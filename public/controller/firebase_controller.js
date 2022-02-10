@@ -1,5 +1,12 @@
 import * as Constant from '../model/constant.js'
 
+export async function createDeck(deck) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .add(deck.serialize());
+    return ref.id;
+}
+
 /* when the function for creating a deck is written
     uncomment the following line to allow for a timestamp
     of when the deck was created to be retained in Firestore.
@@ -10,6 +17,6 @@ import * as Constant from '../model/constant.js'
 
 // Function to allow for deletion of deck
 // TODO: write Firebase side rules to set permissions for deck deletion
-export async function deleteDeck(docID){
+export async function deleteDeck(docID) {
     await firebase.firestore().collection(Constant.collectionName.FLASHCARDS).doc(docID).delete();
 }
