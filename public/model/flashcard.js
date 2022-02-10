@@ -41,7 +41,7 @@ export class Flashcard{
      *      -timestamp
      *      -floating-point & integer
 **************************************************************************/
-        toFirestore(){
+        toFirestore(timestamp){
             return {
                 // This seems a bit much lets see the modal and expand to this.
                 // questionImageName:      this.questionImageName, 
@@ -50,6 +50,13 @@ export class Flashcard{
                 // questionImageURL:       this.answerImageURL,
                 imageName: this.imageName,
                 imageURL: this.imageURL,
+                /*
+                When we add the functions for serializing the flashcard
+                to Firestore, timestamp will be passed by the function
+                allowing us to display creation data for when the deck
+                was created - Cody
+                */
+                timestamp,
                 //Need Question
                 //Need Incorrect Answer(s) --->[]?
                 //Need Correct Answer
