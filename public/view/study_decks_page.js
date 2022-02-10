@@ -8,7 +8,7 @@ export function addEventListeners() {
         await study_decks_page();
     });
 
-    Elements.formCreateAFlashcard.addEventListener('submit', createFlashCard);
+    // Elements.formCreateAFlashcard.addEventListener('submit', createFlashCard);
 }
 
 
