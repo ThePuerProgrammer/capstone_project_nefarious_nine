@@ -50,3 +50,9 @@
     font-weight: bold;
 }
 /*============================================================================*/
+
+.btn:focus, .btn:active {
+    color: #8797AF;
+    box-shadow: none !important;
+    text-decoration: underline;
+}
