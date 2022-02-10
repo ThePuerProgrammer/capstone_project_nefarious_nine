@@ -8,5 +8,5 @@ export function addEventListeners() {
 
 export async function home_page() {
     Elements.root.innerHTML =
-        `<button type="button" class="btn btn-primary btn-lg">Large button</button>`;
+        `<button type="button" class="btn btn-primary btn-lg">Create New Deck</button>`;
 }
