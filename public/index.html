@@ -49,9 +49,9 @@
                 <button type="button" class="btn" id="menu-profile">
                   <img src="./assets/images/account_circle_black_24dp.svg" alt="Profile" width="24" height="24">
                 </button>
-              </li>
-              <li class="nav-item" style="display: inline;">
-                <button type="button" class="btn" id="menu-settings">
+                            </li>
+                            <li class="nav-item" style="display: inline;">
+                                <button type="button" class="btn" id="menu-settings">
                   <img src="./assets/images/settings_black_24dp.svg" alt="Settings" width="24" height="24">
                 </button>
               </li>
@@ -62,6 +62,34 @@
       </div>
   </nav>
   <!-- END OF NAV BAR ------------------------------------------------------->
+              
+  <!-- CREATE DECK MODAL----------------------------------------------------->
+    <div class="modal fade" id="create-deck-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="create-deck-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content pomo-bg-color-md-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title pomo-text-color-light" id="create-deck-modal-label">Create A New Deck</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-create-deck" method="post">
+                        <div class="form-group">
+                            <label class="pomo-text-color-light" for="name">Name</label>
+                            <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1" id="deck-title">
+                            <br>
+                            <br>
+                            <label class="pomo-text-color-light" for="subject">Subject</label>
+                            <input class="form-control form-control-lg" type="subject" name='subject' placeholder="e.g. Data Structures & Algorithms" id="deck-subject">
+                        </div>
+                        <br>
+                        <br>
+                        <button class="btn btn-primary pomo-bg-color-dark" type="submit">Create Deck</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END CREATE DECK MODAL---------------------------------------------->
 
   <!-- MODAL:CREATE A FLASHCARD -->
   <div class="modal fade" id="modal-create-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -127,5 +155,4 @@
     crossorigin="anonymous"></script>
   <!-- END OF SCRIPTS ------------------------------------------------------->
 </body>
-
 </html>

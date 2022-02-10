@@ -6,8 +6,12 @@
     --color-light: #A7ADC6;
 }
 
+
 /* CUSTOM BACKGROUND COLORS */
+
+
 /*============================================================================*/
+
 .pomo-bg-color-dark {
     background-color: #2C1320;
 }
@@ -17,7 +21,7 @@
 }
 
 .pomo-bg-color-md {
-   background-color: #56667A;
+    background-color: #56667A;
 }
 
 .pomo-bg-color-md-light {
@@ -27,10 +31,16 @@
 .pomo-bg-color-light {
     background-color: #A7ADC6;
 }
+
+
 /*============================================================================*/
 
+
 /* CUSTOM TEXT COLORS */
+
+
 /*============================================================================*/
+
 .pomo-text-color-dark {
     color: #2C1320;
 }
@@ -42,16 +52,25 @@
 .pomo-text-color-light {
     color: #A7ADC6;
 }
+
+
 /*============================================================================*/
 
+
 /* FONT MODIFIERS */
+
+
 /*============================================================================*/
+
 .pomo-font-weight-bold {
     font-weight: bold;
 }
+
+
 /*============================================================================*/
 
-.btn:focus, .btn:active {
+.btn:focus,
+.btn:active {
     color: #8797AF;
     box-shadow: none !important;
     text-decoration: underline;
