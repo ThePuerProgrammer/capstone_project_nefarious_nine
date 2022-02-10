@@ -1,10 +1,26 @@
 import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
+import { Deck } from '../model/Deck.js';
 
 export function addEventListeners() {
     Elements.menuStudyDecks.addEventListener('click', async() => {
         history.pushState(null, null, Routes.routePathname.STUDYDECKS);
         await study_decks_page();
+    });
+
+    Elements.formCreateDeck.addEventListener('submit', e => {
+        e.preventDefault();
+        const name = e.target.name.value;
+        const subject = e.target.subject.value;
+
+        // relevant to Cody's story:
+        const dateCreated = Date.now();
+
+        const deck = new Deck({
+            name,
+            subject,
+            dateCreated
+        });
     });
 }
 

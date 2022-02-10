@@ -11,3 +11,8 @@ export const menuStudyDecks = document.getElementById('menu-study-decks');
 export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 //============================================================================//
+
+// CREATE DECK FORM
+//============================================================================//
+export const formCreateDeck = document.getElementById('form-create-deck');
+//============================================================================//
