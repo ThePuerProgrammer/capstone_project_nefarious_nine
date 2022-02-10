@@ -75,11 +75,3 @@
     box-shadow: none !important;
     text-decoration: underline;
 }
-
-.modal-menus-pre-auth {
-    display: none;
-}
-
-.modal-menus-post-auth {
-    display: block;
-}
