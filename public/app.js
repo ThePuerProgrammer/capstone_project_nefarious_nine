@@ -4,6 +4,7 @@ import * as Classrooms from './view/classrooms_page.js'
 import * as StudyDecks from './view/study_decks_page.js'
 import * as Profile from './view/profile_page.js'
 import * as Settings from './view/settings_page.js'
+import * as FirebaseAuth from './controller/firebase_auth.js'
 
 window.onload = () => {
     const pathname = window.location.pathname;
@@ -24,3 +25,4 @@ Classrooms.addEventListeners();
 StudyDecks.addEventListeners();
 Profile.addEventListeners();
 Settings.addEventListeners();
+FirebaseAuth.addEventListeners();
