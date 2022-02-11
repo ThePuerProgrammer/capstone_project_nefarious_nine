@@ -14,7 +14,7 @@ export const menuSettings = document.getElementById('menu-settings');
 
 // STUDY DECKS PAGE
 //============================================================================//
-export const containerForTestDeckList = document.getElementById('container-for-test-deck-list');
+export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
 //============================================================================//
 
 // FORMS
