@@ -23,3 +23,20 @@ export const collectionName = {
 export const storageFolderName = {
     FLASHCARD_IMAGES: 'flashcard_images',
 }
+
+/*****************************************
+ *              HTML ID'S
+ *****************************************
+ * Where we reference html id's across 
+ ******************************************/
+ export const htmlIDs = {
+    buttonShowCreateAFlashcardModal: 'button-show-create-a-flashcard-modal',
+    modalCreateAFlashcard: 'modal-create-a-flashcard',
+}
+
+/*****************************************
+ *         Helper Functions
+ *****************************************
+ * General helper functions that may be used
+ * throughout different JavaScript files
+ ******************************************/
