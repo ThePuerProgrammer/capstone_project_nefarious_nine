@@ -29,6 +29,7 @@ export function addEventListeners() {
         try {
             const docId = await FirebaseController.createDeck(deck);
             deck.docId = docId;
+            Elements.modalCreateDeck.hide();
         } catch (e) {
             if (Constant.DEV) console.log(e);
         }
