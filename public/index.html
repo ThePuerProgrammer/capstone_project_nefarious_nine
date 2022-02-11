@@ -105,16 +105,16 @@
             <div>
               <!---FORM VALIDATION ARE PLACED OF THE FIELDS WITH REQUIREMENTS--> 
               <!--EXAMPLE <input type = "text" name = "title" placeholder="Title of the thread" required minlength="2">-->
-              <!-- DROPDOWN FOR LIST OF DECKS -->
-              <div id="container-for-test-deck-list" class="container">
-
-              </div>
+              <!-- DROPDOWN FOR LIST OF DECKS: List is dynamically filled when the button to open this modal is pressed -->
+              <select id="form-create-a-flashcard-select-container" name="selectedDeck" class="form-select" aria-label="Default select example">
+                <option selected value="Please Select a Deck!">Please Select a Deck!</option>
+              </select>
               <div>
               <!--INPUT OF ANSWER(S) NEEDED-->
               </div>
               <div class="col">
                 <label class="col-2 align-self-center" for="form-question-text-input">Question:</label>
-                <textarea id="form-question-text-input" class="form-control col-2" rows="3" type="text" name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min length ="1"></textarea>
+                <textarea name="question" id="form-question-text-input" class="form-control col-2" rows="3" type="text" name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min length ="1"></textarea>
               </div>
               <br />
               <div>
