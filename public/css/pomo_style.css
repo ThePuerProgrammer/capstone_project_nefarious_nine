@@ -57,15 +57,19 @@
 
 /* BOOTSTRAP OVERRIDES */
 /*============================================================================*/
-.btn:focus,
-.btn:active {
+.navbar .btn:focus, .btn:active {
     color: #8797AF;
     box-shadow: none !important;
     text-decoration: underline;
 }
 
+
 .pomo-btn-expand-width {
     width: 300px !important;
+}
+
+.pomo-btn-expand-width:hover {
+    color: #A7ADC6 !important;
 }
 /*============================================================================*/
 
@@ -92,7 +96,7 @@ input {
 /* STYLE BY ID's */
 /*============================================================================*/
 #pomo-timer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     right: 5%;
     max-width: 300px;

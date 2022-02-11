@@ -11,6 +11,8 @@ export const menuStudyDecks = document.getElementById('menu-study-decks');
 export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
+
+export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
 //============================================================================//
 
 // FORMS

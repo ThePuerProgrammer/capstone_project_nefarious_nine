@@ -219,12 +219,22 @@
   <!-- SPA TARGET IS ROOT -->
   <div id="root"></div>
 
-  <!-- PERSISTENT POMO TIMER -->
+  <!-- PERSISTENT POMO TIMER -------------------------------------------------->
   <div id="pomo-timer">
-    <button type="button" class="btn pomo-bg-color-md-dark pomo-btn-expand-width rounded-0 p-0 pomo-text-color-light pomo-font-weight-bold">
-      Pomodoro Timer
-    </button>
+    <div id="pomo-timer-button-div">
+      <button type="button" class="btn pomo-bg-color-md-dark pomo-btn-expand-width rounded-0 p-0 pomo-text-color-light pomo-font-weight-bold" id="pomo-timer-toggle-button">
+        <span style="display: flex;">
+          <img src="./assets/images/expand.svg" alt="" width="24" height="24" style="flex: 2;">
+          <div id="pomo-timer-inner-div" style="flex: 8;">Pomo Timer</div>
+        </span>
+      </button>
+    </div>
+    <div id="pomo-timer-popup-div" style="height: 0px;">
+      <img src="./assets/images/CEO.png" alt="" height="100%" width="100%">
+    </div>
   </div>
+  <!-- END OF TIMER SECTION --------------------------------------------------->
+
 
   <!-- SCRIPTS -------------------------------------------------------------->
   <!-- update the version number as needed -->
