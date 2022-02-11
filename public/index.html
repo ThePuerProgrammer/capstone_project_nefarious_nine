@@ -171,20 +171,22 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="modal-create-a-flashcard-body" method="post">
-            <div>
-              <!---FORM VALIDATION ARE PLACED OF THE FIELDS WITH REQUIREMENTS-->
+          <form id="form-create-a-flashcard" method="post">
+              <!---FORM VALIDATION ARE PLACED OF THE FIELDS WITH REQUIREMENTS--> 
               <!--EXAMPLE <input type = "text" name = "title" placeholder="Title of the thread" required minlength="2">-->
-              <div>
-                <!--INPUT OF QUESTION NEEDED-->
-              </div>
+              <!-- DROPDOWN FOR LIST OF DECKS: List is dynamically filled when the button to open this modal is pressed -->
+              <select id="form-create-a-flashcard-select-container" name="selectedDeck" class="form-select" aria-label="Default select example">
+                <option selected value="Please Select a Deck!">Please Select a Deck!</option>
+              </select>
               <div>
                 <!--INPUT OF ANSWER(S) NEEDED-->
               </div>
-              <!--DUMMY LINE-->
-              <div>
-                <input type="text" name="dummy" placeholder="dummy" required min length="3">
-              </div>
+              <!-- QUESTION INPUT -->
+              <div class="col">
+                <label class="col-2 align-self-center" for="form-question-text-input">Question:</label>
+                <textarea name="question" id="form-question-text-input" class="form-control col-2" rows="3" type="text" name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min length ="1"></textarea>
+              </div> 
+              <br />
               <div>
                 <img id="form-add-image-tag" style="display: block" />
                 Image:
@@ -193,7 +195,6 @@
               <div>
                 <button type="submit" class="btn btn-outline-primary">Create</button>
               </div>
-            </div>
           </form>
         </div>
       </div>
@@ -280,6 +281,11 @@
   <script type="module" src="app.js"></script>
 
 
+  <!-- JQUERY -->
+  <!-- JQUERY Added so that we can open modals manually. This allows us to make -->
+  <!-- needed database calls and other functionality before the modal opens     -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
   <!--Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

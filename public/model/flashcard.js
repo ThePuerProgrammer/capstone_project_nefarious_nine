@@ -6,6 +6,7 @@ export class Flashcard{
         //Picture Related DATA
         this.imageName = data.imageName;
         this.imageURL = data.imageURL;
+        this.question = data.question;
         //COMMENTED BELOW ABOUT DELVING/EXPANDING FURTHER
         // this.questionImageName = data.questionImageName;
         // this.questionImageURL = data.questionImageURL;
@@ -41,7 +42,8 @@ export class Flashcard{
      *      -timestamp
      *      -floating-point & integer
 **************************************************************************/
-        toFirestore(timestamp){
+        serialize() {   // Older Parameter [serialize(timestamp)], but we may not need a creation timestamp
+                        // for each flashcard.
             return {
                 // This seems a bit much lets see the modal and expand to this.
                 // questionImageName:      this.questionImageName, 
@@ -50,13 +52,14 @@ export class Flashcard{
                 // questionImageURL:       this.answerImageURL,
                 imageName: this.imageName,
                 imageURL: this.imageURL,
+                question: this.question
                 /*
                 When we add the functions for serializing the flashcard
                 to Firestore, timestamp will be passed by the function
                 allowing us to display creation data for when the deck
                 was created - Cody
                 */
-                timestamp,
+                // timestamp,
                 //Need Question
                 //Need Incorrect Answer(s) --->[]?
                 //Need Correct Answer
@@ -73,7 +76,7 @@ export class Flashcard{
             
             if(!obj.imageName || typeof obj.imageName != 'string') return false;
             if(!obj.imageURL || !obj.imageURL.include('https')) return false;
-            //Need Question
+            if(!obj.question || typeof obj.imageName != 'string') return false;
             //Need Incorect Answers
             //Need Correct Answer
         }

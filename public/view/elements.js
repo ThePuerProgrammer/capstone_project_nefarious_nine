@@ -15,6 +15,11 @@ export const menuSignOut = document.getElementById('menu-signout');
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
 //============================================================================//
 
+// STUDY DECKS PAGE
+//============================================================================//
+export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
+//============================================================================//
+
 // FORMS
 //============================================================================//
 export const formSignIn = document.getElementById('form-signin');
