@@ -1,7 +1,7 @@
 import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
 import { Deck } from '../model/Deck.js';
-import * as Flashcards from '../model/flashcard.js'
+import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 
@@ -37,21 +37,24 @@ export function addEventListeners() {
 
     });
 
-    // CREATE A FLASHCARD Submit butotn event listener
-    // TODO: move actual work into its own function and just pass function name
+    // Adds event listener to CREATE A FLASHCARD Submit button
+    // TODO: move actual work into its own function and just pass function name to even listener
     Elements.formCreateAFlashcard.addEventListener('submit', async e => {
         e.preventDefault();
-        const formData = e.target;
+
+        // Process form data
+        // Uses attribute "name" on each HTML element to reference the value.
+        const formData = Array.from(Elements.formCreateAFlashcard).reduce((acc, input) => ({...acc, [input.name]: input.value }), {});
         
         // Getting contents of flashcard
-        const question = formData.question.value;
+        const question = formData.question;
         // Needs Answer
         // Needs Incorrect Answers
         // Needs isMultipleChoice
         const imageURL = "TESTING";
         const imageName = "TESTING";
 
-        // TODO: const deckDocIDReceivingNewFlashcard = "......."
+        const deckDocIDReceivingNewFlashcard = formData.selectedDeck;
 
         const flashcard = new Flashcard({
             question,
@@ -66,7 +69,7 @@ export function addEventListeners() {
             if (Constant.DEV) {
                 console.log(`Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`);
                 console.log("Flashcard Contents: ");
-                console.log(JSON.stringify(flashcard));
+                console.log(flashcard);
             }
         } catch (e) {
             if (Constant.DEV) 
@@ -74,12 +77,7 @@ export function addEventListeners() {
         }
 
     });
-    // Elements.formCreateAFlashcard.addEventListener('submit', createFlashcard);
 }
-
-// export async function createFlashcard(formData) {
-//     e.preventDefault();
-// }
 
 
 export async function study_decks_page() {
@@ -104,24 +102,33 @@ export async function study_decks_page() {
 
     const buttonShowCreateAFlashcardModal = document.getElementById(Constant.htmlIDs.buttonShowCreateAFlashcardModal);
 
-    // Manually Opening
+
+    /*****************************************
+     *    Dynamic Element Event Listeners
+     *****************************************
+    * This is where event listeners for HTML 
+    * elements that are added dynamically to 
+    * the study_decks_page go.
+    ******************************************/
+
+    // Manually opens the modal for "Create a Flashcard" when button is clicked.
+    //  This allows us to pull all of the decks from the (temporary) test deck
+    //  so that we can add a flashcard to a specific deck. Options are added dynamically
+    //  to the select HTML element (#form-create-a-flashcard-select-container) in the "Create A Flashcard" form
     buttonShowCreateAFlashcardModal.addEventListener('click', async e => {
         e.preventDefault();
 
+        // Grabbing list of decks from Firestore
         const listOfTestDecks = await FirebaseController.getAllTestingDecks();
 
-        for (var deck in listOfTestDecks) {
-            document.getElementById('container-for-test-deck-list').innerHTML += `
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                <label class="form-check-label" for="flexRadioDefault2">
-                Default checked radio
-                </label>
+        // Adding list of decks to select menu/drop down
+        listOfTestDecks.forEach(deck => {
+            document.getElementById('form-create-a-flashcard-select-container').innerHTML += `
+                <option value="${deck.docID}">${deck.name}</option>
             `;
-        }
-
+        });
         
-        
-        // Constant.openModal(Constant.htmlIDs.modalCreateAFlashcard);
+        // Opens the Modal
         $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
     });
 }
