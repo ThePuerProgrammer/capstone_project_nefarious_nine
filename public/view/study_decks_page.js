@@ -1,7 +1,7 @@
 import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
 import { Deck } from '../model/Deck.js';
-import * as Flashcards from '../model/flashcard.js'
+import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 
@@ -12,6 +12,7 @@ export function addEventListeners() {
         await study_decks_page();
     });
 
+    // CREATE A DECK Submit button event listener
     Elements.formCreateDeck.addEventListener('submit', async e => {
         e.preventDefault();
         const name = e.target.name.value;
@@ -30,12 +31,52 @@ export function addEventListeners() {
             const docId = await FirebaseController.createDeck(deck);
             deck.docId = docId;
         } catch (e) {
-            if (Constant.DEV) console.log(e);
+            if (Constant.DEV) 
+                console.log(e);
         }
 
-    })
+    });
 
-    // Elements.formCreateAFlashcard.addEventListener('submit', createFlashCard);
+    // Adds event listener to CREATE A FLASHCARD Submit button
+    // TODO: move actual work into its own function and just pass function name to even listener
+    Elements.formCreateAFlashcard.addEventListener('submit', async e => {
+        e.preventDefault();
+
+        // Process form data
+        // Uses attribute "name" on each HTML element to reference the value.
+        const formData = Array.from(Elements.formCreateAFlashcard).reduce((acc, input) => ({...acc, [input.name]: input.value }), {});
+        
+        // Getting contents of flashcard
+        const question = formData.question;
+        // Needs Answer
+        // Needs Incorrect Answers
+        // Needs isMultipleChoice
+        const imageURL = "TESTING";
+        const imageName = "TESTING";
+
+        const deckDocIDReceivingNewFlashcard = formData.selectedDeck;
+
+        const flashcard = new Flashcard({
+            question,
+            imageURL,
+            imageName
+        });
+
+        try {
+            const docId = await FirebaseController.createFlashcard(deckDocIDReceivingNewFlashcard, flashcard);
+            flashcard.docId = docId;
+            
+            if (Constant.DEV) {
+                console.log(`Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`);
+                console.log("Flashcard Contents: ");
+                console.log(flashcard);
+            }
+        } catch (e) {
+            if (Constant.DEV) 
+                console.log(e);
+        }
+
+    });
 }
 
 
@@ -47,7 +88,7 @@ export async function study_decks_page() {
     html += '<h1> Study Decks </h1>';
     //Allows for the create a flashcard button
     html += `
-        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-create-a-flashcard"> + Create Flashcard</button>
+        <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-outline-danger"> + Create Flashcard</button>
     `;
 
     // Solution for merging Piper's 'create_deck_deck_title branch
@@ -58,4 +99,36 @@ export async function study_decks_page() {
     `;
 
     Elements.root.innerHTML = html;
+
+    const buttonShowCreateAFlashcardModal = document.getElementById(Constant.htmlIDs.buttonShowCreateAFlashcardModal);
+
+
+    /*****************************************
+     *    Dynamic Element Event Listeners
+     *****************************************
+    * This is where event listeners for HTML 
+    * elements that are added dynamically to 
+    * the study_decks_page go.
+    ******************************************/
+
+    // Manually opens the modal for "Create a Flashcard" when button is clicked.
+    //  This allows us to pull all of the decks from the (temporary) test deck
+    //  so that we can add a flashcard to a specific deck. Options are added dynamically
+    //  to the select HTML element (#form-create-a-flashcard-select-container) in the "Create A Flashcard" form
+    buttonShowCreateAFlashcardModal.addEventListener('click', async e => {
+        e.preventDefault();
+
+        // Grabbing list of decks from Firestore
+        const listOfTestDecks = await FirebaseController.getAllTestingDecks();
+
+        // Adding list of decks to select menu/drop down
+        listOfTestDecks.forEach(deck => {
+            document.getElementById('form-create-a-flashcard-select-container').innerHTML += `
+                <option value="${deck.docID}">${deck.name}</option>
+            `;
+        });
+        
+        // Opens the Modal
+        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
+    });
 }

@@ -13,6 +13,11 @@ export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 //============================================================================//
 
+// STUDY DECKS PAGE
+//============================================================================//
+export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
+//============================================================================//
+
 // FORMS
 //============================================================================//
 export const formSignIn = document.getElementById('form-signin');
