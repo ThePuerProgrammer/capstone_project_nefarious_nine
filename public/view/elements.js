@@ -12,6 +12,11 @@ export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 //============================================================================//
 
+// STUDY DECKS PAGE
+//============================================================================//
+export const containerForTestDeckList = document.getElementById('container-for-test-deck-list');
+//============================================================================//
+
 // FORMS
 //============================================================================//
 export const formCreateDeck = document.getElementById('form-create-deck');
