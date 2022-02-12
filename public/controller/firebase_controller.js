@@ -23,7 +23,7 @@ export async function createFlashcard(deckDocID, flashcardModel) {
 //============================================================================//
 export async function uploadImageToFlashcard(imageFile, imageName){
     //image doesn't have a name
-    if(!imageName && imageName != null){
+    if(!imageName){
         imageName = Date.now() + imageFile.name;
     }
     const ref = firebase.storage().ref()

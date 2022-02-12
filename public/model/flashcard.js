@@ -89,16 +89,4 @@ export class Flashcard{
         //     if(this.imageURL) flashcard.imageURL = this.imageURL;
         // }
 
-        //validate(){
-        //  const errors{};
-            //NEED QUESTION
-            //NEED INCORRECT ANSWER(S)
-            //NEED CORRECT ANSWER
-            //if(!this.name || this.name.length <2)
-            //  errors.name= 'Product name is too short. Minimum 2 chars.'
-            //....
-            //else return errors
-       // }
-            
-        //}
 }

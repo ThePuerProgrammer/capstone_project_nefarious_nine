@@ -42,7 +42,7 @@ export function addEventListeners() {
     
     //Resets Image
     function resetImageSelection(){
-        imageFile2upload = null;
+        imageFile2Upload = null;
         Elements.imageTageCreateFlash.src = '';
     }
 
@@ -82,25 +82,23 @@ export function addEventListeners() {
         console.log(flashcard);
 
         try {
-            if(typeof obj !== "undefined") {         
-              
+
+            if(imageFile2Upload){
                 console.log("Check1");
+            const {imageName, imageURL} = await FirebaseController.uploadImageToFlashcard(imageFile2Upload);
+            flashcard.imageName=imageName;
+            flashcard.imageURL=imageURL;
             }
             else if(typeof obj === "undefined"){
                 console.log("Check2");
                 flashcard.imageName="N/A";
                 flashcard.imageURL="N/A";
             }
-            else{
-                console.log("Check3");
-            const {imageName, imageURL} = await FirebaseController.uploadImageToFlashcard(imageFile2Upload);
-            flashcard.imageName=imageName;
-            flashcard.imageURL=imageURL;
-            }
-            console.log("Check4");
+            console.log("Check3");
             const docId = await FirebaseController.createFlashcard(deckDocIDReceivingNewFlashcard, flashcard);
-            flashcard.set_docID(docId);
-            
+            //flashcard.set_docID(docId);
+            flashcard.docID=docId;
+           // }
             if (Constant.DEV) {
                 console.log(`Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`);
                 console.log("Flashcard Contents: ");
