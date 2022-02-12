@@ -8,6 +8,8 @@ export class Flashcard{
         this.imageURL = data.imageURL;
         this.question = data.question;
         this.answer = data.answer;
+        this.isMultipleChoice = data.isMultipleChoice;
+        this.incorrectAnswers = data.incorrectAnswers;
         //COMMENTED BELOW ABOUT DELVING/EXPANDING FURTHER
         // this.questionImageName = data.questionImageName;
         // this.questionImageURL = data.questionImageURL;
@@ -53,7 +55,9 @@ export class Flashcard{
                 imageName: this.imageName,
                 imageURL: this.imageURL,
                 question: this.question,
-                answer: this.answer
+                answer: this.answer,
+                isMultipleChoice: this.isMultipleChoice,
+                incorrectAnswers: this.incorrectAnswers
                 /*
                 When we add the functions for serializing the flashcard
                 to Firestore, timestamp will be passed by the function
@@ -79,7 +83,7 @@ export class Flashcard{
             if(!obj.imageURL || !obj.imageURL.include('https')) return false;
             if(!obj.question || typeof obj.imageName != 'string') return false;
             if(!obj.answer || typeof obj.answer != 'string') return false;
-            //Need Incorect Answers
+            // TODO: Need Incorect Answers
         }
 
 /***************************************************************************

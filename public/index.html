@@ -178,23 +178,28 @@
               <label class="col-2 align-self-center" for="form-create-a-flashcard-select-container">Deck:</label>
               <select id="form-create-a-flashcard-select-container" name="selectedDeck" class="form-select" aria-label="Default select example"></select>
               <br />
+              <!-- MULTIPLE CHOICE TOGGLE -->
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="form-check-input-is-multiple-choice">
+                <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple Choice</label>
+              </div>
+              <br />
               <!-- QUESTION INPUT -->
-              <div class="col">
-                <label class="col-2 align-self-center" for="form-question-text-input">Question:</label>
-                <textarea name="question" id="form-question-text-input" class="form-control col-2" rows="3" type="text" name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min length ="1"></textarea>
-              </div> 
+              <label for="form-question-text-input">Question:</label>
+              <textarea name="question" id="form-question-text-input" class="form-control" rows="3" type="text" name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min length ="1"></textarea>
               <br />
               <!-- ANSWER INPUT -->
-              <div class="col">
-                <label class="col-2 align-self-center" for="form-answer-text-input">Answer:</label>
-                <textarea name="answer" id="form-answer-text-input" class="form-control col-2" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
-              </div> 
+              <div id="form-answer-container">
+                <label for="form-answer-text-input">Answer:</label>
+                <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
+              </div>
               <br />
               <div>
                 <img id="form-add-image-tag" style="display: block" />
                 Image:
                 <input id="form-add-image-button" type="file" value="upload" />
               </div>
+              <br />
               <div>
                 <button type="submit" class="btn btn-outline-primary">Create</button>
               </div>
