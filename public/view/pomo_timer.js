@@ -3,16 +3,25 @@
  * there is a distinct difference for the way this component is treated */
 
 import * as Elements from './elements.js'
+import { UserTimer } from '../model/user_timer.js'
 
 let timerStateClosed;
-let timerButtonHeight;
+let userTimer;
+
+// Important for the pausing logic so that min/sec values don't get messed up
+let startButtonClicked = false;
 
 export function addEventListeners() {
 
-    // For toggle state checking
-    timerStateClosed = true;
-    timerButtonHeight = document.getElementById('pomo-timer-button-div').style.height;
+    /* For future work, the UserTimer class constructor can be called with
+     * arguments that can be used as custom profiles! */ 
+    userTimer = new UserTimer;
 
+    // For toggle state checking of the timer popup
+    timerStateClosed = true;
+
+    // TIMER POPUP
+    //------------------------------------------------------------------------//
     Elements.pomoTimerToggleButton.addEventListener('click', () => {
         if (timerStateClosed) {
 
@@ -27,6 +36,9 @@ export function addEventListeners() {
             // flip button icon orientation ^ to v
             Elements.pomoTimerToggleButton.childNodes[0].nextSibling.childNodes[0].nextSibling.src = `./assets/images/collapse.svg`;
 
+            document.getElementById('pomo-timer').style.filter = "drop-shadow(1px 2px 2px #2C1320)";
+
+            // toggle timer state
             timerStateClosed = false;
         } else {
 
@@ -41,19 +53,33 @@ export function addEventListeners() {
             // flip button icon orientation v to ^
             Elements.pomoTimerToggleButton.childNodes[0].nextSibling.childNodes[0].nextSibling.src = `./assets/images/expand.svg`;
 
+            document.getElementById('pomo-timer').style.filter = "none";
+
+            // toggle timer state
             timerStateClosed = true;
         }
     });
+    //------------------------------------------------------------------------//
 
+    // PLAYER BUTTONS
+    //------------------------------------------------------------------------//
     Elements.pomoTimerStartButton.addEventListener('click', () => {
-        console.log('start');
+        if (!startButtonClicked) {
+            userTimer.startTimer();
+        }
+        startButtonClicked = true;
     });
 
-    Elements.pomoTimerStopButton.addEventListener('click', () => {
-        console.log('stop');
+    Elements.pomoTimerPauseButton.addEventListener('click', () => {
+        if (startButtonClicked) {
+            userTimer.pauseTimer();
+            startButtonClicked = false;
+        }
     });
 
     Elements.pomoTimerResetButton.addEventListener('click', () => {
-        console.log('reset');
+        startButtonClicked = false;
+        userTimer.resetTimer();
     });
+    //------------------------------------------------------------------------//
 }

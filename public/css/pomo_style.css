@@ -107,8 +107,9 @@ input {
     border-left: #2C1320;
     border-top: #2C1320;
     border-right: #2C1320;
+    border-width: 3px;
     border-bottom-width: 0;
-    border-style: solid;
+    border-style:ridge;
 }
 
 #play-controls {
@@ -117,5 +118,41 @@ input {
 
 .player {
     flex: 1;
+    filter: drop-shadow(2px 2px 1px #2C1320);
+}
+
+.player .btn:active {
+    padding-top: 2px;
+}
+
+#timer-minutes-display, #timer-seconds-display {
+    margin: 10px 5px 0 5px; 
+    background-color: white; 
+    flex: 1;
+
+    border-style: solid;
+    border-width: 2px;
+    border-color: #2C1320;
+    border-bottom-style: none;
+    font-size: 80px;
+    text-align: center;
+    padding-top: 10px;
+    font-weight: bold;
+    color:#A7ADC6;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: #2C1320;
+    filter: drop-shadow(1px 1px 1px #2C1320);
+}
+
+.timer-hint {
+    border-width: 2px;
+    border-color: #2C1320;
+    border-top-style: none;
+    border-style: solid;
+    margin: 0 5px 0 5px; 
+    flex: 1;
+    text-align: center;
+    filter: drop-shadow(1px 1px 1px #2C1320);
+    font-weight: 700;
 }
 /*============================================================================*/

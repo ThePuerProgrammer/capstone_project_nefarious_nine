@@ -15,7 +15,7 @@ export const menuSignOut = document.getElementById('menu-signout');
 // pomo timer buttons
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
 export const pomoTimerStartButton = document.getElementById('start-timer-button');
-export const pomoTimerStopButton = document.getElementById('stop-timer-button');
+export const pomoTimerPauseButton = document.getElementById('pause-timer-button');
 export const pomoTimerResetButton = document.getElementById('reset-timer-button');
 //============================================================================//
 
@@ -47,4 +47,10 @@ export const modalInfoBox = {
 export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-signin-form'), {backdrop: 'static'});
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));
 export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', {backdrop: 'static'}));
+//============================================================================//
+
+// POMO TIMER MISC ACCESSABLES
+//============================================================================//
+export const timerSecondsDisplay = document.getElementById('timer-seconds-display');
+export const timerMinutesDisplay = document.getElementById('timer-minutes-display');
 //============================================================================//
