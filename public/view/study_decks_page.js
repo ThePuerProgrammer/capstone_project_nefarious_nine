@@ -48,7 +48,7 @@ export function addEventListeners() {
         
         // Getting contents of flashcard
         const question = formData.question;
-        // Needs Answer
+        const answer = formData.answer;
         // Needs Incorrect Answers
         // Needs isMultipleChoice
         const imageURL = "TESTING";
@@ -58,6 +58,7 @@ export function addEventListeners() {
 
         const flashcard = new Flashcard({
             question,
+            answer,
             imageURL,
             imageName
         });
