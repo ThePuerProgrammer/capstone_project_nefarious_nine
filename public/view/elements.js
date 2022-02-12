@@ -18,6 +18,7 @@ export const menuSignOut = document.getElementById('menu-signout');
 export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
 export const formCheckInputIsMultipleChoice = document.getElementById('form-check-input-is-multiple-choice');
 export const formAnswerContainer = document.getElementById('form-answer-container');
+export const formAddFlashCardImageButton = document.getElementById('form-add-image-to-flashcard-button')
 //============================================================================//
 
 // FORMS
@@ -42,3 +43,7 @@ export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-si
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));
 export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', {backdrop: 'static'}));
 //============================================================================//
+
+//IMAGE TAG
+//============================================================================//
+export const imageTagCreateFlash = document.getElementById('form-add-image-to-flashcard-tag');

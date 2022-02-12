@@ -36,6 +36,13 @@ export function addEventListeners() {
         }
 
     });
+    
+    //Declaration of Image
+    let imageFile2Upload;
+    function resetImageSelection(){
+        imageFile2upload = null;
+        Elements.imageTageCreateFlash.src = '';
+    }
 
     // Adds event listener to CREATE A FLASHCARD Submit button
     // TODO: move actual work into its own function and just pass function name to even listener
@@ -116,6 +123,15 @@ export function addEventListeners() {
                 <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
             `;
         }
+    });
+
+    Elements.formAddFlashCardImageButton.addEventListener('change', e=>{
+        imageFile2upload = e.target.files[0];
+        if(!imageFile2Upload) return;
+        //display image
+        const reader = newFileReader();
+        reader.onload = () => Elements.imageTagCreateFlash.src = reader.result;
+        reader.readAsDataURL(imageFile2Upload);
     });
 }
 
