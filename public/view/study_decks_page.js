@@ -4,6 +4,7 @@ import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
+import * as Utilities from './utilities.js'
 
 
 export function addEventListeners() {
@@ -58,8 +59,8 @@ export function addEventListeners() {
         const question = formData.question;
         const answer = formData.answer;
         const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
-        const imageURL = "TESTING";
-        const imageName = "TESTING";
+        
+        
         const incorrectAnswers = [];
 
         if (isMultipleChoice) {
@@ -74,25 +75,27 @@ export function addEventListeners() {
             question,
             isMultipleChoice,
             answer,
-            imageURL,
-            imageName,
             incorrectAnswers,
         });
 
         console.log(flashcard);
 
         try {
+            const {imageName, imageURL} = await FirebaseController.uploadImageToFlashcard(imageFile2Upload);
+            flashcard.imageName=imageName;
+            flashcard.imageURL=imageURL;
             const docId = await FirebaseController.createFlashcard(deckDocIDReceivingNewFlashcard, flashcard);
             flashcard.docId = docId;
             
             if (Constant.DEV) {
                 console.log(`Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`);
                 console.log("Flashcard Contents: ");
-                console.log(flashcard);
+                console.log(flashcard);   
             }
+            Utilities.info('Success!', `Flashcard: ${flashcard.question} has been added!`, 'modal-create-a-flashcard')
         } catch (e) {
-            if (Constant.DEV) 
-                console.log(e);
+            if (Constant.DEV) console.log(e);
+            Utilities.info('Create A Flashcard Error', JSON.stringify(e), 'modal-create-a-flashcard');
         }
 
     });
@@ -126,10 +129,10 @@ export function addEventListeners() {
     });
 
     Elements.formAddFlashCardImageButton.addEventListener('change', e=>{
-        imageFile2upload = e.target.files[0];
+        imageFile2Upload = e.target.files[0];
         if(!imageFile2Upload) return;
         //display image
-        const reader = newFileReader();
+        const reader = new FileReader();
         reader.onload = () => Elements.imageTagCreateFlash.src = reader.result;
         reader.readAsDataURL(imageFile2Upload);
     });

@@ -18,7 +18,7 @@ export const menuSignOut = document.getElementById('menu-signout');
 export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
 export const formCheckInputIsMultipleChoice = document.getElementById('form-check-input-is-multiple-choice');
 export const formAnswerContainer = document.getElementById('form-answer-container');
-export const formAddFlashCardImageButton = document.getElementById('form-add-image-to-flashcard-button')
+export const formAddFlashCardImageButton = document.getElementById('form-add-image-to-flashcard-button');
 //============================================================================//
 
 // FORMS
@@ -26,7 +26,7 @@ export const formAddFlashCardImageButton = document.getElementById('form-add-ima
 export const formSignIn = document.getElementById('form-signin');
 export const formCreateDeck = document.getElementById('form-create-deck');
 export const formCreateAFlashcard = document.getElementById('form-create-a-flashcard');
-export const formCreateAccount = document.getElementById('form-create-account')
+export const formCreateAccount = document.getElementById('form-create-account');
 //============================================================================//
 
 // MODALS
