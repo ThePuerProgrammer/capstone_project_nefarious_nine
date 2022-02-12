@@ -45,38 +45,65 @@ export function addEventListeners() {
         // Process form data
         // Uses attribute "name" on each HTML element to reference the value.
         const formData = Array.from(Elements.formCreateAFlashcard).reduce((acc, input) => ({...acc, [input.name]: input.value }), {});
+        console.log(formData);
         
         // Getting contents of flashcard
         const question = formData.question;
         const answer = formData.answer;
-        // Needs Incorrect Answers
-        // Needs isMultipleChoice
+        const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
         const imageURL = "TESTING";
         const imageName = "TESTING";
+        const incorrectAnswers = [];
+
+        if (formData.incorrectAnswer1 != "") incorrectAnswers.push(formData.incorrectAnswer1);
+        if (formData.incorrectAnswer2 != "") incorrectAnswers.push(formData.incorrectAnswer2);
+        if (formData.incorrectAnswer3 != "") incorrectAnswers.push(formData.incorrectAnswer3);
 
         const deckDocIDReceivingNewFlashcard = formData.selectedDeck;
 
         const flashcard = new Flashcard({
             question,
+            isMultipleChoice,
             answer,
             imageURL,
-            imageName
+            imageName,
+            incorrectAnswers,
         });
 
-        try {
-            const docId = await FirebaseController.createFlashcard(deckDocIDReceivingNewFlashcard, flashcard);
-            flashcard.docId = docId;
-            
-            if (Constant.DEV) {
-                console.log(`Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`);
-                console.log("Flashcard Contents: ");
-                console.log(flashcard);
-            }
-        } catch (e) {
-            if (Constant.DEV) 
-                console.log(e);
-        }
+        console.log(flashcard);
 
+        // try {
+        //     const docId = await FirebaseController.createFlashcard(deckDocIDReceivingNewFlashcard, flashcard);
+        //     flashcard.docId = docId;
+            
+        //     if (Constant.DEV) {
+        //         console.log(`Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`);
+        //         console.log("Flashcard Contents: ");
+        //         console.log(flashcard);
+        //     }
+        // } catch (e) {
+        //     if (Constant.DEV) 
+        //         console.log(e);
+        // }
+
+    });
+
+    // Event listener to change the answer view depending on whether or not
+    //  multiple choice is checked or not
+    Elements.formCheckInputIsMultipleChoice.addEventListener('click', async e => {
+        console.log("mult choice clicked");
+        
+        // // MULTIPLE CHOICE ON
+        // if (Elements.formCheckInputIsMultipleChoice.checked) {
+            
+        // }
+        // // MULTIPLE CHOICE OFF
+        // else {
+        //     formAnswerTextInput.innerHTML = `
+        //     <label for="form-answer-text-input">Answer:</label>
+        //     <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
+        //     `;
+        // }
     });
 }
 
