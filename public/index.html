@@ -224,14 +224,32 @@
   <div id="pomo-timer">
     <div id="pomo-timer-button-div">
       <button type="button" class="btn pomo-bg-color-md-dark pomo-btn-expand-width rounded-0 p-0 pomo-text-color-light pomo-font-weight-bold" id="pomo-timer-toggle-button">
-        <span style="display: flex;">
-          <img src="./assets/images/expand.svg" alt="" width="24" height="24" style="flex: 2;">
-          <div id="pomo-timer-inner-div" style="flex: 8;">Pomo Timer</div>
+        <span>
+          <img src="./assets/images/expand.svg" alt="" width="24" height="24" style="display: inline; margin-left: 2px; margin-right: 2px;">
+          <div id="pomo-timer-inner-div" style="display: inline; margin-left: 15%; margin-right: 15%;">Pomobyte Timer</div>
         </span>
       </button>
     </div>
-    <div id="pomo-timer-popup-div" style="height: 0px;">
-      <img src="./assets/images/CEO.png" alt="" height="100%" width="100%">
+    <div class="pomo-bg-color-md" id="pomo-timer-popup-div" style="height: 0px;">
+      <div id="pomo-timer-min-sec" style="height: 50%; display: none;">
+        <span style="height: 200px;">
+          <div style="margin: 30px 5px 30px 5px; background-color: white; flex: 1">Minutes</div>
+          <div style="margin: 30px 5px 30px 5px; background-color: white; flex: 1">Seconds</div>
+        </span>
+      </div>
+      <div style="height: 35%;">
+      </div>
+      <div id="play-controls" style="display: none;">
+        <button class="btn pomo-bg-color-light m-2 player" id="start-timer-button">
+          <img src="./assets/images/play_arrow_black_24dp.svg"
+        </button>
+        <button class="btn pomo-bg-color-md-light m-2 player" id="stop-timer-button">
+          <img src="./assets/images/stop_black_24dp.svg"
+        </button>
+        <button class="btn pomo-bg-color-md-dark m-2 player" id="reset-timer-button">
+          <img src="./assets/images/restart_alt_black_24dp.svg"
+        </button>
+      </div>
     </div>
   </div>
   <!-- END OF TIMER SECTION --------------------------------------------------->

@@ -12,7 +12,11 @@ export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 
+// pomo timer buttons
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
+export const pomoTimerStartButton = document.getElementById('start-timer-button');
+export const pomoTimerStopButton = document.getElementById('stop-timer-button');
+export const pomoTimerResetButton = document.getElementById('reset-timer-button');
 //============================================================================//
 
 // STUDY DECKS PAGE
