@@ -128,7 +128,7 @@ export async function study_decks_page() {
     html += '<h1> Study Decks </h1>';
     //Allows for the create a flashcard button
     html += `
-        <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-outline-danger"> + Create Flashcard</button>
+        <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-secondary pomo-bg-color-dark"> + Create Flashcard</button>
     `;
 
     // Solution for merging Piper's 'create_deck_deck_title branch
