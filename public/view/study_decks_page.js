@@ -4,7 +4,10 @@ import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
+import * as Utilities from './utilities.js'
 
+//Declaration of Image(Global)
+let imageFile2Upload;
 
 export function addEventListeners() {
     Elements.menuStudyDecks.addEventListener('click', async() => {
@@ -36,6 +39,12 @@ export function addEventListeners() {
         }
 
     });
+    
+    //Resets Image
+    function resetImageSelection(){
+        imageFile2Upload = null;
+        Elements.imageTageCreateFlash.src = '';
+    }
 
     // Adds event listener to CREATE A FLASHCARD Submit button
     // TODO: move actual work into its own function and just pass function name to even listener
@@ -51,8 +60,8 @@ export function addEventListeners() {
         const question = formData.question;
         const answer = formData.answer;
         const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
-        const imageURL = "TESTING";
-        const imageName = "TESTING";
+        
+        
         const incorrectAnswers = [];
 
         if (isMultipleChoice) {
@@ -67,25 +76,38 @@ export function addEventListeners() {
             question,
             isMultipleChoice,
             answer,
-            imageURL,
-            imageName,
             incorrectAnswers,
         });
 
         console.log(flashcard);
 
         try {
+
+            if(imageFile2Upload){
+                console.log("Check1");
+            const {imageName, imageURL} = await FirebaseController.uploadImageToFlashcard(imageFile2Upload);
+            flashcard.imageName=imageName;
+            flashcard.imageURL=imageURL;
+            }
+            else if(typeof obj === "undefined"){
+                console.log("Check2");
+                flashcard.imageName="N/A";
+                flashcard.imageURL="N/A";
+            }
+            console.log("Check3");
             const docId = await FirebaseController.createFlashcard(deckDocIDReceivingNewFlashcard, flashcard);
-            flashcard.docId = docId;
-            
+            //flashcard.set_docID(docId);
+            flashcard.docID=docId;
+           // }
             if (Constant.DEV) {
                 console.log(`Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`);
                 console.log("Flashcard Contents: ");
-                console.log(flashcard);
+                console.log(flashcard);   
             }
+            Utilities.info('Success!', `Flashcard: ${flashcard.question} has been added!`, 'modal-create-a-flashcard')
         } catch (e) {
-            if (Constant.DEV) 
-                console.log(e);
+            if (Constant.DEV) console.log(e);
+            Utilities.info('Create A Flashcard Error', JSON.stringify(e), 'modal-create-a-flashcard');
         }
 
     });
@@ -116,6 +138,15 @@ export function addEventListeners() {
                 <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
             `;
         }
+    });
+
+    Elements.formAddFlashCardImageButton.addEventListener('change', e=>{
+        imageFile2Upload = e.target.files[0];
+        if(!imageFile2Upload) return;
+        //display image
+        const reader = new FileReader();
+        reader.onload = () => Elements.imageTagCreateFlash.src = reader.result;
+        reader.readAsDataURL(imageFile2Upload);
     });
 }
 

@@ -1,8 +1,8 @@
-import { modalInfoBox } from "./elements.js";
+import * as Elements from './elements.js'
 
 export function info(title, body, closeModal) {
-    if (closeModal) closeModal.hide();
-    modalInfoBox.title.innerHTML = title;
-    modalInfoBox.body.innerHTML = body;
-    modalInfoBox.modal.show();
+    if (closeModal) $('#'+closeModal).modal('hide');
+    Elements.popupInfoTitle.innerHTML = title;
+    Elements.popupInfoBody.innerHTML = body;
+    $('#modal-infobox').modal('show');
 }

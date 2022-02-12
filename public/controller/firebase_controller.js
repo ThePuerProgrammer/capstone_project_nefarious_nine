@@ -19,6 +19,20 @@ export async function createFlashcard(deckDocID, flashcardModel) {
     return ref.id;
 }
 //============================================================================//
+//CREATE FLASHCARD IMAGE
+//============================================================================//
+export async function uploadImageToFlashcard(imageFile, imageName){
+    //image doesn't have a name
+    if(!imageName){
+        imageName = Date.now() + imageFile.name;
+    }
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderNames.FLASHCARD_IMAGES + imageName);
+    const taskSnapShot = await ref.put(imageFile);
+    const imageURL = await taskSnapShot.ref.getDownloadURL();
+    return{imageName,imageURL};
+}
+//===========================================================================//
 
 // This function pulls all decks from the highest level owned_decks collection
 // in firestore. This is purely for testing for the time being and will later be
