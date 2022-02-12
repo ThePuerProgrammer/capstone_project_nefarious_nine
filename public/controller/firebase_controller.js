@@ -23,11 +23,11 @@ export async function createFlashcard(deckDocID, flashcardModel) {
 //============================================================================//
 export async function uploadImageToFlashcard(imageFile, imageName){
     //image doesn't have a name
-    if(!imageName){
+    if(!imageName && imageName != null){
         imageName = Date.now() + imageFile.name;
     }
     const ref = firebase.storage().ref()
-        .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageName);
+        .child(Constant.storageFolderNames.FLASHCARD_IMAGES + imageName);
     const taskSnapShot = await ref.put(imageFile);
     const imageURL = await taskSnapShot.ref.getDownloadURL();
     return{imageName,imageURL};

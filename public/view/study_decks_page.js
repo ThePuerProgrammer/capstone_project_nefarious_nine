@@ -6,6 +6,8 @@ import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Utilities from './utilities.js'
 
+//Declaration of Image(Global)
+let imageFile2Upload;
 
 export function addEventListeners() {
     Elements.menuStudyDecks.addEventListener('click', async() => {
@@ -38,8 +40,7 @@ export function addEventListeners() {
 
     });
     
-    //Declaration of Image
-    let imageFile2Upload;
+    //Resets Image
     function resetImageSelection(){
         imageFile2upload = null;
         Elements.imageTageCreateFlash.src = '';
@@ -81,11 +82,24 @@ export function addEventListeners() {
         console.log(flashcard);
 
         try {
+            if(typeof obj !== "undefined") {         
+              
+                console.log("Check1");
+            }
+            else if(typeof obj === "undefined"){
+                console.log("Check2");
+                flashcard.imageName="N/A";
+                flashcard.imageURL="N/A";
+            }
+            else{
+                console.log("Check3");
             const {imageName, imageURL} = await FirebaseController.uploadImageToFlashcard(imageFile2Upload);
             flashcard.imageName=imageName;
             flashcard.imageURL=imageURL;
+            }
+            console.log("Check4");
             const docId = await FirebaseController.createFlashcard(deckDocIDReceivingNewFlashcard, flashcard);
-            flashcard.docId = docId;
+            flashcard.set_docID(docId);
             
             if (Constant.DEV) {
                 console.log(`Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`);

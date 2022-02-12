@@ -20,8 +20,8 @@ export const collectionName = {
  * or anything else stored in the storage 
  * portion.
  ******************************************/
-export const storageFolderName = {
-    FLASHCARD_IMAGES: 'flashcard_images',
+export const storageFolderNames = {
+    FLASHCARD_IMAGES: 'flashcard_images/',
 }
 
 /*****************************************

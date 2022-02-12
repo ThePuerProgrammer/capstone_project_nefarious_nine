@@ -58,16 +58,6 @@ export class Flashcard{
                 answer: this.answer,
                 isMultipleChoice: this.isMultipleChoice,
                 incorrectAnswers: this.incorrectAnswers
-                /*
-                When we add the functions for serializing the flashcard
-                to Firestore, timestamp will be passed by the function
-                allowing us to display creation data for when the deck
-                was created - Cody
-                */
-                // timestamp,
-                //Need Question
-                //Need Incorrect Answer(s) --->[]?
-                //Need Correct Answer
             };
         }
 

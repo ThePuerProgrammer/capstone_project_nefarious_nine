@@ -33,11 +33,13 @@ export const formCreateAccount = document.getElementById('form-create-account');
 //============================================================================//
 /* This allows us to close the modal when an information/popup modal needs to popup.
  * Incase there is an error, we can't have 2 modals open at the same time. */
-export const modalInfoBox = {
-    modal: new bootstrap.Modal(document.getElementById('modal-infobox'), {backdrop: 'static'}),
-    title: document.getElementById('modal-infobox-title'),
-    body: document.getElementById('modal-infobox-body'),
-}
+// export const modalInfoBox = {
+//     modal: new bootstrap.Modal(document.getElementById('modal-infobox'), {backdrop: 'static'}),
+//     title: document.getElementById('modal-infobox-title'),
+//     body: document.getElementById('modal-infobox-body'),
+// }
+export const popupInfoTitle = document.getElementById('modal-infobox-title');
+export const popupInfoBody = document.getElementById('modal-infobox-body');
 
 export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-signin-form'), {backdrop: 'static'});
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));
