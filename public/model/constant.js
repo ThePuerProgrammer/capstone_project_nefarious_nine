@@ -19,9 +19,10 @@ export const collectionName = {
  * Where we reference the storage of images
  * or anything else stored in the storage 
  * portion.
+ * ALL MUST END WITH A FORWARD SLASH
  ******************************************/
 export const storageFolderName = {
-    FLASHCARD_IMAGES: 'flashcard_images',
+    FLASHCARD_IMAGES: 'flashcard_images/',
 }
 
 /*****************************************
