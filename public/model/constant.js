@@ -42,3 +42,4 @@ export const storageFolderName = {
  ******************************************/
     formCheckInputIsMultiple: 'form-check-input-is-multiple'
 }
+
