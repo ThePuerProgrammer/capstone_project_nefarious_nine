@@ -32,7 +32,8 @@ export const storageFolderNames = {
  export const htmlIDs = {
     buttonShowCreateAFlashcardModal: 'button-show-create-a-flashcard-modal',
     modalCreateAFlashcard: 'modal-create-a-flashcard',
-    formCheckInputIsMultiple: 'form-check-input-is-multiple'
+    formCheckInputIsMultiple: 'form-check-input-is-multiple',
+    buttonStudy: 'btn-study-deck'
 }
 
 /*****************************************

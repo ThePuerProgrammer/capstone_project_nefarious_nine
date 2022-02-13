@@ -4,6 +4,7 @@ import * as StudyDecks from '../view/study_decks_page.js'
 import * as Profile from '../view/profile_page.js'
 import * as Settings from '../view/settings_page.js'
 import * as Deck from '../view/deck_page.js'
+import * as Study from '../view/study_page.js'
 
 export const routePathname = {
     HOME: '/',
@@ -11,7 +12,8 @@ export const routePathname = {
     STUDYDECKS: '/study-decks',
     PROFILE: '/profile',
     SETTINGS: '/settings',
-    DECK: '/deck'
+    DECK: '/deck',
+    STUDY: '/study'
 };
 
 export const routes = [
@@ -21,6 +23,7 @@ export const routes = [
     { pathname: routePathname.PROFILE,      page: Profile.profile_page },
     { pathname: routePathname.SETTINGS,     page: Settings.settings_page },
     { pathname: routePathname.DECK,         page: Deck.deck_page },
+    { pathname: routePathname.STUDY,        page: Study.study_page },
 ];
 
 export function routing(path, hash) {

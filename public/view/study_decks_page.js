@@ -48,7 +48,7 @@ export async function study_decks_page() {
 
     // Solution for merging Piper's 'create_deck_deck_title branch
     html += `
-        <button type="button" class="btn btn-primary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
+        <button type="button" class="btn btn-secondary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
             Create New Deck
         </button>
     `;

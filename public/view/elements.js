@@ -15,12 +15,20 @@ export const menuSignOut = document.getElementById('menu-signout');
 
 // STUDY DECKS PAGE
 //============================================================================//
+export const decksCreateDeck = document.getElementById('decks-create-deck');
+//============================================================================//
+
+
+// DECK PAGE
+//============================================================================//
 export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
 export const formCheckInputIsMultipleChoice = document.getElementById('form-check-input-is-multiple-choice');
 export const formAnswerContainer = document.getElementById('form-answer-container');
 export const formAddFlashCardImageButton = document.getElementById('form-add-image-to-flashcard-button');
-export const decksCreateDeck = document.getElementById('decks-create-deck');
+export const btnStudyDeck = document.getElementById('btn-study-deck');
 //============================================================================//
+
+
 
 // FORMS
 //============================================================================//

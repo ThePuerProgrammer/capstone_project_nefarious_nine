@@ -9,6 +9,8 @@ import * as Utilities from './utilities.js'
 let imageFile2Upload;
 
 export function addEventListeners() {
+
+  //Adds event listener to CREATE DECK button within CREATE DECK modal 
   Elements.decksCreateDeck.addEventListener("click", async () => {
     history.pushState(null, null, Routes.routePathname.DECK);
     await deck_page();
@@ -156,8 +158,9 @@ export async function deck_page() {
 
   // study deck button
   html += `
-    <button type="button" class="btn btn-primary">Study</button>
+    <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark">Study</button>
     `;
+    
   Elements.root.innerHTML = html;
 
   const buttonShowCreateAFlashcardModal = document.getElementById(
