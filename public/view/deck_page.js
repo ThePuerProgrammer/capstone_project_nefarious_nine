@@ -14,6 +14,23 @@ export function addEventListeners() {
     await deck_page();
   });
 
+  // Executes parameter function whenever the Create-A-Flashcard Modal is completely hidden
+  //   The function clears the input fields so that whent he user returns, then
+  //   they will have fresh input fields.
+  $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).on('hidden.bs.modal', function (e) {
+    // Deck list Reset
+    Elements.formCreateAFlashcardSelectContainer.innerHTML = "";
+
+    // RESET INPUT FIELDS FOR FOLLOWING:
+    Elements.formCreateAFlashcard.reset();
+
+    // Making sure singular choice is displayed next time.
+    Elements.formAnswerContainer.innerHTML = `
+        <label for="form-answer-text-input">Answer:</label>
+        <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
+    `;
+  });
+
   //Resets Image
   function resetImageSelection() {
     imageFile2Upload = null;
@@ -31,7 +48,6 @@ export function addEventListeners() {
       (acc, input) => ({ ...acc, [input.name]: input.value }),
       {}
     );
-    console.log(formData);
 
     // Getting contents of flashcard
     const question = formData.question;
@@ -68,11 +84,9 @@ export function addEventListeners() {
         flashcard.imageName = imageName;
         flashcard.imageURL = imageURL;
       } else if (typeof obj === "undefined") {
-        console.log("Check2");
         flashcard.imageName = "N/A";
         flashcard.imageURL = "N/A";
       }
-      console.log("Check3");
       const docId = await FirebaseController.createFlashcard(
         deckDocIDReceivingNewFlashcard,
         flashcard
@@ -110,25 +124,25 @@ export function addEventListeners() {
       // MULTIPLE CHOICE ON
       if (Elements.formCheckInputIsMultipleChoice.checked) {
         Elements.formAnswerContainer.innerHTML = `
-                <label for="form-answer-text-input">Correct Answer:</label>
-                <textarea name="answer" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) At least 200" required min length ="1"></textarea>
-                <br />
-                <label for="form-answer-text-input">Incorrect Option:</label>
-                <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1"></textarea>
-                <br />
-                <label for="form-answer-text-input">Incorrect Option:</label>
-                <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1"></textarea>
-                <br />
-                <label for="form-answer-text-input">Incorrect Option:</label>
-                <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1"></textarea>
-            `;
+        <label for="form-answer-text-input">Correct Answer:</label>
+        <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
+        <br />
+        <label for="form-answer-text-input">Incorrect Option:</label>
+        <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1"></textarea>
+        <br />
+        <label for="form-answer-text-input">Incorrect Option:</label>
+        <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1"></textarea>
+        <br />
+        <label for="form-answer-text-input">Incorrect Option:</label>
+        <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1"></textarea>
+        `;
       }
       // MULTIPLE CHOICE OFF
       else {
         Elements.formAnswerContainer.innerHTML = `
-                <label for="form-answer-text-input">Answer:</label>
-                <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
-            `;
+        <label for="form-answer-text-input">Answer:</label>
+        <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
+        `;
       }
     }
   );
@@ -165,12 +179,12 @@ export async function deck_page() {
   );
 
 
- /*****************************************
+  /*****************************************
      *    Dynamic Element Event Listeners
      *****************************************
     * This is where event listeners for HTML 
     * elements that are added dynamically to 
-    * the study_decks_page go.
+    * the decks_page go.
     ******************************************/
 
     // Manually opens the modal for "Create a Flashcard" when button is clicked.
@@ -185,7 +199,7 @@ export async function deck_page() {
 
         // Adding list of decks to select menu/drop down
         listOfTestDecks.forEach(deck => {
-            document.getElementById('form-create-a-flashcard-select-container').innerHTML += `
+            Elements.formCreateAFlashcardSelectContainer.innerHTML += `
                 <option value="${deck.docID}">${deck.name}</option>
             `;
         });
