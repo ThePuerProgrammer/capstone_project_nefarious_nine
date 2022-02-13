@@ -181,6 +181,10 @@ export async function deck_page() {
     Constant.htmlIDs.buttonShowCreateAFlashcardModal
   );
 
+  const buttonStudy = document.getElementById(
+    Constant.htmlIDs.buttonStudy
+  );
+
 
   /*****************************************
      *    Dynamic Element Event Listeners
@@ -210,4 +214,11 @@ export async function deck_page() {
         // Opens the Modal
         $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
     });
+
+    buttonStudy.addEventListener('click', async() => {
+      e.preventDefault();
+      console.log("hellooooo");
+      history.pushState(null, null, Routes.routePathname.STUDY);
+      await study_page();
+  });
 }
