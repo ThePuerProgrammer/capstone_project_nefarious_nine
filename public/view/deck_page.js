@@ -165,32 +165,32 @@ export async function deck_page() {
   );
 
 
- /*****************************************
-     *    Dynamic Element Event Listeners
-     *****************************************
-    * This is where event listeners for HTML 
-    * elements that are added dynamically to 
-    * the study_decks_page go.
-    ******************************************/
+  /*****************************************
+      *    Dynamic Element Event Listeners
+      *****************************************
+     * This is where event listeners for HTML 
+     * elements that are added dynamically to 
+     * the study_decks_page go.
+     ******************************************/
 
-    // Manually opens the modal for "Create a Flashcard" when button is clicked.
-    //  This allows us to pull all of the decks from the (temporary) test deck
-    //  so that we can add a flashcard to a specific deck. Options are added dynamically
-    //  to the select HTML element (#form-create-a-flashcard-select-container) in the "Create A Flashcard" form
-    buttonShowCreateAFlashcardModal.addEventListener('click', async e => {
-        e.preventDefault();
+  // Manually opens the modal for "Create a Flashcard" when button is clicked.
+  //  This allows us to pull all of the decks from the (temporary) test deck
+  //  so that we can add a flashcard to a specific deck. Options are added dynamically
+  //  to the select HTML element (#form-create-a-flashcard-select-container) in the "Create A Flashcard" form
+  buttonShowCreateAFlashcardModal.addEventListener('click', async e => {
+    e.preventDefault();
 
-        // Grabbing list of decks from Firestore
-        const listOfTestDecks = await FirebaseController.getAllTestingDecks();
+    // Grabbing list of decks from Firestore
+    const listOfTestDecks = await FirebaseController.getAllTestingDecks();
 
-        // Adding list of decks to select menu/drop down
-        listOfTestDecks.forEach(deck => {
-            document.getElementById('form-create-a-flashcard-select-container').innerHTML += `
+    // Adding list of decks to select menu/drop down
+    listOfTestDecks.forEach(deck => {
+      document.getElementById('form-create-a-flashcard-select-container').innerHTML += `
                 <option value="${deck.docID}">${deck.name}</option>
             `;
-        });
-        
-        // Opens the Modal
-        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
     });
+
+    // Opens the Modal
+    $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
+  });
 }

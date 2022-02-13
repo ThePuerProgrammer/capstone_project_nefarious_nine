@@ -4,6 +4,7 @@ import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
+import * as DeckPage from './deck_page.js'
 
 
 export function addEventListeners() {
@@ -37,10 +38,6 @@ export function addEventListeners() {
         }
 
     });
-
-    Elements.formViewDeck.addEventListener('submit', async e => {
-
-    })
 }
 
 
@@ -57,25 +54,59 @@ export async function study_decks_page() {
         </button>
     `;
 
+    let deckList;
+    try {
+        // this is pretty temporary since we're just pulling all decks to test
+        // in the future, we can set up our getDecks function to filter by criteria
+        // also TODO: add a dropdown menu to sort decks by different filters - Cody
+        deckList = await FirebaseController.getAllTestingDecks();
+    } catch (e) {
+        // TODO: we can display a popup if there was an error getting the decklists
+        // I'm not doing this now because I don't want to - Cody
+        console.log(e);
+    }
+
     html += `
-        <button id="${Constant.htmlIDs.buttonModalViewDeck}" type="button" class="btn btn-primary pomo-bg-color-dark" data-bs-target="#modal-view-deck">
-            View Deck
-        </button>
+    <table class="table">
+    <thread>
+    <tr>
+    <th scope="col">Select</th>
+    <th scope="col">Subject</th>
+    <th scope="col">Name</th>
+    </tr>
+    </thread>
+    <tbody id="deck-table-body">`
+
+    deckList.forEach(deck => {
+        html += `
+        <tr>
+        ${buildDeckView(deck)}
+        </tr>`
+    })
+
+    html += `</tbody>
+    </table>`;
+    Elements.root.innerHTML += html;
+
+    // it might be better to add this when we actually pull the decks from Firebase
+    // but I'm leaving it here for now - Cody
+    if (deckList.length == 0) {
+        html += '<h2> No decks found! Go create some and get to studying!</h2>'
+        Elements.root.innerHTML += html;
+    }
+
+    DeckPage.addViewButtonListener();
+}
+
+function buildDeckView(deck) {
+    return `
+    <td>
+        <form method="post" class="deck-view-form">
+            <input type="hidden" name="deckID" value="${deck.docId}">
+            <button type="submit" class="btn btn-primary pomo-bg-color-dark">View</button>
+        </form>
+    </td>
+    <td>$${deck.subject}</td>
+    <td>${deck.name}</td>
     `;
-    Elements.root.innerHTML = html;
-
-    const buttonViewDeckModal = document.getElementById(Constant.htmlIDs.buttonModalViewDeck);
-    buttonViewDeckModal.addEventListener('click', async e => {
-        e.preventDefault();
-        // get list of decks from Firestore
-        // TODO: add more information to help filter decks
-        // i.e., created by, subject, classroom, SRS, etc
-        const listOfDecks = await FirebaseController.getAllTestingDecks();
-        listOfDecks.forEach(d => {
-            document.getElementById('form-view-deck-select-container').innerHTML += `
-        <option value="${d.docId}">${d.name}</option>`;
-        });
-        Elements.modalViewDeck.show();
-
-    });
 }
