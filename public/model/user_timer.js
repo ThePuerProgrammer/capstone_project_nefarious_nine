@@ -12,28 +12,19 @@ export class UserTimer {
             this.pingInterval = 1000; // ms
             this.timeInterval = 30; // min
             this.studyTime = .1; // min
-            this.relaxTime = .1; // min
+            this.relaxTime = .05; // min
             this.isStudyMode;
             this.isPaused = false;
             this.interval = null;
-
-            let time = this.studyTime * 60;
-            this.minutes = parseInt(time / 60, 10);
-            this.seconds = parseInt(time % 60, 10);
+            this.isPlaying = false;
 
             this.audioRelaxTimer = new Audio('../assets/sounds/rta.mp3');
             this.audioStudyTimer = new Audio('../assets/sounds/sta.mp3');
 
-            if (this.minutes < 10) {
-                this.minutes = "0" + this.minutes;
-            }
+            this.audioRelaxTimer.volume = 0.3;
+            this.audioStudyTimer.volume = 0.3;
 
-            if (this.seconds < 10) {
-                this.seconds = "0" + this.seconds;
-            }
-
-            Elements.timerMinutesDisplay.innerHTML = this.minutes;
-            Elements.timerSecondsDisplay.innerHTML = this.seconds;
+            this.updateDisplay();
 
             this.setStudyMode(true);
         }
@@ -69,6 +60,9 @@ export class UserTimer {
 
     adjustTimeInterval(timeInterval) {
         this.timeInterval = timeInterval;
+        if (!this.isPlaying) {
+            this.updateDisplay();
+        }
     }
 
     adjustStudyTime(studyTime) {
@@ -83,6 +77,8 @@ export class UserTimer {
     // STANDARD TIMER FUNCTIONS (START, PAUSE, RESET)
     //------------------------------------------------------------------------//
     startTimer() {
+        this.isPlaying = true;
+
         // this section of the solution partially references code found here:
         // https://stackoverflow.com/questions/20618355/how-to-write-a-countdown-timer-in-javascript
         let time;
@@ -90,9 +86,9 @@ export class UserTimer {
             time = this.minutes * 60 + this.seconds - 1;
             this.isPaused = false;
         } else if (this.isStudyMode) {
-            time = this.studyTime * 60 - 1;
+            time = this.studyTime * this.timeInterval * 60 - 1;
         } else {
-            time = this.relaxTime * 60 - 1;
+            time = this.relaxTime * this.timeInterval * 60 - 1;
         }
 
         this.interval = setInterval(() => {
@@ -125,22 +121,29 @@ export class UserTimer {
     }
 
     pauseTimer() {
+        this.isPlaying = false;
         this.isPaused = true;
         clearInterval(this.interval);
     }
 
     resetTimer() {
+        this.isPlaying = false;
         this.setStudyMode(true);
         clearInterval(this.interval);
         this.isPaused = false;
-        let time = this.studyTime * 60;
+        this.updateDisplay();
+    }
+    //------------------------------------------------------------------------//
+
+    updateDisplay() {
+        let time = this.studyTime * this.timeInterval * 60;
         this.minutes = parseInt(time / 60, 10);
         this.seconds = parseInt(time % 60, 10);
-        
+
         if (this.minutes < 10) {
             this.minutes = "0" + this.minutes;
         }
-        
+
         if (this.seconds < 10) {
             this.seconds = "0" + this.seconds;
         }
@@ -148,5 +151,4 @@ export class UserTimer {
         Elements.timerMinutesDisplay.innerHTML = this.minutes;
         Elements.timerSecondsDisplay.innerHTML = this.seconds;
     }
-    //------------------------------------------------------------------------//
 };

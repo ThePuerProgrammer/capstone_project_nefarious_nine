@@ -66,6 +66,10 @@ export const timerModeDisplay = document.getElementById('timer-mode-display');
 export const timerModeDisplayToggle = document.getElementById('timer-mode-display-toggle');
 export const timerModeDisplayStudy = document.getElementById('timer-mode-display-study');
 export const timerModeDisplayRelax = document.getElementById('timer-mode-display-relax');
+export const totalTimeIntervalSlider = document.getElementById('total-time-interval-slider');
+export const timerThumb0 = document.getElementById('timer-thumb-0');
+export const studyRelaxIntervalSlider = document.getElementById('study-relax-interval-slider');
+export const timerThumb1 = document.getElementById('timer-thumb-1');
 //============================================================================//
 
 //IMAGE TAG
