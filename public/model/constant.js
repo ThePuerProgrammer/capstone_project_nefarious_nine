@@ -20,8 +20,8 @@ export const collectionName = {
  * or anything else stored in the storage 
  * portion.
  ******************************************/
-export const storageFolderNames = {
-    FLASHCARD_IMAGES: 'flashcard_images/',
+export const storageFolderName = {
+    FLASHCARD_IMAGES: 'flashcard_images',
 }
 
 /*****************************************
@@ -32,9 +32,7 @@ export const storageFolderNames = {
  export const htmlIDs = {
     buttonShowCreateAFlashcardModal: 'button-show-create-a-flashcard-modal',
     modalCreateAFlashcard: 'modal-create-a-flashcard',
-    formCheckInputIsMultiple: 'form-check-input-is-multiple',
-    buttonStudy: 'btn-study-deck'
-}
+    buttonStudy: 'btn-study-deck',
 
 /*****************************************
  *         Helper Functions
@@ -42,3 +40,5 @@ export const storageFolderNames = {
  * General helper functions that may be used
  * throughout different JavaScript files
  ******************************************/
+    formCheckInputIsMultiple: 'form-check-input-is-multiple'
+}
