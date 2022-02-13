@@ -29,10 +29,12 @@ export const storageFolderNames = {
  *****************************************
  * Where we reference html id's across 
  ******************************************/
- export const htmlIDs = {
+export const htmlIDs = {
     buttonShowCreateAFlashcardModal: 'button-show-create-a-flashcard-modal',
     modalCreateAFlashcard: 'modal-create-a-flashcard',
-    formCheckInputIsMultiple: 'form-check-input-is-multiple'
+    formCheckInputIsMultiple: 'form-check-input-is-multiple',
+    buttonModalViewDeck: 'button-modal-view-deck',
+    modalViewDeck: 'modal-view-deck',
 }
 
 /*****************************************

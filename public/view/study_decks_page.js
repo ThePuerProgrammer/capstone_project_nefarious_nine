@@ -7,7 +7,7 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 
 
 export function addEventListeners() {
-    Elements.menuStudyDecks.addEventListener('click', async() => {
+    Elements.menuStudyDecks.addEventListener('click', async () => {
         history.pushState(null, null, Routes.routePathname.STUDYDECKS);
         await study_decks_page();
     });
@@ -32,11 +32,15 @@ export function addEventListeners() {
             deck.docId = docId;
             Elements.modalCreateDeck.hide();
         } catch (e) {
-            if (Constant.DEV) 
+            if (Constant.DEV)
                 console.log(e);
         }
 
     });
+
+    Elements.formViewDeck.addEventListener('submit', async e => {
+
+    })
 }
 
 
@@ -53,5 +57,25 @@ export async function study_decks_page() {
         </button>
     `;
 
+    html += `
+        <button id="${Constant.htmlIDs.buttonModalViewDeck}" type="button" class="btn btn-primary pomo-bg-color-dark" data-bs-target="#modal-view-deck">
+            View Deck
+        </button>
+    `;
     Elements.root.innerHTML = html;
+
+    const buttonViewDeckModal = document.getElementById(Constant.htmlIDs.buttonModalViewDeck);
+    buttonViewDeckModal.addEventListener('click', async e => {
+        e.preventDefault();
+        // get list of decks from Firestore
+        // TODO: add more information to help filter decks
+        // i.e., created by, subject, classroom, SRS, etc
+        const listOfDecks = await FirebaseController.getAllTestingDecks();
+        listOfDecks.forEach(d => {
+            document.getElementById('form-view-deck-select-container').innerHTML += `
+        <option value="${d.docId}">${d.name}</option>`;
+        });
+        Elements.modalViewDeck.show();
+
+    });
 }
