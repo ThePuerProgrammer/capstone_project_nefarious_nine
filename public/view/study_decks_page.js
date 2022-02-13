@@ -40,7 +40,6 @@ export function addEventListeners() {
     });
 }
 
-
 export async function study_decks_page() {
 
     //Clears all HTML so it doesn't double
