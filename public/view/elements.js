@@ -13,20 +13,22 @@ export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 //============================================================================//
 
-// STUDY DECKS PAGE
+// DECK PAGE
 //============================================================================//
 export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
 export const formCheckInputIsMultipleChoice = document.getElementById('form-check-input-is-multiple-choice');
 export const formAnswerContainer = document.getElementById('form-answer-container');
 export const formAddFlashCardImageButton = document.getElementById('form-add-image-to-flashcard-button');
 export const decksCreateDeck = document.getElementById('decks-create-deck');
+export const formQuestionTextInput = document.getElementById('form-question-text-input');
+export const formCreateAFlashcard = document.getElementById('form-create-a-flashcard');
+export const formAnswerTextInput = document.getElementById('form-answer-text-input');
 //============================================================================//
 
-// FORMS
+// STUDY DECKS PAGE
 //============================================================================//
 export const formSignIn = document.getElementById('form-signin');
 export const formCreateDeck = document.getElementById('form-create-deck');
-export const formCreateAFlashcard = document.getElementById('form-create-a-flashcard');
 export const formCreateAccount = document.getElementById('form-create-account');
 //============================================================================//
 

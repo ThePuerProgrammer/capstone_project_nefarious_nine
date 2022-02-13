@@ -20,8 +20,8 @@ export const collectionName = {
  * or anything else stored in the storage 
  * portion.
  ******************************************/
-export const storageFolderNames = {
-    FLASHCARD_IMAGES: 'flashcard_images/',
+export const storageFolderName = {
+    FLASHCARD_IMAGES: 'flashcard_images',
 }
 
 /*****************************************
@@ -34,10 +34,3 @@ export const storageFolderNames = {
     modalCreateAFlashcard: 'modal-create-a-flashcard',
     formCheckInputIsMultiple: 'form-check-input-is-multiple'
 }
-
-/*****************************************
- *         Helper Functions
- *****************************************
- * General helper functions that may be used
- * throughout different JavaScript files
- ******************************************/
