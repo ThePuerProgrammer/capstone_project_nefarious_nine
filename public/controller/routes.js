@@ -3,13 +3,15 @@ import * as Classrooms from '../view/classrooms_page.js'
 import * as StudyDecks from '../view/study_decks_page.js'
 import * as Profile from '../view/profile_page.js'
 import * as Settings from '../view/settings_page.js'
+import * as Deck from '../view/deck_page.js'
 
 export const routePathname = {
     HOME: '/',
     CLASSROOMS: '/classrooms',
     STUDYDECKS: '/study-decks',
     PROFILE: '/profile',
-    SETTINGS: '/settings'
+    SETTINGS: '/settings',
+    DECK: '/deck'
 };
 
 export const routes = [
@@ -18,6 +20,7 @@ export const routes = [
     { pathname: routePathname.STUDYDECKS,   page: StudyDecks.study_decks_page },
     { pathname: routePathname.PROFILE,      page: Profile.profile_page },
     { pathname: routePathname.SETTINGS,     page: Settings.settings_page },
+    { pathname: routePathname.DECK,         page: Deck.deck_page },
 ];
 
 export function routing(path, hash) {

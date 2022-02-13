@@ -19,6 +19,7 @@ export const formCreateAFlashcardSelectContainer = document.getElementById('form
 export const formCheckInputIsMultipleChoice = document.getElementById('form-check-input-is-multiple-choice');
 export const formAnswerContainer = document.getElementById('form-answer-container');
 export const formAddFlashCardImageButton = document.getElementById('form-add-image-to-flashcard-button');
+export const decksCreateDeck = document.getElementById('decks-create-deck');
 //============================================================================//
 
 // FORMS
