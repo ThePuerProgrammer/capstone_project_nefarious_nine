@@ -123,16 +123,18 @@ input {
 
     border-style: solid;
     border-width: 2px;
+    border-top-width: 3px;
     border-color: #2C1320;
     border-bottom-style: none;
-    font-size: 80px;
+    font-size: 50px;
     text-align: center;
-    padding-top: 10px;
+    padding-top: 35px;
     font-weight: bold;
     color:#A7ADC6;
-    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #2C1320;
     filter: drop-shadow(1px 1px 1px #2C1320);
+    font-family: 'Press Start 2P', cursive;
 }
 
 .timer-hint {
