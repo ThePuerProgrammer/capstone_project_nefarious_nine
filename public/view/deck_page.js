@@ -202,9 +202,9 @@ export async function deck_page() {
             Elements.formCreateAFlashcardSelectContainer.innerHTML += `
                 <option value="${deck.docID}">${deck.name}</option>
             `;
-        });
-        
-        // Opens the Modal
-        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
     });
+
+    // Opens the Modal
+    $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
+  });
 }

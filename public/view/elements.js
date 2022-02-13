@@ -55,7 +55,7 @@ export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-si
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));
 export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', { backdrop: 'static' }));
 export const modalCreateDeck = new bootstrap.Modal(document.getElementById('create-deck-modal'));
-
+//============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
 //============================================================================//
