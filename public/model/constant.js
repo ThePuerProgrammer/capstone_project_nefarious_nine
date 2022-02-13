@@ -21,7 +21,7 @@ export const collectionName = {
  * portion.
  ******************************************/
 export const storageFolderName = {
-    FLASHCARD_IMAGES: 'flashcard_images',
+    FLASHCARD_IMAGES: 'flashcard_images/',
 }
 
 /*****************************************
