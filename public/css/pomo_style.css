@@ -19,6 +19,10 @@
 .pomo-bg-color-light {
     background-color: #A7ADC6;
 }
+
+.pomo-bg-color-gradient-dark-to-light {
+    background-image: linear-gradient(to right, #2C1320 , #A7ADC6);
+}
 /*============================================================================*/
 
 
