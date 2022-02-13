@@ -11,6 +11,13 @@ export const menuStudyDecks = document.getElementById('menu-study-decks');
 export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
+
+// pomo timer buttons
+export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
+export const pomoTimerStartButton = document.getElementById('start-timer-button');
+export const pomoTimerPauseButton = document.getElementById('pause-timer-button');
+export const pomoTimerResetButton = document.getElementById('reset-timer-button');
+export const pomoTimerMakeSettingDefaultButton = document.getElementById('timer-make-setting-default-button');
 //============================================================================//
 
 // DECK PAGE
@@ -48,6 +55,22 @@ export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-si
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));
 export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', { backdrop: 'static' }));
 export const modalCreateDeck = new bootstrap.Modal(document.getElementById('create-deck-modal'));
+//============================================================================//
+
+// POMO TIMER MISC ACCESSABLES
+//============================================================================//
+export const timerSecondsDisplay = document.getElementById('timer-seconds-display');
+export const timerMinutesDisplay = document.getElementById('timer-minutes-display');
+export const timerIntervalSettingsSliders = document.getElementById('timer-interval-settings-sliders');
+export const timerModeDisplay = document.getElementById('timer-mode-display');
+export const timerModeDisplayToggle = document.getElementById('timer-mode-display-toggle');
+export const timerModeDisplayStudy = document.getElementById('timer-mode-display-study');
+export const timerModeDisplayRelax = document.getElementById('timer-mode-display-relax');
+export const totalTimeIntervalSlider = document.getElementById('total-time-interval-slider');
+export const timerThumb0 = document.getElementById('timer-thumb-0');
+export const studyRelaxIntervalSlider = document.getElementById('study-relax-interval-slider');
+export const timerThumb1 = document.getElementById('timer-thumb-1');
+//============================================================================//
 
 //IMAGE TAG
 //============================================================================//
