@@ -70,8 +70,6 @@ export async function study_decks_page() {
         html += buildDeckView(deck);
     })
 
-    html += `</tbody>
-    </table>`;
     Elements.root.innerHTML += html;
 
     // it might be better to add this when we actually pull the decks from Firebase
@@ -86,7 +84,7 @@ export async function study_decks_page() {
 
 function buildDeckView(deck) {
     return `
-    <div id="card-${deck.docId}" class="card" style="width: 18rem; display: inline-block; background-color: #5F4B66; padding: 5px">
+    <div id="card-${deck.docId}" class="card" style="width: 18rem; display: inline-block; background-color: #5F4B66; padding: 5px; margin-bottom: 5px">
         <div class="card-body">
             <h5 class="card-title" style="text-align: center; color: #A7ADC6">${deck.name}</h5>
             <p class="card-text" style="text-align: center; color: #A7ADC6">${deck.subject}</p>
