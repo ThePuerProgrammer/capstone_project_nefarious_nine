@@ -210,11 +210,12 @@ export async function deck_page() {
             Elements.formCreateAFlashcardSelectContainer.innerHTML += `
                 <option value="${deck.docID}">${deck.name}</option>
             `;
-        });
-        
-        // Opens the Modal
-        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
     });
+
+    // Opens the Modal
+    $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');});
+
+  
 
     // Adds event listener for STUDY button
     buttonStudy.addEventListener('click', async e => {
@@ -223,3 +224,4 @@ export async function deck_page() {
       await Study.study_page();
   });
 }
+

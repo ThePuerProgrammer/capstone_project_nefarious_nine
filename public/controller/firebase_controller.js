@@ -27,7 +27,7 @@ export async function uploadImageToFlashcard(imageFile, imageName){
         imageName = Date.now() + imageFile.name;
     }
     const ref = firebase.storage().ref()
-        .child(Constant.storageFolderNames.FLASHCARD_IMAGES + imageName);
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageName);
     const taskSnapShot = await ref.put(imageFile);
     const imageURL = await taskSnapShot.ref.getDownloadURL();
     return{imageName,imageURL};
