@@ -17,6 +17,7 @@ export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-
 export const pomoTimerStartButton = document.getElementById('start-timer-button');
 export const pomoTimerPauseButton = document.getElementById('pause-timer-button');
 export const pomoTimerResetButton = document.getElementById('reset-timer-button');
+export const pomoTimerMakeSettingDefaultButton = document.getElementById('timer-make-setting-default-button');
 //============================================================================//
 
 // DECK PAGE

@@ -21,6 +21,9 @@ export class UserTimer {
             this.minutes = parseInt(time / 60, 10);
             this.seconds = parseInt(time % 60, 10);
 
+            this.audioRelaxTimer = new Audio('../assets/sounds/rta.mp3');
+            this.audioStudyTimer = new Audio('../assets/sounds/sta.mp3');
+
             if (this.minutes < 10) {
                 this.minutes = "0" + this.minutes;
             }
@@ -107,6 +110,12 @@ export class UserTimer {
             Elements.timerSecondsDisplay.innerHTML = this.seconds;
 
             if (--time < 0) {
+                if (this.isStudyMode) {
+                    this.audioStudyTimer.play();
+                } else {
+                    this.audioRelaxTimer.play();
+                }
+
                 this.setStudyMode(!this.isStudyMode);
                 clearInterval(this.interval);
                 this.startTimer();

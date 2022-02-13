@@ -26,7 +26,7 @@ export function addEventListeners() {
         if (timerStateClosed) {
 
             // raise button position 
-            document.getElementById('pomo-timer-popup-div').style.height = "450px";
+            document.getElementById('pomo-timer-popup-div').style.height = "480px";
 
             // make contents visible
             document.getElementById('play-controls').style.display = "flex";
@@ -35,6 +35,7 @@ export function addEventListeners() {
             Elements.timerIntervalSettingsSliders.style.display = "block";
             Elements.timerModeDisplay.style.display = "block";
             Elements.timerModeDisplayToggle.style.display = "block";
+            Elements.pomoTimerMakeSettingDefaultButton.style.display = "block";
 
             // flip button icon orientation ^ to v
             Elements.pomoTimerToggleButton.childNodes[0].nextSibling.childNodes[0].nextSibling.src = `./assets/images/collapse.svg`;

@@ -237,6 +237,7 @@
 
   <!-- PERSISTENT POMO TIMER -------------------------------------------------->
   <div id="pomo-timer">
+
     <div id="pomo-timer-button-div">
       <button type="button" class="btn pomo-bg-color-md-dark pomo-btn-expand-width rounded-0 p-0 pomo-text-color-light pomo-font-weight-bold" id="pomo-timer-toggle-button">
         <span>
@@ -245,6 +246,7 @@
         </span>
       </button>
     </div>
+
     <div class="pomo-bg-color-md" id="pomo-timer-popup-div" style="height: 0px;">
       <div id="pomo-timer-min-sec" style="height: 50%; display: none;">
         <span style="height: 120px;">
@@ -269,9 +271,22 @@
           </span>
         </div>
       </div>
-      <div id="timer-interval-settings-sliders" style="height: 30%; display: none;">
-        <input type="range" min="10" max="60" value="30" step="10" class="slider" id="total-time-interval-slider">
+
+      <div id="timer-interval-settings-sliders" style="height: 40%; display: none;" class="pomo-text-color-light pomo-font-weight-bold">
+        <div>Total Interval Time</div>
+        <input type="range" min="10" max="60" value="30" step="10" class="form-range pomo-thumb" id="total-time-interval-slider">
+        <div style="margin-top: 20px;">
+          <span style="display: flex">
+            <div style="flex: 1">Study</div>
+            <div style="flex: 1; text-align: right;">Relax</div>
+          </span>
+        </div>
+        <input type="range" min="10" max="60" value="30" step="10" class="form-range pomo-thumb" id="total-time-interval-slider">
+        <div id="timer-make-setting-default-button" style="display: none;">
+          <button type="button" class="btn pomo-bg-color-md-light pomo-text-color-dark pomo-font-weight-bold">Make This Setting My Default</button>
+        </div>
       </div>
+
       <div id="play-controls" style="display: none;">
         <button class="btn pomo-bg-color-light m-2 player" id="start-timer-button">
           <img src="./assets/images/play_arrow_black_24dp.svg"
@@ -283,6 +298,7 @@
           <img src="./assets/images/restart_alt_black_24dp.svg"
         </button>
       </div>
+
     </div>
   </div>
   <!-- END OF TIMER SECTION --------------------------------------------------->
