@@ -19,6 +19,7 @@ export const formCreateAFlashcardSelectContainer = document.getElementById('form
 export const formCheckInputIsMultipleChoice = document.getElementById('form-check-input-is-multiple-choice');
 export const formAnswerContainer = document.getElementById('form-answer-container');
 export const formAddFlashCardImageButton = document.getElementById('form-add-image-to-flashcard-button');
+export const decksCreateDeck = document.getElementById('decks-create-deck');
 //============================================================================//
 
 // FORMS
@@ -41,10 +42,11 @@ export const formCreateAccount = document.getElementById('form-create-account');
 export const popupInfoTitle = document.getElementById('modal-infobox-title');
 export const popupInfoBody = document.getElementById('modal-infobox-body');
 
-export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-signin-form'), {backdrop: 'static'});
+export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-signin-form'), { backdrop: 'static' });
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));
-export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', {backdrop: 'static'}));
-//============================================================================//
+export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', { backdrop: 'static' }));
+export const modalCreateDeck = new bootstrap.Modal(document.getElementById('create-deck-modal'));
+
 
 //IMAGE TAG
 //============================================================================//
