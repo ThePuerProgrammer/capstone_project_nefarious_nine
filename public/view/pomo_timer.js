@@ -34,6 +34,7 @@ export function addEventListeners() {
             document.getElementById('pomo-timer-min-sec').childNodes[0].nextSibling.style.display = "flex";
             Elements.timerIntervalSettingsSliders.style.display = "block";
             Elements.timerModeDisplay.style.display = "block";
+            Elements.timerModeDisplayToggle.style.display = "block";
 
             // flip button icon orientation ^ to v
             Elements.pomoTimerToggleButton.childNodes[0].nextSibling.childNodes[0].nextSibling.src = `./assets/images/collapse.svg`;
@@ -54,6 +55,7 @@ export function addEventListeners() {
             document.getElementById('pomo-timer-min-sec').childNodes[0].nextSibling.style.display = "none";
             Elements.timerIntervalSettingsSliders.style.display = "none";
             Elements.timerModeDisplay.style.display = "none";
+            Elements.timerModeDisplayToggle.style.display = "none";
 
             // flip button icon orientation v to ^
             Elements.pomoTimerToggleButton.childNodes[0].nextSibling.childNodes[0].nextSibling.src = `./assets/images/expand.svg`;

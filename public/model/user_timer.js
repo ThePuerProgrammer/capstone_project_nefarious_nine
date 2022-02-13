@@ -2,7 +2,7 @@
 import * as Elements from '../view/elements.js'
 
 export class UserTimer {
-    
+
     // CONSTRUCTORS
     //------------------------------------------------------------------------//
     constructor(data) {
@@ -11,20 +11,28 @@ export class UserTimer {
         } else {
             this.pingInterval = 1000; // ms
             this.timeInterval = 30; // min
-            this.studyTime = 20; // min
-            this.relaxTime = 10; // min
-            this.isStudyMode = true;
+            this.studyTime = .1; // min
+            this.relaxTime = .1; // min
+            this.isStudyMode;
             this.isPaused = false;
             this.interval = null;
 
             let time = this.studyTime * 60;
             this.minutes = parseInt(time / 60, 10);
             this.seconds = parseInt(time % 60, 10);
+
+            if (this.minutes < 10) {
+                this.minutes = "0" + this.minutes;
+            }
+
             if (this.seconds < 10) {
                 this.seconds = "0" + this.seconds;
             }
+
             Elements.timerMinutesDisplay.innerHTML = this.minutes;
             Elements.timerSecondsDisplay.innerHTML = this.seconds;
+
+            this.setStudyMode(true);
         }
     }
     //------------------------------------------------------------------------//
@@ -34,6 +42,26 @@ export class UserTimer {
     setStudyMode(isStudyMode) {
         // value must be true or false
         this.isStudyMode = isStudyMode;
+        if (this.isStudyMode) {
+            Elements.timerModeDisplayStudy.style.borderStyle = "solid";
+            Elements.timerModeDisplayStudy.style.borderColor = "#2C1320"; 
+            Elements.timerModeDisplayStudy.style.backgroundColor = "#A7ADC6";
+            Elements.timerModeDisplayStudy.style.color = "#2C1320";
+
+            Elements.timerModeDisplayRelax.style.color = "#A7ADC6";
+            Elements.timerModeDisplayRelax.style.backgroundColor = "#56667A";
+            Elements.timerModeDisplayRelax.style.borderStyle = "none";
+
+        } else {
+            Elements.timerModeDisplayRelax.style.borderStyle = "solid";
+            Elements.timerModeDisplayRelax.style.borderColor = "#2C1320"; 
+            Elements.timerModeDisplayRelax.style.backgroundColor = "#A7ADC6";
+            Elements.timerModeDisplayRelax.style.color = "#2C1320";
+
+            Elements.timerModeDisplayStudy.style.color = "#A7ADC6";
+            Elements.timerModeDisplayStudy.style.backgroundColor = "#56667A";
+            Elements.timerModeDisplayStudy.style.borderStyle = "none";
+        }
     }
 
     adjustTimeInterval(timeInterval) {
@@ -78,8 +106,10 @@ export class UserTimer {
             Elements.timerMinutesDisplay.innerHTML = this.minutes;
             Elements.timerSecondsDisplay.innerHTML = this.seconds;
 
-            if (--time <= 0) {
+            if (--time < 0) {
                 this.setStudyMode(!this.isStudyMode);
+                clearInterval(this.interval);
+                this.startTimer();
             }
 
         }, this.pingInterval);
@@ -91,14 +121,21 @@ export class UserTimer {
     }
 
     resetTimer() {
+        this.setStudyMode(true);
         clearInterval(this.interval);
         this.isPaused = false;
         let time = this.studyTime * 60;
         this.minutes = parseInt(time / 60, 10);
         this.seconds = parseInt(time % 60, 10);
+        
+        if (this.minutes < 10) {
+            this.minutes = "0" + this.minutes;
+        }
+        
         if (this.seconds < 10) {
             this.seconds = "0" + this.seconds;
         }
+
         Elements.timerMinutesDisplay.innerHTML = this.minutes;
         Elements.timerSecondsDisplay.innerHTML = this.seconds;
     }

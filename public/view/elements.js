@@ -60,6 +60,9 @@ export const timerSecondsDisplay = document.getElementById('timer-seconds-displa
 export const timerMinutesDisplay = document.getElementById('timer-minutes-display');
 export const timerIntervalSettingsSliders = document.getElementById('timer-interval-settings-sliders');
 export const timerModeDisplay = document.getElementById('timer-mode-display');
+export const timerModeDisplayToggle = document.getElementById('timer-mode-display-toggle');
+export const timerModeDisplayStudy = document.getElementById('timer-mode-display-study');
+export const timerModeDisplayRelax = document.getElementById('timer-mode-display-relax');
 //============================================================================//
 
 //IMAGE TAG

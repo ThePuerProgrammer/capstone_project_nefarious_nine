@@ -247,7 +247,7 @@
     </div>
     <div class="pomo-bg-color-md" id="pomo-timer-popup-div" style="height: 0px;">
       <div id="pomo-timer-min-sec" style="height: 50%; display: none;">
-        <span style="height: 160px;">
+        <span style="height: 120px;">
           <div id="timer-minutes-display"></div>
           <div id="timer-seconds-display"></div>
         </span>
@@ -255,9 +255,18 @@
           <div class="pomo-bg-color-md-light pomo-text-color-dark timer-hint">MINUTES</div>
           <div class="pomo-bg-color-md-light pomo-text-color-dark timer-hint">SECONDS</div>
         </span>
-        <div id="timer-mode-display" style="display: none; text-align: left; padding: 5px 0 0 5px" class="pomo-font-weight-bold">
+        <div id="timer-mode-display" style="display: none; text-align: center; margin: 5px 0 0 0;" class=" pomo-text-color-light pomo-font-weight-bold">
           Timer Mode
-          <div>next</div>
+        </div>
+        <div id="timer-mode-display-toggle" style="display: none;">
+          <span style="display: flex">
+            <div id="timer-mode-display-study" class="timer-modes">
+              Study
+            </div>
+            <div id="timer-mode-display-relax" class="timer-modes">
+              Relax
+            </div>
+          </span>
         </div>
       </div>
       <div id="timer-interval-settings-sliders" style="height: 30%; display: none;">
