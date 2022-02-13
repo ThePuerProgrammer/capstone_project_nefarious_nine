@@ -51,6 +51,7 @@ export async function study_decks_page() {
         <button type="button" class="btn btn-primary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
             Create New Deck
         </button>
+        <br><br>
     `;
 
     let deckList;
@@ -65,22 +66,8 @@ export async function study_decks_page() {
         console.log(e);
     }
 
-    html += `
-    <table class="table">
-    <thread>
-    <tr>
-    <th scope="col">Select</th>
-    <th scope="col">Subject</th>
-    <th scope="col">Name</th>
-    </tr>
-    </thread>
-    <tbody id="deck-table-body">`
-
     deckList.forEach(deck => {
-        html += `
-        <tr>
-        ${buildDeckView(deck)}
-        </tr>`
+        html += buildDeckView(deck);
     })
 
     html += `</tbody>
@@ -94,18 +81,20 @@ export async function study_decks_page() {
         Elements.root.innerHTML += html;
     }
 
-    DeckPage.addViewButtonListener();
+    // DeckPage.addViewButtonListener();
 }
 
 function buildDeckView(deck) {
     return `
-    <td>
-        <form method="post" class="deck-view-form">
-            <input type="hidden" name="deckID" value="${deck.docId}">
-            <button type="submit" class="btn btn-primary pomo-bg-color-dark">View</button>
+    <div id="card-${deck.docId}" class="card" style="width: 18rem; display: inline-block; background-color: #5F4B66; padding: 5px">
+        <div class="card-body">
+            <h5 class="card-title" style="text-align: center; color: #A7ADC6">${deck.name}</h5>
+            <p class="card-text" style="text-align: center; color: #A7ADC6">${deck.subject}</p>
+        </div>
+        <form class="form-view-deck float-start" method="post">
+            <input type="hidden" name="docId" value="${deck.docId}">
+            <button class="btn btn-outline-primary pomo-bg-color-dark" type="submit">View</button>
         </form>
-    </td>
-    <td>$${deck.subject}</td>
-    <td>${deck.name}</td>
+    </div>
     `;
 }
