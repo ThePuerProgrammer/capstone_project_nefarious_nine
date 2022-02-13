@@ -4,6 +4,7 @@ import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Utilities from './utilities.js'
+import * as Study from './study_page.js'
 
 //Declaration of Image(Global)
 let imageFile2Upload;
@@ -215,10 +216,10 @@ export async function deck_page() {
         $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
     });
 
-    buttonStudy.addEventListener('click', async() => {
+    // Adds event listener for STUDY button
+    buttonStudy.addEventListener('click', async e => {
       e.preventDefault();
-      console.log("hellooooo");
       history.pushState(null, null, Routes.routePathname.STUDY);
-      await study_page();
+      await Study.study_page();
   });
 }
