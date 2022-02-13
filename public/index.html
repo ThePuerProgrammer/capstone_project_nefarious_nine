@@ -108,8 +108,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="post" id ="form-create-account"
-          <form>
+          <form method="post" id="form-create-account" <form>
             <div>
               <input type="email" name="email" required placeholder="email address">
             </div>
@@ -172,37 +171,41 @@
         </div>
         <div class="modal-body">
           <form id="form-create-a-flashcard" method="post">
-              <!---FORM VALIDATION ARE PLACED OF THE FIELDS WITH REQUIREMENTS--> 
-              <!--EXAMPLE <input type = "text" name = "title" placeholder="Title of the thread" required minlength="2">-->
-              <!-- DROPDOWN FOR LIST OF DECKS: List is dynamically filled when the button to open this modal is pressed -->
-              <label class="col-2 align-self-center" for="form-create-a-flashcard-select-container">Deck:</label>
-              <select id="form-create-a-flashcard-select-container" name="selectedDeck" class="form-select" aria-label="Default select example"></select>
-              <br />
-              <!-- MULTIPLE CHOICE TOGGLE -->
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="form-check-input-is-multiple-choice">
-                <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple Choice</label>
-              </div>
-              <br />
-              <!-- QUESTION INPUT -->
-              <label for="form-question-text-input">Question:</label>
-              <textarea name="question" id="form-question-text-input" class="form-control" rows="3" type="text" name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min length ="1"></textarea>
-              <br />
-              <!-- ANSWER INPUT -->
-              <div id="form-answer-container">
-                <label for="form-answer-text-input">Answer:</label>
-                <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
-              </div>
-              <br />
-              <div>
-                <img id ="form-add-image-to-flashcard-tag" style="display: block" />
-                Image:
-                <input id="form-add-image-to-flashcard-button" type="file" value="upload" />
-              </div>
-              <br />
-              <div>
-                <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Create</button>
-              </div>
+            <!---FORM VALIDATION ARE PLACED OF THE FIELDS WITH REQUIREMENTS-->
+            <!--EXAMPLE <input type = "text" name = "title" placeholder="Title of the thread" required minlength="2">-->
+            <!-- DROPDOWN FOR LIST OF DECKS: List is dynamically filled when the button to open this modal is pressed -->
+            <label class="col-2 align-self-center" for="form-create-a-flashcard-select-container">Deck:</label>
+            <select id="form-create-a-flashcard-select-container" name="selectedDeck" class="form-select"
+              aria-label="Default select example"></select>
+            <br />
+            <!-- MULTIPLE CHOICE TOGGLE -->
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="form-check-input-is-multiple-choice">
+              <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple Choice</label>
+            </div>
+            <br />
+            <!-- QUESTION INPUT -->
+            <label for="form-question-text-input">Question:</label>
+            <textarea name="question" id="form-question-text-input" class="form-control" rows="3" type="text"
+              name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min
+              length="1"></textarea>
+            <br />
+            <!-- ANSWER INPUT -->
+            <div id="form-answer-container">
+              <label for="form-answer-text-input">Answer:</label>
+              <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text"
+                name="flashcard-answer" placeholder="At least 4." required min length="1"></textarea>
+            </div>
+            <br />
+            <div>
+              <img id="form-add-image-to-flashcard-tag" style="display: block" />
+              Image:
+              <input id="form-add-image-to-flashcard-button" type="file" value="upload" />
+            </div>
+            <br />
+            <div>
+              <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Create</button>
+            </div>
           </form>
         </div>
       </div>
@@ -219,7 +222,8 @@
         </div>
         <div class="modal-body pomo-bg-color-light pomo-text-color-dark" id="modal-infobox-body"></div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+            data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -275,7 +279,7 @@
   <!-- JQUERY Added so that we can open modals manually. This allows us to make -->
   <!-- needed database calls and other functionality before the modal opens     -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  
+
   <!--Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

@@ -49,7 +49,6 @@ export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById
 export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', { backdrop: 'static' }));
 export const modalCreateDeck = new bootstrap.Modal(document.getElementById('create-deck-modal'));
 
-
 //IMAGE TAG
 //============================================================================//
 export const imageTagCreateFlash = document.getElementById('form-add-image-to-flashcard-tag');
