@@ -1,17 +1,5 @@
-:pseudo-root {
-    --color-dark: #2C1320;
-    --color-md-dark: #5F4B66;
-    --color-md: #56667A;
-    --color-md-light: #8797AF;
-    --color-light: #A7ADC6;
-}
-
-
 /* CUSTOM BACKGROUND COLORS */
-
-
 /*============================================================================*/
-
 .pomo-bg-color-dark {
     background-color: #2C1320;
 }
@@ -31,16 +19,11 @@
 .pomo-bg-color-light {
     background-color: #A7ADC6;
 }
-
-
 /*============================================================================*/
 
 
 /* CUSTOM TEXT COLORS */
-
-
 /*============================================================================*/
-
 .pomo-text-color-dark {
     color: #2C1320;
 }
@@ -52,38 +35,41 @@
 .pomo-text-color-light {
     color: #A7ADC6;
 }
-
-
 /*============================================================================*/
 
 
 /* FONT MODIFIERS */
-
-
 /*============================================================================*/
-
 .pomo-font-weight-bold {
     font-weight: bold;
 }
-
-
 /*============================================================================*/
 
-.btn:focus,
-.btn:active {
+
+/* BOOTSTRAP OVERRIDES */
+/*============================================================================*/
+.navbar .btn:focus, .btn:active {
     color: #8797AF;
     box-shadow: none !important;
     text-decoration: underline;
 }
 
-/*============================================================================*/
+#pomo-timer-toggle-button {
+    box-shadow: none !important;
+    text-decoration: none;
+}
 
+.pomo-btn-expand-width {
+    width: 290px !important;
+}
+
+.pomo-btn-expand-width:hover {
+    color: #A7ADC6 !important;
+}
+/*============================================================================*/
 
 /* SIGNING IN AND OUT */
-
-
 /*============================================================================*/
-
 .modal-preauth {
     display: block;
 }
@@ -99,3 +85,138 @@ input {
     border-width: 0 0 2px 0;
     width: 100%;
 }
+/*============================================================================*/
+
+
+/* STYLE BY ID's */
+/*============================================================================*/
+#pomo-timer {
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+    max-width: 300px;
+    border-left: #2C1320;
+    border-top: #2C1320;
+    border-right: #2C1320;
+    border-width: 3px;
+    border-bottom-width: 0;
+    border-style:ridge;
+}
+
+#play-controls {
+    margin: auto;
+}
+
+.player {
+    flex: 1;
+    filter: drop-shadow(2px 2px 1px #2C1320);
+}
+
+.player .btn:active {
+    padding-top: 2px;
+}
+
+#timer-make-setting-default-button {
+    margin: 15px 0 0 15px;
+    filter: drop-shadow(1px 1px 2px #2C1320);
+}
+
+#timer-minutes-display, #timer-seconds-display {
+    margin: 10px 5px 0 5px; 
+    background-color: white; 
+    flex: 1;
+
+    border-style: solid;
+    border-width: 2px;
+    border-top-width: 3px;
+    border-color: #2C1320;
+    border-bottom-style: none;
+    font-size: 50px;
+    text-align: center;
+    padding-top: 20px;
+    padding-left: 5px;
+    font-weight: bold;
+    color:#A7ADC6;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #2C1320;
+    filter: drop-shadow(1px 1px 1px #2C1320);
+    font-family: 'Press Start 2P', cursive;
+}
+
+.timer-hint {
+    border-width: 2px;
+    border-color: #2C1320;
+    border-top-style: none;
+    border-style: solid;
+    margin: 0 5px 0 5px; 
+    flex: 1;
+    text-align: center;
+    filter: drop-shadow(1px 1px 1px #2C1320);
+    font-weight: 700;
+}
+
+.timer-modes {
+    margin: 5px 5px 0 5px; 
+    flex: 1;
+    text-align: center;
+    background-color: white;
+    font-size: large;
+    font-weight: 700;
+    color:#2C1320;
+}
+
+#timer-interval-settings-sliders {
+    margin: -15px 5px 0 5px;
+}
+
+.pomo-thumb::-webkit-slider-thumb {
+    background: #8797AF;
+    width: 60px;
+    height: 30px;
+    margin-top: -11px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #2C1320;
+    outline: none !important;
+    box-shadow: none !important;
+}
+  
+.pomo-thumb::-moz-range-thumb {
+    background: #8797AF;
+    width: 60px;
+    height: 40px;
+    margin-top: -15px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #2C1320;
+}
+  
+.pomo-thumb::-ms-thumb {
+    background: #8797AF;
+    width: 60px;
+    height: 40px;
+    margin-top: -15px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #2C1320;
+}
+
+.thumb-0-text {
+    position: absolute;
+    font-size: 18px;
+    top: 56%;
+    pointer-events: none;
+    color:#2C1320;
+}
+
+.thumb-1-text {
+    position: absolute;
+    font-size: 18px;
+    top: 70.6%;
+    pointer-events: none;
+    color:#2C1320;
+}
+/*============================================================================*/
