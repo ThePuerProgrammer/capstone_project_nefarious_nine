@@ -11,6 +11,14 @@ export const DEV = true
 export const collectionName = {
     FLASHCARDS: 'flashcards',
     OWNED_DECKS: 'owned_decks',
+    USERS: 'users',
+    SRS_DATA: 'srs_data',
+    FLASHCARDS_DATA: 'flashcards_data',
+}
+
+export const documentPrefixes = {
+    flashcardDataPrefix: 'flashcard_data_',
+    deckDataPrefix: 'deck_data_',
 }
 
 /*****************************************
@@ -33,5 +41,6 @@ export const storageFolderName = {
 export const htmlIDs = {
     buttonShowCreateAFlashcardModal: 'button-show-create-a-flashcard-modal',
     modalCreateAFlashcard: 'modal-create-a-flashcard',
-    formCheckInputIsMultiple: 'form-check-input-is-multiple'
+    formCheckInputIsMultiple: 'form-check-input-is-multiple',
+    modalCreateAccount: 'modal-create-account'
 }
