@@ -2,17 +2,6 @@ import * as Constant from '../model/constant.js'
 import { Deck } from '../model/Deck.js';
 
 //============================================================================//
-// CREATE User Document
-//============================================================================//
-export async function createUserDocument(user) {
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .add(user.serialize());
-    return ref.id;
-}
-//============================================================================//
-
-//============================================================================//
 // CREATE A Deck
 //============================================================================//
 export async function createDeck(deck) {
@@ -50,6 +39,22 @@ export async function uploadImageToFlashcard(imageFile, imageName){
     const taskSnapShot = await ref.put(imageFile);
     const imageURL = await taskSnapShot.ref.getDownloadURL();
     return{imageName,imageURL};
+}
+//===========================================================================//
+
+//============================================================================//
+// Update Flashcard Data
+//============================================================================//
+export async function updateFlashcardData(deckDocID, flashcardDocID,  userAnswerCorrectly){
+    // use window.localStorage to store needed local information
+
+    const ref = firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(/* TODO: Logged In User UID */)
+        .collection(Constant.collectionName.SRS_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName)
+
 }
 //===========================================================================//
 

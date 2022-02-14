@@ -12,13 +12,8 @@ export const collectionName = {
     FLASHCARDS: 'flashcards',
     OWNED_DECKS: 'owned_decks',
     USERS: 'users',
-    SRS_DATA: 'srs_data',
+    DECK_DATA: 'deck_data',
     FLASHCARDS_DATA: 'flashcards_data',
-}
-
-export const documentPrefixes = {
-    flashcardDataPrefix: 'flashcard_data_',
-    deckDataPrefix: 'deck_data_',
 }
 
 /*****************************************

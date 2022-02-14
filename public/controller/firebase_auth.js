@@ -19,7 +19,16 @@ export function addEventListeners() {
         const email = e.target.email.value;
         const password = e.target.password.value;
         try {
+            let uid;
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
+                .then( cred => {
+                    // Getting UID for localStorage!
+                    uid = cred.user.uid;
+                });
+            
+            localStorage.set("uid", uid);
+            console.log(localStorage.getItem("uid"));
+            
             Elements.modalSignIn.hide();
         } catch (error) {
             const errorCode = error.code;
@@ -42,6 +51,7 @@ export function addEventListeners() {
         }
 
         try {
+            let uid;
             const email = emailAddress;
             const decksStudying = [];
 
@@ -54,8 +64,11 @@ export function addEventListeners() {
             //  * uid of the Auth account matches the Doc ID of the user document!
             await createUserWithEmailAndPassword(auth, emailAddress, password)
                 .then(cred => {
+                    uid = cred.user.uid;
                     return firebase.firestore().collection(Constants.collectionName.USERS).doc(cred.user.uid).set(newUserModel.serialize());
                 });
+            
+            window.localStorage.setItem("uid", uid);
             
             // Account successfully created from here
             e.target.reset();
