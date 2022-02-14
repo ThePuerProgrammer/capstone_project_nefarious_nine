@@ -11,6 +11,14 @@ export const DEV = true
 export const collectionName = {
     FLASHCARDS: 'flashcards',
     OWNED_DECKS: 'owned_decks',
+    USERS: 'users',
+    SRS_DATA: 'srs_data',
+    FLASHCARDS_DATA: 'flashcards_data',
+}
+
+export const documentPrefixes = {
+    flashcardDataPrefix: 'flashcard_data_',
+    deckDataPrefix: 'deck_data_',
 }
 
 /*****************************************
@@ -41,5 +49,6 @@ export const htmlIDs = {
  * General helper functions that may be used
  * throughout different JavaScript files
  ******************************************/
-    formCheckInputIsMultiple: 'form-check-input-is-multiple'
+    formCheckInputIsMultiple: 'form-check-input-is-multiple',
+    modalCreateAccount: 'modal-create-account'
 }

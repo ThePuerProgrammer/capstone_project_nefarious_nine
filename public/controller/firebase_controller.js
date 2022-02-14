@@ -1,13 +1,29 @@
 import * as Constant from '../model/constant.js'
 import { Deck } from '../model/Deck.js';
 
+//============================================================================//
+// CREATE User Document
+//============================================================================//
+export async function createUserDocument(user) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .add(user.serialize());
+    return ref.id;
+}
+//============================================================================//
+
+//============================================================================//
+// CREATE A Deck
+//============================================================================//
 export async function createDeck(deck) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.OWNED_DECKS)
         .add(deck.serialize());
     return ref.id;
 }
+//============================================================================//
 
+//============================================================================//
 // CREATE A Flashcard
 //============================================================================//
 export async function createFlashcard(deckDocID, flashcardModel) {
@@ -18,6 +34,9 @@ export async function createFlashcard(deckDocID, flashcardModel) {
         .add(flashcardModel.serialize());
     return ref.id;
 }
+//============================================================================//
+
+
 //============================================================================//
 //CREATE FLASHCARD IMAGE
 //============================================================================//
@@ -34,6 +53,7 @@ export async function uploadImageToFlashcard(imageFile, imageName){
 }
 //===========================================================================//
 
+//============================================================================//
 // This function pulls all decks from the highest level owned_decks collection
 // in firestore. This is purely for testing for the time being and will later be
 // modified to accomodate users / classrooms
