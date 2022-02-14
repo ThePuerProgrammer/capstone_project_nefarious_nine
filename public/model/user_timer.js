@@ -121,7 +121,6 @@ export class UserTimer {
     }
 
     pauseTimer() {
-        this.isPlaying = false;
         this.isPaused = true;
         clearInterval(this.interval);
     }
