@@ -22,6 +22,9 @@ export function addEventListeners() {
         // relevant to Cody's story:
         const dateCreated = Date.now();
 
+        //get uid
+        //const uid = ;
+
         const deck = new Deck({
             name,
             subject,
@@ -29,7 +32,7 @@ export function addEventListeners() {
         });
 
         try {
-            const docId = await FirebaseController.createDeck(deck);
+            const docId = await FirebaseController.createDeck(uid, deck);
             deck.docId = docId;
             Elements.modalCreateDeck.hide();
         } catch (e) {

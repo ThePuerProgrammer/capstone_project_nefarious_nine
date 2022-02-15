@@ -16,8 +16,10 @@ export async function createUserDocument(user) {
 //============================================================================//
 // CREATE A Deck
 //============================================================================//
-export async function createDeck(deck) {
+export async function createDeck(uid, deck) {
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .add(deck.serialize());
     return ref.id;
@@ -101,6 +103,7 @@ export async function getFlashcards(docId) {
 
     return flashcards;
 }
+
 
 /* when the function for creating a deck is written
     uncomment the following line to allow for a timestamp
