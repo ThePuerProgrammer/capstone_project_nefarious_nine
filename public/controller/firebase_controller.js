@@ -1,6 +1,7 @@
 import * as Constant from '../model/constant.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
+import { FlashcardData } from '../model/flashcard_data.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -18,6 +19,7 @@ export async function createDeck(deck) {
 //============================================================================//
 export async function createFlashcard(deckDocID, flashcardModel) {
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
         .collection(Constant.collectionName.OWNED_DECKS)
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS)
@@ -45,22 +47,49 @@ export async function uploadImageToFlashcard(imageFile, imageName) {
 
 //============================================================================//
 // Update Flashcard Data
+// 
+// 1. Check if data exists
+//   [Data Exists] Grab the data
+//   [Data doesn't exist]  
 //============================================================================//
-export async function updateFlashcardData(deckDocID, flashcardDocID,  userAnswerCorrectly){
+export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAnsweredCorrectly */
     // use window.localStorage to store needed local information
-    let loggedInUserDocID = localStorage.getItem("uid")
+    let loggedInUserDocID = localStorage.getItem("uid");
 
-    // 
+    // Making the reference to the flashcard data
+    const flashcardDataRef = firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(loggedInUserDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID);
 
-    const ref = firebase.firestore()
+    // FlashcardData Model
+    //  If flashcard does't not exist, this model will be used to create 
+    //  flashcard data as-is.
+    //  If flashcard does exist, streak will be updated.
+    let flashcardData = new FlashcardData({
+        streak: 0,
+        lastAccessed: Date.now()
+    });
+
+    // Using the flashcard data reference to check if it exists
+    flashcardDataRef.get().then((doc) => {
+        if (doc.exists) { 
+            flashcardData.streak = doc.data().streak;
+        }
+    });
+
+    // Update flashcardData result on Firebase
+    firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(loggedInUserDocID)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS_DATA)
         .doc(flashcardDocID)
-        .set();
-
+        .set(flashcardData.serialize());
 }
 //===========================================================================//
 
