@@ -70,16 +70,15 @@ export async function study_decks_page() {
         html += buildDeckView(deck);
     })
 
-    Elements.root.innerHTML += html;
-
     // it might be better to add this when we actually pull the decks from Firebase
     // but I'm leaving it here for now - Cody
     if (deckList.length == 0) {
         html += '<h2> No decks found! Go create some and get to studying!</h2>'
-        Elements.root.innerHTML += html;
     }
 
-    // DeckPage.addViewButtonListener();
+    Elements.root.innerHTML += html;
+    DeckPage.addViewButtonListener();
+
 }
 
 function buildDeckView(deck) {
@@ -89,7 +88,7 @@ function buildDeckView(deck) {
             <h5 class="card-title" style="text-align: center; color: #A7ADC6">${deck.name}</h5>
             <p class="card-text" style="text-align: center; color: #A7ADC6">${deck.subject}</p>
         </div>
-        <form class="form-view-deck float-start" method="post">
+        <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
             <button class="btn btn-outline-primary pomo-bg-color-dark" type="submit">View</button>
         </form>
