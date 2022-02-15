@@ -21,6 +21,9 @@ export class UserTimer {
             this.isPlaying = false;
             this.minimizedTimerDisplay = false;
             this.time = 0;              // the actual current countdown element
+            this.flashCount = 0;
+            this.maxFlashCount = 10;    // 10 flashes
+            this.flashInterval = 100;   // ms
 
             this.audioRelaxTimer = new Audio('../assets/sounds/rta.mp3');
             this.audioStudyTimer = new Audio('../assets/sounds/sta.mp3');
@@ -123,6 +126,11 @@ export class UserTimer {
                 // Switch from study to relax or vise versa
                 this.setStudyMode(!this.isStudyMode);
                 clearInterval(this.interval);   // kill the setInterval loop
+
+                if (this.minimizedTimerDisplay) {
+                    this.flashMinimizedDisplay();
+                }
+
                 this.startTimer();
             }
 
@@ -174,5 +182,26 @@ export class UserTimer {
             innerHTML += this.minutes + ":" + this.seconds + "]";
             Elements.pomoTimerInnerDiv.innerHTML = innerHTML;
         }
+    }
+
+    flashMinimizedDisplay() {
+        let flashInterval = setInterval(() => {
+
+            if (this.flashCount % 2 == 0) {
+                Elements.pomoTimerToggleButton.style.backgroundColor = "#A7ADC6";
+                Elements.pomoTimerToggleButton.style.color = "#2C1320";
+            } else {
+                Elements.pomoTimerToggleButton.style.backgroundColor = "#5F4B66";
+                Elements.pomoTimerToggleButton.style.color = "#A7ADC6";
+            }
+
+            this.flashCount += 1;
+            if (this.flashCount >= this.maxFlashCount) {
+                clearInterval(flashInterval);
+                Elements.pomoTimerToggleButton.style.backgroundColor = "#5F4B66";
+                Elements.pomoTimerToggleButton.style.color = "#A7ADC6";
+                this.flashCount = 0;
+            }
+        }, this.flashInterval);
     }
 };
