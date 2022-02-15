@@ -26,14 +26,14 @@ export function addEventListeners() {
                     uid = cred.user.uid;
                 });
             
-            localStorage.set("uid", uid);
-            console.log(localStorage.getItem("uid"));
+            // Saving UID in local storage for referencing user's Firestore data
+            localStorage.setItem("uid", uid); // Retrievable with localStorage.getItem("uid")
             
             Elements.modalSignIn.hide();
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
-            Utilities.info('Sign in Error', JSON.stringify(error), Elements.modalSignIn);
+            Utilities.info('Sign in Error', JSON.stringify(error), Elements.modalSignIn.id);
             if (Constants.DEV)
                 console.log(`error:  ${errorCode} | ${errorMessage}`);
         }
