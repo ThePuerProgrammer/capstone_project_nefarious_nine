@@ -1,6 +1,8 @@
 // Needed for timer display
 import * as Elements from '../view/elements.js'
 
+// TODO studymode switch is still showing study mode time for a second
+
 export class UserTimer {
 
     // CONSTRUCTORS
@@ -9,14 +11,16 @@ export class UserTimer {
         if (data != null) {
             // DATA FOR TIMER PROFILES HINT HINT
         } else {
-            this.pingInterval = 1000; // ms
-            this.timeInterval = 30; // min
-            this.studyTime = .1; // min
-            this.relaxTime = .05; // min
-            this.isStudyMode;
+            this.pingInterval = 1000;   // ms
+            this.timeInterval = 30;     // min
+            this.studyTime = .1;        // min
+            this.relaxTime = .05;       // min
+            this.isStudyMode;           // Study Mode or Relax Mode 
             this.isPaused = false;
-            this.interval = null;
+            this.interval = null;       // the window timer object
             this.isPlaying = false;
+            this.minimizedTimerDisplay = false;
+            this.time = 0;              // the actual current countdown element
 
             this.audioRelaxTimer = new Audio('../assets/sounds/rta.mp3');
             this.audioStudyTimer = new Audio('../assets/sounds/sta.mp3');
@@ -36,6 +40,8 @@ export class UserTimer {
     setStudyMode(isStudyMode) {
         // value must be true or false
         this.isStudyMode = isStudyMode;
+
+        // This flips the display from Study mode to Relax mode and vice versa
         if (this.isStudyMode) {
             Elements.timerModeDisplayStudy.style.borderStyle = "solid";
             Elements.timerModeDisplayStudy.style.borderColor = "#2C1320"; 
@@ -72,6 +78,14 @@ export class UserTimer {
     adjustRelaxTime(relaxTime) {
         this.relaxTime = relaxTime;
     }
+
+    setMinimizedTimerDisplay(minimizedTimerDisplay) {
+        this.minimizedTimerDisplay = minimizedTimerDisplay;
+        if (minimizedTimerDisplay) {
+            // +1 is a janky bug fix, but it works
+            this.updateDisplay(this.time + 1);
+        }
+    }
     //------------------------------------------------------------------------//
 
     // STANDARD TIMER FUNCTIONS (START, PAUSE, RESET)
@@ -81,42 +95,38 @@ export class UserTimer {
 
         // this section of the solution partially references code found here:
         // https://stackoverflow.com/questions/20618355/how-to-write-a-countdown-timer-in-javascript
-        let time;
         if (this.isPaused) {
-            time = this.minutes * 60 + this.seconds - 1;
+            this.time = this.minutes * 60 + this.seconds - 1;
             this.isPaused = false;
         } else if (this.isStudyMode) {
-            time = this.studyTime * this.timeInterval * 60 - 1;
+            this.time = this.studyTime * this.timeInterval * 60 - 1;
         } else {
-            time = this.relaxTime * this.timeInterval * 60 - 1;
+            this.time = this.relaxTime * this.timeInterval * 60 - 1;
         }
 
+        /* the setInterval function executes the function provided as its first
+         * argument on a loop, pausing the length of the interval provided as
+         * the second argument to the setInterval funtion. */ 
         this.interval = setInterval(() => {
-            // i.e. 24 mins
-            this.minutes = parseInt(time / 60, 10);
+            
+            this.updateDisplay(this.time);
 
-            // i.e. 36 seconds
-            this.seconds = parseInt(time % 60, 10);
+            if (--this.time < 0) {
 
-            // prepend the value with a '0' if value is less than 10
-            this.minutes = this.minutes < 10 ? "0" + this.minutes : this.minutes;
-            this.seconds = this.seconds < 10 ? "0" + this.seconds : this.seconds;
-
-            Elements.timerMinutesDisplay.innerHTML = this.minutes;
-            Elements.timerSecondsDisplay.innerHTML = this.seconds;
-
-            if (--time < 0) {
+                // Play notification tones
                 if (this.isStudyMode) {
                     this.audioStudyTimer.play();
                 } else {
                     this.audioRelaxTimer.play();
                 }
 
+                // Switch from study to relax or vise versa
                 this.setStudyMode(!this.isStudyMode);
-                clearInterval(this.interval);
+                clearInterval(this.interval);   // kill the setInterval loop
                 this.startTimer();
             }
 
+        // the interval is the length of the pause. In our case, 1 second
         }, this.pingInterval);
     }
 
@@ -134,20 +144,35 @@ export class UserTimer {
     }
     //------------------------------------------------------------------------//
 
-    updateDisplay() {
-        let time = this.studyTime * this.timeInterval * 60;
+    updateDisplay(time) {
+
+        if (time == null) {
+            time = this.studyTime * this.timeInterval * 60;
+        }
+
+        // i.e. 24 mins
         this.minutes = parseInt(time / 60, 10);
+
+        // i.e. 36 seconds
         this.seconds = parseInt(time % 60, 10);
 
-        if (this.minutes < 10) {
-            this.minutes = "0" + this.minutes;
-        }
-
-        if (this.seconds < 10) {
-            this.seconds = "0" + this.seconds;
-        }
+        // prepend the value with a '0' if value is less than 10
+        this.minutes = this.minutes < 10 ? "0" + this.minutes : this.minutes;
+        this.seconds = this.seconds < 10 ? "0" + this.seconds : this.seconds;
 
         Elements.timerMinutesDisplay.innerHTML = this.minutes;
         Elements.timerSecondsDisplay.innerHTML = this.seconds;
+        
+        if (this.minimizedTimerDisplay) {
+            let innerHTML = "";
+            if (this.isStudyMode) {
+                innerHTML += "Study [";
+            } else {
+                innerHTML += "Relax [";
+            }
+
+            innerHTML += this.minutes + ":" + this.seconds + "]";
+            Elements.pomoTimerInnerDiv.innerHTML = innerHTML;
+        }
     }
 };
