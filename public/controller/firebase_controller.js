@@ -5,8 +5,10 @@ import { Flashcard } from '../model/flashcard.js';
 //============================================================================//
 // CREATE A Deck
 //============================================================================//
-export async function createDeck(deck) {
+export async function createDeck(uid, deck) {
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .add(deck.serialize());
     return ref.id;
