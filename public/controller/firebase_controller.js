@@ -59,7 +59,7 @@ export async function uploadImageToFlashcard(imageFile, imageName) {
 // in firestore. This is purely for testing for the time being and will later be
 // modified to accomodate users / classrooms
 //============================================================================//
-export async function getUserDecks(uid) {
+export async function getAllTestingDecks() {
     let deckList = [];
 
     const testCollectionRef = await firebase.firestore()
