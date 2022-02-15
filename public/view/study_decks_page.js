@@ -23,7 +23,8 @@ export function addEventListeners() {
         const dateCreated = Date.now();
 
         //get uid
-        //const uid = ;
+        const uid = localStorage.getItem("uid");
+        //console.log(uid);
 
         const deck = new Deck({
             name,

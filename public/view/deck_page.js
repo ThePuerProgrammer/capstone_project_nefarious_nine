@@ -86,6 +86,9 @@ export function addEventListeners() {
 
     const deckDocIDReceivingNewFlashcard = formData.selectedDeck;
 
+     //get uid
+     const uid = localStorage.getItem("uid");
+
     const flashcard = new Flashcard({
       question,
       isMultipleChoice,
@@ -107,6 +110,7 @@ export function addEventListeners() {
         flashcard.imageURL = "N/A";
       }
       const docId = await FirebaseController.createFlashcard(
+        uid,
         deckDocIDReceivingNewFlashcard,
         flashcard
       );

@@ -3,17 +3,6 @@ import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 
 //============================================================================//
-// CREATE User Document
-//============================================================================//
-export async function createUserDocument(user) {
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .add(user.serialize());
-    return ref.id;
-}
-//============================================================================//
-
-//============================================================================//
 // CREATE A Deck
 //============================================================================//
 export async function createDeck(deck) {
@@ -27,8 +16,10 @@ export async function createDeck(deck) {
 //============================================================================//
 // CREATE A Flashcard
 //============================================================================//
-export async function createFlashcard(deckDocID, flashcardModel) {
+export async function createFlashcard(uid, deckDocID, flashcardModel) {
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS)
@@ -51,6 +42,27 @@ export async function uploadImageToFlashcard(imageFile, imageName) {
     const taskSnapShot = await ref.put(imageFile);
     const imageURL = await taskSnapShot.ref.getDownloadURL();
     return { imageName, imageURL };
+}
+//===========================================================================//
+
+//============================================================================//
+// Update Flashcard Data
+//============================================================================//
+export async function updateFlashcardData(deckDocID, flashcardDocID,  userAnswerCorrectly){
+    // use window.localStorage to store needed local information
+    let loggedInUserDocID = localStorage.getItem("uid")
+
+    // 
+
+    const ref = firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(loggedInUserDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID)
+        .set();
+
 }
 //===========================================================================//
 
