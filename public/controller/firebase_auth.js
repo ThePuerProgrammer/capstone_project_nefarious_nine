@@ -8,6 +8,8 @@ import * as Constants from '../model/constant.js'
 import * as CreatePage from '../view/create_account_page.js'
 import { routing, routePathname } from './routes.js';
 
+
+
 const auth = getAuth();
 
 export let currentUser = null;
@@ -76,9 +78,43 @@ export function addEventListeners() {
         } catch (e) {
             Utilities.info('Sign Out Error', JSON.stringify(e));
             if (Constants.DEV)
-            console.log('Sign out error' + e);
+                console.log('Sign out error' + e);
         }
     });
+
+    Elements.modalMenuResetPassword.addEventListener('click', async () => {
+        //This just opens the reset password modal within the sign in modal and closes out the sign in modal --Blake
+        try {
+            Elements.modalSignIn.hide();
+            Elements.modalResetPassword.show();
+        } catch (e) {
+            Utilities.info('Reset password menu error ', JSON.stringify(e));
+            if (Constants.DEV)
+                console.log('Reset password menu error ' + e);
+        }
+    })
+
+    Elements.formResetPassword.addEventListener('submit', async e => {
+        e.preventDefault();
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        const passwordConfirm = e.target.passwordConfirm.value;
+
+        if (password !== passwordConfirm) {
+            alert('passwords do not match.');
+            return;
+        }
+        try {
+            await auth.getUserByEmail(email);
+
+
+        } catch (e) {
+            Utilities.info('Password reset error ', JSON.stringify(e));
+            if (Constants.DEV)
+                console.log('Password reset errror ' + e);
+        }
+    })
+
 
     onAuthStateChanged(auth, authStateChangeObserver);
 
@@ -88,7 +124,7 @@ function authStateChangeObserver(user) {
     if (user) {
         currentUser = user;
         // for signing in
-        let elements = document.getElementsByClassName('modal-preauth'); 
+        let elements = document.getElementsByClassName('modal-preauth');
         for (let i = 0; i < elements.length; i++) {
             elements[i].style.display = 'none'; //buttons hidden before state change
         }
@@ -102,7 +138,7 @@ function authStateChangeObserver(user) {
     } else {
         currentUser = null;
         // for signing out
-        let elements = document.getElementsByClassName('modal-preauth'); 
+        let elements = document.getElementsByClassName('modal-preauth');
         for (let i = 0; i < elements.length; i++) {
             elements[i].style.display = 'block'; //showing before state change
         }
