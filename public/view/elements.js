@@ -11,6 +11,10 @@ export const menuStudyDecks = document.getElementById('menu-study-decks');
 export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
+
+//MODAL BUTTONS (for opening modals within modals)
+//============================================================================//
+export const modalMenuResetPassword = document.getElementById('reset-password');
 //============================================================================//
 
 // STUDY DECKS PAGE
@@ -23,7 +27,8 @@ export const formCreateAFlashcardSelectContainer = document.getElementById('form
 export const formSignIn = document.getElementById('form-signin');
 export const formCreateDeck = document.getElementById('form-create-deck');
 export const formCreateAFlashcard = document.getElementById('form-create-a-flashcard');
-export const formCreateAccount = document.getElementById('form-create-account')
+export const formCreateAccount = document.getElementById('form-create-account');
+export const formResetPassword = document.getElementById('form-reset-password');
 //============================================================================//
 
 // MODALS
@@ -31,12 +36,13 @@ export const formCreateAccount = document.getElementById('form-create-account')
 /* This allows us to close the modal when an information/popup modal needs to popup.
  * Incase there is an error, we can't have 2 modals open at the same time. */
 export const modalInfoBox = {
-    modal: new bootstrap.Modal(document.getElementById('modal-infobox'), {backdrop: 'static'}),
+    modal: new bootstrap.Modal(document.getElementById('modal-infobox'), { backdrop: 'static' }),
     title: document.getElementById('modal-infobox-title'),
     body: document.getElementById('modal-infobox-body'),
 }
 
-export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-signin-form'), {backdrop: 'static'});
+export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-signin-form'), { backdrop: 'static' });
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));
-export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', {backdrop: 'static'}));
+export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', { backdrop: 'static' }));
+export const modalResetPassword = new bootstrap.Modal(document.getElementById('modal-reset-password'));
 //============================================================================//
