@@ -59,7 +59,7 @@ export async function uploadImageToFlashcard(imageFile, imageName) {
 // in firestore. This is purely for testing for the time being and will later be
 // modified to accomodate users / classrooms
 //============================================================================//
-export async function getAllTestingDecks() {
+export async function getUserDecks(uid) {
     let deckList = [];
 
     const testCollectionRef = await firebase.firestore()
@@ -88,9 +88,10 @@ export async function getDeckById(docId) {
     return d;
 }
 
-export async function getFlashcards(docId) {
+export async function getFlashcards(uid, docId) {
     let flashcards = [];
     const snapshot = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(docId)
         .collection(Constant.collectionName.FLASHCARDS).get();
     snapshot.forEach(doc => {
