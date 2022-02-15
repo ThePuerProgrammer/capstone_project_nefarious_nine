@@ -72,7 +72,8 @@ export function addEventListeners() {
     Elements.menuSignOut.addEventListener('click', async () => {
         try {
             await signOut(auth);
-            console.log('Sign out success');
+            Utilities.info('Notice', `You're securely signed out!`); //last param dismisses previous modal 
+
         } catch (e) {
             Utilities.info('Sign Out Error', JSON.stringify(e));
             if (Constants.DEV)
