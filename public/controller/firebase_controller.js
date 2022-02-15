@@ -18,8 +18,15 @@ export async function createDeck(deck) {
 // CREATE A Flashcard
 //============================================================================//
 export async function createFlashcard(deckDocID, flashcardModel) {
+    // use window.localStorage to store needed local information
+    let loggedInUserDocID = localStorage.getItem("uid");
+
+    console.log(loggedInUserDocID);
+    console.log(deckDocID);
+
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
+        .doc(loggedInUserDocID)
         .collection(Constant.collectionName.OWNED_DECKS)
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS)
@@ -92,6 +99,35 @@ export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAn
         .set(flashcardData.serialize());
 }
 //===========================================================================//
+
+//============================================================================//
+// This function pulls all decks from the highest level owned_decks collection
+// in firestore. This is purely for testing for the time being and will later be
+// modified to accomodate users / classrooms
+//============================================================================//
+export async function getAllUserDecks() {
+    // use window.localStorage to store needed local information
+    let loggedInUserDocID = localStorage.getItem("uid");
+
+    let deckList = [];
+    const userOwnedDecks = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(loggedInUserDocID)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .orderBy('name')
+        .get();
+    testCollectionRef.forEach(doc => {
+        const d = new Deck(doc.data());
+        d.docId = doc.id;
+        deckList.push(d);
+    })
+
+    localStorage.set(Constant.collectionName.OWNED_DECKS, deckList);
+    console.log(localStorage.get(Constant.collectionName.OWNED_DECKS));
+
+    return deckList;
+}
+//============================================================================//
 
 //============================================================================//
 // This function pulls all decks from the highest level owned_decks collection
