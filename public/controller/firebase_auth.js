@@ -6,6 +6,7 @@ import * as Elements from '../view/elements.js'
 import * as Utilities from '../view/utilities.js'
 import * as Constants from '../model/constant.js'
 import * as CreatePage from '../view/create_account_page.js'
+import { routing, routePathname } from './routes.js';
 
 const auth = getAuth();
 
@@ -84,7 +85,8 @@ export function addEventListeners() {
     Elements.menuSignOut.addEventListener('click', async () => {
         try {
             await signOut(auth);
-            console.log('Sign out success');
+            Utilities.info('Notice', `You're securely signed out!`); //last param dismisses previous modal 
+
         } catch (e) {
             Utilities.info('Sign Out Error', JSON.stringify(e));
             if (Constants.DEV)
@@ -108,6 +110,9 @@ function authStateChangeObserver(user) {
         for (let i = 0; i < elements.length; i++) {
             elements[i].style.display = 'block'; //buttons appear after state change
         }
+        const pathname = window.location.pathname;
+        const hash = window.location.hash;
+        routing(pathname, hash);
     } else {
         currentUser = null;
         // for signing out
@@ -119,6 +124,8 @@ function authStateChangeObserver(user) {
         for (let i = 0; i < elements.length; i++) {
             elements[i].style.display = 'none'; //buttons hidden after state change
         }
+
+        history.pushState(null, null, routePathname.HOME);
 
         Elements.root.innerHTML = CreatePage.html;
     }
