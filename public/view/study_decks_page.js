@@ -22,6 +22,9 @@ export function addEventListeners() {
         // relevant to Cody's story:
         const dateCreated = Date.now();
 
+        //get uid
+        //const uid = ;
+
         const deck = new Deck({
             name,
             subject,
@@ -29,7 +32,7 @@ export function addEventListeners() {
         });
 
         try {
-            const docId = await FirebaseController.createDeck(deck);
+            const docId = await FirebaseController.createDeck(uid, deck);
             deck.docId = docId;
             Elements.modalCreateDeck.hide();
         } catch (e) {
@@ -48,7 +51,7 @@ export async function study_decks_page() {
 
     // Solution for merging Piper's 'create_deck_deck_title branch
     html += `
-        <button type="button" class="btn btn-primary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
+        <button type="button" class="btn btn-secondary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
             Create New Deck
         </button>
         <br><br>
