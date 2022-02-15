@@ -265,15 +265,33 @@ export async function deck_page(docId) {
 }
 
 function buildFlashcardView(flashcard) {
-  return `
-  <div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
+  let html = flashcard.imageURL != "N/A" ? `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="${flashcard.imageURL}" style="width: 100px; height: 100px">
+      <p>${flashcard.question}</p>
+    ` :
+  `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
     <div class="flip-card-inner">
       <div class="flip-card-front">
-        <h1>${flashcard.question}</h1>
-      </div>
-      <div class="flip-card-back">
-        <h1>${flashcard.answer}</h1>
-      </div>
-    </div>
-  </div>`;
+        <p>${flashcard.question}</p>
+      `;
+
+      //TODO: find a way to shuffle these up
+  if(flashcard.isMultipleChoice){
+    for(let i = 0; i < flashcard.incorrectAnswers.length; ++i){
+      html += `<p>${flashcard.incorrectAnswers[i]}</p>`
+    }
+    html += `<p>${flashcard.answer}</p>`;
+  }else{
+    html += `<p>${flashcard.answer}</p>`;
+  }
+
+  html += `</div><div class="flip-card-back">
+  <h1>${flashcard.answer}</h1>
+</div>
+</div>
+</div>`;
+
+  return html;
 }
