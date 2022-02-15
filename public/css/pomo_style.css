@@ -107,7 +107,7 @@ input {
 }
 
 #pomo-timer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 5%;
     max-width: 300px;
