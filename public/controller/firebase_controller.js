@@ -1,5 +1,6 @@
 import * as Constant from '../model/constant.js'
 import { Deck } from '../model/Deck.js';
+import { Flashcard } from '../model/flashcard.js';
 
 //============================================================================//
 // CREATE User Document
@@ -40,16 +41,16 @@ export async function createFlashcard(deckDocID, flashcardModel) {
 //============================================================================//
 //CREATE FLASHCARD IMAGE
 //============================================================================//
-export async function uploadImageToFlashcard(imageFile, imageName){
+export async function uploadImageToFlashcard(imageFile, imageName) {
     //image doesn't have a name
-    if(!imageName){
+    if (!imageName) {
         imageName = Date.now() + imageFile.name;
     }
     const ref = firebase.storage().ref()
         .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageName);
     const taskSnapShot = await ref.put(imageFile);
     const imageURL = await taskSnapShot.ref.getDownloadURL();
-    return{imageName,imageURL};
+    return { imageName, imageURL };
 }
 //===========================================================================//
 
@@ -60,26 +61,46 @@ export async function uploadImageToFlashcard(imageFile, imageName){
 //============================================================================//
 export async function getAllTestingDecks() {
     let deckList = [];
-    
+
     const testCollectionRef = await firebase.firestore()
         .collection(Constant.collectionName.OWNED_DECKS)
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                const deck = new Deck(doc.data());
-                deck.set_docID(doc.id);
-                deckList.push(deck);
-            });
-        })
-        .catch((error) => {
-            if (Constant.DEV)
-                console.log("Error fetching documents from the test deck");
-        });
+        .orderBy('name')
+        .get();
+    testCollectionRef.forEach(doc => {
+        const d = new Deck(doc.data());
+        d.docId = doc.id;
+        deckList.push(d);
+    })
 
     return deckList;
 }
 //============================================================================//
 
+//============================================================================//
+// This function will pull in a single deck from it's docId
+//============================================================================//
+export async function getDeckById(docId) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docId).get();
+    if (!ref.exists) return null;
+    const d = new Deck(ref.data());
+    d.docId = docId;
+    return d;
+}
+
+export async function getFlashcards(docId) {
+    let flashcards = [];
+    const snapshot = await firebase.firestore()
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docId)
+        .collection(Constant.collectionName.FLASHCARDS).get();
+    snapshot.forEach(doc => {
+        const f = new Flashcard(doc.data());
+        f.docId = doc.id;
+        flashcards.push(f);
+    })
+
+    return flashcards;
+}
 
 /* when the function for creating a deck is written
     uncomment the following line to allow for a timestamp
@@ -87,7 +108,7 @@ export async function getAllTestingDecks() {
     This can also be utilized for the entire deck or specific flashcards.
     Whatever utility we need it for. - Cody
 */
-    // const data = flashcard.toFirestore(Date.now());
+// const data = flashcard.toFirestore(Date.now());
 
 // Function to allow for deletion of deck
 // TODO: write Firebase side rules to set permissions for deck deletion

@@ -9,6 +9,22 @@ import * as Study from './study_page.js'
 //Declaration of Image(Global)
 let imageFile2Upload;
 
+export function addViewButtonListener() {
+  const viewButtons = document.getElementsByClassName('form-view-deck');
+  for (let i = 0; i < viewButtons.length; ++i) {
+    addViewFormSubmitEvent(viewButtons[i]);
+  }
+}
+
+export function addViewFormSubmitEvent(form) {
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const docId = e.target.docId.value;
+    history.pushState(null, null, Routes.routePathname.DECK + '#' + docId);
+    await deck_page(docId);
+  })
+}
+
 export function addEventListeners() {
 
   //Adds event listener to CREATE DECK button within CREATE DECK modal 
@@ -160,12 +176,9 @@ export function addEventListeners() {
   });
 }
 
-export async function deck_page() {
-  //Going to make the cards populate here so we can show in the testing them physically
-  //being pulled and added to the page.
-  //Clears all HTML so it doesn't double
-  let html = "";
-  html += "<h1> Deck Page </h1>";
+export async function deck_page(docId) {
+  let html = '';
+  html += '<h1> Deck Page </h1>';
   //Allows for the create a flashcard button
   html += `
         <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-secondary pomo-bg-color-dark"> + Create Flashcard</button>
@@ -175,7 +188,33 @@ export async function deck_page() {
   html += `
     <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark">Study</button>
     `;
-    
+
+  let deck;
+  try {
+    deck = await FirebaseController.getDeckById(docId);
+    if (!deck) {
+      html += '<h5>Deck not found!</h5>';
+    } else {
+      html += `<h2 style="align: center">${deck.name}</h2>`;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+
+  let flashcards;
+  try {
+    flashcards = await FirebaseController.getFlashcards(docId);
+    if (!flashcards) {
+      html += '<h5>No flashcards found for this deck</h5>';
+    }
+  } catch (e) {
+    console.log(e);
+  }
+
+  flashcards.forEach(flashcard => {
+    html += buildFlashcardView(flashcard);
+  })
+
   Elements.root.innerHTML = html;
 
   const buttonShowCreateAFlashcardModal = document.getElementById(
@@ -195,19 +234,19 @@ export async function deck_page() {
     * the decks_page go.
     ******************************************/
 
-    // Manually opens the modal for "Create a Flashcard" when button is clicked.
-    //  This allows us to pull all of the decks from the (temporary) test deck
-    //  so that we can add a flashcard to a specific deck. Options are added dynamically
-    //  to the select HTML element (#form-create-a-flashcard-select-container) in the "Create A Flashcard" form
-    buttonShowCreateAFlashcardModal.addEventListener('click', async e => {
-        e.preventDefault();
+  // Manually opens the modal for "Create a Flashcard" when button is clicked.
+  //  This allows us to pull all of the decks from the (temporary) test deck
+  //  so that we can add a flashcard to a specific deck. Options are added dynamically
+  //  to the select HTML element (#form-create-a-flashcard-select-container) in the "Create A Flashcard" form
+  buttonShowCreateAFlashcardModal.addEventListener('click', async e => {
+    e.preventDefault();
 
-        // Grabbing list of decks from Firestore
-        const listOfTestDecks = await FirebaseController.getAllTestingDecks();
+    // Grabbing list of decks from Firestore
+    const listOfTestDecks = await FirebaseController.getAllTestingDecks();
 
-        // Adding list of decks to select menu/drop down
-        listOfTestDecks.forEach(deck => {
-            Elements.formCreateAFlashcardSelectContainer.innerHTML += `
+    // Adding list of decks to select menu/drop down
+    listOfTestDecks.forEach(deck => {
+      Elements.formCreateAFlashcardSelectContainer.innerHTML += `
                 <option value="${deck.docID}">${deck.name}</option>
             `;
     });
@@ -225,3 +264,16 @@ export async function deck_page() {
   });
 }
 
+function buildFlashcardView(flashcard) {
+  return `
+  <div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <h1>${flashcard.question}</h1>
+      </div>
+      <div class="flip-card-back">
+        <h1>${flashcard.answer}</h1>
+      </div>
+    </div>
+  </div>`;
+}
