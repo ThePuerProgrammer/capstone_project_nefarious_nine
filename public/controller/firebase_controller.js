@@ -18,8 +18,10 @@ export async function createDeck(uid, deck) {
 //============================================================================//
 // CREATE A Flashcard
 //============================================================================//
-export async function createFlashcard(deckDocID, flashcardModel) {
+export async function createFlashcard(uid, deckDocID, flashcardModel) {
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS)
