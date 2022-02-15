@@ -47,13 +47,18 @@ export async function uploadImageToFlashcard(imageFile, imageName){
 //============================================================================//
 export async function updateFlashcardData(deckDocID, flashcardDocID,  userAnswerCorrectly){
     // use window.localStorage to store needed local information
+    let loggedInUserDocID = localStorage.getItem("uid")
+
+    // 
 
     const ref = firebase.firestore()
         .collection(Constant.collectionName.USERS)
-        .doc(/* TODO: Logged In User UID */)
-        .collection(Constant.collectionName.SRS_DATA)
+        .doc(loggedInUserDocID)
+        .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .collection(Constant.collectionName)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID)
+        .set();
 
 }
 //===========================================================================//
