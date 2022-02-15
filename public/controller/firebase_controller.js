@@ -88,9 +88,10 @@ export async function getDeckById(docId) {
     return d;
 }
 
-export async function getFlashcards(docId) {
+export async function getFlashcards(uid, docId) {
     let flashcards = [];
     const snapshot = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(docId)
         .collection(Constant.collectionName.FLASHCARDS).get();
     snapshot.forEach(doc => {
