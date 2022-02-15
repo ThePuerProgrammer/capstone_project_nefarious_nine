@@ -32,13 +32,16 @@ export function addEventListeners() {
         });
 
         try {
-            const docId = await FirebaseController.createDeck(uid, deck);
+            const docId = await FirebaseController.createDeck(deck);
             deck.docId = docId;
             Elements.modalCreateDeck.hide();
         } catch (e) {
             if (Constant.DEV)
                 console.log(e);
         }
+
+       /* history.pushState(null, null, Routes.routePathname.DECK + "#" + docId);
+        await DeckPage.deck_page(docId);*/
 
     });
 }

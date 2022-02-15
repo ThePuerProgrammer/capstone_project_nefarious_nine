@@ -42,6 +42,7 @@ export const htmlIDs = {
     buttonShowCreateAFlashcardModal: 'button-show-create-a-flashcard-modal',
     modalCreateAFlashcard: 'modal-create-a-flashcard',
     buttonStudy: 'btn-study-deck',
+    formAnswerFlashcard: 'form-answer-flashcard',
 
 /*****************************************
  *         Helper Functions

@@ -16,10 +16,8 @@ export async function createUserDocument(user) {
 //============================================================================//
 // CREATE A Deck
 //============================================================================//
-export async function createDeck(uid, deck) {
+export async function createDeck(deck) {
     const ref = await firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .add(deck.serialize());
     return ref.id;
