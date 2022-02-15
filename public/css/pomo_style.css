@@ -66,6 +66,18 @@
 .pomo-btn-expand-width:hover {
     color: #A7ADC6 !important;
 }
+
+.navbar-nav li .dropdown-menu { 
+    background-color: #5F4B66;
+}
+
+.navbar-nav li .dropdown-menu .btn:hover { 
+    background-color: #8797AF;
+}
+
+.navbar .dropdown-toggle::after { 
+    color: #2C1320; 
+}
 /*============================================================================*/
 
 /* SIGNING IN AND OUT */
@@ -88,8 +100,12 @@ input {
 /*============================================================================*/
 
 
-/* STYLE BY ID's */
+/* STYLE BY ID's / CLASSES */
 /*============================================================================*/
+.pomo-nav-logo {
+    filter: drop-shadow(2px 2px 1px #2C1320);
+}
+
 #pomo-timer {
     position: absolute;
     bottom: 0;
@@ -100,7 +116,9 @@ input {
     border-right: #2C1320;
     border-width: 3px;
     border-bottom-width: 0;
-    border-style:ridge;
+    border-style: ridge;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 #play-controls {
@@ -131,6 +149,8 @@ input {
     border-top-width: 3px;
     border-color: #2C1320;
     border-bottom-style: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
     font-size: 50px;
     text-align: center;
     padding-top: 20px;
@@ -148,6 +168,8 @@ input {
     border-color: #2C1320;
     border-top-style: none;
     border-style: solid;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
     margin: 0 5px 0 5px; 
     flex: 1;
     text-align: center;
@@ -160,6 +182,7 @@ input {
     flex: 1;
     text-align: center;
     background-color: white;
+    border-radius: 4px;
     font-size: large;
     font-weight: 700;
     color:#2C1320;
