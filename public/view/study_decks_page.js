@@ -44,9 +44,9 @@ export function addEventListeners() {
 }
 
 export async function study_decks_page() {
-
+    Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
-    let html = '';
+    let html = ''
     html += '<h1> Study Decks </h1>';
 
     // Solution for merging Piper's 'create_deck_deck_title branch
