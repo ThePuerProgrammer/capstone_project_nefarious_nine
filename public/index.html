@@ -26,8 +26,7 @@
   <!-- NAV BAR -------------------------------------------------------------->
   <nav class="navbar navbar-expand-lg pomo-bg-color-md-dark">
     <div class="container-fluid">
-      <img src="./assets/images/pomobyte_logo_non-effected.svg" alt="" width="248" height="32"
-        style="filter: drop-shadow(-3px 3px 2px rgb(0 0 0 / 0.4));">
+      <img src="./assets/images/pomo_logo_cap.svg" alt="" width="188" height="26" class="pomo-nav-logo">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
@@ -50,9 +49,6 @@
             <li class="nav-item modal-postauth">
               <button type="button" class="btn pomo-text-color-light" id="menu-study-decks">Study Decks</button>
             </li>
-            <li class="nav-item modal-postauth">
-              <button type="button" class="btn pomo-text-color-light" id="menu-signout">Sign Out</button>
-            </li>
           </ul>
         </div>
         <div class="modal-postauth">
@@ -60,14 +56,18 @@
           <div style="flex-grow: 1;">
             <ul class="navbar-nav">
               <li class="nav-item" style="display: inline;">
-                <button type="button" class="btn" id="menu-profile">
-                  <img src="./assets/images/account_circle_black_24dp.svg" alt="Profile" width="24" height="24">
-                </button>
-              </li>
-              <li class="nav-item" style="display: inline;">
                 <button type="button" class="btn" id="menu-settings">
                   <img src="./assets/images/settings_black_24dp.svg" alt="Settings" width="24" height="24">
                 </button>
+              </li>
+              <li class="nav-item dropdown" style="display: inline;">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="./assets/images/account_circle_black_24dp.svg" alt="Profile" width="24" height="24">
+                </a>
+                <div class="dropdown-menu" style="top: 48px; right: 0; left: auto;" aria-labelledby="dropdownMenuButton">
+                  <button type="button" class="dropdown-item btn pomo-text-color-light pomo-font-weight-bold" class="btn" id="menu-profile">Profile</button>
+                  <button type="button" class="dropdown-item btn pomo-text-color-light pomo-font-weight-bold" id="menu-signout">Sign Out</button>
+                </div>
               </li>
             </ul>
           </div>
@@ -240,7 +240,7 @@
   <div id="root"></div>
 
   <!-- PERSISTENT POMO TIMER -------------------------------------------------->
-  <div id="pomo-timer">
+  <div id="pomo-timer" class="modal-postauth">
 
     <div id="pomo-timer-button-div">
       <button type="button" class="btn pomo-bg-color-md-dark pomo-btn-expand-width rounded-0 p-0 pomo-text-color-light pomo-font-weight-bold" id="pomo-timer-toggle-button">
