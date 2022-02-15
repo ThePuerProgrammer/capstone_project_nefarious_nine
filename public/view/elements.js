@@ -37,6 +37,7 @@ export const formAnswerTextInput = document.getElementById('form-answer-text-inp
 export const formSignIn = document.getElementById('form-signin');
 export const formCreateDeck = document.getElementById('form-create-deck');
 export const formCreateAccount = document.getElementById('form-create-account');
+export const formViewDeck = document.getElementById('form-view-deck');
 //============================================================================//
 
 // MODALS
@@ -59,6 +60,7 @@ export const modalCreateDeck = new bootstrap.Modal(document.getElementById('crea
 
 // POMO TIMER MISC ACCESSABLES
 //============================================================================//
+export const pomoTimerInnerDiv = document.getElementById('pomo-timer-inner-div');
 export const timerSecondsDisplay = document.getElementById('timer-seconds-display');
 export const timerMinutesDisplay = document.getElementById('timer-minutes-display');
 export const timerIntervalSettingsSliders = document.getElementById('timer-interval-settings-sliders');

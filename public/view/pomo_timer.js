@@ -41,13 +41,15 @@ export function addEventListeners() {
             Elements.timerModeDisplayToggle.style.display = "block";
             Elements.pomoTimerMakeSettingDefaultButton.style.display = "block";
 
-
-
             // flip button icon orientation ^ to v
             Elements.pomoTimerToggleButton.childNodes[0].nextSibling.childNodes[0].nextSibling.src = `./assets/images/collapse.svg`;
 
             // Add a drop shadow to the popup to give it some depth for standing out on the page
             document.getElementById('pomo-timer').style.filter = "drop-shadow(1px 2px 2px #2C1320)";
+
+            // Make sure the display target is the enhanced timer
+            userTimer.setMinimizedTimerDisplay(false);
+            Elements.pomoTimerInnerDiv.innerHTML = "Pomobyte Timer";
 
             // toggle timer state
             timerStateClosed = false;
@@ -69,6 +71,11 @@ export function addEventListeners() {
 
             // Remove drop shadow from popup
             document.getElementById('pomo-timer').style.filter = "none";
+
+            // If timer is playing, show in minized view!
+            if (startButtonClicked) {
+                userTimer.setMinimizedTimerDisplay(true);
+            }
 
             // toggle timer state
             timerStateClosed = true;
@@ -170,6 +177,7 @@ function setThumb0ValueAndPosition() {
     let studyTime;
     let relaxTime;
 
+    // Uses floating point values to create fractions of the total time
     switch (interval) {
         case "1": {
             studyTime = 0.8;
@@ -196,6 +204,7 @@ function setThumb0ValueAndPosition() {
         }
     }
 
+    // Update timer settings (if stopped will update display)
     userTimer.adjustStudyTime(studyTime);
     userTimer.adjustRelaxTime(relaxTime);
     // Set the timer values based on the slider values
@@ -209,6 +218,7 @@ function setThumb1ValueAndPosition() {
     let studyTime;
     let relaxTime;
 
+    // Uses floating point values to create fractions of the total time
     switch (slider1Value) {
         case "1": {
             slider1Position = "3.5%";
@@ -243,9 +253,11 @@ function setThumb1ValueAndPosition() {
         }
     }
 
+    // Update the thumb value
     Elements.timerThumb1.innerHTML = thumb1Text;
     Elements.timerThumb1.style.left = slider1Position;
 
+    // update the timer values (if stopped it will update the display)
     userTimer.adjustStudyTime(studyTime);
     userTimer.adjustRelaxTime(relaxTime);
     userTimer.adjustTimeInterval(Elements.totalTimeIntervalSlider.value);
