@@ -249,9 +249,9 @@ export async function deck_page(deckDockID) {
         // Adds event listener for STUDY button
         buttonStudy.addEventListener('click', async e => {
             e.preventDefault();
-            //const docId = e.target.docId.value;
-            history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
-            await Study.study_page(docId);
+            //const docId = e.target.deckDockID.value;
+            history.pushState(null, null, Routes.routePathname.DECK + "#" + deckDockID);
+            await Study.study_page(deckDockID);
     });
 }
 

@@ -294,7 +294,7 @@ input {
 .study-flashcard-view{
     background-color: #2C1320;
     width: 700px;
-    height: 400px;
+    height: 450px;
     perspective: 1000px;
     position: absolute; /* or absolute */
     top: 50%;
@@ -304,6 +304,3 @@ input {
     transform: translate(-50%, -50%);
 }
 
-.study-flashcard-answer {
-    padding-top: 5%;
-}
