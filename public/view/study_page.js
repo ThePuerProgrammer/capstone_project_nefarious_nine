@@ -39,7 +39,11 @@ export async function study_page() {
   html += `<h1 style="align: center">${deck.name}</h1>`;
   html += `<h4 style="align: center">${deck.subject}</h4>`;
   html += `
-
+    <div class="form-check form-switch float-top-right">
+      <input class="form-check-input" type="checkbox" role="switch"
+      id="smart-study-checkbox">
+      <label class="form-check-label" for="smart-study-checkbox">Smart Study</label>
+    </div>
   `;
 
   // get FLASHCARDS info from firebase

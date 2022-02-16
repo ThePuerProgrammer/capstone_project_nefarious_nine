@@ -304,3 +304,9 @@ input {
     transform: translate(-50%, -50%);
 }
 
+.float-top-right {
+    position: fixed !important;
+    top: 70px !important;
+    right: 20px !important;
+}
+
