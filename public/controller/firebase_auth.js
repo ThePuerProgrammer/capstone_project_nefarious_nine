@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
+import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
 import * as FirebaseController from './firebase_controller.js';
 
 import { User } from '../model/user.js'
@@ -83,38 +83,34 @@ export function addEventListeners() {
         }
     });
 
-    // Elements.modalMenuResetPassword.addEventListener('click', async () => { //blake samani
-    //     //This just opens the reset password modal within the sign in modal and closes out the sign in modal --Blake
-    //     try {
-    //         Elements.modalSignIn.hide();
-    //         Elements.modalResetPassword.show();
-    //     } catch (e) {
-    //         Utilities.info('Reset password menu error ', JSON.stringify(e));
-    //         if (Constants.DEV)
-    //             console.log('Reset password menu error ' + e);
-    //     }
-    // })
+    Elements.modalMenuResetPassword.addEventListener('click', async () => {
+        //This just opens the reset password modal within the sign in modal and closes out the sign in modal --Blake
+        try {
+            Elements.modalSignIn.hide();
+            Elements.modalResetPassword.show();
+        } catch (e) {
+            Utilities.info('Reset password menu error ', JSON.stringify(e));
+            if (Constants.DEV)
+                console.log('Reset password menu error ' + e);
+        }
+    })
 
-    // Elements.formResetPassword.addEventListener('submit', async e => { //Blake Samani
-    //     e.preventDefault();
-    //     const email = e.target.email.value;
-    //     const password = e.target.password.value;
-    //     const passwordConfirm = e.target.passwordConfirm.value;
+    Elements.formResetPassword.addEventListener('submit', async e => {
+        e.preventDefault();
+        const email = e.target.email.value;
 
-    //     if (password !== passwordConfirm) {
-    //         alert('passwords do not match.');
-    //         return;
-    //     }
-    //     try {
-    //         await auth.getUserByEmail(email);
+        try {
+            firebase.auth().sendPasswordResetEmail(email);
 
+            Elements.modalResetPassword.hide();
+            Utilities.info('Notice', `If the email exists, a password reset email has been sent`);
 
-    //     } catch (e) {
-    //         Utilities.info('Password reset error ', JSON.stringify(e));
-    //         if (Constants.DEV)
-    //             console.log('Password reset errror ' + e);
-    //     }
-    // })
+        } catch (e) {
+            Utilities.info('Password reset error ', JSON.stringify(e));
+            if (Constants.DEV)
+                console.log('Password reset errror ' + e);
+        }
+    })
 
 
     onAuthStateChanged(auth, authStateChangeObserver);
