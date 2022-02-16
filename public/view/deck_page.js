@@ -42,6 +42,8 @@ export function addEventListeners() {
   $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).on('hidden.bs.modal', function (e) {
     // RESET INPUT FIELDS FOR FOLLOWING:
     Elements.formCreateAFlashcard.reset();
+    //Elements.imageTagCreateFlashAnswer.src="";
+    //Elements.imageTagCreateFlashQuestion.src="";
 
     // Making sure singular choice is displayed next time.
     Elements.formAnswerContainer.innerHTML = `
@@ -49,12 +51,6 @@ export function addEventListeners() {
         <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
     `;
   });
-
-  //Resets Image
-  function resetImageSelection() {
-    imageFile2Upload = null;
-    Elements.imageTageCreateFlash.src = "";
-  }
 
   // Adds event listener to CREATE A FLASHCARD Submit button
   // TODO: move actual work into its own function and just pass function name to even listener
@@ -72,6 +68,11 @@ export function addEventListeners() {
     const question = formData.question;
     const answer = formData.answer;
     const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
+    const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
+    const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
+
+
+    //Console Tests
     console.log("testing");
     console.log(formData);
 
@@ -93,12 +94,13 @@ export function addEventListeners() {
       answer,
       incorrectAnswers,
     });
-
+    //Console Tests
     console.log(flashcard);
 
     try {
       //Question Image
-      if (imageFile2UploadQuestion) {
+      if (isQuestionImage) {
+        imageFile2UploadQuestion= formData.questionImage;
         console.log("Question-1");
         const { questionImageName,questionImageURL } =
           await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
@@ -109,7 +111,8 @@ export function addEventListeners() {
         flashcard.questionImageURL = "N/A";
       }
       //Answer Image
-      if(imageFile2UploadAnswer){
+      if(isAnswerImage){
+        imageFile2UploadAnswer = formData.answerImage;
         console.log("Answer-1");
         const { answerImageName, answerImageURL } =
           await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
@@ -180,29 +183,68 @@ export function addEventListeners() {
       }
     }
   );
+  Elements.formCheckInputIsImageQuestion.addEventListener(
+    "click",
+    async (e) => {
+      // TOGGLE ON
+      if (Elements.formCheckInputIsImageQuestion.checked) {
+        //TESTING HERE
+        
+        Elements.formContainerQuestionImage.innerHTML = `
+        
+        `
+      } else {
+        Elements.formContainerQuestionImage.innerHTML = `
+        <div>
+          <br />
+        </div>
+        `;
+      }
+    });
 
-  Elements.formAddFlashCardQuestionImageButton.addEventListener("change", (e) => {
-    imageFile2UploadQuestion = e.target.files[0];
-    if (!imageFile2UploadQuestion){
-      //Elements.imageTagCreateFlashQuestion.src = '';
-      return;
-    } 
-    //display image
-    const reader = new FileReader();
-    reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
-    reader.readAsDataURL(imageFile2UploadQuestion);
-  });
-  Elements.formAddFlashCardAnswerImageButton.addEventListener("change", (e) => {
-    imageFile2UploadAnswer = e.target.files[0];
-    if (!imageFile2UploadAnswer){ 
-     //Elements.imageTagCreateFlashAnswer.src = ''; 
-      return;
-    }
-    //display image
-    const reader = new FileReader();
-    reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
-    reader.readAsDataURL(imageFile2UploadAnswer);
-  });
+  Elements.formCheckInputIsImageAnswer.addEventListener(
+    "click",
+    async (e) => {
+      // TOGGLE IS ON
+      if (Elements.formCheckInputIsImageAnswer.checked) {
+        //TESTING HERE
+        
+        Elements.formContainerAnswerImage.innerHTML = `
+          <div class="visible">
+          </div>
+        `;
+      } else {
+        Elements.formContainerAnswerImage.innerHTML =`
+        <div class="invisible">
+        
+        </div>
+        `;
+      }
+    });
+    Elements.formAddFlashCardQuestionImageButton.addEventListener("change", (e) => {
+      imageFile2UploadQuestion = e.target.files[0];
+      if (!imageFile2UploadQuestion){
+        //Elements.imageTagCreateFlashQuestion.src = '';
+        return;
+      } 
+      //display image
+      const reader = new FileReader();
+      reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
+      reader.readAsDataURL(imageFile2UploadQuestion);
+    });
+    Elements.formAddFlashCardAnswerImageButton.addEventListener("change", (e) => {
+      imageFile2UploadAnswer = e.target.files[0];
+      if (!imageFile2UploadAnswer){ 
+       //Elements.imageTagCreateFlashAnswer.src = ''; 
+        return;
+      }
+      //display image
+      const reader = new FileReader();
+      reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
+      reader.readAsDataURL(imageFile2UploadAnswer);
+    });
+ 
+  
 }
 
 export async function deck_page(docId) {
@@ -310,7 +352,7 @@ function buildFlashcardView(flashcard) {
       Much appreciated Dirt Dini.
   */
  
-  html += flashcard.answerImage != "N/A" ?  `</div><div class="flip-card-back">
+  html += flashcard.answerImageURL != "N/A" ?  `</div><div class="flip-card-back">
   <h1>${flashcard.answer}</h1>
   <br>
   <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>

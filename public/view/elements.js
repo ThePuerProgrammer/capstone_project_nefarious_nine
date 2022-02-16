@@ -25,8 +25,6 @@ export const pomoTimerMakeSettingDefaultButton = document.getElementById('timer-
 export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
 export const formCheckInputIsMultipleChoice = document.getElementById('form-check-input-is-multiple-choice');
 export const formAnswerContainer = document.getElementById('form-answer-container');
-export const formAddFlashCardAnswerImageButton = document.getElementById('form-add-image-to-flashcard-answer-button');
-export const formAddFlashCardQuestionImageButton = document.getElementById('form-add-image-to-flashcard-question-button');
 export const decksCreateDeck = document.getElementById('decks-create-deck');
 export const formQuestionTextInput = document.getElementById('form-question-text-input');
 export const formCreateAFlashcard = document.getElementById('form-create-a-flashcard');
@@ -80,8 +78,14 @@ export const studyRelaxIntervalSlider = document.getElementById('study-relax-int
 export const timerThumb1 = document.getElementById('timer-thumb-1');
 //============================================================================//
 
-//IMAGE TAG
+//FLASHCARD IMAGE 
 //============================================================================//
 export const imageTagCreateFlashAnswer = document.getElementById('form-add-image-to-flashcard-answer-tag');
 export const imageTagCreateFlashQuestion = document.getElementById('form-add-image-to-flashcard-question-tag');
+export const formAddFlashCardAnswerImageButton = document.getElementById('form-add-image-to-flashcard-answer-button');
+export const formAddFlashCardQuestionImageButton = document.getElementById('form-add-image-to-flashcard-question-button');
+export const formCheckInputIsImageQuestion = document.getElementById('form-check-input-is-image-question');
+export const formCheckInputIsImageAnswer = document.getElementById('form-check-input-is-image-answer');
+export const formContainerAnswerImage = document.getElementById('form-answer-image-container'); 
+export const formContainerQuestionImage = document.getElementById('form-question-image-container'); 
 //===========================================================================//

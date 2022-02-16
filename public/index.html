@@ -181,12 +181,22 @@
             <!---FORM VALIDATION ARE PLACED OF THE FIELDS WITH REQUIREMENTS-->
             <!--EXAMPLE <input type = "text" name = "title" placeholder="Title of the thread" required minlength="2">-->
             <!-- DROPDOWN FOR LIST OF DECKS: List is dynamically filled when the button to open this modal is pressed -->
-            <label class="col-2 align-self-center" for="form-create-a-flashcard-select-container">Deck:</label>
+            <!--label class="col-2 align-self-center" for="form-create-a-flashcard-select-container">Deck:</label -->
             <br />
             <!-- MULTIPLE CHOICE TOGGLE -->
+            <div class="btn-group" role="group" aria-label="basic checkbox toggle button group">
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" role="switch" id="form-check-input-is-multiple-choice">
               <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple Choice</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="form-check-input-is-image-question">
+              <label class="form-check-label" for="form-check-input-is-image-question">Image w/ Question</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="form-check-input-is-image-answer">
+              <label class="form-check-label" for="form-check-input-is-image-answer">Image w/ Answer</label>
+            </div>
             </div>
             <br />
             <!--HEADING FOR QUESTION SIDE-->
@@ -197,9 +207,9 @@
               name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min
               length="1"></textarea>
             <br />
-            <div>
+            <div id="form-question-image-container">
               <img id="form-add-image-to-flashcard-question-tag" style="display: block" />
-              Image:
+                Image:
               <input id="form-add-image-to-flashcard-question-button" type="file" value="upload" />
             </div>
             <br />
@@ -212,12 +222,10 @@
                 name="flashcard-answer" placeholder="At least 4." required min length="1"></textarea>
             </div>
             <br />
-            <div>
-              <div>
-                <img id="form-add-image-to-flashcard-answer-tag" style="display: block" />
+            <div id="form-answer-image-container">
+              <img id="form-add-image-to-flashcard-answer-tag" style="display: block" />
                 Image:
-                <input id="form-add-image-to-flashcard-answer-button" type="file" value="upload" />
-              </div>
+              <input id="form-add-image-to-flashcard-answer-button" type="file" value="upload" />
             </div>
             <br />
             <div>
