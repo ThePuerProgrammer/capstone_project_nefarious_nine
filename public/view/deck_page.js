@@ -306,15 +306,23 @@ function buildFlashcardView(flashcard) {
   }
 
   /*  Cody, please fix my sloppy work.
+      Really it i
       Much appreciated Dirt Dini.
   */
   if(flashcard.answerImageURL == "N/A"){
     flashcard.answerImageURL = " ";
   }
-  html += `</div><div class="flip-card-back">
+  html += flashcard.answerImage != "N/A" ?  `</div><div class="flip-card-back">
   <h1>${flashcard.answer}</h1>
   <br>
   <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
+</div>
+</div>
+</div>` 
+:
+`</div><div class="flip-card-back">
+<h1>${flashcard.answer}</h1>
+<br>
 </div>
 </div>
 </div>`;
