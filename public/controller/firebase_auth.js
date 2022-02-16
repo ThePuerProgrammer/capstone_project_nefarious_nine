@@ -66,14 +66,11 @@ export function addEventListeners() {
             await createUserWithEmailAndPassword(auth, emailAddress, password)
                 .then(cred => {
                     uid = cred.user.uid;
-                });
+            });
 
-            firebase.firestore()
-                .collection(Constants.collectionName.USERS)
-                .doc(uid)
-                .set(newUserModel.serialize());
-            
-            window.localStorage.setItem("uid", uid);
+            console.log("ADDING USER TO FIRESTORE");
+            firebase.firestore().collection(Constants.collectionName.USERS).doc(uid).set(newUserModel.serialize());
+            console.log("ADDED USER TO FIRESTORE");
             
             // Account successfully created from here
             e.target.reset();

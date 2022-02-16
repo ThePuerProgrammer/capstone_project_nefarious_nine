@@ -23,10 +23,6 @@ export function addEventListeners() {
         // relevant to Cody's story:
         const dateCreated = Date.now();
 
-        //get uid
-        const uid = localStorage.getItem("uid");
-        //console.log(uid);
-
         const deck = new Deck({
             name,
             subject,
@@ -34,16 +30,18 @@ export function addEventListeners() {
         });
 
         try {
-            const docId = await FirebaseController.createDeck(uid, deck);
+            console.log("Creating Deck");
+            const docId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
+            console.log("Deck Created");
             deck.docId = docId;
             Elements.modalCreateDeck.hide();
+
+            history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
+            await DeckPage.deck_page(deck.docId);
         } catch (e) {
             if (Constant.DEV)
                 console.log(e);
         }
-
-       /* history.pushState(null, null, Routes.routePathname.DECK + "#" + docId);
-        await DeckPage.deck_page(docId);*/
 
     });
 }
