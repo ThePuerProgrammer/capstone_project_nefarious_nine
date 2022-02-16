@@ -25,7 +25,8 @@ export const pomoTimerMakeSettingDefaultButton = document.getElementById('timer-
 export const formCreateAFlashcardSelectContainer = document.getElementById('form-create-a-flashcard-select-container');
 export const formCheckInputIsMultipleChoice = document.getElementById('form-check-input-is-multiple-choice');
 export const formAnswerContainer = document.getElementById('form-answer-container');
-export const formAddFlashCardImageButton = document.getElementById('form-add-image-to-flashcard-button');
+export const formAddFlashCardAnswerImageButton = document.getElementById('form-add-image-to-flashcard-answer-button');
+export const formAddFlashCardQuestionImageButton = document.getElementById('form-add-image-to-flashcard-question-button');
 export const decksCreateDeck = document.getElementById('decks-create-deck');
 export const formQuestionTextInput = document.getElementById('form-question-text-input');
 export const formCreateAFlashcard = document.getElementById('form-create-a-flashcard');
@@ -81,4 +82,6 @@ export const timerThumb1 = document.getElementById('timer-thumb-1');
 
 //IMAGE TAG
 //============================================================================//
-export const imageTagCreateFlash = document.getElementById('form-add-image-to-flashcard-tag');
+export const imageTagCreateFlashAnswer = document.getElementById('form-add-image-to-flashcard-answer-tag');
+export const imageTagCreateFlashQuestion = document.getElementById('form-add-image-to-flashcard-question-tag');
+//===========================================================================//

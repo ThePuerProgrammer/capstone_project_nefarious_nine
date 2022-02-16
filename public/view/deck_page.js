@@ -8,7 +8,8 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Study from './study_page.js'
 
 //Declaration of Image(Global)
-let imageFile2Upload;
+let imageFile2UploadQuestion;
+let imageFile2UploadAnswer;
 
 export function addViewButtonListener() {
   const viewButtons = document.getElementsByClassName('form-view-deck');
@@ -96,15 +97,27 @@ export function addEventListeners() {
     console.log(flashcard);
 
     try {
-      if (imageFile2Upload) {
-        console.log("Check1");
-        const { imageName, imageURL } =
-          await FirebaseController.uploadImageToFlashcard(imageFile2Upload);
-        flashcard.imageName = imageName;
-        flashcard.imageURL = imageURL;
+      //Question Image
+      if (imageFile2UploadQuestion) {
+        console.log("Question-1");
+        const { questionImageName,questionImageURL } =
+          await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
+        flashcard.questionImageName = questionImageName;
+        flashcard.questionImageURL= questionImageURL;
       } else if (typeof obj === "undefined") {
-        flashcard.imageName = "N/A";
-        flashcard.imageURL = "N/A";
+        flashcard.questionImageName = "N/A";
+        flashcard.questionImageURL = "N/A";
+      }
+      //Answer Image
+      if(imageFile2UploadAnswer){
+        console.log("Answer-1");
+        const { answerImageName, answerImageURL } =
+          await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
+        flashcard.answerImageName = answerImageName;
+        flashcard.answerImageURL= answerImageURL;
+      }else if (typeof obj === "undefined") {
+        flashcard.answerImageName = "N/A";
+        flashcard.answerImageURL = "N/A";
       }
 
       const docId = await FirebaseController.createFlashcard(
@@ -168,13 +181,27 @@ export function addEventListeners() {
     }
   );
 
-  Elements.formAddFlashCardImageButton.addEventListener("change", (e) => {
-    imageFile2Upload = e.target.files[0];
-    if (!imageFile2Upload) return;
+  Elements.formAddFlashCardQuestionImageButton.addEventListener("change", (e) => {
+    imageFile2UploadQuestion = e.target.files[0];
+    if (!imageFile2UploadQuestion){
+      //Elements.imageTagCreateFlashQuestion.src = '';
+      return;
+    } 
     //display image
     const reader = new FileReader();
-    reader.onload = () => (Elements.imageTagCreateFlash.src = reader.result);
-    reader.readAsDataURL(imageFile2Upload);
+    reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
+    reader.readAsDataURL(imageFile2UploadQuestion);
+  });
+  Elements.formAddFlashCardAnswerImageButton.addEventListener("change", (e) => {
+    imageFile2UploadAnswer = e.target.files[0];
+    if (!imageFile2UploadAnswer){ 
+     //Elements.imageTagCreateFlashAnswer.src = ''; 
+      return;
+    }
+    //display image
+    const reader = new FileReader();
+    reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
+    reader.readAsDataURL(imageFile2UploadAnswer);
   });
 }
 
@@ -256,10 +283,10 @@ export async function deck_page(docId) {
 }
 
 function buildFlashcardView(flashcard) {
-  let html = flashcard.imageURL != "N/A" ? `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
+  let html = flashcard.questionImageURL != "N/A" ? `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
   <div class="flip-card-inner">
     <div class="flip-card-front">
-      <img src="${flashcard.imageURL}" style="width: 100px; height: 100px">
+      <img src="${flashcard.questionImageURL}" style="width: 100px; height: 100px"/>
       <p>${flashcard.question}</p>
     ` :
     `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
@@ -278,8 +305,16 @@ function buildFlashcardView(flashcard) {
     html += `<p>${flashcard.answer}</p>`;
   }
 
+  /*  Cody, please fix my sloppy work.
+      Much appreciated Dirt Dini.
+  */
+  if(flashcard.answerImageURL == "N/A"){
+    flashcard.answerImageURL = " ";
+  }
   html += `</div><div class="flip-card-back">
   <h1>${flashcard.answer}</h1>
+  <br>
+  <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
 </div>
 </div>
 </div>`;

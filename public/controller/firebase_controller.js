@@ -35,22 +35,37 @@ export async function createFlashcard(uid, deckDocID, flashcardModel) {
 }
 //============================================================================//
 
-
 //============================================================================//
-//CREATE FLASHCARD IMAGE
+//CREATE FLASHCARD IMAGE Question
 //============================================================================//
-export async function uploadImageToFlashcard(imageFile, imageName) {
+export async function uploadImageToFlashcardQuestion(questionImageFile, questionImageName) {
     //image doesn't have a name
-    if (!imageName) {
-        imageName = Date.now() + imageFile.name;
+    if (!questionImageName) {
+        questionImageName = Date.now() + questionImageFile.name + 'question';
     }
     const ref = firebase.storage().ref()
-        .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageName);
-    const taskSnapShot = await ref.put(imageFile);
-    const imageURL = await taskSnapShot.ref.getDownloadURL();
-    return { imageName, imageURL };
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + questionImageName);
+    const taskSnapShot = await ref.put(questionImageFile);
+    const questionImageURL = await taskSnapShot.ref.getDownloadURL();
+    return { questionImageName, questionImageURL };
 }
 //===========================================================================//
+//===========================================================================//
+//CREATE FLASHCARD IMAGE Answer
+//===========================================================================//
+export async function uploadImageToFlashcardAnswer(answerImageFile, answerImageName) {
+    //image doesn't have a name
+    if (!answerImageName) {
+        answerImageName = Date.now() + answerImageFile.name + 'answer';
+    }
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES+ answerImageName);
+    const taskSnapShot = await ref.put(answerImageFile);
+    const answerImageURL = await taskSnapShot.ref.getDownloadURL();
+    return { answerImageName, answerImageURL };
+}
+//==========================================================================//
+
 
 //============================================================================//
 // Update Flashcard Data

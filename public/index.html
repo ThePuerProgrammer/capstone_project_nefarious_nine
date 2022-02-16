@@ -115,7 +115,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="post" id="form-create-account" <form>
+          <form method="post" id="form-create-account">
             <div>
               <input type="email" name="email" required placeholder="email address">
             </div>
@@ -189,12 +189,22 @@
               <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple Choice</label>
             </div>
             <br />
+            <!--HEADING FOR QUESTION SIDE-->
+            <h3 style="text-align:center"><u>Question Side</u></h3>
             <!-- QUESTION INPUT -->
             <label for="form-question-text-input">Question:</label>
             <textarea name="question" id="form-question-text-input" class="form-control" rows="3" type="text"
               name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min
               length="1"></textarea>
             <br />
+            <div>
+              <img id="form-add-image-to-flashcard-question-tag" style="display: block" />
+              Image:
+              <input id="form-add-image-to-flashcard-question-button" type="file" value="upload" />
+            </div>
+            <br />
+            <!--HEADING FOR ANSWER SIDE-->
+            <h3 style="text-align:center"><u>Answer Side</u></h3>
             <!-- ANSWER INPUT -->
             <div id="form-answer-container">
               <label for="form-answer-text-input">Answer:</label>
@@ -203,9 +213,11 @@
             </div>
             <br />
             <div>
-              <img id="form-add-image-to-flashcard-tag" style="display: block" />
-              Image:
-              <input id="form-add-image-to-flashcard-button" type="file" value="upload" />
+              <div>
+                <img id="form-add-image-to-flashcard-answer-tag" style="display: block" />
+                Image:
+                <input id="form-add-image-to-flashcard-answer-button" type="file" value="upload" />
+              </div>
             </div>
             <br />
             <div>

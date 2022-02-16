@@ -3,22 +3,15 @@
 **************************************************/
 export class Flashcard{
     constructor(data){
-        //Picture Related DATA
-        this.imageName = data.imageName;
-        this.imageURL = data.imageURL;
         this.question = data.question;
         this.answer = data.answer;
         this.isMultipleChoice = data.isMultipleChoice;
         this.incorrectAnswers = data.incorrectAnswers;
-        //COMMENTED BELOW ABOUT DELVING/EXPANDING FURTHER
-        // this.questionImageName = data.questionImageName;
-        // this.questionImageURL = data.questionImageURL;
-        // this.answerImageName = data.answerImageName;
-        // this.answerImageURL = data.questionImageURL;
-
-        //Need Question
-        //Need Incorrect Answer(s) --->[]?
-
+         //Picture Related DATA
+        this.questionImageName = data.questionImageName;
+        this.questionImageURL = data.questionImageURL;
+        this.answerImageName = data.answerImageName;
+        this.answerImageURL = data.answerImageURL;
     }
 
 
@@ -46,18 +39,15 @@ export class Flashcard{
 **************************************************************************/
         serialize() {   // Older Parameter [serialize(timestamp)], but we may not need a creation timestamp
                         // for each flashcard.
-            return {
-                // This seems a bit much lets see the modal and expand to this.
-                // questionImageName:      this.questionImageName, 
-                // questionImageURL:       this.questionImageURL, 
-                // answerImageName:        this.answerImageName, 
-                // questionImageURL:       this.answerImageURL,
-                imageName: this.imageName,
-                imageURL: this.imageURL,
-                question: this.question,
-                answer: this.answer,
-                isMultipleChoice: this.isMultipleChoice,
-                incorrectAnswers: this.incorrectAnswers
+            return {              
+                question:               this.question,
+                answer:                 this.answer,
+                isMultipleChoice:       this.isMultipleChoice,
+                incorrectAnswers:       this.incorrectAnswers,
+                questionImageName:      this.questionImageName, 
+                questionImageURL:       this.questionImageURL, 
+                answerImageName:        this.answerImageName, 
+                answerImageURL:         this.answerImageURL,
             };
         }
 
@@ -69,11 +59,12 @@ export class Flashcard{
 ***************************************************************************/
         static isSerializedProduct(obj){
             
-            if(!obj.imageName || typeof obj.imageName != 'string') return false;
-            if(!obj.imageURL || !obj.imageURL.include('https')) return false;
-            if(!obj.question || typeof obj.imageName != 'string') return false;
+            if(!obj.questionImageURL || !obj.questionImageURL.include('https')) return false; 
+            if(!obj.answerImageURL || !obj.answerImageURL.include('https')) return false;
+            if(!obj.questionImageName || typeof obj.questionImageName != 'string') return false;
+            if(!obj.answerImageName || typeof obj.answerImageName != 'string') return false;
+            if(!obj.question || typeof obj.question != 'string') return false;
             if(!obj.answer || typeof obj.answer != 'string') return false;
-            // TODO: Need Incorect Answers
         }
 
 /***************************************************************************
