@@ -5,6 +5,7 @@ import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
+import * as Study from './study_page.js'
 
 //Declaration of Image(Global)
 let imageFile2Upload;
@@ -26,6 +27,12 @@ export function addViewFormSubmitEvent(form) {
 }
 
 export function addEventListeners() {
+
+  //Adds event listener to CREATE DECK button within CREATE DECK modal 
+  Elements.decksCreateDeck.addEventListener("click", async () => {
+    history.pushState(null, null, Routes.routePathname.DECK);
+    await deck_page();
+  });
 
   // Executes parameter function whenever the Create-A-Flashcard Modal is completely hidden
   //   The function clears the input fields so that whent he user returns, then
@@ -83,6 +90,9 @@ export function addEventListeners() {
     const deckDocIDReceivingNewFlashcard = formData.selectedDeck.value;
     console.log(formData.selectedDeck.value);
 
+     //get uid
+     const uid = localStorage.getItem("uid");
+
     const flashcard = new Flashcard({
       question,
       isMultipleChoice,
@@ -104,6 +114,7 @@ export function addEventListeners() {
         flashcard.imageURL = "N/A";
       }
       const docId = await FirebaseController.createFlashcard(
+        uid,
         deckDocIDReceivingNewFlashcard,
         flashcard
       );
@@ -183,7 +194,7 @@ export async function deck_page(docId) {
 
   // study deck button
   html += `
-    <button type="button" class="btn btn-primary">Study</button><br>
+    <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark">Study</button>
     `;
 
   let deck;
@@ -218,6 +229,10 @@ export async function deck_page(docId) {
     Constant.htmlIDs.buttonShowCreateAFlashcardModal
   );
 
+  const buttonStudy = document.getElementById(
+    Constant.htmlIDs.buttonStudy
+  );
+
 
   /*****************************************
      *    Dynamic Element Event Listeners
@@ -245,7 +260,16 @@ export async function deck_page(docId) {
     });
 
     // Opens the Modal
-    $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
+    $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');});
+
+  
+
+    // Adds event listener for STUDY button
+    buttonStudy.addEventListener('click', async e => {
+      e.preventDefault();
+      //const docId = e.target.docId.value;
+      history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
+      await Study.study_page(docId);
   });
 }
 

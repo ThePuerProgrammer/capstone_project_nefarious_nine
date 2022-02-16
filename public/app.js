@@ -7,6 +7,7 @@ import * as Settings from './view/settings_page.js'
 import * as PomoTimer from './view/pomo_timer.js'
 import * as FirebaseAuth from './controller/firebase_auth.js'
 import * as Deck from './view/deck_page.js'
+import * as Study from '../view/study_page.js'
 
 window.onload = () => {
     const pathname = window.location.pathname;
@@ -30,3 +31,4 @@ Settings.addEventListeners();
 PomoTimer.addEventListeners();
 FirebaseAuth.addEventListeners();
 Deck.addEventListeners();
+Study.addEventListeners();

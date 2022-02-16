@@ -40,6 +40,11 @@ export const formCreateAccount = document.getElementById('form-create-account');
 export const formViewDeck = document.getElementById('form-view-deck');
 //============================================================================//
 
+// STUDY PAGE
+//============================================================================//
+//export const formAnswerFlashcard = document.getElementById('form-answer-flashcard');
+//============================================================================//
+
 // MODALS
 //============================================================================//
 /* This allows us to close the modal when an information/popup modal needs to popup.

@@ -6,8 +6,10 @@ import { FlashcardData } from '../model/flashcard_data.js';
 //============================================================================//
 // CREATE A Deck
 //============================================================================//
-export async function createDeck(deck) {
+export async function createDeck(uid, deck) {
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .add(deck.serialize());
     return ref.id;
@@ -17,20 +19,17 @@ export async function createDeck(deck) {
 //============================================================================//
 // CREATE A Flashcard
 //============================================================================//
-export async function createFlashcard(deckDocID, flashcardModel) {
-    // use window.localStorage to store needed local information
-    let loggedInUserDocID = localStorage.getItem("uid");
 
-    console.log(loggedInUserDocID);
-    console.log(deckDocID);
+export async function createFlashcard(uid, deckDocID, flashcardModel) {
 
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
-        .doc(loggedInUserDocID)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS)
         .add(flashcardModel.serialize());
+        
     return ref.id;
 }
 //============================================================================//
@@ -174,6 +173,7 @@ export async function getFlashcards(uid, docId) {
 
     return flashcards;
 }
+
 
 /* when the function for creating a deck is written
     uncomment the following line to allow for a timestamp
