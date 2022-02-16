@@ -178,7 +178,7 @@ export function addEventListeners() {
   });
 }
 
-export async function deck_page(docId) {
+export async function deck_page(deckDockID) {
   let html = '';
   html += '<h1> Deck Page </h1>';
   //Allows for the create a flashcard button
@@ -193,7 +193,7 @@ export async function deck_page(docId) {
 
   let deck;
   try {
-    deck = await FirebaseController.getDeckById(docId);
+    deck = await FirebaseController.getDeckById(Auth.currentUser.uid, deckDockID);
     if (!deck) {
       html += '<h5>Deck not found!</h5>';
     } else {
@@ -205,7 +205,7 @@ export async function deck_page(docId) {
 
   let flashcards;
   try {
-    flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, docId);
+    flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckDockID);
     if (!flashcards) {
       html += '<h5>No flashcards found for this deck</h5>';
     }
