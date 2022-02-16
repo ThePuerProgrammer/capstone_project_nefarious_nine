@@ -247,10 +247,9 @@ input {
 /* STYLE FOR FLASHCARDS */
 /*============================================================================*/
 .flip-card {
-    background-color: #2C1320;
+    background-color: transparent;
     width: 300px;
     height: 200px;
-    border: 1px solid #5F4B66;
     perspective: 1000px;
 }
 
@@ -277,14 +276,24 @@ input {
 }
 
 .flip-card-front{
-    background-color: #2C1320;
-    color: #56667A;
+    background-color: #5F4B66;
+    color: #2C1320;
 }
 
 .flip-card-back{
-    background-color: #2C1320;
-    color: #56667A;
+    background-color: #5F4B66;
+    color: #2C1320;
     transform: rotateY(180deg);
+}
+
+.card-text{
+    text-align: center;
+    color: #A7ADC6;
+}
+
+.answer-text{
+    width: fit-content;
+    margin-bottom: 1em;
 }
 
 /*============================================================================*/

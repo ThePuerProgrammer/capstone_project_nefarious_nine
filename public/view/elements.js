@@ -32,6 +32,8 @@ export const decksCreateDeck = document.getElementById('decks-create-deck');
 export const formQuestionTextInput = document.getElementById('form-question-text-input');
 export const formCreateAFlashcard = document.getElementById('form-create-a-flashcard');
 export const formAnswerTextInput = document.getElementById('form-answer-text-input');
+export const formDeleteFlashcard = document.getElementById('form-delete-flashcard');
+export const formDeleteFlashcardSelect = document.getElementById('delete-option');
 //============================================================================//
 
 // STUDY DECKS PAGE
@@ -71,6 +73,7 @@ export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById
 export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', { backdrop: 'static' }));
 export const modalCreateDeck = new bootstrap.Modal(document.getElementById('create-deck-modal'));
 export const modalResetPassword = new bootstrap.Modal(document.getElementById('modal-reset-password'));
+export const modalDeleteFlashcard = new bootstrap.Modal(document.getElementById('modal-delete-a-flashcard', { backdrop: 'static' }));
 
 //============================================================================//
 

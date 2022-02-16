@@ -44,10 +44,12 @@
                             <button type="button" class="btn pomo-text-color-light" id="menu-home">Home</button>
                         </li>
                         <li class="nav-item modal-postauth">
-                            <button type="button" class="btn pomo-text-color-light" id="menu-classrooms">Classrooms</button>
+                            <button type="button" class="btn pomo-text-color-light"
+                                id="menu-classrooms">Classrooms</button>
                         </li>
                         <li class="nav-item modal-postauth">
-                            <button type="button" class="btn pomo-text-color-light" id="menu-study-decks">Study Decks</button>
+                            <button type="button" class="btn pomo-text-color-light" id="menu-study-decks">Study
+                                Decks</button>
                         </li>
                     </ul>
                 </div>
@@ -57,19 +59,23 @@
                         <ul class="navbar-nav">
                             <li class="nav-item" style="display: inline;">
                                 <button type="button" class="btn" id="menu-settings">
-                                    <img src="./assets/images/settings_black_24dp.svg" alt="Settings" width="24" height="24">
+                                    <img src="./assets/images/settings_black_24dp.svg" alt="Settings" width="24"
+                                        height="24">
                                 </button>
                             </li>
                             <li class="nav-item dropdown" style="display: inline;">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    <img src="./assets/images/account_circle_black_24dp.svg" alt="Profile" width="24" height="24">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="./assets/images/account_circle_black_24dp.svg" alt="Profile" width="24"
+                                        height="24">
                                 </a>
                                 <div class="dropdown-menu" style="top: 48px; right: 0; left: auto;"
                                     aria-labelledby="dropdownMenuButton">
-                                    <button type="button" class="dropdown-item btn pomo-text-color-light pomo-font-weight-bold"
+                                    <button type="button"
+                                        class="dropdown-item btn pomo-text-color-light pomo-font-weight-bold"
                                         class="btn" id="menu-profile">Profile</button>
-                                    <button type="button" class="dropdown-item btn pomo-text-color-light pomo-font-weight-bold"
+                                    <button type="button"
+                                        class="dropdown-item btn pomo-text-color-light pomo-font-weight-bold"
                                         id="menu-signout">Sign Out</button>
                                 </div>
                             </li>
@@ -99,11 +105,14 @@
                             <input type="password" name="password" placeholder="Password">
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" type="submit">Sign in</button>
-                        <li class="nav-item modal-preauth">
-                            <button type="button" id="reset-password" class=" btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Reset Password</button>
-                        </li>
-                      </div>
+                            <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+                                type="submit">Sign in</button>
+                            <li class="nav-item modal-preauth">
+                                <button type="button" id="reset-password"
+                                    class=" btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Reset
+                                    Password</button>
+                            </li>
+                        </div>
                     </form>
                 </div>
 
@@ -130,10 +139,12 @@
                             <input type="password" name="password" required minlength="6" placeholder="Password">
                         </div>
                         <div>
-                            <input type="password" name="passwordConfirm" required minlength="6" placeholder="Confirm Password">
+                            <input type="password" name="passwordConfirm" required minlength="6"
+                                placeholder="Confirm Password">
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button type="submit" class="btn btn-outline-primary">Submit to Create Account</button>
+                            <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button
+                                type="submit" class="btn btn-outline-primary">Submit to Create Account</button>
                         </div>
                     </form>
                 </div>
@@ -148,7 +159,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-reset-password-label">Password Reset, please enter your email address</h5>
+                    <h5 class="modal-title" id="modal-reset-password-label">Password Reset, please enter your email
+                        address</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -180,8 +192,8 @@
                     <form id="form-create-deck" method="post">
                         <div class="form-group">
                             <label class="pomo-text-color-light" for="name">Name</label>
-                            <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
-                                id="deck-title">
+                            <input class="form-control form-control-lg" type="name" name="name"
+                                placeholder="e.g. DSA Chapter 1" id="deck-title">
                             <br>
                             <br>
                             <label class="pomo-text-color-light" for="subject">Subject</label>
@@ -190,7 +202,8 @@
                         </div>
                         <br>
                         <br>
-                        <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="decks-create-deck" type="submit">Create Deck</button>
+                        <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="decks-create-deck"
+                            type="submit">Create Deck</button>
                     </form>
                 </div>
             </div>
@@ -199,8 +212,8 @@
     <!-- END CREATE DECK MODAL---------------------------------------------->
 
     <!-- MODAL:CREATE A FLASHCARD -->
-    <div class="modal fade" id="modal-create-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-create-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content pomo-bg-color-md-dark">
                 <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
@@ -212,25 +225,29 @@
                         <!---FORM VALIDATION ARE PLACED OF THE FIELDS WITH REQUIREMENTS-->
                         <!--EXAMPLE <input type = "text" name = "title" placeholder="Title of the thread" required minlength="2">-->
                         <!-- DROPDOWN FOR LIST OF DECKS: List is dynamically filled when the button to open this modal is pressed -->
-                        <label class="col-2 align-self-center" for="form-create-a-flashcard-select-container">Deck:</label>
+                        <label class="col-2 align-self-center"
+                            for="form-create-a-flashcard-select-container">Deck:</label>
                         <br />
                         <!-- MULTIPLE CHOICE TOGGLE -->
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="form-check-input-is-multiple-choice">
-                            <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple Choice</label>
+                            <input class="form-check-input" type="checkbox" role="switch"
+                                id="form-check-input-is-multiple-choice">
+                            <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple
+                                Choice</label>
                         </div>
                         <br />
                         <!-- QUESTION INPUT -->
                         <label for="form-question-text-input">Question:</label>
-                        <textarea name="question" id="form-question-text-input" class="form-control" rows="3" type="text"
-                            name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min
-                            length="1"></textarea>
+                        <textarea name="question" id="form-question-text-input" class="form-control" rows="3"
+                            type="text" name="flashcard-question" placeholder="How many snakes can fit on a plane?"
+                            required min length="1"></textarea>
                         <br />
                         <!-- ANSWER INPUT -->
                         <div id="form-answer-container">
                             <label for="form-answer-text-input">Answer:</label>
-                            <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text"
-                                name="flashcard-answer" placeholder="At least 4." required min length="1"></textarea>
+                            <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3"
+                                type="text" name="flashcard-answer" placeholder="At least 4." required min
+                                length="1"></textarea>
                         </div>
                         <br />
                         <div>
@@ -240,8 +257,42 @@
                         </div>
                         <br />
                         <div>
-                            <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Create</button>
+                            <button type="submit"
+                                class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Create</button>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL:DELETE A FLASHCARD -->
+    <div class="modal fade" id="modal-delete-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden=" true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content pomo-bg-color-md-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title pomo-text-color-light" id="delete-flashcard-modal-label">Delete a flashcard
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-delete-flashcard">
+                        <select class="form-select-delete-flashcard" id="delete-option" onChange="update()">
+                            <option selected>Choose a flashcard to delete</option>
+                        </select>
+                        <input type="hidden" id="value">
+                        <script type="text/javascript">
+                            function update() {
+                                var select = document.getElementById('delete-option');
+                                var option = select.options[select.selectedIndex];
+                                document.getElementById('value').value = option.value;
+                            }
+                            update();
+                        </script>
+                        <br>
+                        <button type="submit"
+                            class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Delete</button>
                     </form>
                 </div>
             </div>
@@ -278,7 +329,8 @@
                 <span>
                     <img src="./assets/images/expand.svg" alt="" width="24" height="24"
                         style="display: inline; margin-left: 2px; margin-right: 2px;">
-                    <div id="pomo-timer-inner-div" style="display: inline; margin-left: 15%; margin-right: 15%;">Pomobyte Timer
+                    <div id="pomo-timer-inner-div" style="display: inline; margin-left: 15%; margin-right: 15%;">
+                        Pomobyte Timer
                     </div>
                 </span>
             </button>
@@ -328,7 +380,9 @@
                     id="study-relax-interval-slider">
                 <div id="timer-thumb-1" class="thumb-1-text"></div>
                 <button id="timer-make-setting-default-button" type="button"
-                    class="btn pomo-bg-color-md-light pomo-text-color-dark pomo-font-weight-bold">Make This Setting My
+                    class="btn pomo-bg-color-md-light pomo-text-color-dark pomo-font-weight-bold">Make This
+                    Setting
+                    My
                     Default</button>
             </div>
 
