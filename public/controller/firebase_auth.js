@@ -22,12 +22,22 @@ export function addEventListeners() {
         const email = e.target.email.value;
         const password = e.target.password.value;
         try {
+            let uid;
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
+                .then( cred => {
+                    // Getting UID for localStorage!
+                    uid = cred.user.uid;
+                });
+            
+            // Saving UID in local storage for referencing user's Firestore data
+            localStorage.setItem("uid", uid); // Retrievable with localStorage.getItem("uid")
+            Utilities.info('Welcome', `You're now signed in as ${email}`);
+            
             Elements.modalSignIn.hide();
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
-            Utilities.info('Sign in Error', JSON.stringify(error), Elements.modalSignIn);
+            Utilities.info('Sign in Error', JSON.stringify(error), Elements.modalSignIn.id);
             if (Constants.DEV)
                 console.log(`error:  ${errorCode} | ${errorMessage}`);
         }
@@ -45,6 +55,7 @@ export function addEventListeners() {
         }
 
         try {
+            let uid;
             const email = emailAddress;
             const decksStudying = [];
 
@@ -59,7 +70,13 @@ export function addEventListeners() {
                 .then(cred => {
                     return firebase.firestore().collection(Constants.collectionName.USERS).doc(cred.user.uid).set(newUserModel.serialize());
                 });
+                    uid = cred.user.uid;
+            });
 
+            console.log("ADDING USER TO FIRESTORE");
+            firebase.firestore().collection(Constants.collectionName.USERS).doc(uid).set(newUserModel.serialize());
+            console.log("ADDED USER TO FIRESTORE");
+      
             // Account successfully created from here
             e.target.reset();
 
