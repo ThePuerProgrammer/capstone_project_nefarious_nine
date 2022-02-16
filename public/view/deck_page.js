@@ -4,6 +4,7 @@ import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Utilities from './utilities.js'
+import * as Auth from '../controller/firebase_auth.js'
 
 //Declaration of Image(Global)
 let imageFile2Upload;
@@ -199,7 +200,7 @@ export async function deck_page(docId) {
 
   let flashcards;
   try {
-    flashcards = await FirebaseController.getFlashcards(docId);
+    flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, docId);
     if (!flashcards) {
       html += '<h5>No flashcards found for this deck</h5>';
     }
@@ -255,19 +256,19 @@ function buildFlashcardView(flashcard) {
       <img src="${flashcard.imageURL}" style="width: 100px; height: 100px">
       <p>${flashcard.question}</p>
     ` :
-  `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
+    `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
     <div class="flip-card-inner">
       <div class="flip-card-front">
         <p>${flashcard.question}</p>
       `;
 
-      //TODO: find a way to shuffle these up
-  if(flashcard.isMultipleChoice){
-    for(let i = 0; i < flashcard.incorrectAnswers.length; ++i){
+  //TODO: find a way to shuffle these up
+  if (flashcard.isMultipleChoice) {
+    for (let i = 0; i < flashcard.incorrectAnswers.length; ++i) {
       html += `<p>${flashcard.incorrectAnswers[i]}</p>`
     }
     html += `<p>${flashcard.answer}</p>`;
-  }else{
+  } else {
     html += `<p>${flashcard.answer}</p>`;
   }
 

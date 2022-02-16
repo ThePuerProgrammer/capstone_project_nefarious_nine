@@ -5,6 +5,7 @@ import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as DeckPage from './deck_page.js'
+import * as Auth from '../controller/firebase_auth.js'
 
 
 export function addEventListeners() {
@@ -59,7 +60,7 @@ export async function study_decks_page() {
         // this is pretty temporary since we're just pulling all decks to test
         // in the future, we can set up our getDecks function to filter by criteria
         // also TODO: add a dropdown menu to sort decks by different filters - Cody
-        deckList = await FirebaseController.getAllTestingDecks();
+        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
     } catch (e) {
         // TODO: we can display a popup if there was an error getting the decklists
         // I'm not doing this now because I don't want to - Cody
