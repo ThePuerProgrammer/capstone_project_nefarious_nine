@@ -12,6 +12,8 @@ let imageFile2UploadQuestion;
 let imageFile2UploadAnswer;
 const imageAnswer = Elements.formContainerAnswerImage;
 const imageQuestion = Elements.formContainerQuestionImage;
+const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
+const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
 
 
 export function addViewButtonListener() {
@@ -64,8 +66,8 @@ export function addEventListeners() {
         const question = formData.question;
         const answer = formData.answer;
         const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
-        const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
-        const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
+       // const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
+        //const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
         console.log("testing");
         console.log(formData);
 
@@ -187,8 +189,10 @@ export function addEventListeners() {
     });
     Elements.formAddFlashCardQuestionImageButton.addEventListener("change", (e) => {
         imageFile2UploadQuestion = e.target.files[0];
-        if (!imageFile2UploadQuestion){
-            //Elements.imageTagCreateFlashQuestion.src = '';
+        
+        if (!imageFile2UploadQuestion || isQuestionImage){
+            //if (!imageFile2UploadQuestion ){
+            Elements.imageTagCreateFlashQuestion.src='';            
             return;
         } 
         //display image
@@ -198,8 +202,9 @@ export function addEventListeners() {
     });
     Elements.formAddFlashCardAnswerImageButton.addEventListener("change", (e) => {
         imageFile2UploadAnswer = e.target.files[0];
-        if (!imageFile2UploadAnswer){ 
-            //Elements.imageTagCreateFlashAnswer.src = ''; 
+        if(!imageFile2UploadAnswer ||isAnswerImage){
+        //if (!imageFile2UploadAnswer){ 
+            Elements.imageTagCreateFlashAnswer.src='';
             return;
         }
         //display image
@@ -331,10 +336,11 @@ function buildFlashcardView(flashcard) {
 function resetFlashcard(){
     Elements.formCreateAFlashcard.reset();
     if(Elements.formCheckInputIsImageQuestion){
-    checkImageQuestion();
+        imageQuestion.style.display='none';
     }
     if(Elements.formCheckInputIsImageAnswer){
-    checkImageAnswer();
+        imageAnswer.style.display='none';
+
     }
     Elements.imageTagCreateFlashAnswer.src="";
     Elements.imageTagCreateFlashQuestion.src="";
