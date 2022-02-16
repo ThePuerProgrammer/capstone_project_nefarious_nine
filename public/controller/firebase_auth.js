@@ -29,6 +29,7 @@ export function addEventListeners() {
             
             // Saving UID in local storage for referencing user's Firestore data
             localStorage.setItem("uid", uid); // Retrievable with localStorage.getItem("uid")
+            Utilities.info('Welcome', `You're now signed in as ${email}`);
             
             Elements.modalSignIn.hide();
         } catch (error) {
