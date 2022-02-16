@@ -30,9 +30,14 @@ export function addEventListeners() {
         });
 
         try {
-            const docId = await FirebaseController.createDeck(deck);
+            console.log("Creating Deck");
+            const docId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
+            console.log("Deck Created");
             deck.docId = docId;
+            localStorage.setItem("deckPageDeckDocID", deck.docId);
             Elements.modalCreateDeck.hide();
+            history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
+            await DeckPage.deck_page(deck.docId);
         } catch (e) {
             if (Constant.DEV)
                 console.log(e);
@@ -49,7 +54,7 @@ export async function study_decks_page() {
 
     // Solution for merging Piper's 'create_deck_deck_title branch
     html += `
-        <button type="button" class="btn btn-primary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
+        <button type="button" class="btn btn-secondary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
             Create New Deck
         </button>
         <br><br>

@@ -1,23 +1,16 @@
 import * as Constant from '../model/constant.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
+import { FlashcardData } from '../model/flashcard_data.js';
 
-//============================================================================//
-// CREATE User Document
-//============================================================================//
-export async function createUserDocument(user) {
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .add(user.serialize());
-    return ref.id;
-}
-//============================================================================//
 
 //============================================================================//
 // CREATE A Deck
 //============================================================================//
-export async function createDeck(deck) {
+export async function createDeck(uid, deck) {
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .add(deck.serialize());
     return ref.id;
@@ -27,12 +20,17 @@ export async function createDeck(deck) {
 //============================================================================//
 // CREATE A Flashcard
 //============================================================================//
-export async function createFlashcard(deckDocID, flashcardModel) {
+
+export async function createFlashcard(uid, deckDocID, flashcardModel) {
+
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS)
         .add(flashcardModel.serialize());
+
     return ref.id;
 }
 //============================================================================//
@@ -53,6 +51,81 @@ export async function uploadImageToFlashcard(imageFile, imageName) {
     return { imageName, imageURL };
 }
 //===========================================================================//
+
+//============================================================================//
+// Update Flashcard Data
+// 
+// 1. Check if data exists
+//   [Data Exists] Grab the data
+//   [Data doesn't exist]  
+//============================================================================//
+export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAnsweredCorrectly */
+    // use window.localStorage to store needed local information
+    let loggedInUserDocID = localStorage.getItem("uid");
+
+    // Making the reference to the flashcard data
+    const flashcardDataRef = firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(loggedInUserDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID);
+
+    // FlashcardData Model
+    //  If flashcard does't not exist, this model will be used to create 
+    //  flashcard data as-is.
+    //  If flashcard does exist, streak will be updated.
+    let flashcardData = new FlashcardData({
+        streak: 0,
+        lastAccessed: Date.now()
+    });
+
+    // Using the flashcard data reference to check if it exists
+    flashcardDataRef.get().then((doc) => {
+        if (doc.exists) { 
+            flashcardData.streak = doc.data().streak;
+        }
+    });
+
+    // Update flashcardData result on Firebase
+    firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(loggedInUserDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID)
+        .set(flashcardData.serialize());
+}
+//===========================================================================//
+
+//============================================================================//
+// This function pulls all decks from the highest level owned_decks collection
+// in firestore. This is purely for testing for the time being and will later be
+// modified to accomodate users / classrooms
+//============================================================================//
+export async function getUserDecks(uid) {
+    // use window.localStorage to store needed local information
+    let deckList = [];
+    const userOwnedDecks = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .orderBy('name')
+        .get();
+
+    userOwnedDecks.forEach(doc => {
+        const d = new Deck(doc.data());
+        d.docId = doc.id;
+        deckList.push(d);
+    })
+
+    // localStorage.set(Constant.collectionName.OWNED_DECKS, deckList);
+
+    return deckList;
+}
+//============================================================================//
 
 //============================================================================//
 // This function pulls all decks from the highest level owned_decks collection
@@ -102,6 +175,7 @@ export async function getFlashcards(uid, docId) {
 
     return flashcards;
 }
+
 
 /* when the function for creating a deck is written
     uncomment the following line to allow for a timestamp

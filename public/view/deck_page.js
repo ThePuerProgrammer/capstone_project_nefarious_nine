@@ -5,6 +5,7 @@ import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
+import * as Study from './study_page.js'
 
 //Declaration of Image(Global)
 let imageFile2Upload;
@@ -21,19 +22,23 @@ export function addViewFormSubmitEvent(form) {
     e.preventDefault();
     const docId = e.target.docId.value;
     history.pushState(null, null, Routes.routePathname.DECK + '#' + docId);
+    localStorage.setItem("deckPageDeckDocID", docId);
     await deck_page(docId);
   })
 }
 
 export function addEventListeners() {
 
+  //Adds event listener to CREATE DECK button within CREATE DECK modal 
+  Elements.decksCreateDeck.addEventListener("click", async () => {
+    history.pushState(null, null, Routes.routePathname.DECK);
+    await deck_page();
+  });
+
   // Executes parameter function whenever the Create-A-Flashcard Modal is completely hidden
   //   The function clears the input fields so that whent he user returns, then
   //   they will have fresh input fields.
   $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).on('hidden.bs.modal', function (e) {
-    // Deck list Reset
-    Elements.formCreateAFlashcardSelectContainer.innerHTML = "";
-
     // RESET INPUT FIELDS FOR FOLLOWING:
     Elements.formCreateAFlashcard.reset();
 
@@ -66,6 +71,8 @@ export function addEventListeners() {
     const question = formData.question;
     const answer = formData.answer;
     const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
+    console.log("testing");
+    console.log(formData);
 
     const incorrectAnswers = [];
 
@@ -78,8 +85,7 @@ export function addEventListeners() {
         incorrectAnswers.push(formData.incorrectAnswer3);
     }
 
-    const deckDocIDReceivingNewFlashcard = formData.selectedDeck;
-
+    let deckDocID = localStorage.getItem("deckPageDeckDocID");
     const flashcard = new Flashcard({
       question,
       isMultipleChoice,
@@ -100,8 +106,10 @@ export function addEventListeners() {
         flashcard.imageName = "N/A";
         flashcard.imageURL = "N/A";
       }
+
       const docId = await FirebaseController.createFlashcard(
-        deckDocIDReceivingNewFlashcard,
+        Auth.currentUser.uid,
+        deckDocID,
         flashcard
       );
       //flashcard.set_docID(docId);
@@ -109,7 +117,7 @@ export function addEventListeners() {
       // }
       if (Constant.DEV) {
         console.log(
-          `Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`
+          `Flashcard created in deck with doc id [${deckDocID}]:`
         );
         console.log("Flashcard Contents: ");
         console.log(flashcard);
@@ -180,7 +188,7 @@ export async function deck_page(docId) {
 
   // study deck button
   html += `
-    <button type="button" class="btn btn-primary">Study</button><br>
+    <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark">Study</button>
     `;
 
   let deck;
@@ -215,6 +223,10 @@ export async function deck_page(docId) {
     Constant.htmlIDs.buttonShowCreateAFlashcardModal
   );
 
+  const buttonStudy = document.getElementById(
+    Constant.htmlIDs.buttonStudy
+  );
+
 
   /*****************************************
      *    Dynamic Element Event Listeners
@@ -231,18 +243,15 @@ export async function deck_page(docId) {
   buttonShowCreateAFlashcardModal.addEventListener('click', async e => {
     e.preventDefault();
 
-    // Grabbing list of decks from Firestore
-    const listOfTestDecks = await FirebaseController.getAllTestingDecks();
-
-    // Adding list of decks to select menu/drop down
-    listOfTestDecks.forEach(deck => {
-      Elements.formCreateAFlashcardSelectContainer.innerHTML += `
-                <option value="${deck.docID}">${deck.name}</option>
-            `;
-    });
-
     // Opens the Modal
-    $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
+    $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');});
+
+    // Adds event listener for STUDY button
+    buttonStudy.addEventListener('click', async e => {
+      e.preventDefault();
+      //const docId = e.target.docId.value;
+      history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
+      await Study.study_page(docId);
   });
 }
 

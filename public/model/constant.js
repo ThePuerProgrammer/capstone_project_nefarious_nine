@@ -12,13 +12,8 @@ export const collectionName = {
     FLASHCARDS: 'flashcards',
     OWNED_DECKS: 'owned_decks',
     USERS: 'users',
-    SRS_DATA: 'srs_data',
+    DECK_DATA: 'deck_data',
     FLASHCARDS_DATA: 'flashcards_data',
-}
-
-export const documentPrefixes = {
-    flashcardDataPrefix: 'flashcard_data_',
-    deckDataPrefix: 'deck_data_',
 }
 
 /*****************************************
@@ -41,6 +36,15 @@ export const storageFolderName = {
 export const htmlIDs = {
     buttonShowCreateAFlashcardModal: 'button-show-create-a-flashcard-modal',
     modalCreateAFlashcard: 'modal-create-a-flashcard',
+    buttonStudy: 'btn-study-deck',
+    formAnswerFlashcard: 'form-answer-flashcard',
+
+/*****************************************
+ *         Helper Functions
+ *****************************************
+ * General helper functions that may be used
+ * throughout different JavaScript files
+ ******************************************/
     formCheckInputIsMultiple: 'form-check-input-is-multiple',
     modalCreateAccount: 'modal-create-account'
 }
