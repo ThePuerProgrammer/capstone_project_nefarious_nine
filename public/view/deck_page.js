@@ -148,7 +148,17 @@ export function addEventListeners() {
         }
         await deck_page(deckDocID);
     });
-
+    Elements.formDeleteFlashcard.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        var f = document.getElementById('value').value;
+        try {
+            await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
+            Utilities.info("Successfully deleted", "Successfully deleted flashcard", "modal-delete-a-flashcard");
+        } catch (e) {
+            Utilities.info("Error", JSON.stringify(e), "modal-delete-a-flashcard");
+        }
+        await deck_page(deckDocID);
+    });
     // Event listener to change the answer view depending on whether or not
     //    multiple choice is checked or not
     Elements.formCheckInputIsMultipleChoice.addEventListener(
