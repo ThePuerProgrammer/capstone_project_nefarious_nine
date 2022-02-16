@@ -201,18 +201,6 @@ export function addEventListeners() {
         reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
         reader.readAsDataURL(imageFile2UploadQuestion);
     });
-
-    Elements.formDeleteFlashcard.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        var f = document.getElementById('value').value;
-        try {
-            await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
-            Utilities.info("Successfully deleted", "Successfully deleted flashcard", "modal-delete-a-flashcard");
-        } catch (e) {
-            Utilities.info("Error", JSON.stringify(e), "modal-delete-a-flashcard");
-        }
-        await deck_page(deckDocID);
-    });
     Elements.formAddFlashCardAnswerImageButton.addEventListener("change", (e) => {
         imageFile2UploadAnswer = e.target.files[0];
         if(!imageFile2UploadAnswer ||isAnswerImage){
@@ -400,6 +388,25 @@ function shuffle(answers) {
         const j = Math.floor(Math.random() * (i + 1));
         [answers[i], answers[j]] = [answers[j], answers[i]];
     }
+}
+
+function checkImageQuestion(){
+    if (Elements.formCheckInputIsImageQuestion.checked) {
+      //TESTING HERE
+      if(imageQuestion.style.display=='none'){
+        imageQuestion.style.display = 'block';
+      } else{
+        imageQuestion.style.display = 'none';
+      }
+    } else if(!Elements.formCheckInputIsImageQuestion.checked){
+      if(imageQuestion.style.display=='none'){
+        imageQuestion.style.display = 'block';
+      } else{
+        imageQuestion.style.display = 'none';
+      }
+    }
+}
+
 }
 
 function checkImageQuestion(){
