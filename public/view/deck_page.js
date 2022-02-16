@@ -10,6 +10,7 @@ import * as Study from './study_page.js'
 //Declaration of Image(Global)
 let imageFile2UploadQuestion;
 let imageFile2UploadAnswer;
+let deckDocID;
 const imageAnswer = Elements.formContainerAnswerImage;
 const imageQuestion = Elements.formContainerQuestionImage;
 const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
