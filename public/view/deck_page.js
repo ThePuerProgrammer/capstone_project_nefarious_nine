@@ -8,7 +8,11 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Study from './study_page.js'
 
 //Declaration of Image(Global)
-let imageFile2Upload;
+let imageFile2UploadQuestion;
+let imageFile2UploadAnswer;
+const imageAnswer = Elements.formContainerAnswerImage;
+const imageQuestion = Elements.formContainerQuestionImage;
+
 
 export function addViewButtonListener() {
     const viewButtons = document.getElementsByClassName('form-view-deck');
@@ -40,21 +44,10 @@ export function addEventListeners() {
     //     they will have fresh input fields.
     $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).on('hidden.bs.modal', function (e) {
         // RESET INPUT FIELDS FOR FOLLOWING:
-        Elements.formCreateAFlashcard.reset();
-
-        // Making sure singular choice is displayed next time.
-        Elements.formAnswerContainer.innerHTML = `
-                <label for="form-answer-text-input">Answer:</label>
-                <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
-        `;
+        resetFlashcard();
     });
 
-    //Resets Image
-    function resetImageSelection() {
-        imageFile2Upload = null;
-        Elements.imageTageCreateFlash.src = "";
-    }
-
+    
     // Adds event listener to CREATE A FLASHCARD Submit button
     // TODO: move actual work into its own function and just pass function name to even listener
     Elements.formCreateAFlashcard.addEventListener("submit", async (e) => {
@@ -71,6 +64,8 @@ export function addEventListeners() {
         const question = formData.question;
         const answer = formData.answer;
         const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
+        const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
+        const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
         console.log("testing");
         console.log(formData);
 
@@ -96,21 +91,35 @@ export function addEventListeners() {
         console.log(flashcard);
 
         try {
-            if (imageFile2Upload) {
-                console.log("Check1");
-                const { imageName, imageURL } =
-                    await FirebaseController.uploadImageToFlashcard(imageFile2Upload);
-                flashcard.imageName = imageName;
-                flashcard.imageURL = imageURL;
+            //Question Image
+            if (isQuestionImage) {
+              console.log("Question-1");
+              const { questionImageName,questionImageURL } =
+                await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
+              flashcard.questionImageName = questionImageName;
+              flashcard.questionImageURL= questionImageURL;
             } else if (typeof obj === "undefined") {
-                flashcard.imageName = "N/A";
-                flashcard.imageURL = "N/A";
+              console.log("Question-2");
+              flashcard.questionImageName = "N/A";
+              flashcard.questionImageURL = "N/A";
             }
-
+            //Answer Image
+            if(isAnswerImage){
+              console.log("Answer-1");
+              const { answerImageName, answerImageURL } =
+                await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
+              flashcard.answerImageName = answerImageName;
+              flashcard.answerImageURL= answerImageURL;
+            }else if (typeof obj === "undefined") {
+              console.log("Answer-2");
+              flashcard.answerImageName = "N/A";
+              flashcard.answerImageURL = "N/A";
+            }
+      
             const docId = await FirebaseController.createFlashcard(
-                Auth.currentUser.uid,
-                deckDocID,
-                flashcard
+              Auth.currentUser.uid,
+              deckDocID,
+              flashcard
             );
             //flashcard.set_docID(docId);
             flashcard.docID = docId;
@@ -168,14 +177,37 @@ export function addEventListeners() {
         }
     );
 
-    Elements.formAddFlashCardImageButton.addEventListener("change", (e) => {
-        imageFile2Upload = e.target.files[0];
-        if (!imageFile2Upload) return;
+    Elements.formCheckInputIsImageQuestion.addEventListener("click", async (e) => {
+        // TOGGLE ON
+        checkImageQuestion();
+    });
+    Elements.formCheckInputIsImageAnswer.addEventListener("click", async (e) => {
+        // TOGGLE IS ON
+        checkImageAnswer();
+    });
+    Elements.formAddFlashCardQuestionImageButton.addEventListener("change", (e) => {
+        imageFile2UploadQuestion = e.target.files[0];
+        if (!imageFile2UploadQuestion){
+            //Elements.imageTagCreateFlashQuestion.src = '';
+            return;
+        } 
         //display image
         const reader = new FileReader();
-        reader.onload = () => (Elements.imageTagCreateFlash.src = reader.result);
-        reader.readAsDataURL(imageFile2Upload);
+        reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
+        reader.readAsDataURL(imageFile2UploadQuestion);
     });
+    Elements.formAddFlashCardAnswerImageButton.addEventListener("change", (e) => {
+        imageFile2UploadAnswer = e.target.files[0];
+        if (!imageFile2UploadAnswer){ 
+            //Elements.imageTagCreateFlashAnswer.src = ''; 
+            return;
+        }
+        //display image
+        const reader = new FileReader();
+        reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
+        reader.readAsDataURL(imageFile2UploadAnswer);
+    });
+    
 }
 
 export async function deck_page(deckDockID) {
@@ -256,10 +288,10 @@ export async function deck_page(deckDockID) {
 }
 
 function buildFlashcardView(flashcard) {
-    let html = flashcard.imageURL != "N/A" ? `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
+    let html = flashcard.questionImageURL != "N/A" ? `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
     <div class="flip-card-inner">
         <div class="flip-card-front">
-            <img src="${flashcard.imageURL}" style="width: 100px; height: 100px">
+            <img src="${flashcard.questionImageURL}" style="width: 100px; height: 100px">
             <p>${flashcard.question}</p>
         ` :
         `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
@@ -278,11 +310,73 @@ function buildFlashcardView(flashcard) {
         html += `<p>${flashcard.answer}</p>`;
     }
 
-    html += `</div><div class="flip-card-back">
+    html += flashcard.answerImageURL != "N/A" ?  `</div><div class="flip-card-back">
     <h1>${flashcard.answer}</h1>
-</div>
-</div>
-</div>`;
-
+    <br>
+    <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
+  </div>
+  </div>
+  </div>` 
+  :
+  `</div><div class="flip-card-back">
+  <h1>${flashcard.answer}</h1>
+  </div>
+  </div>
+  </div>`;
+  
     return html;
+  }
+
+//Function to reset all feels and toggles
+function resetFlashcard(){
+    Elements.formCreateAFlashcard.reset();
+    if(Elements.formCheckInputIsImageQuestion){
+    checkImageQuestion();
+    }
+    if(Elements.formCheckInputIsImageAnswer){
+    checkImageAnswer();
+    }
+    Elements.imageTagCreateFlashAnswer.src="";
+    Elements.imageTagCreateFlashQuestion.src="";
+  
+    // Making sure singular choice is displayed next time.
+    Elements.formAnswerContainer.innerHTML = `
+        <label for="form-answer-text-input">Answer:</label>
+        <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
+    `;
+}
+
+function checkImageQuestion(){
+    if (Elements.formCheckInputIsImageQuestion.checked) {
+      //TESTING HERE
+      if(imageQuestion.style.display=='none'){
+        imageQuestion.style.display = 'block';
+      } else{
+        imageQuestion.style.display = 'none';
+      }
+    } else if(!Elements.formCheckInputIsImageQuestion.checked){
+      if(imageQuestion.style.display=='none'){
+        imageQuestion.style.display = 'block';
+      } else{
+        imageQuestion.style.display = 'none';
+      }
+    }
+}
+
+function checkImageAnswer(){
+    if (Elements.formCheckInputIsImageAnswer.checked) {
+      //TESTING HERE
+      if(imageAnswer.style.display=='none'){
+        imageAnswer.style.display = 'block';
+      } else{
+        imageAnswer.style.display = 'none';
+      }
+    }
+    else if(!Elements.formCheckInputIsImageAnswer.checked){
+      if(imageAnswer.style.display=='none'){
+        imageAnswer.style.display = 'block';
+      } else{
+        imageAnswer.style.display = 'none';
+      }
+    }
 }
