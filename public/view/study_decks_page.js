@@ -19,6 +19,7 @@ export function addEventListeners() {
         e.preventDefault();
         const name = e.target.name.value;
         const subject = e.target.subject.value;
+        const isFavorited = false;
 
         // relevant to Cody's story:
         const dateCreated = Date.now();
@@ -26,7 +27,8 @@ export function addEventListeners() {
         const deck = new Deck({
             name,
             subject,
-            dateCreated
+            dateCreated,
+            isFavorited,
         });
 
         try {
@@ -61,8 +63,7 @@ export async function study_decks_page() {
     html += `
         <button type="button" class="btn btn-secondary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
             Create New Deck
-        </button>
-        <br><br>
+        </button><br><br>
     `;
 
     let deckList;
@@ -77,9 +78,10 @@ export async function study_decks_page() {
         console.log(e);
     }
 
-    deckList.forEach(deck => {
-        html += buildDeckView(deck);
-    })
+    for (let i = 0; i < deckList.length; ++i) {
+        let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
+        html += buildDeckView(deckList[i], flashcards);
+    }
 
     // it might be better to add this when we actually pull the decks from Firebase
     // but I'm leaving it here for now - Cody
@@ -90,19 +92,41 @@ export async function study_decks_page() {
     Elements.root.innerHTML += html;
     DeckPage.addViewButtonListener();
 
+    const favoritedCheckboxes = document.getElementsByClassName("form-check-input");
+    for (let i = 0; i < favoritedCheckboxes.length; ++i) {
+        favoritedCheckboxes[i].addEventListener('change', async e => {
+            const docId = e.target.value;
+            const favorited = document.getElementById('favorited').checked;
+            await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
+        });
+    }
+
 }
 
-function buildDeckView(deck) {
-    return `
+
+function buildDeckView(deck, flashcards) {
+    let html = `
     <div id="card-${deck.docId}" class="card" style="width: 18rem; display: inline-block; background-color: #5F4B66; padding: 5px; margin-bottom: 5px">
         <div class="card-body">
-            <h5 class="card-title" style="text-align: center; color: #A7ADC6">${deck.name}</h5>
-            <p class="card-text" style="text-align: center; color: #A7ADC6">${deck.subject}</p>
+            <h5 class="card-text">${deck.name}</h5>
+            <p class="card-text" >Subject: ${deck.subject}</p>
+            <p class="card-text"># of flashcards: ${flashcards.length}</p>
+            <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
         </div>
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
             <button class="btn btn-outline-primary pomo-bg-color-dark" type="submit">View</button>
-        </form>
+        </form>`;
+
+    html += deck.isFavorited ? `<div class="form-check">
+            <input class="form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
+            <label class="form-check-label" for="favorited">Favorite deck</label>
+        </div>
     </div>
-    `;
+    ` : `<div class="form-check">
+    <input class="form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
+    <label class="form-check-label" for="favorited">Favorite deck</label>
+</div>
+</div>`;
+    return html;
 }

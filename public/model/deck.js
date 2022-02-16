@@ -6,7 +6,7 @@ export class Deck {
         this.name = data.name;
         this.subject = data.subject;
         this.dateCreated = data.dateCreated;
-
+        this.isFavorited = data.isFavorited;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
 
@@ -42,7 +42,7 @@ export class Deck {
             name: this.name,
             subject: this.subject,
             dateCreated: this.dateCreated,
-
+            isFavorited: this.isFavorited,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 

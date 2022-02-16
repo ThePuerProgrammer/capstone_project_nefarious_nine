@@ -38,13 +38,15 @@ export const htmlIDs = {
     modalCreateAFlashcard: 'modal-create-a-flashcard',
     buttonStudy: 'btn-study-deck',
     formAnswerFlashcard: 'form-answer-flashcard',
+    deleteFlashcard: 'button-delete-flashcard-modal',
+    deleteFlashcardModal: 'modal-delete-a-flashcard',
 
-/*****************************************
- *         Helper Functions
- *****************************************
- * General helper functions that may be used
- * throughout different JavaScript files
- ******************************************/
+    /*****************************************
+     *         Helper Functions
+     *****************************************
+     * General helper functions that may be used
+     * throughout different JavaScript files
+     ******************************************/
     formCheckInputIsMultiple: 'form-check-input-is-multiple',
     modalCreateAccount: 'modal-create-account'
 }

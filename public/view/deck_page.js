@@ -10,6 +10,7 @@ import * as Study from './study_page.js'
 //Declaration of Image(Global)
 let imageFile2UploadQuestion;
 let imageFile2UploadAnswer;
+let deckDocID;
 const imageAnswer = Elements.formContainerAnswerImage;
 const imageQuestion = Elements.formContainerQuestionImage;
 const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
@@ -26,10 +27,10 @@ export function addViewButtonListener() {
 export function addViewFormSubmitEvent(form) {
     form.addEventListener('submit', async e => {
         e.preventDefault();
-        const docId = e.target.docId.value;
-        history.pushState(null, null, Routes.routePathname.DECK + '#' + docId);
-        localStorage.setItem("deckPageDeckDocID", docId);
-        await deck_page(docId);
+        deckDocID = e.target.docId.value;
+        history.pushState(null, null, Routes.routePathname.DECK + '#' + deckDocID);
+        localStorage.setItem("deckPageDeckDocID", deckDocID);
+        await deck_page(deckDocID);
     })
 }
 
@@ -146,8 +147,19 @@ export function addEventListeners() {
                 "modal-create-a-flashcard"
             );
         }
+        await deck_page(deckDocID);
     });
-
+    Elements.formDeleteFlashcard.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        var f = document.getElementById('value').value;
+        try {
+            await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
+            Utilities.info("Successfully deleted", "Successfully deleted flashcard", "modal-delete-a-flashcard");
+        } catch (e) {
+            Utilities.info("Error", JSON.stringify(e), "modal-delete-a-flashcard");
+        }
+        await deck_page(deckDocID);
+    });
     // Event listener to change the answer view depending on whether or not
     //    multiple choice is checked or not
     Elements.formCheckInputIsMultipleChoice.addEventListener(
@@ -228,6 +240,7 @@ export async function deck_page(deckDockID) {
         <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark">Study</button>
         `;
 
+    html += `<button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> - Delete Flashcard</button>`;
     let deck;
     try {
         deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDockID);
@@ -243,7 +256,7 @@ export async function deck_page(deckDockID) {
     let flashcards;
     try {
         flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckDockID);
-        if (!flashcards) {
+        if (flashcards.length == 0) {
             html += '<h5>No flashcards found for this deck</h5>';
         }
     } catch (e) {
@@ -263,6 +276,8 @@ export async function deck_page(deckDockID) {
     const buttonStudy = document.getElementById(
         Constant.htmlIDs.buttonStudy
     );
+
+    const deleteButton = document.getElementById(Constant.htmlIDs.deleteFlashcard);
 
 
     /*****************************************
@@ -290,6 +305,27 @@ export async function deck_page(deckDockID) {
             history.pushState(null, null, Routes.routePathname.DECK + "#" + deckDockID);
             await Study.study_page(deckDockID);
     });
+
+    // Adds event listener for STUDY button
+    buttonStudy.addEventListener('click', async e => {
+        e.preventDefault();
+        //const docId = e.target.docId.value;
+        history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
+        await Study.study_page(docId);
+    });
+
+    deleteButton.addEventListener('click', async e => {
+        e.preventDefault();
+        const deleteOption = document.getElementById("delete-option");
+        for (let i = 0; i < flashcards.length; ++i) {
+            const el = document.createElement("option");
+            el.innerHTML = flashcards[i].question;
+            el.value = flashcards[i].docId;
+            deleteOption.appendChild(el);
+        }
+
+        $(`#${Constant.htmlIDs.deleteFlashcardModal}`).modal('show');
+    })
 }
 
 function buildFlashcardView(flashcard) {
@@ -302,17 +338,23 @@ function buildFlashcardView(flashcard) {
         `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
         <div class="flip-card-inner">
             <div class="flip-card-front">
-                <p>${flashcard.question}</p>
+                <h3>${flashcard.question}</h3>
             `;
 
-    //TODO: find a way to shuffle these up
+    //still TODO: make multiple choice answers look better
     if (flashcard.isMultipleChoice) {
-        for (let i = 0; i < flashcard.incorrectAnswers.length; ++i) {
-            html += `<p>${flashcard.incorrectAnswers[i]}</p>`
+        let flashcardAnswers = [flashcard.answer];
+        flashcardAnswers = flashcardAnswers.concat(flashcard.incorrectAnswers);
+        shuffle(flashcardAnswers);
+        if (flashcardAnswers.length == 4) {
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]}   2. ${flashcardAnswers[1]}</p>
+                    <p class="answer-text">3. ${flashcardAnswers[2]}    4. ${flashcardAnswers[3]}</p>`
+        } else if (flashcardAnswers.length == 3) {
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]}   2. ${flashcardAnswers[1]}</p>
+            <p class="answer-text">3. ${flashcardAnswers[2]}</p>`
+        } else if (flashcardAnswers.length == 2) {
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]}   2. ${flashcardAnswers[1]}</p>`
         }
-        html += `<p>${flashcard.answer}</p>`;
-    } else {
-        html += `<p>${flashcard.answer}</p>`;
     }
 
     html += flashcard.answerImageURL != "N/A" ?  `</div><div class="flip-card-back">
@@ -350,6 +392,13 @@ function resetFlashcard(){
         <label for="form-answer-text-input">Answer:</label>
         <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
     `;
+}
+
+function shuffle(answers) {
+    for (let i = answers.length - 1; i > 0; --i) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [answers[i], answers[j]] = [answers[j], answers[i]];
+    }
 }
 
 function checkImageQuestion(){

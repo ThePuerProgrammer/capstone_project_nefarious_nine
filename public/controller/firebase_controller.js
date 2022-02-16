@@ -99,7 +99,7 @@ export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAn
 
     // Using the flashcard data reference to check if it exists
     flashcardDataRef.get().then((doc) => {
-        if (doc.exists) { 
+        if (doc.exists) {
             flashcardData.streak = doc.data().streak;
         }
     });
@@ -128,7 +128,8 @@ export async function getUserDecks(uid) {
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
-        .orderBy('name')
+        .orderBy('isFavorited', 'desc')
+        .orderBy('name', 'asc')
         .get();
 
     userOwnedDecks.forEach(doc => {
@@ -175,7 +176,7 @@ export async function getUserDeckById(uid, deckDocID) {
         .collection(Constant.collectionName.OWNED_DECKS)
         .doc(deckDocID)
         .get();
-        
+
     if (!deckRef.exists) {
         if (Constant.DEV)
             console.log("! Deck reference does not exist");
@@ -185,6 +186,12 @@ export async function getUserDeckById(uid, deckDocID) {
     const deckModel = new Deck(deckRef.data());
     deckModel.set_docID(deckDocID);
     return deckModel;
+}
+
+export async function favoriteDeck(uid, deckDocID, favorited) {
+    await firebase.firestore().collection(Constant.collectionName.USERS)
+        .doc(uid).collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .update({ 'isFavorited': favorited });
 }
 
 export async function getFlashcards(uid, docId) {
@@ -213,6 +220,10 @@ export async function getFlashcards(uid, docId) {
 
 // Function to allow for deletion of deck
 // TODO: write Firebase side rules to set permissions for deck deletion
-export async function deleteDeck(docID) {
-    await firebase.firestore().collection(Constant.collectionName.FLASHCARDS).doc(docID).delete();
+export async function deleteFlashcard(uid, docID, flashcardId) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
+        .delete();
 }
