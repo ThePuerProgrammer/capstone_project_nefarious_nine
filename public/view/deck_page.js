@@ -9,7 +9,6 @@ import * as Study from './study_page.js'
 
 //Declaration of Image(Global)
 let imageFile2Upload;
-let deckDocID;
 
 export function addViewButtonListener() {
   const viewButtons = document.getElementsByClassName('form-view-deck');
@@ -23,6 +22,7 @@ export function addViewFormSubmitEvent(form) {
     e.preventDefault();
     const docId = e.target.docId.value;
     history.pushState(null, null, Routes.routePathname.DECK + '#' + docId);
+    localStorage.setItem("deckPageDeckDocID", docId);
     await deck_page(docId);
   })
 }
@@ -85,6 +85,7 @@ export function addEventListeners() {
         incorrectAnswers.push(formData.incorrectAnswer3);
     }
 
+    let deckDocID = localStorage.getItem("deckPageDeckDocID");
     const flashcard = new Flashcard({
       question,
       isMultipleChoice,
@@ -105,6 +106,7 @@ export function addEventListeners() {
         flashcard.imageName = "N/A";
         flashcard.imageURL = "N/A";
       }
+
       const docId = await FirebaseController.createFlashcard(
         Auth.currentUser.uid,
         deckDocID,
@@ -177,8 +179,6 @@ export function addEventListeners() {
 }
 
 export async function deck_page(docId) {
-  deckDocID = docId;
-
   let html = '';
   html += '<h1> Deck Page </h1>';
   //Allows for the create a flashcard button
