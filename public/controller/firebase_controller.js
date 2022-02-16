@@ -167,7 +167,7 @@ export async function getUserDeckById(uid, deckDocID) {
     }
 
     const deckModel = new Deck(deckRef.data());
-    deckModel.docId = docId;
+    deckModel.set_docID(deckDocID);
     return deckModel;
 }
 

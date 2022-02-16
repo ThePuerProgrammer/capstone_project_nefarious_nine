@@ -193,7 +193,7 @@ export async function deck_page(deckDockID) {
 
   let deck;
   try {
-    deck = await FirebaseController.getDeckById(Auth.currentUser.uid, deckDockID);
+    deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDockID);
     if (!deck) {
       html += '<h5>Deck not found!</h5>';
     } else {
