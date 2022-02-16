@@ -1,4 +1,4 @@
-import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
 import * as FirebaseController from './firebase_controller.js';
 
 import { User } from '../model/user.js'
@@ -7,8 +7,6 @@ import * as Utilities from '../view/utilities.js'
 import * as Constants from '../model/constant.js'
 import * as CreatePage from '../view/create_account_page.js'
 import { routing, routePathname } from './routes.js';
-
-
 
 const auth = getAuth();
 
@@ -68,15 +66,13 @@ export function addEventListeners() {
             //  * uid of the Auth account matches the Doc ID of the user document!
             await createUserWithEmailAndPassword(auth, emailAddress, password)
                 .then(cred => {
-                    return firebase.firestore().collection(Constants.collectionName.USERS).doc(cred.user.uid).set(newUserModel.serialize());
-                });
                     uid = cred.user.uid;
             });
 
             console.log("ADDING USER TO FIRESTORE");
             firebase.firestore().collection(Constants.collectionName.USERS).doc(uid).set(newUserModel.serialize());
             console.log("ADDED USER TO FIRESTORE");
-      
+            
             // Account successfully created from here
             e.target.reset();
 
@@ -96,39 +92,9 @@ export function addEventListeners() {
         } catch (e) {
             Utilities.info('Sign Out Error', JSON.stringify(e));
             if (Constants.DEV)
-                console.log('Sign out error' + e);
+            console.log('Sign out error' + e);
         }
     });
-
-    Elements.modalMenuResetPassword.addEventListener('click', async () => {
-        //This just opens the reset password modal within the sign in modal and closes out the sign in modal --Blake
-        try {
-            Elements.modalSignIn.hide();
-            Elements.modalResetPassword.show();
-        } catch (e) {
-            Utilities.info('Reset password menu error ', JSON.stringify(e));
-            if (Constants.DEV)
-                console.log('Reset password menu error ' + e);
-        }
-    })
-
-    Elements.formResetPassword.addEventListener('submit', async e => {
-        e.preventDefault();
-        const email = e.target.email.value;
-
-        try {
-            firebase.auth().sendPasswordResetEmail(email);
-
-            Elements.modalResetPassword.hide();
-            Utilities.info('Notice', `If the email exists, a password reset email has been sent`);
-
-        } catch (e) {
-            Utilities.info('Password reset error ', JSON.stringify(e));
-            if (Constants.DEV)
-                console.log('Password reset errror ' + e);
-        }
-    })
-
 
     onAuthStateChanged(auth, authStateChangeObserver);
 
@@ -138,7 +104,7 @@ function authStateChangeObserver(user) {
     if (user) {
         currentUser = user;
         // for signing in
-        let elements = document.getElementsByClassName('modal-preauth');
+        let elements = document.getElementsByClassName('modal-preauth'); 
         for (let i = 0; i < elements.length; i++) {
             elements[i].style.display = 'none'; //buttons hidden before state change
         }
@@ -152,7 +118,7 @@ function authStateChangeObserver(user) {
     } else {
         currentUser = null;
         // for signing out
-        let elements = document.getElementsByClassName('modal-preauth');
+        let elements = document.getElementsByClassName('modal-preauth'); 
         for (let i = 0; i < elements.length; i++) {
             elements[i].style.display = 'block'; //showing before state change
         }

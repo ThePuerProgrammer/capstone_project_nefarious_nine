@@ -11,8 +11,6 @@ export const menuStudyDecks = document.getElementById('menu-study-decks');
 export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
-export const modalMenuResetPassword = document.getElementById('reset-password');
-
 
 // pomo timer buttons
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
@@ -48,12 +46,6 @@ export const formSearchDeck = document.getElementById('form-search-deck');
 //export const formAnswerFlashcard = document.getElementById('form-answer-flashcard');
 //============================================================================//
 
-// PW RESET FORM
-//============================================================================//
-export const formResetPassword = document.getElementById('form-reset-password');
-//============================================================================//
-
-
 // MODALS
 //============================================================================//
 /* This allows us to close the modal when an information/popup modal needs to popup.
@@ -70,8 +62,6 @@ export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-si
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));
 export const modalCreateAccount = new bootstrap.Modal(document.getElementById('modal-create-account', { backdrop: 'static' }));
 export const modalCreateDeck = new bootstrap.Modal(document.getElementById('create-deck-modal'));
-export const modalResetPassword = new bootstrap.Modal(document.getElementById('modal-reset-password'));
-
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
