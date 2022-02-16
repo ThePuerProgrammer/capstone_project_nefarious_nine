@@ -309,9 +309,7 @@ function buildFlashcardView(flashcard) {
       Really it i
       Much appreciated Dirt Dini.
   */
-  if(flashcard.answerImageURL == "N/A"){
-    flashcard.answerImageURL = " ";
-  }
+ 
   html += flashcard.answerImage != "N/A" ?  `</div><div class="flip-card-back">
   <h1>${flashcard.answer}</h1>
   <br>
@@ -322,7 +320,6 @@ function buildFlashcardView(flashcard) {
 :
 `</div><div class="flip-card-back">
 <h1>${flashcard.answer}</h1>
-<br>
 </div>
 </div>
 </div>`;
