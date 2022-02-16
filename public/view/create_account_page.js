@@ -1,3 +1,7 @@
+/* CREATE ACCOUNT PAGE
+landing page for pre-auth where a user can sign up for an account
+ */
+
 export const html =`
 <div>
 Need an account?

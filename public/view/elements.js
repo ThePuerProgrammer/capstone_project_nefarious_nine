@@ -38,6 +38,7 @@ export const formSignIn = document.getElementById('form-signin');
 export const formCreateDeck = document.getElementById('form-create-deck');
 export const formCreateAccount = document.getElementById('form-create-account');
 export const formViewDeck = document.getElementById('form-view-deck');
+export const formSearchDeck = document.getElementById('form-search-deck');
 //============================================================================//
 
 // STUDY PAGE
