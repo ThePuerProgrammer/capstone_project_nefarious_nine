@@ -105,10 +105,8 @@ export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAn
 // in firestore. This is purely for testing for the time being and will later be
 // modified to accomodate users / classrooms
 //============================================================================//
-export async function getAllUserDecks() {
+export async function getAllUserDecks(uid) {
     // use window.localStorage to store needed local information
-    let loggedInUserDocID = localStorage.getItem("uid");
-
     let deckList = [];
     const userOwnedDecks = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
@@ -122,8 +120,7 @@ export async function getAllUserDecks() {
         deckList.push(d);
     })
 
-    localStorage.set(Constant.collectionName.OWNED_DECKS, deckList);
-    console.log(localStorage.get(Constant.collectionName.OWNED_DECKS));
+    // localStorage.set(Constant.collectionName.OWNED_DECKS, deckList);
 
     return deckList;
 }

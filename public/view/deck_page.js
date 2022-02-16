@@ -65,6 +65,8 @@ export function addEventListeners() {
     const question = formData.question;
     const answer = formData.answer;
     const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
+    console.log("testing");
+    console.log(formData);
 
     const incorrectAnswers = [];
 
@@ -77,7 +79,8 @@ export function addEventListeners() {
         incorrectAnswers.push(formData.incorrectAnswer3);
     }
 
-    const deckDocIDReceivingNewFlashcard = formData.selectedDeck;
+    const deckDocIDReceivingNewFlashcard = formData.selectedDeck.value;
+    console.log(formData.selectedDeck.value);
 
     const flashcard = new Flashcard({
       question,
