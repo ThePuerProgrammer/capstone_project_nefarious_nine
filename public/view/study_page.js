@@ -59,11 +59,11 @@ export async function study_page() {
   //console.log(flashcard.question);
   html += buildStudyFlashcardView(flashcard);
 
-  Elements.root.innerHTML += html;
+    Elements.root.innerHTML += html;
 
-  const formAnswerFlashcard = document.getElementById(
-    Constant.htmlIDs.formAnswerFlashcard
-  );
+    const formAnswerFlashcard = document.getElementById(
+        Constant.htmlIDs.formAnswerFlashcard
+    );
 
   // event listener for when ANSWER button is pushed on flashcard
   formAnswerFlashcard.addEventListener("submit", async (e) => {
@@ -123,7 +123,7 @@ function buildStudyFlashcardView(flashcard) {
   </div>
   </form></div>`;
 
-  return html;
+    return html;
 }
 
 function buildScoreView(deck, maxLength) {
