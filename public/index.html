@@ -86,24 +86,24 @@
         aria-labelledby="modal-signin-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-signin-label">Sign in to your Account</h5>
+                <div class="modal-header pomo-bg-color-dark">
+                    <h5 class="modal-title pomo-text-color-light" id="modal-signin-label">Sign in to your Account</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body pomo-bg-color-light pomo-text-color-dark">
                     <form id="form-signin" method="post">
                         <div>
-                            <input type="email" name="email" placeholder="email">
+                            <input type="email" name="email" placeholder="Email">
                         </div>
                         <div>
-                            <input type="password" name="password" placeholder="password">
+                            <input type="password" name="password" placeholder="Password">
                         </div>
-                        <div>
-                            <button class=" btn btn-outline-primary" type="submit">Sign in</button>
-                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" type="submit">Sign in</button>
                         <li class="nav-item modal-preauth">
-                            <button type="button" id="reset-password" class=" btn btn-outline-primary">Reset Password</button>
+                            <button type="button" id="reset-password" class=" btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Reset Password</button>
                         </li>
+                      </div>
                     </form>
                 </div>
 
@@ -117,23 +117,23 @@
         aria-labelledby="modal-create-account-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-create-account-label">Create Account</h5>
+                <div class="modal-header pomo-bg-color-dark">
+                    <h5 class="modal-title pomo-text-color-light" id="modal-create-account-label">Create Account</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body pomo-bg-color-light pomo-text-color-dark">
                     <form method="post" id="form-create-account" <form>
                         <div>
-                            <input type="email" name="email" required placeholder="email address">
+                            <input type="email" name="email" required placeholder="Email address">
                         </div>
                         <div>
-                            <input type="password" name="password" required minlength="6" placeholder="passwords">
+                            <input type="password" name="password" required minlength="6" placeholder="Password">
                         </div>
                         <div>
-                            <input type="password" name="passwordConfirm" required minlength="6" placeholder="confirm passwords">
+                            <input type="password" name="passwordConfirm" required minlength="6" placeholder="Confirm Password">
                         </div>
-                        <div>
-                            <button type="submit" class="btn btn-outline-primary">Create</button>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button type="submit" class="btn btn-outline-primary">Submit to Create Account</button>
                         </div>
                     </form>
                 </div>
