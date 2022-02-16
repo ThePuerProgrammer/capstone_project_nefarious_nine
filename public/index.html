@@ -225,23 +225,46 @@
                         <!---FORM VALIDATION ARE PLACED OF THE FIELDS WITH REQUIREMENTS-->
                         <!--EXAMPLE <input type = "text" name = "title" placeholder="Title of the thread" required minlength="2">-->
                         <!-- DROPDOWN FOR LIST OF DECKS: List is dynamically filled when the button to open this modal is pressed -->
-                        <label class="col-2 align-self-center"
-                            for="form-create-a-flashcard-select-container">Deck:</label>
+                        <!--label class="col-2 align-self-center" for="form-create-a-flashcard-select-container">Deck:</label -->
                         <br />
                         <!-- MULTIPLE CHOICE TOGGLE -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="form-check-input-is-multiple-choice">
-                            <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple
-                                Choice</label>
+                        <div class="btn-group" role="group" aria-label="basic checkbox toggle button group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="form-check-input-is-multiple-choice">
+                                <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple
+                                    Choice</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="form-check-input-is-image-question">
+                                <label class="form-check-label" for="form-check-input-is-image-question">Image w/
+                                    Question</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="form-check-input-is-image-answer">
+                                <label class="form-check-label" for="form-check-input-is-image-answer">Image w/
+                                    Answer</label>
+                            </div>
                         </div>
                         <br />
+                        <!--HEADING FOR QUESTION SIDE-->
+                        <h3 style="text-align:center"><u>Question Side</u></h3>
                         <!-- QUESTION INPUT -->
                         <label for="form-question-text-input">Question:</label>
                         <textarea name="question" id="form-question-text-input" class="form-control" rows="3"
                             type="text" name="flashcard-question" placeholder="How many snakes can fit on a plane?"
                             required min length="1"></textarea>
                         <br />
+                        <div id="form-question-image-container" style="display: none;">
+                            <img id="form-add-image-to-flashcard-question-tag" style="display: block" />
+                            Image:
+                            <input id="form-add-image-to-flashcard-question-button" type="file" value="upload" />
+                        </div>
+                        <br />
+                        <!--HEADING FOR ANSWER SIDE-->
+                        <h3 style="text-align:center"><u>Answer Side</u></h3>
                         <!-- ANSWER INPUT -->
                         <div id="form-answer-container">
                             <label for="form-answer-text-input">Answer:</label>
@@ -250,10 +273,10 @@
                                 length="1"></textarea>
                         </div>
                         <br />
-                        <div>
-                            <img id="form-add-image-to-flashcard-tag" style="display: block" />
+                        <div id="form-answer-image-container" style="display: none;">
+                            <img id="form-add-image-to-flashcard-answer-tag" style="display: block" />
                             Image:
-                            <input id="form-add-image-to-flashcard-button" type="file" value="upload" />
+                            <input id="form-add-image-to-flashcard-answer-button" type="file" value="upload" />
                         </div>
                         <br />
                         <div>
@@ -388,11 +411,11 @@
 
             <div id="play-controls" style="display: none;">
                 <button class="btn pomo-bg-color-light m-2 player" id="start-timer-button">
-                    <img src="./assets/images/play_arrow_black_24dp.svg" </button>
+                    <img src="./assets/images/play_arrow_black_24dp.svg"> </button>
                     <button class="btn pomo-bg-color-md-light m-2 player" id="pause-timer-button">
-                        <img src="./assets/images/pause_black_24dp.svg" </button>
+                        <img src="./assets/images/pause_black_24dp.svg"> </button>
                         <button class="btn pomo-bg-color-md-dark m-2 player" id="reset-timer-button">
-                            <img src="./assets/images/restart_alt_black_24dp.svg" </button>
+                            <img src="./assets/images/restart_alt_black_24dp.svg"> </button>
             </div>
 
         </div>
