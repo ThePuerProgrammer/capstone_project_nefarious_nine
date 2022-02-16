@@ -42,7 +42,7 @@ export function addEventListeners() {
     });
 
     // Executes parameter function whenever the Create-A-Flashcard Modal is completely hidden
-    //     The function clears the input fields so that whent he user returns, then
+    //     The function clears the input fields so that when the user returns, then
     //     they will have fresh input fields.
     $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).on('hidden.bs.modal', function (e) {
         // RESET INPUT FIELDS FOR FOLLOWING:

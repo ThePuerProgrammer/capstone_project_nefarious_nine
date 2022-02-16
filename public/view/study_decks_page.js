@@ -44,6 +44,11 @@ export function addEventListeners() {
         }
 
     });
+
+    // Clears CREATE DECK input fields when user closes modal
+    $(`#create-deck-modal`).on('hidden.bs.modal', function (e) {
+        Elements.formCreateDeck.reset();
+    });
 }
 
 export async function study_decks_page() {
