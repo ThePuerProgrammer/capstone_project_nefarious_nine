@@ -80,7 +80,7 @@ export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAn
     let loggedInUserDocID = localStorage.getItem("uid");
 
     // Making the reference to the flashcard data
-    const flashcardDataRef = firebase.firestore()
+    const flashcardDataExistsRef = firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(loggedInUserDocID)
         .collection(Constant.collectionName.DECK_DATA)
@@ -98,7 +98,7 @@ export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAn
     });
 
     // Using the flashcard data reference to check if it exists
-    flashcardDataRef.get().then((doc) => {
+    flashcardDataExistsRef.get().then((doc) => {
         if (doc.exists) { 
             flashcardData.streak = doc.data().streak;
         }
@@ -115,6 +115,45 @@ export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAn
         .set(flashcardData.serialize());
 }
 //===========================================================================//
+
+
+
+//============================================================================//
+// Create Deck Data if Needed
+// 
+// 1. Check if data exists
+//   [Data Exists] Grab the data
+//   [Data doesn't exist]  
+//============================================================================//
+export async function createDeckDataIfNeeded(uid, deckDocID) {
+    let deckDataExists = false;
+
+    // Making the reference to the deck data
+    const deckDataExistsRef = firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID);
+
+    // Using the deck data exists reference to check if it exists
+    deckDataExistsRef.get().then((doc) => {
+        deckDataExists = doc.exists;
+    });
+
+    if (deckDataExists) // Deck exists, no need to create a deck data document
+        return;
+
+    //Deck doesn't exist, create a deck data document
+    firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .set({});
+}
+//===========================================================================//
+
+
 
 //============================================================================//
 // This function pulls all decks from the highest level owned_decks collection

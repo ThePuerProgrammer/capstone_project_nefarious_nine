@@ -281,14 +281,20 @@ export async function deck_page(deckDockID) {
         e.preventDefault();
 
         // Opens the Modal
-        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');});
+        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
+    });
 
-        // Adds event listener for STUDY button
-        buttonStudy.addEventListener('click', async e => {
-            e.preventDefault();
-            //const docId = e.target.deckDockID.value;
-            history.pushState(null, null, Routes.routePathname.DECK + "#" + deckDockID);
-            await Study.study_page(deckDockID);
+    // Adds event listener for STUDY button
+    buttonStudy.addEventListener('click', async e => {
+        e.preventDefault();
+        //const docId = e.target.deckDockID.value;
+
+        // Creates a deck data document if this is the first time
+        //  the user is studying the deck
+        await FirebaseController.createDeckDataIfNeeded(Auth.currentUser.uid, deckDockID);
+
+        history.pushState(null, null, Routes.routePathname.DECK + "#" + deckDockID);
+        await Study.study_page(deckDockID);
     });
 }
 

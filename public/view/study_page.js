@@ -38,6 +38,9 @@ export async function study_page() {
 
   html += `<h1 style="align: center">${deck.name}</h1>`;
   html += `<h4 style="align: center">${deck.subject}</h4>`;
+  html += `
+
+  `;
 
   // get FLASHCARDS info from firebase
   let flashcards;
