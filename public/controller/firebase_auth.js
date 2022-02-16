@@ -66,8 +66,12 @@ export function addEventListeners() {
             await createUserWithEmailAndPassword(auth, emailAddress, password)
                 .then(cred => {
                     uid = cred.user.uid;
-                    return firebase.firestore().collection(Constants.collectionName.USERS).doc(cred.user.uid).set(newUserModel.serialize());
                 });
+
+            firebase.firestore()
+                .collection(Constants.collectionName.USERS)
+                .doc(uid)
+                .set(newUserModel.serialize());
             
             window.localStorage.setItem("uid", uid);
             

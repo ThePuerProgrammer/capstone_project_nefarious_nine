@@ -9,6 +9,7 @@ import * as Study from './study_page.js'
 
 //Declaration of Image(Global)
 let imageFile2Upload;
+let deckDocID;
 
 export function addViewButtonListener() {
   const viewButtons = document.getElementsByClassName('form-view-deck');
@@ -38,9 +39,6 @@ export function addEventListeners() {
   //   The function clears the input fields so that whent he user returns, then
   //   they will have fresh input fields.
   $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).on('hidden.bs.modal', function (e) {
-    // Deck list Reset
-    Elements.formCreateAFlashcardSelectContainer.innerHTML = "";
-
     // RESET INPUT FIELDS FOR FOLLOWING:
     Elements.formCreateAFlashcard.reset();
 
@@ -87,12 +85,6 @@ export function addEventListeners() {
         incorrectAnswers.push(formData.incorrectAnswer3);
     }
 
-    const deckDocIDReceivingNewFlashcard = formData.selectedDeck.value;
-    console.log(formData.selectedDeck.value);
-
-     //get uid
-     const uid = localStorage.getItem("uid");
-
     const flashcard = new Flashcard({
       question,
       isMultipleChoice,
@@ -114,8 +106,8 @@ export function addEventListeners() {
         flashcard.imageURL = "N/A";
       }
       const docId = await FirebaseController.createFlashcard(
-        uid,
-        deckDocIDReceivingNewFlashcard,
+        Auth.currentUser.uid,
+        deckDocID,
         flashcard
       );
       //flashcard.set_docID(docId);
@@ -123,7 +115,7 @@ export function addEventListeners() {
       // }
       if (Constant.DEV) {
         console.log(
-          `Flashcard created in deck with doc id [${deckDocIDReceivingNewFlashcard}]:`
+          `Flashcard created in deck with doc id [${deckDocID}]:`
         );
         console.log("Flashcard Contents: ");
         console.log(flashcard);
@@ -185,6 +177,8 @@ export function addEventListeners() {
 }
 
 export async function deck_page(docId) {
+  deckDocID = docId;
+
   let html = '';
   html += '<h1> Deck Page </h1>';
   //Allows for the create a flashcard button
@@ -249,20 +243,8 @@ export async function deck_page(docId) {
   buttonShowCreateAFlashcardModal.addEventListener('click', async e => {
     e.preventDefault();
 
-    // Grabbing list of decks from Firestore
-    const listOfTestDecks = await FirebaseController.getAllTestingDecks();
-
-    // Adding list of decks to select menu/drop down
-    listOfTestDecks.forEach(deck => {
-      Elements.formCreateAFlashcardSelectContainer.innerHTML += `
-                <option value="${deck.docID}">${deck.name}</option>
-            `;
-    });
-
     // Opens the Modal
     $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');});
-
-  
 
     // Adds event listener for STUDY button
     buttonStudy.addEventListener('click', async e => {

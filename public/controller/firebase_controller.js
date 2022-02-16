@@ -3,6 +3,7 @@ import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
 
+
 //============================================================================//
 // CREATE A Deck
 //============================================================================//
@@ -29,7 +30,7 @@ export async function createFlashcard(uid, deckDocID, flashcardModel) {
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS)
         .add(flashcardModel.serialize());
-        
+
     return ref.id;
 }
 //============================================================================//
@@ -104,16 +105,17 @@ export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAn
 // in firestore. This is purely for testing for the time being and will later be
 // modified to accomodate users / classrooms
 //============================================================================//
-export async function getAllUserDecks(uid) {
+export async function getUserDecks(uid) {
     // use window.localStorage to store needed local information
     let deckList = [];
     const userOwnedDecks = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
-        .doc(loggedInUserDocID)
+        .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
         .orderBy('name')
         .get();
-    testCollectionRef.forEach(doc => {
+
+    userOwnedDecks.forEach(doc => {
         const d = new Deck(doc.data());
         d.docId = doc.id;
         deckList.push(d);
