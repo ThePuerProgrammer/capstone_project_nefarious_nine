@@ -157,7 +157,7 @@ export async function getUserDeckById(uid, deckDocID) {
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
-        .doc(docId)
+        .doc(deckDocID)
         .get();
         
     if (!deckRef.exists) {
@@ -165,7 +165,7 @@ export async function getUserDeckById(uid, deckDocID) {
             console.log("! Deck reference does not exist");
         return null;
     }
-    
+
     const deckModel = new Deck(deckRef.data());
     deckModel.docId = docId;
     return deckModel;
