@@ -10,6 +10,62 @@ import * as Study from './study_page.js'
 //Declaration of Image(Global)
 let imageFile2UploadQuestion;
 let imageFile2UploadAnswer;
+const imageAnswer = Elements.formContainerAnswerImage;
+const imageQuestion = Elements.formContainerQuestionImage;
+
+//Function to reset all feels and toggles
+function resetFlashcard(){
+  Elements.formCreateAFlashcard.reset();
+  if(Elements.formCheckInputIsImageQuestion){
+  checkImageQuestion();
+  }
+  if(Elements.formCheckInputIsImageAnswer){
+  checkImageAnswer();
+  }
+  Elements.imageTagCreateFlashAnswer.src="";
+  Elements.imageTagCreateFlashQuestion.src="";
+
+  // Making sure singular choice is displayed next time.
+  Elements.formAnswerContainer.innerHTML = `
+      <label for="form-answer-text-input">Answer:</label>
+      <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
+  `;
+}
+
+function checkImageQuestion(){
+  if (Elements.formCheckInputIsImageQuestion.checked) {
+    //TESTING HERE
+    if(imageQuestion.style.display=='none'){
+      imageQuestion.style.display = 'block';
+    } else{
+      imageQuestion.style.display = 'none';
+    }
+  } else if(!Elements.formCheckInputIsImageQuestion.checked){
+    if(imageQuestion.style.display=='none'){
+      imageQuestion.style.display = 'block';
+    } else{
+      imageQuestion.style.display = 'none';
+    }
+  }
+}
+
+function checkImageAnswer(){
+  if (Elements.formCheckInputIsImageAnswer.checked) {
+    //TESTING HERE
+    if(imageAnswer.style.display=='none'){
+      imageAnswer.style.display = 'block';
+    } else{
+      imageAnswer.style.display = 'none';
+    }
+  }
+  else if(!Elements.formCheckInputIsImageAnswer.checked){
+    if(imageAnswer.style.display=='none'){
+      imageAnswer.style.display = 'block';
+    } else{
+      imageAnswer.style.display = 'none';
+    }
+  }
+}
 
 export function addViewButtonListener() {
   const viewButtons = document.getElementsByClassName('form-view-deck');
@@ -41,15 +97,7 @@ export function addEventListeners() {
   //   they will have fresh input fields.
   $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).on('hidden.bs.modal', function (e) {
     // RESET INPUT FIELDS FOR FOLLOWING:
-    Elements.formCreateAFlashcard.reset();
-    //Elements.imageTagCreateFlashAnswer.src="";
-    //Elements.imageTagCreateFlashQuestion.src="";
-
-    // Making sure singular choice is displayed next time.
-    Elements.formAnswerContainer.innerHTML = `
-        <label for="form-answer-text-input">Answer:</label>
-        <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
-    `;
+    resetFlashcard();
   });
 
   // Adds event listener to CREATE A FLASHCARD Submit button
@@ -100,25 +148,25 @@ export function addEventListeners() {
     try {
       //Question Image
       if (isQuestionImage) {
-        imageFile2UploadQuestion= formData.questionImage;
         console.log("Question-1");
         const { questionImageName,questionImageURL } =
           await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
         flashcard.questionImageName = questionImageName;
         flashcard.questionImageURL= questionImageURL;
       } else if (typeof obj === "undefined") {
+        console.log("Question-2");
         flashcard.questionImageName = "N/A";
         flashcard.questionImageURL = "N/A";
       }
       //Answer Image
       if(isAnswerImage){
-        imageFile2UploadAnswer = formData.answerImage;
         console.log("Answer-1");
         const { answerImageName, answerImageURL } =
           await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
         flashcard.answerImageName = answerImageName;
         flashcard.answerImageURL= answerImageURL;
       }else if (typeof obj === "undefined") {
+        console.log("Answer-2");
         flashcard.answerImageName = "N/A";
         flashcard.answerImageURL = "N/A";
       }
@@ -183,43 +231,18 @@ export function addEventListeners() {
       }
     }
   );
+
   Elements.formCheckInputIsImageQuestion.addEventListener(
     "click",
     async (e) => {
       // TOGGLE ON
-      if (Elements.formCheckInputIsImageQuestion.checked) {
-        //TESTING HERE
-        
-        Elements.formContainerQuestionImage.innerHTML = `
-        
-        `
-      } else {
-        Elements.formContainerQuestionImage.innerHTML = `
-        <div>
-          <br />
-        </div>
-        `;
-      }
+     checkImageQuestion();
     });
-
   Elements.formCheckInputIsImageAnswer.addEventListener(
     "click",
     async (e) => {
       // TOGGLE IS ON
-      if (Elements.formCheckInputIsImageAnswer.checked) {
-        //TESTING HERE
-        
-        Elements.formContainerAnswerImage.innerHTML = `
-          <div class="visible">
-          </div>
-        `;
-      } else {
-        Elements.formContainerAnswerImage.innerHTML =`
-        <div class="invisible">
-        
-        </div>
-        `;
-      }
+     checkImageAnswer();
     });
     Elements.formAddFlashCardQuestionImageButton.addEventListener("change", (e) => {
       imageFile2UploadQuestion = e.target.files[0];
@@ -368,3 +391,4 @@ function buildFlashcardView(flashcard) {
 
   return html;
 }
+

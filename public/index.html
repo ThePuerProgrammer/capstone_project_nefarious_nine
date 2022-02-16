@@ -207,7 +207,7 @@
               name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min
               length="1"></textarea>
             <br />
-            <div id="form-question-image-container">
+            <div id="form-question-image-container" style="display: none;">
               <img id="form-add-image-to-flashcard-question-tag" style="display: block" />
                 Image:
               <input id="form-add-image-to-flashcard-question-button" type="file" value="upload" />
@@ -222,7 +222,7 @@
                 name="flashcard-answer" placeholder="At least 4." required min length="1"></textarea>
             </div>
             <br />
-            <div id="form-answer-image-container">
+            <div id="form-answer-image-container" style="display: none;">
               <img id="form-add-image-to-flashcard-answer-tag" style="display: block" />
                 Image:
               <input id="form-add-image-to-flashcard-answer-button" type="file" value="upload" />
@@ -236,6 +236,7 @@
       </div>
     </div>
   </div>
+  
 
   <!-- Modal: Popup Info Box -->
   <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
