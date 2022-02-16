@@ -68,8 +68,6 @@ export function addEventListeners() {
             //  * uid of the Auth account matches the Doc ID of the user document!
             await createUserWithEmailAndPassword(auth, emailAddress, password)
                 .then(cred => {
-                    return firebase.firestore().collection(Constants.collectionName.USERS).doc(cred.user.uid).set(newUserModel.serialize());
-                });
                     uid = cred.user.uid;
             });
 
