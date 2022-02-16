@@ -152,8 +152,9 @@ export async function getAllTestingDecks() {
 //============================================================================//
 // This function will pull in a single deck from it's docId
 //============================================================================//
-export async function getDeckById(docId) {
+export async function getDeckById(uid, docId) {
     const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(docId).get();
     if (!ref.exists) return null;
     const d = new Deck(ref.data());
