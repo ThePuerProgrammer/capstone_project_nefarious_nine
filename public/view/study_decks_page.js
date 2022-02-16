@@ -33,7 +33,7 @@ export function addEventListeners() {
         });
 
         try {
-            const docId = await FirebaseController.createDeck(deck);
+            const docId = await FirebaseController.createDeck(uid, deck);
             deck.docId = docId;
             Elements.modalCreateDeck.hide();
         } catch (e) {
