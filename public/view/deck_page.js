@@ -417,25 +417,6 @@ function checkImageQuestion(){
     }
 }
 
-}
-
-function checkImageQuestion(){
-    if (Elements.formCheckInputIsImageQuestion.checked) {
-      //TESTING HERE
-      if(imageQuestion.style.display=='none'){
-        imageQuestion.style.display = 'block';
-      } else{
-        imageQuestion.style.display = 'none';
-      }
-    } else if(!Elements.formCheckInputIsImageQuestion.checked){
-      if(imageQuestion.style.display=='none'){
-        imageQuestion.style.display = 'block';
-      } else{
-        imageQuestion.style.display = 'none';
-      }
-    }
-}
-
 function checkImageAnswer(){
     if (Elements.formCheckInputIsImageAnswer.checked) {
       //TESTING HERE

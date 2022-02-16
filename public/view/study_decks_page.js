@@ -19,6 +19,7 @@ export function addEventListeners() {
         e.preventDefault();
         const name = e.target.name.value;
         const subject = e.target.subject.value;
+        const isFavorited = false;
 
         // relevant to Cody's story:
         const dateCreated = Date.now();
