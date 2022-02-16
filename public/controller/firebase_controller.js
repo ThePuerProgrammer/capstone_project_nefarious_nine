@@ -152,13 +152,23 @@ export async function getAllTestingDecks() {
 //============================================================================//
 // This function will pull in a single deck from it's docId
 //============================================================================//
-export async function getDeckById(docId) {
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.OWNED_DECKS).doc(docId).get();
-    if (!ref.exists) return null;
-    const d = new Deck(ref.data());
-    d.docId = docId;
-    return d;
+export async function getUserDeckById(uid, deckDocID) {
+    const deckRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .doc(deckDocID)
+        .get();
+        
+    if (!deckRef.exists) {
+        if (Constant.DEV)
+            console.log("! Deck reference does not exist");
+        return null;
+    }
+
+    const deckModel = new Deck(deckRef.data());
+    deckModel.set_docID(deckDocID);
+    return deckModel;
 }
 
 export async function getFlashcards(uid, docId) {
