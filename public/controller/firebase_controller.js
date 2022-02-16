@@ -59,8 +59,9 @@ export async function uploadImageToFlashcardAnswer(answerImageFile, answerImageN
     if (!answerImageName) {
         answerImageName = Date.now() + answerImageFile.name + 'answer';
     }
+    
     const ref = firebase.storage().ref()
-        .child(Constant.storageFolderName.FLASHCARD_IMAGES+ answerImageName);
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
     const taskSnapShot = await ref.put(answerImageFile);
     const answerImageURL = await taskSnapShot.ref.getDownloadURL();
     return { answerImageName, answerImageURL };
