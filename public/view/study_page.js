@@ -98,12 +98,12 @@ function buildStudyFlashcardView(flashcard) {
     for (let i = 0; i < flashcard.incorrectAnswers.length; ++i) {
       html += `
       <div class="study-flashcard-question pomo-text-color-light">
-      <h4>${flashcard.incorrectAnswers[i]}</h4>
+      <h4>• ${flashcard.incorrectAnswers[i]}</h4>
       </div>`;
     }
     html += `
     <div class="study-flashcard-question pomo-text-color-light">
-    <h4>${flashcard.answer}</h4>
+    <h4>• ${flashcard.answer}</h4>
     </div>`;
   }
 
