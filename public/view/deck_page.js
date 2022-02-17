@@ -6,6 +6,7 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Study from './study_page.js'
+import * as EditFlashCard from '../controller/edit_flashcard.js'
 
 //Declaration of Image
 let imageFile2UploadQuestion;
@@ -290,7 +291,20 @@ export async function deck_page(deckDockID) {
     );
 
     const deleteButton = document.getElementById(Constant.htmlIDs.deleteFlashcard);
-
+    ///ADDED STEPHEN
+    const editForms = document.getElementsByClassName('form-edit-flashcard')
+    for(let i=0; i< editForms.length; i++){
+        editForms[i].addEventListener('submit', async e => {
+            //prevents refresh on submit of form
+            e.preventDefault();
+            //gets button by tagname within the form
+            const button = e.target.getElementsByTagName('button')[0];
+            const label = Utilities.disableButton(button);
+            //passed by the button on the flashcard
+            await EditFlashCard.edit_flashcard(e.target.docId.value)
+            Utilities.enableButton(button,label);
+        })
+    }
 
     /*****************************************
          *        Dynamic Element Event Listeners
@@ -375,9 +389,10 @@ function buildFlashcardView(flashcard) {
                 <h6>${flashcard.answer}</h6>
                 <br>
                 <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
+                <br>
                 <form class="form-edit-flashcard" method="post">
                     <input type="hidden" name="docId" value="${flashcard.docId}">
-                    <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit">Edit</button>
+                    <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
                 </form>
             </div>
         </div>
@@ -388,7 +403,8 @@ function buildFlashcardView(flashcard) {
                 <h6>${flashcard.answer}</h6>
                 <form class="form-edit-flashcard" method="post">
                     <input type="hidden" name="docId" value="${flashcard.docId}">
-                    <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit">Edit</button>
+                    <br>
+                    <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
                 </form>
             </div>
         </div>
