@@ -369,20 +369,32 @@ function buildFlashcardView(flashcard) {
         }
     }
 
-    html += flashcard.answerImageURL != "N/A" ?  `</div><div class="flip-card-back">
-    <h1>${flashcard.answer}</h1>
-    <br>
-    <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
-  </div>
-  </div>
-  </div>` 
+    html += flashcard.answerImageURL != "N/A" ?  `
+            </div>
+            <div class="flip-card-back">
+                <h6>${flashcard.answer}</h6>
+                <br>
+                <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
+                <form class="form-edit-flashcard" method="post">
+                    <input type="hidden" name="docId" value="${flashcard.docId}">
+                    <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit">Edit</button>
+                </form>
+            </div>
+        </div>
+    </div>` 
   :
-  `</div><div class="flip-card-back">
-  <h1>${flashcard.answer}</h1>
-  </div>
-  </div>
-  </div>`;
+    `       </div>
+            <div class="flip-card-back">
+                <h6>${flashcard.answer}</h6>
+                <form class="form-edit-flashcard" method="post">
+                    <input type="hidden" name="docId" value="${flashcard.docId}">
+                    <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit">Edit</button>
+                </form>
+            </div>
+        </div>
+    </div>`;
   
+    
     return html;
   }
 
