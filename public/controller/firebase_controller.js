@@ -149,31 +149,70 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
 //===========================================================================//
 
 //============================================================================//
-// 
+// Returns an array of doc ID's 
 //============================================================================//
-export async function getNextSmartStudyFlashcard(uid, deckDocID) {
+export async function getFlashcardsDataFromDeck(uid, deckDocID) {
+    let flashcardsDataList = [];
+    const flashcardsDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .get();
+
+    flashcardsDataRef.forEach(doc => {
+        const flashcardData = new FlashcardData(doc.data());
+        flashcardData.set_docID(doc.id);
+        flashcardsDataList.push(flashcardData);
+    })
+
+    // localStorage.set(Constant.collectionName.OWNED_DECKS, deckList);
+
+    return flashcardsDataList;
+}
+//===========================================================================//
+
+//============================================================================//
+// Gets the next flashcard for SmartStudying
+//============================================================================//
+export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurrentlyStudying) {
 
     let targetedStreakGroup = 0;
     let randomNumber = Math.random();
 
-    if (randomNumber >= 46.875) { // Streak 0 Odds
-        targetedStreakGroup = 0
+    
+    if (randomNumber >= 0.46875) { // Streak 0 OR New Card
+        randomNumber = Math.random();       
+
+        if (randomNumber >= 0.75) { // New card Odds
+            console.log("Getting new card...");
+            let newFlashcard = await getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentlyStudying);
+
+            if (newFlashcard == null) {
+                console.log("No new flashcards. Switching to Streak 0 category");
+                targetedStreakGroup = 0; // There are no new flashcards, so default to showing streak 0
+            }
+        }
+        else // Streak 0 Odds 
+            targetedStreakGroup = 0
     }
-    else if (randomNumber >= 21.875) { // Streak 1 Odds
+    else if (randomNumber >= 0.21875) { // Streak 1 Odds
         targetedStreakGroup = 1
     }
-    else if (randomNumber >= 9.375) { // Streak 2 Odds
+    else if (randomNumber >= 0.09375) { // Streak 2 Odds
         targetedStreakGroup = 2
     }
-    else if (randomNumber >= 6.125) { // Streak 2 Odds
+    else if (randomNumber >= 0.06125) { // Streak 3 Odds
         targetedStreakGroup = 3
     }
     else if (randomNumber >= 0) { // Streak 2 Odds
         targetedStreakGroup = 4
     }
 
-    let streakGroupHasFlashcards = true;
+    console.log("Streak Group Chosen: ", targetedStreakGroup);
 
+    let streakGroupHasFlashcards = true;
     // Grabs oldest interacted with flashcard from the targeted streak group
     const nextFlashcard = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
@@ -189,21 +228,60 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID) {
             streakGroupHasFlashcards = doc.exists;
         });
 
-    // Since it is possible for user to have no cards in a streak group, run
-    //  until we find a flashcard
+    // Since it is possible for user to have no cards in a streak group, take precautions to 
+    //  always get a flashcard
     if (!streakGroupHasFlashcards) {
+        console.log("Streak group contained no flashcard data");
 
+        // First, try and get new flashcard
+        console.log("Getting new card...");
+        let newFlashcard = await getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentlyStudying);
+
+        if (newFlashcard != null) {
+            return newFlashcard
+        }
+
+        console.log("No new flashcards exists. Pulling the oldest flashcard data from all Streak Categories");
+        let currentStreakGroup = 0;
+        nextFlashcard = await firebase.firestore()
+            .collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .collection(Constant.collectionName.DECK_DATA)
+            .doc(deckDocID)
+            .collection(Constant.collectionName.FLASHCARDS_DATA)
+            .orderBy("lastAccessed", "desc")
+            .limit(1)
+            .get()
+            .then((doc) => {
+                streakGroupHasFlashcards = doc.exists;
+            });
     }
 
-    // userOwnedDecks.forEach(doc => {
-    //     const d = new Deck(doc.data());
-    //     d.docId = doc.id;
-    //     deckList.push(d);
-    // })
+    return nextFlashcard;
+}
 
-    // localStorage.set(Constant.collectionName.OWNED_DECKS, deckList);
+// Helper function for getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurrentlyStudying)
+//  Returns new if there are no new flashcards
+async function getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentlyStudying) {
+    let flashcardsDataList = await getFlashcardsDataFromDeck(uid, deckDocID);
+            
+    // Find first occurence of a flashcard that isn't in our flashcards data list
+    for (let i = 0; i < flashcardsCurrentlyStudying.length; i++) {
 
-    return deckList;
+        let flashcardInDataList = false;
+        for (let j = 0; j < flashcardsDataList; j++) {
+            if (flashcardsDataList[j].docID == flashcardsCurrentlyStudying[i].docID) {
+                flashcardInDataList = true;
+                break;
+            }
+        }
+
+        if (!flashcardInDataList) {
+            return flashcardsCurrentlyStudying[i];
+        }
+    }
+
+    return null;
 }
 //===========================================================================//
 

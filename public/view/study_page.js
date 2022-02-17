@@ -40,43 +40,37 @@ export async function study_page() {
       console.log(e);
     }
     
-    html += `<h1 style="align: center">${deck.name}</h1>`;
-    html += `<h4 style="align: center">${deck.subject}</h4>`;
-    html += `
+  html += `<h1 style="align: center">${deck.name}</h1>`;
+  html += `<h4 style="align: center">${deck.subject}</h4>`;
+  html += `
     <div class="form-check form-switch float-top-right">
       <input class="form-check-input" type="checkbox" role="switch"
       id="smart-study-checkbox">
       <label class="form-check-label" for="smart-study-checkbox">Smart Study</label>
-      </div>
-    `;
-    
-  let smartStudyIsOn = document.getElementById(Constant.htmlIDs.smartStudyCheckbox).checked;
-
+    </div>
+  `;
+  
   let flashcard;
   let deckLength = 0;
-  if (smartStudyIsOn) { // Generate smart study flaschard
-    // grab a flashcard using SRS data
-  }
-  else { // Generate normal study flashcard
-    // get FLASHCARDS info from firebase
-    let flashcards;
-    try {
-      flashcards = await FirebaseController.getFlashcards(
-        Auth.currentUser.uid,
-        docId
-      );
-      if (!flashcards) {
-        html += "<h5>No flashcards found for this deck</h5>";
-      }
-    } catch (e) {
-      console.log(e);
+  let flashcards;
+  // get FLASHCARDS info from firebase
+  try {
+    flashcards = await FirebaseController.getFlashcards(
+      Auth.currentUser.uid,
+      docId
+    );
+    if (!flashcards) {
+      html += "<h5>No flashcards found for this deck</h5>";
     }
-
-    // set deck length and build individual flashcard view
-    deckLength = flashcards.length;
-    flashcard = flashcards[count];
+  } 
+  catch (e) {
+    console.log(e);
   }
-  
+
+  // set deck length and build individual flashcard view
+  deckLength = flashcards.length;
+  flashcard = flashcards[count];
+
   html += buildStudyFlashcardView(flashcard);
   Elements.root.innerHTML += html;
 
@@ -84,7 +78,6 @@ export async function study_page() {
   const formAnswerFlashcard = document.getElementById(
     Constant.htmlIDs.formAnswerFlashcard
   );
-
 
   // event listener for when ANSWER button is pushed on flashcard
   formAnswerFlashcard.addEventListener("submit", async (e) => {
@@ -116,23 +109,44 @@ export async function study_page() {
 }
 
 export function reload_study_page(deckLength, deck, flashcards) {
+
+  // Check if SmartStudy is on before removing elements
+  const smartStudyIsOn = document.getElementById(Constant.htmlIDs.smartStudyCheckbox).checked;
+
   Elements.root.innerHTML = "";
   let html = "";
 
   html += `<h1 style="align: center">${deck.name}</h1>`;
   html += `<h4 style="align: center">${deck.subject}</h4>`;
+  html += `
+    <div class="form-check form-switch float-top-right">
+      <input class="form-check-input" type="checkbox" role="switch"
+      id="smart-study-checkbox">
+      <label class="form-check-label" for="smart-study-checkbox">Smart Study</label>
+    </div>
+  `;
 
   // set deck length and build individual flashcard view
   //let deckLength = flashcards.length;
-  let flashcard = flashcards[count];
-  html += buildStudyFlashcardView(flashcard);
 
+  // This flashcard will be used if we are in Normal Study
+  let flashcard = flashcards[count];
+
+  if (smartStudyIsOn) {
+    flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docId, flashcards)
+  }
+
+
+
+
+  html += buildStudyFlashcardView(flashcard);
   Elements.root.innerHTML += html;
 
   // create const for submit on ANSWER button
   const formAnswerFlashcard = document.getElementById(
     Constant.htmlIDs.formAnswerFlashcard
   );
+
 
   // event listener for when ANSWER button is pushed on flashcard
   formAnswerFlashcard.addEventListener("submit", async (e) => {
