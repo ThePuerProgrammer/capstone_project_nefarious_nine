@@ -227,3 +227,21 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
         .delete();
 }
+
+//===========================================================================//
+//EDIT FLASHCARD 
+//===========================================================================//
+export async function getFlashCardById(uid,deckDocID,docID){
+    const flashRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID).get();
+    if(flashRef.exists){
+        const flashcard = new Flashcard(flashRef.data());
+        flashcard.set_docID(docID);
+        return flashcard;
+    } else {
+        return null;
+    }
+}
+

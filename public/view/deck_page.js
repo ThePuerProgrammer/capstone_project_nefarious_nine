@@ -301,7 +301,7 @@ export async function deck_page(deckDockID) {
             const button = e.target.getElementsByTagName('button')[0];
             const label = Utilities.disableButton(button);
             //passed by the button on the flashcard
-            await EditFlashCard.edit_flashcard(e.target.docId.value)
+            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDockID,e.target.docId.value)
             Utilities.enableButton(button,label);
         })
     }
