@@ -46,7 +46,7 @@ export const formSearchDeck = document.getElementById('form-search-deck');
 
 // STUDY PAGE
 //============================================================================//
-//export const formAnswerFlashcard = document.getElementById('form-answer-flashcard');
+//export const formStudyViewScore = document.getElementById('form-answer-flashcard');
 //============================================================================//
 
 // PW RESET FORM
