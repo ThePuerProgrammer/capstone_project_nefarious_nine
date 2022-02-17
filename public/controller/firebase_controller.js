@@ -171,7 +171,7 @@ export async function getFlashcardsDataFromDeck(uid, deckDocID) {
 //===========================================================================//
 
 //============================================================================//
-// Gets the next flashcard for SmartStudying
+// Gets the next flashcardModel for SmartStudying
 //============================================================================//
 export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurrentlyStudying) {
 
@@ -191,6 +191,8 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
                 console.log("No new flashcards. Switching to Streak 0 category");
                 targetedStreakGroup = 0; // There are no new flashcards, so default to showing streak 0
             }
+
+            return newFlashcard;
         }
         else // Streak 0 Odds 
             targetedStreakGroup = 0
@@ -227,7 +229,7 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
     let flashcardsReceived = 0;
     nextFlashcard.forEach((doc) => {
         streakGroupHasFlashcards = doc.exists;
-        count++;
+        flashcardsReceived++;
 
         if (streakGroupHasFlashcards)
             nextFlashcardDocID = doc.id;

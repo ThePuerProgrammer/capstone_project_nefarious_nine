@@ -138,12 +138,13 @@ export async function reload_study_page(deckLength, deck, flashcards) {
 
   if (smartStudyOn) {
     flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards)
-    console.log(flashcard);
   }
 
-
-  console.log(`Question: "${flashcard.question}"`);
-  console.log(`Answer: "${flashcard.answer}"`);
+  if (Constant.DEV) {
+    console.log(`Question: "${flashcard.question}"`);
+    console.log(`Answer: "${flashcard.answer}"`);
+  }
+  s
   html += buildStudyFlashcardView(flashcard);
   Elements.root.innerHTML += html;
 
