@@ -302,16 +302,8 @@ export async function deck_page(deckDockID) {
         buttonStudy.addEventListener('click', async e => {
             e.preventDefault();
             //const docId = e.target.deckDockID.value;
-            history.pushState(null, null, Routes.routePathname.DECK + "#" + deckDockID);
-            await Study.study_page(deckDockID);
-    });
-
-    // Adds event listener for STUDY button
-    buttonStudy.addEventListener('click', async e => {
-        e.preventDefault();
-        //const docId = e.target.docId.value;
-        history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
-        await Study.study_page(docId);
+            history.pushState(null, null, Routes.routePathname.STUDY + "#" + deckDockID);
+            await Study.study_page();
     });
 
     deleteButton.addEventListener('click', async e => {

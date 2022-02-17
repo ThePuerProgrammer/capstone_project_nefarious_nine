@@ -6,11 +6,13 @@ import * as Auth from "../controller/firebase_auth.js";
 
 let count = 0; // rudimentary way to cycle trough flashcards in deck
 let score = 0; // rudimentary way to keep track of user score
+//let user_answer = []; //deck to store user answers
 
 export function addEventListeners() {}
 
+//REDUNDANT
 // event listener for when STUDY button is pressed on /deck_page
-export function studyFormSubmitEvent(form) {
+/*export function studyFormSubmitEvent(form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const docId = e.target.docId.value;
@@ -18,7 +20,7 @@ export function studyFormSubmitEvent(form) {
     localStorage.setItem("deckPageDeckDocID", docId);
     await study_page();
   });
-}
+}*/
 
 export async function study_page() {
   Elements.root.innerHTML = "";
@@ -76,22 +78,66 @@ export async function study_page() {
 
     // while there's more flashcards in the deck, reload page to update flashcard view
     if (count < deckLength) {
-      study_page(count);
+      reload_study_page(deckLength, deck, flashcards);
       checkAnswer(answer, flashcard);
       buildStudyFlashcardView(flashcard);
     } else {
       checkAnswer(answer, flashcard);
-      buildScoreView(deck, deckLength);
+      buildOverviewView(deck, deckLength);
+    }
+  });
+}
+
+export function reload_study_page(deckLength, deck, flashcards) {
+  Elements.root.innerHTML = "";
+  let html = "";
+
+  html += `<h1 style="align: center">${deck.name}</h1>`;
+  html += `<h4 style="align: center">${deck.subject}</h4>`;
+
+  // set deck length and build individual flashcard view
+  //let deckLength = flashcards.length;
+  let flashcard = flashcards[count];
+  html += buildStudyFlashcardView(flashcard);
+
+  Elements.root.innerHTML += html;
+
+  // create const for submit on ANSWER button
+  const formAnswerFlashcard = document.getElementById(
+    Constant.htmlIDs.formAnswerFlashcard
+  );
+
+  // event listener for when ANSWER button is pushed on flashcard
+  formAnswerFlashcard.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const answer = e.target.answer.value;
+    console.log(answer);
+
+    // incremement count everytime ANSWER button is pushed
+    count++;
+
+    // while there's more flashcards in the deck, reload page to update flashcard view
+    if (count < deckLength) {
+      reload_study_page(deckLength, deck, flashcards);
+      checkAnswer(answer, flashcard);
+      buildStudyFlashcardView(flashcard);
+    } else {
+      checkAnswer(answer, flashcard);
+      buildOverviewView(deck, deckLength);
     }
   });
 }
 
 // view when flashcards are being shown to study
 function buildStudyFlashcardView(flashcard) {
-  let html = `<div class="study-flashcard-view"><form id="${Constant.htmlIDs.formAnswerFlashcard}">
+  console.log(count);
+  let html = `<div class="study-flashcard-view overflow-auto"><form id="${Constant.htmlIDs.formAnswerFlashcard}">
   <div class="study-flashcard-question pomo-text-color-light">
     <h1>${flashcard.question}</h1>
   </div>`;
+
+
+  // add flashcard.answer to flashcard.incorrectAnswers[i]
 
   // IF MULTIPLE CHOICE
   if (flashcard.isMultipleChoice) {
@@ -109,7 +155,7 @@ function buildStudyFlashcardView(flashcard) {
 
   html += `<div class="study-flashcard-answer pomo-text-color-light">
     <label class="form-label">Answer</label>
-    <input type="answer" name="answer" class="form-control" id="flashcard-answer">
+    <input type="answer" name="answer" class="form-control" required minlength="1" id="flashcard-answer">
     <br>`;
 
   html += `<button type="submit" class="btn btn-secondary pomo-bg-color-dark" style="float:right">Answer</button>
@@ -120,12 +166,29 @@ function buildStudyFlashcardView(flashcard) {
 }
 
 // once entire deck has been studied, show the score view
-function buildScoreView(deck, deckLength) {
+/*function buildScoreView(deck, deckLength) {
+  count = 0; // reset count 
   Elements.root.innerHTML = "";
   let html = "";
-  //html +=  `Score View`;
   html += `<div class="study-flashcard-view pomo-text-color-light">
     <h1 style="align: center">Your score on: ${deck.name}</h1>
+    <br>
+    <br>
+    <h4>Total ${score} / ${deckLength} </4></div>`;
+
+  //console.log(score);
+
+  Elements.root.innerHTML += html;
+} */
+
+// Post-study OVERVIEW view
+function buildOverviewView(deck, deckLength) {
+  count = 0; // reset flashcard index count 
+  //user_answers = []; // reset stored user answers
+  Elements.root.innerHTML = "";
+  let html = "";
+  html += `<div class="study-flashcard-view pomo-text-color-light">
+    <h1 style="align: center">${deck.name} Study Overview</h1>
     <br>
     <br>
     <h4>Total ${score} / ${deckLength} </4></div>`;
@@ -139,13 +202,14 @@ function buildScoreView(deck, deckLength) {
 function checkAnswer(answer, flashcard) {
   let user_answer = answer.toLowerCase();
   let flashcard_answer = flashcard.answer.toLowerCase();
+  //user_answers
 
-  //console.log(user_answer);
-  //console.log(flashcard_answer);
+  let coins = 0;
 
   // increment player score if answer is correct
   if (user_answer == flashcard_answer) {
     score++;
+    coins += 3
     console.log("correct answer");
   } else {
     console.log("incorrect answer");
