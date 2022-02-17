@@ -13,8 +13,6 @@ let imageFile2UploadAnswer;
 let deckDocID;
 const imageAnswer = Elements.formContainerAnswerImage;
 const imageQuestion = Elements.formContainerQuestionImage;
-const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
-const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
 
 
 export function addViewButtonListener() {
@@ -67,8 +65,9 @@ export function addEventListeners() {
         const question = formData.question;
         const answer = formData.answer;
         const isMultipleChoice = Elements.formCheckInputIsMultipleChoice.checked;
-       // const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
-        //const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
+        const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
+        const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
+
         console.log("testing");
         console.log(formData);
 
@@ -107,6 +106,7 @@ export function addEventListeners() {
               flashcard.questionImageURL = "N/A";
             }
             //Answer Image
+            
             if(isAnswerImage){
               console.log("Answer-1");
               const { answerImageName, answerImageURL } =
@@ -199,27 +199,29 @@ export function addEventListeners() {
         // TOGGLE IS ON
         checkImageAnswer();
     });
-    Elements.formAddFlashCardQuestionImageButton.addEventListener("change", (e) => {
+    Elements.formAddFlashCardQuestionImageButton.addEventListener("change",  async (e) => {
         imageFile2UploadQuestion = e.target.files[0];
-        
-        if (!imageFile2UploadQuestion || isQuestionImage){
-            //if (!imageFile2UploadQuestion ){
-            Elements.imageTagCreateFlashQuestion.src='';            
+        if (!imageFile2UploadQuestion ){
+            Elements.imageTagCreateFlashQuestion.src='';  
+            Elements.formCheckInputIsImageQuestion.checked=false;          
             return;
         } 
         //display image
+        Elements.formCheckInputIsImageQuestion.checked=true;
         const reader = new FileReader();
         reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
         reader.readAsDataURL(imageFile2UploadQuestion);
     });
-    Elements.formAddFlashCardAnswerImageButton.addEventListener("change", (e) => {
+
+    Elements.formAddFlashCardAnswerImageButton.addEventListener("change", async (e) => {
         imageFile2UploadAnswer = e.target.files[0];
-        if(!imageFile2UploadAnswer ||isAnswerImage){
-        //if (!imageFile2UploadAnswer){ 
+        if(!imageFile2UploadAnswer){
             Elements.imageTagCreateFlashAnswer.src='';
+            Elements.formCheckInputIsImageAnswer.checked=false;
             return;
         }
         //display image
+        Elements.formCheckInputIsImageAnswer.checked=true;
         const reader = new FileReader();
         reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
         reader.readAsDataURL(imageFile2UploadAnswer);

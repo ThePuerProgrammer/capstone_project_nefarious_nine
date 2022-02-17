@@ -63,41 +63,49 @@ export async function study_decks_page() {
     html += `
         <button type="button" class="btn btn-secondary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
             Create New Deck
-        </button><br><br>
+        </button>
     `;
+
+    html += `
+    <div style="float: right">
+    <label for="sort-decks">Order by:</label>
+    <select name="sort-decks" id="sort-decks" style="width: 200px">
+        <option value="name">Name</option>
+        <option value="subject">Subject</option>
+        <option value="date">Date</option>
+    </select>
+    </div>
+    <br><br>
+    `
 
     let deckList;
     try {
-        // this is pretty temporary since we're just pulling all decks to test
-        // in the future, we can set up our getDecks function to filter by criteria
-        // also TODO: add a dropdown menu to sort decks by different filters - Cody
         deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
     } catch (e) {
-        // TODO: we can display a popup if there was an error getting the decklists
-        // I'm not doing this now because I don't want to - Cody
         console.log(e);
     }
 
-    for (let i = 0; i < deckList.length; ++i) {
+    for (let i = 0; i < deckList.length; i++) {
         let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
         html += buildDeckView(deckList[i], flashcards);
     }
 
-    // it might be better to add this when we actually pull the decks from Firebase
-    // but I'm leaving it here for now - Cody
     if (deckList.length == 0) {
         html += '<h2> No decks found! Go create some and get to studying!</h2>'
     }
 
+
     Elements.root.innerHTML += html;
     DeckPage.addViewButtonListener();
+
 
     const favoritedCheckboxes = document.getElementsByClassName("form-check-input");
     for (let i = 0; i < favoritedCheckboxes.length; ++i) {
         favoritedCheckboxes[i].addEventListener('change', async e => {
             const docId = e.target.value;
-            const favorited = document.getElementById('favorited').checked;
+            const favorited = deckList.find(deck => docId == deck.docId).isFavorited ? false : true;
             await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
+            location.reload();
         });
     }
 
