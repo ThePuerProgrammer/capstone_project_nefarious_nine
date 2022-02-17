@@ -1,4 +1,5 @@
 import * as Constant from '../model/constant.js'
+import * as Utilites from '../view/utilities.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
@@ -244,4 +245,24 @@ export async function getFlashCardById(uid,deckDocID,docID){
         return null;
     }
 }
+//===========================================================================//
+//UPDATE FLASHCARD 
+//===========================================================================//
+export async function updateFlashcard(uid, deckDocID, flashcard, docID){
+//export async function updateFlashcard(flashcard, docID){
+    const docId = docID;
+    const data = flashcard.serializeForUpdate();
+    //call cf await cf_updateFlashcard({docId,data})
+    // const flashRef = await firebase.firestore()
+    //     .collection(Constant.collectionName.FLASHCARDS).doc(docId).update(data);
+    const flashRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docId).update(data);
+    if(!flashRef.exists){
+        if(Constant.DEV) console.log(e);
+        Utilites.info('Update Error Firebase', JSON.stringify(e));
+    }
+}
+
 

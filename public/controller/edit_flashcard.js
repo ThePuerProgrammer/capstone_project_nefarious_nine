@@ -1,7 +1,9 @@
 import * as FirebaseController from './firebase_controller.js'
+import * as Auth from './firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import * as Utilities from '../view/utilities.js'
 import * as Elements from '../view/elements.js'
+import { Flashcard } from '../model/flashcard.js';
 // import * as Flashcard from './/model/flashcard.js'
 
  let imageFile2UploadAnswer;
@@ -48,14 +50,65 @@ export function addEventListeners(){
         // TOGGLE IS ON
         checkImageAnswer();
     });
+    Elements.formEditFlashcard.form.addEventListener('submit', async e=> {
+        e.preventDefault();
+        const button = e.target.getElementsByTagName('button')[0];
+        const label = Utilities.disableButton(button);
+
+        const fc = new Flashcard({
+            question:           e.target.question.value,
+            answer:             e.target.answer.value,
+            //ROAD BLOCK
+            //isMultipleChoice:   e.target.isMultipleChoice.value,
+            //incorrectAnswers:   e.target.incorrectAnswers.value,
+            
+            //Picture Related DATA
+            questionImageName:  e.target.questionImageName.value,
+            answerImageName:    e.target.answerImageName.value,
+        });
+        fc.set_docID(e.target.docId.value);
+        console.log(`fc.docID:${fc.docID}`);
+        let editDeckDocId = e.target.deckDocId.value;
+        console.log(`DeckDocId: ${e.target.deckDocId.value}`);
+        console.log(`editDeckDocId: ${editDeckDocId}`);
+
+
+
+        //Firestore
+        try{
+            if(imageFile2UploadAnswer){
+                const imageAnswerInfo = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer, 
+                    e.target.answerImageName.value);
+                fc.answerImageURL = imageAnswerInfo.answerImageURL;
+            }
+
+            if(imageFile2UploadQuestion){
+                const imageQuestionInfo = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadQuestion, 
+                    e.target.questionImageName.value);
+                fc.questionImageURL = imageQuestionInfo.questionImageURL;
+            }
+
+            //Update Firestore
+            await FirebaseController.updateFlashcard(Auth.currentUser.uid, editDeckDocId,fc,fc.docId);
+            //await FirebaseController.updateFlashcard(fc, fc.docID);
+            //Update Browser
+        } catch(e){
+            if(Constant.DEV) console.log(e);
+            Utilities.info('Update Flashcard Error', JSON.stringify(e));
+        }
+        //Enabling button after process
+        Utilities.enableButton(button,label);
+
+    });
 }
 
 
-export async function edit_flashcard(uid, deckId, docID){
-    //console.log(docID);
+export async function edit_flashcard(uid, deckId, docId){
+    console.log(docId);
     let flashcard;
+    
     try{
-        flashcard = await FirebaseController.getFlashCardById(uid,deckId,docID);
+        flashcard = await FirebaseController.getFlashCardById(uid,deckId,docId);
         if(!flashcard){
             Utilities.info('getFlashCardById Error', 'No flashcard found by the id');
             return;
@@ -66,8 +119,8 @@ export async function edit_flashcard(uid, deckId, docID){
         return;
     }
 
-    //Getting Elements from Firebase to Edit Modal
-    Elements.formEditFlashcard.form.docId.value = flashcard.docId;
+    //Getting Elements from Firebase to Edit //CHANGES HERE
+    Elements.formEditFlashcard.form.docId.value = flashcard.docID;
     Elements.formEditFlashcard.form.questionImageName.value = flashcard.questionImageName;
     Elements.formEditFlashcard.form.answerImageName.value = flashcard.answerImageName;
     Elements.formEditFlashcard.form.question.value = flashcard.question;
@@ -133,3 +186,4 @@ function checkImageAnswer(){
       }
     }
 }
+
