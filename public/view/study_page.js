@@ -6,6 +6,7 @@ import * as Auth from "../controller/firebase_auth.js";
 
 let count = 0; // rudimentary way to cycle trough flashcards in deck
 let score = 0; // rudimentary way to keep track of user score
+let coins = 0 // keep track of coins earned 
 let user_answers = []; //array of user_history
 
 export function addEventListeners() {
@@ -216,7 +217,7 @@ function buildOverviewView(deck, deckLength) {
   html += `
   </ul>
   <br>
-  <h4>Score: ${score} / ${deckLength} Coins Earned: </h4>
+  <h4>Score: ${score} / ${deckLength} Coins Earned: ${coins} </h4>
   </div>
   </div>`;
 
@@ -231,8 +232,6 @@ function checkAnswer(answer, flashcard) {
   let user_answer = answer.toLowerCase();
   let flashcard_answer = flashcard.answer.toLowerCase();
   user_history.answer = user_answer;
-
-  let coins = 0;
 
   // increment player score if answer is correct
   if (user_answer == flashcard_answer) {
