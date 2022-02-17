@@ -39,5 +39,6 @@ export const htmlIDs = {
     buttonStudy: 'btn-study-deck',
     formAnswerFlashcard: 'form-answer-flashcard',
     formCheckInputIsMultiple: 'form-check-input-is-multiple',
-    modalCreateAccount: 'modal-create-account'
+    modalCreateAccount: 'modal-create-account',
+    smartStudyCheckbox: 'smart-study-checkbox'
 }

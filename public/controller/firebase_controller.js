@@ -116,14 +116,9 @@ export async function updateFlashcardData(deckDocID, flashcardDocID) { /* userAn
 }
 //===========================================================================//
 
-
-
 //============================================================================//
-// Create Deck Data if Needed
-// 
-// 1. Check if data exists
-//   [Data Exists] Grab the data
-//   [Data doesn't exist]  
+// Creates deck data if the user doesn't have a deck data for the deck they
+//  are going to study
 //============================================================================//
 export async function createDeckDataIfNeeded(uid, deckDocID) {
     let deckDataExists = false;
@@ -153,6 +148,66 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
 }
 //===========================================================================//
 
+//============================================================================//
+// 
+//============================================================================//
+export async function getNextSmartStudyFlashcard(uid, deckDocID) {
+
+    let targetedStreakGroup = 0;
+    let randomNumber = Math.random();
+
+    if (randomNumber >= 46.875) { // Streak 0 Odds
+        targetedStreakGroup = 0
+    }
+    else if (randomNumber >= 21.875) { // Streak 1 Odds
+        targetedStreakGroup = 1
+    }
+    else if (randomNumber >= 9.375) { // Streak 2 Odds
+        targetedStreakGroup = 2
+    }
+    else if (randomNumber >= 6.125) { // Streak 2 Odds
+        targetedStreakGroup = 3
+    }
+    else if (randomNumber >= 0) { // Streak 2 Odds
+        targetedStreakGroup = 4
+    }
+
+    let streakGroupHasFlashcards = true;
+
+    // Grabs oldest interacted with flashcard from the targeted streak group
+    const nextFlashcard = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .where("streak", "==", targetedStreakGroup)
+        .orderBy("lastAccessed", "desc")
+        .limit(1)
+        .get()
+        .then((doc) => {
+            streakGroupHasFlashcards = doc.exists;
+        });
+
+    // Since it is possible for user to have no cards in a streak group, run
+    //  until we find a flashcard
+    if (!streakGroupHasFlashcards) {
+
+    }
+
+    // userOwnedDecks.forEach(doc => {
+    //     const d = new Deck(doc.data());
+    //     d.docId = doc.id;
+    //     deckList.push(d);
+    // })
+
+    // localStorage.set(Constant.collectionName.OWNED_DECKS, deckList);
+
+    return deckList;
+}
+//===========================================================================//
+
+
 
 
 //============================================================================//
@@ -161,7 +216,6 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
 // modified to accomodate users / classrooms
 //============================================================================//
 export async function getUserDecks(uid) {
-    // use window.localStorage to store needed local information
     let deckList = [];
     const userOwnedDecks = await firebase.firestore()
         .collection(Constant.collectionName.USERS)

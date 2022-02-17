@@ -24,6 +24,8 @@ export async function study_page() {
   Elements.root.innerHTML = "";
   let html = "";
 
+  // Smart Study Checkbox
+  
   // get DECK info from firebase
   let docId = localStorage.getItem("deckPageDeckDocID");
   let deck;
@@ -31,40 +33,49 @@ export async function study_page() {
     deck = await FirebaseController.getUserDeckById(
       Auth.currentUser.uid,
       docId
-    );
-  } catch (e) {
-    console.log(e);
-  }
-
-  html += `<h1 style="align: center">${deck.name}</h1>`;
-  html += `<h4 style="align: center">${deck.subject}</h4>`;
-  html += `
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    
+    html += `<h1 style="align: center">${deck.name}</h1>`;
+    html += `<h4 style="align: center">${deck.subject}</h4>`;
+    html += `
     <div class="form-check form-switch float-top-right">
       <input class="form-check-input" type="checkbox" role="switch"
       id="smart-study-checkbox">
       <label class="form-check-label" for="smart-study-checkbox">Smart Study</label>
-    </div>
-  `;
+      </div>
+    `;
+    
+  let smartStudyIsOn = document.getElementById(Constant.htmlIDs.smartStudyCheckbox).checked;
 
-  // get FLASHCARDS info from firebase
-  let flashcards;
-  try {
-    flashcards = await FirebaseController.getFlashcards(
-      Auth.currentUser.uid,
-      docId
-    );
-    if (!flashcards) {
-      html += "<h5>No flashcards found for this deck</h5>";
-    }
-  } catch (e) {
-    console.log(e);
+  let flashcard;
+  let deckLength = 0;
+  if (smartStudyIsOn) { // Generate smart study flaschard
+    // grab a flashcard using SRS data
   }
+  else { // Generate normal study flashcard
+    // get FLASHCARDS info from firebase
+    let flashcards;
+    try {
+      flashcards = await FirebaseController.getFlashcards(
+        Auth.currentUser.uid,
+        docId
+      );
+      if (!flashcards) {
+        html += "<h5>No flashcards found for this deck</h5>";
+      }
+    } catch (e) {
+      console.log(e);
+    }
 
-  // set deck length and build individual flashcard view
-  let deckLength = flashcards.length;
-  let flashcard = flashcards[count];
+    // set deck length and build individual flashcard view
+    deckLength = flashcards.length;
+    flashcard = flashcards[count];
+  }
+  
   html += buildStudyFlashcardView(flashcard);
-
   Elements.root.innerHTML += html;
 
   // create const for submit on ANSWER button
@@ -72,11 +83,20 @@ export async function study_page() {
     Constant.htmlIDs.formAnswerFlashcard
   );
 
+
   // event listener for when ANSWER button is pushed on flashcard
   formAnswerFlashcard.addEventListener("submit", async (e) => {
     e.preventDefault();
     const answer = e.target.answer.value;
     console.log(answer);
+
+    if (smartStudyIsOn) {
+      let isUserCorrect = checkAnswer(answer, flashcard);
+      // update flashcard data
+      // go next flashcard
+      return;
+    }
+    // If smart study is on, we stop here
 
     // incremement count everytime ANSWER button is pushed
     count++;
@@ -86,7 +106,8 @@ export async function study_page() {
       study_page(count);
       checkAnswer(answer, flashcard);
       buildStudyFlashcardView(flashcard);
-    } else {
+    } 
+    else {
       checkAnswer(answer, flashcard);
       buildScoreView(deck, deckLength);
     }
@@ -154,7 +175,9 @@ function checkAnswer(answer, flashcard) {
   if (user_answer == flashcard_answer) {
     score++;
     console.log("correct answer");
+    return true;
   } else {
     console.log("incorrect answer");
+    return false;
   }
 }
