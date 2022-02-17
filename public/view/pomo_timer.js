@@ -4,6 +4,9 @@
 
 import * as Elements from './elements.js'
 import { UserTimer } from '../model/user_timer.js'
+import * as FirebaseController from '../controller/firebase_controller.js'
+import * as Auth from '../controller/firebase_auth.js'
+
 
 let timerStateClosed;
 let userTimer;
@@ -130,6 +133,21 @@ export function addEventListeners() {
         userTimer.resetTimer();
     });
     //------------------------------------------------------------------------//
+
+    Elements.pomoTimerMakeSettingDefaultButton.addEventListener('click', async () => {
+        let total = Elements.totalTimeIntervalSlider.value;
+        let range = Elements.studyRelaxIntervalSlider.value;
+        const updateMap = {};
+        updateMap[defaultTimerSetting] = [total, range];
+        FirebaseController.updateUserInfo(firebase.auth().currentUser.uid, updateMap );
+        console.log(firebase.auth().currentUser.uid);
+        console.log(total);
+        console.log(range);
+
+
+    });
+
+
 }
 
 function setThumb0ValueAndPosition() {

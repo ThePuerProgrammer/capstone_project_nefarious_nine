@@ -227,3 +227,15 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
         .delete();
 }
+
+
+
+//============================================================================//
+// create default timer 
+//============================================================================//
+
+
+export async function updateUserInfo(uid, updateInfo){
+    await firebase.firestore().collection(Constant.collectionNames.USERS)
+        .doc(uid).update(updateInfo);
+}
