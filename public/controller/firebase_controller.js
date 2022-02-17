@@ -221,7 +221,8 @@ export async function getUserDecks(uid) {
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS)
-        .orderBy('name')
+        .orderBy('isFavorited', 'desc')
+        .orderBy('name', 'asc')
         .get();
 
     userOwnedDecks.forEach(doc => {
@@ -268,7 +269,7 @@ export async function getUserDeckById(uid, deckDocID) {
         .collection(Constant.collectionName.OWNED_DECKS)
         .doc(deckDocID)
         .get();
-        
+
     if (!deckRef.exists) {
         if (Constant.DEV)
             console.log("! Deck reference does not exist");
@@ -280,6 +281,12 @@ export async function getUserDeckById(uid, deckDocID) {
     return deckModel;
 }
 
+export async function favoriteDeck(uid, deckDocID, favorited) {
+    await firebase.firestore().collection(Constant.collectionName.USERS)
+        .doc(uid).collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .update({ 'isFavorited': favorited });
+}
+
 export async function getFlashcards(uid, docId) {
     let flashcards = [];
     const snapshot = await firebase.firestore()
@@ -288,7 +295,7 @@ export async function getFlashcards(uid, docId) {
         .collection(Constant.collectionName.FLASHCARDS).get();
     snapshot.forEach(doc => {
         const f = new Flashcard(doc.data());
-        f.docId = doc.id;
+        f.set_docID(doc.id);
         flashcards.push(f);
     })
 
@@ -306,6 +313,10 @@ export async function getFlashcards(uid, docId) {
 
 // Function to allow for deletion of deck
 // TODO: write Firebase side rules to set permissions for deck deletion
-export async function deleteDeck(docID) {
-    await firebase.firestore().collection(Constant.collectionName.FLASHCARDS).doc(docID).delete();
+export async function deleteFlashcard(uid, docID, flashcardId) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
+        .delete();
 }
