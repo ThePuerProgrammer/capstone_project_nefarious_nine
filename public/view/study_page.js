@@ -25,6 +25,7 @@ export function addEventListeners() {}
 }*/
 
 
+// Only on entering study page 
 export async function study_page() {
   Elements.root.innerHTML = "";
   let html = "";
@@ -110,8 +111,7 @@ export async function study_page() {
   });
 }
 
-// TODO: event listener for smart study toggle to reload page
-
+// For each flashcard refresh
 export async function reload_study_page(deckLength, deck, flashcards) {
 
   // Check if SmartStudy is on before removing elements
@@ -138,7 +138,16 @@ export async function reload_study_page(deckLength, deck, flashcards) {
 
   if (smartStudyOn) {
     flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards)
+
+    html += `
+      <div id="smart-study-streak-text-container" class="d-flex justify-content-center streak-container">
+        <h3 class="streak">Streak: </h3><h3 id="streak-number-text" class="">0</h3>
+      </div>
+    `;
   }
+
+  console.log("received flashcard");
+  console.log(flashcard);
 
   if (Constant.DEV) {
     console.log(`Question: "${flashcard.question}"`);
@@ -164,16 +173,38 @@ export async function reload_study_page(deckLength, deck, flashcards) {
 
     if (smartStudyOn) {
       let userAnsweredCorrectly = checkAnswer(answer, flashcard);
+      let updatedFlashcardData;
       try {
-        await FirebaseController.updateFlashcardData(Auth.currentUser.uid, localStorage.getItem("deckPageDeckDocID"), flashcard.docID, userAnsweredCorrectly);
+        updatedFlashcardData = await FirebaseController.updateFlashcardData(Auth.currentUser.uid, localStorage.getItem("deckPageDeckDocID"), flashcard.docID, userAnsweredCorrectly);
       }
       catch (e) {
         if (Constant.DEV)
           console.log("Error updating data for flashcard");
       }
+
+      // get container
+      const smartStudyStreakTextContainer = document.getElementById(Constant.htmlIDs.smartStudyStreakTextContainer);
+      const streakNumberText = document.getElementById(Constant.htmlIDs.streakNumberText);
+
+      // smartStudyStreakTextContainer.addEventListener("animationend", end, () => {
+      //   console.log("Animation ended");
+      // });
+
+      console.log("User answered correctly", userAnsweredCorrectly);
       
-      // go to next flashcard
-      reload_study_page(deckLength, deck, flashcards);
+      // Streak text: appear animation & update color to reflect answer
+      streakNumberText.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect");
+      console.log(streakNumberText.innerHTML);
+      streakNumberText.innerHTML = updatedFlashcardData.streak;
+      console.log(streakNumberText.innerHTML);
+      console.log(updatedFlashcardData.streak);
+      smartStudyStreakTextContainer.style.opacity = '100';
+
+      sleep(1000).then(() => { 
+          // go to next flashcard
+          reload_study_page(deckLength, deck, flashcards);
+      });
+      
       return;
     }
     // If smart study is on, we stop here
@@ -286,4 +317,8 @@ function checkAnswer(answer, flashcard) {
     console.log("incorrect answer");
     return false;
   }
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

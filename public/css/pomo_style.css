@@ -319,3 +319,24 @@ input {
     right: 20px !important;
 }
 
+.streak-container {
+    opacity: 100%;
+    transition: opacity 0.5s;
+}
+
+.streak {
+    color: #2C1320;
+    text-shadow: -2px 2px 5px #5F4B66;
+}
+
+.streak-correct {
+    color: #68e252;
+    text-shadow: -2px 2px 5px #5F4B66;
+}
+
+.streak-incorrect {
+    color: #fa4040;
+    text-shadow: -2px 2px 5px #5F4B66;
+}
+
+

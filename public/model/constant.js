@@ -42,5 +42,7 @@ export const htmlIDs = {
     deleteFlashcardModal: 'modal-delete-a-flashcard',
     formCheckInputIsMultiple: 'form-check-input-is-multiple',
     modalCreateAccount: 'modal-create-account',
-    smartStudyCheckbox: 'smart-study-checkbox'
+    smartStudyCheckbox: 'smart-study-checkbox',
+    smartStudyStreakTextContainer: 'smart-study-streak-text-container',
+    streakNumberText: 'streak-number-text'
 }

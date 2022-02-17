@@ -94,25 +94,31 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
         streak: 0,
         lastAccessed: Date.now()
     });
-
+    console.log("flashcardDataStreak", flashcardData.streak);
+    
     // Using the flashcard data reference to check if it exists
     await flashcardDataExistsRef.get().then((doc) => {
-        if (doc.exists)
+        if (doc.exists && userAnsweredCorrectly) // only use old streak if user answered correctly
             flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
     });
-
+    console.log("flashcardDataStreak", flashcardData.streak);
+    
     if (userAnsweredCorrectly)
         flashcardData.streak++;  // Answered correctly, increment streak.
-
+    console.log("flashcardDataStreak", flashcardData.streak);
+    
     // Update flashcardData result on Firebase
-    firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .doc(uid)
-        .collection(Constant.collectionName.DECK_DATA)
-        .doc(deckDocID)
-        .collection(Constant.collectionName.FLASHCARDS_DATA)
-        .doc(flashcardDocID)
-        .set(flashcardData.serialize());
+    await firebase.firestore()
+    .collection(Constant.collectionName.USERS)
+    .doc(uid)
+    .collection(Constant.collectionName.DECK_DATA)
+    .doc(deckDocID)
+    .collection(Constant.collectionName.FLASHCARDS_DATA)
+    .doc(flashcardDocID)
+    .set(flashcardData.serialize());
+    
+    console.log("flashcardDataStreak", flashcardData.streak);
+    return flashcardData
 }
 //===========================================================================//
 
