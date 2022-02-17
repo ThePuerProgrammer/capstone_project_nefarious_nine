@@ -8,6 +8,7 @@ import * as PomoTimer from './view/pomo_timer.js'
 import * as FirebaseAuth from './controller/firebase_auth.js'
 import * as Deck from './view/deck_page.js'
 import * as Study from '../view/study_page.js'
+import * as EditFlashcard from './controller/edit_flashcard.js'
 
 window.onload = () => {
     const pathname = window.location.pathname;
@@ -32,3 +33,4 @@ PomoTimer.addEventListeners();
 FirebaseAuth.addEventListeners();
 Deck.addEventListeners();
 Study.addEventListeners();
+EditFlashcard.addEventListeners();

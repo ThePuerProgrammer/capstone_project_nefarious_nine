@@ -4,12 +4,51 @@ import * as Utilities from '../view/utilities.js'
 import * as Elements from '../view/elements.js'
 // import * as Flashcard from './/model/flashcard.js'
 
-// let imageFile2UploadAnswer;
-// let imageFile2UploadQuestion;
+ let imageFile2UploadAnswer;
+ let imageFile2UploadQuestion;
 
 let imageAnswer = Elements.formEditFlashcard.answerImageContainer;
 let imageQuestion = Elements.formEditFlashcard.questionImageContainer;
 
+export function addEventListeners(){
+    Elements.formEditFlashcard.answerImageButton.addEventListener('change', e=> {
+        imageFile2UploadAnswer = e.target.files[0];
+        if(!imageFile2UploadAnswer){
+            Elements.formEditFlashcard.answerImageTag.src=null;
+            Elements.formEditFlashcard.answerImageToggle.checked=false;
+            return;
+        }
+        Elements.formEditFlashcard.answerImageToggle.checked=true;
+        const reader = new FileReader();
+        reader.onload = () => (Elements.formEditFlashcard.answerImageTag.src= reader.result);
+        reader.readAsDataURL(imageFile2UploadAnswer);
+    });
+
+    Elements.formEditFlashcard.questionImageButton.addEventListener('change', e=> {
+        imageFile2UploadQuestion = e.target.files[0];
+        if(!imageFile2UploadQuestion){
+            Elements.formEditFlashcard.questionImageTag.src=null;
+            Elements.formEditFlashcard.questionImageToggle.checked=false;
+            return;
+        }
+        Elements.formEditFlashcard.questionImageToggle.checked=true;
+        const reader = new FileReader();
+        reader.onload = () => (Elements.formEditFlashcard.questionImageTag.src= reader.result);
+        reader.readAsDataURL(imageFile2UploadQuestion);
+    });
+
+    //Checks for the Image Question Toggle
+    Elements.formEditFlashcard.questionImageToggle.addEventListener("click", async (e) => {
+        // TOGGLE ON
+        checkImageQuestion();
+    });
+    
+    //Checks for the Image Answer Toggle
+    Elements.formEditFlashcard.answerImageToggle.addEventListener("click", async (e) => {
+        // TOGGLE IS ON
+        checkImageAnswer();
+    });
+}
 
 
 export async function edit_flashcard(uid, deckId, docID){
