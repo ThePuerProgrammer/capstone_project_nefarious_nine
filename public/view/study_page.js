@@ -144,7 +144,7 @@ export async function reload_study_page(deckLength, deck, flashcards) {
     console.log(`Question: "${flashcard.question}"`);
     console.log(`Answer: "${flashcard.answer}"`);
   }
-  s
+  
   html += buildStudyFlashcardView(flashcard);
   Elements.root.innerHTML += html;
 

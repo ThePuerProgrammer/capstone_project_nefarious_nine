@@ -97,10 +97,12 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
 
     // Using the flashcard data reference to check if it exists
     await flashcardDataExistsRef.get().then((doc) => {
-        if (doc.exists && userAnsweredCorrectly) { 
-            flashcardData.streak = doc.data().streak + 1; // Answered correctly, increment streak.
-        }
+        if (doc.exists)
+            flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
     });
+
+    if (userAnsweredCorrectly)
+        flashcardData.streak++;  // Answered correctly, increment streak.
 
     // Update flashcardData result on Firebase
     firebase.firestore()
@@ -260,21 +262,20 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
             .collection(Constant.collectionName.DECK_DATA)
             .doc(deckDocID)
             .collection(Constant.collectionName.FLASHCARDS_DATA)
-            .orderBy("lastAccessed", "desc")
+            .orderBy("lastAccessed", "asc")
             .limit(1)
             .get(); 
 
         nextFlashcard.forEach((doc) => {
-            if (streakGroupHasFlashcards)
+            if (doc.exists)
                 nextFlashcardDocID = doc.id;
         });
+        console.log("Oldest Accessed Doc ID: ", nextFlashcardDocID);
     }
 
 
     let nextFlashcardModel;
     for (let i = 0; i < flashcardsCurrentlyStudying.length; i++) {
-        console.log("fc docID", flashcardsCurrentlyStudying[i].docID);
-        console.log("target", nextFlashcardDocID);
         if (flashcardsCurrentlyStudying[i].docID == nextFlashcardDocID) {
             nextFlashcardModel = flashcardsCurrentlyStudying[i];
             break;
