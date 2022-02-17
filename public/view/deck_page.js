@@ -303,6 +303,17 @@ export async function deck_page(deckDockID) {
         buttonStudy.addEventListener('click', async e => {
             e.preventDefault();
             //const docId = e.target.deckDockID.value;
+
+            // If this is the user's first time studying the deck then we need to create
+            //  a deck data for them.
+            try {
+                await FirebaseController.createDeckDataIfNeeded(Auth.currentUser.uid, deckDocID);
+            }
+            catch (e) {
+                if (Constant.DEV)
+                    console.log("Error Creating Data Deck (User's first time studying a deck)", e);
+            }
+
             history.pushState(null, null, Routes.routePathname.STUDY + "#" + deckDockID);
             await Study.study_page();
     });
