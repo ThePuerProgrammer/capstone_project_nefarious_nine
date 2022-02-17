@@ -7,7 +7,7 @@ import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Study from './study_page.js'
 
-//Declaration of Image(Global)
+//Declaration of Image
 let imageFile2UploadQuestion;
 let imageFile2UploadAnswer;
 let deckDocID;
@@ -191,28 +191,37 @@ export function addEventListeners() {
         }
     );
 
+    //Checks for the Image Question Toggle
     Elements.formCheckInputIsImageQuestion.addEventListener("click", async (e) => {
         // TOGGLE ON
         checkImageQuestion();
     });
+    
+    //Checks for the Image Answer Toggle
     Elements.formCheckInputIsImageAnswer.addEventListener("click", async (e) => {
         // TOGGLE IS ON
         checkImageAnswer();
     });
+    
+    //Checks for Image selection of Question Image
     Elements.formAddFlashCardQuestionImageButton.addEventListener("change",  async (e) => {
         imageFile2UploadQuestion = e.target.files[0];
         if (!imageFile2UploadQuestion ){
+            //If image is deselected it is reset and given conditions to
+            //represent that in creating the flashcard.
             Elements.imageTagCreateFlashQuestion.src='';  
             Elements.formCheckInputIsImageQuestion.checked=false;          
             return;
         } 
-        //display image
+        //Image is loaded and information represents this when creating
+        //flashcard.
         Elements.formCheckInputIsImageQuestion.checked=true;
         const reader = new FileReader();
         reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
         reader.readAsDataURL(imageFile2UploadQuestion);
     });
-
+    
+    //Checks for Image selection of Answer Image
     Elements.formAddFlashCardAnswerImageButton.addEventListener("change", async (e) => {
         imageFile2UploadAnswer = e.target.files[0];
         if(!imageFile2UploadAnswer){
@@ -220,7 +229,8 @@ export function addEventListeners() {
             Elements.formCheckInputIsImageAnswer.checked=false;
             return;
         }
-        //display image
+        //Image is loaded and information represents this when creating
+        //flashcard.
         Elements.formCheckInputIsImageAnswer.checked=true;
         const reader = new FileReader();
         reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
@@ -376,7 +386,7 @@ function buildFlashcardView(flashcard) {
     return html;
   }
 
-//Function to reset all feels and toggles
+//Function to reset all feels and toggles in creation modal
 function resetFlashcard(){
     Elements.formCreateAFlashcard.reset();
     if(Elements.formCheckInputIsImageQuestion){
@@ -402,10 +412,9 @@ function shuffle(answers) {
         [answers[i], answers[j]] = [answers[j], answers[i]];
     }
 }
-
+//Method to display the container for question image.
 function checkImageQuestion(){
     if (Elements.formCheckInputIsImageQuestion.checked) {
-      //TESTING HERE
       if(imageQuestion.style.display=='none'){
         imageQuestion.style.display = 'block';
       } else{
@@ -419,10 +428,9 @@ function checkImageQuestion(){
       }
     }
 }
-
+//Method to display the container for answer image.
 function checkImageAnswer(){
     if (Elements.formCheckInputIsImageAnswer.checked) {
-      //TESTING HERE
       if(imageAnswer.style.display=='none'){
         imageAnswer.style.display = 'block';
       } else{
