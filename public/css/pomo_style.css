@@ -296,22 +296,14 @@ input {
     margin-bottom: 1em;
 }
 
-.deck-card{
-    width: 18rem;
-    display: inline-block;
-    background-color: #5F4B66;
-    margin-bottom: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
 /*============================================================================*/
 
 /* STYLE FOR STUDYING FLASHCARD */
 /*============================================================================*/
 .study-flashcard-view{
     background-color: #2C1320;
-    width: 800px;
-    height: 550px;
+    width: 700px;
+    height: 450px;
     perspective: 1000px;
     position: absolute; /* or absolute */
     top: 50%;
@@ -320,7 +312,38 @@ input {
     /* bring your own prefixes */
     transform: translate(-50%, -50%);
 }
+/*============================================================================*/
 
+/*STYLE FOR STARTER PET BUTTONS*/
+/*============================================================================*/
+/*Hides radio buttons*/
+[type=radio] { 
+    position: static;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* Image style */
+[type=radio] + img {
+    cursor: pointer;
+  }
+
+  /* Checked animation*/
+.raise:hover,
+.raise:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+  color: gray;
+}
+.resize {
+    position: relative;
+    padding: 0, 70%, 0, 70%;
+}
+/*============================================================================*/
+
+/*STYLING FOR SMART STUDY INDICATORS*/
+/*============================================================================*/
 .float-top-right {
     position: fixed !important;
     top: 70px !important;
@@ -354,4 +377,4 @@ input {
     margin-right: auto;
     width: 50%;
   }
-
+/*============================================================================*/
