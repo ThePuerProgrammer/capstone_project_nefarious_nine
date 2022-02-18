@@ -4,6 +4,10 @@
 
 import * as Elements from './elements.js'
 import { UserTimer } from '../model/user_timer.js'
+import * as FirebaseController from '../controller/firebase_controller.js'
+import * as Auth from '../controller/firebase_auth.js'
+import { User } from '../model/user.js';
+
 
 let timerStateClosed;
 let userTimer;
@@ -17,16 +21,30 @@ export function addEventListeners() {
      * arguments that can be used as custom profiles! */ 
     userTimer = new UserTimer;
 
+    // First time timer is open
+    let firstTimeOpened = true;
+
     // For toggle state checking of the timer popup
     timerStateClosed = true;
 
     // TIMER POPUP
     //------------------------------------------------------------------------//
-    Elements.pomoTimerToggleButton.addEventListener('click', () => {
+    Elements.pomoTimerToggleButton.addEventListener('click', async () => {
         if (timerStateClosed) {
 
             // raise button position 
             document.getElementById('pomo-timer-popup-div').style.height = "480px";
+
+            // set default
+            if (firstTimeOpened) {
+                firstTimeOpened = false;
+                const defaultTimerSetting = await FirebaseController.getUserTimerDefault(Auth.currentUser.uid);
+                let totalTime = defaultTimerSetting[0];
+                let studyRelaxTime = defaultTimerSetting[1];
+                Elements.totalTimeIntervalSlider.value = totalTime;
+                Elements.studyRelaxIntervalSlider.value = studyRelaxTime;
+            }
+
 
             // Initialize the thumb values and positions using absolute divs
             setThumb0ValueAndPosition();
@@ -130,6 +148,19 @@ export function addEventListeners() {
         userTimer.resetTimer();
     });
     //------------------------------------------------------------------------//
+
+    // DEFAULT BUTTON
+    //------------------------------------------------------------------------//
+    Elements.pomoTimerMakeSettingDefaultButton.addEventListener('click', async () => {
+        let total = Elements.totalTimeIntervalSlider.value;
+        let range = Elements.studyRelaxIntervalSlider.value;
+        const updateMap = {};
+        updateMap['defaultTimerSetting'] = [total, range];
+        await FirebaseController.updateUserInfo(Auth.currentUser.uid, updateMap );
+    });
+    //------------------------------------------------------------------------//
+
+
 }
 
 function setThumb0ValueAndPosition() {
@@ -262,3 +293,7 @@ function setThumb1ValueAndPosition() {
     userTimer.adjustRelaxTime(relaxTime);
     userTimer.adjustTimeInterval(Elements.totalTimeIntervalSlider.value);
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }

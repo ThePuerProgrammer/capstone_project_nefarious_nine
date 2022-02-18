@@ -1,7 +1,8 @@
 export class User{
     constructor(data){
         this.email = data.email;
-        this.decksStudying = data.decksStudying
+        this.decksStudying = data.decksStudying;
+        this.defaultTimerSetting = [30, 3];
         // TODO: SHOP STUFF
     }
 
@@ -33,7 +34,16 @@ export class User{
             return {
                 email: this.email,
                 decksStudying: this.decksStudying,
+                defaultTimerSetting: this.defaultTimerSetting,
             };
+        }
+
+       static deserialize(data) {
+           const user = new User(data);
+           user.defaultTimerSetting = data.defaultTimerSetting;
+           user.email = data.email;
+           user.decksStudying = data.decksStudying;
+           return user;
         }
 
 /***************************************************************************
