@@ -58,12 +58,12 @@ export function addEventListeners() {
             let uid;
             const email = emailAddress;
             const decksStudying = [];
-            const coins = 0;
+            const pet = '';
 
             const newUserModel = new User({
                 email,
                 decksStudying,
-                coins
+                pet,
             });
 
             // Creates user Auth Account AND adds user account to users collections
@@ -81,6 +81,7 @@ export function addEventListeners() {
             e.target.reset();
 
             Utilities.info('Account created', `You're signed in as ${emailAddress}`, Constants.htmlIDs.modalCreateAccount); //last param dismisses previous modal 
+            Elements.modalPomodoption.show();
 
         } catch (e) {
             if (Constants.DEV) console.log(e);
