@@ -227,3 +227,28 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
         .delete();
 }
+
+
+//============================================================================//
+// create default timer 
+//============================================================================//
+
+
+export async function updateUserInfo(uid, updateInfo){
+    await firebase.firestore().collection(Constant.collectionName.USERS)
+        .doc(uid).update(updateInfo);
+}
+
+export async function getUserTimerDefault(uid) {
+    var docRef = firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid);
+
+    docRef.get().then((doc) => {
+        return doc.data().defaultTimerSetting;
+
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    return null;
+}
