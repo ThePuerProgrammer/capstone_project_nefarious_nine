@@ -249,10 +249,6 @@ export async function reload_study_page(deckLength, deck, flashcards) {
 
 // view when flashcards are being shown to STUDY
 function buildStudyFlashcardView(flashcard) {
-<<<<<<< HEAD
-  // console.log(count);
-=======
->>>>>>> origin/main
   let html = `<div class="study-flashcard-view overflow-auto"><form id="${Constant.htmlIDs.formAnswerFlashcard}">
   <div class="study-flashcard-question pomo-text-color-light">`;
 
