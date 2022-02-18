@@ -248,7 +248,6 @@ export async function getUserTimerDefault(uid) {
         .then((doc) => {
             const user = User.deserialize(doc.data());
             defaultTimerSetting = user.defaultTimerSetting;
-            console.log('======================' + defaultTimerSetting);
         }).catch((error) => {
             console.log("Error getting document:", error);
         });

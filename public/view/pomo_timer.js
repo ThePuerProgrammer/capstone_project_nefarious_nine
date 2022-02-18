@@ -39,7 +39,6 @@ export function addEventListeners() {
             if (firstTimeOpened) {
                 firstTimeOpened = false;
                 const defaultTimerSetting = await FirebaseController.getUserTimerDefault(Auth.currentUser.uid);
-                console.log(defaultTimerSetting);
                 let totalTime = defaultTimerSetting[0];
                 let studyRelaxTime = defaultTimerSetting[1];
                 Elements.totalTimeIntervalSlider.value = totalTime;
