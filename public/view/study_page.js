@@ -25,6 +25,9 @@ export async function study_page() {
       Auth.currentUser.uid,
       deckDocId
     );
+    if (!deck) {
+      html += "<h5>Deck not found!</h5>";
+    }
   } catch (e) {
     console.log(e);
   }
@@ -39,12 +42,11 @@ export async function study_page() {
       Auth.currentUser.uid,
       deckDocId
     );
+    if (flashcards.length == 0) {
+      html += "<h5>No flashcards found for this deck</h5>";
+    }
   } catch (e) {
     console.log(e);
-  }
-
-  if (!flashcards) {
-    html += "<h5>No flashcards found for this deck</h5>";
   }
 
   // set deck length and build individual flashcard view
@@ -78,11 +80,11 @@ export async function study_page() {
       e.target.reset();
     } else {
       checkAnswer(answer, flashcard);
+      await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
       document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
         buildOverviewView(deck, deckLength);
     }
   });
-
 }
 
 // view when flashcards are being shown to STUDY
@@ -181,12 +183,11 @@ function buildOverviewView(deck, deckLength) {
       user_answers[index].correct = true;
       score++;
       coins += 3;
+      await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
       document.getElementById(Constant.htmlIDs.overrideFlashcardBtn).innerHTML =
         buildOverviewView(deck, deckLength);
     });
   }
-
-  // firebase UPDATE COINS here
 
 }
 
