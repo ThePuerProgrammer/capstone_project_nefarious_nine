@@ -59,11 +59,13 @@ export function addEventListeners() {
             const email = emailAddress;
             const decksStudying = [];
             const pet = '';
+            const coins = 0;
 
             const newUserModel = new User({
                 email,
                 decksStudying,
                 pet,
+                coins,
             });
 
             // Creates user Auth Account AND adds user account to users collections
