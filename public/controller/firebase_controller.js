@@ -2,7 +2,7 @@ import * as Constant from '../model/constant.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
-
+import { User } from '../model/user.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -240,15 +240,19 @@ export async function updateUserInfo(uid, updateInfo){
 }
 
 export async function getUserTimerDefault(uid) {
-    var docRef = firebase.firestore()
+    const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
-        .doc(uid);
-
-    docRef.get().then((doc) => {
-        return doc.data().defaultTimerSetting;
-
-    }).catch((error) => {
-        console.log("Error getting document:", error);
-    });
-    return null;
+        .doc(uid); 
+    let defaultTimerSetting;
+    await ref.get()
+        .then((doc) => {
+            const user = User.deserialize(doc.data());
+            defaultTimerSetting = user.defaultTimerSetting;
+            console.log('======================' + defaultTimerSetting);
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+    return defaultTimerSetting;
+    
 }
+
