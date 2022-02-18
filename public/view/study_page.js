@@ -8,21 +8,30 @@ import * as Auth from "../controller/firebase_auth.js";
 let smartStudyOn = false; // To keep track of Smart Study Toggle
 let count = 0; // rudimentary way to cycle trough flashcards in deck
 let score = 0; // rudimentary way to keep track of user score
-//let user_answer = []; //deck to store user answers
+let coins = 0 // keep track of coins earned 
+let user_answers = []; //array of user_history
 
-export function addEventListeners() {}
+export function addEventListeners() {
 
-//REDUNDANT
-// event listener for when STUDY button is pressed on /deck_page
-/*export function studyFormSubmitEvent(form) {
+    /*form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const docId = e.target.docId.value;
+      history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
+      localStorage.setItem("deckPageDeckDocID", docId);
+      await study_page();
+    });*/
+  
+  //REDUNDANT
+  // event listener for when STUDY button is pressed on /deck_page
+  /*export function studyFormSubmitEvent(form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const docId = e.target.docId.value;
     history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
     localStorage.setItem("deckPageDeckDocID", docId);
     await study_page();
-  });
-}*/
+  });*/
+}
 
 
 // Only on entering study page 
@@ -129,9 +138,6 @@ export async function reload_study_page(deckLength, deck, flashcards) {
       <label class="form-check-label" for="smart-study-checkbox">Smart Study</label>
     </div>
   `;
-
-  // set deck length and build individual flashcard view
-  //let deckLength = flashcards.length;
 
   // This flashcard will be used if we are in Normal Study
   let flashcard = flashcards[count];
@@ -240,7 +246,6 @@ function buildStudyFlashcardView(flashcard) {
     <h1>${flashcard.question}</h1>
   </div>`;
 
-
   // add flashcard.answer to flashcard.incorrectAnswers[i]
 
   // IF MULTIPLE CHOICE
@@ -270,29 +275,13 @@ function buildStudyFlashcardView(flashcard) {
 }
 
 // once entire deck has been studied, show the score view
-/*function buildScoreView(deck, deckLength) {
-  count = 0; // reset count 
+export async function buildScoreView(deck, deckLength) {
+  user_answers = []; // reset stored user answers
+  count = 0; // reset count
   Elements.root.innerHTML = "";
   let html = "";
-  html += `<div class="study-flashcard-view pomo-text-color-light">
+  html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light">
     <h1 style="align: center">Your score on: ${deck.name}</h1>
-    <br>
-    <br>
-    <h4>Total ${score} / ${deckLength} </4></div>`;
-
-  //console.log(score);
-
-  Elements.root.innerHTML += html;
-} */
-
-// Post-study OVERVIEW view
-function buildOverviewView(deck, deckLength) {
-  count = 0; // reset flashcard index count 
-  //user_answers = []; // reset stored user answers
-  Elements.root.innerHTML = "";
-  let html = "";
-  html += `<div class="study-flashcard-view pomo-text-color-light">
-    <h1 style="align: center">${deck.name} Study Overview</h1>
     <br>
     <br>
     <h4>Total ${score} / ${deckLength} </4></div>`;
@@ -302,24 +291,63 @@ function buildOverviewView(deck, deckLength) {
   Elements.root.innerHTML += html;
 }
 
+// Post-study OVERVIEW view
+function buildOverviewView(deck, deckLength) {
+  Elements.root.innerHTML = "";
+  let html = "";
+  html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light">
+    <h1 style="align: center">${deck.name} Study Overview</h1>
+    <br>
+    <ul class="list-group list-group-flush list-group-numbered">`;
+
+  // loop through each user answer
+  for (let i = 0; i < user_answers.length; i++) {
+    html += `<li class="list-group-item pomo-text-color-light pomo-bg-color-dark "> ${user_answers[i].answer}`;
+    // If user answer is CORRECT show answer with checkmark
+    if (user_answers[i].correct) {
+      html += `<span> <img src="./assets/images/check_green_24dp.svg" alt="Correct" width="24"
+      height="24"></span></li>`;
+    }
+    // If user answer is INCORRECT show answer entered, ex, and correct answer
+    else {
+      html += `<span class = "correct-answer pomo-text-color-md"> <img src="./assets/images/close_red_24dp.svg" alt="Incorrect" width="24"
+      height="24"> ${user_answers[i].flashcard}</span></li>`;
+    }
+  }
+
+  html += `
+  </ul>
+  <br>
+  <h4>Score: ${score} / ${deckLength} Coins Earned: ${coins} </h4>
+  </div>
+  </div>`;
+
+  Elements.root.innerHTML += html;
+  user_answers = []; // reset stored user answers
+  count = 0; // reset count
+}
+
 // checks whether answer entered by user matches correct answer
 function checkAnswer(answer, flashcard) {
+  let user_history = {}; // object to store user_answer, bool correct
   let user_answer = answer.toLowerCase();
   let flashcard_answer = flashcard.answer.toLowerCase();
-  //user_answers
-
-  let coins = 0;
+  user_history.answer = user_answer;
 
   // increment player score if answer is correct
   if (user_answer == flashcard_answer) {
     score++;
     coins += 3
-    console.log("correct answer");
+    user_history.correct = true;
     return true;
-  } else {
-    console.log("incorrect answer");
+  } 
+  else {
+    user_history.correct = false;
+    user_history.flashcard = flashcard_answer;
     return false;
   }
+
+  user_answers.push(user_history);
 }
 
 function sleep(ms) {

@@ -63,41 +63,91 @@ export async function study_decks_page() {
     html += `
         <button type="button" class="btn btn-secondary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
             Create New Deck
-        </button><br><br>
+        </button>
     `;
+
+    html += `
+    <div style="float:right">
+    <label for="sort-decks">Order by:</label>
+    <select name="sort-decks" id="sort-decks" style="width: 200px">
+        <option selected>Sort decks by...</option>
+        <option value="name">Name</option>
+        <option value="subject">Subject</option>
+        <option value="date">Date</option>
+    </select>
+    </div>
+    <br><br>
+    `
 
     let deckList;
     try {
-        // this is pretty temporary since we're just pulling all decks to test
-        // in the future, we can set up our getDecks function to filter by criteria
-        // also TODO: add a dropdown menu to sort decks by different filters - Cody
         deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
     } catch (e) {
-        // TODO: we can display a popup if there was an error getting the decklists
-        // I'm not doing this now because I don't want to - Cody
         console.log(e);
     }
 
-    for (let i = 0; i < deckList.length; ++i) {
+    html += `<div id="deck-container">`
+    for (let i = 0; i < deckList.length; i++) {
         let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
         html += buildDeckView(deckList[i], flashcards);
     }
+    html += `</div>`
 
-    // it might be better to add this when we actually pull the decks from Firebase
-    // but I'm leaving it here for now - Cody
     if (deckList.length == 0) {
         html += '<h2> No decks found! Go create some and get to studying!</h2>'
     }
 
+
     Elements.root.innerHTML += html;
     DeckPage.addViewButtonListener();
+
+    const sortDeckSelect = document.getElementById("sort-decks");
+    sortDeckSelect.addEventListener('change', async e => {
+        e.preventDefault();
+        var opt = e.target.options[e.target.selectedIndex].value;
+        var deckContainer = document.getElementById('deck-container');
+        var decks = deckContainer.getElementsByClassName('card');
+        var list = [];
+        for(let i = 0; i < decks.length; ++i){
+            list.push(decks.item(i));
+        }
+        if(opt == "name"){
+            list.sort(function(a, b){
+                var aId = a.getAttribute('id');
+                var bId = b.getAttribute('id');
+                var first = deckList.find(deck => deck.docId == aId);
+                var second = deckList.find(deck => deck.docId == bId);
+                return (first.name < second.name) ? -1 : (first.name > second.name) ? 1 : 0;
+            });
+        }else if(opt == "subject"){
+            list.sort(function(a, b){
+                var aId = a.getAttribute('id');
+                var bId = b.getAttribute('id');
+                var first = deckList.find(deck => deck.docId == aId);
+                var second = deckList.find(deck => deck.docId == bId);
+                return (first.subject < second.subject) ? -1 : (first.subject > second.subject) ? 1 : 0;
+            });
+        }else if(opt == "date"){
+            list.sort(function(a, b){
+                var aId = a.getAttribute('id');
+                var bId = b.getAttribute('id');
+                var first = deckList.find(deck => deck.docId == aId);
+                var second = deckList.find(deck => deck.docId == bId);
+                return (first.dateCreated < second.dateCreated) ? -1 : (first.dateCreated > second.dateCreated) ? 1 : 0;
+            });
+        }
+        for(let i = 0; i < list.length; ++i){
+            deckContainer.appendChild(list[i]);
+        }
+    })
 
     const favoritedCheckboxes = document.getElementsByClassName("form-check-input");
     for (let i = 0; i < favoritedCheckboxes.length; ++i) {
         favoritedCheckboxes[i].addEventListener('change', async e => {
             const docId = e.target.value;
-            const favorited = document.getElementById('favorited').checked;
+            const favorited = deckList.find(deck => docId == deck.docId).isFavorited ? false : true;
             await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
+            await study_decks_page();
         });
     }
 
@@ -106,11 +156,11 @@ export async function study_decks_page() {
 
 function buildDeckView(deck, flashcards) {
     let html = `
-    <div id="card-${deck.docId}" class="card" style="width: 18rem; display: inline-block; background-color: #5F4B66; padding: 5px; margin-bottom: 5px">
+    <div id="${deck.docId}" class="card" style="width: 18rem; display: inline-block; background-color: #5F4B66; padding: 5px; margin-bottom: 5px">
         <div class="card-body">
             <h5 class="card-text">${deck.name}</h5>
-            <p class="card-text" >Subject: ${deck.subject}</p>
-            <p class="card-text"># of flashcards: ${flashcards.length}</p>
+            <h6 class="card-text" >Subject: ${deck.subject}</h6>
+            <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
             <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
         </div>
         <form class="form-view-deck" method="post">
