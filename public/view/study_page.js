@@ -105,7 +105,7 @@ export async function study_page() {
     smartStudyPopupTextContainer.innerHTML = `
       <div class="row">
         <div class="col-10">
-            <h3 class="streak">Smart Study Mode: </h3>
+            <h3 class="streak">Regular Study: </h3>
         </div>
         <div class="col-2">
             <h3 id="smart-study-indicator" class=""></h3>
@@ -121,17 +121,17 @@ export async function study_page() {
 
     smartStudyOn = smartStudyCheckbox.checked;
     if (smartStudyOn) {
-      smartStudyIndicator.classList.remove("streak-incorrect"); 
-      smartStudyIndicator.classList.add("streak-correct");
-      smartStudyIndicator.innerHTML = "On";
+      smartStudyIndicator.classList.add("streak-incorrect"); 
+      smartStudyIndicator.classList.remove("streak-correct");
+      smartStudyIndicator.innerHTML = "Paused";
       flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards);
       formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
       smartStudyPopupTextContainer.style.opacity = '100';
     }
     else { // Smart Study Off
-      smartStudyIndicator.classList.remove("streak-correct");
-      smartStudyIndicator.classList.add("streak-incorrect"); 
-      smartStudyIndicator.innerHTML = "Off";
+      smartStudyIndicator.classList.add("streak-correct");
+      smartStudyIndicator.classList.remove("streak-incorrect"); 
+      smartStudyIndicator.innerHTML = "Resumed";
       flashcard = flashcards[count]; // Go back to Normal Study
       formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
       smartStudyPopupTextContainer.style.opacity = '100';
@@ -359,7 +359,8 @@ function checkAnswer(answer, flashcard) {
     user_history.flashcard = flashcard_answer;
   }
 
-  user_answers.push(user_history);
+  if (!smartStudyOn)
+    user_answers.push(user_history);
 
   return user_answer == flashcard_answer;
 }
