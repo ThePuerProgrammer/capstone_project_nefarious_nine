@@ -296,14 +296,22 @@ input {
     margin-bottom: 1em;
 }
 
+.deck-card{
+    width: 18rem;
+    display: inline-block;
+    background-color: #5F4B66;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
 /*============================================================================*/
 
 /* STYLE FOR STUDYING FLASHCARD */
 /*============================================================================*/
 .study-flashcard-view{
     background-color: #2C1320;
-    width: 700px;
-    height: 450px;
+    width: 800px;
+    height: 550px;
     perspective: 1000px;
     position: absolute; /* or absolute */
     top: 50%;
@@ -313,3 +321,9 @@ input {
     transform: translate(-50%, -50%);
 }
 
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }

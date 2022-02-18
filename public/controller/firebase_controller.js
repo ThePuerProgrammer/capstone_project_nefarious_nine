@@ -202,7 +202,7 @@ export async function getFlashcards(uid, docId) {
         .collection(Constant.collectionName.FLASHCARDS).get();
     snapshot.forEach(doc => {
         const f = new Flashcard(doc.data());
-        f.docId = doc.id;
+        f.set_docID(doc.id);
         flashcards.push(f);
     })
 
