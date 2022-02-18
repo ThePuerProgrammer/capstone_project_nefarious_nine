@@ -17,6 +17,8 @@ export function addEventListeners() {}
 
 // Only on entering study page 
 export async function study_page() {
+  reset(); // start by resetting globals
+
   Elements.root.innerHTML = "";
   let html = "";
   
@@ -28,6 +30,9 @@ export async function study_page() {
       Auth.currentUser.uid,
       deckDocId
     );
+    if (!deck) {
+      html += "<h5>Deck not found!</h5>";
+    }
   } catch (e) {
     console.log(e);
   }
@@ -63,7 +68,7 @@ export async function study_page() {
       Auth.currentUser.uid,
       deckDocId
     );
-    if (!flashcards) {
+    if (flashcards.length == 0) {
       html += "<h5>No flashcards found for this deck</h5>";
     }
   } 
@@ -150,7 +155,7 @@ export async function study_page() {
 
 
   // event listener for when ANSWER button is pushed on flashcard
-  formAnswerFlashcard.addEventListener('submit', async (e) => {
+  formAnswerFlashcard.addEventListener("submit", async (e) => {
     e.preventDefault();
     const answer = e.target.answer.value;
 
@@ -208,7 +213,7 @@ export async function study_page() {
     // incremement count everytime ANSWER button is pushed
     count++;
 
-    // while there's more flashcards in the deck, reload page to update flashcard view
+    // while there's more flashcards in the deck, update flashcard view
     if (count < deckLength) {
       checkAnswer(answer, flashcard);
       flashcard = flashcards[count];
@@ -218,10 +223,15 @@ export async function study_page() {
       e.target.reset();
     } else {
       checkAnswer(answer, flashcard);
-
       document.getElementById(Constant.htmlIDs.smartStudyCheckbox).disabled = true;
-      document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
-        buildOverviewView(deck, deckLength);
+      try {
+        await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
+      }
+      catch (e) {
+        if (Constant.DEV)
+          console.log("Error updating user's coins", e);
+      }
+      document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML = buildOverviewView(deck, deckLength);
     }
   });
 }
@@ -263,7 +273,8 @@ function buildStudyFlashcardView(flashcard) {
 
   html += `<button type="submit" class="btn btn-secondary pomo-bg-color-dark" style="float:right">Answer</button>
   </div>
-  </form></div>`;
+  </form>
+  </div>`;
 
   console.log(flashcard.question);
   return html;
@@ -272,7 +283,7 @@ function buildStudyFlashcardView(flashcard) {
 // Post-study OVERVIEW view
 function buildOverviewView(deck, deckLength) {
   let html = "";
-  html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light">
+  html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light" id="${Constant.htmlIDs.overrideFlashcardBtn}">
     <h1 style="align: center">${deck.name} Study Overview</h1>
     <br>
     <ul class="list-group list-group-flush list-group-numbered" role="group">`;
@@ -280,17 +291,24 @@ function buildOverviewView(deck, deckLength) {
   // loop through each user answer
   for (let i = 0; i < user_answers.length; i++) {
     html += `
-    <li class="list-group-item pomo-text-color-light pomo-bg-color-dark "> ${user_answers[i].answer}`;
+    <li class="list-group-item pomo-text-color-light pomo-bg-color-dark"> ${user_answers[i].answer}`;
     // If user answer is CORRECT show answer with checkmark
     if (user_answers[i].correct) {
       html += `<span> <img src="./assets/images/check_green_24dp.svg" alt="Correct" width="24"
       height="24"></span>
       </li>`;
     }
-    // If user answer is INCORRECT show answer entered, ex, and correct answer
+    // If user answer is INCORRECT show answer entered, ex, correct answer, and override button
     else {
-      html += `<span class = "correct-answer pomo-text-color-md"> <img src="./assets/images/close_red_24dp.svg" alt="Incorrect" width="28"
-      height="28"> ${user_answers[i].flashcard} <button type="button" class="btn btn-link">Override: I was correct</button></span></li>`;
+      html += `<span class = "correct-answer pomo-text-color-md"> 
+      <img src="./assets/images/close_red_24dp.svg" alt="Incorrect" width="28"
+      height="28"> ${user_answers[i].flashcard} 
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="${i}" id="override">
+        <label class="form-check-label" for="override">Override: I was correct</label>
+        </div>
+      </span>
+      </li>`;
     }
   }
 
@@ -301,31 +319,24 @@ function buildOverviewView(deck, deckLength) {
   </div>
   </div>`;
 
-  // create const
-  const overrideFlashcardBtn = document.getElementById(
-    Constant.htmlIDs.overrideFlashcardBtn
-  );
+  Elements.root.innerHTML += html;
 
-  /*overrideFlashcardBtn.addEventListener('click', async () => {
-   // e.preventDefault();
-    console.log("override button pressed");
-    //e.preventDefault();
-   // const answer = e.target.override.value;
+  const overrideCheckboxes =
+    document.getElementsByClassName("form-check-input");
 
-    //console.log(answer);
-
-    //user_answers.where(user_answers.flashcard == answer)
-    // for that one, set .correct = true;
-    //user_answers.filter(x => x == answer)
-
-    //score++;
-    //coins += 3;
-    //document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
-    //buildOverviewView(deck, deckLength);
-  });*/
-
-  //Elements.root.innerHTML += html;
-  return html;
+  // Add event listener for OVERRIDE button on each incorrect answer
+  for (let i = 0; i < overrideCheckboxes.length; ++i) {
+    overrideCheckboxes[i].addEventListener("change", async (e) => {
+      const index = e.target.value;
+      console.log(index);
+      user_answers[index].correct = true;
+      score++;
+      coins += 3;
+      await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
+      document.getElementById(Constant.htmlIDs.overrideFlashcardBtn).innerHTML =
+        buildOverviewView(deck, deckLength);
+    });
+  }
 
 }
 
@@ -356,4 +367,6 @@ function checkAnswer(answer, flashcard) {
 function reset() {
   user_answers = []; // reset stored user answers
   count = 0; // reset count
+  score = 0;
+  coins = 0;
 }
