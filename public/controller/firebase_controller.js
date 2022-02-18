@@ -239,3 +239,17 @@ export async function updateUserInfo(uid, updateInfo){
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).update(updateInfo);
 }
+
+export async function getUserTimerDefault(uid) {
+    const snapshot = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .get();
+
+    let defaultTimerSetting;
+    snapshot.forEach(doc => {
+        defaultTimerSetting = doc.defaultTimerSetting;
+    });
+    
+    return defaultTimerSetting;
+}
