@@ -298,12 +298,24 @@ export async function deck_page(deckDockID) {
         e.preventDefault();
 
         // Opens the Modal
-        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');});
+        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
+    });
 
         // Adds event listener for STUDY button
         buttonStudy.addEventListener('click', async e => {
             e.preventDefault();
             //const docId = e.target.deckDockID.value;
+
+            // If this is the user's first time studying the deck then we need to create
+            //  a deck data for them.
+            try {
+                await FirebaseController.createDeckDataIfNeeded(Auth.currentUser.uid, deckDocID);
+            }
+            catch (e) {
+                if (Constant.DEV)
+                    console.log("Error Creating Data Deck (User's first time studying a deck)", e);
+            }
+
             history.pushState(null, null, Routes.routePathname.STUDY + "#" + deckDockID);
             localStorage.setItem("deckPageDeckDocID", deckDockID);
             await Study.study_page();

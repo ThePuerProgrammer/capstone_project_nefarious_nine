@@ -4,19 +4,24 @@ import * as FirebaseController from "../controller/firebase_controller.js";
 import * as Constant from "../model/constant.js";
 import * as Auth from "../controller/firebase_auth.js";
 
+
+let smartStudyOn = false; // To keep track of Smart Study Toggle
 let count = 0; // rudimentary way to cycle trough flashcards in deck
 let score = 0; // rudimentary way to keep track of user score
 let coins = 0; // keep track of coins earned
 let user_answers = []; //array of user_history
+let skipFlashcardRefresh = false;
 
 export function addEventListeners() {}
 
+
+// Only on entering study page 
 export async function study_page() {
   reset(); // start by resetting globals
 
   Elements.root.innerHTML = "";
   let html = "";
-
+  
   // get DECK info from firebase
   let deckDocId = localStorage.getItem("deckPageDeckDocID");
   let deck;
@@ -34,9 +39,30 @@ export async function study_page() {
 
   html += `<h1 style="align: center">${deck.name}</h1>`;
   html += `<h4 style="align: center">${deck.subject}</h4>`;
-
-  // get FLASHCARDS info from firebase
+  html += `
+    <div class="form-check form-switch float-top-right">
+      <input class="form-check-input" type="checkbox" role="switch"
+      id="smart-study-checkbox">
+      <label class="form-check-label" for="smart-study-checkbox">Smart Study</label>
+    </div>
+  `;
+  html += `
+    <div id="smart-study-popup-text-container" class="d-flex justify-content-center streak-container">
+      <div class="row">
+          <div class="col-8">
+              <h3 class="streak">Streak: </h3>
+          </div>
+          <div class="col-4">
+              <h3 id="streak-number-text" class="">0</h3>
+          </div>
+      </div>
+    </div>
+  `;
+      
+  let flashcard;
+  let deckLength = 0;
   let flashcards;
+  // get FLASHCARDS info from firebase
   try {
     flashcards = await FirebaseController.getFlashcards(
       Auth.currentUser.uid,
@@ -45,27 +71,144 @@ export async function study_page() {
     if (flashcards.length == 0) {
       html += "<h5>No flashcards found for this deck</h5>";
     }
-  } catch (e) {
+  } 
+  catch (e) {
     console.log(e);
   }
 
   // set deck length and build individual flashcard view
-  let deckLength = flashcards.length;
-  let flashcard = flashcards[count];
-  html += buildStudyFlashcardView(flashcard);
+  deckLength = flashcards.length;
+  flashcard = flashcards[count];
 
+  if (smartStudyOn) {
+    flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards)
+  }
+
+  html += buildStudyFlashcardView(flashcard);
   Elements.root.innerHTML += html;
 
   // create const for submit on ANSWER button
   const formAnswerFlashcard = document.getElementById(
     Constant.htmlIDs.formAnswerFlashcard
   );
+  const smartStudyCheckbox = document.getElementById(
+    Constant.htmlIDs.smartStudyCheckbox
+  );
+  const smartStudyPopupTextContainer = document.getElementById(
+    Constant.htmlIDs.smartStudyPopupTextContainer
+  );
+  const studyFlashcardAnswer = document.getElementById(
+    Constant.htmlIDs.studyFlashcardAnswer
+  );
+
+  smartStudyCheckbox.addEventListener('change', async (e) => {
+    smartStudyPopupTextContainer.innerHTML = `
+      <div class="row">
+        <div class="col-10">
+            <h3 class="streak">Regular Study: </h3>
+        </div>
+        <div class="col-2">
+            <h3 id="smart-study-indicator" class=""></h3>
+        </div>
+      </div>
+    `;
+
+    const smartStudyIndicator = document.getElementById(
+      Constant.htmlIDs.smartStudyIndicator
+    );
+
+    skipFlashcardRefresh = true;
+
+    smartStudyOn = smartStudyCheckbox.checked;
+    if (smartStudyOn) {
+      smartStudyIndicator.classList.add("streak-incorrect"); 
+      smartStudyIndicator.classList.remove("streak-correct");
+      smartStudyIndicator.innerHTML = "Paused";
+      flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards);
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      smartStudyPopupTextContainer.style.opacity = '100';
+    }
+    else { // Smart Study Off
+      smartStudyIndicator.classList.add("streak-correct");
+      smartStudyIndicator.classList.remove("streak-incorrect"); 
+      smartStudyIndicator.innerHTML = "Resumed";
+      flashcard = flashcards[count]; // Go back to Normal Study
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      smartStudyPopupTextContainer.style.opacity = '100';
+    }
+  });
+
+  smartStudyPopupTextContainer.addEventListener('transitionend', (e) => {
+      if (smartStudyPopupTextContainer.style.opacity == '0') {
+        if (skipFlashcardRefresh) {
+          skipFlashcardRefresh = false;
+          return;
+        }
+
+        formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+        studyFlashcardAnswer.value = "";
+      }
+      else {
+        smartStudyPopupTextContainer.style.opacity = '0';
+      }
+  });
+
 
   // event listener for when ANSWER button is pushed on flashcard
   formAnswerFlashcard.addEventListener("submit", async (e) => {
     e.preventDefault();
     const answer = e.target.answer.value;
-    console.log(answer);
+
+    // === SMART STUDY ===
+    if (smartStudyOn) {
+      let userAnsweredCorrectly = checkAnswer(answer, flashcard);
+      let updatedFlashcardData;
+      try {
+          updatedFlashcardData = await FirebaseController.updateFlashcardData(Auth.currentUser.uid, localStorage.getItem("deckPageDeckDocID"), flashcard.docID, userAnsweredCorrectly);
+      }
+      catch (e) {
+      if (Constant.DEV)
+          console.log("Error updating data for flashcard");
+      }
+
+      
+      // updating popup contents to have streak notifcation
+      smartStudyPopupTextContainer.innerHTML = `
+        <div class="row">
+            <div class="col-8">
+                <h3 class="streak">Streak: </h3>
+            </div>
+            <div class="col-4">
+                <h3 id="smart-study-indicator" class="">0</h3>
+            </div>
+        </div>
+      `;
+  
+      // Get needed elements for displaying Streak
+      const smartStudyIndicator = document.getElementById(Constant.htmlIDs.smartStudyIndicator);
+      
+      // Update
+      smartStudyIndicator.classList.remove(userAnsweredCorrectly ? "streak-incorrect" : "streak-correct"); // remove old score styling
+      smartStudyIndicator.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect"); // add new score styling
+      smartStudyIndicator.innerHTML = updatedFlashcardData.streak;
+
+      // Update next flashcard
+      try {
+        flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards)
+      }
+      catch (e) {
+        if (Constant.DEV)
+          console.log("Error getting next smart study flashcard");
+      }
+
+      // When transition ends, we set opacity to 0. When "set to 0" 
+      //    transition ends, we load the next card.
+      //    Setting opacity to 100 leads to an event listener 'transitionend' that loads the next card
+      smartStudyPopupTextContainer.style.opacity = '100'; // Streak text appear transition      
+      return;
+    }
+
+    // === NORMAL STUDY ===
 
     // incremement count everytime ANSWER button is pushed
     count++;
@@ -80,9 +223,15 @@ export async function study_page() {
       e.target.reset();
     } else {
       checkAnswer(answer, flashcard);
-      await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
-      document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
-        buildOverviewView(deck, deckLength);
+      document.getElementById(Constant.htmlIDs.smartStudyCheckbox).disabled = true;
+      try {
+        await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
+      }
+      catch (e) {
+        if (Constant.DEV)
+          console.log("Error updating user's coins", e);
+      }
+      document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML = buildOverviewView(deck, deckLength);
     }
   });
 }
@@ -119,7 +268,7 @@ function buildStudyFlashcardView(flashcard) {
 
   html += `<div class="study-flashcard-answer pomo-text-color-light">
     <label class="form-label">Answer</label>
-    <input type="answer" name="answer" class="form-control" required minlength="1" id="flashcard-answer">
+    <input type="answer" name="answer" class="form-control" required minlength="1" id="study-flashcard-answer" autofocus>
     <br>`;
 
   html += `<button type="submit" class="btn btn-secondary pomo-bg-color-dark" style="float:right">Answer</button>
@@ -198,17 +347,22 @@ function checkAnswer(answer, flashcard) {
   let flashcard_answer = flashcard.answer.toLowerCase();
   user_history.answer = user_answer;
 
+
   // increment player score if answer is correct
   if (user_answer == flashcard_answer) {
     score++;
-    coins += 3;
+    coins += 3
     user_history.correct = true;
-  } else {
+  } 
+  else {
     user_history.correct = false;
     user_history.flashcard = flashcard_answer;
   }
 
-  user_answers.push(user_history);
+  if (!smartStudyOn)
+    user_answers.push(user_history);
+
+  return user_answer == flashcard_answer;
 }
 
 function reset() {
