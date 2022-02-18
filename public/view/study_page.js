@@ -159,11 +159,11 @@ function buildOverviewView(deck, deckLength) {
   </div>`;
 
   // create const
-  const overrideFlashcardBtn = document.getElementById(
+  const formAnswerFlashcard = document.getElementById(
     Constant.htmlIDs.formAnswerFlashcard
   );
 
-  overrideFlashcardBtn.addEventListener("click", async () => {
+  formAnswerFlashcard.addEventListener("click", async () => {
     //e.preventDefault();
     console.log("override button pressed");
 
@@ -175,10 +175,11 @@ function buildOverviewView(deck, deckLength) {
     // for that one, set .correct = true;
     //user_answers.filter(x => x == answer)
 
-    //score++;
-    //coins += 3;
-    //document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
-    //buildOverviewView(deck, deckLength);
+    user_answers[0].correct = true;
+    score++;
+    coins += 3;
+    document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
+    buildOverviewView(deck, deckLength);
   });
 
   //Elements.root.innerHTML += html;
