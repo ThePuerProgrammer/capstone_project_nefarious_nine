@@ -94,18 +94,15 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
         streak: 0,
         lastAccessed: Date.now()
     });
-    console.log("flashcardDataStreak", flashcardData.streak);
     
     // Using the flashcard data reference to check if it exists
     await flashcardDataExistsRef.get().then((doc) => {
         if (doc.exists && userAnsweredCorrectly) // only use old streak if user answered correctly
             flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
     });
-    console.log("flashcardDataStreak", flashcardData.streak);
     
     if (userAnsweredCorrectly)
         flashcardData.streak++;  // Answered correctly, increment streak.
-    console.log("flashcardDataStreak", flashcardData.streak);
     
     // Update flashcardData result on Firebase
     await firebase.firestore()
@@ -186,17 +183,16 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
     let targetedStreakGroup = 0;
     let randomNumber = Math.random();
     
-    console.log(randomNumber);
+    // console.log("Random Number Chosen: ", randomNumber);
     
     if (randomNumber >= 0.46875) { // Streak 0 OR New Card
         randomNumber = Math.random();       
 
         if (randomNumber >= 0.75) { // New card Odds
-            console.log("Getting new card...");
+            // Getting new card...
             let newFlashcard = await getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentlyStudying);
 
             if (newFlashcard == null) { 
-                console.log("No new flashcards. Switching to Streak 0 category");
                 targetedStreakGroup = 0; // There are no new flashcards, so default to showing streak 0
             }
             else {
@@ -220,8 +216,6 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
         targetedStreakGroup = 4
     }
 
-    console.log("Streak Group Chosen: ", targetedStreakGroup);
-
     let streakGroupHasFlashcards = true;
     // Grabs oldest interacted with flashcard from the targeted streak group
     let nextFlashcardDocID;
@@ -232,7 +226,7 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
         .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS_DATA)
         .where("streak", "==", targetedStreakGroup)
-        .orderBy("lastAccessed", "desc")
+        .orderBy("lastAccessed", "asc")
         .limit(1)
         .get();
 
@@ -251,18 +245,16 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
 
     // Since it is possible for user to have no cards in a streak group, take precautions to 
     //  always get a flashcard
-    if (!streakGroupHasFlashcards) {
-        console.log("Streak group contained no flashcard data");
+    if (!streakGroupHasFlashcards) { // if streak group contained no flashcard data
+
 
         // First, try and get new flashcard
-        console.log("Getting new card...");
         let newFlashcard = await getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentlyStudying);
 
         if (newFlashcard != null) { // newFlashcard == null means there are no new flashcards
             return newFlashcard; // Returning the new flashcard
         }
 
-        console.log("No new flashcards exists. Pulling the oldest flashcard data from all Streak Categories");
         // No new flashcards exists. Pulling the oldest lastAccessed flashcard from all Streak Categories
         nextFlashcard = await firebase.firestore()
             .collection(Constant.collectionName.USERS)
@@ -278,7 +270,6 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
             if (doc.exists)
                 nextFlashcardDocID = doc.id;
         });
-        console.log("Oldest Accessed Doc ID: ", nextFlashcardDocID);
     }
 
 

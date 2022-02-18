@@ -159,9 +159,6 @@ export async function reload_study_page(deckLength, deck, flashcards) {
     `;
   }
 
-  console.log("received flashcard");
-  console.log(flashcard);
-
   if (Constant.DEV) {
     console.log(`Question: "${flashcard.question}"`);
     console.log(`Answer: "${flashcard.answer}"`);
@@ -198,18 +195,16 @@ export async function reload_study_page(deckLength, deck, flashcards) {
       // Get needed elements for displaying Streak
       const smartStudyStreakTextContainer = document.getElementById(Constant.htmlIDs.smartStudyStreakTextContainer);
       const streakNumberText = document.getElementById(Constant.htmlIDs.streakNumberText);
-
-      console.log("User answered correctly", userAnsweredCorrectly);
       
       // Streak text: appear animation & update color to reflect answer
       streakNumberText.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect");
-      console.log(streakNumberText.innerHTML);
       streakNumberText.innerHTML = updatedFlashcardData.streak;
-      console.log(streakNumberText.innerHTML);
-      console.log(updatedFlashcardData.streak);
+
+      // Streak text: disappear animation
       smartStudyStreakTextContainer.style.opacity = '100';
 
-      sleep(700).then(() => { // sketchy but needed b/c reloading page for next flashcard. Allows user to see the streak for a moment going to next card
+      // Allows user to see the streak for a moment going to next card
+      sleep(700).then(() => { // sketchy but needed b/c reloading page for next flashcard.
           // go to next flashcard
           reload_study_page(deckLength, deck, flashcards);
       });
