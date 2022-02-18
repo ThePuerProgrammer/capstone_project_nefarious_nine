@@ -106,7 +106,7 @@ export async function study_decks_page() {
         e.preventDefault();
         var opt = e.target.options[e.target.selectedIndex].value;
         var deckContainer = document.getElementById('deck-container');
-        var decks = deckContainer.getElementsByClassName('card');
+        var decks = deckContainer.getElementsByClassName('deck-card');
         var list = [];
         for(let i = 0; i < decks.length; ++i){
             list.push(decks.item(i));
@@ -156,7 +156,7 @@ export async function study_decks_page() {
 
 function buildDeckView(deck, flashcards) {
     let html = `
-    <div id="${deck.docId}" class="card" style="width: 18rem; display: inline-block; background-color: #5F4B66; padding: 5px; margin-bottom: 5px">
+    <div id="${deck.docId}" class="deck-card">
         <div class="card-body">
             <h5 class="card-text">${deck.name}</h5>
             <h6 class="card-text" >Subject: ${deck.subject}</h6>
