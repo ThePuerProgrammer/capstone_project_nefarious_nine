@@ -10,6 +10,7 @@ let count = 0; // rudimentary way to cycle trough flashcards in deck
 let score = 0; // rudimentary way to keep track of user score
 let coins = 0; // keep track of coins earned
 let user_answers = []; //array of user_history
+let skipFlashcardRefresh = false;
 
 export function addEventListeners() {}
 
@@ -41,7 +42,7 @@ export async function study_page() {
     </div>
   `;
   html += `
-    <div id="smart-study-streak-text-container" class="d-flex justify-content-center streak-container">
+    <div id="smart-study-popup-text-container" class="d-flex justify-content-center streak-container">
       <div class="row">
           <div class="col-8">
               <h3 class="streak">Streak: </h3>
@@ -88,31 +89,63 @@ export async function study_page() {
   const smartStudyCheckbox = document.getElementById(
     Constant.htmlIDs.smartStudyCheckbox
   );
-  const smartStudyStreakTextContainer = document.getElementById(
-    Constant.htmlIDs.smartStudyStreakTextContainer
+  const smartStudyPopupTextContainer = document.getElementById(
+    Constant.htmlIDs.smartStudyPopupTextContainer
   );
   const studyFlashcardAnswer = document.getElementById(
     Constant.htmlIDs.studyFlashcardAnswer
   );
 
   smartStudyCheckbox.addEventListener('change', async (e) => {
-    console.log("Smart Study Clicked");
+    smartStudyPopupTextContainer.innerHTML = `
+      <div class="row">
+        <div class="col-10">
+            <h3 class="streak">Smart Study Mode: </h3>
+        </div>
+        <div class="col-2">
+            <h3 id="smart-study-indicator" class=""></h3>
+        </div>
+      </div>
+    `;
+
+    const smartStudyIndicator = document.getElementById(
+      Constant.htmlIDs.smartStudyIndicator
+    );
+
+    skipFlashcardRefresh = true;
+
     smartStudyOn = smartStudyCheckbox.checked;
-    if (smartStudyCheckbox) {
-      console.log("Changing flashcard");
+    if (smartStudyOn) {
+      smartStudyIndicator.classList.remove("streak-incorrect"); 
+      smartStudyIndicator.classList.add("streak-correct");
+      smartStudyIndicator.innerHTML = "On";
+      flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards);
       formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
-      studyFlashcardAnswer.value = "";
+      smartStudyPopupTextContainer.style.opacity = '100';
+    }
+    else { // Smart Study Off
+      smartStudyIndicator.classList.remove("streak-correct");
+      smartStudyIndicator.classList.add("streak-incorrect"); 
+      smartStudyIndicator.innerHTML = "Off";
+      flashcard = flashcards[count]; // Go back to Normal Study
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      smartStudyPopupTextContainer.style.opacity = '100';
     }
   });
 
-  smartStudyStreakTextContainer.addEventListener('transitionend', (e) => {
-    if (smartStudyStreakTextContainer.style.opacity == '0') {
-      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
-      studyFlashcardAnswer.value = "";
-    }
-    else {
-      smartStudyStreakTextContainer.style.opacity = '0';
-    }
+  smartStudyPopupTextContainer.addEventListener('transitionend', (e) => {
+      if (smartStudyPopupTextContainer.style.opacity == '0') {
+        if (skipFlashcardRefresh) {
+          skipFlashcardRefresh = false;
+          return;
+        }
+
+        formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+        studyFlashcardAnswer.value = "";
+      }
+      else {
+        smartStudyPopupTextContainer.style.opacity = '0';
+      }
   });
 
 
@@ -132,14 +165,27 @@ export async function study_page() {
       if (Constant.DEV)
           console.log("Error updating data for flashcard");
       }
+
+      
+      // updating popup contents to have streak notifcation
+      smartStudyPopupTextContainer.innerHTML = `
+        <div class="row">
+            <div class="col-8">
+                <h3 class="streak">Streak: </h3>
+            </div>
+            <div class="col-4">
+                <h3 id="smart-study-indicator" class="">0</h3>
+            </div>
+        </div>
+      `;
   
       // Get needed elements for displaying Streak
-      const streakNumberText = document.getElementById(Constant.htmlIDs.streakNumberText);
+      const smartStudyIndicator = document.getElementById(Constant.htmlIDs.smartStudyIndicator);
       
       // Update
-      streakNumberText.classList.remove(userAnsweredCorrectly ? "streak-incorrect" : "streak-correct"); // remove old score styling
-      streakNumberText.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect"); // add new score styling
-      streakNumberText.innerHTML = updatedFlashcardData.streak;
+      smartStudyIndicator.classList.remove(userAnsweredCorrectly ? "streak-incorrect" : "streak-correct"); // remove old score styling
+      smartStudyIndicator.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect"); // add new score styling
+      smartStudyIndicator.innerHTML = updatedFlashcardData.streak;
 
       // Update next flashcard
       try {
@@ -153,7 +199,7 @@ export async function study_page() {
       // When transition ends, we set opacity to 0. When "set to 0" 
       //    transition ends, we load the next card.
       //    Setting opacity to 100 leads to an event listener 'transitionend' that loads the next card
-      smartStudyStreakTextContainer.style.opacity = '100'; // Streak text appear transition      
+      smartStudyPopupTextContainer.style.opacity = '100'; // Streak text appear transition      
       return;
     }
 
@@ -172,6 +218,8 @@ export async function study_page() {
       e.target.reset();
     } else {
       checkAnswer(answer, flashcard);
+
+      document.getElementById(Constant.htmlIDs.smartStudyCheckbox).disabled = true;
       document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
         buildOverviewView(deck, deckLength);
     }
