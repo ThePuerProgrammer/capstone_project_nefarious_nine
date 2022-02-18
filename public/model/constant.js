@@ -45,5 +45,6 @@ export const htmlIDs = {
     modalCreateAccount: 'modal-create-account',
     smartStudyCheckbox: 'smart-study-checkbox',
     smartStudyStreakTextContainer: 'smart-study-streak-text-container',
-    streakNumberText: 'streak-number-text'
+    streakNumberText: 'streak-number-text',
+    studyFlashcardAnswer: 'study-flashcard-answer',
 }

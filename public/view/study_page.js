@@ -85,17 +85,34 @@ export async function study_page() {
   const formAnswerFlashcard = document.getElementById(
     Constant.htmlIDs.formAnswerFlashcard
   );
-  // For evenT listener further down!
   const smartStudyCheckbox = document.getElementById(
     Constant.htmlIDs.smartStudyCheckbox
   );
   const smartStudyStreakTextContainer = document.getElementById(
     Constant.htmlIDs.smartStudyStreakTextContainer
   );
+  const studyFlashcardAnswer = document.getElementById(
+    Constant.htmlIDs.studyFlashcardAnswer
+  );
 
-        
+  smartStudyCheckbox.addEventListener('change', async (e) => {
+    console.log("Smart Study Clicked");
+    smartStudyOn = smartStudyCheckbox.checked;
+    if (smartStudyCheckbox) {
+      console.log("Changing flashcard");
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      studyFlashcardAnswer.value = "";
+    }
+  });
+
   smartStudyStreakTextContainer.addEventListener('transitionend', (e) => {
-    console.log("animation appeared");
+    if (smartStudyStreakTextContainer.style.opacity == '0') {
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      studyFlashcardAnswer.value = "";
+    }
+    else {
+      smartStudyStreakTextContainer.style.opacity = '0';
+    }
   });
 
 
@@ -104,7 +121,7 @@ export async function study_page() {
     e.preventDefault();
     const answer = e.target.answer.value;
 
-      // SMART STUDY
+    // === SMART STUDY ===
     if (smartStudyOn) {
       let userAnsweredCorrectly = checkAnswer(answer, flashcard);
       let updatedFlashcardData;
@@ -119,23 +136,28 @@ export async function study_page() {
       // Get needed elements for displaying Streak
       const streakNumberText = document.getElementById(Constant.htmlIDs.streakNumberText);
       
-      // Streak text: appear animation & update color to reflect answer
-      streakNumberText.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect");
+      // Update
+      streakNumberText.classList.remove(userAnsweredCorrectly ? "streak-incorrect" : "streak-correct"); // remove old score styling
+      streakNumberText.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect"); // add new score styling
       streakNumberText.innerHTML = updatedFlashcardData.streak;
-  
-      // Streak text: disappear animation
-      smartStudyStreakTextContainer.style.opacity = '100';
 
-      // // Allows user to see the streak for a moment going to next card
-      // sleep(700).then(() => { // sketchy but needed b/c reloading page for next flashcard.
-      //     // go to next flashcard
-      //     reload_study_page(deckLength, deck, flashcards);
-      // });
-      
+      // Update next flashcard
+      try {
+        flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards)
+      }
+      catch (e) {
+        if (Constant.DEV)
+          console.log("Error getting next smart study flashcard");
+      }
+
+      // When transition ends, we set opacity to 0. When "set to 0" 
+      //    transition ends, we load the next card.
+      //    Setting opacity to 100 leads to an event listener 'transitionend' that loads the next card
+      smartStudyStreakTextContainer.style.opacity = '100'; // Streak text appear transition      
       return;
     }
 
-    // NORMAL STUDY
+    // === NORMAL STUDY ===
 
     // incremement count everytime ANSWER button is pushed
     count++;
@@ -154,134 +176,7 @@ export async function study_page() {
         buildOverviewView(deck, deckLength);
     }
   });
-
-  smartStudyCheckbox.addEventListener('change', async (e) => {
-      smartStudyOn = smartStudyCheckbox.checked
-  });
-
-  // reset()
 }
-// <<<<<<< HEAD
-  
-//   smartStudyCheckbox.addEventListener('change', async (e) => {
-//     reload_study_page(deckLength, deck, flashcards);
-//   });
-// }
-
-// // For each flashcard refresh
-// export async function reload_study_page(deckLength, deck, flashcards) {
-
-//   // Check if SmartStudy is on before removing elements
-//   smartStudyOn = document.getElementById(Constant.htmlIDs.smartStudyCheckbox).checked;
-
-//   Elements.root.innerHTML = "";
-//   let html = "";
-
-//   html += `<h1 style="align: center">${deck.name}</h1>`;
-//   html += `<h4 style="align: center">${deck.subject}</h4>`;
-//   html += `
-//     <div class="form-check form-switch float-top-right">
-//       <input class="form-check-input" type="checkbox" role="switch"
-//       id="smart-study-checkbox" ${smartStudyOn ? "checked" : "" }>
-//       <label class="form-check-label" for="smart-study-checkbox">Smart Study</label>
-//     </div>
-//   `;
-
-//   // This flashcard will be used if we are in Normal Study
-//   let flashcard = flashcards[count];
-
-//   if (smartStudyOn) {
-//     flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards)
-
-//     html += `
-//       <div id="smart-study-streak-text-container" class="d-flex justify-content-center streak-container">
-//         <div class="row">
-//             <div class="col-8">
-//                 <h3 class="streak">Streak: </h3>
-//             </div>
-//             <div class="col-4">
-//                 <h3 id="streak-number-text" class="">0</h3>
-//             </div>
-//         </div>
-//       </div>
-//     `;
-//   }
-
-//   if (Constant.DEV) {
-//     console.log(`Question: "${flashcard.question}"`);
-//     console.log(`Answer: "${flashcard.answer}"`);
-//   }
-  
-//   html += buildStudyFlashcardView(flashcard);
-//   Elements.root.innerHTML += html;
-
-//   // create const for submit on ANSWER button
-//   const formAnswerFlashcard_reload = document.getElementById(
-//     Constant.htmlIDs.formAnswerFlashcard
-//   );
-//   // For evenT listener further down!
-//   const smartStudyCheckbox_reload = document.getElementById(
-//     Constant.htmlIDs.smartStudyCheckbox
-//   );
-
-//   // event listener for when ANSWER button is pushed on flashcard
-//   formAnswerFlashcard_reload.addEventListener("submit", async (e) => {
-//     e.preventDefault();
-//     const answer = e.target.answer.value;
-
-//     if (smartStudyOn) {
-//       let userAnsweredCorrectly = checkAnswer(answer, flashcard);
-//       let updatedFlashcardData;
-//       try {
-//         updatedFlashcardData = await FirebaseController.updateFlashcardData(Auth.currentUser.uid, localStorage.getItem("deckPageDeckDocID"), flashcard.docID, userAnsweredCorrectly);
-//       }
-//       catch (e) {
-//         if (Constant.DEV)
-//           console.log("Error updating data for flashcard");
-//       }
-
-//       // Get needed elements for displaying Streak
-//       const smartStudyStreakTextContainer = document.getElementById(Constant.htmlIDs.smartStudyStreakTextContainer);
-//       const streakNumberText = document.getElementById(Constant.htmlIDs.streakNumberText);
-      
-//       // Streak text: appear animation & update color to reflect answer
-//       streakNumberText.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect");
-//       streakNumberText.innerHTML = updatedFlashcardData.streak;
-
-//       // Streak text: disappear animation
-//       smartStudyStreakTextContainer.style.opacity = '100';
-
-//       // Allows user to see the streak for a moment going to next card
-//       sleep(700).then(() => { // sketchy but needed b/c reloading page for next flashcard.
-//           // go to next flashcard
-//           reload_study_page(deckLength, deck, flashcards);
-//       });
-      
-//       return;
-//     }
-//     // If smart study is on, we stop here
-
-//     // incremement count everytime ANSWER button is pushed
-//     count++;
-
-//     // while there's more flashcards in the deck, reload page to update flashcard view
-//     if (count < deckLength) {
-//       reload_study_page(deckLength, deck, flashcards);
-//       checkAnswer(answer, flashcard);
-//       buildStudyFlashcardView(flashcard);
-//     } 
-//     else {
-//       checkAnswer(answer, flashcard);
-//       buildOverviewView(deck, deckLength);
-//     }
-//   });
-
-//   smartStudyCheckbox_reload.addEventListener('change', async (e) => {
-//     reload_study_page(deckLength, deck, flashcards);
-//   });
-// =======
-
-// >>>>>>> piperbacker/study_deck
 
 // view when flashcards are being shown to STUDY
 function buildStudyFlashcardView(flashcard) {
@@ -315,7 +210,7 @@ function buildStudyFlashcardView(flashcard) {
 
   html += `<div class="study-flashcard-answer pomo-text-color-light">
     <label class="form-label">Answer</label>
-    <input type="answer" name="answer" class="form-control" required minlength="1" id="flashcard-answer">
+    <input type="answer" name="answer" class="form-control" required minlength="1" id="study-flashcard-answer" autofocus>
     <br>`;
 
   html += `<button type="submit" class="btn btn-secondary pomo-bg-color-dark" style="float:right">Answer</button>
@@ -393,25 +288,21 @@ function checkAnswer(answer, flashcard) {
   let flashcard_answer = flashcard.answer.toLowerCase();
   user_history.answer = user_answer;
 
+
   // increment player score if answer is correct
   if (user_answer == flashcard_answer) {
     score++;
     coins += 3
     user_history.correct = true;
-    return true;
   } 
   else {
     user_history.correct = false;
     user_history.flashcard = flashcard_answer;
-    return false;
   }
 
   user_answers.push(user_history);
-}
 
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return user_answer == flashcard_answer;
 }
 
 function reset() {

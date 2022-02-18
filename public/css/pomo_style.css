@@ -321,7 +321,8 @@ input {
 
 .streak-container {
     opacity: 0%;
-    transition: opacity 0.25s;
+    transition: opacity 0.5s;
+    transition-timing-function: cubic-bezier(0, .55, .4, .97);
 }
 
 .streak {
