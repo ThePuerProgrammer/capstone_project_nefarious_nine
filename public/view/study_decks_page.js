@@ -141,10 +141,11 @@ export async function study_decks_page() {
         }
     })
 
-    const favoritedCheckboxes = document.getElementsByClassName("form-check-input");
+    const favoritedCheckboxes = document.getElementsByClassName("favorite-checkbox");
     for (let i = 0; i < favoritedCheckboxes.length; ++i) {
         favoritedCheckboxes[i].addEventListener('change', async e => {
             const docId = e.target.value;
+            console.log(docId);
             const favorited = deckList.find(deck => docId == deck.docId).isFavorited ? false : true;
             await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
             await study_decks_page();
@@ -169,12 +170,12 @@ function buildDeckView(deck, flashcards) {
         </form>`;
 
     html += deck.isFavorited ? `<div class="form-check">
-            <input class="form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
+            <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
             <label class="form-check-label" for="favorited">Favorite deck</label>
         </div>
     </div>
     ` : `<div class="form-check">
-    <input class="form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
+    <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
     <label class="form-check-label" for="favorited">Favorite deck</label>
 </div>
 </div>`;
