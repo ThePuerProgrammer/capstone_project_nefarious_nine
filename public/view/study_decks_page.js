@@ -115,17 +115,17 @@ export async function study_decks_page() {
             list.sort(function(a, b){
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
-                var first = deckList.find(deck => deck.docId == aId);
-                var second = deckList.find(deck => deck.docId == bId);
-                return (first.name < second.name) ? -1 : (first.name > second.name) ? 1 : 0;
+                var firstName = deckList.find(deck => deck.docId == aId).name.toLowerCase();
+                var secondName = deckList.find(deck => deck.docId == bId).name.toLowerCase();
+                return (firstName < secondName) ? -1 : (firstName > secondName) ? 1 : 0;
             });
         }else if(opt == "subject"){
             list.sort(function(a, b){
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
-                var first = deckList.find(deck => deck.docId == aId);
-                var second = deckList.find(deck => deck.docId == bId);
-                return (first.subject < second.subject) ? -1 : (first.subject > second.subject) ? 1 : 0;
+                var firstSubject = deckList.find(deck => deck.docId == aId).subject.toLowerCase();
+                var secondSubject = deckList.find(deck => deck.docId == bId).subject.toLowerCase();
+                return (firstSubject < secondSubject) ? -1 : (firstSubject > secondSubject) ? 1 : 0;
             });
         }else if(opt == "date"){
             list.sort(function(a, b){
