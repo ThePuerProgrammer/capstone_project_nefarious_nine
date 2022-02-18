@@ -57,7 +57,7 @@ export async function study_page() {
   );
 
   // event listener for when ANSWER button is pushed on flashcard
-  formAnswerFlashcard.addEventListener('submit', async (e) => {
+  formAnswerFlashcard.addEventListener("submit", async (e) => {
     e.preventDefault();
     const answer = e.target.answer.value;
     console.log(answer);
@@ -160,14 +160,14 @@ function buildOverviewView(deck, deckLength) {
 
   // create const
   const overrideFlashcardBtn = document.getElementById(
-    Constant.htmlIDs.overrideFlashcardBtn
+    Constant.htmlIDs.formAnswerFlashcard
   );
 
-  /*overrideFlashcardBtn.addEventListener('click', async () => {
-   // e.preventDefault();
-    console.log("override button pressed");
+  overrideFlashcardBtn.addEventListener("click", async () => {
     //e.preventDefault();
-   // const answer = e.target.override.value;
+    console.log("override button pressed");
+
+    // const answer = e.target.override.value;
 
     //console.log(answer);
 
@@ -179,11 +179,10 @@ function buildOverviewView(deck, deckLength) {
     //coins += 3;
     //document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
     //buildOverviewView(deck, deckLength);
-  });*/
+  });
 
   //Elements.root.innerHTML += html;
   return html;
-
 }
 
 // checks whether answer entered by user matches correct answer
