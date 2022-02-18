@@ -302,8 +302,8 @@ input {
 /*============================================================================*/
 .study-flashcard-view{
     background-color: #2C1320;
-    width: 700px;
-    height: 450px;
+    width: 800px;
+    height: 550px;
     perspective: 1000px;
     position: absolute; /* or absolute */
     top: 50%;
@@ -312,3 +312,10 @@ input {
     /* bring your own prefixes */
     transform: translate(-50%, -50%);
 }
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
