@@ -255,3 +255,13 @@ export async function getUserTimerDefault(uid) {
     
 }
 
+
+//============================================================================//
+// update user coins
+//============================================================================//
+
+export async function updateCoins(uid, coins) {
+    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
+    .update({ 'coins': coins });
+}
+

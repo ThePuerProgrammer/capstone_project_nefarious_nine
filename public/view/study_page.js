@@ -9,28 +9,25 @@ let score = 0; // rudimentary way to keep track of user score
 let coins = 0; // keep track of coins earned
 let user_answers = []; //array of user_history
 
-export function addEventListeners() {
-  /*form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const docId = e.target.docId.value;
-      history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
-      localStorage.setItem("deckPageDeckDocID", docId);
-      await study_page();
-    });*/
-}
+export function addEventListeners() {}
 
 export async function study_page() {
+  reset(); // start by resetting globals
+
   Elements.root.innerHTML = "";
   let html = "";
 
   // get DECK info from firebase
-  let docId = localStorage.getItem("deckPageDeckDocID");
+  let deckDocId = localStorage.getItem("deckPageDeckDocID");
   let deck;
   try {
     deck = await FirebaseController.getUserDeckById(
       Auth.currentUser.uid,
-      docId
+      deckDocId
     );
+    if (!deck) {
+      html += "<h5>Deck not found!</h5>";
+    }
   } catch (e) {
     console.log(e);
   }
@@ -43,9 +40,9 @@ export async function study_page() {
   try {
     flashcards = await FirebaseController.getFlashcards(
       Auth.currentUser.uid,
-      docId
+      deckDocId
     );
-    if (!flashcards) {
+    if (flashcards.length == 0) {
       html += "<h5>No flashcards found for this deck</h5>";
     }
   } catch (e) {
@@ -73,80 +70,19 @@ export async function study_page() {
     // incremement count everytime ANSWER button is pushed
     count++;
 
-    const cardTag = document.getElementById(
-      Constant.htmlIDs.formAnswerFlashcard
-    );
-
-    // while there's more flashcards in the deck, reload page to update flashcard view
+    // while there's more flashcards in the deck, update flashcard view
     if (count < deckLength) {
       checkAnswer(answer, flashcard);
       flashcard = flashcards[count];
 
-      /* if (flashcard.questionImageURL != "N/A") {
-        cardTag.getElementsByTagName("img")[0].src = flashcard.questionImageURL;
-      }
-      cardTag.getElementsByClassName('flashcard-question')[0].innerHTML =
-        flashcard.question;
-      if (flashcard.answerImageURL != "N/A") {
-        cardTag.getElementsByTagName("img")[1].src = flashcard.answerImageURL;
-      }
-      if (flashcard.isMultipleChoice) {
-        for (let i = 0; i < flashcard.incorrectAnswers.length; ++i) {
-          //console.log(i);
-          cardTag.getElementsByClassName('flashcard-multiple')[i].innerHTML =
-            flashcard.incorrectAnswers[i];
-        }
-        cardTag.getElementsByClassName('flashcard-answer')[i+1].innerHTML = flashcard.answer;
-      }
-
-      e.target.reset(); */
-
-      //Elements.formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
-      reload_study_page(deckLength, deck, flashcards);
-      html += buildStudyFlashcardView(flashcard);
+      document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
+        buildStudyFlashcardView(flashcard);
+      e.target.reset();
     } else {
       checkAnswer(answer, flashcard);
-      buildOverviewView(deck, deckLength);
-    }
-  });
-}
-
-// Added a reload func to avoid querying firebase everytime a new flashcard is displayed
-export function reload_study_page(deckLength, deck, flashcards) {
-  Elements.root.innerHTML = "";
-  let html = "";
-
-  html += `<h1 style="align: center">${deck.name}</h1>`;
-  html += `<h4 style="align: center">${deck.subject}</h4>`;
-
-  // build individual flashcard view
-  let flashcard = flashcards[count];
-  html += buildStudyFlashcardView(flashcard);
-
-  Elements.root.innerHTML += html;
-
-  // create const for submit on ANSWER button
-  const formAnswerFlashcard = document.getElementById(
-    Constant.htmlIDs.formAnswerFlashcard
-  );
-
-  // event listener for when ANSWER button is pushed on flashcard
-  formAnswerFlashcard.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const answer = e.target.answer.value;
-    console.log(answer);
-
-    // incremement count everytime ANSWER button is pushed
-    count++;
-
-    // while there's more flashcards in the deck, reload page to update flashcard view
-    if (count < deckLength) {
-      reload_study_page(deckLength, deck, flashcards);
-      checkAnswer(answer, flashcard);
-      buildStudyFlashcardView(flashcard);
-    } else {
-      checkAnswer(answer, flashcard);
-      buildOverviewView(deck, deckLength);
+      await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
+      document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
+        buildOverviewView(deck, deckLength);
     }
   });
 }
@@ -188,33 +124,17 @@ function buildStudyFlashcardView(flashcard) {
 
   html += `<button type="submit" class="btn btn-secondary pomo-bg-color-dark" style="float:right">Answer</button>
   </div>
-  </form></div>`;
+  </form>
+  </div>`;
 
+  console.log(flashcard.question);
   return html;
 }
 
-// once entire deck has been studied, show the score view
-/*export async function buildScoreView(deck, deckLength) {
-  user_answers = []; // reset stored user answers
-  count = 0; // reset count
-  Elements.root.innerHTML = "";
-  let html = "";
-  html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light">
-    <h1 style="align: center">Your score on: ${deck.name}</h1>
-    <br>
-    <br>
-    <h4>Total ${score} / ${deckLength} </4></div>`;
-
-  //console.log(score);
-
-  Elements.root.innerHTML += html;
-}*/
-
 // Post-study OVERVIEW view
 function buildOverviewView(deck, deckLength) {
-  Elements.root.innerHTML = "";
   let html = "";
-  html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light">
+  html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light" id="${Constant.htmlIDs.overrideFlashcardBtn}">
     <h1 style="align: center">${deck.name} Study Overview</h1>
     <br>
     <ul class="list-group list-group-flush list-group-numbered" role="group">`;
@@ -222,17 +142,24 @@ function buildOverviewView(deck, deckLength) {
   // loop through each user answer
   for (let i = 0; i < user_answers.length; i++) {
     html += `
-    <li class="list-group-item pomo-text-color-light pomo-bg-color-dark "> ${user_answers[i].answer}`;
+    <li class="list-group-item pomo-text-color-light pomo-bg-color-dark"> ${user_answers[i].answer}`;
     // If user answer is CORRECT show answer with checkmark
     if (user_answers[i].correct) {
       html += `<span> <img src="./assets/images/check_green_24dp.svg" alt="Correct" width="24"
       height="24"></span>
       </li>`;
     }
-    // If user answer is INCORRECT show answer entered, ex, and correct answer
+    // If user answer is INCORRECT show answer entered, ex, correct answer, and override button
     else {
-      html += `<span class = "correct-answer pomo-text-color-md"> <img src="./assets/images/close_red_24dp.svg" alt="Incorrect" width="28"
-      height="28"> ${user_answers[i].flashcard} <button type="button" class="btn btn-link">Override: I was correct</button></span></li>`;
+      html += `<span class = "correct-answer pomo-text-color-md"> 
+      <img src="./assets/images/close_red_24dp.svg" alt="Incorrect" width="28"
+      height="28"> ${user_answers[i].flashcard} 
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="${i}" id="override">
+        <label class="form-check-label" for="override">Override: I was correct</label>
+        </div>
+      </span>
+      </li>`;
     }
   }
 
@@ -245,8 +172,23 @@ function buildOverviewView(deck, deckLength) {
 
   Elements.root.innerHTML += html;
 
-  user_answers = []; // reset stored user answers
-  count = 0; // reset count
+  const overrideCheckboxes =
+    document.getElementsByClassName("form-check-input");
+
+  // Add event listener for OVERRIDE button on each incorrect answer
+  for (let i = 0; i < overrideCheckboxes.length; ++i) {
+    overrideCheckboxes[i].addEventListener("change", async (e) => {
+      const index = e.target.value;
+      console.log(index);
+      user_answers[index].correct = true;
+      score++;
+      coins += 3;
+      await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
+      document.getElementById(Constant.htmlIDs.overrideFlashcardBtn).innerHTML =
+        buildOverviewView(deck, deckLength);
+    });
+  }
+
 }
 
 // checks whether answer entered by user matches correct answer
@@ -267,4 +209,11 @@ function checkAnswer(answer, flashcard) {
   }
 
   user_answers.push(user_history);
+}
+
+function reset() {
+  user_answers = []; // reset stored user answers
+  count = 0; // reset count
+  score = 0;
+  coins = 0;
 }
