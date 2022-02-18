@@ -141,7 +141,14 @@ export async function reload_study_page(deckLength, deck, flashcards) {
 
     html += `
       <div id="smart-study-streak-text-container" class="d-flex justify-content-center streak-container">
-        <h3 class="streak">Streak: </h3><h3 id="streak-number-text" class="">0</h3>
+        <div class="row">
+            <div class="col-8">
+                <h3 class="streak">Streak: </h3>
+            </div>
+            <div class="col-4">
+                <h3 id="streak-number-text" class="">0</h3>
+            </div>
+        </div>
       </div>
     `;
   }
@@ -182,13 +189,9 @@ export async function reload_study_page(deckLength, deck, flashcards) {
           console.log("Error updating data for flashcard");
       }
 
-      // get container
+      // Get needed elements for displaying Streak
       const smartStudyStreakTextContainer = document.getElementById(Constant.htmlIDs.smartStudyStreakTextContainer);
       const streakNumberText = document.getElementById(Constant.htmlIDs.streakNumberText);
-
-      // smartStudyStreakTextContainer.addEventListener("animationend", end, () => {
-      //   console.log("Animation ended");
-      // });
 
       console.log("User answered correctly", userAnsweredCorrectly);
       
@@ -200,7 +203,7 @@ export async function reload_study_page(deckLength, deck, flashcards) {
       console.log(updatedFlashcardData.streak);
       smartStudyStreakTextContainer.style.opacity = '100';
 
-      sleep(1000).then(() => { 
+      sleep(700).then(() => { // sketchy but needed b/c reloading page for next flashcard. Allows user to see the streak for a moment going to next card
           // go to next flashcard
           reload_study_page(deckLength, deck, flashcards);
       });

@@ -195,15 +195,17 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
             console.log("Getting new card...");
             let newFlashcard = await getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentlyStudying);
 
-            if (newFlashcard == null) {
+            if (newFlashcard == null) { 
                 console.log("No new flashcards. Switching to Streak 0 category");
                 targetedStreakGroup = 0; // There are no new flashcards, so default to showing streak 0
             }
-
-            return newFlashcard;
+            else {
+                return newFlashcard; // There was a new flashcard!
+            }
         }
-        else // Streak 0 Odds 
+        else { // Streak 0 Odds 
             targetedStreakGroup = 0
+        }
     }
     else if (randomNumber >= 0.21875) { // Streak 1 Odds
         targetedStreakGroup = 1
