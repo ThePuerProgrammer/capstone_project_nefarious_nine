@@ -6,29 +6,17 @@ import * as Auth from "../controller/firebase_auth.js";
 
 let count = 0; // rudimentary way to cycle trough flashcards in deck
 let score = 0; // rudimentary way to keep track of user score
-let coins = 0 // keep track of coins earned 
+let coins = 0; // keep track of coins earned
 let user_answers = []; //array of user_history
 
 export function addEventListeners() {
-
-    /*form.addEventListener("submit", async (e) => {
+  /*form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const docId = e.target.docId.value;
       history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
       localStorage.setItem("deckPageDeckDocID", docId);
       await study_page();
     });*/
-  
-  //REDUNDANT
-  // event listener for when STUDY button is pressed on /deck_page
-  /*export function studyFormSubmitEvent(form) {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const docId = e.target.docId.value;
-    history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
-    localStorage.setItem("deckPageDeckDocID", docId);
-    await study_page();
-  });*/
 }
 
 export async function study_page() {
@@ -85,11 +73,37 @@ export async function study_page() {
     // incremement count everytime ANSWER button is pushed
     count++;
 
+    const cardTag = document.getElementById(
+      Constant.htmlIDs.formAnswerFlashcard
+    );
+
     // while there's more flashcards in the deck, reload page to update flashcard view
     if (count < deckLength) {
-      reload_study_page(deckLength, deck, flashcards);
       checkAnswer(answer, flashcard);
-      buildStudyFlashcardView(flashcard);
+      flashcard = flashcards[count];
+
+      /* if (flashcard.questionImageURL != "N/A") {
+        cardTag.getElementsByTagName("img")[0].src = flashcard.questionImageURL;
+      }
+      cardTag.getElementsByClassName('flashcard-question')[0].innerHTML =
+        flashcard.question;
+      if (flashcard.answerImageURL != "N/A") {
+        cardTag.getElementsByTagName("img")[1].src = flashcard.answerImageURL;
+      }
+      if (flashcard.isMultipleChoice) {
+        for (let i = 0; i < flashcard.incorrectAnswers.length; ++i) {
+          //console.log(i);
+          cardTag.getElementsByClassName('flashcard-multiple')[i].innerHTML =
+            flashcard.incorrectAnswers[i];
+        }
+        cardTag.getElementsByClassName('flashcard-answer')[i+1].innerHTML = flashcard.answer;
+      }
+
+      e.target.reset(); */
+
+      //Elements.formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      reload_study_page(deckLength, deck, flashcards);
+      html += buildStudyFlashcardView(flashcard);
     } else {
       checkAnswer(answer, flashcard);
       buildOverviewView(deck, deckLength);
@@ -137,27 +151,33 @@ export function reload_study_page(deckLength, deck, flashcards) {
   });
 }
 
-// view when flashcards are being shown to study
+// view when flashcards are being shown to STUDY
 function buildStudyFlashcardView(flashcard) {
-  console.log(count);
   let html = `<div class="study-flashcard-view overflow-auto"><form id="${Constant.htmlIDs.formAnswerFlashcard}">
-  <div class="study-flashcard-question pomo-text-color-light">
-    <h1>${flashcard.question}</h1>
+  <div class="study-flashcard-question pomo-text-color-light">`;
+
+  if (flashcard.questionImageURL != "N/A") {
+    html += `<img src="${flashcard.questionImageURL}" style="width: 200px; height: 200px" class="center">`;
+  }
+
+  html += `<h1 class="flashcard-question">${flashcard.question}</h1>
   </div>`;
 
-  // add flashcard.answer to flashcard.incorrectAnswers[i]
+  if (flashcard.answerImageURL != "N/A") {
+    html += `<img src="${flashcard.answerImageURL}" style="width: 200px; height: 200px" class="center">`;
+  }
 
   // IF MULTIPLE CHOICE
   if (flashcard.isMultipleChoice) {
     for (let i = 0; i < flashcard.incorrectAnswers.length; ++i) {
       html += `
-      <div class="study-flashcard-question pomo-text-color-light">
-      <h4>• ${flashcard.incorrectAnswers[i]}</h4>
+      <div class="study-flashcard-multiple pomo-text-color-light">
+      <h4 class="flashcard-multiple">${flashcard.incorrectAnswers[i]}</h4>
       </div>`;
     }
     html += `
-    <div class="study-flashcard-question pomo-text-color-light">
-    <h4>• ${flashcard.answer}</h4>
+    <div class="study-flashcard-answer pomo-text-color-light">
+    <h4 class="flashcard-answer">${flashcard.answer}</h4>
     </div>`;
   }
 
@@ -174,7 +194,7 @@ function buildStudyFlashcardView(flashcard) {
 }
 
 // once entire deck has been studied, show the score view
-export async function buildScoreView(deck, deckLength) {
+/*export async function buildScoreView(deck, deckLength) {
   user_answers = []; // reset stored user answers
   count = 0; // reset count
   Elements.root.innerHTML = "";
@@ -188,7 +208,7 @@ export async function buildScoreView(deck, deckLength) {
   //console.log(score);
 
   Elements.root.innerHTML += html;
-}
+}*/
 
 // Post-study OVERVIEW view
 function buildOverviewView(deck, deckLength) {
@@ -197,20 +217,22 @@ function buildOverviewView(deck, deckLength) {
   html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light">
     <h1 style="align: center">${deck.name} Study Overview</h1>
     <br>
-    <ul class="list-group list-group-flush list-group-numbered">`;
+    <ul class="list-group list-group-flush list-group-numbered" role="group">`;
 
   // loop through each user answer
   for (let i = 0; i < user_answers.length; i++) {
-    html += `<li class="list-group-item pomo-text-color-light pomo-bg-color-dark "> ${user_answers[i].answer}`;
+    html += `
+    <li class="list-group-item pomo-text-color-light pomo-bg-color-dark "> ${user_answers[i].answer}`;
     // If user answer is CORRECT show answer with checkmark
     if (user_answers[i].correct) {
       html += `<span> <img src="./assets/images/check_green_24dp.svg" alt="Correct" width="24"
-      height="24"></span></li>`;
+      height="24"></span>
+      </li>`;
     }
     // If user answer is INCORRECT show answer entered, ex, and correct answer
     else {
-      html += `<span class = "correct-answer pomo-text-color-md"> <img src="./assets/images/close_red_24dp.svg" alt="Incorrect" width="24"
-      height="24"> ${user_answers[i].flashcard}</span></li>`;
+      html += `<span class = "correct-answer pomo-text-color-md"> <img src="./assets/images/close_red_24dp.svg" alt="Incorrect" width="28"
+      height="28"> ${user_answers[i].flashcard} <button type="button" class="btn btn-link">Override: I was correct</button></span></li>`;
     }
   }
 
@@ -222,6 +244,7 @@ function buildOverviewView(deck, deckLength) {
   </div>`;
 
   Elements.root.innerHTML += html;
+
   user_answers = []; // reset stored user answers
   count = 0; // reset count
 }
