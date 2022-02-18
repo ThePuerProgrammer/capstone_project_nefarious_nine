@@ -38,7 +38,7 @@ export function addEventListeners() {
             // set default
             if (firstTimeOpened) {
                 firstTimeOpened = false;
-                let defaultTimerSetting = await FirebaseController.getUserTimerDefault(firebase.auth().currentUser.uid);
+                const defaultTimerSetting = await FirebaseController.getUserTimerDefault(Auth.currentUser.uid);
                 let totalTime = defaultTimerSetting[0];
                 let studyRelaxTime = defaultTimerSetting[1];
                 Elements.totalTimeIntervalSlider.value = totalTime;
@@ -154,10 +154,9 @@ export function addEventListeners() {
     Elements.pomoTimerMakeSettingDefaultButton.addEventListener('click', async () => {
         let total = Elements.totalTimeIntervalSlider.value;
         let range = Elements.studyRelaxIntervalSlider.value;
-        const key = User.defaultTimerSetting;
         const updateMap = {};
-        updateMap[key] = [total, range];
-        FirebaseController.updateUserInfo(firebase.auth().currentUser.uid, updateMap );
+        updateMap['defaultTimerSetting'] = [total, range];
+        await FirebaseController.updateUserInfo(Auth.currentUser.uid, updateMap );
     });
     //------------------------------------------------------------------------//
 
@@ -294,3 +293,7 @@ function setThumb1ValueAndPosition() {
     userTimer.adjustRelaxTime(relaxTime);
     userTimer.adjustTimeInterval(Elements.totalTimeIntervalSlider.value);
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
