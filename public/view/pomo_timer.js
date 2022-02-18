@@ -38,11 +38,9 @@ export function addEventListeners() {
             // set default
             if (firstTimeOpened) {
                 firstTimeOpened = false;
-                let defaultTimerSetting = await FirebaseController.getUserTimerDefault(uid);
+                let defaultTimerSetting = await FirebaseController.getUserTimerDefault(firebase.auth().currentUser.uid);
                 let totalTime = defaultTimerSetting[0];
                 let studyRelaxTime = defaultTimerSetting[1];
-                console.log(totalTime);
-                console.log(studyRelaxTime);
                 Elements.totalTimeIntervalSlider.value = totalTime;
                 Elements.studyRelaxIntervalSlider.value = studyRelaxTime;
             }

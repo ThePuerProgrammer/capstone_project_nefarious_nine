@@ -229,7 +229,6 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 }
 
 
-
 //============================================================================//
 // create default timer 
 //============================================================================//
@@ -241,15 +240,15 @@ export async function updateUserInfo(uid, updateInfo){
 }
 
 export async function getUserTimerDefault(uid) {
-    const snapshot = await firebase.firestore()
+    var docRef = firebase.firestore()
         .collection(Constant.collectionName.USERS)
-        .doc(uid)
-        .get();
+        .doc(uid);
 
-    let defaultTimerSetting;
-    snapshot.forEach(doc => {
-        defaultTimerSetting = doc.defaultTimerSetting;
+    docRef.get().then((doc) => {
+        return doc.data().defaultTimerSetting;
+
+    }).catch((error) => {
+        console.log("Error getting document:", error);
     });
-    
-    return defaultTimerSetting;
+    return null;
 }
