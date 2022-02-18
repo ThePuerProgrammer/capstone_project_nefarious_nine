@@ -236,6 +236,6 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 
 
 export async function updateUserInfo(uid, updateInfo){
-    await firebase.firestore().collection(Constant.collectionNames.USERS)
+    await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).update(updateInfo);
 }
