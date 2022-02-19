@@ -48,7 +48,7 @@ export function addEventListeners() {
         resetFlashcard();
     });
 
-    
+
     // Adds event listener to CREATE A FLASHCARD Submit button
     // TODO: move actual work into its own function and just pass function name to even listener
     Elements.formCreateAFlashcard.addEventListener("submit", async (e) => {
@@ -95,34 +95,34 @@ export function addEventListeners() {
         try {
             //Question Image
             if (isQuestionImage) {
-              console.log("Question-1");
-              const { questionImageName,questionImageURL } =
-                await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
-              flashcard.questionImageName = questionImageName;
-              flashcard.questionImageURL= questionImageURL;
+                console.log("Question-1");
+                const { questionImageName, questionImageURL } =
+                    await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
+                flashcard.questionImageName = questionImageName;
+                flashcard.questionImageURL = questionImageURL;
             } else if (typeof obj === "undefined") {
-              console.log("Question-2");
-              flashcard.questionImageName = "N/A";
-              flashcard.questionImageURL = "N/A";
+                console.log("Question-2");
+                flashcard.questionImageName = "N/A";
+                flashcard.questionImageURL = "N/A";
             }
             //Answer Image
-            
-            if(isAnswerImage){
-              console.log("Answer-1");
-              const { answerImageName, answerImageURL } =
-                await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
-              flashcard.answerImageName = answerImageName;
-              flashcard.answerImageURL= answerImageURL;
-            }else if (typeof obj === "undefined") {
-              console.log("Answer-2");
-              flashcard.answerImageName = "N/A";
-              flashcard.answerImageURL = "N/A";
+
+            if (isAnswerImage) {
+                console.log("Answer-1");
+                const { answerImageName, answerImageURL } =
+                    await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
+                flashcard.answerImageName = answerImageName;
+                flashcard.answerImageURL = answerImageURL;
+            } else if (typeof obj === "undefined") {
+                console.log("Answer-2");
+                flashcard.answerImageName = "N/A";
+                flashcard.answerImageURL = "N/A";
             }
-      
+
             const docId = await FirebaseController.createFlashcard(
-              Auth.currentUser.uid,
-              deckDocID,
-              flashcard
+                Auth.currentUser.uid,
+                deckDocID,
+                flashcard
             );
             //flashcard.set_docID(docId);
             flashcard.docID = docId;
@@ -199,15 +199,15 @@ export function addEventListeners() {
         // TOGGLE IS ON
         checkImageAnswer();
     });
-    Elements.formAddFlashCardQuestionImageButton.addEventListener("change",  async (e) => {
+    Elements.formAddFlashCardQuestionImageButton.addEventListener("change", async (e) => {
         imageFile2UploadQuestion = e.target.files[0];
-        if (!imageFile2UploadQuestion ){
-            Elements.imageTagCreateFlashQuestion.src='';  
-            Elements.formCheckInputIsImageQuestion.checked=false;          
+        if (!imageFile2UploadQuestion) {
+            Elements.imageTagCreateFlashQuestion.src = '';
+            Elements.formCheckInputIsImageQuestion.checked = false;
             return;
-        } 
+        }
         //display image
-        Elements.formCheckInputIsImageQuestion.checked=true;
+        Elements.formCheckInputIsImageQuestion.checked = true;
         const reader = new FileReader();
         reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
         reader.readAsDataURL(imageFile2UploadQuestion);
@@ -215,18 +215,18 @@ export function addEventListeners() {
 
     Elements.formAddFlashCardAnswerImageButton.addEventListener("change", async (e) => {
         imageFile2UploadAnswer = e.target.files[0];
-        if(!imageFile2UploadAnswer){
-            Elements.imageTagCreateFlashAnswer.src='';
-            Elements.formCheckInputIsImageAnswer.checked=false;
+        if (!imageFile2UploadAnswer) {
+            Elements.imageTagCreateFlashAnswer.src = '';
+            Elements.formCheckInputIsImageAnswer.checked = false;
             return;
         }
         //display image
-        Elements.formCheckInputIsImageAnswer.checked=true;
+        Elements.formCheckInputIsImageAnswer.checked = true;
         const reader = new FileReader();
         reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
         reader.readAsDataURL(imageFile2UploadAnswer);
     });
-    
+
 }
 
 export async function deck_page(deckDockID) {
@@ -301,25 +301,25 @@ export async function deck_page(deckDockID) {
         $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
     });
 
-        // Adds event listener for STUDY button
-        buttonStudy.addEventListener('click', async e => {
-            e.preventDefault();
-            //const docId = e.target.deckDockID.value;
+    // Adds event listener for STUDY button
+    buttonStudy.addEventListener('click', async e => {
+        e.preventDefault();
+        //const docId = e.target.deckDockID.value;
 
-            // If this is the user's first time studying the deck then we need to create
-            //  a deck data for them.
-            try {
-                await FirebaseController.createDeckDataIfNeeded(Auth.currentUser.uid, deckDocID);
-            }
-            catch (e) {
-                if (Constant.DEV)
-                    console.log("Error Creating Data Deck (User's first time studying a deck)", e);
-            }
+        // If this is the user's first time studying the deck then we need to create
+        //  a deck data for them.
+        try {
+            await FirebaseController.createDeckDataIfNeeded(Auth.currentUser.uid, deckDocID);
+        }
+        catch (e) {
+            if (Constant.DEV)
+                console.log("Error Creating Data Deck (User's first time studying a deck)", e);
+        }
 
-            history.pushState(null, null, Routes.routePathname.STUDY + "#" + deckDockID);
-            localStorage.setItem("deckPageDeckDocID", deckDockID);
-            await Study.study_page();
-        }); 
+        history.pushState(null, null, Routes.routePathname.STUDY + "#" + deckDockID);
+        localStorage.setItem("deckPageDeckDocID", deckDockID);
+        await Study.study_page();
+    });
 
     deleteButton.addEventListener('click', async e => {
         e.preventDefault();
@@ -327,7 +327,7 @@ export async function deck_page(deckDockID) {
         for (let i = 0; i < flashcards.length; ++i) {
             const el = document.createElement("option");
             el.innerHTML = flashcards[i].question;
-            el.value = flashcards[i].docId;
+            el.value = flashcards[i].docID;
             deleteOption.appendChild(el);
         }
 
@@ -364,36 +364,36 @@ function buildFlashcardView(flashcard) {
         }
     }
 
-    html += flashcard.answerImageURL != "N/A" ?  `</div><div class="flip-card-back">
+    html += flashcard.answerImageURL != "N/A" ? `</div><div class="flip-card-back">
     <h1>${flashcard.answer}</h1>
     <br>
     <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
   </div>
   </div>
-  </div>` 
-  :
-  `</div><div class="flip-card-back">
+  </div>`
+        :
+        `</div><div class="flip-card-back">
   <h1>${flashcard.answer}</h1>
   </div>
   </div>
   </div>`;
-  
+
     return html;
-  }
+}
 
 //Function to reset all feels and toggles
-function resetFlashcard(){
+function resetFlashcard() {
     Elements.formCreateAFlashcard.reset();
-    if(Elements.formCheckInputIsImageQuestion){
-        imageQuestion.style.display='none';
+    if (Elements.formCheckInputIsImageQuestion) {
+        imageQuestion.style.display = 'none';
     }
-    if(Elements.formCheckInputIsImageAnswer){
-        imageAnswer.style.display='none';
+    if (Elements.formCheckInputIsImageAnswer) {
+        imageAnswer.style.display = 'none';
 
     }
-    Elements.imageTagCreateFlashAnswer.src="";
-    Elements.imageTagCreateFlashQuestion.src="";
-  
+    Elements.imageTagCreateFlashAnswer.src = "";
+    Elements.imageTagCreateFlashQuestion.src = "";
+
     // Making sure singular choice is displayed next time.
     Elements.formAnswerContainer.innerHTML = `
         <label for="form-answer-text-input">Answer:</label>
@@ -408,37 +408,37 @@ function shuffle(answers) {
     }
 }
 
-function checkImageQuestion(){
+function checkImageQuestion() {
     if (Elements.formCheckInputIsImageQuestion.checked) {
-      //TESTING HERE
-      if(imageQuestion.style.display=='none'){
-        imageQuestion.style.display = 'block';
-      } else{
-        imageQuestion.style.display = 'none';
-      }
-    } else if(!Elements.formCheckInputIsImageQuestion.checked){
-      if(imageQuestion.style.display=='none'){
-        imageQuestion.style.display = 'block';
-      } else{
-        imageQuestion.style.display = 'none';
-      }
+        //TESTING HERE
+        if (imageQuestion.style.display == 'none') {
+            imageQuestion.style.display = 'block';
+        } else {
+            imageQuestion.style.display = 'none';
+        }
+    } else if (!Elements.formCheckInputIsImageQuestion.checked) {
+        if (imageQuestion.style.display == 'none') {
+            imageQuestion.style.display = 'block';
+        } else {
+            imageQuestion.style.display = 'none';
+        }
     }
 }
 
-function checkImageAnswer(){
+function checkImageAnswer() {
     if (Elements.formCheckInputIsImageAnswer.checked) {
-      //TESTING HERE
-      if(imageAnswer.style.display=='none'){
-        imageAnswer.style.display = 'block';
-      } else{
-        imageAnswer.style.display = 'none';
-      }
+        //TESTING HERE
+        if (imageAnswer.style.display == 'none') {
+            imageAnswer.style.display = 'block';
+        } else {
+            imageAnswer.style.display = 'none';
+        }
     }
-    else if(!Elements.formCheckInputIsImageAnswer.checked){
-      if(imageAnswer.style.display=='none'){
-        imageAnswer.style.display = 'block';
-      } else{
-        imageAnswer.style.display = 'none';
-      }
+    else if (!Elements.formCheckInputIsImageAnswer.checked) {
+        if (imageAnswer.style.display == 'none') {
+            imageAnswer.style.display = 'block';
+        } else {
+            imageAnswer.style.display = 'none';
+        }
     }
 }
