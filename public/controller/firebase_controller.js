@@ -2,7 +2,7 @@ import * as Constant from '../model/constant.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
-
+import { User } from '../model/user.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -397,7 +397,7 @@ export async function getFlashcards(uid, docId) {
         .collection(Constant.collectionName.FLASHCARDS).get();
     snapshot.forEach(doc => {
         const f = new Flashcard(doc.data());
-        f.docId = doc.id;
+        f.set_docID(doc.id);
         flashcards.push(f);
     })
 
@@ -423,9 +423,40 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .delete();
 }
 
-//Update Pet
-export async function updatePet(uid, updatedPet) {
-    await firebase.firestore()
-        .collection(Constant.collectionName.USERS).doc(uid)
-        .update({ 'pet': updatedPet });
+
+//============================================================================//
+// create default timer 
+//============================================================================//
+
+
+export async function updateUserInfo(uid, updateInfo){
+    await firebase.firestore().collection(Constant.collectionName.USERS)
+        .doc(uid).update(updateInfo);
 }
+
+export async function getUserTimerDefault(uid) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid); 
+    let defaultTimerSetting;
+    await ref.get()
+        .then((doc) => {
+            const user = User.deserialize(doc.data());
+            defaultTimerSetting = user.defaultTimerSetting;
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+    return defaultTimerSetting;
+    
+}
+
+
+//============================================================================//
+// update user coins
+//============================================================================//
+
+export async function updateCoins(uid, coins) {
+    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
+    .update({ 'coins': coins });
+}
+
