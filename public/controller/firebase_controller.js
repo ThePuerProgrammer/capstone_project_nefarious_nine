@@ -421,15 +421,6 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
         .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
         .delete();
-    }
-    
-//============================================================================//
-// update user coins
-//============================================================================//
-
-export async function updateCoins(uid, coins) {
-    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
-    .update({ 'coins': coins });
 }
 
 //Update Pet
