@@ -3,7 +3,7 @@ export class User{
         this.email = data.email;
         this.decksStudying = data.decksStudying
         this.pet = data.pet;
-        this.coins = data.coins;
+        // TODO: SHOP STUFF
     }
 
 
@@ -35,7 +35,6 @@ export class User{
                 email: this.email,
                 decksStudying: this.decksStudying,
                 pet: this.pet,
-                coins: this.coins,
             };
         }
 
@@ -48,6 +47,7 @@ export class User{
         static isSerializedProduct(obj){
             
             if(!obj.email || typeof obj.email != 'string') return false;
+            // TODO: decks studying type check
         }
 
 /***************************************************************************
