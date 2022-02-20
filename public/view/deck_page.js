@@ -34,11 +34,6 @@ export function addViewFormSubmitEvent(form) {
 
 export function addEventListeners() {
 
-    //Adds event listener to CREATE DECK button within CREATE DECK modal 
-    Elements.decksCreateDeck.addEventListener("click", async () => {
-        history.pushState(null, null, Routes.routePathname.DECK);
-        await deck_page();
-    });
 
     // Executes parameter function whenever the Create-A-Flashcard Modal is completely hidden
     //     The function clears the input fields so that when the user returns, then
