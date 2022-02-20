@@ -4,6 +4,7 @@ export class User{
         this.decksStudying = data.decksStudying;
         this.defaultTimerSetting = [30, 3];
         this.coins = data.coins;
+        this.pet = data.pet;
         // TODO: SHOP STUFF
     }
 
@@ -37,6 +38,7 @@ export class User{
                 decksStudying: this.decksStudying,
                 defaultTimerSetting: this.defaultTimerSetting,
                 coins: this.coins,
+                pet: this.pet,
             };
         }
 
@@ -46,6 +48,7 @@ export class User{
            user.email = data.email;
            user.decksStudying = data.decksStudying;
            user.coins = data.coins;
+           user.pet = data.pet;
            return user;
         }
 

@@ -460,3 +460,14 @@ export async function updateCoins(uid, coins) {
     .update({ 'coins': coins });
 }
 
+//============================================================================//
+// UPDATE USER PET
+//============================================================================//
+export async function updatePet(uid, updatedPet) {
+    await firebase.firestore()
+    .collection(Constant.collectionName.USERS)
+    .doc(uid)
+    .update({ 'pet': updatedPet});
+
+}
+//============================================================================//

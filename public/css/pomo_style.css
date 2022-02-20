@@ -355,3 +355,38 @@ input {
     width: 50%;
   }
 
+  /*STYLES FOR POMOPET RADIO BUTTONS*/
+/*============================================================================*/
+
+/*Hides radio buttons*/
+[type=radio] { 
+    position: static;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/*Curser Style*/
+[type=radio] + img {
+      cursor: pointer;
+}
+
+/* Hover animation*/
+.raise:hover,
+.raise:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+  color: gray;
+}
+
+/*Radio Button positioning*/
+.resize {
+    position: relative;
+    padding: 0, 70%, 0, 70%;
+}
+
+.center-position {
+    margin:0 auto;
+    display:block;
+}
+/*============================================================================*/
