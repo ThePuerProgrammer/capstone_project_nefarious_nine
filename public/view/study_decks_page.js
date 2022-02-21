@@ -108,27 +108,27 @@ export async function study_decks_page() {
         var deckContainer = document.getElementById('deck-container');
         var decks = deckContainer.getElementsByClassName('deck-card');
         var list = [];
-        for(let i = 0; i < decks.length; ++i){
+        for (let i = 0; i < decks.length; ++i) {
             list.push(decks.item(i));
         }
-        if(opt == "name"){
-            list.sort(function(a, b){
+        if (opt == "name") {
+            list.sort(function (a, b) {
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
                 var firstName = deckList.find(deck => deck.docId == aId).name.toLowerCase();
                 var secondName = deckList.find(deck => deck.docId == bId).name.toLowerCase();
                 return (firstName < secondName) ? -1 : (firstName > secondName) ? 1 : 0;
             });
-        }else if(opt == "subject"){
-            list.sort(function(a, b){
+        } else if (opt == "subject") {
+            list.sort(function (a, b) {
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
                 var firstSubject = deckList.find(deck => deck.docId == aId).subject.toLowerCase();
                 var secondSubject = deckList.find(deck => deck.docId == bId).subject.toLowerCase();
                 return (firstSubject < secondSubject) ? -1 : (firstSubject > secondSubject) ? 1 : 0;
             });
-        }else if(opt == "date"){
-            list.sort(function(a, b){
+        } else if (opt == "date") {
+            list.sort(function (a, b) {
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
                 var first = deckList.find(deck => deck.docId == aId);
@@ -136,7 +136,7 @@ export async function study_decks_page() {
                 return (first.dateCreated < second.dateCreated) ? -1 : (first.dateCreated > second.dateCreated) ? 1 : 0;
             });
         }
-        for(let i = 0; i < list.length; ++i){
+        for (let i = 0; i < list.length; ++i) {
             deckContainer.appendChild(list[i]);
         }
     })

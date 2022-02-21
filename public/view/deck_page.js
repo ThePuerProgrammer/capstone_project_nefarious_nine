@@ -324,6 +324,10 @@ export async function deck_page(deckDockID) {
     deleteButton.addEventListener('click', async e => {
         e.preventDefault();
         const deleteOption = document.getElementById("delete-option");
+        for (let i = deleteOption.length; i > 0; i--) {
+            deleteOption.remove(i);
+        }
+
         for (let i = 0; i < flashcards.length; ++i) {
             const el = document.createElement("option");
             el.innerHTML = flashcards[i].question;
