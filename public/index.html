@@ -172,6 +172,45 @@
   </div>
   <!--END OF RESET PASSWORD -------------------------------------------------------->
 
+   <!-- ADOPTION MODAL -------------------------------------------------------------->
+ <div class="modal fade" id="modal-pomodoption" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+ aria-labelledby="modal-pomodoption-label" aria-hidden="true">
+ <div class="modal-dialog">
+   <div class="modal-content">
+     <div class="modal-header pomo-bg-color-dark">
+       <h5 class="modal-title pomo-text-color-light" id="modal-pomodoption-label">Adopt A PomoPet!</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+     </div>
+     <div class="modal-body pomo-bg-color-light pomo-text-color-dark">
+       <form method="post" id="form-pomodoption">
+         <h2>Welcome to Pomobyte!</h2>
+         <p>You can now adopt a Pomopet to help you on your study quest!</p>
+         <div id="pet-selected"></div>
+         <div class="row" style="padding-bottom: 20%;">
+           <label class="raise" style="width: 70px;">
+             <input type="radio" class="resize" name="pet" value="Bunny" checked>
+             <img src="./assets/images/Bunny Sprite.png" width="150" height="150">
+           </label>
+           <label class="raise resize" style="width: 70px; left: 15%;">
+             <input type="radio" class="resize" name="pet" value="Dog">
+             <img src="./assets/images/Rembo Sprite.png" width="150" height="150">
+           </label>
+           <label class="raise resize" style="width: 70px; left: 30%;">
+             <input type="radio" class="resize" name="pet" value="Cat">
+             <img src="./assets/images/Cat Sprite.png" width="150" height="150">
+           </label>
+         </div>
+         <div class="modal-footer">
+           <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button type="submit"
+             >Adopt</button>
+         </div>
+       </form>
+     </div>
+   </div>
+ </div>
+</div>
+<!-------------------------------------------------------------------------------->
+
 
   <!-- CREATE DECK MODAL----------------------------------------------------->
   <div class="modal fade" id="create-deck-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
