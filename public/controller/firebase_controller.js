@@ -59,7 +59,7 @@ export async function uploadImageToFlashcardAnswer(answerImageFile, answerImageN
     if (!answerImageName) {
         answerImageName = Date.now() + answerImageFile.name + 'answer';
     }
-    
+
     const ref = firebase.storage().ref()
         .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
     const taskSnapShot = await ref.put(answerImageFile);
@@ -94,26 +94,26 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
         streak: 0,
         lastAccessed: Date.now()
     });
-    
+
     // Using the flashcard data reference to check if it exists
     await flashcardDataExistsRef.get().then((doc) => {
         if (doc.exists && userAnsweredCorrectly) // only use old streak if user answered correctly
             flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
     });
-    
+
     if (userAnsweredCorrectly)
         flashcardData.streak++;  // Answered correctly, increment streak.
-    
+
     // Update flashcardData result on Firebase
     await firebase.firestore()
-    .collection(Constant.collectionName.USERS)
-    .doc(uid)
-    .collection(Constant.collectionName.DECK_DATA)
-    .doc(deckDocID)
-    .collection(Constant.collectionName.FLASHCARDS_DATA)
-    .doc(flashcardDocID)
-    .set(flashcardData.serialize());
-    
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID)
+        .set(flashcardData.serialize());
+
     console.log("flashcardDataStreak", flashcardData.streak);
     return flashcardData
 }
@@ -182,17 +182,17 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
 
     let targetedStreakGroup = 0;
     let randomNumber = Math.random();
-    
+
     // console.log("Random Number Chosen: ", randomNumber);
-    
+
     if (randomNumber >= 0.46875) { // Streak 0 OR New Card
-        randomNumber = Math.random();       
+        randomNumber = Math.random();
 
         if (randomNumber >= 0.75) { // New card Odds
             // Getting new card...
             let newFlashcard = await getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentlyStudying);
 
-            if (newFlashcard == null) { 
+            if (newFlashcard == null) {
                 targetedStreakGroup = 0; // There are no new flashcards, so default to showing streak 0
             }
             else {
@@ -238,7 +238,7 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
         if (streakGroupHasFlashcards)
             nextFlashcardDocID = doc.id;
     });
-    
+
     if (flashcardsReceived == 0) {
         streakGroupHasFlashcards = false
     }
@@ -264,7 +264,7 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
             .collection(Constant.collectionName.FLASHCARDS_DATA)
             .orderBy("lastAccessed", "asc")
             .limit(1)
-            .get(); 
+            .get();
 
         nextFlashcard.forEach((doc) => {
             if (doc.exists)
@@ -288,7 +288,7 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
 //  Returns new if there are no new flashcards
 async function getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentlyStudying) {
     let flashcardsDataList = await getFlashcardsDataFromDeck(uid, deckDocID);
-            
+
     // Find first occurence of a flashcard that isn't in our flashcards data list
     for (let i = 0; i < flashcardsCurrentlyStudying.length; i++) {
 
@@ -429,7 +429,7 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 //============================================================================//
 
 
-export async function updateUserInfo(uid, updateInfo){
+export async function updateUserInfo(uid, updateInfo) {
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).update(updateInfo);
 }
@@ -437,7 +437,7 @@ export async function updateUserInfo(uid, updateInfo){
 export async function getUserTimerDefault(uid) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
-        .doc(uid); 
+        .doc(uid);
     let defaultTimerSetting;
     await ref.get()
         .then((doc) => {
@@ -447,7 +447,7 @@ export async function getUserTimerDefault(uid) {
             console.log("Error getting document:", error);
         });
     return defaultTimerSetting;
-    
+
 }
 
 
@@ -457,7 +457,7 @@ export async function getUserTimerDefault(uid) {
 
 export async function updateCoins(uid, coins) {
     await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
-    .update({ 'coins': coins });
+        .update({ 'coins': coins });
 }
 
 //============================================================================//

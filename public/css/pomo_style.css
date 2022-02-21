@@ -250,6 +250,11 @@ input {
     background-color: transparent;
     width: 300px;
     height: 200px;
+    border: 1px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
     perspective: 1000px;
 }
 
@@ -303,6 +308,7 @@ input {
     margin-bottom: 5px;
     margin-left: 5px;
     margin-right: 5px;
+    margin-top: 5px;
 }
 /*============================================================================*/
 
