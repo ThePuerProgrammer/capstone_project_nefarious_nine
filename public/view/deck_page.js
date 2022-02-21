@@ -146,6 +146,7 @@ export function addEventListeners() {
     });
     Elements.formDeleteFlashcard.addEventListener('submit', async (e) => {
         e.preventDefault();
+        // get the value from the select list item
         var f = document.getElementById('value').value;
         try {
             await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
@@ -153,6 +154,7 @@ export function addEventListeners() {
         } catch (e) {
             Utilities.info("Error", JSON.stringify(e), "modal-delete-a-flashcard");
         }
+        // refresh the page
         await deck_page(deckDocID);
     });
     // Event listener to change the answer view depending on whether or not
@@ -319,10 +321,12 @@ export async function deck_page(deckDockID) {
     deleteButton.addEventListener('click', async e => {
         e.preventDefault();
         const deleteOption = document.getElementById("delete-option");
+        // clear out the select list elements to prevent duplicates from appearing
         for (let i = deleteOption.length; i > 0; i--) {
             deleteOption.remove(i);
         }
 
+        // build select list elements from flashcard array
         for (let i = 0; i < flashcards.length; ++i) {
             const el = document.createElement("option");
             el.innerHTML = flashcards[i].question;
@@ -330,6 +334,7 @@ export async function deck_page(deckDockID) {
             deleteOption.appendChild(el);
         }
 
+        // opens delete flashcard modal
         $(`#${Constant.htmlIDs.deleteFlashcardModal}`).modal('show');
     })
 }
@@ -352,6 +357,7 @@ function buildFlashcardView(flashcard) {
         let flashcardAnswers = [flashcard.answer];
         flashcardAnswers = flashcardAnswers.concat(flashcard.incorrectAnswers);
         shuffle(flashcardAnswers);
+        // TODO: Find a much better way of doing this
         if (flashcardAnswers.length == 4) {
             html += `<p class="answer-text">1. ${flashcardAnswers[0]}   2. ${flashcardAnswers[1]}</p>
                     <p class="answer-text">3. ${flashcardAnswers[2]}    4. ${flashcardAnswers[3]}</p>`
