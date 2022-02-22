@@ -168,26 +168,15 @@ export function addEventListeners() {
         async (e) => {
             // MULTIPLE CHOICE ON
             if (Elements.formCheckInputIsMultipleChoice.checked) {
-                Elements.formAnswerContainer.innerHTML = `
-                <label for="form-answer-text-input">Correct Answer:</label>
-                <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
-                <br />
-                <label for="form-answer-text-input">Incorrect Option:</label>
-                <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1"></textarea>
-                <br />
-                <label for="form-answer-text-input">Incorrect Option:</label>
-                <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1"></textarea>
-                <br />
-                <label for="form-answer-text-input">Incorrect Option:</label>
-                <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1"></textarea>
-                `;
+                Elements.formCheckInputIsImageAnswer.checked=false;
+                imageAnswer.style.display = 'none';
+                multipleChoiceOnHTML();
+
             }
             // MULTIPLE CHOICE OFF
             else {
-                Elements.formAnswerContainer.innerHTML = `
-                <label for="form-answer-text-input">Answer:</label>
-                <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
-                `;
+                Elements.formCheckInputIsImageAnswer.checked=false;
+                multipleChoiceOffHTML();            
             }
         }
     );
@@ -202,6 +191,10 @@ export function addEventListeners() {
     Elements.formCheckInputIsImageAnswer.addEventListener("click", async (e) => {
         // TOGGLE IS ON
         checkImageAnswer();
+        if(Elements.formCheckInputIsMultipleChoice.checked){
+            Elements.formCheckInputIsMultipleChoice.checked =false;
+            multipleChoiceOffHTML();
+        }
     });
     
     //Checks for Image selection of Question Image
@@ -470,4 +463,27 @@ function checkImageAnswer(){
         imageAnswer.style.display = 'none';
       }
     }
+}
+
+function multipleChoiceOnHTML(){
+    Elements.formAnswerContainer.innerHTML = `
+    <label for="form-answer-text-input">Correct Answer:</label>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
+    <br />
+    <label for="form-answer-text-input">Incorrect Option:</label>
+    <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1"></textarea>
+    <br />
+    <label for="form-answer-text-input">Incorrect Option:</label>
+    <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1"></textarea>
+    <br />
+    <label for="form-answer-text-input">Incorrect Option:</label>
+    <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1"></textarea>
+    `;
+}
+
+function multipleChoiceOffHTML(){
+    Elements.formAnswerContainer.innerHTML =`
+    <label for="form-answer-text-input">Answer:</label>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
+    `;
 }
