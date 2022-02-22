@@ -14,10 +14,10 @@ let imageQuestion = Elements.formEditFlashcard.questionImageContainer;
 
 export function addEventListeners(){
     Elements.formEditFlashcard.answerImageButton.addEventListener('change', e=> {
+        //Possibly need to check for something here
         imageFile2UploadAnswer = e.target.files[0];
         if(!imageFile2UploadAnswer){
-            Elements.formEditFlashcard.answerImageTag.src=null;
-            Elements.formEditFlashcard.answerImageToggle.checked=false;
+            Elements.formEditFlashcard.answerImageTag.src='';
             return;
         }
         Elements.formEditFlashcard.answerImageToggle.checked=true;
@@ -29,8 +29,7 @@ export function addEventListeners(){
     Elements.formEditFlashcard.questionImageButton.addEventListener('change', e=> {
         imageFile2UploadQuestion = e.target.files[0];
         if(!imageFile2UploadQuestion){
-            Elements.formEditFlashcard.questionImageTag.src=null;
-            Elements.formEditFlashcard.questionImageToggle.checked=false;
+            Elements.formEditFlashcard.questionImageTag.src='';
             return;
         }
         Elements.formEditFlashcard.questionImageToggle.checked=true;
@@ -64,13 +63,14 @@ export function addEventListeners(){
             
             //Picture Related DATA
             questionImageName:  e.target.questionImageName.value,
+            //questionImageURL:   e.target.questionImageURL.value,
             answerImageName:    e.target.answerImageName.value,
+            //answerImageURL:     e.target.answerImageURL.value,
         });
         fc.set_docID(e.target.docId.value);
         console.log(`fc.docID:${fc.docID}`);
-        let editDeckDocId = e.target.deckDocId.value;
-        console.log(`DeckDocId: ${e.target.deckDocId.value}`);
-        console.log(`editDeckDocId: ${editDeckDocId}`);
+        let editDeckDocId = window.localStorage.getItem('deckPageDeckDocID');
+        console.log(editDeckDocId);
 
 
 
@@ -79,18 +79,17 @@ export function addEventListeners(){
             if(imageFile2UploadAnswer){
                 const imageAnswerInfo = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer, 
                     e.target.answerImageName.value);
-                fc.answerImageURL = imageAnswerInfo.answerImageURL;
+                fc.answerImageURL = imageAnswerInfo.answerImageURL.value;
             }
 
             if(imageFile2UploadQuestion){
                 const imageQuestionInfo = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadQuestion, 
                     e.target.questionImageName.value);
-                fc.questionImageURL = imageQuestionInfo.questionImageURL;
+                fc.questionImageURL = imageQuestionInfo.questionImageURL.value;
             }
 
             //Update Firestore
-            await FirebaseController.updateFlashcard(Auth.currentUser.uid, editDeckDocId,fc,fc.docId);
-            //await FirebaseController.updateFlashcard(fc, fc.docID);
+            await FirebaseController.updateFlashcard(Auth.currentUser.uid, editDeckDocId,fc,fc.docID);//changed Id to ID
             //Update Browser
         } catch(e){
             if(Constant.DEV) console.log(e);
@@ -104,7 +103,7 @@ export function addEventListeners(){
 
 
 export async function edit_flashcard(uid, deckId, docId){
-    console.log(docId);
+    resetFlashcard();
     let flashcard;
     
     try{
@@ -154,14 +153,14 @@ export async function edit_flashcard(uid, deckId, docId){
 
 //Method to display the container for question image.
 function checkImageQuestion(){
-    if (Elements.formCheckInputIsImageQuestion.checked) {
+    if (Elements.formEditFlashcard.questionImageToggle.checked) {
       if(imageQuestion.style.display=='none'){
         imageQuestion.style.display = 'block';
       } else{
         imageQuestion.style.display = 'none';
       }
-    } else if(!Elements.formCheckInputIsImageQuestion.checked){
-      if(imageQuestion.style.display=='none'){
+    } else if(!Elements.formEditFlashcard.questionImageToggle.checked){
+      if(imageQuestion.style.display=='block'){
         imageQuestion.style.display = 'block';
       } else{
         imageQuestion.style.display = 'none';
@@ -171,19 +170,39 @@ function checkImageQuestion(){
 
 //Method to display the container for answer image.
 function checkImageAnswer(){
-    if (Elements.formCheckInputIsImageAnswer.checked) {
+    if (Elements.formEditFlashcard.answerImageToggle.checked) {
       if(imageAnswer.style.display=='none'){
         imageAnswer.style.display = 'block';
       } else{
         imageAnswer.style.display = 'none';
       }
     }
-    else if(!Elements.formCheckInputIsImageAnswer.checked){
-      if(imageAnswer.style.display=='none'){
+    else if(!Elements.formEditFlashcard.answerImageToggle.checked){
+      if(imageAnswer.style.display=='block'){
         imageAnswer.style.display = 'block';
       } else{
         imageAnswer.style.display = 'none';
       }
     }
+}
+//Function to reset all fields
+function resetFlashcard(){
+    Elements.formEditFlashcard.form.reset();
+    if(Elements.formEditFlashcard.questionImageToggle){
+        imageQuestion.style.display='none';
+    }
+    if(Elements.formEditFlashcard.answerImageToggle){
+        imageAnswer.style.display='none';
+
+    }
+    Elements.formEditFlashcard.answerImageTag.src="";
+    Elements.formEditFlashcard.questionImageTag.src="";
+    
+    //  Looking at How to mess with this area...
+    // Making sure singular choice is displayed next time.
+    // Elements.formAnswerContainer.innerHTML = `
+    //     <label for="form-answer-text-input">Answer:</label>
+    //     <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
+    // `;
 }
 

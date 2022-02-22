@@ -211,7 +211,6 @@ export function addEventListeners() {
             //If image is deselected it is reset and given conditions to
             //represent that in creating the flashcard.
             Elements.imageTagCreateFlashQuestion.src='';  
-            Elements.formCheckInputIsImageQuestion.checked=false;          
             return;
         } 
         //Image is loaded and information represents this when creating
@@ -227,7 +226,6 @@ export function addEventListeners() {
         imageFile2UploadAnswer = e.target.files[0];
         if(!imageFile2UploadAnswer){
             Elements.imageTagCreateFlashAnswer.src='';
-            Elements.formCheckInputIsImageAnswer.checked=false;
             return;
         }
         //Image is loaded and information represents this when creating

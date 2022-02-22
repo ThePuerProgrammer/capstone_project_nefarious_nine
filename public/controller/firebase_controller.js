@@ -250,19 +250,45 @@ export async function getFlashCardById(uid,deckDocID,docID){
 //===========================================================================//
 export async function updateFlashcard(uid, deckDocID, flashcard, docID){
 //export async function updateFlashcard(flashcard, docID){
-    const docId = docID;
     const data = flashcard.serializeForUpdate();
-    //call cf await cf_updateFlashcard({docId,data})
-    // const flashRef = await firebase.firestore()
-    //     .collection(Constant.collectionName.FLASHCARDS).doc(docId).update(data);
     const flashRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
-        .collection(Constant.collectionName.FLASHCARDS).doc(docId).update(data);
-    if(!flashRef.exists){
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID)
+        .update({
+            question:data.question,
+            answer:data.answer,
+            questionImageName:data.questionImageName,
+            questionImageURL:data.questionImageURL,
+            answerImageName:data.answerImageName,
+            answerImageURL:data.answerImageURL,
+        }).then(() => {console.log("UPDATED");});
+    //Error Code
+        if(!flashRef.doc.exists){
         if(Constant.DEV) console.log(e);
         Utilites.info('Update Error Firebase', JSON.stringify(e));
     }
 }
+
+
+//ORIGNALLY USED THIS 
+//        .collection(Constant.collectionName.FLASHCARDS).doc(docId).update(data);
+
+    // // Using the flashcard data reference to check if it exists
+    // flashcardDataRef.get().then((doc) => {
+    //     if (doc.exists) {
+    //         flashcardData.streak = doc.data().streak;
+    //     }
+    // });
+
+    // // Update flashcardData result on Firebase
+    // firebase.firestore()
+    //     .collection(Constant.collectionName.USERS)
+    //     .doc(loggedInUserDocID)
+    //     .collection(Constant.collectionName.DECK_DATA)
+    //     .doc(deckDocID)
+    //     .collection(Constant.collectionName.FLASHCARDS_DATA)
+    //     .doc(flashcardDocID)
+    //     .set(flashcardData.serialize());
 
 
