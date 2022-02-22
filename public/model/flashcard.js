@@ -67,6 +67,7 @@ export class Flashcard{
             if(!obj.answerImageName || typeof obj.answerImageName != 'string') return false;
             if(!obj.question || typeof obj.question != 'string') return false;
             if(!obj.answer || typeof obj.answer != 'string') return false;
+            if(!obj.isMultipleChoice || typeof obj.isMultipleChoice != 'boolean') return false;
         }
 
 /***************************************************************************
@@ -80,6 +81,8 @@ export class Flashcard{
             const fc = {};
             if(this.question) fc.question = this.question;
             if(this.answer) fc.answer = this.answer;
+            if(this.incorrectAnswers) fc.incorrectAnswers = this.incorrectAnswers;
+            if(this.isMultipleChoice) fc.isMultipleChoice = this.isMultipleChoice;
             if(this.questionImageName) fc.questionImageName = this.questionImageName;
             if(this.questionImageURL) fc.questionImageURL = this.questionImageURL;
             if(this.answerImageName) fc.answerImageName = this.answerImageName;

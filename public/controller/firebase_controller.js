@@ -248,32 +248,52 @@ export async function getFlashCardById(uid,deckDocID,docID){
 //===========================================================================//
 //UPDATE FLASHCARD 
 //===========================================================================//
+/*  This will retrieve the flashcard as it is a nested subcollection, requiring
+    to go through user and deck to make the update.  I found that when updating
+    both doc.data().'field' like doc.data().question and data.question work the
+    same.  As I have given a declaration of data for data.question below.
+============================================================================*/
 export async function updateFlashcard(uid, deckDocID, flashcard, docID){
-//export async function updateFlashcard(flashcard, docID){
     const data = flashcard.serializeForUpdate();
     const flashRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS).doc(docID)
-        .update({
-            question:data.question,
-            answer:data.answer,
-            questionImageName:data.questionImageName,
-            questionImageURL:data.questionImageURL,
-            answerImageName:data.answerImageName,
-            answerImageURL:data.answerImageURL,
-        }).then(() => {console.log("UPDATED");});
-    //Error Code
-        if(!flashRef.doc.exists){
-        if(Constant.DEV) console.log(e);
-        Utilites.info('Update Error Firebase', JSON.stringify(e));
-    }
+        .get().then((doc)=>{
+            if(doc.exists){
+                    flashcard.question =data.question;
+                    flashcard.answer = data.answer;
+                    //flashcard.isMultipleChoice = data.isMultipleChoice;
+                    flashcard.incorrectAnswers = data.incorrectAnswers;
+                    flashcard.questionImageName= data.questionImageName;
+                    flashcard.questionImageURL = data.questionImageURL;
+                    flashcard.answerImageName = data.answerImageName;
+                    flashcard.answerImageURL = data.answerImageURL;
+                    console.log("UPDATED");
+                }//Error Code
+                else if(Constant.DEV) {
+                    console.log(e);
+                    Utilites.info('Update Error Firebase', JSON.stringify(e));
+                }   
+        });
+
+        firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID)
+        .set(flashcard.serialize());
 }
 
 
 //ORIGNALLY USED THIS 
-//        .collection(Constant.collectionName.FLASHCARDS).doc(docId).update(data);
-
+//         .update({
+//     question:data.question,
+//     answer:data.answer,
+//     questionImageName:data.questionImageName,
+//     questionImageURL:data.questionImageURL,
+//     answerImageName:data.answerImageName,
+//     answerImageURL:data.answerImageURL,
+// }).then(() => {console.log("UPDATED");});
     // // Using the flashcard data reference to check if it exists
     // flashcardDataRef.get().then((doc) => {
     //     if (doc.exists) {

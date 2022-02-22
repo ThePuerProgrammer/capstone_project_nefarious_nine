@@ -74,6 +74,7 @@ export function addEventListeners() {
 
         const incorrectAnswers = [];
 
+
         if (isMultipleChoice) {
             if (formData.incorrectAnswer1 != "")
                 incorrectAnswers.push(formData.incorrectAnswer1);
