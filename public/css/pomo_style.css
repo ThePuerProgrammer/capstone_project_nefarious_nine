@@ -396,3 +396,29 @@ input {
     display:block;
 }
 /*============================================================================*/
+
+  /*STYLES FOR CLASSROOM TABS*/
+/*============================================================================*/
+.classroom-tab {
+    background-color: #2C1320;
+    color: #56667A;
+    float: left;
+    border: none;
+    outline: none;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 25%;
+    transition: 0.3s;
+}
+
+.classroom-tab-content{
+    display: none;
+    padding: 100px 20px;
+    height: 100%;
+    animation: fadeEffect 1s;
+}
+
+@keyframes fadeEffect{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}

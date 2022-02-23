@@ -383,12 +383,19 @@ export async function getUserDeckById(uid, deckDocID) {
     return deckModel;
 }
 
+
+//============================================================================//
+// Favorite a deck
+//============================================================================//
 export async function favoriteDeck(uid, deckDocID, favorited) {
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .update({ 'isFavorited': favorited });
 }
 
+//============================================================================//
+// Get flashcards for a specific deck
+//============================================================================//
 export async function getFlashcards(uid, docId) {
     let flashcards = [];
     const snapshot = await firebase.firestore()
@@ -405,16 +412,9 @@ export async function getFlashcards(uid, docId) {
 }
 
 
-/* when the function for creating a deck is written
-    uncomment the following line to allow for a timestamp
-    of when the deck was created to be retained in Firestore.
-    This can also be utilized for the entire deck or specific flashcards.
-    Whatever utility we need it for. - Cody
-*/
-// const data = flashcard.toFirestore(Date.now());
-
-// Function to allow for deletion of deck
-// TODO: write Firebase side rules to set permissions for deck deletion
+//============================================================================//
+// Delete flashcards
+//============================================================================//
 export async function deleteFlashcard(uid, docID, flashcardId) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
@@ -465,9 +465,35 @@ export async function updateCoins(uid, coins) {
 //============================================================================//
 export async function updatePet(uid, updatedPet) {
     await firebase.firestore()
-    .collection(Constant.collectionName.USERS)
-    .doc(uid)
-    .update({ 'pet': updatedPet});
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'pet': updatedPet });
 
 }
 //============================================================================//
+
+
+// These will both probably need to be redone once classrooms are implemented - Cody
+//============================================================================//
+// Gets all available classrooms
+//============================================================================//
+export async function getAvailableClassrooms() {
+    let classroomList = [];
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .orderBy('name')
+        .get();
+
+    ref.forEach(doc => {
+        // TODO: deserialize classroom docs
+    });
+    return classroomList;
+}
+
+//============================================================================//
+// Gets user's classrooms
+//============================================================================//
+export async function getMyClassrooms(uid) {
+    // TODO
+    return 0;
+}

@@ -14,6 +14,7 @@ export const collectionName = {
     USERS: 'users',
     DECK_DATA: 'deck_data',
     FLASHCARDS_DATA: 'flashcards_data',
+    CLASSROOMS: 'classrooms',
 }
 
 /*****************************************
