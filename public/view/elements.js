@@ -119,5 +119,7 @@ export const formEditFlashcard = {
     questionImageToggle: document.getElementById('form-check-input-is-image-question-edit'),
     answerImageToggle: document.getElementById('form-check-input-is-image-answer-edit'),
     multipleAnswerContainer: document.getElementById('form-edit-answer-container'),
+    answerTextInput: document.getElementById('form-answer-text-input-edit'),
 }
+export const formCheckInputIsMultipleChoiceEdit = document.getElementById('form-check-input-is-multiple-choice-edit');
 //==========================================================================//

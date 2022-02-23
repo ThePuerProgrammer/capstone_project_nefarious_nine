@@ -49,8 +49,8 @@ export function addEventListeners(){
     Elements.formEditFlashcard.answerImageToggle.addEventListener('click', async (e) => {
         // TOGGLE IS ON
         checkImageAnswer();
-        if(Elements.formEditFlashcard.multipleChoiceToggle.checked){
-            Elements.formEditFlashcard.multipleChoiceToggle.checked=false;
+        if(Elements.formEditFlashcard.answerImageToggle.checked){
+            Elements.formCheckInputIsMultipleChoiceEdit.checked=false;
             multipleChoiceOffHTML();
         }
     });
@@ -59,11 +59,15 @@ export function addEventListeners(){
         if(Elements.formEditFlashcard.multipleChoiceToggle.checked){
             Elements.formEditFlashcard.answerImageToggle.checked=false;
             imageAnswer.style.display = 'none';
+           // checkImageAnswer();
+            //imageAnswer.style.display = 'none';
             multipleChoiceOnHTML();
         }//Toggle Off
         else{
             Elements.formEditFlashcard.answerImageToggle.checked=false;
-            multipleChoiceOffHTML();
+            imageAnswer.style.display = 'none';
+
+            //multipleChoiceOffHTML();
         }
     });
     Elements.formEditFlashcard.form.addEventListener('submit', async e=> {
@@ -188,7 +192,7 @@ export async function edit_flashcard(uid, deckId, docId){
     Elements.formEditFlashcard.multipleChoiceToggle = flashcard.isMultipleChoice;
     
     //Verifying Toggles
-    const ismultiplechoice = Elements.formEditFlashcard.multipleChoiceToggle;
+    let ismultiplechoice = Elements.formEditFlashcard.multipleChoiceToggle;
     const incorrectAnswers = [];
     const isQuestionImage = Elements.formEditFlashcard.questionImageToggle;
     const isAnswerImage = Elements.formEditFlashcard.answerImageToggle;
@@ -207,13 +211,13 @@ export async function edit_flashcard(uid, deckId, docId){
         isAnswerImage.checked=true;
         imageAnswer.style.display='block';
     }
-    // if(!flashcard.isMultipleChoice){
-    //     ismultiplechoice.checked = false;        
-    //     multipleChoiceOffHTML();
-    // } else {
-    //     ismultiplechoice.checked=true;
-    //     multipleChoiceOnHTML();
-    // }
+    if(!flashcard.isMultipleChoice){
+        ismultiplechoice = false;        
+        //multipleChoiceOffHTML();
+    } else {
+        ismultiplechoice=true;
+        //multipleChoiceOnHTML();
+    }
 
     Elements.modalEditFlashcard.show();
 }
@@ -276,7 +280,7 @@ function resetFlashcard(){
 function multipleChoiceOnHTML(){
     Elements.formEditFlashcard.formAnswerContainer.innerHTML = `
     <label for="form-answer-text-input">Correct Answer:</label>
-    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
+    <textarea name="answer" id="form-answer-text-input-edit" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formEditFlashcard.answerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
     <br />
     <label for="form-answer-text-input">Incorrect Option:</label>
     <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1"></textarea>
@@ -292,7 +296,7 @@ function multipleChoiceOnHTML(){
 function multipleChoiceOffHTML(){
     Elements.formEditFlashcard.formAnswerContainer.innerHTML =`
     <label for="form-answer-text-input">Answer:</label>
-    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
+    <textarea name="answer" id="form-answer-text-input-edit" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formEditFlashcard.answerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
     `;
 }
 
