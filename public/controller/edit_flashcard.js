@@ -59,8 +59,6 @@ export function addEventListeners(){
         if(Elements.formEditFlashcard.multipleChoiceToggle.checked){
             Elements.formEditFlashcard.answerImageToggle.checked=false;
             imageAnswer.style.display = 'none';
-           // checkImageAnswer();
-            //imageAnswer.style.display = 'none';
             //multipleChoiceOnHTML();
         }//Toggle Off
         else{
@@ -89,10 +87,7 @@ export function addEventListeners(){
         fc.set_docID(e.target.docId.value);
        
         let editDeckDocId = window.localStorage.getItem('deckPageDeckDocID');
-        // const formData = Array.from(Elements.formEditFlashcard).reduce(
-        //     (acc, input) => ({ ...acc, [input.name]: input.value }),
-        //     {}
-        // );
+
         const isMultipleChoice = Elements.formEditFlashcard.multipleChoiceToggle;
         const incorrectAnswers = [];
         const isQuestionImage = Elements.formEditFlashcard.questionImageToggle;
@@ -124,15 +119,9 @@ export function addEventListeners(){
         try{
             if(isAnswerImage.checked==true){
                 if(e.target.answerImageName.value != "N/A" || imageFile2UploadAnswer != null){
-                    // if(e.target.answerImageName.value != imageFile2UploadAnswer){
-                    //     fc.answerImageName = e.target.answerImageName.value;
-                    //     fc.answerImageURL = e.target.answerImageURL.value;
-                    // }
-                    // else{
                         const{answerImageName, answerImageURL} = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
                         fc.answerImageName = answerImageName;
                         fc.answerImageURL = answerImageURL;
-                    //}
                 } else if(typeof obj === "undefined"){
                     console.log("Answer Undefined");
                     fc.answerImageName = "N/A";
@@ -143,28 +132,12 @@ export function addEventListeners(){
                 fc.answerImageName = "N/A";
                 fc.answerImageURL = "N/A";
             }
-            //     //const imageAnswerInfo = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer, 
-            //     const {answerImageName, answerImageURL} = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer,     
-            //         e.target.answerImageName.value);
-            //     fc.answerImageName = answerImageName;
-            //     fc.answerImageURL = answerImageURL;
-            // } else if (typeof obj === "undefined") {
-            //     console.log("Answer-2");
-            //     fc.answerImageName = "N/A";
-            //     fc.answerImageURL = "N/A";
-            
-            console.log(`isQuestionImage.checked${isQuestionImage.checked}`);
 
             if(isQuestionImage.checked==true){
                 if(e.target.questionImageName.value != "N/A" || imageFile2UploadQuestion != null){
-                    // if(e.target.questionImageName.value != imageFile2UploadQuestion){
-                    //     fc.questionImageName = e.target.questionImageName;
-                    //     fc.questionImageURL = e.target.questionImageURL;
-                    // } else {
-                            const{questionImageName, questionImageURL} = await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
-                            fc.questionImageName = questionImageName;
-                            fc.questionImageURL = questionImageURL;
-                    //}
+                    const{questionImageName, questionImageURL} = await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
+                    fc.questionImageName = questionImageName;
+                    fc.questionImageURL = questionImageURL;
                 } else if (typeof obj === "undefined") {
                     console.log("Question-2");
                     fc.questionImageName = "N/A";
@@ -175,11 +148,8 @@ export function addEventListeners(){
                 fc.questionImageName = "N/A";
                 fc.questionImageURL = "N/A";
             }
-                // const {questionImageName, questionImageURL} = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadQuestion, 
-                //     e.target.questionImageName.value);
             //Update Firestore
             await FirebaseController.updateFlashcard(Auth.currentUser.uid, editDeckDocId,fc,fc.docID);//changed Id to ID
-            //Update Browser
         } catch(e){
             if(Constant.DEV) console.log(e);
             Utilities.info('Update Flashcard Error', JSON.stringify(e));

@@ -479,17 +479,6 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID){
         .set(flashcard.serialize());
 }
 
-
-//ORIGNALLY USED THIS 
-//         .update({
-//     question:data.question,
-//     answer:data.answer,
-//     questionImageName:data.questionImageName,
-//     questionImageURL:data.questionImageURL,
-//     answerImageName:data.answerImageName,
-//     answerImageURL:data.answerImageURL,
-// }).then(() => {console.log("UPDATED");});
-
 //============================================================================//
 // create default timer 
 //============================================================================//
