@@ -67,7 +67,7 @@ export function addEventListeners(){
             Elements.formEditFlashcard.answerImageToggle.checked=false;
             imageAnswer.style.display = 'none';
 
-            //multipleChoiceOffHTML();
+            multipleChoiceOffHTML();
         }
     });
     Elements.formEditFlashcard.form.addEventListener('submit', async e=> {
@@ -91,10 +91,10 @@ export function addEventListeners(){
         fc.set_docID(e.target.docId.value);
        
         let editDeckDocId = window.localStorage.getItem('deckPageDeckDocID');
-        const formData = Array.from(Elements.formEditFlashcard).reduce(
-            (acc, input) => ({ ...acc, [input.name]: input.value }),
-            {}
-        );
+        // const formData = Array.from(Elements.formEditFlashcard).reduce(
+        //     (acc, input) => ({ ...acc, [input.name]: input.value }),
+        //     {}
+        // );
         const isMultipleChoice = Elements.formEditFlashcard.multipleChoiceToggle;
         const incorrectAnswers = [];
         const isQuestionImage = Elements.formEditFlashcard.questionImageToggle;
@@ -213,10 +213,10 @@ export async function edit_flashcard(uid, deckId, docId){
     }
     if(!flashcard.isMultipleChoice){
         ismultiplechoice = false;        
-        //multipleChoiceOffHTML();
+        multipleChoiceOffHTML();
     } else {
         ismultiplechoice=true;
-        //multipleChoiceOnHTML();
+        multipleChoiceOnHTML();
     }
 
     Elements.modalEditFlashcard.show();
@@ -278,24 +278,24 @@ function resetFlashcard(){
 }
 
 function multipleChoiceOnHTML(){
-    Elements.formEditFlashcard.formAnswerContainer.innerHTML = `
-    <label for="form-answer-text-input">Correct Answer:</label>
+    Elements.formAnswerTextInputEdit.innerHTML= `
+    <label for="form-answer-text-input-edit">Correct Answer:</label>
     <textarea name="answer" id="form-answer-text-input-edit" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formEditFlashcard.answerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
     <br />
-    <label for="form-answer-text-input">Incorrect Option:</label>
+    <label for="form-answer-text-input-edit">Incorrect Option:</label>
     <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1"></textarea>
     <br />
-    <label for="form-answer-text-input">Incorrect Option:</label>
+    <label for="form-answer-text-input-edit">Incorrect Option:</label>
     <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1"></textarea>
     <br />
-    <label for="form-answer-text-input">Incorrect Option:</label>
+    <label for="form-answer-text-input-edit">Incorrect Option:</label>
     <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1"></textarea>
     `;
 }
 
 function multipleChoiceOffHTML(){
-    Elements.formEditFlashcard.formAnswerContainer.innerHTML =`
-    <label for="form-answer-text-input">Answer:</label>
+    Elements.formAnswerTextInputEdit.innerHTML =`
+    <label for="form-answer-text-input-edit">Answer:</label>
     <textarea name="answer" id="form-answer-text-input-edit" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formEditFlashcard.answerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
     `;
 }

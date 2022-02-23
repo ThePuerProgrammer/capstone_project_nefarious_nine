@@ -122,4 +122,5 @@ export const formEditFlashcard = {
     answerTextInput: document.getElementById('form-answer-text-input-edit'),
 }
 export const formCheckInputIsMultipleChoiceEdit = document.getElementById('form-check-input-is-multiple-choice-edit');
+export const formAnswerTextInputEdit = document.getElementById('form-edit-answer-container');
 //==========================================================================//
