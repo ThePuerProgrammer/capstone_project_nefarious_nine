@@ -40,15 +40,31 @@ export function addEventListeners(){
     });
 
     //Checks for the Image Question Toggle
-    Elements.formEditFlashcard.questionImageToggle.addEventListener("click", async (e) => {
+    Elements.formEditFlashcard.questionImageToggle.addEventListener('click', async (e) => {
         // TOGGLE ON
         checkImageQuestion();
     });
     
     //Checks for the Image Answer Toggle
-    Elements.formEditFlashcard.answerImageToggle.addEventListener("click", async (e) => {
+    Elements.formEditFlashcard.answerImageToggle.addEventListener('click', async (e) => {
         // TOGGLE IS ON
         checkImageAnswer();
+        if(Elements.formEditFlashcard.multipleChoiceToggle.checked){
+            Elements.formEditFlashcard.multipleChoiceToggle.checked=false;
+            multipleChoiceOffHTML();
+        }
+    });
+    Elements.formEditFlashcard.multipleChoiceToggle.addEventListener('click', async (e)=> {
+        //Toggle On
+        if(Elements.formEditFlashcard.multipleChoiceToggle.checked){
+            Elements.formEditFlashcard.answerImageToggle.checked=false;
+            imageAnswer.style.display = 'none';
+            multipleChoiceOnHTML();
+        }//Toggle Off
+        else{
+            Elements.formEditFlashcard.answerImageToggle.checked=false;
+            multipleChoiceOffHTML();
+        }
     });
     Elements.formEditFlashcard.form.addEventListener('submit', async e=> {
         e.preventDefault();
@@ -69,21 +85,35 @@ export function addEventListeners(){
             answerImageURL:     e.target.answerImageURL.value,
         });
         fc.set_docID(e.target.docId.value);
-        console.log(`fc.docID:${fc.docID}`);
+       
         let editDeckDocId = window.localStorage.getItem('deckPageDeckDocID');
-        console.log(editDeckDocId);
-        const isMultipleChoice = Elements.formEditFlashcard.multipleChoiceToggle.checked;
+        const formData = Array.from(Elements.formEditFlashcard).reduce(
+            (acc, input) => ({ ...acc, [input.name]: input.value }),
+            {}
+        );
+        const isMultipleChoice = Elements.formEditFlashcard.multipleChoiceToggle;
         const incorrectAnswers = [];
         const isQuestionImage = Elements.formEditFlashcard.questionImageToggle;
         const isAnswerImage = Elements.formEditFlashcard.answerImageToggle;
 
         //Check isMultipleChoice and registers value
-        //if(!isMultipleChoice || typeof obj === "undefined"){
+        //Toggling this real quick
             if(!isMultipleChoice){
-            console.log("checking mutliple choice worked");
-             fc.isMultipleChoice = isMultipleChoice;
-             fc.incorrectAnswers = incorrectAnswers;
-        }
+                console.log("checking mutliple choice worked");
+                fc.isMultipleChoice = false;
+                fc.incorrectAnswers = incorrectAnswers;
+            } else{
+                fc.isMultipleChoice = true;
+                if (isMultipleChoice) {
+                    if (formData.incorrectAnswer1 != "")
+                        incorrectAnswers.push(formData.incorrectAnswer1);
+                    if (formData.incorrectAnswer2 != "")
+                        incorrectAnswers.push(formData.incorrectAnswer2);
+                    if (formData.incorrectAnswer3 != "")
+                        incorrectAnswers.push(formData.incorrectAnswer3);
+                }
+                fc.incorrectAnswers = incorrectAnswers;
+            }
 
         //Firestore
         try{
@@ -155,28 +185,35 @@ export async function edit_flashcard(uid, deckId, docId){
     Elements.formEditFlashcard.form.answer.value = flashcard.answer;
     Elements.formEditFlashcard.questionImageTag.src = flashcard.questionImageURL;
     Elements.formEditFlashcard.answerImageTag.src = flashcard.answerImageURL;
+    Elements.formEditFlashcard.multipleChoiceToggle = flashcard.isMultipleChoice;
     
     //Verifying Toggles
-    const isMultipleChoice = Elements.formEditFlashcard.multipleChoiceToggle;
+    const ismultiplechoice = Elements.formEditFlashcard.multipleChoiceToggle;
     const incorrectAnswers = [];
     const isQuestionImage = Elements.formEditFlashcard.questionImageToggle;
     const isAnswerImage = Elements.formEditFlashcard.answerImageToggle;
 
     if(!flashcard.questionImageName||flashcard.questionImageName=='N/A'){
         isQuestionImage.checked=false;
-        checkImageQuestion();
+        imageQuestion.style.display='none';
     } else {
         isQuestionImage.checked=true;
-        checkImageQuestion();
-
+        imageQuestion.style.display='block';
     }
     if(!flashcard.answerImageName||flashcard.answerImageName=='N/A'){
         isAnswerImage.checked=false;
-        checkImageAnswer();
+        imageAnswer.style.display='none';
     } else {
         isAnswerImage.checked=true;
-        checkImageAnswer();
+        imageAnswer.style.display='block';
     }
+    // if(!flashcard.isMultipleChoice){
+    //     ismultiplechoice.checked = false;        
+    //     multipleChoiceOffHTML();
+    // } else {
+    //     ismultiplechoice.checked=true;
+    //     multipleChoiceOnHTML();
+    // }
 
     Elements.modalEditFlashcard.show();
 }
@@ -237,7 +274,7 @@ function resetFlashcard(){
 }
 
 function multipleChoiceOnHTML(){
-    Elements.formAnswerContainer.innerHTML = `
+    Elements.formEditFlashcard.formAnswerContainer.innerHTML = `
     <label for="form-answer-text-input">Correct Answer:</label>
     <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
     <br />
@@ -253,7 +290,7 @@ function multipleChoiceOnHTML(){
 }
 
 function multipleChoiceOffHTML(){
-    Elements.formAnswerContainer.innerHTML =`
+    Elements.formEditFlashcard.formAnswerContainer.innerHTML =`
     <label for="form-answer-text-input">Answer:</label>
     <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
     `;
