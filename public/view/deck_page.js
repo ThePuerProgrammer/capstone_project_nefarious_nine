@@ -280,7 +280,6 @@ export async function deck_page(deckDockID) {
     );
 
     const deleteButton = document.getElementById(Constant.htmlIDs.deleteFlashcard);
-    ///ADDED STEPHEN
     const editForms = document.getElementsByClassName('form-edit-flashcard')
     for(let i=0; i< editForms.length; i++){
         editForms[i].addEventListener('submit', async e => {
@@ -290,8 +289,9 @@ export async function deck_page(deckDockID) {
             const button = e.target.getElementsByTagName('button')[0];
             const label = Utilities.disableButton(button);
             //passed by the button on the flashcard
-            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDockID,e.target.docId.value)
             Utilities.enableButton(button,label);
+            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDockID,e.target.docId.value)
+           
         })
     }
 
@@ -390,7 +390,7 @@ function buildFlashcardView(flashcard) {
     <br>
     <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
     <form class="form-edit-flashcard" method="post">
-        <input type="hidden" name="docId" value="${flashcard.docId}">
+        <input type="hidden" name="docId" value="${flashcard.docID}">
         <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
     </form>
   </div>
@@ -400,7 +400,7 @@ function buildFlashcardView(flashcard) {
         `</div><div class="flip-card-back">
   <h5>${flashcard.answer}</h5>
   <form class="form-edit-flashcard" method="post">
-        <input type="hidden" name="docId" value="${flashcard.docId}">
+        <input type="hidden" name="docId" value="${flashcard.docID}">
         <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
   </form>
   </div>

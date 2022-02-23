@@ -489,24 +489,6 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID){
 //     answerImageName:data.answerImageName,
 //     answerImageURL:data.answerImageURL,
 // }).then(() => {console.log("UPDATED");});
-    // // Using the flashcard data reference to check if it exists
-    // flashcardDataRef.get().then((doc) => {
-    //     if (doc.exists) {
-    //         flashcardData.streak = doc.data().streak;
-    //     }
-    // });
-
-    // // Update flashcardData result on Firebase
-    // firebase.firestore()
-    //     .collection(Constant.collectionName.USERS)
-    //     .doc(loggedInUserDocID)
-    //     .collection(Constant.collectionName.DECK_DATA)
-    //     .doc(deckDocID)
-    //     .collection(Constant.collectionName.FLASHCARDS_DATA)
-    //     .doc(flashcardDocID)
-    //     .set(flashcardData.serialize());
-
-
 
 //============================================================================//
 // create default timer 
