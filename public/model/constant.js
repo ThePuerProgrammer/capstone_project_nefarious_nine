@@ -14,6 +14,7 @@ export const collectionName = {
     USERS: 'users',
     DECK_DATA: 'deck_data',
     FLASHCARDS_DATA: 'flashcards_data',
+    CLASSROOMS: 'classrooms',
 }
 
 /*****************************************
@@ -38,15 +39,14 @@ export const htmlIDs = {
     modalCreateAFlashcard: 'modal-create-a-flashcard',
     buttonStudy: 'btn-study-deck',
     formAnswerFlashcard: 'form-answer-flashcard',
+    overrideFlashcardBtn: 'override-flashcard-btn',
     deleteFlashcard: 'button-delete-flashcard-modal',
     deleteFlashcardModal: 'modal-delete-a-flashcard',
-
-    /*****************************************
-     *         Helper Functions
-     *****************************************
-     * General helper functions that may be used
-     * throughout different JavaScript files
-     ******************************************/
     formCheckInputIsMultiple: 'form-check-input-is-multiple',
-    modalCreateAccount: 'modal-create-account'
+    modalCreateAccount: 'modal-create-account',
+    smartStudyCheckbox: 'smart-study-checkbox',
+    smartStudyPopupTextContainer: 'smart-study-popup-text-container',
+    streakNumberText: 'streak-number-text',
+    studyFlashcardAnswer: 'study-flashcard-answer',
+    smartStudyIndicator: 'smart-study-indicator',
 }

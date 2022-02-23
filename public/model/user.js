@@ -1,7 +1,10 @@
 export class User{
     constructor(data){
         this.email = data.email;
-        this.decksStudying = data.decksStudying
+        this.decksStudying = data.decksStudying;
+        this.defaultTimerSetting = [30, 3];
+        this.coins = data.coins;
+        this.pet = data.pet;
         // TODO: SHOP STUFF
     }
 
@@ -33,7 +36,20 @@ export class User{
             return {
                 email: this.email,
                 decksStudying: this.decksStudying,
+                defaultTimerSetting: this.defaultTimerSetting,
+                coins: this.coins,
+                pet: this.pet,
             };
+        }
+
+       static deserialize(data) {
+           const user = new User(data);
+           user.defaultTimerSetting = data.defaultTimerSetting;
+           user.email = data.email;
+           user.decksStudying = data.decksStudying;
+           user.coins = data.coins;
+           user.pet = data.pet;
+           return user;
         }
 
 /***************************************************************************

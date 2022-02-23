@@ -35,11 +35,6 @@ export function addViewFormSubmitEvent(form) {
 
 export function addEventListeners() {
 
-    //Adds event listener to CREATE DECK button within CREATE DECK modal 
-    Elements.decksCreateDeck.addEventListener("click", async () => {
-        history.pushState(null, null, Routes.routePathname.DECK);
-        await deck_page();
-    });
 
     // Executes parameter function whenever the Create-A-Flashcard Modal is completely hidden
     //     The function clears the input fields so that when the user returns, then
@@ -49,7 +44,7 @@ export function addEventListeners() {
         resetFlashcard();
     });
 
-    
+
     // Adds event listener to CREATE A FLASHCARD Submit button
     // TODO: move actual work into its own function and just pass function name to even listener
     Elements.formCreateAFlashcard.addEventListener("submit", async (e) => {
@@ -97,34 +92,34 @@ export function addEventListeners() {
         try {
             //Question Image
             if (isQuestionImage) {
-              console.log("Question-1");
-              const { questionImageName,questionImageURL } =
-                await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
-              flashcard.questionImageName = questionImageName;
-              flashcard.questionImageURL= questionImageURL;
+                console.log("Question-1");
+                const { questionImageName, questionImageURL } =
+                    await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
+                flashcard.questionImageName = questionImageName;
+                flashcard.questionImageURL = questionImageURL;
             } else if (typeof obj === "undefined") {
-              console.log("Question-2");
-              flashcard.questionImageName = "N/A";
-              flashcard.questionImageURL = "N/A";
+                console.log("Question-2");
+                flashcard.questionImageName = "N/A";
+                flashcard.questionImageURL = "N/A";
             }
             //Answer Image
-            
-            if(isAnswerImage){
-              console.log("Answer-1");
-              const { answerImageName, answerImageURL } =
-                await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
-              flashcard.answerImageName = answerImageName;
-              flashcard.answerImageURL= answerImageURL;
-            }else if (typeof obj === "undefined") {
-              console.log("Answer-2");
-              flashcard.answerImageName = "N/A";
-              flashcard.answerImageURL = "N/A";
+
+            if (isAnswerImage) {
+                console.log("Answer-1");
+                const { answerImageName, answerImageURL } =
+                    await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
+                flashcard.answerImageName = answerImageName;
+                flashcard.answerImageURL = answerImageURL;
+            } else if (typeof obj === "undefined") {
+                console.log("Answer-2");
+                flashcard.answerImageName = "N/A";
+                flashcard.answerImageURL = "N/A";
             }
-      
+
             const docId = await FirebaseController.createFlashcard(
-              Auth.currentUser.uid,
-              deckDocID,
-              flashcard
+                Auth.currentUser.uid,
+                deckDocID,
+                flashcard
             );
             //flashcard.set_docID(docId);
             flashcard.docID = docId;
@@ -153,6 +148,7 @@ export function addEventListeners() {
     });
     Elements.formDeleteFlashcard.addEventListener('submit', async (e) => {
         e.preventDefault();
+        // get the value from the select list item
         var f = document.getElementById('value').value;
         try {
             await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
@@ -160,6 +156,7 @@ export function addEventListeners() {
         } catch (e) {
             Utilities.info("Error", JSON.stringify(e), "modal-delete-a-flashcard");
         }
+        // refresh the page
         await deck_page(deckDocID);
     });
     // Event listener to change the answer view depending on whether or not
@@ -229,7 +226,7 @@ export function addEventListeners() {
         reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
         reader.readAsDataURL(imageFile2UploadAnswer);
     });
-    
+
 }
 
 export async function deck_page(deckDockID) {
@@ -314,34 +311,46 @@ export async function deck_page(deckDockID) {
         e.preventDefault();
 
         // Opens the Modal
-        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');});
-
-        // Adds event listener for STUDY button
-        buttonStudy.addEventListener('click', async e => {
-            e.preventDefault();
-            //const docId = e.target.deckDockID.value;
-            history.pushState(null, null, Routes.routePathname.DECK + "#" + deckDockID);
-            await Study.study_page(deckDockID);
+        $(`#${Constant.htmlIDs.modalCreateAFlashcard}`).modal('show');
     });
 
     // Adds event listener for STUDY button
     buttonStudy.addEventListener('click', async e => {
         e.preventDefault();
-        //const docId = e.target.docId.value;
-        history.pushState(null, null, Routes.routePathname.STUDY + "#" + docId);
-        await Study.study_page(docId);
+        //const docId = e.target.deckDockID.value;
+
+        // If this is the user's first time studying the deck then we need to create
+        //  a deck data for them.
+        try {
+            await FirebaseController.createDeckDataIfNeeded(Auth.currentUser.uid, deckDocID);
+        }
+        catch (e) {
+            if (Constant.DEV)
+                console.log("Error Creating Data Deck (User's first time studying a deck)", e);
+        }
+
+        history.pushState(null, null, Routes.routePathname.STUDY + "#" + deckDockID);
+        localStorage.setItem("deckPageDeckDocID", deckDockID);
+        await Study.study_page();
     });
 
     deleteButton.addEventListener('click', async e => {
         e.preventDefault();
         const deleteOption = document.getElementById("delete-option");
+        // clear out the select list elements to prevent duplicates from appearing
+        for (let i = deleteOption.length; i > 0; i--) {
+            deleteOption.remove(i);
+        }
+
+        // build select list elements from flashcard array
         for (let i = 0; i < flashcards.length; ++i) {
             const el = document.createElement("option");
             el.innerHTML = flashcards[i].question;
-            el.value = flashcards[i].docId;
+            el.value = flashcards[i].docID;
             deleteOption.appendChild(el);
         }
 
+        // opens delete flashcard modal
         $(`#${Constant.htmlIDs.deleteFlashcardModal}`).modal('show');
     })
 }
@@ -364,6 +373,7 @@ function buildFlashcardView(flashcard) {
         let flashcardAnswers = [flashcard.answer];
         flashcardAnswers = flashcardAnswers.concat(flashcard.incorrectAnswers);
         shuffle(flashcardAnswers);
+        // TODO: Find a much better way of doing this
         if (flashcardAnswers.length == 4) {
             html += `<p class="answer-text">1. ${flashcardAnswers[0]}   2. ${flashcardAnswers[1]}</p>
                     <p class="answer-text">3. ${flashcardAnswers[2]}    4. ${flashcardAnswers[3]}</p>`
@@ -375,50 +385,44 @@ function buildFlashcardView(flashcard) {
         }
     }
 
-    html += flashcard.answerImageURL != "N/A" ?  `
-            </div>
-            <div class="flip-card-back">
-                <h6>${flashcard.answer}</h6>
-                <br>
-                <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
-                <br>
-                <form class="form-edit-flashcard" method="post">
-                    <input type="hidden" name="docId" value="${flashcard.docId}">
-                    <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
-                </form>
-            </div>
-        </div>
-    </div>` 
-  :
-    `       </div>
-            <div class="flip-card-back">
-                <h6>${flashcard.answer}</h6>
-                <form class="form-edit-flashcard" method="post">
-                    <input type="hidden" name="docId" value="${flashcard.docId}">
-                    <br>
-                    <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
-                </form>
-            </div>
-        </div>
-    </div>`;
-  
-    
+    html += flashcard.answerImageURL != "N/A" ? `</div><div class="flip-card-back">
+    <h5>${flashcard.answer}</h5>
+    <br>
+    <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
+    <form class="form-edit-flashcard" method="post">
+        <input type="hidden" name="docId" value="${flashcard.docId}">
+        <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
+    </form>
+  </div>
+  </div>
+  </div>`
+        :
+        `</div><div class="flip-card-back">
+  <h5>${flashcard.answer}</h5>
+  <form class="form-edit-flashcard" method="post">
+        <input type="hidden" name="docId" value="${flashcard.docId}">
+        <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
+  </form>
+  </div>
+  </div>
+  </div>`;
+
     return html;
-  }
+}
 
 //Function to reset all feels and toggles in creation modal
 function resetFlashcard(){
     Elements.formCreateAFlashcard.reset();
-    if(Elements.formCheckInputIsImageQuestion){
-        imageQuestion.style.display='none';
+    if (Elements.formCheckInputIsImageQuestion) {
+        imageQuestion.style.display = 'none';
     }
-    if(Elements.formCheckInputIsImageAnswer){
-        imageAnswer.style.display='none';
+    if (Elements.formCheckInputIsImageAnswer) {
+        imageAnswer.style.display = 'none';
 
     }
-    Elements.imageTagCreateFlashAnswer.src="";
-    Elements.imageTagCreateFlashQuestion.src="";
-  
+    Elements.imageTagCreateFlashAnswer.src = "";
+    Elements.imageTagCreateFlashQuestion.src = "";
+
     // Making sure singular choice is displayed next time.
     Elements.formAnswerContainer.innerHTML = `
         <label for="form-answer-text-input">Answer:</label>
@@ -457,12 +461,12 @@ function checkImageAnswer(){
         imageAnswer.style.display = 'none';
       }
     }
-    else if(!Elements.formCheckInputIsImageAnswer.checked){
-      if(imageAnswer.style.display=='none'){
-        imageAnswer.style.display = 'block';
-      } else{
-        imageAnswer.style.display = 'none';
-      }
+    else if (!Elements.formCheckInputIsImageAnswer.checked) {
+        if (imageAnswer.style.display == 'none') {
+            imageAnswer.style.display = 'block';
+        } else {
+            imageAnswer.style.display = 'none';
+        }
     }
 }
 

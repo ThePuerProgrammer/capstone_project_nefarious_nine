@@ -250,6 +250,11 @@ input {
     background-color: transparent;
     width: 300px;
     height: 200px;
+    border: 1px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
     perspective: 1000px;
 }
 
@@ -296,14 +301,23 @@ input {
     margin-bottom: 1em;
 }
 
+.deck-card{
+    width: 18rem;
+    display: inline-block;
+    background-color: #5F4B66;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
 /*============================================================================*/
 
 /* STYLE FOR STUDYING FLASHCARD */
 /*============================================================================*/
 .study-flashcard-view{
     background-color: #2C1320;
-    width: 700px;
-    height: 450px;
+    width: 800px;
+    height: 550px;
     perspective: 1000px;
     position: absolute; /* or absolute */
     top: 50%;
@@ -311,4 +325,100 @@ input {
     padding: 3%;
     /* bring your own prefixes */
     transform: translate(-50%, -50%);
+}
+
+.float-top-right {
+    position: fixed !important;
+    top: 70px !important;
+    right: 20px !important;
+}
+
+.streak-container {
+    opacity: 0%;
+    transition: opacity 0.5s;
+    transition-timing-function: cubic-bezier(0, .55, .4, .97);
+}
+
+.streak {
+    color: #2C1320;
+    text-shadow: 0px 0px 5px #5F4B66;
+}
+
+.streak-correct {
+    color: #68e252;
+    text-shadow: 0px 0px 5px #5F4B66;
+}
+
+.streak-incorrect {
+    color: #fa4040;
+    text-shadow: 0px 0px 5px #5F4B66;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+  /*STYLES FOR POMOPET RADIO BUTTONS*/
+/*============================================================================*/
+
+/*Hides radio buttons*/
+[type=radio] { 
+    position: static;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/*Curser Style*/
+[type=radio] + img {
+      cursor: pointer;
+}
+
+/* Hover animation*/
+.raise:hover,
+.raise:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+  color: gray;
+}
+
+/*Radio Button positioning*/
+.resize {
+    position: relative;
+    padding: 0, 70%, 0, 70%;
+}
+
+.center-position {
+    margin:0 auto;
+    display:block;
+}
+/*============================================================================*/
+
+  /*STYLES FOR CLASSROOM TABS*/
+/*============================================================================*/
+.classroom-tab {
+    background-color: #2C1320;
+    color: #56667A;
+    float: left;
+    border: none;
+    outline: none;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 25%;
+    transition: 0.3s;
+}
+
+.classroom-tab-content{
+    display: none;
+    padding: 100px 20px;
+    height: 100%;
+    animation: fadeEffect 1s;
+}
+
+@keyframes fadeEffect{
+    from {opacity: 0;}
+    to {opacity: 1;}
 }

@@ -47,6 +47,7 @@ export const formSearchDeck = document.getElementById('form-search-deck');
 // STUDY PAGE
 //============================================================================//
 //export const formAnswerFlashcard = document.getElementById('form-answer-flashcard');
+//export const overrideFlashcardBtn = document.getElementById('override-flashcard-btn');
 //============================================================================//
 
 // PW RESET FORM
@@ -124,3 +125,8 @@ export const formEditFlashcard = {
 export const formCheckInputIsMultipleChoiceEdit = document.getElementById('form-check-input-is-multiple-choice-edit');
 export const formAnswerTextInputEdit = document.getElementById('form-edit-answer-container');
 //==========================================================================//
+
+//PET ADOPTION
+//============================================================================//
+export const formPomodoption = document.getElementById('form-pomodoption');
+//============================================================================//

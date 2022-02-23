@@ -66,6 +66,7 @@ export async function study_decks_page() {
         </button>
     `;
 
+    // sort select menu
     html += `
     <div style="float:right">
     <label for="sort-decks">Order by:</label>
@@ -99,36 +100,66 @@ export async function study_decks_page() {
 
 
     Elements.root.innerHTML += html;
+    // adds an event listener to each of the view buttons
     DeckPage.addViewButtonListener();
 
     const sortDeckSelect = document.getElementById("sort-decks");
     sortDeckSelect.addEventListener('change', async e => {
         e.preventDefault();
+        // get the value from the sort deck list select item, the value === deckDocID
         var opt = e.target.options[e.target.selectedIndex].value;
+        // grab the div wrapped around the deck cards
         var deckContainer = document.getElementById('deck-container');
-        var decks = deckContainer.getElementsByClassName('card');
+        // grab the cards contained in the deck
+        var decks = deckContainer.getElementsByClassName('deck-card');
+        // store the decks inside of an array for sorting
         var list = [];
-        for(let i = 0; i < decks.length; ++i){
+        for (let i = 0; i < decks.length; ++i) {
             list.push(decks.item(i));
         }
-        if(opt == "name"){
-            list.sort(function(a, b){
+        /* Brief explanation of sorting in JS:
+            By default, sort() sorts values as strings. As such, it doesn't work correctly when
+            attempting to sort numbers. Hence, you can create a compare function to sort numbers corrently
+            If the function returns a negative result, a is sorted before b. If the function returns a
+            positive result, b is sorted before a. If the result is zero, no changes are done as the values
+            are in the correct order.
+            Since it isn't just sorting those items but actually variables of those items, we're using a compare
+            function for each item in the list to sort it properly. Each compare function works in a similar manner
+            but is using different variables
+        */
+        // First, we check what the value of the selected item from the sort deck list is
+        if (opt == "name") {
+            // next, we call the sort() function on the list and utilize a lambda function
+            list.sort(function (a, b) {
+                // This gets the 'id' attribute from the card
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
-                var first = deckList.find(deck => deck.docId == aId);
-                var second = deckList.find(deck => deck.docId == bId);
-                return (first.name < second.name) ? -1 : (first.name > second.name) ? 1 : 0;
+                // this will find the corresponding deck by the docId and then convert it to lowercase
+                // Note: .toLowerCase() does not transform the string itself, but creates a new string
+                var firstName = deckList.find(deck => deck.docId == aId).name.toLowerCase();
+                var secondName = deckList.find(deck => deck.docId == bId).name.toLowerCase();
+                /* Utilizing a nested ternary operator:
+                    1. Check if a is less than b. If true, return -1 as explained above
+                    2. If false, check if a is greater than b. If true, return 1 as explained above
+                    3. If false, then the function returns 0 as the values are already in their proper place
+                */
+                return (firstName < secondName) ? -1 : (firstName > secondName) ? 1 : 0;
             });
-        }else if(opt == "subject"){
-            list.sort(function(a, b){
+            // Each function will operate in a similar manner
+        } else if (opt == "subject") {
+            list.sort(function (a, b) {
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
-                var first = deckList.find(deck => deck.docId == aId);
-                var second = deckList.find(deck => deck.docId == bId);
-                return (first.subject < second.subject) ? -1 : (first.subject > second.subject) ? 1 : 0;
+                var firstSubject = deckList.find(deck => deck.docId == aId).subject.toLowerCase();
+                var secondSubject = deckList.find(deck => deck.docId == bId).subject.toLowerCase();
+                return (firstSubject < secondSubject) ? -1 : (firstSubject > secondSubject) ? 1 : 0;
             });
-        }else if(opt == "date"){
-            list.sort(function(a, b){
+        } else if (opt == "date") {
+            list.sort(function (a, b) {
+                /* DO NOT TOUCH THIS ONE 
+                    A different method could probably be worked out for sorting by name and subject,
+                    but dateCreated can ONLY be sorted using a compare function
+                */
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
                 var first = deckList.find(deck => deck.docId == aId);
@@ -136,15 +167,18 @@ export async function study_decks_page() {
                 return (first.dateCreated < second.dateCreated) ? -1 : (first.dateCreated > second.dateCreated) ? 1 : 0;
             });
         }
-        for(let i = 0; i < list.length; ++i){
+        // Finally, append the decks to the div wrapped around them, replacing the original order with the new order
+        for (let i = 0; i < list.length; ++i) {
             deckContainer.appendChild(list[i]);
         }
+        // If you've made it this far, then thank you for for following along
     })
 
-    const favoritedCheckboxes = document.getElementsByClassName("form-check-input");
+    const favoritedCheckboxes = document.getElementsByClassName("favorite-checkbox");
     for (let i = 0; i < favoritedCheckboxes.length; ++i) {
         favoritedCheckboxes[i].addEventListener('change', async e => {
             const docId = e.target.value;
+            console.log(docId);
             const favorited = deckList.find(deck => docId == deck.docId).isFavorited ? false : true;
             await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
             await study_decks_page();
@@ -156,7 +190,7 @@ export async function study_decks_page() {
 
 function buildDeckView(deck, flashcards) {
     let html = `
-    <div id="${deck.docId}" class="card" style="width: 18rem; display: inline-block; background-color: #5F4B66; padding: 5px; margin-bottom: 5px">
+    <div id="${deck.docId}" class="deck-card">
         <div class="card-body">
             <h5 class="card-text">${deck.name}</h5>
             <h6 class="card-text" >Subject: ${deck.subject}</h6>
@@ -168,13 +202,14 @@ function buildDeckView(deck, flashcards) {
             <button class="btn btn-outline-primary pomo-bg-color-dark" type="submit">View</button>
         </form>`;
 
+    // ternary operator to check if a deck is favorited or not
     html += deck.isFavorited ? `<div class="form-check">
-            <input class="form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
+            <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
             <label class="form-check-label" for="favorited">Favorite deck</label>
         </div>
     </div>
     ` : `<div class="form-check">
-    <input class="form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
+    <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
     <label class="form-check-label" for="favorited">Favorite deck</label>
 </div>
 </div>`;
