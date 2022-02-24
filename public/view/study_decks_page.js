@@ -32,6 +32,7 @@ export function addEventListeners() {
             subject,
             dateCreated,
             isFavorited,
+            category
         });
 
         try {
