@@ -5,28 +5,31 @@ import * as Utilities from '../view/utilities.js'
 import * as Elements from '../view/elements.js'
 import { Flashcard } from '../model/flashcard.js';
 import { deck_page } from '../view/deck_page.js'
-// import * as Flashcard from './/model/flashcard.js'
 
  let imageFile2UploadAnswer;
  let imageFile2UploadQuestion;
 
 let imageAnswer = Elements.formEditFlashcard.answerImageContainer;
 let imageQuestion = Elements.formEditFlashcard.questionImageContainer;
-
+//Adds all event listeners to the perspective buttons and switches.
 export function addEventListeners(){
+    //Allows the user to upload an image to the answer side of the flashcard
     Elements.formEditFlashcard.answerImageButton.addEventListener('change', e=> {
         //Possibly need to check for something here
         imageFile2UploadAnswer = e.target.files[0];
+        //If an image is unselected.
         if(!imageFile2UploadAnswer){
             Elements.formEditFlashcard.answerImageTag.src='';
             return;
         }
+        //When uploaded it will register the toggle to true
         Elements.formEditFlashcard.answerImageToggle.checked=true;
         const reader = new FileReader();
+        //Loads the Image and displays preview
         reader.onload = () => (Elements.formEditFlashcard.answerImageTag.src= reader.result);
         reader.readAsDataURL(imageFile2UploadAnswer);
     });
-
+    //Same as the Answer Image, but for the question portion.
     Elements.formEditFlashcard.questionImageButton.addEventListener('change', e=> {
         imageFile2UploadQuestion = e.target.files[0];
         if(!imageFile2UploadQuestion){
