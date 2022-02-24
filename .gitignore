@@ -64,3 +64,6 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+#ignore DS_Store related to mac files
+**/.DS_Store

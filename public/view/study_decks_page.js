@@ -20,6 +20,9 @@ export function addEventListeners() {
         const name = e.target.name.value;
         const subject = e.target.subject.value;
         const isFavorited = false;
+        const category = e.target.selectCategory.value;
+
+        console.log("category is: " + category);
 
         // relevant to Cody's story:
         const dateCreated = Date.now();
@@ -29,6 +32,7 @@ export function addEventListeners() {
             subject,
             dateCreated,
             isFavorited,
+            category
         });
 
         try {
@@ -60,11 +64,14 @@ export async function study_decks_page() {
     html += '<h1> Study Decks </h1>';
 
     // Solution for merging Piper's 'create_deck_deck_title branch
-    html += `
+    /*html += `
         <button type="button" class="btn btn-secondary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
             Create New Deck
         </button>
-    `;
+    `;*/
+
+    html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark">
+     Create Deck</button>`;
 
     // sort select menu
     html += `
@@ -184,6 +191,28 @@ export async function study_decks_page() {
             await study_decks_page();
         });
     }
+
+    const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
+
+    // restructured create deck button to add category dropdown menu
+    createDeckButton.addEventListener('click', async e => {
+
+        const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+
+        // add firebase func. to retrieve categories list
+
+        // clear innerHTML to prevent duplicates
+        Elements.formDeckCategorySelect.innerHTML = '';
+ 
+        categories.forEach(category => {
+            Elements.formDeckCategorySelect.innerHTML += `
+                      <option value="${category}">${category}</option>
+                  `;
+          });
+
+        // opens create Deck modal
+        $(`#${Constant.htmlIDs.createDeckModal}`).modal('show');
+    })
 
 }
 

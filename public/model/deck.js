@@ -7,6 +7,7 @@ export class Deck {
         this.subject = data.subject;
         this.dateCreated = data.dateCreated;
         this.isFavorited = data.isFavorited;
+        this.category = data.category;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
 
@@ -43,6 +44,7 @@ export class Deck {
             subject: this.subject,
             dateCreated: this.dateCreated,
             isFavorited: this.isFavorited,
+            category: this.category,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 

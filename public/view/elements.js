@@ -41,6 +41,7 @@ export const formDeleteFlashcardSelect = document.getElementById('delete-option'
 //============================================================================//
 export const formSignIn = document.getElementById('form-signin');
 export const formCreateDeck = document.getElementById('form-create-deck');
+export const formDeckCategorySelect = document.getElementById('select-deck-category');
 export const formCreateAccount = document.getElementById('form-create-account');
 export const formViewDeck = document.getElementById('form-view-deck');
 export const formSearchDeck = document.getElementById('form-search-deck');
