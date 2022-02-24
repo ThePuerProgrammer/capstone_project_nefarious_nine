@@ -8,7 +8,7 @@ import * as PomoTimer from './view/pomo_timer.js'
 import * as FirebaseAuth from './controller/firebase_auth.js'
 import * as Deck from './view/deck_page.js'
 import * as Study from '../view/study_page.js'
-import * as Godot from '../view/godot_page.js'
+import * as Minigames from '../view/minigames_page.js'
 
 window.onload = () => {
     const pathname = window.location.pathname;
@@ -33,4 +33,4 @@ PomoTimer.addEventListeners();
 FirebaseAuth.addEventListeners();
 Deck.addEventListeners();
 Study.addEventListeners();
-Godot.addEventListeners();
+Minigames.addEventListeners();

@@ -3,13 +3,13 @@ import * as Routes from '../controller/routes.js'
 
 export function addEventListeners() {
     Elements.menuTempGodot.addEventListener('click', async() => {
-        history.pushState(null, null, Routes.routePathname.GODOT);
-        await godot_page();
+        history.pushState(null, null, Routes.routePathname.MINIGAMES);
+        await minigames_page();
     });
 }
 
-export async function godot_page() {
-    Elements.root.innerHTML = `GoDot page`;
+export async function minigames_page() {
+    Elements.root.innerHTML = `Minigames page`;
 
     // Do godot magic here
 }
