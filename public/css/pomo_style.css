@@ -256,6 +256,7 @@ input {
     margin-right: 5px;
     margin-top: 5px;
     perspective: 1000px;
+    word-wrap: break-all;
 }
 
 .flip-card-inner{
@@ -265,6 +266,7 @@ input {
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
+    word-wrap: break-all;
 }
 
 .flip-card:hover .flip-card-inner {
@@ -294,13 +296,24 @@ input {
 .card-text{
     text-align: center;
     color: #A7ADC6;
+    overflow-wrap: break-word;
 }
 
 .answer-text{
     width: fit-content;
     margin-bottom: 1em;
+    overflow-wrap: break-word;
 }
 
+/* .form-control{
+    width:fit-content;
+    margin-bottom: 1em;
+    overflow-wrap: break-word;
+} */
+/*============================================================================*/
+
+/* STYLE FOR STUDY DECKS */
+/*============================================================================*/
 .deck-card{
     width: 18rem;
     display: inline-block;
@@ -310,6 +323,31 @@ input {
     margin-right: 5px;
     margin-top: 5px;
 }
+.deck-view-css{
+    text-align: center;
+}
+.form-check{
+    text-align: center;
+    align-items: center;
+    vertical-align: auto;
+    float:right;
+    padding-right: 90px;
+}
+
+/*Could be a problem*/
+.modal-content{
+    width:auto;
+}
+.delete-flashcard-css-class{
+    padding-top: 10px;
+}    
+
+   
+
+
+
+
+
 /*============================================================================*/
 
 /* STYLE FOR STUDYING FLASHCARD */

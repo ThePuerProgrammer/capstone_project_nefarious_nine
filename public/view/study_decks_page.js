@@ -220,6 +220,7 @@ export async function study_decks_page() {
 function buildDeckView(deck, flashcards) {
     let html = `
     <div id="${deck.docId}" class="deck-card">
+        <div class="deck-view-css">
         <div class="card-body">
             <h5 class="card-text">${deck.name}</h5>
             <h6 class="card-text" >Subject: ${deck.subject}</h6>
@@ -228,18 +229,19 @@ function buildDeckView(deck, flashcards) {
         </div>
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-primary pomo-bg-color-dark" type="submit">View</button>
-        </form>`;
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+        </form>
+        </div>`;
 
     // ternary operator to check if a deck is favorited or not
     html += deck.isFavorited ? `<div class="form-check">
-            <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
-            <label class="form-check-label" for="favorited">Favorite deck</label>
-        </div>
+    <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>        
+    <label class="form-check-label" for="favorited">Favorite deck</label>
+    </div>
     </div>
     ` : `<div class="form-check">
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
-    <label class="form-check-label" for="favorited">Favorite deck</label>
+    <label class="form-check-label pomo-text-color-light" for="favorited">Favorite deck</label>
 </div>
 </div>`;
     return html;

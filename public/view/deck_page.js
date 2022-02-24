@@ -365,7 +365,7 @@ function buildFlashcardView(flashcard) {
         `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
         <div class="flip-card-inner">
             <div class="flip-card-front">
-                <h3>${flashcard.question}</h3>
+                <h5>${flashcard.question}</h5>
             `;
 
     //still TODO: make multiple choice answers look better
@@ -375,18 +375,18 @@ function buildFlashcardView(flashcard) {
         shuffle(flashcardAnswers);
         // TODO: Find a much better way of doing this
         if (flashcardAnswers.length == 4) {
-            html += `<p class="answer-text">1. ${flashcardAnswers[0]}   2. ${flashcardAnswers[1]}</p>
-                    <p class="answer-text">3. ${flashcardAnswers[2]}    4. ${flashcardAnswers[3]}</p>`
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]} <br/> 2. ${flashcardAnswers[1]}  
+            <br/> 3. ${flashcardAnswers[2]}  <br/> 4. ${flashcardAnswers[3]}  </p>`
         } else if (flashcardAnswers.length == 3) {
-            html += `<p class="answer-text">1. ${flashcardAnswers[0]}   2. ${flashcardAnswers[1]}</p>
-            <p class="answer-text">3. ${flashcardAnswers[2]}</p>`
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]}  <br/> 2. ${flashcardAnswers[1]}
+                        <br/> 3. ${flashcardAnswers[2]}</p>`
         } else if (flashcardAnswers.length == 2) {
-            html += `<p class="answer-text">1. ${flashcardAnswers[0]}   2. ${flashcardAnswers[1]}</p>`
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]} <br/>  2. ${flashcardAnswers[1]}</p>`
         }
     }
 
     html += flashcard.answerImageURL != "N/A" ? `</div><div class="flip-card-back">
-    <h5>${flashcard.answer}</h5>
+    <h6>${flashcard.answer}</h6>
     <br>
     <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
     <form class="form-edit-flashcard" method="post">
@@ -398,7 +398,7 @@ function buildFlashcardView(flashcard) {
   </div>`
         :
         `</div><div class="flip-card-back">
-  <h5>${flashcard.answer}</h5>
+  <h6>${flashcard.answer}</h6>
   <form class="form-edit-flashcard" method="post">
         <input type="hidden" name="docId" value="${flashcard.docID}">
         <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
@@ -473,22 +473,22 @@ function checkImageAnswer(){
 function multipleChoiceOnHTML(){
     Elements.formAnswerContainer.innerHTML = `
     <label for="form-answer-text-input">Correct Answer:</label>
-    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1" max length="30"></textarea>
     <br />
     <label for="form-answer-text-input">Incorrect Option:</label>
-    <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1"></textarea>
+    <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1" max length="30"></textarea>
     <br />
     <label for="form-answer-text-input">Incorrect Option:</label>
-    <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1"></textarea>
+    <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1" max length="30"></textarea>
     <br />
     <label for="form-answer-text-input">Incorrect Option:</label>
-    <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1"></textarea>
+    <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1" max length="30"></textarea>
     `;
 }
 
 function multipleChoiceOffHTML(){
     Elements.formAnswerContainer.innerHTML =`
     <label for="form-answer-text-input">Answer:</label>
-    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required min length ="1" max length="30"></textarea>
     `;
 }
