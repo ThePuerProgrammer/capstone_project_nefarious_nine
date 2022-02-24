@@ -14,8 +14,21 @@ export function addEventListeners() {
 export async function classrooms_page() {
     Elements.root.innerHTML = '';
 
-    let html = `<button id="my-classroom-button" class="classroom-tab btn-secondary">My Classrooms</button>
-    <button id="available-classroom-button" class="classroom-tab btn-secondary">Available Classrooms</button>`
+    let html = `<div class="tab"><button id="my-classroom-button" class="classroom-tab">My Classrooms</button>
+    <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>`
+
+    // sort select menu
+    html += `
+    <div style="float:right">
+    <label for="sort-decks">Order by:</label>
+    <select name="sort-decks" id="sort-decks" style="width: 200px">
+        <option selected>Sort classrooms by...</option>
+        <option value="name">Name</option>
+        <option value="subject">Subject</option>
+        <option value="date">Category</option>
+    </select>
+    </div>
+    </div>`
 
     // placeholder for classrooms until they're done so you get to see how cool they look
     html += `<div id="Available Classrooms" class="classroom-tab-content">
@@ -141,6 +154,11 @@ export async function classrooms_page() {
             tabContents[i].style.display = "none";
         }
         document.getElementById('Available Classrooms').style.display = "block";
+        e.target.style.backgroundColor = `#A7ADC6`;
+        e.target.style.color = `#2C1320`;
+        e.target.style.borderBottom = `#A7ADC6`;
+        document.getElementById('my-classroom-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('my-classroom-button').style.color = '#A7ADC6';
     })
 
     const myClassroomButton = document.getElementById('my-classroom-button');
@@ -150,7 +168,13 @@ export async function classrooms_page() {
             tabContents[i].style.display = "none";
         }
         document.getElementById('My Classrooms').style.display = "block";
+        e.target.style.backgroundColor = `#A7ADC6`;
+        e.target.style.color = `#2C1320`;
+        e.target.style.borderBottom = `#A7ADC6`;
+        document.getElementById('available-classroom-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('available-classroom-button').style.color = '#A7ADC6';
     })
+    myClassroomButton.click();
 
 }
 
