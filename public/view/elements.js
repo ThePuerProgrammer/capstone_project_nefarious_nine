@@ -13,6 +13,8 @@ export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 export const modalMenuResetPassword = document.getElementById('reset-password');
 
+// TEMPORARY Element for temporary button
+export const menuTempGodot = document.getElementById('menu-temp-godot'); 
 
 // pomo timer buttons
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
