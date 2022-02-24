@@ -319,6 +319,81 @@
     </div>
   </div>
 
+  <!-- MODAL:EDIT A FLASHCARD -->
+  <div class="modal fade" id="modal-edit-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-edit-a-flashcard-title">Edit Flashcard</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-edit-a-flashcard" method="post">
+            <input type="hidden" name="docId" />
+            <input type="hidden" name="deckDocId" />
+            <input type="hidden" name="isMultipleChoice"/>
+            <input type="hidden" name="incorrectAnswers"/>
+            <input type="hidden" name="questionImageName" />
+            <input type="hidden" name="answerImageName" />
+            <input type="hidden" name="questionImageURL"/>
+            <input type="hidden" name="answerImageURL"/>
+            <div class="btn-group" role="group" aria-label="basic checkbox toggle button group">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch"
+                  id="form-check-input-is-multiple-choice-edit">
+                <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple
+                  Choice</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch"
+                  id="form-check-input-is-image-question-edit">
+                <label class="form-check-label" for="form-check-input-is-image-question">Image w/
+                  Question</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch"
+                  id="form-check-input-is-image-answer-edit">
+                <label class="form-check-label" for="form-check-input-is-image-answer">Image w/
+                  Answer</label>
+              </div>
+            </div>
+            <br />
+            <h3 style="text-align:center"><u>Question Side</u></h3>
+            <div>
+              Question: <textarea name="question" type="text" name="flashcard-question" class="form-control" required
+                min length="1"></textarea>
+            </div>
+            <br />
+            <div id="form-edit-flashcard-question-image-container">
+              <img id="form-edit-flashcard-question-image-tag"
+                style="height: 100%; width: 100%; object-fit: contain; display: block;">
+              Image:
+              <input id="form-edit-flashcard-question-image-button" type="file" value="upload" />
+            </div>
+            <br />
+            <h3 style="text-align:center"><u>Answer Side</u></h3>
+            <div id="form-edit-answer-container">
+              Answer: <textarea name="answer" id="form-answer-text-input-edit" type="text" name="flashcard-answer" 
+                class="form-control" placeholder ="At least 4." required min length="1"></textarea>
+            </div>
+            <br />
+            <div id="form-edit-flashcard-answer-image-container">
+              <img id="form-edit-flashcard-answer-image-tag"
+                style=" height: 100%; width: 100%; object-fit: contain; display: block;">
+              Image:
+              <input id="form-edit-flashcard-answer-image-button" type="file" value="upload" />
+            </div>
+            <br />
+            <div>
+              <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL:DELETE A FLASHCARD -->
   <div class="modal fade" id="modal-delete-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden=" true">
@@ -461,7 +536,6 @@
     </div>
   </div>
   <!-- END OF TIMER SECTION --------------------------------------------------->
-
 
   <!-- SCRIPTS -------------------------------------------------------------->
   <!-- update the version number as needed -->

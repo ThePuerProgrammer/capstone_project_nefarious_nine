@@ -3,8 +3,8 @@
 **************************************************/
 export class Flashcard{
     constructor(data){
-        this.question = data.question;
-        this.answer = data.answer;
+        this.question = data.question.trim();
+        this.answer = data.answer.trim();
         this.isMultipleChoice = data.isMultipleChoice;
         this.incorrectAnswers = data.incorrectAnswers;
         //Picture Related DATA
@@ -67,6 +67,7 @@ export class Flashcard{
             if(!obj.answerImageName || typeof obj.answerImageName != 'string') return false;
             if(!obj.question || typeof obj.question != 'string') return false;
             if(!obj.answer || typeof obj.answer != 'string') return false;
+            if(!obj.isMultipleChoice || typeof obj.isMultipleChoice != 'boolean') return false;
         }
 
 /***************************************************************************
@@ -76,10 +77,17 @@ export class Flashcard{
  *      This will allow updating to be serialized, prevents errors on the 
  *      firebase side.  
 ***************************************************************************/
-        // serializeForUpdate(){
-        //     const flashcard = {};
-        //     if(this.imageName) flashcard.imageName = this.imageName;
-        //     if(this.imageURL) flashcard.imageURL = this.imageURL;
-        // }
+        serializeForUpdate(){
+            const fc = {};
+            if(this.question) fc.question = this.question;
+            if(this.answer) fc.answer = this.answer;
+            if(this.incorrectAnswers) fc.incorrectAnswers = this.incorrectAnswers;
+            if(this.isMultipleChoice) fc.isMultipleChoice = this.isMultipleChoice;
+            if(this.questionImageName) fc.questionImageName = this.questionImageName;
+            if(this.questionImageURL) fc.questionImageURL = this.questionImageURL;
+            if(this.answerImageName) fc.answerImageName = this.answerImageName;
+            if(this.answerImageURL) fc.answerImageURL = this.answerImageURL;
+            return fc;
+        }
 
 }
