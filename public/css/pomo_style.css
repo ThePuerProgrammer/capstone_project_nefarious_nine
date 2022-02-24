@@ -399,12 +399,16 @@ input {
 
   /*STYLES FOR CLASSROOM TABS*/
 /*============================================================================*/
+.tab{
+    border-bottom: 1px solid #2C1320;
+    padding-bottom: 55px;
+}
+
 .classroom-tab {
-    background-color: #2C1320;
-    color: #56667A;
+    background-color: #A7ADC6;
+    color: #2C1320;
     float: left;
-    border: none;
-    outline: none;
+    border-bottom: #A7ADC6;
     padding: 14px 16px;
     font-size: 17px;
     width: 25%;
@@ -422,6 +426,8 @@ input {
     from {opacity: 0;}
     to {opacity: 1;}
 }
+
+/*============================================================================*/
 
 iframe {
     width: 100%;
