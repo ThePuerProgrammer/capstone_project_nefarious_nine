@@ -114,19 +114,33 @@ export function addEventListeners(){
 
             console.log(`isQuestionImage.checked${isQuestionImage.checked}`);
             console.log(`isAnswerImage.checked${isAnswerImage.checked}`);
+            if(imageFile2UploadAnswer){
+            console.log(`answerImageUPLOAD${imageFile2UploadAnswer.value}`);
+            }
+            if(imageFile2UploadQuestion){
+            console.log(`questionImageUPLOAD${imageFile2UploadQuestion.value}`);
+            }
+        
 
         //Firestore
         try{
             if(isAnswerImage.checked==true){
-                if(e.target.answerImageName.value != "N/A" || imageFile2UploadAnswer != null){
-                        const{answerImageName, answerImageURL} = await FirebaseController.uploadImageToFlashcardAnswer(imageFile2UploadAnswer);
-                        fc.answerImageName = answerImageName;
-                        fc.answerImageURL = answerImageURL;
+                //If the image is changed
+                if(imageFile2UploadAnswer != null){
+                    const{answerImageName, answerImageURL} = await FirebaseController.uploadImageToFlashcardAnswerEdit(imageFile2UploadAnswer);
+                    fc.answerImageName = answerImageName;
+                    fc.answerImageURL = answerImageURL;
+                    //If the image is unchanged
+                 } else if(imageFile2UploadAnswer==null){
+                    const{imageNamePassed, imageURL } = await FirebaseController.existingImageForUpdate(e.target.answerImageName.value);
+                    fc.answerImageName = imageNamePassed; 
+                    fc.answerImageURL = imageURL ;
+                    //Failsafe
                 } else if(typeof obj === "undefined"){
                     console.log("Answer Undefined");
                     fc.answerImageName = "N/A";
                     fc.answerImageURL = "N/A";
-                }
+                }//If the image is unchecked
             } else if(typeof obj === "undefined"){
                 console.log("Answer Undefined");
                 fc.answerImageName = "N/A";
@@ -134,15 +148,22 @@ export function addEventListeners(){
             }
 
             if(isQuestionImage.checked==true){
-                if(e.target.questionImageName.value != "N/A" || imageFile2UploadQuestion != null){
-                    const{questionImageName, questionImageURL} = await FirebaseController.uploadImageToFlashcardQuestion(imageFile2UploadQuestion);
+                //If the image is changed
+                if(imageFile2UploadQuestion != null){
+                    const{questionImageName, questionImageURL} = await FirebaseController.uploadImageToFlashcardQuestionEdit(imageFile2UploadQuestion);
                     fc.questionImageName = questionImageName;
                     fc.questionImageURL = questionImageURL;
+                    //If the Image is unchanged.
+                } else if(imageFile2UploadQuestion==null){
+                    const{imageNamePassed, imageURL } = await FirebaseController.existingImageForUpdate(e.target.questionImageName.value);
+                    fc.questionImageName = imageNamePassed;
+                    fc.questionImageURL = imageURL ;
+                    //Failsafe
                 } else if (typeof obj === "undefined") {
                     console.log("Question-2");
                     fc.questionImageName = "N/A";
                     fc.questionImageURL = "N/A";
-                  }
+                }//If the image is unchecked
             } else if (typeof obj === "undefined") {
                 console.log("Question-2");
                 fc.questionImageName = "N/A";
@@ -163,6 +184,7 @@ export function addEventListeners(){
         await deck_page(editDeckDocId);
 
     });
+
 }
 
 
@@ -182,7 +204,7 @@ export async function edit_flashcard(uid, deckId, docId){
         return;
     }
 
-    //Getting Elements from Firebase to Edit //CHANGES HERE
+    //Getting Elements from Firebase to Edit
     Elements.formEditFlashcard.form.docId.value = flashcard.docID;
     Elements.formEditFlashcard.form.questionImageName.value = flashcard.questionImageName;
     Elements.formEditFlashcard.form.answerImageName.value = flashcard.answerImageName;
@@ -269,7 +291,8 @@ function resetFlashcard(){
     }
     Elements.formEditFlashcard.answerImageTag.src="";
     Elements.formEditFlashcard.questionImageTag.src="";
-    
+    imageFile2UploadAnswer = null;
+    imageFile2UploadQuestion = null;
     //  Looking at How to mess with this area...
     // Making sure singular choice is displayed next time.
     // Elements.formAnswerContainer.innerHTML = `

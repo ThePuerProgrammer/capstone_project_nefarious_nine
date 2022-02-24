@@ -480,6 +480,54 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID){
 }
 
 //============================================================================//
+// EXISTING IMAGE FOR UPDATE
+//============================================================================//
+//  This will retrieve an image already existing from the storage
+//  reference link : https://firebase.google.com/docs/storage/web/download-files#web-version-9_2
+export async function existingImageForUpdate(imageNamePassed){
+    
+    const storageRef = firebase.storage().ref()
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageNamePassed);
+        console.log(`Check 1`);
+    try{
+        console.log(`Check 2`);
+        // const snapShotQuery = await ref.get(storageRef);
+        const imageURL = await storageRef.getDownloadURL();
+        console.log(`imageURL = ${imageURL}`);
+
+        console.log(`check 3`)
+        //const imageName = imageName;
+        return{imageNamePassed, imageURL };
+        console.log(`check 3`)
+    
+    } catch(e) {
+        if(Constant.DEV) console.log(e);
+        Utilites.info('Error Updating w/ Exisiting Image',JSON.stringify(e),"modal-edit-a-flashcard");
+    }
+}
+//Uploaded Image ! (Since the target image is the original image)
+export async function uploadImageToFlashcardAnswerEdit(answerImageFile) {
+    //Generic Naming
+    const answerImageName = Date.now() + answerImageFile.name + 'answer';
+    
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
+   
+    const taskSnapShot = await ref.put(answerImageFile);
+    const answerImageURL = await taskSnapShot.ref.getDownloadURL();
+    return { answerImageName, answerImageURL };
+}
+//Uploaded Image ? (Since the target image is the original image)
+export async function uploadImageToFlashcardQuestionEdit(questionImageFile) {
+    //Generic Naming
+    const questionImageName = Date.now() + questionImageFile.name + 'question';
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + questionImageName);
+    const taskSnapShot = await ref.put(questionImageFile);
+    const questionImageURL = await taskSnapShot.ref.getDownloadURL();
+    return { questionImageName, questionImageURL };
+}
+//============================================================================//
 // create default timer 
 //============================================================================//
 
