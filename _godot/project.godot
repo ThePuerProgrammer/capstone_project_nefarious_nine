@@ -165,7 +165,13 @@ _global_script_class_icons={
 [application]
 
 config/name="Pomogame"
+run/main_scene="res://Menu/MenuScreen.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1920
+window/size/height=880
 
 [physics]
 
@@ -173,4 +179,5 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+environment/default_clear_color=Color( 0.207843, 0.207843, 0.207843, 1 )
 environment/default_environment="res://default_env.tres"

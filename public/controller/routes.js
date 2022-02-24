@@ -5,6 +5,7 @@ import * as Profile from '../view/profile_page.js'
 import * as Settings from '../view/settings_page.js'
 import * as Deck from '../view/deck_page.js'
 import * as Study from '../view/study_page.js'
+import * as Minigames from '../view/minigames_page.js'
 
 export const routePathname = {
     HOME: '/',
@@ -13,7 +14,8 @@ export const routePathname = {
     PROFILE: '/profile',
     SETTINGS: '/settings',
     DECK: '/deck',
-    STUDY: '/study'
+    STUDY: '/study',
+    MINIGAMES: '/minigames',
 };
 
 export const routes = [
@@ -24,6 +26,7 @@ export const routes = [
     { pathname: routePathname.SETTINGS,     page: Settings.settings_page },
     { pathname: routePathname.DECK,         page: Deck.deck_page },
     { pathname: routePathname.STUDY,        page: Study.study_page },
+    { pathname: routePathname.MINIGAMES,    page: Minigames.minigames_page },
 ];
 
 export function routing(path, hash) {
