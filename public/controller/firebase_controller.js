@@ -1,4 +1,5 @@
 import * as Constant from '../model/constant.js'
+import * as Utilites from '../view/utilities.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
@@ -423,7 +424,109 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .delete();
 }
 
+//===========================================================================//
+//EDIT FLASHCARD 
+//===========================================================================//
+export async function getFlashCardById(uid,deckDocID,docID){
+    const flashRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID).get();
+    if(flashRef.exists){
+        const flashcard = new Flashcard(flashRef.data());
+        flashcard.set_docID(docID);
+        return flashcard;
+    } else {
+        return null;
+    }
+}
+//===========================================================================//
+//UPDATE FLASHCARD 
+//===========================================================================//
+/*  This will retrieve the flashcard as it is a nested subcollection, requiring
+    to go through user and deck to make the update.  I found that when updating
+    both doc.data().'field' like doc.data().question and data.question work the
+    same.  As I have given a declaration of data for data.question below.
+============================================================================*/
+export async function updateFlashcard(uid, deckDocID, flashcard, docID){
+    const data = flashcard.serializeForUpdate();
+    const flashRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID)
+        .get().then((doc)=>{
+            if(doc.exists){
+                    flashcard.question =data.question;
+                    flashcard.answer = data.answer;
+                    //flashcard.isMultipleChoice = data.isMultipleChoice;
+                    flashcard.incorrectAnswers = data.incorrectAnswers;
+                    flashcard.questionImageName= data.questionImageName;
+                    flashcard.questionImageURL = data.questionImageURL;
+                    flashcard.answerImageName = data.answerImageName;
+                    flashcard.answerImageURL = data.answerImageURL;
+                    console.log("UPDATED");
+                }//Error Code
+                else if(Constant.DEV) {
+                    console.log(e);
+                    Utilites.info('Update Error Firebase', JSON.stringify(e));
+                }   
+        });
 
+        firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID)
+        .set(flashcard.serialize());
+}
+
+//============================================================================//
+// EXISTING IMAGE FOR UPDATE
+//============================================================================//
+//  This will retrieve an image already existing from the storage
+//  reference link : https://firebase.google.com/docs/storage/web/download-files#web-version-9_2
+export async function existingImageForUpdate(imageNamePassed){
+    
+    const storageRef = firebase.storage().ref()
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageNamePassed);
+        console.log(`Check 1`);
+    try{
+        console.log(`Check 2`);
+        // const snapShotQuery = await ref.get(storageRef);
+        const imageURL = await storageRef.getDownloadURL();
+        console.log(`imageURL = ${imageURL}`);
+
+        console.log(`check 3`)
+        //const imageName = imageName;
+        return{imageNamePassed, imageURL };
+        console.log(`check 3`)
+    
+    } catch(e) {
+        if(Constant.DEV) console.log(e);
+        Utilites.info('Error Updating w/ Exisiting Image',JSON.stringify(e),"modal-edit-a-flashcard");
+    }
+}
+//Uploaded Image ! (Since the target image is the original image)
+export async function uploadImageToFlashcardAnswerEdit(answerImageFile) {
+    //Generic Naming
+    const answerImageName = Date.now() + answerImageFile.name + 'answer';
+    
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
+   
+    const taskSnapShot = await ref.put(answerImageFile);
+    const answerImageURL = await taskSnapShot.ref.getDownloadURL();
+    return { answerImageName, answerImageURL };
+}
+//Uploaded Image ? (Since the target image is the original image)
+export async function uploadImageToFlashcardQuestionEdit(questionImageFile) {
+    //Generic Naming
+    const questionImageName = Date.now() + questionImageFile.name + 'question';
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.FLASHCARD_IMAGES + questionImageName);
+    const taskSnapShot = await ref.put(questionImageFile);
+    const questionImageURL = await taskSnapShot.ref.getDownloadURL();
+    return { questionImageName, questionImageURL };
+}
 //============================================================================//
 // create default timer 
 //============================================================================//

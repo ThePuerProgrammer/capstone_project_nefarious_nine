@@ -6,3 +6,17 @@ export function info(title, body, closeModal) {
     Elements.popupInfoBody.innerHTML = body;
     $('#modal-infobox').modal('show');
 }
+//Disables a button so a user cannot click it multiple times
+//incase a page/model takes time to load, could fault or double.
+export function disableButton(button){
+    button.disabled = true;
+    const label = button.innerHTML;
+    button.innerHTML = 'Wait...';
+    return label;
+}
+//Re-enables a button so a user can click on it after a process is 
+//completed.
+export function enableButton(button, label){
+    if(label) button.innerHTML = label;
+    button.disabled = false;
+}

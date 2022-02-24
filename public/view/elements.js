@@ -76,6 +76,7 @@ export const modalCreateAccount = new bootstrap.Modal(document.getElementById('m
 export const modalCreateDeck = new bootstrap.Modal(document.getElementById('create-deck-modal'));
 export const modalResetPassword = new bootstrap.Modal(document.getElementById('modal-reset-password'));
 export const modalDeleteFlashcard = new bootstrap.Modal(document.getElementById('modal-delete-a-flashcard', { backdrop: 'static' }));
+export const modalEditFlashcard = new bootstrap.Modal(document.getElementById('modal-edit-a-flashcard', { backdrop:'static'}));
 
 //============================================================================//
 
@@ -107,6 +108,25 @@ export const formContainerAnswerImage = document.getElementById('form-answer-ima
 export const formContainerQuestionImage = document.getElementById('form-question-image-container'); 
 //===========================================================================//
 
+//EDIT FLASHCARD
+//==========================================================================//
+export const formEditFlashcard = {
+    form: document.getElementById('form-edit-a-flashcard'),
+    questionImageTag: document.getElementById('form-edit-flashcard-question-image-tag'),
+    questionImageButton: document.getElementById('form-edit-flashcard-question-image-button'),
+    questionImageContainer: document.getElementById('form-edit-flashcard-question-image-container'),
+    answerImageTag: document.getElementById('form-edit-flashcard-answer-image-tag'),
+    answerImageButton: document.getElementById('form-edit-flashcard-answer-image-button'),
+    answerImageContainer: document.getElementById('form-edit-flashcard-answer-image-container'),
+    multipleChoiceToggle: document.getElementById('form-check-input-is-multiple-choice-edit'),
+    questionImageToggle: document.getElementById('form-check-input-is-image-question-edit'),
+    answerImageToggle: document.getElementById('form-check-input-is-image-answer-edit'),
+    multipleAnswerContainer: document.getElementById('form-edit-answer-container'),
+    answerTextInput: document.getElementById('form-answer-text-input-edit'),
+}
+export const formCheckInputIsMultipleChoiceEdit = document.getElementById('form-check-input-is-multiple-choice-edit');
+export const formAnswerTextInputEdit = document.getElementById('form-edit-answer-container');
+//==========================================================================//
 
 //PET ADOPTION
 //============================================================================//
