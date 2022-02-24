@@ -9,7 +9,9 @@ export function addEventListeners() {
 }
 
 export async function minigames_page() {
-    Elements.root.innerHTML = `Minigames page`;
-
-    // Do godot magic here
+    Elements.root.innerHTML = `
+        <div id="pomogame-iframe-container">
+            <iframe src="pomogame.html" id="pomogame-iframe"></iframe>
+        </div>
+    `;
 }

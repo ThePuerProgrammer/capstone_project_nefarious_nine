@@ -422,3 +422,13 @@ input {
     from {opacity: 0;}
     to {opacity: 1;}
 }
+
+iframe {
+    width: 100%;
+    height: 878px;
+}
+
+#pomogame-iframe-container {
+    width: 100%;
+    height: calc(100vh - 58px);
+}

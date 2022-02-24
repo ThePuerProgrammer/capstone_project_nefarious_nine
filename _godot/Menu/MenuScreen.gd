@@ -1,6 +1,6 @@
 extends Control
 
-var scene_path_to_load
+var _scene_path_to_load
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,12 +11,13 @@ func _ready():
 	$FadeIn.fade_in()
 
 func _on_Button_pressed(scene_to_load):
-	scene_path_to_load = scene_to_load
+	_scene_path_to_load = scene_to_load
 	$FadeOut.show()
 	$FadeOut.fade_out()
 
 func _on_FadeOut_fade_out_finished():
-	get_tree().change_scene(scene_path_to_load)
+	if (get_tree().change_scene(_scene_path_to_load) != OK):
+		print("Failed to change scene")
 
 func _on_FadeIn_fade_in_finished():
 	$FadeIn.hide()

@@ -22,9 +22,9 @@ __meta__ = {
 
 [node name="Center" type="VBoxContainer" parent="Container"]
 margin_left = 806.0
-margin_top = 436.0
+margin_top = 407.0
 margin_right = 1114.0
-margin_bottom = 501.0
+margin_bottom = 472.0
 custom_constants/separation = 15
 
 [node name="Label" type="Label" parent="Container/Center"]
@@ -52,7 +52,6 @@ color = Color( 0, 0, 0, 0 )
 visible = false
 color = Color( 0, 0, 0, 1 )
 
-[connection signal="pressed" from="Container/Center/backButton" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Container/Center/backButton" to="." method="_on_backButton_pressed"]
 [connection signal="fade_out_finished" from="FadeOut" to="." method="_on_FadeOut_fade_out_finished"]
 [connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]
