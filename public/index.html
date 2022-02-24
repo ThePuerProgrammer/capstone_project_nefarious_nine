@@ -403,7 +403,7 @@
     aria-labelledby="staticBackdropLabel" aria-hidden=" true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
           <h5 class="modal-title pomo-text-color-light" id="delete-flashcard-modal-label">Delete a flashcard
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -423,12 +423,15 @@
               update();
             </script>
             <br>
+            <div class="delete-flashcard-css-class">
             <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Delete</button>
-          </form>
+           </div>
+          </form>   
+        </div>
         </div>
       </div>
     </div>
-  </div>
+  
 
   <!-- Modal: Popup Info Box -->
   <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
