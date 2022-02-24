@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon.svg-5c4f39d37c9275a3768de73a392fd315.stex"
+path="res://.import/pomobyte-minigames.png-797f8213e2a35118757bb0d27bd03ae5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/godot-firebase/icon.svg"
-dest_files=[ "res://.import/icon.svg-5c4f39d37c9275a3768de73a392fd315.stex" ]
+source_file="res://assets/art/pomobyte-minigames.png"
+dest_files=[ "res://.import/pomobyte-minigames.png-797f8213e2a35118757bb0d27bd03ae5.stex" ]
 
 [params]
 

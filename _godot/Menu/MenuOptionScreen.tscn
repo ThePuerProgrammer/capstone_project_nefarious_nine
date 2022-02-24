@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Menu/return_to_main_menu.gd" type="Script" id=2]
+[ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=4]
+
+[node name="MenuOptionScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Container" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Center" type="VBoxContainer" parent="Container"]
+margin_left = 806.0
+margin_top = 436.0
+margin_right = 1114.0
+margin_bottom = 501.0
+custom_constants/separation = 15
+
+[node name="Label" type="Label" parent="Container/Center"]
+margin_right = 308.0
+margin_bottom = 22.0
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 3
+text = "Sample Text :)"
+
+[node name="backButton" type="Button" parent="Container/Center"]
+margin_top = 37.0
+margin_right = 308.0
+margin_bottom = 65.0
+custom_fonts/font = ExtResource( 1 )
+text = "Back"
+
+[node name="FadeOut" parent="." instance=ExtResource( 3 )]
+visible = false
+color = Color( 0, 0, 0, 0 )
+
+[node name="FadeIn" parent="." instance=ExtResource( 4 )]
+visible = false
+color = Color( 0, 0, 0, 1 )
+
+[connection signal="pressed" from="Container/Center/backButton" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Container/Center/backButton" to="." method="_on_backButton_pressed"]
+[connection signal="fade_out_finished" from="FadeOut" to="." method="_on_FadeOut_fade_out_finished"]
+[connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]
