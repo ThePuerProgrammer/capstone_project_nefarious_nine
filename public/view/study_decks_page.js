@@ -6,6 +6,8 @@ import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as DeckPage from './deck_page.js'
 import * as Auth from '../controller/firebase_auth.js'
+import * as Utilities from './utilities.js'
+import * as EditDeck from '../controller/edit_deck.js'
 
 
 export function addEventListeners() {
@@ -69,7 +71,7 @@ export async function study_decks_page() {
 
     // sort select menu
     html += `
-    <div style="float:right">
+    <div style="float:right; padding-right:50px;">
     <label for="sort-decks">Order by:</label>
     <select name="sort-decks" id="sort-decks" style="width: 200px">
         <option selected disabled>Sort decks by...</option>
@@ -101,9 +103,21 @@ export async function study_decks_page() {
     }
 
 
+
+
     Elements.root.innerHTML += html;
     // adds an event listener to each of the view buttons
     DeckPage.addViewButtonListener();
+
+    const editDeckForms = document.getElementsByClassName('form-edit-deck');
+    for(let i=0; i< editDeckForms.length; i++){
+        editDeckForms[i].addEventListener('submit', async e=>{
+            //prevents refresh on submit of form
+            e.preventDefault();          
+            await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
+        });
+    }
+
 
     const sortDeckSelect = document.getElementById("sort-decks");
     sortDeckSelect.addEventListener('change', async e => {
@@ -236,9 +250,14 @@ function buildDeckView(deck, flashcards) {
             <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
             <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
         </div>
+        <div class="btn-group">
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+        </form>
+        <form class="form-edit-deck" method="post">
+            <input type="hidden" name="docId" value="${deck.docId}">
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Edit</button>
         </form>
         </div>`;
 
@@ -248,9 +267,11 @@ function buildDeckView(deck, flashcards) {
     <label class="form-check-label" for="favorited">Favorite deck</label>
     </div>
     </div>
+    </div>
     ` : `<div class="form-check">
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
     <label class="form-check-label pomo-text-color-light" for="favorited">Favorite deck</label>
+</div>
 </div>
 </div>`;
     return html;
