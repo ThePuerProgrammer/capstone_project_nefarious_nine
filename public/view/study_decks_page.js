@@ -63,13 +63,7 @@ export async function study_decks_page() {
     let html = ''
     html += '<h1> Study Decks </h1>';
 
-    // Solution for merging Piper's 'create_deck_deck_title branch
-    /*html += `
-        <button type="button" class="btn btn-secondary pomo-bg-color-dark" data-bs-toggle="modal" data-bs-target="#create-deck-modal">
-            Create New Deck
-        </button>
-    `;*/
-
+    //create deck button
     html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark">
      Create Deck</button>`;
 

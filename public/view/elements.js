@@ -78,6 +78,7 @@ export const modalCreateDeck = new bootstrap.Modal(document.getElementById('crea
 export const modalResetPassword = new bootstrap.Modal(document.getElementById('modal-reset-password'));
 export const modalDeleteFlashcard = new bootstrap.Modal(document.getElementById('modal-delete-a-flashcard', { backdrop: 'static' }));
 export const modalEditFlashcard = new bootstrap.Modal(document.getElementById('modal-edit-a-flashcard', { backdrop:'static'}));
+export const modalCreateClassroom = new bootstrap.Modal(document.getElementById('create-classroom-modal'));
 
 //============================================================================//
 
@@ -132,4 +133,10 @@ export const formAnswerTextInputEdit = document.getElementById('form-edit-answer
 //PET ADOPTION
 //============================================================================//
 export const formPomodoption = document.getElementById('form-pomodoption');
+//============================================================================//
+
+//CLASSROOMS PAGE
+//============================================================================//
+export const formCreateClassroom = document.getElementById('form-create-classroom');
+export const formClassCategorySelect = document.getElementById('select-class-category');
 //============================================================================//

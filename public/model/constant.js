@@ -51,4 +51,6 @@ export const htmlIDs = {
     smartStudyIndicator: 'smart-study-indicator',
     createDeck: 'button-create-deck-modal',
     createDeckModal: 'create-deck-modal',
+    createClassroom: 'button-create-classroom-modal',
+    createClassroomModal: 'create-classroom-modal',
 }
