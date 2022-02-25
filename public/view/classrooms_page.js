@@ -67,11 +67,11 @@ export async function classrooms_page() {
 
     html += `<div style="float:right">
     <label for="sort-classrooms">Order by:</label>
-    <select name="sort-classrooms" id="sort-decks" style="width: 200px">
+    <select name="sort-classrooms" id="sort-classrooms" style="width: 200px">
         <option selected disabled>Sort classrooms by...</option>
         <option value="name">Name</option>
         <option value="subject">Subject</option>
-        <option value="date">Category</option>
+        <option value="category">Category</option>
     </select>
     </div>
     </div><div id="Available Classrooms" class="classroom-tab-content">`;
@@ -84,7 +84,7 @@ export async function classrooms_page() {
         console.log(e);
     }
 
-    html += ` <table class="table">
+    html += ` <table id="available-classrooms-table" class="table sortable">
         <thread>
          <tr>
             <th scope="col">View</th>
@@ -93,7 +93,7 @@ export async function classrooms_page() {
             <th scope="col">Category</th>
         </tr>
         </thread>
-    <tbody id="available-classroom-table-body">
+    <tbody>
     `;
 
     if (availableClassroomList.length == 0) {
@@ -119,7 +119,7 @@ export async function classrooms_page() {
         console.log(e);
     }
 
-    html += `<table class="table">
+    html += `<table id="my-classrooms-table" class="table sortable">
          <thread>
           <tr>
              <th scope="col">View</th>
@@ -128,7 +128,7 @@ export async function classrooms_page() {
              <th scope="col">Category</th>
          </tr>
          </thread>
-    <tbody id="available-classroom-table-body">
+    <tbody>
      `;
 
     if (myClassroomList.length == 0) {
@@ -196,12 +196,188 @@ export async function classrooms_page() {
 
         // opens create Classroom modal
         $(`#${Constant.htmlIDs.createClassroomModal}`).modal('show');
-    })
+    });
+
+    const sortClassSelect = document.getElementById("sort-classrooms");
+    sortClassSelect.addEventListener('change', async e => {
+        e.preventDefault();
+        // get value from select menu and check if available classroom tab is hiddne
+        var opt = e.target.options[e.target.selectedIndex].value;
+        var swap, rows, shouldSwap;
+        var checkHidden = document.getElementById("Available Classrooms");
+        // for later use
+        var i;
+        if (checkHidden.style.display === "none") {
+            // sorting my classrooms
+            // first grab the table
+            var table = document.getElementById("my-classrooms-table");
+            // set swap to true
+            swap = true;
+            if (opt == "name") {
+                // create a while loop to iterate through the table rows
+                while (swap) {
+                    // base of saying we're done swapping
+                    swap = false;
+                    rows = table.rows;
+                    // iterate through rows, first row is headers so we ignore that
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwap = false;
+                        // getting classroom.docId from first row
+                        var a = rows[i].getElementsByTagName("td")[1];
+                        // getting classroom.docId from second row
+                        var b = rows[i + 1].getElementsByTagName("td")[1];
+                        // check if they should switch, if yes then break the loop
+                        if (a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase()) {
+                            shouldSwap = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwap) {
+                        // swap the rows
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        swap = true;
+                    }
+                }
+            } else if (opt == "subject") {
+                while (swap) {
+                    // base of saying we're done swapping
+                    swap = false;
+                    rows = table.rows;
+                    // iterate through rows, first row is headers so we ignore that
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwap = false;
+                        // getting classroom.docId from first row
+                        var a = rows[i].getElementsByTagName("td")[2];
+                        // getting classroom.docId from second row
+                        var b = rows[i + 1].getElementsByTagName("td")[2];
+                        // check if they should switch, if yes then break the loop
+                        if (a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase()) {
+                            shouldSwap = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwap) {
+                        // swap the rows
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        swap = true;
+                    }
+                }
+            } else if (opt == "category") {
+                while (swap) {
+                    // base of saying we're done swapping
+                    swap = false;
+                    rows = table.rows;
+                    // iterate through rows, first row is headers so we ignore that
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwap = false;
+                        // getting classroom.docId from first row
+                        var a = rows[i].getElementsByTagName("td")[3];
+                        // getting classroom.docId from second row
+                        var b = rows[i + 1].getElementsByTagName("td")[3];
+                        // check if they should switch, if yes then break the loop
+                        if (a.innerHTML > b.innerHTML) {
+                            shouldSwap = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwap) {
+                        // swap the rows
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        swap = true;
+                    }
+                }
+            }
+        } else {
+            // sorting available classrooms
+            // first grab the table
+            var table = document.getElementById("available-classrooms-table");
+            // set swap to true
+            swap = true;
+            if (opt == "name") {
+                // create a while loop to iterate through the table rows
+                while (swap) {
+                    // base of saying we're done swapping
+                    swap = false;
+                    rows = table.rows;
+                    // iterate through rows, first row is headers so we ignore that
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwap = false;
+                        // getting classroom.docId from first row
+                        var a = rows[i].getElementsByTagName("td")[1];
+                        // getting classroom.docId from second row
+                        var b = rows[i + 1].getElementsByTagName("td")[1];
+                        // check if they should switch, if yes then break the loop
+                        if (a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase()) {
+                            shouldSwap = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwap) {
+                        // swap the rows
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        swap = true;
+                    }
+                }
+            } else if (opt == "subject") {
+                while (swap) {
+                    // base of saying we're done swapping
+                    swap = false;
+                    rows = table.rows;
+                    // iterate through rows, first row is headers so we ignore that
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwap = false;
+                        // getting classroom.docId from first row
+                        var a = rows[i].getElementsByTagName("td")[2];
+                        // getting classroom.docId from second row
+                        var b = rows[i + 1].getElementsByTagName("td")[2];
+                        // check if they should switch, if yes then break the loop
+                        if (a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase()) {
+                            shouldSwap = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwap) {
+                        // swap the rows
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        swap = true;
+                    }
+                }
+            } else if (opt == "category") {
+                while (swap) {
+                    // base of saying we're done swapping
+                    swap = false;
+                    rows = table.rows;
+                    // iterate through rows, first row is headers so we ignore that
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwap = false;
+                        // getting classroom.docId from first row
+                        var a = rows[i].getElementsByTagName("td")[3];
+                        // getting classroom.docId from second row
+                        var b = rows[i + 1].getElementsByTagName("td")[3];
+                        // check if they should switch, if yes then break the loop
+                        if (a.innerHTML > b.innerHTML) {
+                            shouldSwap = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwap) {
+                        // swap the rows
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        swap = true;
+                    }
+                }
+            }
+        }
+    });
 }
 
 function buildClassroom(classroom) {
     return `
-    <td><button type="submit" class="btn btn-secondary pomo-bg-color-dark" id="${classroom.docId}">View</button></td>
+    <td value="${classroom.docId}">
+    <form class="form-view-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docId}">
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+        </form></td>
     <td>${classroom.name}</td>
     <td>${classroom.subject}</td>
     <td>${classroom.category}</td>
