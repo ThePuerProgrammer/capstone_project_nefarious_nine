@@ -1,13 +1,15 @@
 /**************************************************
- *               Create Deck Class
+ *               Create Classroom Class
  **************************************************/
-export class Deck {
+ export class Classroom {
     constructor(data) {
         this.name = data.name;
         this.subject = data.subject;
         this.dateCreated = data.dateCreated;
-        this.isFavorited = data.isFavorited;
+        //this.isFavorited = data.isFavorited;
         this.category = data.category;
+        this.moderatorList = data.moderatorList;
+        this.members = data.members;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
 
@@ -42,9 +44,11 @@ export class Deck {
         return {
             name: this.name,
             subject: this.subject,
-            dateCreated: this.dateCreated,
-            isFavorited: this.isFavorited,
+            //dateCreated: this.dateCreated,
+            //isFavorited: this.isFavorited,
             category: this.category,
+            moderatorList: this.moderatorList,
+            members: this.members,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 
