@@ -45,7 +45,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=8]
 shader = SubResource( 7 )
 shader_param/tiled_factor = Vector2( 1, 1 )
-shader_param/aspect_ratio = 0.458333
+shader_param/aspect_ratio = 0.470312
 shader_param/wave_height = 0.04
 shader_param/wave_width_factor = Vector2( 5, 1 )
 shader_param/wave_speed_factor = 0.2
@@ -66,23 +66,23 @@ script = ExtResource( 4 )
 [node name="Centered" type="CenterContainer" parent="."]
 material = SubResource( 6 )
 margin_right = 1920.0
-margin_bottom = 880.0
+margin_bottom = 900.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Lobby Scene BG" type="Sprite" parent="Centered"]
 material = SubResource( 8 )
-position = Vector2( 961, 440 )
-scale = Vector2( 1.875, 0.859375 )
+position = Vector2( 961, 451.5 )
+scale = Vector2( 1.875, 0.881836 )
 texture = ExtResource( 8 )
 script = ExtResource( 9 )
 
 [node name="TabContainer" type="TabContainer" parent="Centered"]
 margin_left = 298.0
-margin_top = 85.0
+margin_top = 95.0
 margin_right = 1622.0
-margin_bottom = 795.0
+margin_bottom = 805.0
 tab_align = 0
 
 [node name="Join Lobby" type="VBoxContainer" parent="Centered/TabContainer"]
