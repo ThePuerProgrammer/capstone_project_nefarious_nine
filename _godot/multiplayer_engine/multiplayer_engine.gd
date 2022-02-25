@@ -1,10 +1,9 @@
 extends Node
 
-onready var maxPlayersOptionButton = get_node("Centered/Tab_Container/Create_Lobby/Lobby_Settings/Max_Players_Option_Button")
+onready var maxPlayersOptionButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/MaxPlayersOptionButton")
 
 func _ready():
 	maxPlayersOptionButton.add_item("Select Max")
-	maxPlayersOptionButton.add_item("1")
 	maxPlayersOptionButton.add_item("2")
 	maxPlayersOptionButton.add_item("3")
 	maxPlayersOptionButton.add_item("4")
