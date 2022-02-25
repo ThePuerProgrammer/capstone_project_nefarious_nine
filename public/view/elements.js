@@ -77,6 +77,8 @@ export const modalCreateDeck = new bootstrap.Modal(document.getElementById('crea
 export const modalResetPassword = new bootstrap.Modal(document.getElementById('modal-reset-password'));
 export const modalDeleteFlashcard = new bootstrap.Modal(document.getElementById('modal-delete-a-flashcard', { backdrop: 'static' }));
 export const modalEditFlashcard = new bootstrap.Modal(document.getElementById('modal-edit-a-flashcard', { backdrop:'static'}));
+export const modalEditDeck = new bootstrap.Modal(document.getElementById('modal-edit-a-deck', { backdrop:'static'}));
+
 
 //============================================================================//
 
@@ -128,6 +130,13 @@ export const formCheckInputIsMultipleChoiceEdit = document.getElementById('form-
 export const formAnswerTextInputEdit = document.getElementById('form-edit-answer-container');
 //==========================================================================//
 
+//EDIT DECK
+//==========================================================================//
+export const formEditDeck ={
+    form: document.getElementById('form-edit-a-deck'),
+    checkboxIsFavorited: document.getElementById(''),
+}    
+//==========================================================================//
 //PET ADOPTION
 //============================================================================//
 export const formPomodoption = document.getElementById('form-pomodoption');

@@ -425,6 +425,48 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 }
 
 //===========================================================================//
+//UPDATE DECK 
+//===========================================================================//
+/*  This will retrieve the deck as it is a nested subcollection, requiring
+    to go through user to make the update.  I found that when updating
+    both doc.data().'field' like doc.data().name and data.name work the
+    same.  As I have given a declaration of data for data.question below.
+============================================================================*/
+export async function updateDeck(uid, deck, deckDocID){
+    const data = deck.serializeForUpdate();
+    const deckRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .get().then((doc)=>{
+            if(doc.exists){
+                    deck.name = data.name;
+                    deck.subject = data.subject;
+                    deck.dateCreated = data.dateCreated;
+                    //When editing flashcards I found that booleans were difficult
+                    //to use here and commented it out isMultiplechoice and was functional
+                    //deck.isFavorited = data.isFavorited;
+                    console.log("UPDATED");
+                    console.log(`Check 5:${data.isFavorited}`)
+
+                    console.log(`Check 6:${deck.isFavorited}`)
+
+                }//Error Code
+                else if(Constant.DEV) {
+                    console.log(e);
+                    Utilites.info('Update Error Firebase', JSON.stringify(e));
+                }   
+        });
+
+        firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .set(deck.serialize());
+
+        console.log(`Check 7:${deck.isFavorited}`)
+
+}
+
+//===========================================================================//
 //EDIT FLASHCARD 
 //===========================================================================//
 export async function getFlashCardById(uid,deckDocID,docID){

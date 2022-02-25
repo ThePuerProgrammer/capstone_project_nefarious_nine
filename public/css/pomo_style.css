@@ -335,13 +335,20 @@ input {
     padding-right: 90px;
 }
 
-/*Could be a problem*/
-.modal-content{
-    width:auto;
+.content-width-delete-flashcard{
+    width: auto;
 }
+
 .delete-flashcard-css-class{
     padding-top: 10px;
 }    
+
+.form-edit-deck{
+    padding-left: 5px;
+}
+.form-view-deck{
+    padding-right: 5px;
+}
 
    
 

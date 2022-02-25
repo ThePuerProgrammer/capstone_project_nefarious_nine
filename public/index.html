@@ -221,7 +221,7 @@
     aria-labelledby="create-deck-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
           <h5 class="modal-title pomo-text-color-light" id="create-deck-modal-label">Create A New Deck</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -248,7 +248,46 @@
   </div>
   <!-- END CREATE DECK MODAL---------------------------------------------->
 
-  <!-- MODAL:CREATE A FLASHCARD -->
+   <!-- EDIT DECK MODAL----------------------------------------------------->
+   <div class="modal fade" id="modal-edit-a-deck" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+   aria-labelledby="modal-edit-a-deck-label" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+     <div class="modal-content pomo-bg-color-md-dark">
+       <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+         <h5 class="modal-title pomo-text-color-light" id="modal-edit-a-deck-title">Edit Deck</h5>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div class="modal-body">
+         <form id="form-edit-a-deck" method="post">
+           <input type="hidden" name="docId" />
+           <input type="hidden" name="isFavorited" />
+           <input type="hidden" name="dateCreated" />
+           <div class="form-group">
+            <div id="form-edit-deck-name">
+             <label class="pomo-text-color-light" for="name">Name</label>
+             <input class="form-control form-control-lg" type="name" name="name"
+               required minlength="2" id="deck-title">
+            </div>
+             <br>
+             <br>
+             <div id="form-edit-deck-subject">
+             <label class="pomo-text-color-light" for="subject">Subject</label>
+             <input class="form-control form-control-lg" type="subject" name="subject"
+               required minlength="2" id="deck-subject">
+             </div>
+          </div>
+           <br>
+           <br>
+           <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="float:right" id="decks-create-deck"
+             type="submit">Update</button>
+         </form>
+       </div>
+     </div>
+   </div>
+ </div>
+ <!-- END EDIT DECK MODAL---------------------------------------------->
+
+  <!-- MODAL:CREATE A FLASHCARD ---------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-create-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -322,8 +361,8 @@
       </div>
     </div>
   </div>
-
-  <!-- MODAL:EDIT A FLASHCARD -->
+  <!-- END OF CREATE A FLASHCARD----------------------------------------------------------------------------------------->
+  <!-- MODAL:EDIT A FLASHCARD ----------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-edit-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -379,7 +418,7 @@
             <h3 style="text-align:center"><u>Answer Side</u></h3>
             <div id="form-edit-answer-container">
               Answer: <textarea name="answer" id="form-answer-text-input-edit" type="text" name="flashcard-answer" 
-                class="form-control" placeholder ="At least 4." required min length="1"></textarea>
+                class="form-control" placeholder ="At least 4." required minlength="1" maxlength="30"></textarea>
             </div>
             <br />
             <div id="form-edit-flashcard-answer-image-container">
@@ -397,11 +436,12 @@
       </div>
     </div>
   </div>
-
+  <!-- END OF EDIT A FLASHCARD----------------------------------------------------------------------------------------->
   <!-- MODAL:DELETE A FLASHCARD -->
   <div class="modal fade" id="modal-delete-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden=" true">
     <div class="modal-dialog modal-dialog-centered">
+      <span class="content-width-delete-flashcard">
       <div class="modal-content pomo-bg-color-md-dark">
         <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
           <h5 class="modal-title pomo-text-color-light" id="delete-flashcard-modal-label">Delete a flashcard
@@ -429,6 +469,7 @@
           </form>   
         </div>
         </div>
+      </span>
       </div>
     </div>
   
