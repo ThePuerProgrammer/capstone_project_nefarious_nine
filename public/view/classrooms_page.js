@@ -3,11 +3,58 @@ import * as Routes from '../controller/routes.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
+import * as Constant from '../model/constant.js'
+import { Classroom } from '../model/classroom.js';
 
 export function addEventListeners() {
     Elements.menuClassrooms.addEventListener('click', async () => {
         history.pushState(null, null, Routes.routePathname.CLASSROOMS);
         await classrooms_page();
+    });
+
+    // CREATE A CLASSROOM Submit button event listener
+    Elements.formCreateClassroom.addEventListener('submit', async e => {
+        e.preventDefault();
+        const name = e.target.name.value;
+        const subject = e.target.subject.value;
+        //const isFavorited = false;
+        const category = e.target.selectClassCategory.value;
+
+        // add current user as a moderator
+        const moderatorList = [];
+        moderatorList.push(Auth.currentUser.email);
+
+        // add current user to members list
+        const members = [];
+        members.push(Auth.currentUser.email);
+
+
+        const classroom = new Classroom({
+            name,
+            subject,
+            //dateCreated,
+            category,
+            moderatorList,
+            members
+        });
+
+        try {
+            const docId = await FirebaseController.createClassroom(classroom);
+            classroom.docId = docId;
+            localStorage.setItem("classroomPageClassroomDocID", classroom.docId);
+            Elements.modalCreateClassroom.hide();
+            //history.pushState(null, null, Routes.routePathname.CLASSROOM + "#" + classroom.docId);
+           // await DeckPage.deck_page(deck.docId);
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }
+
+    });
+
+    // Clears CREATE CLASSROOM input fields when user closes modal
+    $(`#create-classroom-modal`).on('hidden.bs.modal', function (e) {
+        Elements.formCreateClassroom.reset();
     });
 }
 
@@ -51,8 +98,14 @@ export async function classrooms_page() {
      </tbody></table></div>
      `
 
-    html += `<div id="My Classrooms" class="classroom-tab-content">
-    <table class="table">
+    html += `<div id="My Classrooms" class="classroom-tab-content">`;
+
+    // create classroom buton
+    html += `<button id="${Constant.htmlIDs.createClassroom}" type="button" class="btn btn-secondary pomo-bg-color-dark">
+    Create Classroom</button>`;
+
+     html +=
+    `<table class="table">
          <thread>
           <tr>
              <th scope="col">View</th>
@@ -69,7 +122,7 @@ export async function classrooms_page() {
         <td>Category</td>
      </tr>
      </tbody></table></div>
-     `
+     `;
 
     // once we have classrooms built in firebase and as a model, this'll probably work :)
     // html += `<div id="Available Classrooms" class="classroom-tab-content">
@@ -175,6 +228,28 @@ export async function classrooms_page() {
         document.getElementById('available-classroom-button').style.color = '#A7ADC6';
     })
     myClassroomButton.click();
+
+    const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
+
+    // create classroom open modal button listener 
+    createClassroomButton.addEventListener('click', async e => {
+
+        const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+
+        // add firebase func. to retrieve categories list
+
+        // clear innerHTML to prevent duplicates
+        Elements.formClassCategorySelect.innerHTML = '';
+ 
+        categories.forEach(category => {
+            Elements.formClassCategorySelect.innerHTML += `
+                      <option value="${category}">${category}</option>
+                  `;
+          });
+
+        // opens create Classroom modal
+        $(`#${Constant.htmlIDs.createClassroomModal}`).modal('show');
+    })
 
 }
 

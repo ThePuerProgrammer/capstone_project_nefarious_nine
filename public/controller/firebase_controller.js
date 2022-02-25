@@ -600,3 +600,15 @@ export async function getMyClassrooms(uid) {
     // TODO
     return 0;
 }
+
+//============================================================================//
+// CREATE A Classroom
+//============================================================================//
+export async function createClassroom(classroom) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .add(classroom.serialize());
+     
+    return ref.id;
+}
+//============================================================================//

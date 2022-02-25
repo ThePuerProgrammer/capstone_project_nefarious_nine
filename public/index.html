@@ -436,6 +436,44 @@
     </div>
   </div>
 
+    <!-- CREATE CLASSROOM MODAL----------------------------------------------------->
+    <div class="modal fade" id="create-classroom-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="create-classroom-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header">
+          <h5 class="modal-title pomo-text-color-light" id="create-classroom-modal-label">Create A New Classroom</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-create-classroom" method="post">
+            <div class="form-group">
+              <label class="pomo-text-color-light" for="name">Name</label>
+              <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
+                required minlength="2" id="class-title">
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="subject">Subject</label>
+              <input class="form-control form-control-lg" type="subject" name='subject'
+                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="class-subject">
+                <br>
+                <br>
+                <label class="pomo-text-color-light" for="selectClassCategory">Category</label>
+                <br>
+              <select id="select-class-category" name="selectClassCategory" class="form-select-class-category"
+                aria-label="Default select example" style="width:300px;"></select>
+            </div>
+            <br>
+            <br>
+            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-create-deck"
+              type="submit">Create Classroom</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END CREATE CLASSROOM MODAL---------------------------------------------->
+
   <!-- Modal: Popup Info Box -->
   <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="modal-infobox-label" aria-hidden="true">
