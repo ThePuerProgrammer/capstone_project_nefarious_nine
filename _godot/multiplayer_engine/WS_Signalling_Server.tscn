@@ -2,5 +2,5 @@
 
 [ext_resource path="res://multiplayer_engine/ws_auth_server.gd" type="Script" id=1]
 
-[node name="WS_Auth_Server" type="Node"]
+[node name="WS_Signalling_Server" type="Node"]
 script = ExtResource( 1 )

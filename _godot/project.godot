@@ -171,7 +171,7 @@ config/icon="res://icon.png"
 [autoload]
 
 MenuMusic="*res://MenuMusic.tscn"
-WsAuthServer="*res://multiplayer_engine/WS_Auth_Server.tscn"
+WsSignallingServer="*res://multiplayer_engine/WS_Signalling_Server.tscn"
 
 [display]
 
