@@ -1,20 +1,175 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://multiplayer_engine/active_lobby.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=1]
 [ext_resource path="res://multiplayer_engine/p2p_client.gd" type="Script" id=2]
-[ext_resource path="res://multiplayer_engine/create_lobby.gd" type="Script" id=3]
+[ext_resource path="res://assets/icons/outline_keyboard_double_arrow_up_black_24dp.png" type="Texture" id=3]
 [ext_resource path="res://multiplayer_engine/multiplayer_engine.gd" type="Script" id=4]
 [ext_resource path="res://multiplayer_engine/ws_auth_server.gd" type="Script" id=5]
 [ext_resource path="res://multiplayer_engine/p2p_server.gd" type="Script" id=6]
+[ext_resource path="res://assets/icons/outline_key_black_24dp.png" type="Texture" id=7]
+[ext_resource path="res://assets/textures/water.png" type="Texture" id=8]
+[ext_resource path="res://multiplayer_engine/lobby_scene_bg.gd" type="Script" id=9]
+[ext_resource path="res://assets/icons/outline_sports_esports_black_24dp.png" type="Texture" id=10]
+
+[sub_resource type="Shader" id=5]
+code = "shader_type canvas_item;
+
+void fragment() {
+
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 5 )
+
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+
+uniform vec2 tiled_factor = vec2(1, 1);
+uniform	float aspect_ratio = 0.5;
+uniform float wave_height = 0.04;
+uniform vec2 wave_width_factor = vec2(5.0, 1.0);
+uniform float wave_speed_factor = 0.2;
+
+void fragment() {
+	vec2 tiled_uvs = UV * tiled_factor;
+	tiled_uvs.y *= aspect_ratio;
+	vec2 waves_offset;
+	waves_offset.x = cos(TIME * wave_speed_factor + (-tiled_uvs.y) * wave_width_factor.x );
+	waves_offset.y = sin(TIME * wave_speed_factor + (-tiled_uvs.y) * wave_width_factor.y );
+	COLOR = texture( TEXTURE, tiled_uvs + waves_offset * wave_height ) * vec4(vec3(0.88, 0.32, 0.64) * 0.3, 1);
+	
+	// visualize
+//	COLOR = vec4(waves_offset / 0.05, 0.0, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
+shader_param/tiled_factor = Vector2( 1, 1 )
+shader_param/aspect_ratio = 0.458333
+shader_param/wave_height = 0.04
+shader_param/wave_width_factor = Vector2( 5, 1 )
+shader_param/wave_speed_factor = 0.2
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(vec3(0.8), 1);
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
 
 [node name="Multiplayer_Engine" type="Node"]
 script = ExtResource( 4 )
 
-[node name="Active_Lobby" type="Node2D" parent="."]
-script = ExtResource( 1 )
+[node name="Centered" type="CenterContainer" parent="."]
+material = SubResource( 6 )
+margin_right = 1920.0
+margin_bottom = 880.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Create_Lobby" type="Node2D" parent="."]
-script = ExtResource( 3 )
+[node name="Lobby Scene BG" type="Sprite" parent="Centered"]
+material = SubResource( 8 )
+position = Vector2( 961, 440 )
+scale = Vector2( 1.875, 0.859375 )
+texture = ExtResource( 8 )
+script = ExtResource( 9 )
+
+[node name="TabContainer" type="TabContainer" parent="Centered"]
+margin_left = 298.0
+margin_top = 85.0
+margin_right = 1622.0
+margin_bottom = 795.0
+tab_align = 0
+
+[node name="Join Lobby" type="VBoxContainer" parent="Centered/TabContainer"]
+visible = false
+material = SubResource( 4 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Join_Label" type="Label" parent="Centered/TabContainer/Join Lobby"]
+margin_right = 1316.0
+margin_bottom = 22.0
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Active Lobbies"
+align = 1
+
+[node name="Server_List_BG" type="ColorRect" parent="Centered/TabContainer/Join Lobby"]
+margin_top = 26.0
+margin_right = 1316.0
+margin_bottom = 640.0
+rect_min_size = Vector2( 1316, 614 )
+size_flags_vertical = 3
+color = Color( 0.0980392, 0.0980392, 0.0980392, 1 )
+
+[node name="Join_HBox" type="HBoxContainer" parent="Centered/TabContainer/Join Lobby"]
+margin_top = 644.0
+margin_right = 1316.0
+margin_bottom = 678.0
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Pword_Input" type="LineEdit" parent="Centered/TabContainer/Join Lobby/Join_HBox"]
+margin_left = 964.0
+margin_right = 1150.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 186, 34 )
+right_icon = ExtResource( 7 )
+placeholder_text = "Enter Lobby Password"
+placeholder_alpha = 0.127
+
+[node name="Join_Button" type="Button" parent="Centered/TabContainer/Join Lobby/Join_HBox"]
+margin_left = 1154.0
+margin_right = 1316.0
+margin_bottom = 34.0
+text = " Connect To Lobby"
+icon = ExtResource( 3 )
+
+[node name="Create Lobby" type="VBoxContainer" parent="Centered/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Label" type="Label" parent="Centered/TabContainer/Create Lobby"]
+margin_right = 1316.0
+margin_bottom = 22.0
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Create a New Game Lobby"
+align = 1
+
+[node name="Lobby_Settings" type="HBoxContainer" parent="Centered/TabContainer/Create Lobby"]
+margin_top = 26.0
+margin_right = 1316.0
+margin_bottom = 640.0
+rect_min_size = Vector2( 1316, 614 )
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Centered/TabContainer/Create Lobby"]
+margin_top = 644.0
+margin_right = 1316.0
+margin_bottom = 674.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Create_Button" type="Button" parent="Centered/TabContainer/Create Lobby/HBoxContainer"]
+margin_left = 597.0
+margin_right = 718.0
+margin_bottom = 30.0
+text = "Create Lobby"
+icon = ExtResource( 10 )
 
 [node name="WS_Auth_Server" type="Node" parent="."]
 script = ExtResource( 5 )
@@ -24,3 +179,15 @@ script = ExtResource( 6 )
 
 [node name="P2P_Client" type="Node" parent="."]
 script = ExtResource( 2 )
+
+[node name="Lobby_Panel" type="PanelContainer" parent="."]
+visible = false
+margin_left = 300.0
+margin_top = 50.0
+margin_right = 1620.0
+margin_bottom = 830.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="item_rect_changed" from="Centered/Lobby Scene BG" to="Centered/Lobby Scene BG" method="resized_screen"]

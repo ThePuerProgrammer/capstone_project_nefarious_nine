@@ -27,14 +27,14 @@ __meta__ = {
 }
 
 [node name="Logo" type="TextureRect" parent="MenuContainer"]
-margin_right = 1680.0
+margin_right = 1679.0
 margin_bottom = 238.0
 texture = ExtResource( 3 )
 stretch_mode = 4
 
 [node name="MenuButtons" type="VBoxContainer" parent="MenuContainer"]
 margin_top = 288.0
-margin_right = 1680.0
+margin_right = 1679.0
 margin_bottom = 783.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -42,19 +42,20 @@ custom_constants/separation = 60
 alignment = 1
 
 [node name="SingleplayerButton" parent="MenuContainer/MenuButtons" instance=ExtResource( 2 )]
-margin_right = 1680.0
+margin_right = 1679.0
 margin_bottom = 125.0
 rect_min_size = Vector2( 0, 125 )
 
 [node name="MultiplayerButton" parent="MenuContainer/MenuButtons" instance=ExtResource( 1 )]
 margin_top = 185.0
-margin_right = 1680.0
+margin_right = 1679.0
 margin_bottom = 310.0
 rect_min_size = Vector2( 0, 125 )
+scene_to_load = "res://multiplayer_engine/Multiplayer_Engine.tscn"
 
 [node name="GameSettingsButton" parent="MenuContainer/MenuButtons" instance=ExtResource( 4 )]
 margin_top = 370.0
-margin_right = 1680.0
+margin_right = 1679.0
 margin_bottom = 495.0
 rect_min_size = Vector2( 0, 125 )
 
