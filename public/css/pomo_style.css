@@ -437,7 +437,7 @@ input {
 
   /*STYLES FOR CLASSROOM TABS*/
 /*============================================================================*/
-.tab{
+.classroom-page-tab{
     border-bottom: 1px solid #2C1320;
     padding-bottom: 55px;
 }
