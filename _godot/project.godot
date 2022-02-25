@@ -171,7 +171,7 @@ config/icon="res://icon.png"
 [display]
 
 window/size/width=1920
-window/size/height=880
+window/size/height=900
 
 [physics]
 
