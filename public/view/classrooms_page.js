@@ -5,6 +5,7 @@ import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import { Classroom } from '../model/classroom.js';
+import * as OneClassroomPage from './one_classroom_page.js';
 
 export function addEventListeners() {
     Elements.menuClassrooms.addEventListener('click', async () => {
@@ -238,13 +239,15 @@ export async function classrooms_page() {
             }
         }
     });
+
+    OneClassroomPage.addClassroomViewButtonListeners();
 }
 
 function buildClassroom(classroom) {
     return `
-    <td value="${classroom.docId}">
+    <td>
     <form class="form-view-classroom" method="post">
-            <input type="hidden" name="docId" value="${classroom.docId}">
+            <input type="hidden" name="docId" value="${classroom.docID}">
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
         </form></td>
     <td>${classroom.name}</td>

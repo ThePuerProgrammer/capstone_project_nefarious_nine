@@ -614,6 +614,22 @@ export async function getMyClassrooms(email) {
 }
 
 //============================================================================//
+// Gets one classroom
+//============================================================================//
+export async function getOneClassroom(classroomDocID) {
+    const classroomRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classroomDocID)
+        .get();
+
+    if (!classroomRef.exists) return null;
+
+    const classroom = new Classroom(classroomRef.data());
+    classroom.set_docID(classroomDocID);
+    return classroom;
+}
+
+//============================================================================//
 // CREATE A Classroom
 //============================================================================//
 export async function createClassroom(classroom) {
