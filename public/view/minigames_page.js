@@ -11,7 +11,7 @@ export function addEventListeners() {
 export async function minigames_page() {
     Elements.root.innerHTML = `
         <div id="pomogame-iframe-container">
-            <iframe src="pomogame.html" id="pomogame-iframe"></iframe>
+            <iframe src="../gd_exports/pomogame.html" id="pomogame-iframe"></iframe>
         </div>
     `;
 }
