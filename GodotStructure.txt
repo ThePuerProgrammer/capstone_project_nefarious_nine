@@ -1,0 +1,32 @@
+================================================================================
+The Godot project is currently stored in 
+
+/capstone_project_nefarious_nine/_godot
+
+So any changes within the engine will be translated here
+================================================================================
+
+
+================================================================================
+The file tree within Godot for general development should be maintained as
+/_godot
+    /Menu
+        /* related to the main menu
+    /minigame_1
+        /* related to minigame_1 
+    /minigame_2
+        /* you get the point
+    /minigame_3
+    /minigame_4
+    /minigame_5
+    /multiplayer_engine
+    main.gd
+    Main.tscn
+================================================================================
+
+
+================================================================================
+The exports from Godot should be directed to
+
+/capstone_project_nefarious_nine/public/gd_exports
+================================================================================

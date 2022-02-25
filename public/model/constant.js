@@ -49,4 +49,8 @@ export const htmlIDs = {
     streakNumberText: 'streak-number-text',
     studyFlashcardAnswer: 'study-flashcard-answer',
     smartStudyIndicator: 'smart-study-indicator',
+    createDeck: 'button-create-deck-modal',
+    createDeckModal: 'create-deck-modal',
+    createClassroom: 'button-create-classroom-modal',
+    createClassroomModal: 'create-classroom-modal',
 }

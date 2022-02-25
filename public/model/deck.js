@@ -10,6 +10,7 @@ export class Deck {
         //This ensures this is a type number
         this.dateCreated = typeof data.dateCreated =='number' ? data.dateCreated:Number(data.dateCreated);
         this.isFavorited = data.isFavorited;
+        this.category = data.category;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
 
@@ -46,6 +47,7 @@ export class Deck {
             subject: this.subject,
             dateCreated: this.dateCreated,
             isFavorited: this.isFavorited,
+            category: this.category,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 
