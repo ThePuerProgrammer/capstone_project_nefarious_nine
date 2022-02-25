@@ -11,8 +11,7 @@ func _ready():
 		button.connect("pressed", self, "_on_Button_pressed", [button.scene_to_load])
 	$FadeIn.show()
 	$FadeIn.fade_in()
-	if !player.playing:
-		player.play()
+	$MusicStartTimer.start()
 
 func _on_Button_pressed(scene_to_load):
 	_scene_path_to_load = scene_to_load
@@ -25,3 +24,8 @@ func _on_FadeOut_fade_out_finished():
 
 func _on_FadeIn_fade_in_finished():
 	$FadeIn.hide()
+
+
+func _on_MusicStartTimer_timeout():
+	if !player.playing:
+		player.play()
