@@ -4,6 +4,7 @@ import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
 import { User } from '../model/user.js';
+import { Classroom } from '../model/classroom.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -427,12 +428,12 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 //===========================================================================//
 //EDIT FLASHCARD 
 //===========================================================================//
-export async function getFlashCardById(uid,deckDocID,docID){
+export async function getFlashCardById(uid, deckDocID, docID) {
     const flashRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS).doc(docID).get();
-    if(flashRef.exists){
+    if (flashRef.exists) {
         const flashcard = new Flashcard(flashRef.data());
         flashcard.set_docID(docID);
         return flashcard;
@@ -448,31 +449,31 @@ export async function getFlashCardById(uid,deckDocID,docID){
     both doc.data().'field' like doc.data().question and data.question work the
     same.  As I have given a declaration of data for data.question below.
 ============================================================================*/
-export async function updateFlashcard(uid, deckDocID, flashcard, docID){
+export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
     const data = flashcard.serializeForUpdate();
     const flashRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS).doc(docID)
-        .get().then((doc)=>{
-            if(doc.exists){
-                    flashcard.question =data.question;
-                    flashcard.answer = data.answer;
-                    //flashcard.isMultipleChoice = data.isMultipleChoice;
-                    flashcard.incorrectAnswers = data.incorrectAnswers;
-                    flashcard.questionImageName= data.questionImageName;
-                    flashcard.questionImageURL = data.questionImageURL;
-                    flashcard.answerImageName = data.answerImageName;
-                    flashcard.answerImageURL = data.answerImageURL;
-                    console.log("UPDATED");
-                }//Error Code
-                else if(Constant.DEV) {
-                    console.log(e);
-                    Utilites.info('Update Error Firebase', JSON.stringify(e));
-                }   
+        .get().then((doc) => {
+            if (doc.exists) {
+                flashcard.question = data.question;
+                flashcard.answer = data.answer;
+                //flashcard.isMultipleChoice = data.isMultipleChoice;
+                flashcard.incorrectAnswers = data.incorrectAnswers;
+                flashcard.questionImageName = data.questionImageName;
+                flashcard.questionImageURL = data.questionImageURL;
+                flashcard.answerImageName = data.answerImageName;
+                flashcard.answerImageURL = data.answerImageURL;
+                console.log("UPDATED");
+            }//Error Code
+            else if (Constant.DEV) {
+                console.log(e);
+                Utilites.info('Update Error Firebase', JSON.stringify(e));
+            }
         });
 
-        firebase.firestore()
+    firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS).doc(docID)
@@ -484,12 +485,12 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID){
 //============================================================================//
 //  This will retrieve an image already existing from the storage
 //  reference link : https://firebase.google.com/docs/storage/web/download-files#web-version-9_2
-export async function existingImageForUpdate(imageNamePassed){
-    
+export async function existingImageForUpdate(imageNamePassed) {
+
     const storageRef = firebase.storage().ref()
         .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageNamePassed);
-        console.log(`Check 1`);
-    try{
+    console.log(`Check 1`);
+    try {
         console.log(`Check 2`);
         // const snapShotQuery = await ref.get(storageRef);
         const imageURL = await storageRef.getDownloadURL();
@@ -497,22 +498,22 @@ export async function existingImageForUpdate(imageNamePassed){
 
         console.log(`check 3`)
         //const imageName = imageName;
-        return{imageNamePassed, imageURL };
+        return { imageNamePassed, imageURL };
         console.log(`check 3`)
-    
-    } catch(e) {
-        if(Constant.DEV) console.log(e);
-        Utilites.info('Error Updating w/ Exisiting Image',JSON.stringify(e),"modal-edit-a-flashcard");
+
+    } catch (e) {
+        if (Constant.DEV) console.log(e);
+        Utilites.info('Error Updating w/ Exisiting Image', JSON.stringify(e), "modal-edit-a-flashcard");
     }
 }
 //Uploaded Image ! (Since the target image is the original image)
 export async function uploadImageToFlashcardAnswerEdit(answerImageFile) {
     //Generic Naming
     const answerImageName = Date.now() + answerImageFile.name + 'answer';
-    
+
     const ref = firebase.storage().ref()
         .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
-   
+
     const taskSnapShot = await ref.put(answerImageFile);
     const answerImageURL = await taskSnapShot.ref.getDownloadURL();
     return { answerImageName, answerImageURL };
@@ -584,11 +585,13 @@ export async function getAvailableClassrooms() {
     let classroomList = [];
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
-        .orderBy('name')
+        .orderBy('name', 'asc')
         .get();
 
     ref.forEach(doc => {
-        // TODO: deserialize classroom docs
+        const cr = new Classroom(doc.data());
+        cr.set_docID(doc.id);
+        classroomList.push(cr);
     });
     return classroomList;
 }
@@ -596,9 +599,18 @@ export async function getAvailableClassrooms() {
 //============================================================================//
 // Gets user's classrooms
 //============================================================================//
-export async function getMyClassrooms(uid) {
-    // TODO
-    return 0;
+export async function getMyClassrooms(email) {
+    let classroomList = [];
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('moderatorList', 'array-contains', email).get();
+
+    ref.forEach(doc => {
+        const cr = new Classroom(doc.data());
+        cr.set_docID(doc.id);
+        classroomList.push(cr);
+    });
+    return classroomList;
 }
 
 //============================================================================//
@@ -608,7 +620,7 @@ export async function createClassroom(classroom) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
         .add(classroom.serialize());
-     
+
     return ref.id;
 }
 //============================================================================//
