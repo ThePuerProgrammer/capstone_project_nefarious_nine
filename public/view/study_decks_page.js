@@ -72,16 +72,17 @@ export async function study_decks_page() {
     <div style="float:right">
     <label for="sort-decks">Order by:</label>
     <select name="sort-decks" id="sort-decks" style="width: 200px">
-        <option selected>Sort decks by...</option>
+        <option selected disabled>Sort decks by...</option>
         <option value="name">Name</option>
         <option value="subject">Subject</option>
         <option value="date">Date</option>
+        <option value="category">Category</option>
     </select>
     </div>
     <br><br>
     `
 
-    let deckList;
+    let deckList = [];
     try {
         deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
     } catch (e) {
@@ -144,7 +145,8 @@ export async function study_decks_page() {
                     2. If false, check if a is greater than b. If true, return 1 as explained above
                     3. If false, then the function returns 0 as the values are already in their proper place
                 */
-                return (firstName < secondName) ? -1 : (firstName > secondName) ? 1 : 0;
+                return (firstName < secondName) ? -1 :
+                    (firstName > secondName) ? 1 : 0;
             });
             // Each function will operate in a similar manner
         } else if (opt == "subject") {
@@ -153,7 +155,8 @@ export async function study_decks_page() {
                 var bId = b.getAttribute('id');
                 var firstSubject = deckList.find(deck => deck.docId == aId).subject.toLowerCase();
                 var secondSubject = deckList.find(deck => deck.docId == bId).subject.toLowerCase();
-                return (firstSubject < secondSubject) ? -1 : (firstSubject > secondSubject) ? 1 : 0;
+                return (firstSubject < secondSubject) ? -1 :
+                    (firstSubject > secondSubject) ? 1 : 0;
             });
         } else if (opt == "date") {
             list.sort(function (a, b) {
@@ -163,9 +166,20 @@ export async function study_decks_page() {
                 */
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
-                var first = deckList.find(deck => deck.docId == aId);
-                var second = deckList.find(deck => deck.docId == bId);
-                return (first.dateCreated < second.dateCreated) ? -1 : (first.dateCreated > second.dateCreated) ? 1 : 0;
+                var firstDate = deckList.find(deck => deck.docId == aId).dateCreated;
+                var secondDate = deckList.find(deck => deck.docId == bId).dateCreated;
+                // third date ( ͡° ͜ʖ ͡°)
+                return (firstDate < secondDate) ? -1 :
+                    (firstDate > secondDate) ? 1 : 0;
+            });
+        } else if (opt == "category") {
+            list.sort(function (a, b) {
+                var aId = a.getAttribute('id');
+                var bId = b.getAttribute('id');
+                var firstCategory = deckList.find(deck => deck.docId == aId).category;
+                var secondCategory = deckList.find(deck => deck.docId = bId).category;
+                return (firstCategory.category < secondCategory.category) ? -1 :
+                    (firstCategory.category > secondCategory.category) ? 1 : 0;
             });
         }
         // Finally, append the decks to the div wrapped around them, replacing the original order with the new order
@@ -197,12 +211,12 @@ export async function study_decks_page() {
 
         // clear innerHTML to prevent duplicates
         Elements.formDeckCategorySelect.innerHTML = '';
- 
+
         categories.forEach(category => {
             Elements.formDeckCategorySelect.innerHTML += `
                       <option value="${category}">${category}</option>
                   `;
-          });
+        });
 
         // opens create Deck modal
         $(`#${Constant.htmlIDs.createDeckModal}`).modal('show');
@@ -218,6 +232,7 @@ function buildDeckView(deck, flashcards) {
         <div class="card-body">
             <h5 class="card-text">${deck.name}</h5>
             <h6 class="card-text" >Subject: ${deck.subject}</h6>
+            <h6 class="card-text">Category: ${deck.category}</h6>
             <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
             <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
         </div>

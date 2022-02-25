@@ -5,6 +5,7 @@ import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import { Classroom } from '../model/classroom.js';
+import * as OneClassroomPage from './one_classroom_page.js';
 
 export function addEventListeners() {
     Elements.menuClassrooms.addEventListener('click', async () => {
@@ -44,12 +45,12 @@ export function addEventListeners() {
             localStorage.setItem("classroomPageClassroomDocID", classroom.docId);
             Elements.modalCreateClassroom.hide();
             //history.pushState(null, null, Routes.routePathname.CLASSROOM + "#" + classroom.docId);
-           // await DeckPage.deck_page(deck.docId);
+            // await DeckPage.deck_page(deck.docId);
         } catch (e) {
             if (Constant.DEV)
                 console.log(e);
         }
-
+        await classrooms_page();
     });
 
     // Clears CREATE CLASSROOM input fields when user closes modal
@@ -60,26 +61,66 @@ export function addEventListeners() {
 
 export async function classrooms_page() {
     Elements.root.innerHTML = '';
+    let html = '';
 
-    let html = `<div class="tab"><button id="my-classroom-button" class="classroom-tab">My Classrooms</button>
-    <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>`
+    html += `<div class="classroom-page-tab"><button id="my-classroom-button" class="classroom-tab">My Classrooms</button>
+    <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>`;
 
-    // sort select menu
-    html += `
-    <div style="float:right">
-    <label for="sort-decks">Order by:</label>
-    <select name="sort-decks" id="sort-decks" style="width: 200px">
-        <option selected>Sort classrooms by...</option>
+    html += `<div style="float:right">
+    <label for="sort-classrooms">Order by:</label>
+    <select name="sort-classrooms" id="sort-classrooms" style="width: 200px">
+        <option selected disabled>Sort classrooms by...</option>
         <option value="name">Name</option>
         <option value="subject">Subject</option>
-        <option value="date">Category</option>
+        <option value="category">Category</option>
     </select>
     </div>
-    </div>`
+    </div><div id="Available Classrooms" class="classroom-tab-content">`;
 
-    // placeholder for classrooms until they're done so you get to see how cool they look
-    html += `<div id="Available Classrooms" class="classroom-tab-content">
-    <table class="table">
+    let availableClassroomList = [];
+    try {
+        availableClassroomList = await FirebaseController.getAvailableClassrooms();
+    } catch (e) {
+        Utilities.info('Error getting available classrooms', JSON.stringify(e));
+        console.log(e);
+    }
+
+    html += ` <table id="available-classrooms-table" class="table">
+        <thread>
+         <tr>
+            <th scope="col">View</th>
+            <th scope="col">Classroom</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Category</th>
+        </tr>
+        </thread>
+    <tbody>
+    `;
+
+    if (availableClassroomList.length == 0) {
+        html += '<p>No classrooms found!</p>';
+    }
+
+    availableClassroomList.forEach(c => {
+        html += `
+                <tr>${buildClassroom(c)}</tr>`;
+    })
+    html += `</tbody></table></div>`;
+
+    // My Classrooms tab with create classroom buton
+    html += `<div id="My Classrooms" class="classroom-tab-content">
+        <button id="${Constant.htmlIDs.createClassroom}" type="button" class="btn btn-secondary pomo-bg-color-dark">
+        Create Classroom</button>`;
+
+    let myClassroomList = [];
+    try {
+        myClassroomList = await FirebaseController.getMyClassrooms(Auth.currentUser.email);
+    } catch (e) {
+        Utilities.info('Error getting your classrooms', JSON.stringify(e));
+        console.log(e);
+    }
+
+    html += `<table id="my-classrooms-table" class="table">
          <thread>
           <tr>
              <th scope="col">View</th>
@@ -88,118 +129,23 @@ export async function classrooms_page() {
              <th scope="col">Category</th>
          </tr>
          </thread>
-     <tbody id="available-classroom-table-body">
-     <tr>
-        <td><button id="available-classroom-view">View</button></td>
-        <td>Classname</td>
-        <td>Subject</td>
-        <td>Category</td>
-     </tr>
-     </tbody></table></div>
-     `
-
-    html += `<div id="My Classrooms" class="classroom-tab-content">`;
-
-    // create classroom buton
-    html += `<button id="${Constant.htmlIDs.createClassroom}" type="button" class="btn btn-secondary pomo-bg-color-dark">
-    Create Classroom</button>`;
-
-     html +=
-    `<table class="table">
-         <thread>
-          <tr>
-             <th scope="col">View</th>
-             <th scope="col">Classroom</th>
-             <th scope="col">Subject</th>
-             <th scope="col">Category</th>
-         </tr>
-         </thread>
-     <tbody id="my-classroom-table-body">
-     <tr>
-        <td><button id="my-classroom-view">View</button></td>
-        <td>Classname</td>
-        <td>Subject</td>
-        <td>Category</td>
-     </tr>
-     </tbody></table></div>
+    <tbody>
      `;
 
-    // once we have classrooms built in firebase and as a model, this'll probably work :)
-    // html += `<div id="Available Classrooms" class="classroom-tab-content">
-    // <table class="table">
-    //     <thread>
-    //      <tr>
-    //         <th scope="col">View</th>
-    //         <th scope="col">Classroom</th>
-    //         <th scope="col">Subject</th>
-    //         <th scope="col">Category</th>
-    //     </tr>
-    //     </thread>
-    // <tbody id="available-classroom-table-body">
-    // `
+    if (myClassroomList.length == 0) {
+        html += '<p>No classrooms found!</p>';
+    }
+    myClassroomList.forEach(c => {
+        html += `
+                <tr>${buildClassroom(c)}</tr>`;
+    })
 
-    // let availableClassroomList = [];
-    // try {
-    //     availableClassroomList = await FirebaseController.getAvailableClassrooms();
-    // } catch (e) {
-    //     Utilities.info('Error getting available classrooms', JSON.stringify(e));
-    //     console.log(e);
-    // }
-
-    // availableClassroomList.forEach(c => {
-    //     html += `
-    //     <tr>${buildClassroom(c)}</tr>`
-    // })
-
-    // if (availableClassroomList.length == 0) {
-    //     html += '<p>No classrooms found!</p>'
-    // }
-    // html += `</tbody></table></div>`
-
-    // html += `<div id="My Classrooms" class="classroom-tab-content">
-    // <table class="table">
-    //     <thread>
-    //      <tr>
-    //         <th scope="col">View</th>
-    //         <th scope="col">Classroom</th>
-    //         <th scope="col">Subject</th>
-    //         <th scope="col">Category</th>
-    //     </tr>
-    //     </thread>
-    // <tbody id="available-classroom-table-body">
-    // `
-
-    // let myClassroomList = [];
-    // try {
-    //     myClassroomList = await FirebaseController.getMyClassrooms(Auth.currentUser.uid);
-    // } catch (e) {
-    //     Utilities.info('Error getting your classrooms', JSON.stringify(e));
-    //     console.log(e);
-    // }
-
-    // myClassroomList.forEach(c => {
-    //     html += `
-    //     <tr>${buildClassroom(c)}</tr>`
-    // })
-
-    // if (myClassroomList.length == 0) {
-    //     html += '<p>No classrooms found!</p>'
-    // }
-    // html += `</tbody></table></div>`
+    html += `</tbody></table></div>`;
 
     Elements.root.innerHTML += html;
 
-    const availableClassroomViewButton = document.getElementById('available-classroom-view');
-    availableClassroomViewButton.addEventListener('click', e => {
-        Utilities.info("", 'why');
-    })
 
-    const myClassroomViewButton = document.getElementById('my-classroom-view');
-    myClassroomViewButton.addEventListener('click', e => {
-        Utilities.info("", 'pls');
-    })
-
-
+    // get available class tab and show it as visible
     const availableClassroomButton = document.getElementById('available-classroom-button');
     availableClassroomButton.addEventListener('click', e => {
         let tabContents = document.getElementsByClassName("classroom-tab-content");
@@ -214,6 +160,7 @@ export async function classrooms_page() {
         document.getElementById('my-classroom-button').style.color = '#A7ADC6';
     })
 
+    // get my classroom tab and show it as visible
     const myClassroomButton = document.getElementById('my-classroom-button');
     myClassroomButton.addEventListener('click', e => {
         let tabContents = document.getElementsByClassName("classroom-tab-content");
@@ -227,6 +174,7 @@ export async function classrooms_page() {
         document.getElementById('available-classroom-button').style.backgroundColor = `#2C1320`;
         document.getElementById('available-classroom-button').style.color = '#A7ADC6';
     })
+    // sets myclassrooms as default
     myClassroomButton.click();
 
     const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
@@ -240,19 +188,70 @@ export async function classrooms_page() {
 
         // clear innerHTML to prevent duplicates
         Elements.formClassCategorySelect.innerHTML = '';
- 
+
         categories.forEach(category => {
             Elements.formClassCategorySelect.innerHTML += `
                       <option value="${category}">${category}</option>
                   `;
-          });
+        });
 
         // opens create Classroom modal
         $(`#${Constant.htmlIDs.createClassroomModal}`).modal('show');
-    })
+    });
 
+    const sortClassSelect = document.getElementById("sort-classrooms");
+    sortClassSelect.addEventListener('change', async e => {
+        e.preventDefault();
+        // get value from select menu and check if available classroom tab is hiddne
+        var opt = e.target.options[e.target.selectedIndex].value;
+        var swap, rows, shouldSwap;
+        var checkHidden = document.getElementById("Available Classrooms");
+        // set which table to use
+        var table = checkHidden.style.display === "none" ? document.getElementById("my-classrooms-table") : document.getElementById("available-classrooms-table");
+        // for later use
+        var i;
+        var x = (opt == "name") ? 1 : (opt == "subject") ? 2 : 3;
+        // set swap to true
+        swap = true;
+        // if (opt == "name") {
+        // create a while loop to iterate through the table rows
+        while (swap) {
+            // base of saying we're done swapping
+            swap = false;
+            rows = table.rows;
+            // iterate through rows, first row is headers so we ignore that
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwap = false;
+                // getting classroom.docId from first row
+                var a = rows[i].getElementsByTagName("td")[x];
+                // getting classroom.docId from second row
+                var b = rows[i + 1].getElementsByTagName("td")[x];
+                // check if they should switch, if yes then break the loop
+                if (a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase()) {
+                    shouldSwap = true;
+                    break;
+                }
+            }
+            if (shouldSwap) {
+                // swap the rows
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                swap = true;
+            }
+        }
+    });
+
+    OneClassroomPage.addClassroomViewButtonListeners();
 }
 
 function buildClassroom(classroom) {
-    // TODO
+    return `
+    <td>
+    <form class="form-view-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docID}">
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+        </form></td>
+    <td>${classroom.name}</td>
+    <td>${classroom.subject}</td>
+    <td>${classroom.category}</td>
+    `;
 }
