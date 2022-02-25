@@ -1,16 +1,16 @@
 extends Node
 
+onready var maxPlayersOptionButton = get_node("Centered/Tab_Container/Create_Lobby/Lobby_Settings/Max_Players_Option_Button")
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	maxPlayersOptionButton.add_item("Select Max")
+	maxPlayersOptionButton.add_item("1")
+	maxPlayersOptionButton.add_item("2")
+	maxPlayersOptionButton.add_item("3")
+	maxPlayersOptionButton.add_item("4")
+	maxPlayersOptionButton.set_item_disabled(0, true)	
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _on_Back_To_Main_Menu_Button_pressed():
+	if (get_tree().change_scene("res://Menu/MenuScreen.tscn") != OK):
+		print("Failed to change scene")

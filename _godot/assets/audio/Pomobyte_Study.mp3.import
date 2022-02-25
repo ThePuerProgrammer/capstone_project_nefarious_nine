@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Pomobyte_Study.mp3-37ecb3714cb477dfee1d1b065fd60ba5.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/Pomobyte_Study.mp3"
+dest_files=[ "res://.import/Pomobyte_Study.mp3-37ecb3714cb477dfee1d1b065fd60ba5.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

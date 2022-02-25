@@ -2,8 +2,12 @@ extends Control
 
 var _scene_path_to_load
 
+onready var player = get_node("/root/MenuMusic/AudioStreamPlayer")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if !player.playing:
+		player.play()
 	#$MenuContainer/MenuButtons/SingleplayerButton.grab_focus()
 	for button in $MenuContainer/MenuButtons.get_children():
 		button.connect("pressed", self, "_on_Button_pressed", [button.scene_to_load])

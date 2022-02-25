@@ -168,6 +168,10 @@ config/name="Pomogame"
 run/main_scene="res://Menu/MenuScreen.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+MenuMusic="*res://MenuMusic.tscn"
+
 [display]
 
 window/size/width=1920
