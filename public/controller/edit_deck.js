@@ -15,10 +15,10 @@ export function addEventListeners(){
             name:           e.target.name.value,
             subject:        e.target.subject.value,
             dateCreated:    e.target.dateCreated.value,
+            category:       e.target.selectCategory.value,
             isFavorited:    e.target.isFavorited.value,
         });
         d.set_docID(e.target.docId.value);
-        const isFavorited = Elements.formEditDeck.isFavorited;
 
         if(d.isFavorited=="false"){
             console.log(`Trying comparison false`);
@@ -52,7 +52,6 @@ export async function edit_deck(uid, deckId){
 
     try{
         deck = await FirebaseController.getUserDeckById(uid, deckId);
-        console.log(`Check 3:${deck.isFavorited}`)
 
         if(!deck){
             Utilities.info('getDeckById Error', 'No deck found by the id');
@@ -68,9 +67,18 @@ export async function edit_deck(uid, deckId){
     Elements.formEditDeck.form.name.value = deck.name;
     Elements.formEditDeck.form.subject.value = deck.subject;
     Elements.formEditDeck.form.dateCreated.value = deck.dateCreated;
+    //Checking type before loading
+    if(deck.category){deck.category;}else if(typeof obj==='undefined'){deck.category='Misc'};
+    Elements.formEditDeck.form.selectCategory.value = deck.category;
     Elements.formEditDeck.form.isFavorited.value = deck.isFavorited;
-    console.log(`Check 4:${deck.isFavorited}`)
 
+    //Adding the Categories...THINGS
+    const categories =["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+    
+    categories.forEach(category => {
+        Elements.formEditDeckCategorySelect.innerHTML +=`
+        <option value="${category}">${category}</option>`;
+    });
     //Showing the data loaded into the modal
     Elements.modalEditDeck.show();
 

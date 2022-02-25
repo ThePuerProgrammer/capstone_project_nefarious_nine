@@ -135,8 +135,10 @@ export const formAnswerTextInputEdit = document.getElementById('form-edit-answer
 //==========================================================================//
 export const formEditDeck ={
     form: document.getElementById('form-edit-a-deck'),
-    checkboxIsFavorited: document.getElementById(''),
-}    
+    //if we are wanting to add checkbox into the edit
+    //checkboxIsFavorited: document.getElementById(''),
+} 
+export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
 //==========================================================================//
 //PET ADOPTION
 //============================================================================//

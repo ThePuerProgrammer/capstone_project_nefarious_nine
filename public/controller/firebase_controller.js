@@ -443,13 +443,14 @@ export async function updateDeck(uid, deck, deckDocID){
                     deck.name = data.name;
                     deck.subject = data.subject;
                     deck.dateCreated = data.dateCreated;
+                    deck.category = data.category;
                     //When editing flashcards I found that booleans were difficult
                     //to use here and commented it out isMultiplechoice and was functional
                     //deck.isFavorited = data.isFavorited;
                     console.log("UPDATED");
-                    console.log(`Check 5:${data.isFavorited}`)
+                    console.log(`Check 5:${data.category}`)
 
-                    console.log(`Check 6:${deck.isFavorited}`)
+                    console.log(`Check 6:${deck.category}`)
 
                 }//Error Code
                 else if(Constant.DEV) {

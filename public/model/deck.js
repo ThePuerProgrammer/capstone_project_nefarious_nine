@@ -64,6 +64,7 @@ static isSerializedDeck(obj){
             
     if(!obj.name || typeof obj.name != 'string') return false;
     if(!obj.subject || typeof obj.subject != 'string') return false;
+    if(!obj.category || typeof obj.category != 'string') return false;
     if(!obj.dateCreated || typeof obj.dateCreated != 'number') return false;
     if(!obj.isFavorited || typeof obj.isFavorited != 'boolean') return false;
 }
@@ -78,6 +79,7 @@ static isSerializedDeck(obj){
         const d = {};
         if(this.name) d.name = this.name;
         if(this.subject) d.subject = this.subject;
+        if(this.category) d.category = this.category;
         if(this.isFavorited) d.isFavorited = this.isFavorited;
         if(this.dateCreated) d.dateCreated = this.dateCreated;
         return d;
