@@ -75,7 +75,9 @@ export async function classrooms_page() {
         <option value="category">Category</option>
     </select>
     </div>
-    </div><div id="Available Classrooms" class="classroom-tab-content">`;
+    </div>`;
+
+    html += `<div id="Available Classrooms" class="classroom-tab-content">`;
 
     let availableClassroomList = [];
     try {
@@ -101,9 +103,9 @@ export async function classrooms_page() {
         html += '<p>No classrooms found!</p>';
     }
 
-    availableClassroomList.forEach(c => {
+    availableClassroomList.forEach(ac => {
         html += `
-                <tr>${buildClassroom(c)}</tr>`;
+                <tr>${buildClassroom(ac)}</tr>`;
     })
     html += `</tbody></table></div>`;
 
@@ -142,7 +144,7 @@ export async function classrooms_page() {
 
     html += `</tbody></table></div>`;
 
-    Elements.root.innerHTML += html;
+    Elements.root.innerHTML = html;
 
 
     // get available class tab and show it as visible
