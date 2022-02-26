@@ -1,0 +1,56 @@
+LEAVE DESCRIPTIVE COMMENTS FOR ANY REASONABLE CHUNK OF CODE
+
+An example of a bad comment
+
+// a variable named b
+let b;
+
+An example of a good comment
+
+// loops through numArray and sets maxValueInNumArray 
+// to the max value in numArray
+let maxValueInNumArray = Number.MIN_VALUE;
+for (let i = 0; i < numArray.length; i++) {
+    if (numArray[i] > maxValueInNumArray) {
+        maxValueInNumArray = numArray[i];
+    }
+}
+
+USE THE ABOVE BRACKETING STYLE FOR ALL JS FUNCTIONS
+
+*Not required, but consider using comment blocks to partition sections of code*
+If you chose to do so, use the following style
+
+// PUBLIC EXPORT FUNCTIONS
+//============================================================================//
+*functions here*
+*functions here*
+*functions here*
+*functions here*
+*functions here*
+//============================================================================//
+
+// PRIVATE LOCAL FUNCTIONS
+//============================================================================//
+*functions here*
+*functions here*
+*functions here*
+*functions here*
+*functions here*
+//============================================================================//
+
+You might be surprised at how much this helps you navigate our work
+
+SEMICOLONS REQUIRED FOR JS BUT DO NOT USE FOR GDSCRIPT
+
+USE NAMING VARIABLES
+
+// An example of a bad variable name
+let x = 0;
+
+// An example of a good variable name
+let currentUserCoinCount = 0;
+
+IN GDSCRIPT, USE TABS. ALWAYS. WILL BREAK CODE.
+
+IN JS, FEEL FREE TO BE A DISGUSTING HEATHEN
