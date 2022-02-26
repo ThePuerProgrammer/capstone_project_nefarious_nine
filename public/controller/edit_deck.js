@@ -84,3 +84,18 @@ export async function edit_deck(uid, deckId){
 
 
 }
+
+export async function delete_deck(docId){
+        
+    try{
+        console.log(`docId=${docId}`);
+        await FirebaseController.deleteDeck(Auth.currentUser.uid, docId);
+        // const deckTag =document.getElementById('deck.docId');
+        // deckTag.remove();
+        Utilities.info(`Success`, `The desired deck as successfully deleted.`);
+
+    } catch(e){
+    if(Constant.DEV)console.log(e);
+    Utilities.info(`Delete Deck Error`, JSON.stringify(e));
+    }
+}
