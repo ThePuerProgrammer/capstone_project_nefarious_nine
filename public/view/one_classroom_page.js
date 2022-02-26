@@ -36,6 +36,11 @@ export async function one_classroom_page(classroomDocID) {
     }
 
     html += `<h1>${classroom.name}</h1>`;
-    html += `<p>${classroomDocID}</p>`;
+    html += `<p>${classroomDocID}</p>
+    <p>${classroom.subject}</p>
+    <p>${classroom.category}</p>
+    <p>${classroom.moderatorList}</p>
+    <p>${classroom.members}</p>
+    `;
     Elements.root.innerHTML += html;
 }
