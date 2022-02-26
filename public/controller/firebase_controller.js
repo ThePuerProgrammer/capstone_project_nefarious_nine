@@ -423,6 +423,36 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
         .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
         .delete();
+    //Maybe add a delete of the image here after flashcard delete, keeping data consistent
+}
+
+//============================================================================//
+// DELETE DECK
+//============================================================================//
+export async function deleteDeck(uid, docID) {
+    let flashcards = []; 
+    //Get All flashcards
+    const ref = await firebase.firestore()
+    .collection(Constant.collectionName.USERS).doc(uid)
+    .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+    .collection(Constant.collectionName.FLASHCARDS)    
+    .get();
+    //Place all flashcards in array
+    ref.forEach(doc => {
+        const f = new Flashcard(doc.data());
+        f.set_docID(doc.id);
+        flashcards.push(f);
+    });
+    //Delete Flashcards
+    for(let i=flashcards.length; i > 0; i--){
+        console.log(`On #: ${i}`);
+        await deleteFlashcard(uid, docID, flashcards[i].docId);
+    }
+    //Delete Deck
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .delete();
 }
 
 //===========================================================================//

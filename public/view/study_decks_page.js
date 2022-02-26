@@ -67,7 +67,7 @@ export async function study_decks_page() {
 
     //create deck button
     html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark">
-     Create Deck</button>`;
+     Create A Deck +</button>`;
 
     // sort select menu
     html += `
@@ -116,6 +116,20 @@ export async function study_decks_page() {
             e.preventDefault();          
             await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
         });
+    }
+    const deleteDeckForms = document.getElementsByClassName('form-delete-deck');
+    for(let i=0; i < deleteDeckForms.length; i++){
+        deleteDeckForms[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            // let flashcard = await FirebaseController.getFlashcards(Auth.currentUser.uid, e.target.docId.value);
+
+           
+            // console.log(`docId:${e.target.docId.value}, flashcards:${e.target.flashcards}, decklist[0].flashcards:${flashcard.length}`);
+            const button = e.target.getElementsByTagName('button')[0];
+            const label = Utilities.disableButton(button);
+            await EditDeck.delete_deck(e.target.docId.value);
+            Utilities.enableButton(button, label);
+        })
     }
 
 
@@ -253,11 +267,15 @@ function buildDeckView(deck, flashcards) {
         <div class="btn-group">
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">View</button>
         </form>
         <form class="form-edit-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Edit</button>
+        </form>
+        <form class="form-delete-deck" method="post">
+            <input type="hidden" name="docId" value="${deck.docId}">
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Delete</button>
         </form>
         </div>`;
 
