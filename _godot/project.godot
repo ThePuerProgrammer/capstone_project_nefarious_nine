@@ -171,12 +171,21 @@ config/icon="res://icon.png"
 [autoload]
 
 MenuMusic="*res://MenuMusic.tscn"
-WsSignallingServer="*res://multiplayer_engine/WS_Signalling_Server.tscn"
+Firebase="*res://addons/godot-firebase/firebase/firebase.tscn"
+CurrentUser="*res://Current_User.tscn"
 
 [display]
 
 window/size/width=1920
 window/size/height=900
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/godot-firebase/plugin.cfg", "res://addons/http-sse-client/plugin.cfg", "res://addons/silicon.util.custom_docs/plugin.cfg" )
+
+[global]
+
+firebase=false
 
 [physics]
 

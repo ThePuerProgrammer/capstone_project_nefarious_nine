@@ -1,10 +1,8 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=1]
-[ext_resource path="res://multiplayer_engine/p2p_client.gd" type="Script" id=2]
 [ext_resource path="res://assets/icons/outline_keyboard_double_arrow_up_black_24dp.png" type="Texture" id=3]
 [ext_resource path="res://multiplayer_engine/multiplayer_engine.gd" type="Script" id=4]
-[ext_resource path="res://multiplayer_engine/p2p_server.gd" type="Script" id=6]
 [ext_resource path="res://assets/icons/outline_key_black_24dp.png" type="Texture" id=7]
 [ext_resource path="res://Pomo_BG.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/icons/outline_sports_esports_black_24dp.png" type="Texture" id=10]
@@ -48,13 +46,12 @@ __meta__ = {
 [node name="TabContainer" type="TabContainer" parent="Centered"]
 self_modulate = Color( 1, 1, 1, 0.741176 )
 margin_left = 298.0
-margin_top = 97.0
+margin_top = 95.0
 margin_right = 1622.0
-margin_bottom = 803.0
+margin_bottom = 805.0
 tab_align = 0
 
 [node name="JoinLobby" type="VBoxContainer" parent="Centered/TabContainer"]
-visible = false
 material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -110,6 +107,7 @@ text = " Connect To Lobby"
 icon = ExtResource( 3 )
 
 [node name="CreateLobby" type="VBoxContainer" parent="Centered/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -269,10 +267,5 @@ margin_bottom = 30.0
 text = "Create Lobby"
 icon = ExtResource( 10 )
 
-[node name="P2P_Server" type="Node" parent="."]
-script = ExtResource( 6 )
-
-[node name="P2P_Client" type="Node" parent="."]
-script = ExtResource( 2 )
-
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]
+[connection signal="pressed" from="Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton" to="." method="_createLobby"]
