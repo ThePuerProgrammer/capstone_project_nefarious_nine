@@ -18,7 +18,11 @@ void fragment() {
 	vec2 waves_offset;
 	waves_offset.x = cos(TIME * wave_speed_factor + (-tiled_uvs.y + tiled_uvs.x) * wave_width_factor.x );
 	waves_offset.y = sin(TIME * wave_speed_factor + (-tiled_uvs.y) * wave_width_factor.y );
-	COLOR = texture( TEXTURE, tiled_uvs + waves_offset * wave_height ) * vec4(vec3(0.88, 0.32, 0.64) * 0.3, 1);
+	float full_range_offset_x = -1.0 + 2.0 * waves_offset.x;
+	float full_range_x = -1.0 + 2.0 * tiled_uvs.x;
+	float inward_waves = -0.09 + sin(TIME * wave_speed_factor - full_range_x - full_range_offset_x) * 0.03;
+	vec4 colorize = vec4(vec3(0.88, 0.32, 0.64) * 0.3 + inward_waves, 1);
+	COLOR = texture( TEXTURE, tiled_uvs + waves_offset * wave_height ) * colorize;
 }"
 
 [sub_resource type="ShaderMaterial" id=8]
