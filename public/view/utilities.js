@@ -20,3 +20,10 @@ export function enableButton(button, label){
     if(label) button.innerHTML = label;
     button.disabled = false;
 }
+
+export function print(DEV, developer, msg) {
+    if (DEV) {
+        console.log('In testing by: ', developer);
+        console.log(msg);
+    }
+}
