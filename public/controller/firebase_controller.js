@@ -437,7 +437,7 @@ export async function deleteDeck(uid, docID) {
     .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
     .collection(Constant.collectionName.FLASHCARDS)    
     .get();
-    //Place all flashcards in array
+    //Deletes each flashcard as it is pulled
     ref.forEach(doc  => {
         const f = new Flashcard(doc.data());
         f.set_docID(doc.id);
