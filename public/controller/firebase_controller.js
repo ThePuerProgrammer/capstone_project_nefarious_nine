@@ -438,16 +438,12 @@ export async function deleteDeck(uid, docID) {
     .collection(Constant.collectionName.FLASHCARDS)    
     .get();
     //Place all flashcards in array
-    ref.forEach(doc => {
+    ref.forEach(doc  => {
         const f = new Flashcard(doc.data());
         f.set_docID(doc.id);
-        flashcards.push(f);
+        deleteFlashcard(uid, docID, f.docID);
     });
-    //Delete Flashcards
-    for(let i=flashcards.length; i > 0; i--){
-        console.log(`On #: ${i}`);
-        await deleteFlashcard(uid, docID, flashcards[i].docId);
-    }
+
     //Delete Deck
     await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
@@ -477,10 +473,9 @@ export async function updateDeck(uid, deck, deckDocID) {
                 //When editing flashcards I found that booleans were difficult
                 //to use here and commented it out isMultiplechoice and was functional
                 //deck.isFavorited = data.isFavorited;
-                console.log("UPDATED");
-                console.log(`Check 5:${data.category}`)
-
-                console.log(`Check 6:${deck.category}`)
+                // console.log("UPDATED");
+                // console.log(`Check 5:${data.category}`)
+                // console.log(`Check 6:${deck.category}`)
 
             }//Error Code
             else if (Constant.DEV) {
@@ -494,7 +489,7 @@ export async function updateDeck(uid, deck, deckDocID) {
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .set(deck.serialize());
 
-    console.log(`Check 7:${deck.isFavorited}`)
+    // console.log(`Check 7:${deck.isFavorited}`)
 
 }
 
@@ -562,17 +557,16 @@ export async function existingImageForUpdate(imageNamePassed) {
 
     const storageRef = firebase.storage().ref()
         .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageNamePassed);
-    console.log(`Check 1`);
+    // console.log(`Check 1`);
     try {
-        console.log(`Check 2`);
-        // const snapShotQuery = await ref.get(storageRef);
+        // console.log(`Check 2`);
         const imageURL = await storageRef.getDownloadURL();
-        console.log(`imageURL = ${imageURL}`);
+        // console.log(`imageURL = ${imageURL}`);
 
-        console.log(`check 3`)
+        // console.log(`check 3`)
         //const imageName = imageName;
         return { imageNamePassed, imageURL };
-        console.log(`check 3`)
+        // console.log(`check 3`)
 
     } catch (e) {
         if (Constant.DEV) console.log(e);
