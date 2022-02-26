@@ -21,19 +21,21 @@ export function addEventListeners(){
         d.set_docID(e.target.docId.value);
 
         if(d.isFavorited=="false"){
-            console.log(`Trying comparison false`);
+            // console.log(`Trying comparison false`);
             d.isFavorited=false;
         } else {
-            console.log(`Trying comparison true`);
+            // console.log(`Trying comparison true`);
             d.isFavorited=true;
         }
 
         // const isFavorited = Elements.formEditDeck.checkboxIsFavorited
-        console.log(`Check 1:${d.isFavorited}`)
+        // console.log(`Check 1:${d.isFavorited}`)
         //Firestore
         try{
             await FirebaseController.updateDeck(Auth.currentUser.uid, d ,d.docID)
-            console.log(`Check 2:${d.isFavorited}`)
+            // console.log(`Check 2:${d.isFavorited}`)
+            //Added an additional load, as not all the updated was loading the first time.
+            await study_decks_page();
 
         } catch(e){
             if(Constant.DEV) console.log(e);
@@ -42,7 +44,6 @@ export function addEventListeners(){
         await study_decks_page();
         Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
     })
-   
 
 }
 
@@ -86,9 +87,9 @@ export async function edit_deck(uid, deckId){
 }
 
 export async function delete_deck(docId){
-        
+
     try{
-        console.log(`docId=${docId}`);
+        // console.log(`docId=${docId}`);
         await FirebaseController.deleteDeck(Auth.currentUser.uid, docId);
         // const deckTag =document.getElementById('deck.docId');
         // deckTag.remove();
@@ -98,4 +99,5 @@ export async function delete_deck(docId){
     if(Constant.DEV)console.log(e);
     Utilities.info(`Delete Deck Error`, JSON.stringify(e));
     }
+    await study_decks_page();
 }
