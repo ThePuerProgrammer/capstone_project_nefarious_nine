@@ -266,7 +266,7 @@ input {
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
-    word-wrap: break-all;
+    word-wrap: break-word;
 }
 
 .flip-card:hover .flip-card-inner {
@@ -296,13 +296,13 @@ input {
 .card-text{
     text-align: center;
     color: #A7ADC6;
-    overflow-wrap: break-word;
+    overflow-wrap: break-all;
 }
 
 .answer-text{
-    width: fit-content;
+    /* width: fit-content; */
     margin-bottom: 1em;
-    overflow-wrap: break-word;
+    overflow-wrap: break-all;
 }
 
 /* .form-control{
@@ -325,6 +325,7 @@ input {
 }
 .deck-view-css{
     text-align: center;
+    word-wrap: break-word;
 }
 .form-check{
     text-align: center;
@@ -334,13 +335,20 @@ input {
     padding-right: 90px;
 }
 
-/*Could be a problem*/
-.modal-content{
-    width:auto;
+.content-width-delete-flashcard{
+    width: auto;
 }
+
 .delete-flashcard-css-class{
     padding-top: 10px;
 }    
+
+.form-edit-deck{
+    padding-left: 5px;
+}
+.form-view-deck{
+    padding-right: 5px;
+}
 
    
 

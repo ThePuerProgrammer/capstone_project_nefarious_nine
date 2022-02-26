@@ -78,6 +78,7 @@ export const modalCreateDeck = new bootstrap.Modal(document.getElementById('crea
 export const modalResetPassword = new bootstrap.Modal(document.getElementById('modal-reset-password'));
 export const modalDeleteFlashcard = new bootstrap.Modal(document.getElementById('modal-delete-a-flashcard', { backdrop: 'static' }));
 export const modalEditFlashcard = new bootstrap.Modal(document.getElementById('modal-edit-a-flashcard', { backdrop:'static'}));
+export const modalEditDeck = new bootstrap.Modal(document.getElementById('modal-edit-a-deck', { backdrop:'static'}));
 export const modalCreateClassroom = new bootstrap.Modal(document.getElementById('create-classroom-modal'));
 
 //============================================================================//
@@ -130,6 +131,15 @@ export const formCheckInputIsMultipleChoiceEdit = document.getElementById('form-
 export const formAnswerTextInputEdit = document.getElementById('form-edit-answer-container');
 //==========================================================================//
 
+//EDIT DECK
+//==========================================================================//
+export const formEditDeck ={
+    form: document.getElementById('form-edit-a-deck'),
+    //if we are wanting to add checkbox into the edit
+    //checkboxIsFavorited: document.getElementById(''),
+} 
+export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
+//==========================================================================//
 //PET ADOPTION
 //============================================================================//
 export const formPomodoption = document.getElementById('form-pomodoption');

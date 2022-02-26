@@ -115,6 +115,7 @@ export function addEventListeners(){
                 fc.incorrectAnswers = incorrectAnswers;
             }
 
+            //Testing things within the console, can be deleted
             console.log(`isQuestionImage.checked${isQuestionImage.checked}`);
             console.log(`isAnswerImage.checked${isAnswerImage.checked}`);
             if(imageFile2UploadAnswer){

@@ -426,6 +426,49 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 }
 
 //===========================================================================//
+//UPDATE DECK 
+//===========================================================================//
+/*  This will retrieve the deck as it is a nested subcollection, requiring
+    to go through user to make the update.  I found that when updating
+    both doc.data().'field' like doc.data().name and data.name work the
+    same.  As I have given a declaration of data for data.question below.
+============================================================================*/
+export async function updateDeck(uid, deck, deckDocID) {
+    const data = deck.serializeForUpdate();
+    const deckRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .get().then((doc) => {
+            if (doc.exists) {
+                deck.name = data.name;
+                deck.subject = data.subject;
+                deck.dateCreated = data.dateCreated;
+                deck.category = data.category;
+                //When editing flashcards I found that booleans were difficult
+                //to use here and commented it out isMultiplechoice and was functional
+                //deck.isFavorited = data.isFavorited;
+                console.log("UPDATED");
+                console.log(`Check 5:${data.category}`)
+
+                console.log(`Check 6:${deck.category}`)
+
+            }//Error Code
+            else if (Constant.DEV) {
+                console.log(e);
+                Utilites.info('Update Error Firebase', JSON.stringify(e));
+            }
+        });
+
+    firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .set(deck.serialize());
+
+    console.log(`Check 7:${deck.isFavorited}`)
+
+}
+
+//===========================================================================//
 //EDIT FLASHCARD 
 //===========================================================================//
 export async function getFlashCardById(uid, deckDocID, docID) {
@@ -600,16 +643,37 @@ export async function getAvailableClassrooms() {
 // Gets user's classrooms
 //============================================================================//
 export async function getMyClassrooms(email) {
-    let classroomList = [];
-    const ref = await firebase.firestore()
+    let moderatorList = [];
+    let membersList = [];
+    // get classes user is member of
+    const membersRef = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
-        .where('moderatorList', 'array-contains', email).get();
+        .where('members', 'array-contains', email)
+        .get();
 
-    ref.forEach(doc => {
+    membersRef.forEach(doc => {
         const cr = new Classroom(doc.data());
         cr.set_docID(doc.id);
-        classroomList.push(cr);
+        membersList.push(cr);
+    })
+    // get classes user is mod of
+    const moderatorRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('moderatorList', 'array-contains', email)
+        .get();
+
+    moderatorRef.forEach(doc => {
+        const cr = new Classroom(doc.data());
+        cr.set_docID(doc.id);
+        moderatorList.push(cr);
     });
+
+    // combine both lists and remove duplicates
+    let classroomList = [];
+    classroomList = membersList.filter(mem => !moderatorList.includes(mem));
+
+
+    // return final list
     return classroomList;
 }
 
