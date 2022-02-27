@@ -44,14 +44,15 @@ __meta__ = {
 [node name="LobbySceneBG" parent="Centered" instance=ExtResource( 8 )]
 
 [node name="TabContainer" type="TabContainer" parent="Centered"]
-self_modulate = Color( 1, 1, 1, 0.741176 )
+self_modulate = Color( 1, 1, 1, 0.717647 )
 margin_left = 298.0
-margin_top = 95.0
+margin_top = 97.0
 margin_right = 1622.0
-margin_bottom = 805.0
+margin_bottom = 803.0
 tab_align = 0
 
 [node name="JoinLobby" type="VBoxContainer" parent="Centered/TabContainer"]
+visible = false
 material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -107,7 +108,6 @@ text = " Connect To Lobby"
 icon = ExtResource( 3 )
 
 [node name="CreateLobby" type="VBoxContainer" parent="Centered/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -133,11 +133,43 @@ rect_min_size = Vector2( 1316, 614 )
 size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0 )
 
+[node name="SelectClassroomLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
+margin_left = 236.0
+margin_top = 76.0
+margin_right = 780.0
+margin_bottom = 120.0
+custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = -3
+custom_fonts/font = ExtResource( 11 )
+text = "Select Classroom"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SelectClassroomOptionsButton" type="OptionButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
+margin_left = 832.0
+margin_top = 81.0
+margin_right = 1149.0
+margin_bottom = 105.0
+rect_min_size = Vector2( 250, 0 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = SubResource( 9 )
+custom_colors/font_color_focus = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color = Color( 0.454902, 0.462745, 0.529412, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Select Classroom"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="MaxPlayerLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 231.0
-margin_top = 125.0
-margin_right = 639.0
-margin_bottom = 159.0
+margin_left = 236.0
+margin_top = 176.0
+margin_right = 644.0
+margin_bottom = 210.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -151,10 +183,10 @@ __meta__ = {
 }
 
 [node name="MaxPlayersOptionButton" type="OptionButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 680.0
-margin_top = 127.0
-margin_right = 930.0
-margin_bottom = 151.0
+margin_left = 690.0
+margin_top = 179.0
+margin_right = 940.0
+margin_bottom = 203.0
 rect_min_size = Vector2( 250, 0 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -168,10 +200,10 @@ __meta__ = {
 }
 
 [node name="PasswordRequiredLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 229.0
-margin_top = 229.0
-margin_right = 841.0
-margin_bottom = 263.0
+margin_left = 236.0
+margin_top = 280.0
+margin_right = 848.0
+margin_bottom = 314.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -185,10 +217,10 @@ __meta__ = {
 }
 
 [node name="PasswordLineEdit" type="LineEdit" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 883.0
-margin_top = 225.0
-margin_right = 1083.0
-margin_bottom = 259.0
+margin_left = 890.0
+margin_top = 276.0
+margin_right = 1090.0
+margin_bottom = 310.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -199,10 +231,10 @@ __meta__ = {
 }
 
 [node name="ChatEnabledLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 226.0
-margin_top = 336.0
-margin_right = 668.0
-margin_bottom = 370.0
+margin_left = 235.0
+margin_top = 387.0
+margin_right = 677.0
+margin_bottom = 421.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -216,20 +248,20 @@ __meta__ = {
 }
 
 [node name="ChatEnabledCheckbutton" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 717.0
-margin_top = 329.0
-margin_right = 793.0
-margin_bottom = 369.0
+margin_left = 724.0
+margin_top = 380.0
+margin_right = 800.0
+margin_bottom = 420.0
 pressed = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VoteNextMinigameLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 224.0
-margin_top = 446.0
-margin_right = 870.0
-margin_bottom = 480.0
+margin_left = 235.0
+margin_top = 491.0
+margin_right = 881.0
+margin_bottom = 525.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -243,10 +275,10 @@ __meta__ = {
 }
 
 [node name="ChatEnabledCheckbutton2" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 912.0
-margin_top = 440.0
-margin_right = 988.0
-margin_bottom = 480.0
+margin_left = 919.0
+margin_top = 485.0
+margin_right = 995.0
+margin_bottom = 525.0
 pressed = true
 __meta__ = {
 "_edit_use_anchors_": false
