@@ -42,3 +42,6 @@ func _on_login_succeeded(_auth_info):
 	var document : FirestoreDocument = yield(document_task, "get_document")
 	userDoc = document
 	emit_signal("authentication_success")
+
+func authenticate_current_user(password):
+	Firebase.Auth.login_with_email_and_password(user_email, password)

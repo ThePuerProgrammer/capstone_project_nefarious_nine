@@ -67,7 +67,7 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 641, 320 )
 
-[node name="LineEdit" type="LineEdit" parent="CenterContainer/SignInPanel/ColorRect/CenterContainer"]
+[node name="PasswordEdit" type="LineEdit" parent="CenterContainer/SignInPanel/ColorRect/CenterContainer"]
 margin_left = 195.0
 margin_top = 132.0
 margin_right = 445.0
@@ -78,10 +78,15 @@ right_icon = ExtResource( 4 )
 placeholder_text = "Password"
 placeholder_alpha = 0.207
 
-[node name="Button" type="Button" parent="CenterContainer/SignInPanel/ColorRect"]
+[node name="SignInButton" type="Button" parent="CenterContainer/SignInPanel/ColorRect"]
 margin_left = 260.0
 margin_top = 242.0
 margin_right = 380.0
 margin_bottom = 272.0
 text = "Sign In"
 icon = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="CenterContainer/SignInPanel/ColorRect/SignInButton" to="." method="_on_SignInButton_pressed"]
