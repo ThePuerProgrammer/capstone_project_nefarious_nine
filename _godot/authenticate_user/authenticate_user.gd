@@ -6,11 +6,15 @@ onready var password_edit : LineEdit = get_node("CenterContainer/SignInPanel/Col
 signal success_banner_timeout
 
 func _ready():
-	CurrentUser.connect('failure_to_authenticate_user', self, '_on_auth_success')
-	CurrentUser.connect("authentication_success", self, '_on_auth_failure')
+	var e = OK
+	e += CurrentUser.connect('failure_to_authenticate_user', self, '_on_auth_failure')
+	e += CurrentUser.connect("authentication_success", self, '_on_auth_success')
+	if e != OK:
+		print('Could not connect CurrentUser signals')
 
 func _on_auth_success():
-	submit_button.text = "Success!"
+	get_node("CenterContainer/SignInPanel/ColorRect/EnterPasswordLabel").text = \
+		"Success!"
 	yield(get_tree().create_timer(0.5), "timeout")
 	emit_signal("success_banner_timeout")
 	
@@ -20,6 +24,7 @@ func _on_auth_failure():
 	yield(get_tree().create_timer(1.0), "timeout")
 	get_node("CenterContainer/SignInPanel/ColorRect/EnterPasswordLabel").text = \
 		"Try Again"
+	password_edit.text = ''
 	submit_button.disabled = false
 	
 func _on_SignInButton_pressed():
