@@ -80,7 +80,7 @@ export const modalDeleteFlashcard = new bootstrap.Modal(document.getElementById(
 export const modalEditFlashcard = new bootstrap.Modal(document.getElementById('modal-edit-a-flashcard', { backdrop:'static'}));
 export const modalEditDeck = new bootstrap.Modal(document.getElementById('modal-edit-a-deck', { backdrop:'static'}));
 export const modalCreateClassroom = new bootstrap.Modal(document.getElementById('create-classroom-modal'));
-
+export const modalDeleteDeckConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-delete-deck',{ backdrop: 'static' }));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -139,6 +139,7 @@ export const formEditDeck ={
     //checkboxIsFavorited: document.getElementById(''),
 } 
 export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
+export const formDeleteDeckConfirmation = document.getElementById('form-delete-deck-confirmation');
 //==========================================================================//
 //PET ADOPTION
 //============================================================================//

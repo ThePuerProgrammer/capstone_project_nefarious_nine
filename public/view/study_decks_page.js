@@ -9,6 +9,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as EditDeck from '../controller/edit_deck.js'
 
+let confirmation=false;
 
 export function addEventListeners() {
     Elements.menuStudyDecks.addEventListener('click', async () => {
@@ -56,6 +57,9 @@ export function addEventListeners() {
     // Clears CREATE DECK input fields when user closes modal
     $(`#create-deck-modal`).on('hidden.bs.modal', function (e) {
         Elements.formCreateDeck.reset();
+    });
+    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e=>{
+        const yes = e.target.yes.value;
     });
 }
 
@@ -121,15 +125,19 @@ export async function study_decks_page() {
     for(let i=0; i < deleteDeckForms.length; i++){
         deleteDeckForms[i].addEventListener('submit', async e => {
             e.preventDefault();
-            // let flashcard = await FirebaseController.getFlashcards(Auth.currentUser.uid, e.target.docId.value);
-
-           
-            // console.log(`docId:${e.target.docId.value}, flashcards:${e.target.flashcards}, decklist[0].flashcards:${flashcard.length}`);
             const button = e.target.getElementsByTagName('button')[0];
             const label = Utilities.disableButton(button);
-            await EditDeck.delete_deck(e.target.docId.value);
+            let deckId = e.target.docId.value;
+            Elements.modalDeleteDeckConfirmation.show();
+            const button2 = document.getElementById('modal-confirmation-delete-deck-yes');
+            button2.addEventListener("click", async e =>{
+                console.log('click');
+                confirmation = true;
+                await EditDeck.delete_deck(deckId, confirmation);
+            });
+            // await EditDeck.delete_deck(e.target.docId.value,confirmation);
             Utilities.enableButton(button, label);
-        })
+        });
     }
 
 

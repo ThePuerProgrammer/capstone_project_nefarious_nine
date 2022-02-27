@@ -430,7 +430,6 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 // DELETE DECK
 //============================================================================//
 export async function deleteDeck(uid, docID) {
-    let flashcards = []; 
     //Get All flashcards
     const ref = await firebase.firestore()
     .collection(Constant.collectionName.USERS).doc(uid)
