@@ -134,10 +134,10 @@ size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0 )
 
 [node name="SelectClassroomLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 225.0
-margin_top = 38.0
-margin_right = 769.0
-margin_bottom = 82.0
+margin_left = 236.0
+margin_top = 76.0
+margin_right = 780.0
+margin_bottom = 120.0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
@@ -149,10 +149,10 @@ __meta__ = {
 }
 
 [node name="SelectClassroomOptionsButton" type="OptionButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 819.0
-margin_top = 43.0
-margin_right = 1069.0
-margin_bottom = 67.0
+margin_left = 832.0
+margin_top = 81.0
+margin_right = 1149.0
+margin_bottom = 105.0
 rect_min_size = Vector2( 250, 0 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -166,10 +166,10 @@ __meta__ = {
 }
 
 [node name="MaxPlayerLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 231.0
-margin_top = 125.0
-margin_right = 639.0
-margin_bottom = 159.0
+margin_left = 236.0
+margin_top = 176.0
+margin_right = 644.0
+margin_bottom = 210.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -183,10 +183,10 @@ __meta__ = {
 }
 
 [node name="MaxPlayersOptionButton" type="OptionButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 683.0
-margin_top = 128.0
-margin_right = 933.0
-margin_bottom = 152.0
+margin_left = 690.0
+margin_top = 179.0
+margin_right = 940.0
+margin_bottom = 203.0
 rect_min_size = Vector2( 250, 0 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -200,10 +200,10 @@ __meta__ = {
 }
 
 [node name="PasswordRequiredLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 229.0
-margin_top = 229.0
-margin_right = 841.0
-margin_bottom = 263.0
+margin_left = 236.0
+margin_top = 280.0
+margin_right = 848.0
+margin_bottom = 314.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -217,10 +217,10 @@ __meta__ = {
 }
 
 [node name="PasswordLineEdit" type="LineEdit" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 883.0
-margin_top = 225.0
-margin_right = 1083.0
-margin_bottom = 259.0
+margin_left = 890.0
+margin_top = 276.0
+margin_right = 1090.0
+margin_bottom = 310.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -231,10 +231,10 @@ __meta__ = {
 }
 
 [node name="ChatEnabledLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 226.0
-margin_top = 336.0
-margin_right = 668.0
-margin_bottom = 370.0
+margin_left = 235.0
+margin_top = 387.0
+margin_right = 677.0
+margin_bottom = 421.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -248,20 +248,20 @@ __meta__ = {
 }
 
 [node name="ChatEnabledCheckbutton" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 717.0
-margin_top = 329.0
-margin_right = 793.0
-margin_bottom = 369.0
+margin_left = 724.0
+margin_top = 380.0
+margin_right = 800.0
+margin_bottom = 420.0
 pressed = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VoteNextMinigameLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 224.0
-margin_top = 446.0
-margin_right = 870.0
-margin_bottom = 480.0
+margin_left = 235.0
+margin_top = 491.0
+margin_right = 881.0
+margin_bottom = 525.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -275,10 +275,10 @@ __meta__ = {
 }
 
 [node name="ChatEnabledCheckbutton2" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 912.0
-margin_top = 440.0
-margin_right = 988.0
-margin_bottom = 480.0
+margin_left = 919.0
+margin_top = 485.0
+margin_right = 995.0
+margin_bottom = 525.0
 pressed = true
 __meta__ = {
 "_edit_use_anchors_": false
