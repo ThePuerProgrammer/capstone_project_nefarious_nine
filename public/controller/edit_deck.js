@@ -6,6 +6,7 @@ import * as Elements from '../view/elements.js'
 import { Deck } from '../model/Deck.js'
 import { study_decks_page } from '../view/study_decks_page.js'
 
+
 export function addEventListeners(){
     Elements.formEditDeck.form.addEventListener('submit', async e=>{
         e.preventDefault();
@@ -43,7 +44,14 @@ export function addEventListeners(){
         }
         await study_decks_page();
         Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
+    });
+
+    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e=>{
+        e.preventDefault();
+        const yes = e.target.yes.value;        
+        console.log(`${yes}`);
     })
+
 
 }
 
@@ -86,18 +94,16 @@ export async function edit_deck(uid, deckId){
 
 }
 
-export async function delete_deck(docId){
+export async function delete_deck(docId,confirmation){
+    if(confirmation){
+        try{
+            await FirebaseController.deleteDeck(Auth.currentUser.uid, docId);
+            Utilities.info(`Success`, `The desired deck as successfully deleted.`,);
 
-    try{
-        // console.log(`docId=${docId}`);
-        await FirebaseController.deleteDeck(Auth.currentUser.uid, docId);
-        // const deckTag =document.getElementById('deck.docId');
-        // deckTag.remove();
-        Utilities.info(`Success`, `The desired deck as successfully deleted.`);
-
-    } catch(e){
-    if(Constant.DEV)console.log(e);
-    Utilities.info(`Delete Deck Error`, JSON.stringify(e));
+        } catch(e){
+            if(Constant.DEV)console.log(e);
+            Utilities.info(`Delete Deck Error`, JSON.stringify(e));
+        }
+        await study_decks_page();
     }
-    await study_decks_page();
 }
