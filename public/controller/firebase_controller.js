@@ -432,12 +432,12 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 export async function deleteDeck(uid, docID) {
     //Get All flashcards
     const ref = await firebase.firestore()
-    .collection(Constant.collectionName.USERS).doc(uid)
-    .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
-    .collection(Constant.collectionName.FLASHCARDS)    
-    .get();
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .collection(Constant.collectionName.FLASHCARDS)
+        .get();
     //Deletes each flashcard as it is pulled
-    ref.forEach(doc  => {
+    ref.forEach(doc => {
         const f = new Flashcard(doc.data());
         f.set_docID(doc.id);
         deleteFlashcard(uid, docID, f.docID);
@@ -603,7 +603,13 @@ export async function updateUserInfo(uid, updateInfo) {
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).update(updateInfo);
 }
-
+//============================================================================//
+//Update Classroom
+//============================================================================//
+export async function updateClassroom(classroom) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
+        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category });
+}
 export async function getUserTimerDefault(uid) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)

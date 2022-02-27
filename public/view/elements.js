@@ -14,7 +14,7 @@ export const menuSignOut = document.getElementById('menu-signout');
 export const modalMenuResetPassword = document.getElementById('reset-password');
 
 // TEMPORARY Element for temporary button
-export const menuTempGodot = document.getElementById('menu-temp-godot'); 
+export const menuTempGodot = document.getElementById('menu-temp-godot');
 
 // pomo timer buttons
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
@@ -77,10 +77,11 @@ export const modalCreateAccount = new bootstrap.Modal(document.getElementById('m
 export const modalCreateDeck = new bootstrap.Modal(document.getElementById('create-deck-modal'));
 export const modalResetPassword = new bootstrap.Modal(document.getElementById('modal-reset-password'));
 export const modalDeleteFlashcard = new bootstrap.Modal(document.getElementById('modal-delete-a-flashcard', { backdrop: 'static' }));
-export const modalEditFlashcard = new bootstrap.Modal(document.getElementById('modal-edit-a-flashcard', { backdrop:'static'}));
-export const modalEditDeck = new bootstrap.Modal(document.getElementById('modal-edit-a-deck', { backdrop:'static'}));
+export const modalEditFlashcard = new bootstrap.Modal(document.getElementById('modal-edit-a-flashcard', { backdrop: 'static' }));
+export const modalEditDeck = new bootstrap.Modal(document.getElementById('modal-edit-a-deck', { backdrop: 'static' }));
 export const modalCreateClassroom = new bootstrap.Modal(document.getElementById('create-classroom-modal'));
-export const modalDeleteDeckConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-delete-deck',{ backdrop: 'static' }));
+export const modalDeleteDeckConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-delete-deck', { backdrop: 'static' }));
+export const modalEditClassroom = new bootstrap.Modal(document.getElementById('modal-edit-classroom', { backdrop: 'static' }));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -107,8 +108,8 @@ export const formAddFlashCardAnswerImageButton = document.getElementById('form-a
 export const formAddFlashCardQuestionImageButton = document.getElementById('form-add-image-to-flashcard-question-button');
 export const formCheckInputIsImageQuestion = document.getElementById('form-check-input-is-image-question');
 export const formCheckInputIsImageAnswer = document.getElementById('form-check-input-is-image-answer');
-export const formContainerAnswerImage = document.getElementById('form-answer-image-container'); 
-export const formContainerQuestionImage = document.getElementById('form-question-image-container'); 
+export const formContainerAnswerImage = document.getElementById('form-answer-image-container');
+export const formContainerQuestionImage = document.getElementById('form-question-image-container');
 //===========================================================================//
 
 //EDIT FLASHCARD
@@ -133,11 +134,11 @@ export const formAnswerTextInputEdit = document.getElementById('form-edit-answer
 
 //EDIT DECK
 //==========================================================================//
-export const formEditDeck ={
+export const formEditDeck = {
     form: document.getElementById('form-edit-a-deck'),
     //if we are wanting to add checkbox into the edit
     //checkboxIsFavorited: document.getElementById(''),
-} 
+}
 export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
 export const formDeleteDeckConfirmation = document.getElementById('form-delete-deck-confirmation');
 //==========================================================================//
@@ -150,4 +151,6 @@ export const formPomodoption = document.getElementById('form-pomodoption');
 //============================================================================//
 export const formCreateClassroom = document.getElementById('form-create-classroom');
 export const formClassCategorySelect = document.getElementById('select-class-category');
+export const formEditClassroom = document.getElementById('form-edit-classroom');
+export const formEditClassCategorySelect = document.getElementById('edit-class-category');
 //============================================================================//

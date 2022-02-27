@@ -53,4 +53,5 @@ export const htmlIDs = {
     createDeckModal: 'create-deck-modal',
     createClassroom: 'button-create-classroom-modal',
     createClassroomModal: 'create-classroom-modal',
+    buttonEditClassroom: 'button-edit-class',
 }
