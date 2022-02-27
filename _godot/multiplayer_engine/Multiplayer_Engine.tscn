@@ -44,7 +44,7 @@ __meta__ = {
 [node name="LobbySceneBG" parent="Centered" instance=ExtResource( 8 )]
 
 [node name="TabContainer" type="TabContainer" parent="Centered"]
-self_modulate = Color( 1, 1, 1, 0.741176 )
+self_modulate = Color( 1, 1, 1, 0.717647 )
 margin_left = 298.0
 margin_top = 95.0
 margin_right = 1622.0
