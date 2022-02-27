@@ -94,6 +94,8 @@ export async function classrooms_page() {
             <th scope="col">Classroom</th>
             <th scope="col">Subject</th>
             <th scope="col">Category</th>
+            <th scope="col">Members</th>
+            <th scop="col">Joined</th>
         </tr>
         </thread>
     <tbody>
@@ -101,6 +103,13 @@ export async function classrooms_page() {
 
     if (availableClassroomList.length == 0) {
         html += '<p>No classrooms found!</p>';
+    } else {
+        // sort decks by joined classrooms first
+        availableClassroomList.sort(function (a, b) {
+            const aMember = a.members.includes(Auth.currentUser.email);
+            const bMember = b.members.includes(Auth.currentUser.email);
+            return bMember - aMember;
+        })
     }
 
     availableClassroomList.forEach(ac => {
@@ -129,6 +138,8 @@ export async function classrooms_page() {
              <th scope="col">Classroom</th>
              <th scope="col">Subject</th>
              <th scope="col">Category</th>
+             <th scope="col">Members</th>
+             <th scope="col">Joined</th>
          </tr>
          </thread>
     <tbody>
@@ -245,8 +256,9 @@ export async function classrooms_page() {
     OneClassroomPage.addClassroomViewButtonListeners();
 }
 
+
 function buildClassroom(classroom) {
-    return `
+    let html = `
     <td>
     <form class="form-view-classroom" method="post">
             <input type="hidden" name="docId" value="${classroom.docID}">
@@ -255,5 +267,9 @@ function buildClassroom(classroom) {
     <td>${classroom.name}</td>
     <td>${classroom.subject}</td>
     <td>${classroom.category}</td>
+    <td>${classroom.members.length}</td>
     `;
+
+    html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
+    return html;
 }

@@ -432,12 +432,12 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
 export async function deleteDeck(uid, docID) {
     //Get All flashcards
     const ref = await firebase.firestore()
-    .collection(Constant.collectionName.USERS).doc(uid)
-    .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
-    .collection(Constant.collectionName.FLASHCARDS)    
-    .get();
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .collection(Constant.collectionName.FLASHCARDS)
+        .get();
     //Deletes each flashcard as it is pulled
-    ref.forEach(doc  => {
+    ref.forEach(doc => {
         const f = new Flashcard(doc.data());
         f.set_docID(doc.id);
         deleteFlashcard(uid, docID, f.docID);
@@ -651,7 +651,6 @@ export async function getAvailableClassrooms() {
     let classroomList = [];
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
-        .orderBy('name', 'asc')
         .get();
 
     ref.forEach(doc => {
@@ -659,6 +658,7 @@ export async function getAvailableClassrooms() {
         cr.set_docID(doc.id);
         classroomList.push(cr);
     });
+
     return classroomList;
 }
 
