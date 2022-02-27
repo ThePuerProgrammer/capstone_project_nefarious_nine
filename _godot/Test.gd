@@ -14,11 +14,22 @@ func _ready():
 #	for i in d:
 #		print(i)
 
-	var query : FirestoreQuery = FirestoreQuery.new().from("classrooms").where("members", FirestoreQuery.OPERATOR.ARRAY_CONTAINS, "jesse@test.com")
-	var query_task : FirestoreTask = Firebase.Firestore.query(query)
-	var res = yield(query_task, "task_finished")
-	data = res.data 
+#	var query : FirestoreQuery = FirestoreQuery.new().from("classrooms").where("members", FirestoreQuery.OPERATOR.ARRAY_CONTAINS, "jesse@test.com")
+#	var query_task : FirestoreTask = Firebase.Firestore.query(query)
+#	var res = yield(query_task, "task_finished")
+#	data = res.data 
+#
+#	for i in data:
+#		print(i)
 	
-	for i in data:
-		print(i)
+	var query_classrooms : FirestoreQuery = \
+		FirestoreQuery.new()\
+		.from("classrooms")\
+		.where("members", FirestoreQuery.OPERATOR.ARRAY_CONTAINS, "jesse@test.com")\
+		.ordered_by("category", FirestoreQuery.DIRECTION.ASCENDING)\
+		.limit(20)
+	
+	var query_task : FirestoreTask = Firebase.Firestore.query(query_classrooms)
+	var query_classrooms_res = yield(query_task, "task_finished")
+	var classroom_data = query_classrooms_res.data
 	
