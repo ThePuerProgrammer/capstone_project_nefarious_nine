@@ -11,6 +11,7 @@ export function addEventListeners() {
 
 export async function minigames_page() {
     window.localStorage.setItem('userid', Auth.currentUser.uid)
+    window.localStorage.setItem('email', Auth.currentUser.email)
     Elements.root.innerHTML = `
         <div id="pomogame-iframe-container">
             <iframe src="../gd_exports/pomogame.html" id="pomogame-iframe"></iframe>

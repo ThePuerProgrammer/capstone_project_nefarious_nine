@@ -16,23 +16,7 @@ func _ready():
 	maxPlayersOptionButton.add_item("4")
 	maxPlayersOptionButton.set_item_disabled(0, true)
 	
-#	# Query object works in the place of Firebase.Firestore.collection().doc().get()
-#	var query : FirestoreQuery = FirestoreQuery.new()
-#
-#	# Target the classrooms collection
-#	query.from('classrooms')
-#
-#	# Get all classrooms that the current user is a member of
-#	query.where('members', FirestoreQuery.OPERATOR.ARRAY_CONTAINS, CurrentUser.userDoc.doc_fields.email)
-#
-#	# Issue the query
-#	var query_task : FirestoreTask = Firebase.Firestore.query(query)
-#
-#	# Yield on the request to get a result
-#	var result : Array = yield(query_task, "task_finished")
-#
-#	for i in result:
-#		print(i)
+	
 
 func _on_Back_To_Main_Menu_Button_pressed():
 	if (get_tree().change_scene("res://Menu/MenuScreen.tscn") != OK):
