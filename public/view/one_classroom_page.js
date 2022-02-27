@@ -36,6 +36,12 @@ export async function one_classroom_page(classroomDocID) {
         Utilities.info('Failed to retrieve classroom', JSON.stringify(e));
     }
 
+    let members = [];
+    //get members list 
+    for (let k = 0; k < classroom.members.length; k++) {
+        members.push(classroom.members[k]);
+    }
+
 
     let mod = false;
     for (let i = 0; i < classroom.moderatorList.length; i++) { //check if current user is a mod
@@ -47,16 +53,23 @@ export async function one_classroom_page(classroomDocID) {
     //causes null edit button error
     if (mod == true) {
         //removed doc id from page view -- Blake
-        html += `<h1>${classroom.name}</h1>`;
+        html += `<h1>${classroom.name}
+    
+        <button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Edit Classroom</button>
+    
+        </h1>`;
         html += `
         <p>Subject: ${classroom.subject}</p>
         <p>Category: ${classroom.category}</p>
         <p>Mods: ${classroom.moderatorList}</p>
-        <p>Members: ${classroom.members}</p> 
-        <div>
-        <button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Edit Classroom</button>
-        </div>
         `;
+        html += `<p>Members:</p>`
+
+        members.forEach(member => {
+            html += `
+                <tr>${buildButtons(member, classroom.banlist)}</tr>
+               `
+        })
     }
     else {
         //if user is not a mod, do not populate edit classrroom button
@@ -104,5 +117,61 @@ export async function one_classroom_page(classroomDocID) {
         await one_classroom_page(classroomDocID);
 
     })
+    const banButtons = document.getElementsByClassName('form-ban-members');
+    //this will add ban functionality to each member button
+    for (let i = 0; i < banButtons.length; ++i) {
+        banButtons[i].addEventListener("submit", async e => {
+            e.preventDefault();
+            await FirebaseController.banMember(classroomDocID, e.target.membername.value);
+            await one_classroom_page(classroomDocID);
+        })
+    }
+
+    //this will add unban functionality to each member button
+    const unbanButtons = document.getElementsByClassName('form-unban-members');
+    for (let i = 0; i < unbanButtons.length; i++) {
+        unbanButtons[i].addEventListener("submit", async e => {
+            e.preventDefault();
+            await FirebaseController.unbanMember(classroomDocID, e.target.membername.value);
+            await one_classroom_page(classroomDocID);
+        })
+    }
+
 
 }
+
+function buildButtons(member, banlist) {
+    let onlist = false;
+    for (let i = 0; i < banlist.length; i++) {
+        if (banlist[i] == member) {
+            onlist = true;
+        }
+    }
+    if (onlist == false) { //If user is not banned
+        //span is used to change text values on hover using css. See here https://stackoverflow.com/questions/9913293/change-text-on-hover-then-return-to-the-previous-text
+        return `
+                <form class="form-ban-members" method="post">
+                <input type="hidden" name="membername" value="${member}">
+                <button id="ban-btn" type="submit" class="btn ban-btn-expand-width pomo-bg-color-dark pomo-text-color-light edit-btn-hover ban-btn-hover btn-sm"><span class="membas">${member}
+                </span>
+                <span class="byebye">BAN</span>
+                </button>
+                </form>
+                <br>
+                `;
+    }
+    else { //else user is on ban list
+        return `
+                <form class="form-unban-members" method="post">
+                <input type="hidden" name="membername" value="${member}">
+                <button id="ban-btn" type="submit" class="btn ban-btn-expand-width pomo-bg-color-dark pomo-text-color-light edit-btn-hover-blue ban-btn-hover btn-sm"><span class="membas">${member}
+                </span>
+                <span class="byebye">UNBAN</span>
+                </button>
+                </form>
+                <br>
+                `;
+    }
+
+}
+
