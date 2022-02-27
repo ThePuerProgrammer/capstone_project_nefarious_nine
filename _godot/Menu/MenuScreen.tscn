@@ -71,6 +71,7 @@ visible = false
 color = Color( 0, 0, 0, 0 )
 
 [node name="MusicStartTimer" type="Timer" parent="."]
+wait_time = 0.5
 one_shot = true
 
 [connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]
