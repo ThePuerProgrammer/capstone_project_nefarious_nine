@@ -10,6 +10,9 @@ export function addEventListeners() {
 }
 
 export async function minigames_page() {
+    /* Roloading the page causes an error here. 
+     * I'm not sure exactly why, but this becomes null. 
+     * Perhaps it just happens too fast? Robust testing needed. */
     window.localStorage.setItem('userid', Auth.currentUser.uid)
     window.localStorage.setItem('email', Auth.currentUser.email)
     Elements.root.innerHTML = `
