@@ -18,25 +18,11 @@ var create_time : String        # createTime
 
 func _init(doc : Dictionary = {}, _doc_name : String = "", _doc_fields : Dictionary = {}) -> void:
 	self.document = doc
-	# Jesse Rankins modifying for empty .doc('') request
-	####################################################
-	if doc.has('name'):
-		self.doc_name = doc.name
-	else:
-		self.doc_name = 'Entire Collection Request'
-	####################################################
-		
+	self.doc_name = doc.name
 	if self.doc_name.count("/") > 2:
 		self.doc_name = (self.doc_name.split("/") as Array).back()
 	self.doc_fields = fields2dict(self.document)
-	
-	# Jesse Rankins modifying for empty .doc('') request
-	####################################################
-	if doc.has('createTime'):
-		self.create_time = doc.createTime
-	else:
-		self.create_time = "Multiple times noted"
-	####################################################	
+	self.create_time = doc.createTime
 
 # Pass a dictionary { 'key' : 'value' } to format it in a APIs usable .fields 
 static func dict2fields(dict : Dictionary) -> Dictionary:

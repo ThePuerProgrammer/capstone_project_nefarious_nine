@@ -7,7 +7,8 @@ const collections : Dictionary = {
 	'lobbies' : 'lobbies',
 }
 
-var classrooms : Dictionary = {}
+var classrooms
+var classrooms_docid_to_name_dict : Dictionary = {}
 
 func _ready():
 	# Max players drop down button items. Disable non numeric
@@ -17,24 +18,24 @@ func _ready():
 	maxPlayersOptionButton.add_item("4")
 	maxPlayersOptionButton.set_item_disabled(0, true)
 	
-	# Parse the current user for their classrooms field
-	var fields = CurrentUser.userDoc.doc_fields
-	var myClassrooms = fields["myClassrooms"]
-	
-	# Get all the classroom docs from the classrooms that the user belongs to
-	for classroom in myClassrooms:
-		var collection : FirestoreCollection = Firebase.Firestore.collection('classrooms')
-		var document_task : FirestoreTask = collection.get(classroom)
-		var document : FirestoreDocument = yield(document_task, "get_document")
-		classrooms[classroom] = document.doc_fields["name"]
+	# Query for classrooms that the current user is a member of
+	var query : FirestoreQuery = FirestoreQuery.new().from("classrooms").where("members", FirestoreQuery.OPERATOR.ARRAY_CONTAINS, CurrentUser.user_email)
+	var query_task : FirestoreTask = Firebase.Firestore.query(query)
+	var res = yield(query_task, "task_finished")
+	classrooms = res.data 
+
+	# Create a docid to name dictionary for selecting the classroom
+	for classroom in classrooms:
+		var fields = classroom["doc_fields"]
+		classrooms_docid_to_name_dict[classroom["doc_name"]] = fields["name"]
 
 	# This label will be disabled
 	selectClassroomsButton.add_item("Select a Classroom")
-	
+
 	# Add all the users classrooms to the dropdown
-	for classroom in classrooms.values():
+	for classroom in classrooms_docid_to_name_dict.values():
 		selectClassroomsButton.add_item(classroom)
-	
+
 	# Disable label
 	selectClassroomsButton.set_item_disabled(0, true)
 	
