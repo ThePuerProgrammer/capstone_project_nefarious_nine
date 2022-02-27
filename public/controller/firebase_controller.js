@@ -603,7 +603,13 @@ export async function updateUserInfo(uid, updateInfo) {
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).update(updateInfo);
 }
-
+//============================================================================//
+//Update Classroom
+//============================================================================//
+export async function updateClassroom(classroom) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
+        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category });
+}
 export async function getUserTimerDefault(uid) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
