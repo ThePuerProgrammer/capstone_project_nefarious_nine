@@ -2,6 +2,7 @@ extends Node
 
 onready var maxPlayersOptionButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/MaxPlayersOptionButton")
 onready var selectClassroomsButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton")
+onready var lobbies_vbox = get_node("Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox")
 
 const collections : Dictionary = {
 	'lobbies' : 'lobbies',
@@ -11,6 +12,9 @@ var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
 
 var decks
+
+var lobbies = []
+var selected_lobby
 
 func _ready():
 	# Max players drop down button items. Disable non numeric
@@ -49,7 +53,27 @@ func _on_Back_To_Main_Menu_Button_pressed():
 
 func _createLobby():
 	get_node("Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton").disabled = true
+	
+	# Instantiate a new lobby button scene
+	var new_lobby = load('res://multiplayer_engine/Lobby_Selection.tscn').instance()
+	lobbies.append(new_lobby)
+	
+	# Connect its signals	
+	new_lobby.connect('lobby_button_pressed', self, '_on_lobby_selection')
+	
+	# Describe the lobby
+	new_lobby.lobby_number = lobbies.size() - 1
+	new_lobby.get_node('HBoxContainer/HostNameLabel').text = 'poop'
+	
+	# Add it to the scene
+	lobbies_vbox.add_child(new_lobby)
+
+func _on_lobby_selection(lobby_number):
+	selected_lobby = lobby_number
 
 func _on_classroom_selected(index):
 	# Once the user selects a classroom, query for the classroom decks
 	pass
+
+func _on_RefreshButton_pressed():
+	pass # Replace with function body.

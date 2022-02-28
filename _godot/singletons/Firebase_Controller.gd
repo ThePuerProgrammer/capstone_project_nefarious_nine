@@ -17,3 +17,9 @@ func get_user_document(user_id):
 	var document_task : FirestoreTask = collection.get(user_id)
 	var document : FirestoreDocument = yield(document_task, "get_document")
 	return document
+	
+func add_new_multiplayer_lobby(lobby_fields):
+	assert(typeof(lobby_fields) == TYPE_DICTIONARY)
+	var collection : FirestoreCollection = Firebase.Firestore.collection(Constants.COLLECTIONS.MULTIPLAYER_GAME_LOBBIES)
+	var add_task : FirestoreTask = collection.add('', lobby_fields)
+	var document : FirestoreTask = yield(add_task, "task_finished")

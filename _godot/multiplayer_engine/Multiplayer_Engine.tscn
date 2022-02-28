@@ -76,6 +76,101 @@ rect_min_size = Vector2( 1316, 614 )
 size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0.537255 )
 
+[node name="ScrollContainer" type="ScrollContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LobbiesVBox" type="VBoxContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer"]
+margin_right = 1316.0
+margin_bottom = 614.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TableBar" type="Control" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox"]
+margin_right = 1316.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+
+[node name="ColorRect" type="ColorRect" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+color = Color( 0.654902, 0.678431, 0.776471, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColumnTitles" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_right = 258.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Host Name"
+align = 1
+valign = 1
+
+[node name="Label2" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_left = 262.0
+margin_right = 520.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Privacy Status"
+align = 1
+valign = 1
+
+[node name="Label3" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_left = 524.0
+margin_right = 782.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Classroom"
+align = 1
+valign = 1
+
+[node name="Label4" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_left = 786.0
+margin_right = 1044.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Player Count"
+align = 1
+valign = 1
+
+[node name="Label5" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_left = 1048.0
+margin_right = 1306.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Chat Enabled"
+align = 1
+valign = 1
+
 [node name="JoinHBox" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby"]
 margin_top = 640.0
 margin_right = 1316.0
@@ -89,6 +184,11 @@ margin_bottom = 34.0
 size_flags_horizontal = 2
 text = "Back to Main Menu"
 align = 0
+
+[node name="RefreshButton" type="Button" parent="Centered/TabContainer/JoinLobby/JoinHBox"]
+margin_left = 955.0
+margin_right = 967.0
+margin_bottom = 34.0
 
 [node name="PwordInput" type="LineEdit" parent="Centered/TabContainer/JoinLobby/JoinHBox"]
 margin_left = 971.0
@@ -138,7 +238,7 @@ margin_left = 236.0
 margin_top = 76.0
 margin_right = 780.0
 margin_bottom = 120.0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -172,7 +272,7 @@ margin_right = 644.0
 margin_bottom = 210.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -206,7 +306,7 @@ margin_right = 848.0
 margin_bottom = 314.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -237,7 +337,7 @@ margin_right = 677.0
 margin_bottom = 421.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -264,7 +364,7 @@ margin_right = 881.0
 margin_bottom = 525.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -300,5 +400,6 @@ text = "Create Lobby"
 icon = ExtResource( 10 )
 
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]
+[connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/RefreshButton" to="." method="_on_RefreshButton_pressed"]
 [connection signal="item_selected" from="Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton" to="." method="_on_classroom_selected"]
 [connection signal="pressed" from="Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton" to="." method="_createLobby"]

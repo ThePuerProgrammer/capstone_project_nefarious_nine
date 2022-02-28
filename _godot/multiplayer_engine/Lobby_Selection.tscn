@@ -1,0 +1,103 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://multiplayer_engine/Lobby_Selection.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=2]
+
+[node name="Lobby_Selection" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -614.0
+margin_bottom = -860.0
+rect_min_size = Vector2( 1306, 40 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 1306.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+color = Color( 0.819608, 0.819608, 0.819608, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HostNameLabel" type="Label" parent="HBoxContainer"]
+margin_right = 258.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Host name"
+align = 1
+valign = 1
+
+[node name="PrivacyStatusLabel" type="Label" parent="HBoxContainer"]
+margin_left = 262.0
+margin_right = 520.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Privacy Status"
+align = 1
+valign = 1
+
+[node name="ClassroomLabel" type="Label" parent="HBoxContainer"]
+margin_left = 524.0
+margin_right = 782.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Classroom"
+align = 1
+valign = 1
+
+[node name="PlayerCountLabel" type="Label" parent="HBoxContainer"]
+margin_left = 786.0
+margin_right = 1044.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Player count"
+align = 1
+valign = 1
+
+[node name="ChatEnabledLabel" type="Label" parent="HBoxContainer"]
+margin_left = 1048.0
+margin_right = 1306.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Chat Enabled"
+align = 1
+valign = 1
+
+[node name="LobbySelectionButton" type="Button" parent="."]
+margin_right = 1306.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+action_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="LobbySelectionButton" to="." method="_on_LobbySelectionButton_pressed"]

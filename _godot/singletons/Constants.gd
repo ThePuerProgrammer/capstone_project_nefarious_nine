@@ -8,4 +8,5 @@ const COLLECTIONS = {
 	'CLASSROOMS' : "classrooms",
 	'DECKS' : 'decks',
 	'USERS' : 'users' 
+	'MULTIPLAYER_GAME_LOBBIES' : 'multiplayer_game_lobbies'
 }
