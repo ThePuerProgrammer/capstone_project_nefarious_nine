@@ -300,4 +300,5 @@ text = "Create Lobby"
 icon = ExtResource( 10 )
 
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]
+[connection signal="item_selected" from="Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton" to="." method="_on_classroom_selected"]
 [connection signal="pressed" from="Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton" to="." method="_createLobby"]

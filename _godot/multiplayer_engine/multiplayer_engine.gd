@@ -10,6 +10,8 @@ const collections : Dictionary = {
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
 
+var decks
+
 func _ready():
 	# Max players drop down button items. Disable non numeric
 	maxPlayersOptionButton.add_item("Select Max")
@@ -19,10 +21,12 @@ func _ready():
 	maxPlayersOptionButton.set_item_disabled(0, true)
 	
 	# Query for classrooms that the current user is a member of
-	var query : FirestoreQuery = FirestoreQuery.new().from("classrooms").where("members", FirestoreQuery.OPERATOR.ARRAY_CONTAINS, CurrentUser.user_email)
-	var query_task : FirestoreTask = Firebase.Firestore.query(query)
-	var res = yield(query_task, "task_finished")
-	classrooms = res.data 
+	classrooms = FirebaseController.get_classrooms_where_user_is_member(CurrentUser.user_email)
+	
+	# Firebase queries will yield back to the caller, so this conditional statement ensures we only 
+	# continue once classrooms has gotten data back from the FirebaseController function
+	if classrooms is GDScriptFunctionState:
+		classrooms = yield(classrooms, "completed")
 
 	# Create a docid to name dictionary for selecting the classroom
 	for classroom in classrooms:
@@ -46,8 +50,6 @@ func _on_Back_To_Main_Menu_Button_pressed():
 func _createLobby():
 	get_node("Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton").disabled = true
 
-func _offer_created(type, data, id):
-	pass
-	
-func _new_ice_candidate(mid_name, index_name, sdp_name, id):
+func _on_classroom_selected(index):
+	# Once the user selects a classroom, query for the classroom decks
 	pass
