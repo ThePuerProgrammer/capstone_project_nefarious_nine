@@ -12,6 +12,10 @@ func _ready():
 	if e != OK:
 		print('Could not connect CurrentUser signals')
 
+func _input(event):
+	if event.is_action_pressed("ui_accept"):
+		submit_button.emit_signal("pressed")
+
 func _on_auth_success():
 	get_node("CenterContainer/SignInPanel/ColorRect/EnterPasswordLabel").text = \
 		"Success!"
@@ -20,10 +24,7 @@ func _on_auth_success():
 	
 func _on_auth_failure():
 	get_node("CenterContainer/SignInPanel/ColorRect/EnterPasswordLabel").text = \
-		"Incorrect Password"
-	yield(get_tree().create_timer(1.0), "timeout")
-	get_node("CenterContainer/SignInPanel/ColorRect/EnterPasswordLabel").text = \
-		"Try Again"
+		"Incorrect Password\nTry Again"
 	password_edit.text = ''
 	submit_button.disabled = false
 	

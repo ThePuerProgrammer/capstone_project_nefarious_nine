@@ -4,7 +4,7 @@ extends Node
 var user_id
 
 # From firebase_auth.js Auth.currentUser.email
-var user_email = "jesse@test.com"
+var user_email = ""
 
 # After successful signin, the current user's user collection
 var userDoc
@@ -15,6 +15,9 @@ signal failure_to_authenticate_user
 signal authentication_success
 
 func _ready():
+	if Constants.DEV:
+		user_email = Constants.TEST_EMAIL
+	
 	# Connect the auth system signals
 	var e = OK
 	e += Firebase.Auth.connect("login_failed",		self, "_on_login_failed")
