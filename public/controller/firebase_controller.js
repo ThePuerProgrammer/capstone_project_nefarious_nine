@@ -610,6 +610,25 @@ export async function updateClassroom(classroom) {
     await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
         .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category });
 }
+//============================================================================//
+//Ban Members
+//============================================================================//
+export async function banMember(docID, member) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
+        .update({
+            banlist: firebase.firestore.FieldValue.arrayUnion(member)
+        });
+
+}
+
+export async function unbanMember(docID, member) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
+        .update({
+            banlist: firebase.firestore.FieldValue.arrayRemove(member)
+        });
+}
+
+
 export async function getUserTimerDefault(uid) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)

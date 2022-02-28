@@ -1,7 +1,7 @@
 /**************************************************
  *               Create Classroom Class
  **************************************************/
- export class Classroom {
+export class Classroom {
     constructor(data) {
         this.name = data.name;
         this.subject = data.subject;
@@ -10,6 +10,7 @@
         this.category = data.category;
         this.moderatorList = data.moderatorList;
         this.members = data.members;
+        this.banlist = data.banlist;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
 
@@ -18,7 +19,7 @@
     /**************************************************
      *      Setter for the Document ID
     **************************************************/
-    set_docID(ID){
+    set_docID(ID) {
         this.docID = ID;
     }
 
@@ -49,6 +50,7 @@
             category: this.category,
             moderatorList: this.moderatorList,
             members: this.members,
+            banlist: this.banlist,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 

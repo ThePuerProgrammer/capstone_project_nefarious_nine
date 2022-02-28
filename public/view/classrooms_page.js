@@ -29,6 +29,8 @@ export function addEventListeners() {
         const members = [];
         members.push(Auth.currentUser.email);
 
+        const banlist = [];
+
 
         const classroom = new Classroom({
             name,
@@ -36,7 +38,8 @@ export function addEventListeners() {
             //dateCreated,
             category,
             moderatorList,
-            members
+            members,
+            banlist,
         });
 
         try {
