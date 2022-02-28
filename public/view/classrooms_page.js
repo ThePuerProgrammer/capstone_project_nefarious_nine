@@ -115,6 +115,16 @@ export async function classrooms_page() {
         })
     }
 
+    let myClassroomList = [];
+    for (let i = 0; i < availableClassroomList.length; i++) {
+        if (availableClassroomList[i].members.includes(Auth.currentUser.email)) {
+            myClassroomList.push(availableClassroomList[i]);
+        } else {
+            // we can break once a classroom doesn't contain the user since they're sorted
+            break;
+        }
+    }
+
     availableClassroomList.forEach(ac => {
         html += `
                 <tr>${buildClassroom(ac)}</tr>`;
@@ -125,14 +135,6 @@ export async function classrooms_page() {
     html += `<div id="My Classrooms" class="classroom-tab-content">
         <button id="${Constant.htmlIDs.createClassroom}" type="button" class="btn btn-secondary pomo-bg-color-dark">
         Create Classroom</button>`;
-
-    let myClassroomList = [];
-    try {
-        myClassroomList = await FirebaseController.getMyClassrooms(Auth.currentUser.email);
-    } catch (e) {
-        Utilities.info('Error getting your classrooms', JSON.stringify(e));
-        console.log(e);
-    }
 
     html += `<table id="my-classrooms-table" class="table">
          <thread>
@@ -270,7 +272,7 @@ function buildClassroom(classroom) {
     <td>${classroom.name}</td>
     <td>${classroom.subject}</td>
     <td>${classroom.category}</td>
-    <td>${classroom.members.length}</td>
+    <td>${classroom.members.length}/9</td>
     `;
 
     html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
