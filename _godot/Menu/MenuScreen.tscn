@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Menu/Buttons/MultiplayerButton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Menu/Buttons/SingleplayerButton.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Menu/MenuScreen.gd" type="Script" id=6]
 [ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=7]
+[ext_resource path="res://authenticate_user/Authenticate_User.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Pomo_BG.tscn" type="PackedScene" id=9]
 
 [node name="MenuScreen" type="Control"]
@@ -36,6 +37,7 @@ texture = ExtResource( 3 )
 stretch_mode = 4
 
 [node name="MenuButtons" type="VBoxContainer" parent="MenuContainer"]
+visible = false
 margin_top = 288.0
 margin_right = 1679.0
 margin_bottom = 783.0
@@ -61,6 +63,8 @@ margin_top = 370.0
 margin_right = 1679.0
 margin_bottom = 495.0
 rect_min_size = Vector2( 0, 125 )
+
+[node name="Authenticate_User" parent="MenuContainer" instance=ExtResource( 8 )]
 
 [node name="FadeIn" parent="." instance=ExtResource( 5 )]
 visible = false
