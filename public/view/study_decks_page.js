@@ -131,7 +131,6 @@ export async function study_decks_page() {
             Elements.modalDeleteDeckConfirmation.show();
             const button2 = document.getElementById('modal-confirmation-delete-deck-yes');
             button2.addEventListener("click", async e =>{
-                console.log('click');
                 confirmation = true;
                 await EditDeck.delete_deck(deckId, confirmation);
             });

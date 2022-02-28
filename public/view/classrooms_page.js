@@ -93,7 +93,7 @@ export async function classrooms_page() {
     html += ` <table id="available-classrooms-table" class="table">
         <thread>
          <tr>
-            <th scope="col">View</th>
+            <th scope="col">Preview</th>
             <th scope="col">Classroom</th>
             <th scope="col">Subject</th>
             <th scope="col">Category</th>
@@ -127,7 +127,7 @@ export async function classrooms_page() {
 
     availableClassroomList.forEach(ac => {
         html += `
-                <tr>${buildClassroom(ac)}</tr>`;
+                <tr>${buildAvailableClassroom(ac)}</tr>`;
     })
     html += `</tbody></table></div>`;
 
@@ -155,13 +155,83 @@ export async function classrooms_page() {
     }
     myClassroomList.forEach(c => {
         html += `
-                <tr>${buildClassroom(c)}</tr>`;
+                <tr>${buildMyClassroom(c)}</tr>`;
     })
 
     html += `</tbody></table></div>`;
 
     Elements.root.innerHTML = html;
 
+    const previewForms = document.getElementsByClassName('form-preview-classroom');
+    for(let i=0; i <previewForms.length; i++){
+        previewForms[i].addEventListener('submit', e =>{
+            e.preventDefault();
+            const button = e.target.getElementsByTagName('button')[0];
+            const label = Utilities.disableButton(button);
+            //Getting hidden elements from the preview form.
+            let classId = e.target.docId.value;
+            let className = e.target.name.value;
+            let classSubject = e.target.subject.value;
+            let classCategory = e.target.category.value;
+            let classMods = e.target.mods.value;
+            let classMembers = e.target.members.value;   
+            let userEmail = Auth.currentUser.email;    
+
+            //Adding pieces of the Classroom to the Modal
+            Elements.previewClassroomLabel.innerHTML=`Preview of ${className}`;
+            Elements.previewClassroomBody.innerHTML=`
+            <center><h3><u>Subject:</u></h3>
+            <p>${classSubject}</p>
+            <h3><u>Category:</u></h3>
+            <p>${classCategory}</p>
+            <h3><u>Mod(s):</u></h3>
+            <p>${classMods}</p>
+            <h3><u>Member(s):</u></h3> </center>`;
+            //Breaking the string into an array to put each member on a separate line
+            const classMembersList = classMembers.split(",");
+            //Iterating through the array to print all names
+            if(classMembers.length > 0){
+                for(let j=0; j < classMembersList.length; j++){
+
+                    Elements.previewClassroomBody.innerHTML+=`
+                    <center><p>${classMembersList[j]}</p> </center>` ;
+                }
+            }
+            //Checking to see if the classroom is full
+            if(classMembersList.length==classMembers.length){
+                //CLASSROOM FULL
+                Elements.previewClassroomFooter.innerHTML=`
+                <button class="btn btn-secondary pomo-bg-color-dark 
+                    pomo-text-color-light" disabled> Join</button>
+                `;
+            } else { //CLASSROOM HAS ROOM
+                Elements.previewClassroomFooter.innerHTML=`
+                <form class="form-join-classroom" method="post">
+                    <input type="hidden" name="docId" value="${classId}">
+                    <button id="form-join-classroom" class="btn btn-secondary pomo-bg-color-dark 
+                        pomo-text-color-light" type="submit"> Join</button>
+                </form>`;
+            }
+            const joinClassroom = document.getElementsByClassName('form-join-classroom');
+            for(let i= 0; i < joinClassroom.length; i++){
+                joinClassroom[i].addEventListener('submit', async e=>{
+                    e.preventDefault();
+                    console.log('click');
+                    await FirebaseController.joinClassroom(classId, userEmail);
+                    console.log('joined');
+                    classroomDocID =e.target.docId.value;
+                    history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classroomDocID);
+                    await one_classroom_page(classroomDocID);
+                });
+            }           
+
+            Elements.modalPreviewClassroom.show();
+            //const joinButton = document.getElementById('')
+            Utilities.enableButton(button, label);
+        });
+        
+    }
+    
 
     // get available class tab and show it as visible
     const availableClassroomButton = document.getElementById('available-classroom-button');
@@ -262,13 +332,35 @@ export async function classrooms_page() {
 }
 
 
-function buildClassroom(classroom) {
+function buildMyClassroom(classroom) {
     let html = `
     <td>
     <form class="form-view-classroom" method="post">
             <input type="hidden" name="docId" value="${classroom.docID}">
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
         </form></td>
+    <td>${classroom.name}</td>
+    <td>${classroom.subject}</td>
+    <td>${classroom.category}</td>
+    <td>${classroom.members.length}/9</td>
+    `;
+
+    html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
+    return html;
+}
+
+function buildAvailableClassroom(classroom) {
+    let html = `
+    <td>
+    <form class="form-preview-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docID}"/>
+            <input type="hidden" name="name" value ="${classroom.name}"/>
+            <input type="hidden" name="subject" value ="${classroom.subject}"/>
+            <input type="hidden" name="category" value ="${classroom.category}"/>
+            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
+            <input type="hidden" name="members" value ="${classroom.members}"/>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Preview</button>
+    </form></td>
     <td>${classroom.name}</td>
     <td>${classroom.subject}</td>
     <td>${classroom.category}</td>
