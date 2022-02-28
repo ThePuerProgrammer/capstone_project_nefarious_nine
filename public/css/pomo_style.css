@@ -54,6 +54,32 @@
     text-decoration: underline;
 }
 
+/* Change btn color on hover */
+.edit-btn-hover:hover {
+    background-color: rgb(255, 0, 0);
+}
+
+.edit-btn-hover-blue:hover {
+    background-color: rgb(108, 183, 253);
+}
+/*These three button styles will allow you to change text upon hover
+see function buildButtons */
+button .byebye {
+    display: none;
+  }
+  
+button:hover .membas {
+    display: none;
+}
+  
+button:hover .byebye {
+    display: inline;
+}
+
+.ban-btn-expand-width {
+    width: 150px;
+}
+
 #pomo-timer-toggle-button {
     box-shadow: none !important;
     text-decoration: none;
