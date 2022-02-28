@@ -690,40 +690,40 @@ export async function getAvailableClassrooms() {
 //============================================================================//
 // Gets user's classrooms
 //============================================================================//
-export async function getMyClassrooms(email) {
-    let moderatorList = [];
-    let membersList = [];
-    // get classes user is member of
-    const membersRef = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .where('members', 'array-contains', email)
-        .get();
+// export async function getMyClassrooms(email) {
+//     let moderatorList = [];
+//     let membersList = [];
+//     // get classes user is member of
+//     const membersRef = await firebase.firestore()
+//         .collection(Constant.collectionName.CLASSROOMS)
+//         .where('members', 'array-contains', email)
+//         .get();
 
-    membersRef.forEach(doc => {
-        const cr = new Classroom(doc.data());
-        cr.set_docID(doc.id);
-        membersList.push(cr);
-    })
-    // get classes user is mod of
-    const moderatorRef = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .where('moderatorList', 'array-contains', email)
-        .get();
+//     membersRef.forEach(doc => {
+//         const cr = new Classroom(doc.data());
+//         cr.set_docID(doc.id);
+//         membersList.push(cr);
+//     })
+//     // get classes user is mod of
+//     const moderatorRef = await firebase.firestore()
+//         .collection(Constant.collectionName.CLASSROOMS)
+//         .where('moderatorList', 'array-contains', email)
+//         .get();
 
-    moderatorRef.forEach(doc => {
-        const cr = new Classroom(doc.data());
-        cr.set_docID(doc.id);
-        moderatorList.push(cr);
-    });
+//     moderatorRef.forEach(doc => {
+//         const cr = new Classroom(doc.data());
+//         cr.set_docID(doc.id);
+//         moderatorList.push(cr);
+//     });
 
-    // combine both lists and remove duplicates
-    let classroomList = [];
-    classroomList = membersList.filter(mem => !moderatorList.includes(mem));
+//     // combine both lists and remove duplicates
+//     let classroomList = [];
+//     classroomList = membersList.filter(mem => !moderatorList.includes(mem));
 
 
-    // return final list
-    return classroomList;
-}
+//     // return final list
+//     return classroomList;
+// }
 
 //============================================================================//
 // Gets one classroom
