@@ -20,7 +20,7 @@ void fragment() {
 	waves_offset.y = sin(TIME * wave_speed_factor + (-tiled_uvs.y) * wave_width_factor.y );
 	float full_range_offset_x = -1.0 + 2.0 * waves_offset.x;
 	float full_range_x = -1.0 + 2.0 * tiled_uvs.x;
-	float inward_waves = -0.09 + sin(TIME * wave_speed_factor - full_range_x - full_range_offset_x * waves_offset.y * 0.5) * 0.03;
+	float inward_waves = -0.03 + sin(TIME * wave_speed_factor - full_range_x - full_range_offset_x * waves_offset.y * 0.5) * 0.01;
 	vec4 colorize = vec4(vec3(0.88, 0.32, 0.64) * 0.3 + inward_waves, 1);
 	COLOR = texture( TEXTURE, tiled_uvs + waves_offset * wave_height ) * colorize;
 }"
