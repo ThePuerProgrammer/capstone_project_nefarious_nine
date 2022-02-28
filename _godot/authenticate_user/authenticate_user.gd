@@ -19,7 +19,7 @@ func _input(event):
 func _on_auth_success():
 	get_node("CenterContainer/SignInPanel/ColorRect/EnterPasswordLabel").text = \
 		"Success!"
-	yield(get_tree().create_timer(0.5), "timeout")
+	yield(get_tree().create_timer(0.3), "timeout")
 	emit_signal("success_banner_timeout")
 	
 func _on_auth_failure():

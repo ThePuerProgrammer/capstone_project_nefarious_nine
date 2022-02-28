@@ -9,6 +9,8 @@ var user_email = ""
 # After successful signin, the current user's user collection
 var userDoc
 
+var user_is_authenticated = false
+
 var window
 
 signal failure_to_authenticate_user
@@ -43,6 +45,7 @@ func _on_login_failed(code, msg):
 		
 # Get the user account from the user data belonging to the website sign in user
 func _on_login_succeeded(_auth_info):
+	user_is_authenticated = true
 	if window != null:
 		var collection : FirestoreCollection = Firebase.Firestore.collection('users')
 		var document_task : FirestoreTask = collection.get(user_id)
