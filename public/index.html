@@ -262,7 +262,7 @@
     aria-labelledby="create-deck-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+        <div class="modal-header pomo-text-color-light">
           <h5 class="modal-title pomo-text-color-light" id="create-deck-modal-label">Create A New Deck</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -532,7 +532,7 @@
   <div class="modal fade" id="create-classroom-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="create-classroom-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content pomo-bg-color-md-dark">
+      <div class="modal-content pomo-bg-color-dark">
         <div class="modal-header">
           <h5 class="modal-title pomo-text-color-light" id="create-classroom-modal-label">Create A New Classroom</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -541,13 +541,13 @@
           <form id="form-create-classroom" method="post">
             <div class="form-group">
               <label class="pomo-text-color-light" for="name">Name</label>
-              <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
+              <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. CMSC 4433"
                 required minlength="2" id="class-title">
               <br>
               <br>
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
-                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="class-subject">
+                placeholder="e.g. Software Design & Development" required minlength="2" id="class-subject">
               <br>
               <br>
               <label class="pomo-text-color-light" for="selectClassCategory">Category</label>
@@ -557,7 +557,7 @@
             </div>
             <br>
             <br>
-            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-create-deck"
+            <button class="btn btn-secondary pomo-bg-color-md-dark" style="float:right" id="class-create-deck"
               type="submit">Create Classroom</button>
           </form>
         </div>
