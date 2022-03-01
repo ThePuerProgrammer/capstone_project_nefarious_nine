@@ -80,6 +80,7 @@ export const modalDeleteDeckConfirmation = new bootstrap.Modal(document.getEleme
 export const modalEditClassroom = new bootstrap.Modal(document.getElementById('modal-edit-classroom', { backdrop: 'static' }));
 export const modalPreviewClassroom = new bootstrap.Modal(document.getElementById('preview-classroom-modal', {backdrop:'static'}));
 export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-leave-classroom', {backdrop: 'static'}));
+export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', {backdrop: 'static'}));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
