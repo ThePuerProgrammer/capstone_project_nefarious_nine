@@ -148,3 +148,22 @@ func _on_JoinButton_pressed():
 	else:
 		pword_input_line_edit.text = ''
 		join_button.disabled = true
+		
+func _generate_peer_id():
+	# A little idea I have to convert the users docid to an int for client/peer id
+	# My concern has been that a combination of the uid to int could possibly land on the same number
+	# This solution doesn't entirely eliminate that, but I think it makes it a lot less likely
+	# Without, perhaps, some type of log that shows what ids are currently active, nothing really
+	# could prevent overlap. But in this case, the uid is converted to an array of bytes
+	# that array is summed together as int values. The original uid becomes the seed hash for an rng
+	# along with the current unix time and the final value is the product of the rng and the int 
+	# representation of the uid
+	var uid : String = CurrentUser.user_id
+	var pool_bytes = uid.to_ascii()
+	var bytes_to_int = 0
+	for byte in pool_bytes:
+		bytes_to_int += int(byte)
+	var rng = RandomNumberGenerator.new()
+	rng.seed = hash(uid) + OS.get_unix_time()
+	var random_number = rng.rand_range(1, 1000) 
+	return random_number * bytes_to_int
