@@ -76,14 +76,6 @@ func _createLobby():
 		}
 		FirebaseController.add_new_multiplayer_lobby(lobby_description)
 		
-		# Establish this computer as a peer
-		peer = WebRTCPeerConnection.new()
-		
-		# Must have an active data channel to make an offer
-		data_channel = WebRTCDataChannel.new()
-		
-		
-
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
 

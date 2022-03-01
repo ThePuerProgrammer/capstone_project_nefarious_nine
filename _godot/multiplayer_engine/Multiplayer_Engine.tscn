@@ -420,9 +420,9 @@ margin_bottom = 479.0
 dialog_text = "You Must First Select The Max Players"
 
 [node name="IncorrectJoinPasswordAlert" type="AcceptDialog" parent="Centered"]
-margin_left = 831.0
+margin_left = 891.0
 margin_top = 421.0
-margin_right = 1088.0
+margin_right = 1029.0
 margin_bottom = 479.0
 dialog_text = "Incorrect Password"
 
