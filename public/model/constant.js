@@ -15,6 +15,7 @@ export const collectionName = {
     DECK_DATA: 'deck_data',
     FLASHCARDS_DATA: 'flashcards_data',
     CLASSROOMS: 'classrooms',
+    BACKEND: 'backend',
 }
 
 /*****************************************

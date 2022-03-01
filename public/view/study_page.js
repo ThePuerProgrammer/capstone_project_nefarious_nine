@@ -8,6 +8,7 @@ import * as Auth from "../controller/firebase_auth.js";
 let smartStudyOn = false; // To keep track of Smart Study Toggle
 let count = 0; // rudimentary way to cycle trough flashcards in deck
 let score = 0; // rudimentary way to keep track of user score
+let start_coins; // how many coins the user starts out w
 let coins = 0; // keep track of coins earned
 let user_answers = []; //array of user_history
 let skipFlashcardRefresh = false;
@@ -22,6 +23,14 @@ export async function study_page() {
   Elements.root.innerHTML = "";
   let html = "";
   
+  // get COINS from firebase
+  try {
+    coins = await FirebaseController.getCoins(Auth.currentUser.uid);
+    start_coins = coins;
+  } catch (e) {
+    console.log(e);
+  }
+
   // get DECK info from firebase
   let deckDocId = localStorage.getItem("deckPageDeckDocID");
   let deck;
@@ -315,7 +324,9 @@ function buildOverviewView(deck, deckLength) {
   html += `
   </ul>
   <br>
-  <h4>Score: ${score} / ${deckLength} Coins Earned: ${coins} </h4>
+  <h4>Score: ${score} / ${deckLength}</h4>
+  <h4>Coins Earned: ${coins-start_coins}</h4>
+  <h4>Total Coins: ${coins}</h4>
   </div>
   </div>`;
 

@@ -49,43 +49,123 @@ export async function one_classroom_page(classroomDocID) {
             mod = true;
         }
     }
+
+    // adding classroom, members, and leaderboard tabs
+    html += `<div class="classroom-page-tab">
+        <button id="classroom-gen-button" class="classroom-tab">Classroom</button>
+        <button id="classroom-members-button" class="classroom-tab">Members</button>
+        <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard</button>
+        </div>`;
+    // could possibly add a new tab for classroom chat?
+
+
+    // CLASSROOM tab contents
+    html += `<div id="Classroom" class="one-classroom-tab-content">
+        <h1>${classroom.name}</h1>
+        <h4>${classroom.subject}, ${classroom.category}</h4>
+        <br>`;
+    
     //if current user is a mod, populate the edit classroom button
     //causes null edit button error
     if (mod == true) {
         //removed doc id from page view -- Blake
-        html += `<h1>${classroom.name}
-    
-        <button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Edit Classroom</button>
-        <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
+        html += `<button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+            >Edit Classroom</button>
+            <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
                 Delete Classroom
-        </button>
-    
-        </h1>`;
-        html += `
-        <p>Subject: ${classroom.subject}</p>
-        <p>Category: ${classroom.category}</p>
-        <p>Mods: ${classroom.moderatorList}</p>
-        `;
-        html += `<p>Members:</p>`
+            </button>`
+            ;
+    }
 
+    html += `</div>`;
+
+    // MEMBERS tab contents
+    html+= `<div id="Members" class="one-classroom-tab-content">
+        <div class="row">
+        <div class="column">
+        <h2>Members</h2>`;
+
+    // If mod, show members w BAN option
+    if (mod == true) {
         members.forEach(member => {
-            html += `
-                <tr>${buildButtons(member, classroom.banlist)}</tr>
-               `
+            html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
+        })
+    } else {
+        members.forEach(member => {
+            html += `<p>${member}</p>`;
         })
     }
-    else {
-        //if user is not a mod, do not populate edit classrroom button
-        html += `<h1>${classroom.name}</h1>`;
-        html += `
-        <p>Subject: ${classroom.subject}</p>
-        <p>Category: ${classroom.category}</p>
-        <p>Mods: ${classroom.moderatorList}</p>
-        <p>Members: ${classroom.members}</p> 
-        `;
 
-    }
-    Elements.root.innerHTML += html;
+    html += `</div>
+        <div class="column">
+        <h2>Mods</h2>`;
+
+        // display mods list
+        let mods = classroom.moderatorList
+        mods.forEach(mod => {
+            html += `<p>${mod}</p>`;
+        })
+
+        html += `</div>
+        </div>
+        </div>`; 
+
+    // future LEADERBOARD tab content
+    html += `<div id="Leaderboard" class="one-classroom-tab-content">
+        <h2>Leaderboard</h2>
+        </div>`;
+
+    Elements.root.innerHTML = html;
+    
+    // get CLASSROOM tab and show it as visible
+    const classroomGenButton = document.getElementById('classroom-gen-button');
+    classroomGenButton.addEventListener('click', e => {
+        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].style.display = "none";
+        }
+        document.getElementById('Classroom').style.display = "block";
+        e.target.style.backgroundColor = `#A7ADC6`;
+        e.target.style.color = `#2C1320`;
+        e.target.style.borderBottom = `#A7ADC6`;
+        document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
+         
+    })
+
+    // get MEMBERS tab and show it as visible
+    const classroomMembersButton = document.getElementById('classroom-members-button');
+    classroomMembersButton.addEventListener('click', e => {
+        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].style.display = "none";
+        }
+        document.getElementById('Members').style.display = "block";
+        e.target.style.backgroundColor = `#A7ADC6`;
+        e.target.style.color = `#2C1320`;
+        e.target.style.borderBottom = `#A7ADC6`;
+        document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-members-button').style.color = '#A7ADC6';
+    })
+
+     // get LEADERBOARD tab and show it as visible
+     const classroomLeaderboardButton = document.getElementById('classroom-leaderboard-button');
+     classroomLeaderboardButton.addEventListener('click', e => {
+        // clear all tabs contents
+         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+         for (let i = 0; i < tabContents.length; i++) {
+             tabContents[i].style.display = "none";
+         }
+         document.getElementById('Leaderboard').style.display = "block";
+         e.target.style.backgroundColor = `#A7ADC6`;
+         e.target.style.color = `#2C1320`;
+         e.target.style.borderBottom = `#A7ADC6`;
+         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
+         document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
+     })
+
+    // sets CLASSROOM as default
+    classroomGenButton.click();
 
     //following Pipers create classroom functionality
     if (mod == true) { //if owner of classroom, add listener. This avoids null editButton errors.
