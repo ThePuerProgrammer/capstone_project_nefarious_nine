@@ -81,7 +81,7 @@ export async function one_classroom_page(classroomDocID) {
         <div class="column">
         <h2>Members</h2>`;
 
-    // If mod, show members w BAN option
+    // If current user is mod, show members w BAN option
     if (mod == true) {
         members.forEach(member => {
             html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
@@ -116,32 +116,50 @@ export async function one_classroom_page(classroomDocID) {
     // get CLASSROOM tab and show it as visible
     const classroomGenButton = document.getElementById('classroom-gen-button');
     classroomGenButton.addEventListener('click', e => {
+        // clear all tabs contents
         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
         for (let i = 0; i < tabContents.length; i++) {
             tabContents[i].style.display = "none";
         }
+        // display gen classroom tab content
         document.getElementById('Classroom').style.display = "block";
-        e.target.style.backgroundColor = `#A7ADC6`;
-        e.target.style.color = `#2C1320`;
-        e.target.style.borderBottom = `#A7ADC6`;
+        //e.target.style.backgroundColor = `#A7ADC6`;
+        //e.target.style.color = `#2C1320`;
+        //e.target.style.borderBottom = `#A7ADC6`;
+        
         document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
+
+        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-members-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
          
     })
 
     // get MEMBERS tab and show it as visible
     const classroomMembersButton = document.getElementById('classroom-members-button');
     classroomMembersButton.addEventListener('click', e => {
+        // clear all tabs contents
         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
         for (let i = 0; i < tabContents.length; i++) {
             tabContents[i].style.display = "none";
         }
+        // display members tab content
         document.getElementById('Members').style.display = "block";
-        e.target.style.backgroundColor = `#A7ADC6`;
-        e.target.style.color = `#2C1320`;
-        e.target.style.borderBottom = `#A7ADC6`;
+        //e.target.style.backgroundColor = `#A7ADC6`;
+        //e.target.style.color = `#2C1320`;
+        //e.target.style.borderBottom = `#A7ADC6`;
+
         document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-members-button').style.color = '#A7ADC6';
+
+        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-gen-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
     })
 
      // get LEADERBOARD tab and show it as visible
@@ -152,12 +170,20 @@ export async function one_classroom_page(classroomDocID) {
          for (let i = 0; i < tabContents.length; i++) {
              tabContents[i].style.display = "none";
          }
+         // display leaderboard tab content
          document.getElementById('Leaderboard').style.display = "block";
-         e.target.style.backgroundColor = `#A7ADC6`;
-         e.target.style.color = `#2C1320`;
-         e.target.style.borderBottom = `#A7ADC6`;
-         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
-         document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
+        // e.target.style.backgroundColor = `#A7ADC6`;
+        // e.target.style.color = `#2C1320`;
+        // e.target.style.borderBottom = `#A7ADC6`;
+
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
+
+         document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+         document.getElementById('classroom-members-button').style.color = '#2C1320';
+ 
+         document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+         document.getElementById('classroom-gen-button').style.color = '#2C1320';
      })
 
     // sets CLASSROOM as default
