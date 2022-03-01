@@ -199,6 +199,8 @@ margin_left = 971.0
 margin_right = 1157.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 186, 34 )
+editable = false
+secret = true
 right_icon = ExtResource( 7 )
 placeholder_text = "Enter Lobby Password"
 placeholder_alpha = 0.127
@@ -417,7 +419,15 @@ margin_right = 1088.0
 margin_bottom = 479.0
 dialog_text = "You Must First Select The Max Players"
 
+[node name="IncorrectJoinPasswordAlert" type="AcceptDialog" parent="Centered"]
+margin_left = 831.0
+margin_top = 421.0
+margin_right = 1088.0
+margin_bottom = 479.0
+dialog_text = "Incorrect Password"
+
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/RefreshButton" to="." method="_on_RefreshButton_pressed"]
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]
+[connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/JoinButton" to="." method="_on_JoinButton_pressed"]
 [connection signal="item_selected" from="Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton" to="." method="_on_classroom_selected"]
 [connection signal="pressed" from="Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton" to="." method="_createLobby"]

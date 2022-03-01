@@ -6,6 +6,8 @@ onready var lobbies_vbox = get_node("Centered/TabContainer/JoinLobby/ServerListB
 onready var lobby_password_line_edit = get_node("Centered/TabContainer/CreateLobby/LobbySettings/PasswordLineEdit")
 onready var chat_enabled_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/ChatEnabledCheckbutton")
 onready var vote_minigame_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton")
+onready var pword_input_line_edit = get_node('Centered/TabContainer/JoinLobby/JoinHBox/PwordInput')
+onready var join_button = get_node('Centered/TabContainer/JoinLobby/JoinHBox/JoinButton')
 
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
@@ -97,7 +99,13 @@ func _get_available_lobbies():
 	for lobby in lobbies:
 		var doc_fields = lobby['doc_fields']
 		var new_lobby = load('res://multiplayer_engine/Lobby_Selection.tscn').instance()
-		new_lobby.get_node('HBoxContainer/HostNameLabel').text = doc_fields['host']
+		
+		# TODO CHANGE WHEN USERNAME FIELD EXISTS
+		# Extract the username from the email as the host
+		var host : String = doc_fields['host']
+		host = host.substr(0, host.find('@'))
+		
+		new_lobby.get_node('HBoxContainer/HostNameLabel').text = host
 		new_lobby.get_node('HBoxContainer/PrivacyStatusLabel').text = 'Public' if doc_fields['password'] == '' else 'Private'
 		new_lobby.password = doc_fields['password'] # We are going to need this info when joining
 		new_lobby.get_node('HBoxContainer/ClassroomLabel').text = doc_fields['classroom']
@@ -119,8 +127,21 @@ func _get_available_lobbies():
 
 func _on_lobby_button_pressed(lobby_number):
 	selected_lobby = lobby_number
+	if available_lobbies[lobby_number].password == '':
+		pword_input_line_edit.text = ''
+		pword_input_line_edit.editable = false
+	else:
+		pword_input_line_edit.editable = true
 	
 	# Make sure only the selected has the highlighted background color
 	for lobby in available_lobbies:
 		if lobby.lobby_number != lobby_number:
 			lobby.get_node('ColorRect').color = lobby.default_color
+
+
+func _on_JoinButton_pressed():
+	if available_lobbies[selected_lobby].password != pword_input_line_edit.text:
+		get_node("Centered/IncorrectJoinPasswordAlert").popup()
+	else:
+		pword_input_line_edit.text = ''
+		join_button.disabled = true
