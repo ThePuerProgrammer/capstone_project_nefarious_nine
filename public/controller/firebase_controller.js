@@ -5,6 +5,7 @@ import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
 import { User } from '../model/user.js';
 import { Classroom } from '../model/classroom.js';
+import { Backend } from '../model/backend.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -750,5 +751,19 @@ export async function createClassroom(classroom) {
         .add(classroom.serialize());
 
     return ref.id;
+}
+//============================================================================//
+
+//============================================================================//
+// Retrieve CATEGORIES
+//============================================================================//
+export async function getCategories() {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.BACKEND)
+        .doc('Categories')
+        .get();
+
+    const backend = new Backend(ref.data());
+    return backend.categories;
 }
 //============================================================================//

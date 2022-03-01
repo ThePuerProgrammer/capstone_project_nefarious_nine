@@ -199,9 +199,17 @@ export async function classrooms_page() {
     // CREATE CLASSROOM open modal button listener 
     createClassroomButton.addEventListener('click', async e => {
 
-        const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+        //const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
 
-        // add firebase func. to retrieve categories list
+        // Firebase func. to retrieve categories list
+        let categories;
+        try {
+            categories = await FirebaseController.getCategories();
+            //console.log(cat);
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }
 
         // clear innerHTML to prevent duplicates
         Elements.formClassCategorySelect.innerHTML = '';

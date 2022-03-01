@@ -241,9 +241,17 @@ export async function study_decks_page() {
     // restructured create deck button to add category dropdown menu
     createDeckButton.addEventListener('click', async e => {
 
-        const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+       // const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
 
-        // add firebase func. to retrieve categories list
+        // call Firebase func. to retrieve categories list
+        let categories;
+        try {
+            categories = await FirebaseController.getCategories();
+            //console.log(cat);
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }
 
         // clear innerHTML to prevent duplicates
         Elements.formDeckCategorySelect.innerHTML = '';
