@@ -198,35 +198,86 @@ export async function classrooms_page() {
                 }
             }
             //Checking to see if the classroom is full
-            if(classMembersList.length==classMembers.length){
-                //CLASSROOM FULL
+             //ALREADY ENROLLED
+            if(classMembers.includes(userEmail)){
                 Elements.previewClassroomFooter.innerHTML=`
-                <button class="btn btn-secondary pomo-bg-color-dark 
-                    pomo-text-color-light" disabled> Join</button>
-                `;
-            } else { //CLASSROOM HAS ROOM
+                <form class="form-view-classroom-from-preview" method="post">
+                    <input type="hidden" name="docId" value="${classId}">
+                    <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+                </form>`;
+                //Adding Case of user is creator to leave
+                if(!classMods.includes(userEmail)){
+                    Elements.previewClassroomFooter.innerHTML+=`
+                    <form class="form-leave-classroom-from-preview" method="post">
+                        <input type="hidden" name="docId" value="${classId}">
+                        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Leave</button>
+                    </form>`
+                }
+            } else if(classMembersList.length!=classMembers.length){
+                //CLASSROOM HAS ROOM
                 Elements.previewClassroomFooter.innerHTML=`
                 <form class="form-join-classroom" method="post">
                     <input type="hidden" name="docId" value="${classId}">
                     <button id="form-join-classroom" class="btn btn-secondary pomo-bg-color-dark 
-                        pomo-text-color-light" type="submit"> Join</button>
+                        pomo-text-color-light" type="submit" style="padding:5px 10px"> Join</button>
                 </form>`;
+            } else { 
+                   //CLASSROOM FULL
+                   Elements.previewClassroomFooter.innerHTML=`
+                   <button class="btn btn-secondary pomo-bg-color-dark 
+                       pomo-text-color-light" style="padding:5px 10px" disabled> Join</button>
+                   `;
+                
             }
+            //JOIN BUTTON EVENT LISTENER
             const joinClassroom = document.getElementsByClassName('form-join-classroom');
             for(let i= 0; i < joinClassroom.length; i++){
                 joinClassroom[i].addEventListener('submit', async e=>{
                     e.preventDefault();
-                    console.log('click');
+                    //Join the classroom
                     await FirebaseController.joinClassroom(classId, userEmail);
-                    console.log('joined');
-                    classroomDocID =e.target.docId.value;
-                    history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classroomDocID);
-                    await one_classroom_page(classroomDocID);
+                    //Closes modal on button click
+                    $('#preview-classroom-modal').modal('hide')
+                    //Navigates to the classroom webpage
+                    history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classId);
+                    await OneClassroomPage.one_classroom_page(classId);
+                });
+            }
+            //VIEW BUTTON EVENT LISTENER
+            const viewClassroomFromPreview = document.getElementsByClassName('form-view-classroom-from-preview');
+            for(let i=0; i < viewClassroomFromPreview.length; i++){
+                viewClassroomFromPreview[i].addEventListener('submit', async e => {
+                    e.preventDefault();
+                    let classId = e.target.docId.value;
+                    //Closes modal on button click
+                    $('#preview-classroom-modal').modal('hide')
+                    //Navigates to classroom webpage
+                    history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classId);
+                    await OneClassroomPage.one_classroom_page(classId);
+
+                });
+            }
+            //LEAVE BUTTON EVEN LISTENER
+            const leaveClassroomFromPreview = document.getElementsByClassName('form-leave-classroom-from-preview');
+            for(let i=0; i <leaveClassroomFromPreview.length; i++){
+                leaveClassroomFromPreview[i].addEventListener('submit', async e=> {
+                    e.preventDefault();
+                    let classId = e.target.docId.value;
+                    console.log('Here');
+                    //Closes modal on button click
+                    $('#preview-classroom-modal').modal('hide');
+                    Elements.modalLeaveClassroomConfirmation.show();
+                    const confirmation = document.getElementById('modal-confirmation-leave-classroom-yes');
+                    confirmation.addEventListener("click", async e=>{
+                        console.log('ALSO HERE');
+                        await FirebaseController.leaveClassroom(classId, userEmail);
+                        availableClassroomButton.click();
+                    });
+                    
+                    
                 });
             }           
-
             Elements.modalPreviewClassroom.show();
-            //const joinButton = document.getElementById('')
             Utilities.enableButton(button, label);
         });
         
