@@ -784,3 +784,17 @@ export async function leaveClassroom(classId, userEmail) {
         .update({ members: arrayRemove(userEmail)});
 }
 //============================================================================//
+
+//============================================================================//
+// get user COINS
+//============================================================================//
+export async function getCoins(uid) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .get();
+    
+    const user = new User(ref.data());
+    return user.coins;
+}
+//============================================================================//
