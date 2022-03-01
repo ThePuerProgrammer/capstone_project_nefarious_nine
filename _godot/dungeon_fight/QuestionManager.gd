@@ -46,12 +46,15 @@ func reset_for_next_question():
 	_progressBarHard.value = 0
 	currentProgressBarSubSection = 0
 	
+func startNextQuestion():
+	# TODO: Get next flashcard here
+	$QuestionTimer.start()
+	
 
 func _on_startGameTimer_timeout():
 	_waitingForAnswer = true
-	print("called again")
-	$QuestionTimer.start()
 	$startGameTimer.stop()	
+	startNextQuestion()
 
 
 func _on_QuestionTimer_timeout():

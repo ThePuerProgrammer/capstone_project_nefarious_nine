@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://assets/Resources/floor.tres" type="TileSet" id=1]
 [ext_resource path="res://assets/tilesets/dungeon_fighting/Floor/Sample_Character_Normal_Right.png" type="Texture" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_green_background.tres" type="StyleBox" id=12]
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_background.tres" type="StyleBox" id=13]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=14]
+[ext_resource path="res://dungeon_fight/PopupLabel.gd" type="Script" id=15]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24.8649, 65.9436 )
@@ -233,6 +234,7 @@ custom_constants/shadow_offset_y = 7
 text = "GO!"
 align = 1
 valign = 1
+script = ExtResource( 15 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
