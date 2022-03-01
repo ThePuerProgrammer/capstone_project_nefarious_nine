@@ -18,6 +18,9 @@ var available_lobbies = []
 var lobby_docids = []
 var selected_lobby = -1
 
+var peer
+var data_channel
+
 func _ready():
 	# Max players drop down button items. Disable non numeric
 	maxPlayersOptionButton.add_item("Select Max")
@@ -72,6 +75,14 @@ func _createLobby():
 			'vote_enabled' : vote_minigame_checkbutton.pressed
 		}
 		FirebaseController.add_new_multiplayer_lobby(lobby_description)
+		
+		# Establish this computer as a peer
+		peer = WebRTCPeerConnection.new()
+		
+		# Must have an active data channel to make an offer
+		data_channel = WebRTCDataChannel.new()
+		
+		
 
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
