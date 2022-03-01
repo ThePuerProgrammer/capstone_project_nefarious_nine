@@ -46,13 +46,12 @@ __meta__ = {
 [node name="TabContainer" type="TabContainer" parent="Centered"]
 self_modulate = Color( 1, 1, 1, 0.717647 )
 margin_left = 298.0
-margin_top = 97.0
+margin_top = 83.0
 margin_right = 1622.0
-margin_bottom = 803.0
+margin_bottom = 817.0
 tab_align = 0
 
 [node name="JoinLobby" type="VBoxContainer" parent="Centered/TabContainer"]
-visible = false
 material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -212,6 +211,7 @@ text = " Connect To Lobby"
 icon = ExtResource( 3 )
 
 [node name="CreateLobby" type="VBoxContainer" parent="Centered/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -221,7 +221,7 @@ margin_bottom = -4.0
 
 [node name="CreateLobbyLabel" type="Label" parent="Centered/TabContainer/CreateLobby"]
 margin_right = 1316.0
-margin_bottom = 18.0
+margin_bottom = 38.0
 grow_vertical = 2
 size_flags_vertical = 3
 custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
@@ -230,9 +230,9 @@ text = "Create a New Game Lobby"
 align = 1
 
 [node name="LobbySettings" type="ColorRect" parent="Centered/TabContainer/CreateLobby"]
-margin_top = 22.0
+margin_top = 42.0
 margin_right = 1316.0
-margin_bottom = 636.0
+margin_bottom = 656.0
 rect_min_size = Vector2( 1316, 614 )
 size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0 )
@@ -389,9 +389,9 @@ __meta__ = {
 }
 
 [node name="SubmitHBox" type="HBoxContainer" parent="Centered/TabContainer/CreateLobby"]
-margin_top = 640.0
+margin_top = 660.0
 margin_right = 1316.0
-margin_bottom = 670.0
+margin_bottom = 698.0
 size_flags_horizontal = 7
 size_flags_vertical = 3
 alignment = 1
@@ -399,7 +399,7 @@ alignment = 1
 [node name="CreateButton" type="Button" parent="Centered/TabContainer/CreateLobby/SubmitHBox"]
 margin_left = 597.0
 margin_right = 718.0
-margin_bottom = 30.0
+margin_bottom = 38.0
 text = "Create Lobby"
 icon = ExtResource( 10 )
 
@@ -409,6 +409,13 @@ margin_top = 421.0
 margin_right = 1079.0
 margin_bottom = 479.0
 dialog_text = "You Must First Select A Classroom!"
+
+[node name="NoMaxPlayersDefinedAlert" type="AcceptDialog" parent="Centered"]
+margin_left = 831.0
+margin_top = 421.0
+margin_right = 1088.0
+margin_bottom = 479.0
+dialog_text = "You Must First Select The Max Players"
 
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/RefreshButton" to="." method="_on_RefreshButton_pressed"]
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]

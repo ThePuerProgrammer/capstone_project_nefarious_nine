@@ -25,10 +25,10 @@ func add_new_multiplayer_lobby(lobby_fields):
 	yield(add_task, "task_finished")
 
 func get_multiplayer_lobbies(classroom_list):
-	assert(typeof(classroom_list) == TYPE_DICTIONARY)
+	assert(typeof(classroom_list) == TYPE_ARRAY)
 	var query : FirestoreQuery = FirestoreQuery.new()\
 		.from(Constants.COLLECTIONS.MULTIPLAYER_GAME_LOBBIES)\
-		.where("classroom", FirestoreQuery.OPERATOR.ARRAY_CONTAINS_ANY, classroom_list)
+		.where("classroom", FirestoreQuery.OPERATOR.IN, classroom_list)
 	var query_task : FirestoreTask = Firebase.Firestore.query(query)
-	var res = yield(query_task, "task_finished")
-	return res.data 
+	var res : Array = yield(query_task, "task_finished").data
+	return res

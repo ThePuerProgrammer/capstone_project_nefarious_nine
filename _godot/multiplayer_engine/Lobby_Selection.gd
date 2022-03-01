@@ -3,6 +3,7 @@ extends Control
 signal lobby_button_pressed(lobby_number)
 
 var lobby_number
+var password
 const default_color = '#d1d1d1'
 const pressed_color = '#56667A'
 

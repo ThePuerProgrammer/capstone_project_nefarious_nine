@@ -7,18 +7,13 @@ onready var lobby_password_line_edit = get_node("Centered/TabContainer/CreateLob
 onready var chat_enabled_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/ChatEnabledCheckbutton")
 onready var vote_minigame_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton")
 
-
-const collections : Dictionary = {
-	'lobbies' : 'lobbies',
-}
-
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
 
 var decks
 
-var lobbies = []
-var selected_lobby
+var available_lobbies = []
+var selected_lobby = -1
 
 func _ready():
 	# Max players drop down button items. Disable non numeric
@@ -58,6 +53,8 @@ func _on_Back_To_Main_Menu_Button_pressed():
 func _createLobby():
 	if selectClassroomsButton.get_selected_id() == 0:
 		get_node("Centered/NoClassroomSelectedAlert").popup()
+	elif maxPlayersOptionButton.get_selected_id() == 0:
+		get_node("Centered/NoMaxPlayersDefinedAlert").popup()
 	else:
 		get_node("Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton").disabled = true
 		var lobby_description = {
@@ -78,7 +75,18 @@ func _on_classroom_selected(index):
 	pass
 
 func _on_RefreshButton_pressed():
-	var res = FirebaseController.get_multiplayer_lobbies(classrooms_docid_to_name_dict.values())
-	if res is GDScriptFunctionState:
-		res = yield(res, "completed")
-	
+	var lobbies = FirebaseController.get_multiplayer_lobbies(classrooms_docid_to_name_dict.values())
+	if lobbies is GDScriptFunctionState:
+		lobbies = yield(lobbies, "completed")
+	for lobby in lobbies:
+		var doc_fields = lobby['doc_fields']
+		var new_lobby = load('res://multiplayer_engine/Lobby_Selection.tscn').instance()
+		new_lobby.get_node('HBoxContainer/HostNameLabel').text = doc_fields['host']
+		new_lobby.get_node('HBoxContainer/PrivacyStatusLabel').text = 'Public' if doc_fields['password'] == '' else 'Private'
+		new_lobby.password = doc_fields['password']
+		new_lobby.get_node('HBoxContainer/ClassroomLabel').text = doc_fields['classroom']
+		new_lobby.get_node('HBoxContainer/PlayerCountLabel').text = doc_fields['player_count']
+		new_lobby.get_node('HBoxContainer/ChatEnabledLabel').text = 'Enabled' if doc_fields['chat_enabled'] else 'Disabled'
+		available_lobbies.append(new_lobby)
+		new_lobby.lobby_number = available_lobbies.size() - 1
+		get_node('Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox').add_child(new_lobby)			
