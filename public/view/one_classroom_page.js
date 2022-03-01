@@ -104,9 +104,7 @@ export async function one_classroom_page(classroomDocID) {
         <h2>Leaderboard</h2>
         </div>`;
 
-    Elements.root.innerHTML += html;
-
-
+    Elements.root.innerHTML = html;
     
     // get CLASSROOM tab and show it as visible
     const classroomGenButton = document.getElementById('classroom-gen-button');
@@ -121,6 +119,7 @@ export async function one_classroom_page(classroomDocID) {
         e.target.style.borderBottom = `#A7ADC6`;
         document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
+         
     })
 
     // get MEMBERS tab and show it as visible
