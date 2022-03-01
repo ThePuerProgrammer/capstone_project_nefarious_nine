@@ -272,9 +272,9 @@ export async function classrooms_page() {
                         await FirebaseController.leaveClassroom(classId, userEmail);
                         availableClassroomButton.click();
                     });
-                    
-                    
+
                 });
+
             }           
             Elements.modalPreviewClassroom.show();
             Utilities.enableButton(button, label);

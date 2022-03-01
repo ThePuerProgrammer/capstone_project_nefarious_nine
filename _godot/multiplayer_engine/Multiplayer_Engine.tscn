@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/icons/outline_keyboard_double_arrow_up_black_24dp.png" type="Texture" id=3]
 [ext_resource path="res://multiplayer_engine/multiplayer_engine.gd" type="Script" id=4]
 [ext_resource path="res://assets/icons/outline_key_black_24dp.png" type="Texture" id=7]
-[ext_resource path="res://Pomo_BG.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui_elements/Pomo_BG.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/icons/outline_sports_esports_black_24dp.png" type="Texture" id=10]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_48pt.tres" type="DynamicFont" id=11]
 
@@ -46,9 +46,9 @@ __meta__ = {
 [node name="TabContainer" type="TabContainer" parent="Centered"]
 self_modulate = Color( 1, 1, 1, 0.717647 )
 margin_left = 298.0
-margin_top = 95.0
+margin_top = 83.0
 margin_right = 1622.0
-margin_bottom = 805.0
+margin_bottom = 817.0
 tab_align = 0
 
 [node name="JoinLobby" type="VBoxContainer" parent="Centered/TabContainer"]
@@ -68,18 +68,122 @@ custom_fonts/font = ExtResource( 1 )
 text = "Active Lobbies"
 align = 1
 
-[node name="ServerListBG" type="ColorRect" parent="Centered/TabContainer/JoinLobby"]
+[node name="RefreshButton" type="Button" parent="Centered/TabContainer/JoinLobby"]
+margin_left = 1256.0
 margin_top = 22.0
 margin_right = 1316.0
-margin_bottom = 636.0
+margin_bottom = 42.0
+size_flags_horizontal = 8
+text = "Refresh"
+align = 0
+
+[node name="ServerListBG" type="ColorRect" parent="Centered/TabContainer/JoinLobby"]
+margin_top = 46.0
+margin_right = 1316.0
+margin_bottom = 660.0
 rect_min_size = Vector2( 1316, 614 )
 size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0.537255 )
 
-[node name="JoinHBox" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby"]
-margin_top = 640.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LobbiesVBox" type="VBoxContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer"]
 margin_right = 1316.0
-margin_bottom = 674.0
+margin_bottom = 614.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TableBar" type="Control" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox"]
+margin_right = 1316.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+
+[node name="ColorRect" type="ColorRect" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+color = Color( 0.654902, 0.678431, 0.776471, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColumnTitles" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1306, 40 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_right = 258.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Host Name"
+align = 1
+valign = 1
+
+[node name="Label2" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_left = 262.0
+margin_right = 520.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Privacy Status"
+align = 1
+valign = 1
+
+[node name="Label3" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_left = 524.0
+margin_right = 782.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Classroom"
+align = 1
+valign = 1
+
+[node name="Label4" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_left = 786.0
+margin_right = 1044.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Player Count"
+align = 1
+valign = 1
+
+[node name="Label5" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
+margin_left = 1048.0
+margin_right = 1306.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Chat Enabled"
+align = 1
+valign = 1
+
+[node name="JoinHBox" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby"]
+margin_top = 664.0
+margin_right = 1316.0
+margin_bottom = 698.0
 size_flags_horizontal = 3
 alignment = 2
 
@@ -95,6 +199,8 @@ margin_left = 971.0
 margin_right = 1157.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 186, 34 )
+editable = false
+secret = true
 right_icon = ExtResource( 7 )
 placeholder_text = "Enter Lobby Password"
 placeholder_alpha = 0.127
@@ -117,7 +223,7 @@ margin_bottom = -4.0
 
 [node name="CreateLobbyLabel" type="Label" parent="Centered/TabContainer/CreateLobby"]
 margin_right = 1316.0
-margin_bottom = 18.0
+margin_bottom = 38.0
 grow_vertical = 2
 size_flags_vertical = 3
 custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
@@ -126,9 +232,9 @@ text = "Create a New Game Lobby"
 align = 1
 
 [node name="LobbySettings" type="ColorRect" parent="Centered/TabContainer/CreateLobby"]
-margin_top = 22.0
+margin_top = 42.0
 margin_right = 1316.0
-margin_bottom = 636.0
+margin_bottom = 656.0
 rect_min_size = Vector2( 1316, 614 )
 size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0 )
@@ -138,7 +244,7 @@ margin_left = 236.0
 margin_top = 76.0
 margin_right = 780.0
 margin_bottom = 120.0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -172,7 +278,7 @@ margin_right = 644.0
 margin_bottom = 210.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -206,7 +312,7 @@ margin_right = 848.0
 margin_bottom = 314.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -237,7 +343,7 @@ margin_right = 677.0
 margin_bottom = 421.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -264,7 +370,7 @@ margin_right = 881.0
 margin_bottom = 525.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
@@ -274,7 +380,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ChatEnabledCheckbutton2" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
+[node name="VoteNextMinigameCheckbutton" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
 margin_left = 919.0
 margin_top = 485.0
 margin_right = 995.0
@@ -285,9 +391,9 @@ __meta__ = {
 }
 
 [node name="SubmitHBox" type="HBoxContainer" parent="Centered/TabContainer/CreateLobby"]
-margin_top = 640.0
+margin_top = 660.0
 margin_right = 1316.0
-margin_bottom = 670.0
+margin_bottom = 698.0
 size_flags_horizontal = 7
 size_flags_vertical = 3
 alignment = 1
@@ -295,9 +401,33 @@ alignment = 1
 [node name="CreateButton" type="Button" parent="Centered/TabContainer/CreateLobby/SubmitHBox"]
 margin_left = 597.0
 margin_right = 718.0
-margin_bottom = 30.0
+margin_bottom = 38.0
 text = "Create Lobby"
 icon = ExtResource( 10 )
 
+[node name="NoClassroomSelectedAlert" type="AcceptDialog" parent="Centered"]
+margin_left = 841.0
+margin_top = 421.0
+margin_right = 1079.0
+margin_bottom = 479.0
+dialog_text = "You Must First Select A Classroom!"
+
+[node name="NoMaxPlayersDefinedAlert" type="AcceptDialog" parent="Centered"]
+margin_left = 831.0
+margin_top = 421.0
+margin_right = 1088.0
+margin_bottom = 479.0
+dialog_text = "You Must First Select The Max Players"
+
+[node name="IncorrectJoinPasswordAlert" type="AcceptDialog" parent="Centered"]
+margin_left = 831.0
+margin_top = 421.0
+margin_right = 1088.0
+margin_bottom = 479.0
+dialog_text = "Incorrect Password"
+
+[connection signal="pressed" from="Centered/TabContainer/JoinLobby/RefreshButton" to="." method="_on_RefreshButton_pressed"]
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]
+[connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/JoinButton" to="." method="_on_JoinButton_pressed"]
+[connection signal="item_selected" from="Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton" to="." method="_on_classroom_selected"]
 [connection signal="pressed" from="Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton" to="." method="_createLobby"]
