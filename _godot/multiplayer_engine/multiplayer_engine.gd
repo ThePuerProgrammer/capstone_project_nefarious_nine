@@ -2,13 +2,21 @@ extends Node
 
 onready var maxPlayersOptionButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/MaxPlayersOptionButton")
 onready var selectClassroomsButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton")
-
-const collections : Dictionary = {
-	'lobbies' : 'lobbies',
-}
+onready var lobbies_vbox = get_node("Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox")
+onready var lobby_password_line_edit = get_node("Centered/TabContainer/CreateLobby/LobbySettings/PasswordLineEdit")
+onready var chat_enabled_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/ChatEnabledCheckbutton")
+onready var vote_minigame_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton")
+onready var pword_input_line_edit = get_node('Centered/TabContainer/JoinLobby/JoinHBox/PwordInput')
+onready var join_button = get_node('Centered/TabContainer/JoinLobby/JoinHBox/JoinButton')
 
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
+
+var decks
+
+var available_lobbies = []
+var lobby_docids = []
+var selected_lobby = -1
 
 func _ready():
 	# Max players drop down button items. Disable non numeric
@@ -19,10 +27,12 @@ func _ready():
 	maxPlayersOptionButton.set_item_disabled(0, true)
 	
 	# Query for classrooms that the current user is a member of
-	var query : FirestoreQuery = FirestoreQuery.new().from("classrooms").where("members", FirestoreQuery.OPERATOR.ARRAY_CONTAINS, CurrentUser.user_email)
-	var query_task : FirestoreTask = Firebase.Firestore.query(query)
-	var res = yield(query_task, "task_finished")
-	classrooms = res.data 
+	classrooms = FirebaseController.get_classrooms_where_user_is_member(CurrentUser.user_email)
+	
+	# Firebase queries will yield back to the caller, so this conditional statement ensures we only 
+	# continue once classrooms has gotten data back from the FirebaseController function
+	if classrooms is GDScriptFunctionState:
+		classrooms = yield(classrooms, "completed")
 
 	# Create a docid to name dictionary for selecting the classroom
 	for classroom in classrooms:
@@ -36,18 +46,102 @@ func _ready():
 	for classroom in classrooms_docid_to_name_dict.values():
 		selectClassroomsButton.add_item(classroom)
 
-	# Disable label
+	# Disable lable
 	selectClassroomsButton.set_item_disabled(0, true)
+	
+	# Ensure the lobbies are visible as soon as you visit the mp page
+	_get_available_lobbies()
 	
 func _on_Back_To_Main_Menu_Button_pressed():
 	if (get_tree().change_scene("res://Menu/MenuScreen.tscn") != OK):
 		print("Failed to change scene")
 
 func _createLobby():
-	get_node("Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton").disabled = true
+	if selectClassroomsButton.get_selected_id() == 0:
+		get_node("Centered/NoClassroomSelectedAlert").popup()
+	elif maxPlayersOptionButton.get_selected_id() == 0:
+		get_node("Centered/NoMaxPlayersDefinedAlert").popup()
+	else:
+		get_node("Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton").disabled = true
+		var lobby_description = {
+			'host' : CurrentUser.user_email,
+			'password' : lobby_password_line_edit.text,
+			'classroom' : selectClassroomsButton.get_item_text(selectClassroomsButton.get_selected_id()),
+			'player_count' : "1/" + maxPlayersOptionButton.get_item_text(maxPlayersOptionButton.get_selected_id()),
+			'chat_enabled' : chat_enabled_checkbutton.pressed,
+			'vote_enabled' : vote_minigame_checkbutton.pressed
+		}
+		FirebaseController.add_new_multiplayer_lobby(lobby_description)
 
-func _offer_created(type, data, id):
+func _on_lobby_selection(lobby_number):
+	selected_lobby = lobby_number
+
+func _on_classroom_selected(_index):
+	# Once the user selects a classroom, query for the classroom decks
 	pass
+
+func _on_RefreshButton_pressed():
+	_get_available_lobbies()		
+
+func _get_available_lobbies():
+	# Remove existing lobby nodes so there aren't duplicates
+	for available in available_lobbies:
+		lobbies_vbox.remove_child(available)
+		
+	# Firebase find lobbies from classrooms you are a member of
+	var lobbies = FirebaseController.get_multiplayer_lobbies(classrooms_docid_to_name_dict.values())
 	
-func _new_ice_candidate(mid_name, index_name, sdp_name, id):
-	pass
+	# Ensure that the firebase function has returned a result before continuing
+	if lobbies is GDScriptFunctionState:
+		lobbies = yield(lobbies, "completed")
+	
+	# Parse the result and add the lobbies to our list
+	for lobby in lobbies:
+		var doc_fields = lobby['doc_fields']
+		var new_lobby = load('res://multiplayer_engine/Lobby_Selection.tscn').instance()
+		
+		# TODO CHANGE WHEN USERNAME FIELD EXISTS
+		# Extract the username from the email as the host
+		var host : String = doc_fields['host']
+		host = host.substr(0, host.find('@'))
+		
+		new_lobby.get_node('HBoxContainer/HostNameLabel').text = host
+		new_lobby.get_node('HBoxContainer/PrivacyStatusLabel').text = 'Public' if doc_fields['password'] == '' else 'Private'
+		new_lobby.password = doc_fields['password'] # We are going to need this info when joining
+		new_lobby.get_node('HBoxContainer/ClassroomLabel').text = doc_fields['classroom']
+		new_lobby.get_node('HBoxContainer/PlayerCountLabel').text = doc_fields['player_count']
+		new_lobby.get_node('HBoxContainer/ChatEnabledLabel').text = 'Enabled' if doc_fields['chat_enabled'] else 'Disabled'
+		
+		# Connect the signal emitted from the button component of the Lobby Selection instance
+		new_lobby.connect('lobby_button_pressed', self, '_on_lobby_button_pressed')		
+		
+		# We need a record of these
+		available_lobbies.append(new_lobby)
+		lobby_docids.append(lobby['doc_name'])
+		
+		# This number is used for indexing when joining
+		new_lobby.lobby_number = available_lobbies.size() - 1
+		
+		# Present it to the list
+		lobbies_vbox.add_child(new_lobby)
+
+func _on_lobby_button_pressed(lobby_number):
+	selected_lobby = lobby_number
+	if available_lobbies[lobby_number].password == '':
+		pword_input_line_edit.text = ''
+		pword_input_line_edit.editable = false
+	else:
+		pword_input_line_edit.editable = true
+	
+	# Make sure only the selected has the highlighted background color
+	for lobby in available_lobbies:
+		if lobby.lobby_number != lobby_number:
+			lobby.get_node('ColorRect').color = lobby.default_color
+
+
+func _on_JoinButton_pressed():
+	if available_lobbies[selected_lobby].password != pword_input_line_edit.text:
+		get_node("Centered/IncorrectJoinPasswordAlert").popup()
+	else:
+		pword_input_line_edit.text = ''
+		join_button.disabled = true
