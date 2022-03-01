@@ -13,6 +13,7 @@ var classrooms_docid_to_name_dict : Dictionary = {}
 var decks
 
 var available_lobbies = []
+var lobby_docids = []
 var selected_lobby = -1
 
 func _ready():
@@ -43,8 +44,11 @@ func _ready():
 	for classroom in classrooms_docid_to_name_dict.values():
 		selectClassroomsButton.add_item(classroom)
 
-	# Disable label
+	# Disable lable
 	selectClassroomsButton.set_item_disabled(0, true)
+	
+	# Ensure the lobbies are visible as soon as you visit the mp page
+	_get_available_lobbies()
 	
 func _on_Back_To_Main_Menu_Button_pressed():
 	if (get_tree().change_scene("res://Menu/MenuScreen.tscn") != OK):
@@ -75,18 +79,37 @@ func _on_classroom_selected(index):
 	pass
 
 func _on_RefreshButton_pressed():
+	_get_available_lobbies()		
+
+func _get_available_lobbies():
+	# Remove existing lobby nodes so there aren't duplicates
+	for available in available_lobbies:
+		lobbies_vbox.remove_child(available)
+		
+	# Firebase find lobbies from classrooms you are a member of
 	var lobbies = FirebaseController.get_multiplayer_lobbies(classrooms_docid_to_name_dict.values())
+	
+	# Ensure that the firebase function has returned a result before continuing
 	if lobbies is GDScriptFunctionState:
 		lobbies = yield(lobbies, "completed")
+	
+	# Parse the result and add the lobbies to our list
 	for lobby in lobbies:
 		var doc_fields = lobby['doc_fields']
 		var new_lobby = load('res://multiplayer_engine/Lobby_Selection.tscn').instance()
 		new_lobby.get_node('HBoxContainer/HostNameLabel').text = doc_fields['host']
 		new_lobby.get_node('HBoxContainer/PrivacyStatusLabel').text = 'Public' if doc_fields['password'] == '' else 'Private'
-		new_lobby.password = doc_fields['password']
+		new_lobby.password = doc_fields['password'] # We are going to need this info when joining
 		new_lobby.get_node('HBoxContainer/ClassroomLabel').text = doc_fields['classroom']
 		new_lobby.get_node('HBoxContainer/PlayerCountLabel').text = doc_fields['player_count']
 		new_lobby.get_node('HBoxContainer/ChatEnabledLabel').text = 'Enabled' if doc_fields['chat_enabled'] else 'Disabled'
+		
+		# We need a record of these
 		available_lobbies.append(new_lobby)
+		lobby_docids.append(lobby['doc_name'])
+		
+		# This number is used for indexing when joining
 		new_lobby.lobby_number = available_lobbies.size() - 1
-		get_node('Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox').add_child(new_lobby)			
+		
+		# Present it to the list
+		lobbies_vbox.add_child(new_lobby)
