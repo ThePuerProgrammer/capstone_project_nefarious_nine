@@ -767,3 +767,20 @@ export async function getCategories() {
     return backend.categories;
 }
 //============================================================================//
+//============================================================================//
+//JOIN Classroom
+//============================================================================//
+export async function joinClassroom(classId, userEmail) {
+    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
+        .update({ members: arrayUnion(userEmail)});
+}
+//============================================================================//
+//LEAVE Classroom
+//============================================================================//
+export async function leaveClassroom(classId, userEmail) {
+    const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
+        .update({ members: arrayRemove(userEmail)});
+}
+//============================================================================//

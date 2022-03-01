@@ -566,6 +566,50 @@
   </div>
   <!-- END CREATE CLASSROOM MODAL---------------------------------------------->
 
+  <!-- MODAL:PREVIEW CLASSROOM ------------------------------------------------------------------------------------------------------------------------------------>
+  <div class="modal fade" id="preview-classroom-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title pomo-text-color-light" id="preview-classroom-modal-label"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pomo-bg-color-light pomo-text-color-dark" id="preview-classroom-modal-body">
+        </div>
+        <div class="modal-footer" id="preview-classroom-modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF PREVIEW CLASSROOM MODAL---------------------------------------------------------------------------------------------------------------------------->
+  <!-- MODAL: CONFIRMATION LEAVE CLASSROOM -------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-confirmation-leave-classroom" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="modal-confirmation-leave-classroom-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-confirmation-delete-deck-title">Confirmation</h5>
+        </div>
+        <div class="modal-body pomo-bg-color-light pomo-text-color-dark" id="modal-confirmation-delete-deck-body">
+          <h6>Are you sure you wish to leave this classroom ?</h6>
+          <h6>If you leave this classroom, you will lose access to
+            this classrooms decks and other activities.</h6>
+        </div>
+        <div class="modal-footer">
+          <form id="form-leave-classroom-confirmation" method="post">
+            <input type="hidden" name="yes" />
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              id="modal-confirmation-leave-classroom-yes" type="submit" data-bs-dismiss="modal">Yes</button>
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              data-bs-dismiss="modal">No</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
+
+
   <!-- MODAL: CONFIRMATION DELETE DECK -------------------------------------------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-confirmation-delete-deck" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="modal-confirmation-delete-deck-label" aria-hidden="true">
