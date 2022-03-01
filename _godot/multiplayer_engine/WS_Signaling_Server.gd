@@ -6,7 +6,8 @@ var _active_lobbies : Dictionary = {
 	# Example structure
 	# 'server firebase docid' : {
 		# 'max_players' : 4,
-		# 'queued_players' : ['user1.uid, user2.uid'], 
+		# 'queued_players' : ['user1.uid, user2.uid'],
+		# 'connected_players' : ['user', 'user2', etc]
 	#}
 }
 
@@ -59,6 +60,10 @@ func create_new_match(lobby):
 		message.game_start = true
 		message.content = new_game
 		_server.get_peer(lobby['queued_players'][0]).put_packet(message.get_raw())
-
+		lobby['queued_players'].remove(0)
+	
+	for n in new_game:
+		lobby['connected_players'][n] = new_game
+			
 func _log():
 	pass
