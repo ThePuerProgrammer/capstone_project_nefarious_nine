@@ -69,7 +69,6 @@ func _physics_process(delta):
 		# When we return to the _middlePosition, stop interpolating
 		if position == _middlePosition:
 			_dodgingLeft = false
-	
 	elif _dodgingRight:
 		# When we reach the left position, turn around to return
 		#	to the middle position

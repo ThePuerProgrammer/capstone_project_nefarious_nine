@@ -1,11 +1,27 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/Resources/floor.tres" type="TileSet" id=1]
 [ext_resource path="res://assets/tilesets/dungeon_fighting/Floor/Sample_Character_Normal_Right.png" type="Texture" id=2]
 [ext_resource path="res://dungeon_fight/player.gd" type="Script" id=3]
+[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_green_foreground.tres" type="StyleBox" id=4]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_48pt.tres" type="DynamicFont" id=5]
+[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_medium_background.tres" type="StyleBox" id=6]
+[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_yellow_foreground.tres" type="StyleBox" id=7]
+[ext_resource path="res://assets/themes/question_tile.tres" type="StyleBox" id=8]
+[ext_resource path="res://dungeon_fight/QuestionManager.gd" type="Script" id=9]
+[ext_resource path="res://dungeon_fight/Buttons/AnswerButton.tscn" type="PackedScene" id=10]
+[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_foreground.tres" type="StyleBox" id=11]
+[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_green_background.tres" type="StyleBox" id=12]
+[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_background.tres" type="StyleBox" id=13]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=14]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24.8649, 65.9436 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 100
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 14 )
 
 [node name="dungeon_fight" type="Node2D"]
 
@@ -14,10 +30,10 @@ mode = 1
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 128, 64 )
 format = 1
-tile_data = PoolIntArray( -3407800, 0, 0, 65549, 0, 0, 65550, 0, 0, 65551, 0, 0 )
+tile_data = PoolIntArray( -3407800, 0, 0, -393198, 0, 0, -393197, 0, 0, -393196, 0, 0, -393195, 0, 0, -393194, 0, 0, -327662, 0, 0, -327661, 0, 0, -327660, 0, 0, -327659, 0, 0, -327658, 0, 0, -262126, 0, 0, -262125, 0, 0, -262124, 0, 0, -262123, 0, 0, -262122, 0, 0, -196590, 0, 0, -196589, 0, 0, -196588, 0, 0, -196587, 0, 0, -196586, 0, 0, -131054, 0, 0, -131053, 0, 0, -131052, 0, 0, -131051, 0, 0, -131050, 0, 0, -65518, 0, 0, -65517, 0, 0, -65516, 0, 0, -65515, 0, 0, -65514, 0, 0, 18, 0, 0, 19, 0, 0, 20, 0, 0, 21, 0, 0, 22, 0, 0, 65554, 0, 0, 65555, 0, 0, 65556, 0, 0, 65557, 0, 0, 65558, 0, 0 )
 
 [node name="Player" type="KinematicBody2D" parent="."]
-position = Vector2( 838.048, 459.615 )
+position = Vector2( 1286.6, 621.467 )
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="Player"]
@@ -27,7 +43,7 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="MiddlePlayerPosition" type="KinematicBody2D" parent="."]
-position = Vector2( 838.048, 459.615 )
+position = Vector2( 1286.6, 621.467 )
 
 [node name="Sprite" type="Sprite" parent="MiddlePlayerPosition"]
 
@@ -35,7 +51,7 @@ position = Vector2( 838.048, 459.615 )
 shape = SubResource( 1 )
 
 [node name="LeftPlayerPosition" type="KinematicBody2D" parent="."]
-position = Vector2( 774.048, 427.523 )
+position = Vector2( 1222.6, 589.376 )
 
 [node name="Sprite" type="Sprite" parent="LeftPlayerPosition"]
 
@@ -43,9 +59,197 @@ position = Vector2( 774.048, 427.523 )
 shape = SubResource( 1 )
 
 [node name="RightPlayerPosition" type="KinematicBody2D" parent="."]
-position = Vector2( 902.048, 491.866 )
+position = Vector2( 1350.6, 653.718 )
 
 [node name="Sprite" type="Sprite" parent="RightPlayerPosition"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightPlayerPosition"]
 shape = SubResource( 1 )
+
+[node name="TimerBar" type="Control" parent="."]
+margin_left = 1015.8
+margin_top = 42.0
+margin_right = 1055.8
+margin_bottom = 82.0
+rect_min_size = Vector2( 850, 50 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBarHbox" type="HBoxContainer" parent="TimerBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBarEasy" type="ProgressBar" parent="TimerBar/ProgressBarHbox"]
+margin_right = 283.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 283, 50 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/fg = ExtResource( 4 )
+custom_styles/bg = ExtResource( 12 )
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBarMedium" type="ProgressBar" parent="TimerBar/ProgressBarHbox"]
+margin_left = 283.0
+margin_right = 566.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 283, 50 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/fg = ExtResource( 7 )
+custom_styles/bg = ExtResource( 6 )
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBarHard" type="ProgressBar" parent="TimerBar/ProgressBarHbox"]
+margin_left = 566.0
+margin_right = 849.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 283, 50 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/fg = ExtResource( 11 )
+custom_styles/bg = ExtResource( 13 )
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuestionMenu" type="Control" parent="."]
+margin_right = 960.0
+margin_bottom = 900.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainColumn" type="VBoxContainer" parent="QuestionMenu"]
+margin_left = 35.0
+margin_top = 30.0
+margin_right = 960.0
+margin_bottom = 900.0
+custom_constants/separation = 62
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuestionTextPanelContainer" type="PanelContainer" parent="QuestionMenu/MainColumn"]
+margin_right = 925.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 0, 300 )
+custom_styles/panel = ExtResource( 8 )
+
+[node name="MarginContainer" type="MarginContainer" parent="QuestionMenu/MainColumn/QuestionTextPanelContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 921.0
+margin_bottom = 296.0
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 6
+
+[node name="ScrollContainer" type="ScrollContainer" parent="QuestionMenu/MainColumn/QuestionTextPanelContainer/MarginContainer"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 909.0
+margin_bottom = 286.0
+
+[node name="QuestionText" type="Label" parent="QuestionMenu/MainColumn/QuestionTextPanelContainer/MarginContainer/ScrollContainer"]
+margin_right = 889.0
+margin_bottom = 700.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = ExtResource( 5 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -7
+custom_constants/shadow_offset_y = 7
+text = "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopAnswerRow" type="HBoxContainer" parent="QuestionMenu/MainColumn"]
+margin_top = 362.0
+margin_right = 925.0
+margin_bottom = 562.0
+custom_constants/separation = 75
+alignment = 1
+
+[node name="Answer1PanelContainer" parent="QuestionMenu/MainColumn/TopAnswerRow" instance=ExtResource( 10 )]
+
+[node name="Answer2PanelContainer" parent="QuestionMenu/MainColumn/TopAnswerRow" instance=ExtResource( 10 )]
+margin_left = 500.0
+margin_right = 900.0
+
+[node name="BottomAnswerRow" type="HBoxContainer" parent="QuestionMenu/MainColumn"]
+margin_top = 624.0
+margin_right = 925.0
+margin_bottom = 824.0
+custom_constants/separation = 75
+alignment = 1
+
+[node name="Answer3PanelContainer" parent="QuestionMenu/MainColumn/BottomAnswerRow" instance=ExtResource( 10 )]
+
+[node name="Answer4PanelContainer" parent="QuestionMenu/MainColumn/BottomAnswerRow" instance=ExtResource( 10 )]
+margin_left = 500.0
+margin_right = 900.0
+
+[node name="PopupMessage" type="Control" parent="."]
+margin_left = 1286.6
+margin_top = 142.544
+margin_right = 1586.6
+margin_bottom = 342.544
+rect_min_size = Vector2( 400, 200 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopupLabel" type="Label" parent="PopupMessage"]
+margin_left = 0.00012207
+margin_right = 300.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 400, 200 )
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -7
+custom_constants/shadow_offset_y = 7
+text = "GO!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuestionManager" type="Node" parent="."]
+script = ExtResource( 9 )
+
+[node name="QuestionTimer" type="Timer" parent="QuestionManager"]
+wait_time = 15.0
+autostart = true
+
+[node name="startGameTimer" type="Timer" parent="QuestionManager"]
+wait_time = 3.5
+
+[connection signal="answer_selected" from="QuestionMenu/MainColumn/TopAnswerRow/Answer1PanelContainer" to="QuestionManager" method="_on_Answer1PanelContainer_answer_selected"]
+[connection signal="answer_selected" from="QuestionMenu/MainColumn/TopAnswerRow/Answer2PanelContainer" to="QuestionManager" method="_on_Answer2PanelContainer_answer_selected"]
+[connection signal="answer_selected" from="QuestionMenu/MainColumn/BottomAnswerRow/Answer3PanelContainer" to="QuestionManager" method="_on_Answer3PanelContainer_answer_selected"]
+[connection signal="answer_selected" from="QuestionMenu/MainColumn/BottomAnswerRow/Answer4PanelContainer" to="QuestionManager" method="_on_Answer4PanelContainer_answer_selected"]
+[connection signal="timeout" from="QuestionManager/QuestionTimer" to="QuestionManager" method="_on_QuestionTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/startGameTimer" to="QuestionManager" method="_on_startGameTimer_timeout"]
