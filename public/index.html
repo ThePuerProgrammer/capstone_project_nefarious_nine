@@ -564,23 +564,23 @@
       </div>
     </div>
   </div>
-  <!-- END CREATE CLASSROOM MODAL---------------------------------------------->
+  <!-- END CREATE CLASSROOM MODAL------------------------------------------------>
 
     <!-- DELETE CLASSROOM Modal ------------------------------------------------->
-  <div class="modal fade" id="modal-delete-classroom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-delete-classroom-titl" aria-hidden="true">
+  <div class="modal fade" id="modal-delete-classroom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-delete-classroom-title" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal-delete-classroom-title">Delete Classroom</h5>
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark">
+          <h5 class="modal-title pomo-text-color-light pomo-font-weight-bold" id="modal-delete-classroom-title">Delete Classroom?</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Understood</button>
-        </div>
+         <form id="form-delete-classroom" method="post">
+            <h3 style="text-align:center">Are you sure you want to delete this classroom?</h3>      
+              <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-bg-color-md-light center" data-cs-dismiss="modal">No thanks</button>
+              <button type="button" class="btn btn-danger pomo-bg-color-dark center" data-cs-dismiss="modal">Yes, plz, delete!</button>                   
+         </form>
+        </div>        
       </div>
     </div>
   </div>

@@ -63,11 +63,7 @@ export const formResetPassword = document.getElementById('form-reset-password');
 //============================================================================//
 /* This allows us to close the modal when an information/popup modal needs to popup.
  * Incase there is an error, we can't have 2 modals open at the same time. */
-// export const modalInfoBox = {
-//     modal: new bootstrap.Modal(document.getElementById('modal-infobox'), {backdrop: 'static'}),
-//     title: document.getElementById('modal-infobox-title'),
-//     body: document.getElementById('modal-infobox-body'),
-// }
+
 export const popupInfoTitle = document.getElementById('modal-infobox-title');
 export const popupInfoBody = document.getElementById('modal-infobox-body');
 
@@ -153,4 +149,5 @@ export const formCreateClassroom = document.getElementById('form-create-classroo
 export const formClassCategorySelect = document.getElementById('select-class-category');
 export const formEditClassroom = document.getElementById('form-edit-classroom');
 export const formEditClassCategorySelect = document.getElementById('edit-class-category');
+export const formDeleteClassroom = document.getElementById('form-delete-classroom');
 //============================================================================//

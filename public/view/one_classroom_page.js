@@ -56,6 +56,9 @@ export async function one_classroom_page(classroomDocID) {
         html += `<h1>${classroom.name}
     
         <button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Edit Classroom</button>
+        <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
+                Delete Classroom
+        </button>
     
         </h1>`;
         html += `
@@ -87,6 +90,7 @@ export async function one_classroom_page(classroomDocID) {
     //following Pipers create classroom functionality
     if (mod == true) { //if owner of classroom, add listener. This avoids null editButton errors.
         const editButton = document.getElementById('button-edit-class');
+        const deleteButton = document.getElementById('button-delete-classroom');
         editButton.addEventListener('click', async e => {
 
             const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
@@ -98,6 +102,10 @@ export async function one_classroom_page(classroomDocID) {
                   `;
             });
             Elements.modalEditClassroom.show();
+        })
+
+        Elements.formDeleteClassroom.addEventListener('click', async e =>{
+
         })
     }
 
