@@ -46,12 +46,13 @@ __meta__ = {
 [node name="TabContainer" type="TabContainer" parent="Centered"]
 self_modulate = Color( 1, 1, 1, 0.717647 )
 margin_left = 298.0
-margin_top = 95.0
+margin_top = 97.0
 margin_right = 1622.0
-margin_bottom = 805.0
+margin_bottom = 803.0
 tab_align = 0
 
 [node name="JoinLobby" type="VBoxContainer" parent="Centered/TabContainer"]
+visible = false
 material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -68,10 +69,19 @@ custom_fonts/font = ExtResource( 1 )
 text = "Active Lobbies"
 align = 1
 
-[node name="ServerListBG" type="ColorRect" parent="Centered/TabContainer/JoinLobby"]
+[node name="RefreshButton" type="Button" parent="Centered/TabContainer/JoinLobby"]
+margin_left = 1256.0
 margin_top = 22.0
 margin_right = 1316.0
-margin_bottom = 636.0
+margin_bottom = 42.0
+size_flags_horizontal = 8
+text = "Refresh"
+align = 0
+
+[node name="ServerListBG" type="ColorRect" parent="Centered/TabContainer/JoinLobby"]
+margin_top = 46.0
+margin_right = 1316.0
+margin_bottom = 660.0
 rect_min_size = Vector2( 1316, 614 )
 size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0.537255 )
@@ -172,9 +182,9 @@ align = 1
 valign = 1
 
 [node name="JoinHBox" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby"]
-margin_top = 640.0
+margin_top = 664.0
 margin_right = 1316.0
-margin_bottom = 674.0
+margin_bottom = 698.0
 size_flags_horizontal = 3
 alignment = 2
 
@@ -184,11 +194,6 @@ margin_bottom = 34.0
 size_flags_horizontal = 2
 text = "Back to Main Menu"
 align = 0
-
-[node name="RefreshButton" type="Button" parent="Centered/TabContainer/JoinLobby/JoinHBox"]
-margin_left = 955.0
-margin_right = 967.0
-margin_bottom = 34.0
 
 [node name="PwordInput" type="LineEdit" parent="Centered/TabContainer/JoinLobby/JoinHBox"]
 margin_left = 971.0
@@ -207,7 +212,6 @@ text = " Connect To Lobby"
 icon = ExtResource( 3 )
 
 [node name="CreateLobby" type="VBoxContainer" parent="Centered/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -374,7 +378,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ChatEnabledCheckbutton2" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
+[node name="VoteNextMinigameCheckbutton" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
 margin_left = 919.0
 margin_top = 485.0
 margin_right = 995.0
@@ -399,7 +403,14 @@ margin_bottom = 30.0
 text = "Create Lobby"
 icon = ExtResource( 10 )
 
+[node name="NoClassroomSelectedAlert" type="AcceptDialog" parent="Centered"]
+margin_left = 841.0
+margin_top = 421.0
+margin_right = 1079.0
+margin_bottom = 479.0
+dialog_text = "You Must First Select A Classroom!"
+
+[connection signal="pressed" from="Centered/TabContainer/JoinLobby/RefreshButton" to="." method="_on_RefreshButton_pressed"]
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]
-[connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/RefreshButton" to="." method="_on_RefreshButton_pressed"]
 [connection signal="item_selected" from="Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton" to="." method="_on_classroom_selected"]
 [connection signal="pressed" from="Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton" to="." method="_createLobby"]

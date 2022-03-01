@@ -3,6 +3,10 @@ extends Node
 onready var maxPlayersOptionButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/MaxPlayersOptionButton")
 onready var selectClassroomsButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton")
 onready var lobbies_vbox = get_node("Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox")
+onready var lobby_password_line_edit = get_node("Centered/TabContainer/CreateLobby/LobbySettings/PasswordLineEdit")
+onready var chat_enabled_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/ChatEnabledCheckbutton")
+onready var vote_minigame_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton")
+
 
 const collections : Dictionary = {
 	'lobbies' : 'lobbies',
@@ -52,21 +56,19 @@ func _on_Back_To_Main_Menu_Button_pressed():
 		print("Failed to change scene")
 
 func _createLobby():
-	get_node("Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton").disabled = true
-	
-	# Instantiate a new lobby button scene
-	var new_lobby = load('res://multiplayer_engine/Lobby_Selection.tscn').instance()
-	lobbies.append(new_lobby)
-	
-	# Connect its signals	
-	new_lobby.connect('lobby_button_pressed', self, '_on_lobby_selection')
-	
-	# Describe the lobby
-	new_lobby.lobby_number = lobbies.size() - 1
-	new_lobby.get_node('HBoxContainer/HostNameLabel').text = 'poop'
-	
-	# Add it to the scene
-	lobbies_vbox.add_child(new_lobby)
+	if selectClassroomsButton.get_selected_id() == 0:
+		get_node("Centered/NoClassroomSelectedAlert").popup()
+	else:
+		get_node("Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton").disabled = true
+		var lobby_description = {
+			'host' : CurrentUser.user_email,
+			'password' : lobby_password_line_edit.text,
+			'classroom' : selectClassroomsButton.get_item_text(selectClassroomsButton.get_selected_id()),
+			'player_count' : "1/" + maxPlayersOptionButton.get_item_text(maxPlayersOptionButton.get_selected_id()),
+			'chat_enabled' : chat_enabled_checkbutton.pressed,
+			'vote_enabled' : vote_minigame_checkbutton.pressed
+		}
+		FirebaseController.add_new_multiplayer_lobby(lobby_description)
 
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
@@ -76,4 +78,7 @@ func _on_classroom_selected(index):
 	pass
 
 func _on_RefreshButton_pressed():
-	pass # Replace with function body.
+	var res = FirebaseController.get_multiplayer_lobbies(classrooms_docid_to_name_dict.values())
+	if res is GDScriptFunctionState:
+		res = yield(res, "completed")
+	
