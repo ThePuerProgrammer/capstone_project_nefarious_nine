@@ -81,9 +81,16 @@ export async function one_classroom_page(classroomDocID) {
         <div class="column">
         <h2>Members</h2>`;
 
-    members.forEach(member => {
-        html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
-    })
+    // If mod, show members w BAN option
+    if (mod == true) {
+        members.forEach(member => {
+            html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
+        })
+    } else {
+        members.forEach(member => {
+            html += `<p>${member}</p>`;
+        })
+    }
 
     html += `</div>
         <div class="column">
