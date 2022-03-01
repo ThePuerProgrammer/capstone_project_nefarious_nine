@@ -319,8 +319,8 @@ export async function classrooms_page() {
     // sets myclassrooms as default
     myClassroomButton.click();
 
-    const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
 
+    const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
     // CREATE CLASSROOM open modal button listener 
     createClassroomButton.addEventListener('click', async e => {
 
@@ -341,8 +341,7 @@ export async function classrooms_page() {
 
         categories.forEach(category => {
             Elements.formClassCategorySelect.innerHTML += `
-                      <option value="${category}">${category}</option>
-                  `;
+                      <option value="${category}">${category}</option>`;
         });
 
         // opens create Classroom modal
