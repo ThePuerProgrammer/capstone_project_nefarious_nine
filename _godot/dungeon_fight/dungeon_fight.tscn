@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://assets/Resources/floor.tres" type="TileSet" id=1]
 [ext_resource path="res://assets/tilesets/dungeon_fighting/Floor/Sample_Character_Normal_Right.png" type="Texture" id=2]
@@ -15,6 +15,15 @@
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_background.tres" type="StyleBox" id=13]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=14]
 [ext_resource path="res://dungeon_fight/PopupLabel.gd" type="Script" id=15]
+[ext_resource path="res://assets/tilesets/dungeon_fighting/Enemy/Enemy_idle_test.png" type="Texture" id=16]
+[ext_resource path="res://assets/tilesets/dungeon_fighting/Enemy/Enemy_Hard_Test.png" type="Texture" id=17]
+[ext_resource path="res://assets/tilesets/dungeon_fighting/Enemy/Enemy_Medium_Test.png" type="Texture" id=18]
+[ext_resource path="res://assets/tilesets/dungeon_fighting/Enemy/Enemy_Easy_Test.png" type="Texture" id=19]
+[ext_resource path="res://dungeon_fight/Vignette.gd" type="Script" id=20]
+[ext_resource path="res://dungeon_fight/Effects.gd" type="Script" id=21]
+[ext_resource path="res://dungeon_fight/WhiteOut.gd" type="Script" id=22]
+[ext_resource path="res://assets/Resources/vignette_animation.tres" type="Animation" id=23]
+[ext_resource path="res://dungeon_fight/WhiteIn.gd" type="Script" id=24]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24.8649, 65.9436 )
@@ -23,6 +32,90 @@ extents = Vector2( 24.8649, 65.9436 )
 size = 100
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 14 )
+
+[sub_resource type="Shader" id=10]
+code = "shader_type canvas_item;
+
+uniform vec4 color: hint_color;
+uniform float multiplier = 0.2;
+uniform float softness = 3.0;
+
+void fragment() 
+{	
+	float value = distance(UV, vec2(0.5));
+	COLOR = vec4(color.rgb, smoothstep(multiplier, softness, value));	
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 10 )
+shader_param/color = Color( 0, 0, 0, 1 )
+shader_param/multiplier = -0.122
+shader_param/softness = 12.0
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "white_in"
+
+[sub_resource type="Animation" id=6]
+resource_name = "white_out"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "white_in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
 
 [node name="dungeon_fight" type="Node2D"]
 
@@ -73,9 +166,6 @@ margin_top = 42.0
 margin_right = 1055.8
 margin_bottom = 82.0
 rect_min_size = Vector2( 850, 50 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ProgressBarHbox" type="HBoxContainer" parent="TimerBar"]
 margin_right = 40.0
@@ -129,9 +219,6 @@ __meta__ = {
 [node name="QuestionMenu" type="Control" parent="."]
 margin_right = 960.0
 margin_bottom = 900.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MainColumn" type="VBoxContainer" parent="QuestionMenu"]
 margin_left = 35.0
@@ -170,11 +257,11 @@ margin_right = 889.0
 margin_bottom = 700.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
-custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
 custom_constants/shadow_offset_x = -7
 custom_constants/shadow_offset_y = 7
+custom_fonts/font = ExtResource( 5 )
 text = "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
 align = 1
 valign = 1
@@ -215,9 +302,6 @@ margin_top = 142.544
 margin_right = 1586.6
 margin_bottom = 342.544
 rect_min_size = Vector2( 400, 200 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PopupLabel" type="Label" parent="PopupMessage"]
 margin_left = 0.00012207
@@ -225,12 +309,12 @@ margin_right = 300.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 400, 200 )
 size_flags_vertical = 1
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
 custom_constants/shadow_offset_x = -7
 custom_constants/shadow_offset_y = 7
+custom_fonts/font = SubResource( 2 )
 text = "GO!"
 align = 1
 valign = 1
@@ -241,17 +325,61 @@ __meta__ = {
 
 [node name="QuestionManager" type="Node" parent="."]
 script = ExtResource( 9 )
+_enemyIdleTest_tex = ExtResource( 16 )
+_enemyEasyTest_tex = ExtResource( 19 )
+_enemyMediumTest_tex = ExtResource( 18 )
+_enemyHardTest_tex = ExtResource( 17 )
 
 [node name="QuestionTimer" type="Timer" parent="QuestionManager"]
-wait_time = 15.0
-autostart = true
+wait_time = 1.5
 
 [node name="startGameTimer" type="Timer" parent="QuestionManager"]
-wait_time = 3.5
+
+[node name="Enemy" type="Sprite" parent="."]
+position = Vector2( 1401.55, 517.46 )
+texture = ExtResource( 16 )
+
+[node name="Effects" type="CanvasLayer" parent="."]
+script = ExtResource( 21 )
+
+[node name="Vignette" type="ColorRect" parent="Effects"]
+visible = false
+material = SubResource( 4 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 20 )
+
+[node name="VignetteAnimationPlayer" type="AnimationPlayer" parent="Effects/Vignette"]
+anims/vignette_animation = ExtResource( 23 )
+
+[node name="WhiteOut" type="ColorRect" parent="Effects"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 22 )
+
+[node name="WhiteOutAnimationPlayer" type="AnimationPlayer" parent="Effects/WhiteOut"]
+anims/RESET = SubResource( 5 )
+anims/white_in = SubResource( 7 )
+anims/white_out = SubResource( 6 )
+
+[node name="WhiteIn" type="ColorRect" parent="Effects"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 24 )
+
+[node name="WhiteInAnimationPlayer" type="AnimationPlayer" parent="Effects/WhiteIn"]
+anims/RESET = SubResource( 8 )
+anims/white_in = SubResource( 9 )
 
 [connection signal="answer_selected" from="QuestionMenu/MainColumn/TopAnswerRow/Answer1PanelContainer" to="QuestionManager" method="_on_Answer1PanelContainer_answer_selected"]
 [connection signal="answer_selected" from="QuestionMenu/MainColumn/TopAnswerRow/Answer2PanelContainer" to="QuestionManager" method="_on_Answer2PanelContainer_answer_selected"]
 [connection signal="answer_selected" from="QuestionMenu/MainColumn/BottomAnswerRow/Answer3PanelContainer" to="QuestionManager" method="_on_Answer3PanelContainer_answer_selected"]
 [connection signal="answer_selected" from="QuestionMenu/MainColumn/BottomAnswerRow/Answer4PanelContainer" to="QuestionManager" method="_on_Answer4PanelContainer_answer_selected"]
 [connection signal="timeout" from="QuestionManager/QuestionTimer" to="QuestionManager" method="_on_QuestionTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/QuestionTimer" to="Effects" method="_on_QuestionTimer_timeout"]
 [connection signal="timeout" from="QuestionManager/startGameTimer" to="QuestionManager" method="_on_startGameTimer_timeout"]
+[connection signal="animation_finished" from="Effects/Vignette/VignetteAnimationPlayer" to="Effects" method="_on_VignetteAnimationPlayer_animation_finished"]
+[connection signal="animation_finished" from="Effects/WhiteOut/WhiteOutAnimationPlayer" to="Effects" method="_on_WhiteOutAnimationPlayer_animation_finished"]
+[connection signal="animation_finished" from="Effects/WhiteIn/WhiteInAnimationPlayer" to="Effects" method="_on_WhiteInAnimationPlayer_animation_finished"]

@@ -13,4 +13,4 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 shadow_color = Color( 0, 0, 0, 0.121569 )
 shadow_size = 10
-anti_aliasing_size = 2
+anti_aliasing_size = 2.0
