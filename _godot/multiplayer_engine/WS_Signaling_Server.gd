@@ -51,10 +51,18 @@ func _process(_delta):
 
 	for lobby in _active_lobbies:
 		if lobby['queued_players'].size() >= lobby['max_players']:
-			create_new_match()
+			create_new_match(lobby)
 
-func create_new_match():
-	pass
+func create_new_match(lobby):
+	var new_game = []
+	for player in lobby['queued_players']:
+		new_game.append(player)
+
+	for _i in range(lobby['max_players']):
+		var message = load('res://multiplayer_engine/Message.gd').new()
+		message.game_start = true
+		message.content = new_game
+		_server.get_peer(lobby['queued_players'][0]).put_packet(message.get_raw())
 
 func _log():
 	pass

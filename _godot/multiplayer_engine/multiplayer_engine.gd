@@ -19,6 +19,7 @@ var lobby_docids = []
 var selected_lobby = -1
 
 var peer
+var peer_id
 var data_channel
 
 func _ready():
@@ -75,6 +76,7 @@ func _createLobby():
 			'vote_enabled' : vote_minigame_checkbutton.pressed
 		}
 		FirebaseController.add_new_multiplayer_lobby(lobby_description)
+		peer_id = _generate_peer_id()
 		
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
@@ -157,7 +159,7 @@ func _generate_peer_id():
 	# could prevent overlap. But in this case, the uid is converted to an array of bytes
 	# that array is summed together as int values. The original uid becomes the seed hash for an rng
 	# along with the current unix time and the final value is the product of the rng and the int 
-	# representation of the uid
+	# representation of the uid. It's not perfect, but it should do for now. 
 	var uid : String = CurrentUser.user_id
 	var pool_bytes = uid.to_ascii()
 	var bytes_to_int = 0
@@ -165,5 +167,5 @@ func _generate_peer_id():
 		bytes_to_int += int(byte)
 	var rng = RandomNumberGenerator.new()
 	rng.seed = hash(uid) + OS.get_unix_time()
-	var random_number = rng.rand_range(1, 1000) 
+	var random_number = rng.rand_range(1, 100000) 
 	return random_number * bytes_to_int
