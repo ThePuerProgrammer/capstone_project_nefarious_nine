@@ -1,7 +1,5 @@
 extends Node
 
-const PORT = 6969
-
 onready var _server = WebSocketServer.new()
 
 var _active_lobbies : Dictionary = {
@@ -20,13 +18,13 @@ func _ready():
 	_server.connect("data_received", self, "_on_data")
 
 	# Start listening
-	var err = _server.listen(PORT)
+	var err = _server.listen(Constants.SERVER_PORT)
 	if err != OK:
 		print("Unable to start server")
 		set_process(false)
 
 	# Won't ever make it here if unsuccessful
-	print('Server listening on port: ', PORT)
+	print('Server listening on port: ', Constants.SERVER_PORT)
 
 	_log()
 
@@ -45,8 +43,6 @@ func _on_data(id):
 	_server.get_peer(id).put_packet(pkt)
 
 func _process(_delta):
-	# Call this in _process or _physics_process.
-	# Data transfer, and signals emission will only happen when calling this function.
 	_server.poll()
 
 	for lobby in _active_lobbies:
@@ -59,7 +55,7 @@ func create_new_match(lobby):
 		new_game.append(player)
 
 	for _i in range(lobby['max_players']):
-		var message = load('res://multiplayer_engine/Message.gd').new()
+		var message = Message.new()
 		message.game_start = true
 		message.content = new_game
 		_server.get_peer(lobby['queued_players'][0]).put_packet(message.get_raw())
