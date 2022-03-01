@@ -74,7 +74,7 @@ func _createLobby():
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
 
-func _on_classroom_selected(index):
+func _on_classroom_selected(_index):
 	# Once the user selects a classroom, query for the classroom decks
 	pass
 
@@ -104,6 +104,9 @@ func _get_available_lobbies():
 		new_lobby.get_node('HBoxContainer/PlayerCountLabel').text = doc_fields['player_count']
 		new_lobby.get_node('HBoxContainer/ChatEnabledLabel').text = 'Enabled' if doc_fields['chat_enabled'] else 'Disabled'
 		
+		# Connect the signal emitted from the button component of the Lobby Selection instance
+		new_lobby.connect('lobby_button_pressed', self, '_on_lobby_button_pressed')		
+		
 		# We need a record of these
 		available_lobbies.append(new_lobby)
 		lobby_docids.append(lobby['doc_name'])
@@ -113,3 +116,11 @@ func _get_available_lobbies():
 		
 		# Present it to the list
 		lobbies_vbox.add_child(new_lobby)
+
+func _on_lobby_button_pressed(lobby_number):
+	selected_lobby = lobby_number
+	
+	# Make sure only the selected has the highlighted background color
+	for lobby in available_lobbies:
+		if lobby.lobby_number != lobby_number:
+			lobby.get_node('ColorRect').color = lobby.default_color
