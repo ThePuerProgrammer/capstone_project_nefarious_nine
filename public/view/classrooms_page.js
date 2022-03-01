@@ -47,13 +47,12 @@ export function addEventListeners() {
             classroom.docId = docId;
             localStorage.setItem("classroomPageClassroomDocID", classroom.docId);
             Elements.modalCreateClassroom.hide();
-            //history.pushState(null, null, Routes.routePathname.CLASSROOM + "#" + classroom.docId);
-            // await DeckPage.deck_page(deck.docId);
+            history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' +  classroom.docId);
+            await OneClassroomPage.one_classroom_page( classroom.docId);
         } catch (e) {
             if (Constant.DEV)
                 console.log(e);
         }
-        await classrooms_page();
     });
 
     // Clears CREATE CLASSROOM input fields when user closes modal
@@ -131,7 +130,7 @@ export async function classrooms_page() {
     })
     html += `</tbody></table></div>`;
 
-    // My Classrooms tab with create classroom buton
+    // My Classrooms tab with create classroom button
     html += `<div id="My Classrooms" class="classroom-tab-content">
         <button id="${Constant.htmlIDs.createClassroom}" type="button" class="btn btn-secondary pomo-bg-color-dark">
         Create Classroom</button>`;
@@ -197,7 +196,7 @@ export async function classrooms_page() {
 
     const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
 
-    // create classroom open modal button listener 
+    // CREATE CLASSROOM open modal button listener 
     createClassroomButton.addEventListener('click', async e => {
 
         const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];

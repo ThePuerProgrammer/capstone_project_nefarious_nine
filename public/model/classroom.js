@@ -5,7 +5,7 @@ export class Classroom {
     constructor(data) {
         this.name = data.name;
         this.subject = data.subject;
-        this.dateCreated = data.dateCreated;
+        //this.dateCreated = data.dateCreated;
         //this.isFavorited = data.isFavorited;
         this.category = data.category;
         this.moderatorList = data.moderatorList;
