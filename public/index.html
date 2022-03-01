@@ -20,6 +20,7 @@
 
   <title>Pomobyte</title>
 </head>
+
 <body class="pomo-bg-color-light">
 
   <!-- NAV BAR -------------------------------------------------------------->
@@ -176,44 +177,84 @@
   </div>
   <!--END OF RESET PASSWORD -------------------------------------------------------->
 
-   <!-- ADOPTION MODAL -------------------------------------------------------------->
- <div class="modal fade" id="modal-pomodoption" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
- aria-labelledby="modal-pomodoption-label" aria-hidden="true">
- <div class="modal-dialog">
-   <div class="modal-content">
-     <div class="modal-header pomo-bg-color-dark">
-       <h5 class="modal-title pomo-text-color-light" id="modal-pomodoption-label">Adopt A PomoPet!</h5>
-       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-     </div>
-     <div class="modal-body pomo-bg-color-light pomo-text-color-dark">
-       <form method="post" id="form-pomodoption">
-         <h2>Welcome to Pomobyte!</h2>
-         <p>You can now adopt a Pomopet to help you on your study quest!</p>
-         <div id="pet-selected"></div>
-         <div class="row" style="padding-bottom: 20%;">
-           <label class="raise" style="width: 70px;">
-             <input type="radio" class="resize" name="pet" value="Bunny" checked>
-             <img src="./assets/images/Bunny Sprite.png" width="150" height="150">
-           </label>
-           <label class="raise resize" style="width: 70px; left: 15%;">
-             <input type="radio" class="resize" name="pet" value="Dog">
-             <img src="./assets/images/Rembo Sprite.png" width="150" height="150">
-           </label>
-           <label class="raise resize" style="width: 70px; left: 30%;">
-             <input type="radio" class="resize" name="pet" value="Cat">
-             <img src="./assets/images/Cat Sprite.png" width="150" height="150">
-           </label>
-         </div>
-         <div class="modal-footer">
-           <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button type="submit"
-             >Adopt</button>
-         </div>
-       </form>
-     </div>
-   </div>
- </div>
-</div>
-<!-------------------------------------------------------------------------------->
+  <!--EDIT CLASSROOM -------------------------------------------------------->
+  <div class="modal fade" id="modal-edit-classroom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-edit-classroom-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header">
+          <h5 class="modal-title pomo-text-color-light" id="modal-edit-classroom-label">Edit Classroom</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-edit-classroom" method="post">
+            <div class="form-group">
+              <label class="pomo-text-color-light" for="name">Name</label>
+              <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
+                required minlength="2" id="class-title">
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="subject">Subject</label>
+              <input class="form-control form-control-lg" type="subject" name='subject'
+                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="class-subject">
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="editClassCategory">Category</label>
+              <br>
+              <select id="edit-class-category" name="editClassCategory" class="form-edit-classroom-category"
+                aria-label="Default select example" style="width:300px;"></select>
+            </div>
+            <br>
+            <br>
+            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-create-deck"
+              type="submit">Submit Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--END EDIT CLASSROOM -------------------------------------------------------->
+
+
+  <!-- ADOPTION MODAL -------------------------------------------------------------->
+  <div class="modal fade" id="modal-pomodoption" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-pomodoption-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header pomo-bg-color-dark">
+          <h5 class="modal-title pomo-text-color-light" id="modal-pomodoption-label">Adopt A PomoPet!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pomo-bg-color-light pomo-text-color-dark">
+          <form method="post" id="form-pomodoption">
+            <h2>Welcome to Pomobyte!</h2>
+            <p>You can now adopt a Pomopet to help you on your study quest!</p>
+            <div id="pet-selected"></div>
+            <div class="row" style="padding-bottom: 20%;">
+              <label class="raise" style="width: 70px;">
+                <input type="radio" class="resize" name="pet" value="Bunny" checked>
+                <img src="./assets/images/Bunny Sprite.png" width="150" height="150">
+              </label>
+              <label class="raise resize" style="width: 70px; left: 15%;">
+                <input type="radio" class="resize" name="pet" value="Dog">
+                <img src="./assets/images/Rembo Sprite.png" width="150" height="150">
+              </label>
+              <label class="raise resize" style="width: 70px; left: 30%;">
+                <input type="radio" class="resize" name="pet" value="Cat">
+                <img src="./assets/images/Cat Sprite.png" width="150" height="150">
+              </label>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button
+                type="submit">Adopt</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-------------------------------------------------------------------------------->
 
 
   <!-- CREATE DECK MODAL----------------------------------------------------->
@@ -221,7 +262,7 @@
     aria-labelledby="create-deck-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header">
+        <div class="modal-header pomo-text-color-light">
           <h5 class="modal-title pomo-text-color-light" id="create-deck-modal-label">Create A New Deck</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -236,10 +277,10 @@
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
                 placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="deck-subject">
-                <br>
-                <br>
-                <label class="pomo-text-color-light" for="selectCategory">Category</label>
-                <br>
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="selectCategory">Category</label>
+              <br>
               <select id="select-deck-category" name="selectCategory" class="form-select-deck-category"
                 aria-label="Default select example" style="width:300px;"></select>
             </div>
@@ -254,7 +295,53 @@
   </div>
   <!-- END CREATE DECK MODAL---------------------------------------------->
 
-  <!-- MODAL:CREATE A FLASHCARD -->
+  <!-- EDIT DECK MODAL----------------------------------------------------->
+  <div class="modal fade" id="modal-edit-a-deck" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-edit-a-deck-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title pomo-text-color-light" id="modal-edit-a-deck-title">Edit Deck</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-edit-a-deck" method="post">
+            <input type="hidden" name="docId" />
+            <input type="hidden" name="isFavorited" />
+            <input type="hidden" name="dateCreated" />
+            <div class="form-group">
+              <div id="form-edit-deck-name">
+                <label class="pomo-text-color-light" for="name">Name</label>
+                <input class="form-control form-control-lg" type="name" name="name" required minlength="2"
+                  id="deck-title-edit">
+              </div>
+              <br>
+              <br>
+              <div id="form-edit-deck-subject">
+                <label class="pomo-text-color-light" for="subject">Subject</label>
+                <input class="form-control form-control-lg" type="subject" name="subject" required minlength="2"
+                  id="deck-subject-edit">
+              </div>
+              <br>
+              <div id="form-edit-deck-category">
+                <label class="pomo-text-color-light" for="selectCategory">Category</label>
+                <br>
+                <select id="select-deck-category-edit" name="selectCategory" class="form-select-deck-category"
+                  aria-label="Default select example" style="width:300px;"></select>
+              </div>
+            </div>
+            <br>
+            <br>
+            <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="float:right"
+              id="decks-edit-deck" type="submit">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END EDIT DECK MODAL---------------------------------------------->
+
+  <!-- MODAL:CREATE A FLASHCARD ---------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-create-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -328,8 +415,8 @@
       </div>
     </div>
   </div>
-
-  <!-- MODAL:EDIT A FLASHCARD -->
+  <!-- END OF CREATE A FLASHCARD----------------------------------------------------------------------------------------->
+  <!-- MODAL:EDIT A FLASHCARD ----------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-edit-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -342,12 +429,12 @@
           <form id="form-edit-a-flashcard" method="post">
             <input type="hidden" name="docId" />
             <input type="hidden" name="deckDocId" />
-            <input type="hidden" name="isMultipleChoice"/>
-            <input type="hidden" name="incorrectAnswers"/>
+            <input type="hidden" name="isMultipleChoice" />
+            <input type="hidden" name="incorrectAnswers" />
             <input type="hidden" name="questionImageName" />
             <input type="hidden" name="answerImageName" />
-            <input type="hidden" name="questionImageURL"/>
-            <input type="hidden" name="answerImageURL"/>
+            <input type="hidden" name="questionImageURL" />
+            <input type="hidden" name="answerImageURL" />
             <div class="btn-group" role="group" aria-label="basic checkbox toggle button group">
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch"
@@ -384,8 +471,8 @@
             <br />
             <h3 style="text-align:center"><u>Answer Side</u></h3>
             <div id="form-edit-answer-container">
-              Answer: <textarea name="answer" id="form-answer-text-input-edit" type="text" name="flashcard-answer" 
-                class="form-control" placeholder ="At least 4." required min length="1"></textarea>
+              Answer: <textarea name="answer" id="form-answer-text-input-edit" type="text" name="flashcard-answer"
+                class="form-control" placeholder="At least 4." required minlength="1" maxlength="30"></textarea>
             </div>
             <br />
             <div id="form-edit-flashcard-answer-image-container">
@@ -403,47 +490,49 @@
       </div>
     </div>
   </div>
-
+  <!-- END OF EDIT A FLASHCARD----------------------------------------------------------------------------------------->
   <!-- MODAL:DELETE A FLASHCARD -->
   <div class="modal fade" id="modal-delete-a-flashcard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden=" true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
-          <h5 class="modal-title pomo-text-color-light" id="delete-flashcard-modal-label">Delete a flashcard
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <span class="content-width-delete-flashcard">
+        <div class="modal-content pomo-bg-color-md-dark">
+          <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+            <h5 class="modal-title pomo-text-color-light" id="delete-flashcard-modal-label">Delete a flashcard
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="form-delete-flashcard">
+              <select class="form-select-delete-flashcard" id="delete-option" onChange="update()">
+                <option selected>Choose a flashcard to delete</option>
+              </select>
+              <input type="hidden" id="value">
+              <script type="text/javascript">
+                function update() {
+                  var select = document.getElementById('delete-option');
+                  var option = select.options[select.selectedIndex];
+                  document.getElementById('value').value = option.value;
+                }
+                update();
+              </script>
+              <br>
+              <div class="delete-flashcard-css-class">
+                <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Delete</button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div class="modal-body">
-          <form id="form-delete-flashcard">
-            <select class="form-select-delete-flashcard" id="delete-option" onChange="update()">
-              <option selected>Choose a flashcard to delete</option>
-            </select>
-            <input type="hidden" id="value">
-            <script type="text/javascript">
-              function update() {
-                var select = document.getElementById('delete-option');
-                var option = select.options[select.selectedIndex];
-                document.getElementById('value').value = option.value;
-              }
-              update();
-            </script>
-            <br>
-            <div class="delete-flashcard-css-class">
-            <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Delete</button>
-           </div>
-          </form>   
-        </div>
-        </div>
-      </div>
+      </span>
     </div>
-  
+  </div>
 
-    <!-- CREATE CLASSROOM MODAL----------------------------------------------------->
-    <div class="modal fade" id="create-classroom-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+
+  <!-- CREATE CLASSROOM MODAL----------------------------------------------------->
+  <div class="modal fade" id="create-classroom-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="create-classroom-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content pomo-bg-color-md-dark">
+      <div class="modal-content pomo-bg-color-dark">
         <div class="modal-header">
           <h5 class="modal-title pomo-text-color-light" id="create-classroom-modal-label">Create A New Classroom</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -452,23 +541,23 @@
           <form id="form-create-classroom" method="post">
             <div class="form-group">
               <label class="pomo-text-color-light" for="name">Name</label>
-              <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
+              <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. CMSC 4433"
                 required minlength="2" id="class-title">
               <br>
               <br>
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
-                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="class-subject">
-                <br>
-                <br>
-                <label class="pomo-text-color-light" for="selectClassCategory">Category</label>
-                <br>
+                placeholder="e.g. Software Design & Development" required minlength="2" id="class-subject">
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="selectClassCategory">Category</label>
+              <br>
               <select id="select-class-category" name="selectClassCategory" class="form-select-class-category"
                 aria-label="Default select example" style="width:300px;"></select>
             </div>
             <br>
             <br>
-            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-create-deck"
+            <button class="btn btn-secondary pomo-bg-color-md-dark" style="float:right" id="class-create-deck"
               type="submit">Create Classroom</button>
           </form>
         </div>
@@ -477,7 +566,78 @@
   </div>
   <!-- END CREATE CLASSROOM MODAL---------------------------------------------->
 
-  <!-- Modal: Popup Info Box -->
+  <!-- MODAL:PREVIEW CLASSROOM ------------------------------------------------------------------------------------------------------------------------------------>
+  <div class="modal fade" id="preview-classroom-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title pomo-text-color-light" id="preview-classroom-modal-label"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pomo-bg-color-light pomo-text-color-dark" id="preview-classroom-modal-body">
+        </div>
+        <div class="modal-footer" id="preview-classroom-modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF PREVIEW CLASSROOM MODAL---------------------------------------------------------------------------------------------------------------------------->
+  <!-- MODAL: CONFIRMATION LEAVE CLASSROOM -------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-confirmation-leave-classroom" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="modal-confirmation-leave-classroom-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-confirmation-delete-deck-title">Confirmation</h5>
+        </div>
+        <div class="modal-body pomo-bg-color-light pomo-text-color-dark" id="modal-confirmation-delete-deck-body">
+          <h6>Are you sure you wish to leave this classroom ?</h6>
+          <h6>If you leave this classroom, you will lose access to
+            this classrooms decks and other activities.</h6>
+        </div>
+        <div class="modal-footer">
+          <form id="form-leave-classroom-confirmation" method="post">
+            <input type="hidden" name="yes" />
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              id="modal-confirmation-leave-classroom-yes" type="submit" data-bs-dismiss="modal">Yes</button>
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              data-bs-dismiss="modal">No</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
+
+
+  <!-- MODAL: CONFIRMATION DELETE DECK -------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-confirmation-delete-deck" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="modal-confirmation-delete-deck-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-confirmation-delete-deck-title">Confirmation</h5>
+        </div>
+        <div class="modal-body pomo-bg-color-light pomo-text-color-dark" id="modal-confirmation-delete-deck-body">
+          <h6>Are you sure you wish to delete this deck?</h6>
+          <h6>If you delete this deck, it will be permanently
+            removed and all flashcards within the deck will be lost.</h6>
+        </div>
+        <div class="modal-footer">
+          <form id="form-delete-deck-confirmation" method="post">
+            <input type="hidden" name="yes" />
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              id="modal-confirmation-delete-deck-yes" type="submit" data-bs-dismiss="modal">Yes</button>
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              data-bs-dismiss="modal">No</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
+
+  <!-- Modal: Popup Info Box -------------------------------------------------->
   <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="modal-infobox-label" aria-hidden="true">
     <div class="modal-dialog">
@@ -493,7 +653,7 @@
       </div>
     </div>
   </div>
-
+  <!-- END OF POPUP INFO BOX----------------------------------------------------->
   <!-- SPA TARGET IS ROOT -->
   <div id="root"></div>
 

@@ -10,6 +10,7 @@ import * as Deck from './view/deck_page.js'
 import * as Study from '../view/study_page.js'
 import * as Minigames from '../view/minigames_page.js'
 import * as EditFlashcard from './controller/edit_flashcard.js'
+import * as EditDeck from './controller/edit_deck.js'
 
 window.onload = () => {
     const pathname = window.location.pathname;
@@ -36,3 +37,4 @@ Deck.addEventListeners();
 Study.addEventListeners();
 Minigames.addEventListeners();
 EditFlashcard.addEventListeners();
+EditDeck.addEventListeners();

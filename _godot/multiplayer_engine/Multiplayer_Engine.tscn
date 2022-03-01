@@ -1,11 +1,8 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=1]
-[ext_resource path="res://multiplayer_engine/p2p_client.gd" type="Script" id=2]
 [ext_resource path="res://assets/icons/outline_keyboard_double_arrow_up_black_24dp.png" type="Texture" id=3]
 [ext_resource path="res://multiplayer_engine/multiplayer_engine.gd" type="Script" id=4]
-[ext_resource path="res://multiplayer_engine/ws_auth_server.gd" type="Script" id=5]
-[ext_resource path="res://multiplayer_engine/p2p_server.gd" type="Script" id=6]
 [ext_resource path="res://assets/icons/outline_key_black_24dp.png" type="Texture" id=7]
 [ext_resource path="res://Pomo_BG.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/icons/outline_sports_esports_black_24dp.png" type="Texture" id=10]
@@ -47,15 +44,14 @@ __meta__ = {
 [node name="LobbySceneBG" parent="Centered" instance=ExtResource( 8 )]
 
 [node name="TabContainer" type="TabContainer" parent="Centered"]
-self_modulate = Color( 1, 1, 1, 0.741176 )
+self_modulate = Color( 1, 1, 1, 0.717647 )
 margin_left = 298.0
-margin_top = 97.0
+margin_top = 95.0
 margin_right = 1622.0
-margin_bottom = 803.0
+margin_bottom = 805.0
 tab_align = 0
 
 [node name="JoinLobby" type="VBoxContainer" parent="Centered/TabContainer"]
-visible = false
 material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -111,6 +107,7 @@ text = " Connect To Lobby"
 icon = ExtResource( 3 )
 
 [node name="CreateLobby" type="VBoxContainer" parent="Centered/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -136,11 +133,43 @@ rect_min_size = Vector2( 1316, 614 )
 size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0 )
 
+[node name="SelectClassroomLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
+margin_left = 236.0
+margin_top = 76.0
+margin_right = 780.0
+margin_bottom = 120.0
+custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = -3
+custom_fonts/font = ExtResource( 11 )
+text = "Select Classroom"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SelectClassroomOptionsButton" type="OptionButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
+margin_left = 832.0
+margin_top = 81.0
+margin_right = 1149.0
+margin_bottom = 105.0
+rect_min_size = Vector2( 250, 0 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = SubResource( 9 )
+custom_colors/font_color_focus = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color = Color( 0.454902, 0.462745, 0.529412, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Select Classroom"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="MaxPlayerLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 129.0
-margin_top = 61.0
-margin_right = 537.0
-margin_bottom = 95.0
+margin_left = 236.0
+margin_top = 176.0
+margin_right = 644.0
+margin_bottom = 210.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -154,10 +183,10 @@ __meta__ = {
 }
 
 [node name="MaxPlayersOptionButton" type="OptionButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 578.0
-margin_top = 63.0
-margin_right = 828.0
-margin_bottom = 87.0
+margin_left = 690.0
+margin_top = 179.0
+margin_right = 940.0
+margin_bottom = 203.0
 rect_min_size = Vector2( 250, 0 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -171,10 +200,10 @@ __meta__ = {
 }
 
 [node name="PasswordRequiredLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 127.0
-margin_top = 165.0
-margin_right = 739.0
-margin_bottom = 199.0
+margin_left = 236.0
+margin_top = 280.0
+margin_right = 848.0
+margin_bottom = 314.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -182,16 +211,16 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
 custom_fonts/font = ExtResource( 11 )
-text = "Password Required?"
+text = "Password Required:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PasswordLineEdit" type="LineEdit" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 781.0
-margin_top = 161.0
-margin_right = 981.0
-margin_bottom = 195.0
+margin_left = 890.0
+margin_top = 276.0
+margin_right = 1090.0
+margin_bottom = 310.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -202,10 +231,10 @@ __meta__ = {
 }
 
 [node name="ChatEnabledLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 124.0
-margin_top = 272.0
-margin_right = 566.0
-margin_bottom = 306.0
+margin_left = 235.0
+margin_top = 387.0
+margin_right = 677.0
+margin_bottom = 421.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -213,26 +242,26 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = -3
 custom_fonts/font = ExtResource( 11 )
-text = "Chat Enabled?"
+text = "Chat Enabled:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ChatEnabledCheckbutton" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 615.0
-margin_top = 265.0
-margin_right = 691.0
-margin_bottom = 305.0
+margin_left = 724.0
+margin_top = 380.0
+margin_right = 800.0
+margin_bottom = 420.0
 pressed = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VoteNextMinigameLabel" type="Label" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 122.0
-margin_top = 382.0
-margin_right = 598.0
-margin_bottom = 416.0
+margin_left = 235.0
+margin_top = 491.0
+margin_right = 881.0
+margin_bottom = 525.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.223529, 0.0823529, 0.172549, 1 )
@@ -246,10 +275,10 @@ __meta__ = {
 }
 
 [node name="ChatEnabledCheckbutton2" type="CheckButton" parent="Centered/TabContainer/CreateLobby/LobbySettings"]
-margin_left = 810.0
-margin_top = 376.0
-margin_right = 886.0
-margin_bottom = 416.0
+margin_left = 919.0
+margin_top = 485.0
+margin_right = 995.0
+margin_bottom = 525.0
 pressed = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -270,13 +299,5 @@ margin_bottom = 30.0
 text = "Create Lobby"
 icon = ExtResource( 10 )
 
-[node name="WS_Auth_Server" type="Node" parent="."]
-script = ExtResource( 5 )
-
-[node name="P2P_Server" type="Node" parent="."]
-script = ExtResource( 6 )
-
-[node name="P2P_Client" type="Node" parent="."]
-script = ExtResource( 2 )
-
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]
+[connection signal="pressed" from="Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton" to="." method="_createLobby"]

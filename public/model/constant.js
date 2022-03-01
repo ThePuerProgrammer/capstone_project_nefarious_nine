@@ -15,6 +15,7 @@ export const collectionName = {
     DECK_DATA: 'deck_data',
     FLASHCARDS_DATA: 'flashcards_data',
     CLASSROOMS: 'classrooms',
+    BACKEND: 'backend',
 }
 
 /*****************************************
@@ -53,4 +54,5 @@ export const htmlIDs = {
     createDeckModal: 'create-deck-modal',
     createClassroom: 'button-create-classroom-modal',
     createClassroomModal: 'create-classroom-modal',
+    buttonEditClassroom: 'button-edit-class',
 }

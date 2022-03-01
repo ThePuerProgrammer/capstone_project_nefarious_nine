@@ -59,7 +59,7 @@ export class Flashcard{
  *      This will ensure the user inputs of the correct type. 
  *      Will prompt for an error, claimed in the error tags in index.html 
 ***************************************************************************/
-        static isSerializedProduct(obj){
+        static isSerializedFlashcard(obj){
             
             if(!obj.questionImageURL || !obj.questionImageURL.include('https')) return false; 
             if(!obj.answerImageURL || !obj.answerImageURL.include('https')) return false;
@@ -71,7 +71,6 @@ export class Flashcard{
         }
 
 /***************************************************************************
- *                  (UNDER CONSTRUCTION FOR A LATER STORY)
  *                  Serialization For Editing/Updating
  * *************************************************************************
  *      This will allow updating to be serialized, prevents errors on the 

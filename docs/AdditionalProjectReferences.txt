@@ -1,0 +1,11 @@
+Including WebRTC into the project for multiplayer peer-to-peer gameplay was 
+built with the aid of the following codelab
+
+https://webrtc.org/getting-started/firebase-rtc-codelab
+
+and the Godot documentation and sample project found at
+
+https://docs.godotengine.org/en/3.2/tutorials/networking/webrtc.html
+
+The Firebase Godot plugin (MIT license) was added to the project and can 
+found in the _godot/addons directory

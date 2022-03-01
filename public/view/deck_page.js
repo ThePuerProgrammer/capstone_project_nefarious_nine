@@ -166,15 +166,15 @@ export function addEventListeners() {
         async (e) => {
             // MULTIPLE CHOICE ON
             if (Elements.formCheckInputIsMultipleChoice.checked) {
-                Elements.formCheckInputIsImageAnswer.checked=false;
+                Elements.formCheckInputIsImageAnswer.checked = false;
                 imageAnswer.style.display = 'none';
                 multipleChoiceOnHTML();
 
             }
             // MULTIPLE CHOICE OFF
             else {
-                Elements.formCheckInputIsImageAnswer.checked=false;
-                multipleChoiceOffHTML();            
+                Elements.formCheckInputIsImageAnswer.checked = false;
+                multipleChoiceOffHTML();
             }
         }
     );
@@ -184,44 +184,44 @@ export function addEventListeners() {
         // TOGGLE ON
         checkImageQuestion();
     });
-    
+
     //Checks for the Image Answer Toggle
     Elements.formCheckInputIsImageAnswer.addEventListener("click", async (e) => {
         // TOGGLE IS ON
         checkImageAnswer();
-        if(Elements.formCheckInputIsMultipleChoice.checked){
-            Elements.formCheckInputIsMultipleChoice.checked =false;
+        if (Elements.formCheckInputIsMultipleChoice.checked) {
+            Elements.formCheckInputIsMultipleChoice.checked = false;
             multipleChoiceOffHTML();
         }
     });
-    
+
     //Checks for Image selection of Question Image
-    Elements.formAddFlashCardQuestionImageButton.addEventListener("change",  async (e) => {
+    Elements.formAddFlashCardQuestionImageButton.addEventListener("change", async (e) => {
         imageFile2UploadQuestion = e.target.files[0];
-        if (!imageFile2UploadQuestion ){
+        if (!imageFile2UploadQuestion) {
             //If image is deselected it is reset and given conditions to
             //represent that in creating the flashcard.
-            Elements.imageTagCreateFlashQuestion.src='';  
+            Elements.imageTagCreateFlashQuestion.src = '';
             return;
-        } 
+        }
         //Image is loaded and information represents this when creating
         //flashcard.
-        Elements.formCheckInputIsImageQuestion.checked=true;
+        Elements.formCheckInputIsImageQuestion.checked = true;
         const reader = new FileReader();
         reader.onload = () => (Elements.imageTagCreateFlashQuestion.src = reader.result);
         reader.readAsDataURL(imageFile2UploadQuestion);
     });
-    
+
     //Checks for Image selection of Answer Image
     Elements.formAddFlashCardAnswerImageButton.addEventListener("change", async (e) => {
         imageFile2UploadAnswer = e.target.files[0];
-        if(!imageFile2UploadAnswer){
-            Elements.imageTagCreateFlashAnswer.src='';
+        if (!imageFile2UploadAnswer) {
+            Elements.imageTagCreateFlashAnswer.src = '';
             return;
         }
         //Image is loaded and information represents this when creating
         //flashcard.
-        Elements.formCheckInputIsImageAnswer.checked=true;
+        Elements.formCheckInputIsImageAnswer.checked = true;
         const reader = new FileReader();
         reader.onload = () => (Elements.imageTagCreateFlashAnswer.src = reader.result);
         reader.readAsDataURL(imageFile2UploadAnswer);
@@ -281,7 +281,7 @@ export async function deck_page(deckDockID) {
 
     const deleteButton = document.getElementById(Constant.htmlIDs.deleteFlashcard);
     const editForms = document.getElementsByClassName('form-edit-flashcard')
-    for(let i=0; i< editForms.length; i++){
+    for (let i = 0; i < editForms.length; i++) {
         editForms[i].addEventListener('submit', async e => {
             //prevents refresh on submit of form
             e.preventDefault();
@@ -290,9 +290,8 @@ export async function deck_page(deckDockID) {
             const label = Utilities.disableButton(button);
             //passed by the button on the flashcard
             Utilities.enableButton(button,label);
-            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDockID,e.target.docId.value)
-           
-        })
+            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDockID,e.target.docId.value);
+        });
     }
 
     /*****************************************
@@ -411,7 +410,7 @@ function buildFlashcardView(flashcard) {
 }
 
 //Function to reset all feels and toggles in creation modal
-function resetFlashcard(){
+function resetFlashcard() {
     Elements.formCreateAFlashcard.reset();
     if (Elements.formCheckInputIsImageQuestion) {
         imageQuestion.style.display = 'none';
@@ -426,7 +425,7 @@ function resetFlashcard(){
     // Making sure singular choice is displayed next time.
     Elements.formAnswerContainer.innerHTML = `
         <label for="form-answer-text-input">Answer:</label>
-        <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
+        <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required minlength ="1"></textarea>
     `;
 }
 
@@ -437,29 +436,29 @@ function shuffle(answers) {
     }
 }
 //Method to display the container for question image.
-function checkImageQuestion(){
+function checkImageQuestion() {
     if (Elements.formCheckInputIsImageQuestion.checked) {
-      if(imageQuestion.style.display=='none'){
-        imageQuestion.style.display = 'block';
-      } else{
-        imageQuestion.style.display = 'none';
-      }
-    } else if(!Elements.formCheckInputIsImageQuestion.checked){
-      if(imageQuestion.style.display=='none'){
-        imageQuestion.style.display = 'block';
-      } else{
-        imageQuestion.style.display = 'none';
-      }
+        if (imageQuestion.style.display == 'none') {
+            imageQuestion.style.display = 'block';
+        } else {
+            imageQuestion.style.display = 'none';
+        }
+    } else if (!Elements.formCheckInputIsImageQuestion.checked) {
+        if (imageQuestion.style.display == 'none') {
+            imageQuestion.style.display = 'block';
+        } else {
+            imageQuestion.style.display = 'none';
+        }
     }
 }
 //Method to display the container for answer image.
-function checkImageAnswer(){
+function checkImageAnswer() {
     if (Elements.formCheckInputIsImageAnswer.checked) {
-      if(imageAnswer.style.display=='none'){
-        imageAnswer.style.display = 'block';
-      } else{
-        imageAnswer.style.display = 'none';
-      }
+        if (imageAnswer.style.display == 'none') {
+            imageAnswer.style.display = 'block';
+        } else {
+            imageAnswer.style.display = 'none';
+        }
     }
     else if (!Elements.formCheckInputIsImageAnswer.checked) {
         if (imageAnswer.style.display == 'none') {
@@ -470,25 +469,25 @@ function checkImageAnswer(){
     }
 }
 
-function multipleChoiceOnHTML(){
+function multipleChoiceOnHTML() {
     Elements.formAnswerContainer.innerHTML = `
     <label for="form-answer-text-input">Correct Answer:</label>
-    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1" max length="30"></textarea>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required minlength ="1" maxlength="30"></textarea>
     <br />
     <label for="form-answer-text-input">Incorrect Option:</label>
-    <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1" max length="30"></textarea>
+    <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required minlength ="1" maxlength="30"></textarea>
     <br />
     <label for="form-answer-text-input">Incorrect Option:</label>
-    <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1" max length="30"></textarea>
+    <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" minlength ="1" maxlength="30"></textarea>
     <br />
     <label for="form-answer-text-input">Incorrect Option:</label>
-    <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1" max length="30"></textarea>
+    <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" minlength="1" maxlength="30"></textarea>
     `;
 }
 
-function multipleChoiceOffHTML(){
-    Elements.formAnswerContainer.innerHTML =`
+function multipleChoiceOffHTML() {
+    Elements.formAnswerContainer.innerHTML = `
     <label for="form-answer-text-input">Answer:</label>
-    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required min length ="1" max length="30"></textarea>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required minlength ="1" maxlength="30"></textarea>
     `;
 }

@@ -6,6 +6,7 @@ import * as Settings from '../view/settings_page.js'
 import * as Deck from '../view/deck_page.js'
 import * as Study from '../view/study_page.js'
 import * as Minigames from '../view/minigames_page.js'
+import * as OneClassroom from '../view/one_classroom_page.js';
 
 export const routePathname = {
     HOME: '/',
@@ -16,17 +17,19 @@ export const routePathname = {
     DECK: '/deck',
     STUDY: '/study',
     MINIGAMES: '/minigames',
+    ONECLASSROOM: '/classroom',
 };
 
 export const routes = [
-    { pathname: routePathname.HOME,         page: Home.home_page },
-    { pathname: routePathname.CLASSROOMS,   page: Classrooms.classrooms_page },
-    { pathname: routePathname.STUDYDECKS,   page: StudyDecks.study_decks_page },
-    { pathname: routePathname.PROFILE,      page: Profile.profile_page },
-    { pathname: routePathname.SETTINGS,     page: Settings.settings_page },
-    { pathname: routePathname.DECK,         page: Deck.deck_page },
-    { pathname: routePathname.STUDY,        page: Study.study_page },
-    { pathname: routePathname.MINIGAMES,    page: Minigames.minigames_page },
+    { pathname: routePathname.HOME, page: Home.home_page },
+    { pathname: routePathname.CLASSROOMS, page: Classrooms.classrooms_page },
+    { pathname: routePathname.STUDYDECKS, page: StudyDecks.study_decks_page },
+    { pathname: routePathname.PROFILE, page: Profile.profile_page },
+    { pathname: routePathname.SETTINGS, page: Settings.settings_page },
+    { pathname: routePathname.DECK, page: Deck.deck_page },
+    { pathname: routePathname.STUDY, page: Study.study_page },
+    { pathname: routePathname.MINIGAMES, page: Minigames.minigames_page },
+    { pathname: routePathname.ONECLASSROOM, page: OneClassroom.one_classroom_page },
 ];
 
 export function routing(path, hash) {

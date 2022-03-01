@@ -6,7 +6,10 @@ import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as DeckPage from './deck_page.js'
 import * as Auth from '../controller/firebase_auth.js'
+import * as Utilities from './utilities.js'
+import * as EditDeck from '../controller/edit_deck.js'
 
+let confirmation=false;
 
 export function addEventListeners() {
     Elements.menuStudyDecks.addEventListener('click', async () => {
@@ -55,6 +58,9 @@ export function addEventListeners() {
     $(`#create-deck-modal`).on('hidden.bs.modal', function (e) {
         Elements.formCreateDeck.reset();
     });
+    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e=>{
+        const yes = e.target.yes.value;
+    });
 }
 
 export async function study_decks_page() {
@@ -65,23 +71,24 @@ export async function study_decks_page() {
 
     //create deck button
     html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark">
-     Create Deck</button>`;
+     Create A Deck +</button>`;
 
     // sort select menu
     html += `
-    <div style="float:right">
+    <div style="float:right; padding-right:50px;">
     <label for="sort-decks">Order by:</label>
     <select name="sort-decks" id="sort-decks" style="width: 200px">
-        <option selected>Sort decks by...</option>
+        <option selected disabled>Sort decks by...</option>
         <option value="name">Name</option>
         <option value="subject">Subject</option>
         <option value="date">Date</option>
+        <option value="category">Category</option>
     </select>
     </div>
     <br><br>
     `
 
-    let deckList;
+    let deckList = [];
     try {
         deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
     } catch (e) {
@@ -100,9 +107,38 @@ export async function study_decks_page() {
     }
 
 
+
+
     Elements.root.innerHTML += html;
     // adds an event listener to each of the view buttons
     DeckPage.addViewButtonListener();
+
+    const editDeckForms = document.getElementsByClassName('form-edit-deck');
+    for(let i=0; i< editDeckForms.length; i++){
+        editDeckForms[i].addEventListener('submit', async e=>{
+            //prevents refresh on submit of form
+            e.preventDefault();          
+            await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
+        });
+    }
+    const deleteDeckForms = document.getElementsByClassName('form-delete-deck');
+    for(let i=0; i < deleteDeckForms.length; i++){
+        deleteDeckForms[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            const button = e.target.getElementsByTagName('button')[0];
+            const label = Utilities.disableButton(button);
+            let deckId = e.target.docId.value;
+            Elements.modalDeleteDeckConfirmation.show();
+            const button2 = document.getElementById('modal-confirmation-delete-deck-yes');
+            button2.addEventListener("click", async e =>{
+                confirmation = true;
+                await EditDeck.delete_deck(deckId, confirmation);
+            });
+            // await EditDeck.delete_deck(e.target.docId.value,confirmation);
+            Utilities.enableButton(button, label);
+        });
+    }
+
 
     const sortDeckSelect = document.getElementById("sort-decks");
     sortDeckSelect.addEventListener('change', async e => {
@@ -144,7 +180,8 @@ export async function study_decks_page() {
                     2. If false, check if a is greater than b. If true, return 1 as explained above
                     3. If false, then the function returns 0 as the values are already in their proper place
                 */
-                return (firstName < secondName) ? -1 : (firstName > secondName) ? 1 : 0;
+                return (firstName < secondName) ? -1 :
+                    (firstName > secondName) ? 1 : 0;
             });
             // Each function will operate in a similar manner
         } else if (opt == "subject") {
@@ -153,7 +190,8 @@ export async function study_decks_page() {
                 var bId = b.getAttribute('id');
                 var firstSubject = deckList.find(deck => deck.docId == aId).subject.toLowerCase();
                 var secondSubject = deckList.find(deck => deck.docId == bId).subject.toLowerCase();
-                return (firstSubject < secondSubject) ? -1 : (firstSubject > secondSubject) ? 1 : 0;
+                return (firstSubject < secondSubject) ? -1 :
+                    (firstSubject > secondSubject) ? 1 : 0;
             });
         } else if (opt == "date") {
             list.sort(function (a, b) {
@@ -163,9 +201,20 @@ export async function study_decks_page() {
                 */
                 var aId = a.getAttribute('id');
                 var bId = b.getAttribute('id');
-                var first = deckList.find(deck => deck.docId == aId);
-                var second = deckList.find(deck => deck.docId == bId);
-                return (first.dateCreated < second.dateCreated) ? -1 : (first.dateCreated > second.dateCreated) ? 1 : 0;
+                var firstDate = deckList.find(deck => deck.docId == aId).dateCreated;
+                var secondDate = deckList.find(deck => deck.docId == bId).dateCreated;
+                // third date ( ͡° ͜ʖ ͡°)
+                return (firstDate < secondDate) ? -1 :
+                    (firstDate > secondDate) ? 1 : 0;
+            });
+        } else if (opt == "category") {
+            list.sort(function (a, b) {
+                var aId = a.getAttribute('id');
+                var bId = b.getAttribute('id');
+                var firstCategory = deckList.find(deck => deck.docId == aId).category;
+                var secondCategory = deckList.find(deck => deck.docId = bId).category;
+                return (firstCategory.category < secondCategory.category) ? -1 :
+                    (firstCategory.category > secondCategory.category) ? 1 : 0;
             });
         }
         // Finally, append the decks to the div wrapped around them, replacing the original order with the new order
@@ -191,18 +240,26 @@ export async function study_decks_page() {
     // restructured create deck button to add category dropdown menu
     createDeckButton.addEventListener('click', async e => {
 
-        const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+       // const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
 
-        // add firebase func. to retrieve categories list
+        // call Firebase func. to retrieve categories list
+        let categories;
+        try {
+            categories = await FirebaseController.getCategories();
+            //console.log(cat);
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }
 
         // clear innerHTML to prevent duplicates
         Elements.formDeckCategorySelect.innerHTML = '';
- 
+
         categories.forEach(category => {
             Elements.formDeckCategorySelect.innerHTML += `
                       <option value="${category}">${category}</option>
                   `;
-          });
+        });
 
         // opens create Deck modal
         $(`#${Constant.htmlIDs.createDeckModal}`).modal('show');
@@ -218,12 +275,22 @@ function buildDeckView(deck, flashcards) {
         <div class="card-body">
             <h5 class="card-text">${deck.name}</h5>
             <h6 class="card-text" >Subject: ${deck.subject}</h6>
+            <h6 class="card-text">Category: ${deck.category}</h6>
             <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
             <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
         </div>
+        <div class="btn-group">
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">View</button>
+        </form>
+        <form class="form-edit-deck" method="post">
+            <input type="hidden" name="docId" value="${deck.docId}">
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Edit</button>
+        </form>
+        <form class="form-delete-deck" method="post">
+            <input type="hidden" name="docId" value="${deck.docId}">
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Delete</button>
         </form>
         </div>`;
 
@@ -233,9 +300,11 @@ function buildDeckView(deck, flashcards) {
     <label class="form-check-label" for="favorited">Favorite deck</label>
     </div>
     </div>
+    </div>
     ` : `<div class="form-check">
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
     <label class="form-check-label pomo-text-color-light" for="favorited">Favorite deck</label>
+</div>
 </div>
 </div>`;
     return html;

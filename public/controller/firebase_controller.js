@@ -4,6 +4,8 @@ import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
 import { User } from '../model/user.js';
+import { Classroom } from '../model/classroom.js';
+import { Backend } from '../model/backend.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -422,17 +424,84 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
         .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
         .delete();
+    //Maybe add a delete of the image here after flashcard delete, keeping data consistent
+}
+
+//============================================================================//
+// DELETE DECK
+//============================================================================//
+export async function deleteDeck(uid, docID) {
+    //Get All flashcards
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .collection(Constant.collectionName.FLASHCARDS)
+        .get();
+    //Deletes each flashcard as it is pulled
+    ref.forEach(doc => {
+        const f = new Flashcard(doc.data());
+        f.set_docID(doc.id);
+        deleteFlashcard(uid, docID, f.docID);
+    });
+
+    //Delete Deck
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .delete();
+}
+
+//===========================================================================//
+//UPDATE DECK 
+//===========================================================================//
+/*  This will retrieve the deck as it is a nested subcollection, requiring
+    to go through user to make the update.  I found that when updating
+    both doc.data().'field' like doc.data().name and data.name work the
+    same.  As I have given a declaration of data for data.question below.
+============================================================================*/
+export async function updateDeck(uid, deck, deckDocID) {
+    const data = deck.serializeForUpdate();
+    const deckRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .get().then((doc) => {
+            if (doc.exists) {
+                deck.name = data.name;
+                deck.subject = data.subject;
+                deck.dateCreated = data.dateCreated;
+                deck.category = data.category;
+                //When editing flashcards I found that booleans were difficult
+                //to use here and commented it out isMultiplechoice and was functional
+                //deck.isFavorited = data.isFavorited;
+                // console.log("UPDATED");
+                // console.log(`Check 5:${data.category}`)
+                // console.log(`Check 6:${deck.category}`)
+
+            }//Error Code
+            else if (Constant.DEV) {
+                console.log(e);
+                Utilites.info('Update Error Firebase', JSON.stringify(e));
+            }
+        });
+
+    firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .set(deck.serialize());
+
+    // console.log(`Check 7:${deck.isFavorited}`)
+
 }
 
 //===========================================================================//
 //EDIT FLASHCARD 
 //===========================================================================//
-export async function getFlashCardById(uid,deckDocID,docID){
+export async function getFlashCardById(uid, deckDocID, docID) {
     const flashRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS).doc(docID).get();
-    if(flashRef.exists){
+    if (flashRef.exists) {
         const flashcard = new Flashcard(flashRef.data());
         flashcard.set_docID(docID);
         return flashcard;
@@ -448,31 +517,31 @@ export async function getFlashCardById(uid,deckDocID,docID){
     both doc.data().'field' like doc.data().question and data.question work the
     same.  As I have given a declaration of data for data.question below.
 ============================================================================*/
-export async function updateFlashcard(uid, deckDocID, flashcard, docID){
+export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
     const data = flashcard.serializeForUpdate();
     const flashRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS).doc(docID)
-        .get().then((doc)=>{
-            if(doc.exists){
-                    flashcard.question =data.question;
-                    flashcard.answer = data.answer;
-                    //flashcard.isMultipleChoice = data.isMultipleChoice;
-                    flashcard.incorrectAnswers = data.incorrectAnswers;
-                    flashcard.questionImageName= data.questionImageName;
-                    flashcard.questionImageURL = data.questionImageURL;
-                    flashcard.answerImageName = data.answerImageName;
-                    flashcard.answerImageURL = data.answerImageURL;
-                    console.log("UPDATED");
-                }//Error Code
-                else if(Constant.DEV) {
-                    console.log(e);
-                    Utilites.info('Update Error Firebase', JSON.stringify(e));
-                }   
+        .get().then((doc) => {
+            if (doc.exists) {
+                flashcard.question = data.question;
+                flashcard.answer = data.answer;
+                //flashcard.isMultipleChoice = data.isMultipleChoice;
+                flashcard.incorrectAnswers = data.incorrectAnswers;
+                flashcard.questionImageName = data.questionImageName;
+                flashcard.questionImageURL = data.questionImageURL;
+                flashcard.answerImageName = data.answerImageName;
+                flashcard.answerImageURL = data.answerImageURL;
+                console.log("UPDATED");
+            }//Error Code
+            else if (Constant.DEV) {
+                console.log(e);
+                Utilites.info('Update Error Firebase', JSON.stringify(e));
+            }
         });
 
-        firebase.firestore()
+    firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS).doc(docID)
@@ -484,35 +553,34 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID){
 //============================================================================//
 //  This will retrieve an image already existing from the storage
 //  reference link : https://firebase.google.com/docs/storage/web/download-files#web-version-9_2
-export async function existingImageForUpdate(imageNamePassed){
-    
+export async function existingImageForUpdate(imageNamePassed) {
+
     const storageRef = firebase.storage().ref()
         .child(Constant.storageFolderName.FLASHCARD_IMAGES + imageNamePassed);
-        console.log(`Check 1`);
-    try{
-        console.log(`Check 2`);
-        // const snapShotQuery = await ref.get(storageRef);
+    // console.log(`Check 1`);
+    try {
+        // console.log(`Check 2`);
         const imageURL = await storageRef.getDownloadURL();
-        console.log(`imageURL = ${imageURL}`);
+        // console.log(`imageURL = ${imageURL}`);
 
-        console.log(`check 3`)
+        // console.log(`check 3`)
         //const imageName = imageName;
-        return{imageNamePassed, imageURL };
-        console.log(`check 3`)
-    
-    } catch(e) {
-        if(Constant.DEV) console.log(e);
-        Utilites.info('Error Updating w/ Exisiting Image',JSON.stringify(e),"modal-edit-a-flashcard");
+        return { imageNamePassed, imageURL };
+        // console.log(`check 3`)
+
+    } catch (e) {
+        if (Constant.DEV) console.log(e);
+        Utilites.info('Error Updating w/ Exisiting Image', JSON.stringify(e), "modal-edit-a-flashcard");
     }
 }
 //Uploaded Image ! (Since the target image is the original image)
 export async function uploadImageToFlashcardAnswerEdit(answerImageFile) {
     //Generic Naming
     const answerImageName = Date.now() + answerImageFile.name + 'answer';
-    
+
     const ref = firebase.storage().ref()
         .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
-   
+
     const taskSnapShot = await ref.put(answerImageFile);
     const answerImageURL = await taskSnapShot.ref.getDownloadURL();
     return { answerImageName, answerImageURL };
@@ -536,6 +604,31 @@ export async function updateUserInfo(uid, updateInfo) {
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).update(updateInfo);
 }
+//============================================================================//
+//Update Classroom
+//============================================================================//
+export async function updateClassroom(classroom) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
+        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category });
+}
+//============================================================================//
+//Ban Members
+//============================================================================//
+export async function banMember(docID, member) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
+        .update({
+            banlist: firebase.firestore.FieldValue.arrayUnion(member)
+        });
+
+}
+
+export async function unbanMember(docID, member) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
+        .update({
+            banlist: firebase.firestore.FieldValue.arrayRemove(member)
+        });
+}
+
 
 export async function getUserTimerDefault(uid) {
     const ref = await firebase.firestore()
@@ -584,21 +677,69 @@ export async function getAvailableClassrooms() {
     let classroomList = [];
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
-        .orderBy('name')
         .get();
 
     ref.forEach(doc => {
-        // TODO: deserialize classroom docs
+        const cr = new Classroom(doc.data());
+        cr.set_docID(doc.id);
+        classroomList.push(cr);
     });
+
     return classroomList;
 }
 
 //============================================================================//
 // Gets user's classrooms
 //============================================================================//
-export async function getMyClassrooms(uid) {
-    // TODO
-    return 0;
+// export async function getMyClassrooms(email) {
+//     let moderatorList = [];
+//     let membersList = [];
+//     // get classes user is member of
+//     const membersRef = await firebase.firestore()
+//         .collection(Constant.collectionName.CLASSROOMS)
+//         .where('members', 'array-contains', email)
+//         .get();
+
+//     membersRef.forEach(doc => {
+//         const cr = new Classroom(doc.data());
+//         cr.set_docID(doc.id);
+//         membersList.push(cr);
+//     })
+//     // get classes user is mod of
+//     const moderatorRef = await firebase.firestore()
+//         .collection(Constant.collectionName.CLASSROOMS)
+//         .where('moderatorList', 'array-contains', email)
+//         .get();
+
+//     moderatorRef.forEach(doc => {
+//         const cr = new Classroom(doc.data());
+//         cr.set_docID(doc.id);
+//         moderatorList.push(cr);
+//     });
+
+//     // combine both lists and remove duplicates
+//     let classroomList = [];
+//     classroomList = membersList.filter(mem => !moderatorList.includes(mem));
+
+
+//     // return final list
+//     return classroomList;
+// }
+
+//============================================================================//
+// Gets one classroom
+//============================================================================//
+export async function getOneClassroom(classroomDocID) {
+    const classroomRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classroomDocID)
+        .get();
+
+    if (!classroomRef.exists) return null;
+
+    const classroom = new Classroom(classroomRef.data());
+    classroom.set_docID(classroomDocID);
+    return classroom;
 }
 
 //============================================================================//
@@ -608,7 +749,38 @@ export async function createClassroom(classroom) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
         .add(classroom.serialize());
-     
+
     return ref.id;
+}
+//============================================================================//
+
+//============================================================================//
+// Retrieve CATEGORIES
+//============================================================================//
+export async function getCategories() {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.BACKEND)
+        .doc('Categories')
+        .get();
+
+    const backend = new Backend(ref.data());
+    return backend.categories;
+}
+//============================================================================//
+//============================================================================//
+//JOIN Classroom
+//============================================================================//
+export async function joinClassroom(classId, userEmail) {
+    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
+        .update({ members: arrayUnion(userEmail)});
+}
+//============================================================================//
+//LEAVE Classroom
+//============================================================================//
+export async function leaveClassroom(classId, userEmail) {
+    const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
+        .update({ members: arrayRemove(userEmail)});
 }
 //============================================================================//

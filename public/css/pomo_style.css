@@ -54,6 +54,32 @@
     text-decoration: underline;
 }
 
+/* Change btn color on hover */
+.edit-btn-hover:hover {
+    background-color: rgb(255, 0, 0);
+}
+
+.edit-btn-hover-blue:hover {
+    background-color: rgb(108, 183, 253);
+}
+/*These three button styles will allow you to change text upon hover
+see function buildButtons */
+button .byebye {
+    display: none;
+  }
+  
+button:hover .membas {
+    display: none;
+}
+  
+button:hover .byebye {
+    display: inline;
+}
+
+.ban-btn-expand-width {
+    width: 150px;
+}
+
 #pomo-timer-toggle-button {
     box-shadow: none !important;
     text-decoration: none;
@@ -266,7 +292,7 @@ input {
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
-    word-wrap: break-all;
+    word-wrap: break-word;
 }
 
 .flip-card:hover .flip-card-inner {
@@ -296,13 +322,13 @@ input {
 .card-text{
     text-align: center;
     color: #A7ADC6;
-    overflow-wrap: break-word;
+    overflow-wrap: break-all;
 }
 
 .answer-text{
-    width: fit-content;
+    /* width: fit-content; */
     margin-bottom: 1em;
-    overflow-wrap: break-word;
+    overflow-wrap: break-all;
 }
 
 /* .form-control{
@@ -325,6 +351,7 @@ input {
 }
 .deck-view-css{
     text-align: center;
+    word-wrap: break-word;
 }
 .form-check{
     text-align: center;
@@ -334,13 +361,27 @@ input {
     padding-right: 90px;
 }
 
-/*Could be a problem*/
-.modal-content{
-    width:auto;
+.content-width-delete-flashcard{
+    width: auto;
 }
+
 .delete-flashcard-css-class{
     padding-top: 10px;
 }    
+
+.form-edit-deck{
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-bottom: 5px;
+}
+.form-view-deck{
+    padding-right: 2px;
+    padding-bottom: 5px;
+}
+.form-delete-deck{
+    padding-left: 2px;
+    padding-bottom: 5px;
+}
 
    
 
@@ -437,7 +478,7 @@ input {
 
   /*STYLES FOR CLASSROOM TABS*/
 /*============================================================================*/
-.tab{
+.classroom-page-tab{
     border-bottom: 1px solid #2C1320;
     padding-bottom: 55px;
 }
@@ -470,7 +511,6 @@ input {
 iframe {
     width: 100%;
     height: calc(100vh - 58px);
-
 }
 
 #pomogame-iframe-container {
