@@ -125,8 +125,10 @@ export async function classrooms_page() {
     }
 
     availableClassroomList.forEach(ac => {
-        html += `
+        if(!ac.banlist.includes(Auth.currentUser.email)){
+            html += `
                 <tr>${buildAvailableClassroom(ac)}</tr>`;
+        }
     })
     html += `</tbody></table></div>`;
 
@@ -153,8 +155,10 @@ export async function classrooms_page() {
         html += '<p>No classrooms found!</p>';
     }
     myClassroomList.forEach(c => {
+        if(!c.banlist.includes(Auth.currentUser.email)){
         html += `
                 <tr>${buildMyClassroom(c)}</tr>`;
+        }
     })
 
     html += `</tbody></table></div>`;
@@ -407,7 +411,17 @@ function buildMyClassroom(classroom) {
 }
 
 function buildAvailableClassroom(classroom) {
-    let html = `
+    let html = classroom.members.includes(Auth.currentUser.email) ? `
+    <td>
+    <form class="form-preview-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docID}"/>
+            <input type="hidden" name="name" value ="${classroom.name}"/>
+            <input type="hidden" name="subject" value ="${classroom.subject}"/>
+            <input type="hidden" name="category" value ="${classroom.category}"/>
+            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
+            <input type="hidden" name="members" value ="${classroom.members}"/>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+    </form></td>` : `
     <td>
     <form class="form-preview-classroom" method="post">
             <input type="hidden" name="docId" value="${classroom.docID}"/>
@@ -417,7 +431,8 @@ function buildAvailableClassroom(classroom) {
             <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
             <input type="hidden" name="members" value ="${classroom.members}"/>
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Preview</button>
-    </form></td>
+    </form></td>`;
+    html += `
     <td>${classroom.name}</td>
     <td>${classroom.subject}</td>
     <td>${classroom.category}</td>
