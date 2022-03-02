@@ -9,16 +9,14 @@ onready var vote_minigame_checkbutton 	= $"Centered/TabContainer/CreateLobby/Lob
 onready var pword_input_line_edit 		= $'Centered/TabContainer/JoinLobby/JoinHBox/PwordInput'
 onready var join_button 				= $'Centered/TabContainer/JoinLobby/JoinHBox/JoinButton'
 
+onready var client_mgr = ClientMgr.new()
+
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
-
-var decks
 
 var available_lobbies = []
 var lobby_docids = []
 var selected_lobby = -1
-
-onready var client_mgr = ClientMgr.new()
 
 func _ready():
 	# Max players drop down button items. Disable non numeric

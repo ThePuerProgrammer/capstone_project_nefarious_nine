@@ -20,7 +20,7 @@ _global_script_classes=[ {
 "path": "res://addons/silicon.util.custom_docs/doc_item/class_doc_item.gd"
 }, {
 "base": "Node",
-"class": "ClientMgr",
+"class": "ClientManager",
 "language": "GDScript",
 "path": "res://multiplayer_engine/Client_Mgr.gd"
 }, {
@@ -143,11 +143,16 @@ _global_script_classes=[ {
 "class": "StorageTask",
 "language": "GDScript",
 "path": "res://addons/godot-firebase/storage/storage_task.gd"
+}, {
+"base": "Node",
+"class": "WebRTC_Client",
+"language": "GDScript",
+"path": "res://multiplayer_engine/WebRTC_Client.gd"
 } ]
 _global_script_class_icons={
 "ArgumentDocItem": "",
 "ClassDocItem": "",
-"ClientMgr": "",
+"ClientManager": "",
 "ConstantDocItem": "",
 "DocExporter": "",
 "DocItem": "",
@@ -171,7 +176,8 @@ _global_script_class_icons={
 "PropertyDocItem": "",
 "SignalDocItem": "",
 "StorageReference": "",
-"StorageTask": ""
+"StorageTask": "",
+"WebRTC_Client": ""
 }
 
 [application]
