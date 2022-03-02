@@ -1,5 +1,5 @@
 import * as Elements from './elements.js';
-import * as Util from './utilities.js';
+import * as Utilities from './utilities.js';
 import * as Routes from '../controller/routes.js';
 import * as ProtectedMessage from './protected_message.js';
 import * as Constants from '../model/constant.js';
@@ -13,25 +13,26 @@ export function addEventListeners() {
         e.preventDefault();
         const searchKeys = e.target.searchKeys.value.trim();
         if (searchKeys.length==0) {
-            Uint8ClampedArray.info('Error', 'No search key found');
+            Utilities.info('Error', 'No search key found');
             return;
         }
 
         const button = e.target.getElementsByTagName('button')[0];
-        const label = Util.disableButton(button);
+        const label = Utilities.disableButton(button);
 
         const searchKeysArray = searchKeys.toLowerCase(). match(/\S+/g);
         const joinedSearchKeys = searchKeysArray.join(',');
 
         history.pushState(null, null, Routes.routePathname.SEARCH + '#' + joinedSearchKeys);
-        await search_page(joinedSearchKeys, deckSearch);
+        const searchType = e.target.searchType.value;
+        await search_page(joinedSearchKeys, searchType); //for whichever search you're running
 
-        Util.enableButton(button, label);
+        Utilities.enableButton(button, label);
     });
     
 }
 
-export async function search_page(joinedSearchKeys, typeSearch) {
+export async function search_page(joinedSearchKeys, searchType) {
 
     if (!joinedSearchKeys) {
         Util.info('Error', 'No Search Query Found');
@@ -48,7 +49,7 @@ export async function search_page(joinedSearchKeys, typeSearch) {
         return;
     }
 
-    switch(typeSearch) {
+    switch(searchType) {
 
         case deckSearch:
             const deckList = searchDecks();

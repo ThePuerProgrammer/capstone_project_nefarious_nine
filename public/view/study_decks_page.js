@@ -69,7 +69,7 @@ export async function study_decks_page() {
     Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
-    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover" type="click" style="float:right;">Search Decks</button></h1> '
+    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="fa fa-search"></i>Search Decks</button></h1> '
     ;
 
     //create deck button
@@ -94,7 +94,7 @@ export async function study_decks_page() {
 
     let deckList = [];
     try {
-        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
+        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid); //this is what's showing up as null
     } catch (e) {
         console.log(e);
     }
@@ -271,7 +271,7 @@ export async function study_decks_page() {
 
     const searchDeckButton = document.getElementById('search-decks-button');
     searchDeckButton.addEventListener('click', async e => {
-        Utilities.searchBox('Search Decks', 'input query');
+        Utilities.searchBox('Search Decks', 'input query', 'searchDecks');
     })
 
 } //end study_decks_page()

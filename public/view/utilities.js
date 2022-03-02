@@ -11,6 +11,7 @@ export function searchBox(title, placeholder) {
     //if (closeModal) $('#' +closeModal).modal('hide');
     Elements.searchBoxTitle.innerHTML = title;
     Elements.searchBoxPlaceholder.innerHTML = placeholder;
+    //Elements.searchBoxType = searchType;
     $('#modal-searchbox').modal('show');
 }
 

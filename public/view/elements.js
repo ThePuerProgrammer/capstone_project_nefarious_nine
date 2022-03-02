@@ -167,5 +167,6 @@ export const previewClassroomLabel = document.getElementById('preview-classroom-
 //============================================================================//
 export const searchBoxTitle = document.getElementById('modal-searchbox-title');
 export const searchBoxPlaceholder = document.getElementById('modal-searchbox-placeholder');
+export const searchBoxType = document.getElementById('modal-searchbox-type');
 export const formSearchBox = document.getElementById('form-searchbox');
 //============================================================================//
