@@ -188,6 +188,7 @@ export async function one_classroom_page(classroomDocID) {
         document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
     })
 
+    // submitting a message
     const messageSubmitButton = document.getElementById("classroom-message-button");
     messageSubmitButton.addEventListener('click', async e => {
         e.preventDefault();
@@ -203,6 +204,7 @@ export async function one_classroom_page(classroomDocID) {
         const messageTag = document.createElement('div');
         messageTag.innerHTML = buildMessageView(message);
         const tempEl = document.getElementById('temp');
+        // delete temp if it's there
         if(tempEl){
             tempEl.remove();
         }
