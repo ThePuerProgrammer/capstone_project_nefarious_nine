@@ -44,7 +44,7 @@ export const htmlIDs = {
     deleteFlashcard: 'button-delete-flashcard-modal',
     deleteFlashcardModal: 'modal-delete-a-flashcard',
     formCheckInputIsMultiple: 'form-check-input-is-multiple',
-    modalCreateAccount: 'modal-create-account',
+    createAccountModal: 'modal-create-account',
     smartStudyCheckbox: 'smart-study-checkbox',
     smartStudyPopupTextContainer: 'smart-study-popup-text-container',
     streakNumberText: 'streak-number-text',
@@ -55,4 +55,7 @@ export const htmlIDs = {
     createClassroom: 'button-create-classroom-modal',
     createClassroomModal: 'create-classroom-modal',
     buttonEditClassroom: 'button-edit-class',
+    miniGamesPage: 'godot-mini-games',
+    chillZonePage: 'chill-zone-page',
+    analyticsPage: 'analytics-page',
 }
