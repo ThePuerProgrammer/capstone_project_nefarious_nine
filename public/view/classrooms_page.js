@@ -255,6 +255,8 @@ export async function classrooms_page() {
                     //Closes modal on button click
                     $('#preview-classroom-modal').modal('hide')
                     //Navigates to classroom webpage
+                    window.sessionStorage;
+                    sessionStorage.setItem('classId', classId);
                     history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classId);
                     await OneClassroomPage.one_classroom_page(classId);
 

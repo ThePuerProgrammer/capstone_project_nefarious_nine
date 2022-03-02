@@ -9,6 +9,10 @@ import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 
 export async function one_classroom_page(classroomDocID) {
+    if(classroomDocID == null){
+        classroomDocID = sessionStorage.getItem('classId');
+    }
+    console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';
 
