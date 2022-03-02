@@ -472,7 +472,7 @@ function checkImageAnswer() {
 function multipleChoiceOnHTML() {
     Elements.formAnswerContainer.innerHTML = `
     <label for="form-answer-text-input">Correct Answer:</label>
-    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="(Required) At least 200" required minlength ="1" maxlength="30"></textarea>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) At least 200" required minlength ="1" maxlength="30"></textarea>
     <br />
     <label for="form-answer-text-input">Incorrect Option:</label>
     <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required minlength ="1" maxlength="30"></textarea>
@@ -488,6 +488,6 @@ function multipleChoiceOnHTML() {
 function multipleChoiceOffHTML() {
     Elements.formAnswerContainer.innerHTML = `
     <label for="form-answer-text-input">Answer:</label>
-    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formAnswerTextInput.innerHTML}" placeholder="At least 4." required minlength ="1" maxlength="30"></textarea>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required minlength ="1" maxlength="30"></textarea>
     `;
 }

@@ -2,12 +2,7 @@ import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
 import * as Auth from '../controller/firebase_auth.js'
 
-export function addEventListeners() {
-    Elements.menuTempGodot.addEventListener('click', async() => {
-        history.pushState(null, null, Routes.routePathname.MINIGAMES);
-        await minigames_page();
-    });
-}
+export function addEventListeners() {}
 
 export async function minigames_page() {
     /* Roloading the page causes an error here. 

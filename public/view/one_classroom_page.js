@@ -5,6 +5,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as Elements from './elements.js'
 import { Classroom } from '../model/classroom.js'
+import { classrooms_page } from './classrooms_page.js'
 
 let classroomDocID;
 
@@ -65,12 +66,16 @@ export async function one_classroom_page(classroomDocID) {
         <h4>${classroom.subject}, ${classroom.category}</h4>
         <br>`;
     
-    //if current user is a mod, populate the edit classroom button
+    //if current user is a mod, populate the edit classroom button and delete button
     //causes null edit button error
     if (mod == true) {
         //removed doc id from page view -- Blake
         html += `<button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
-            >Edit Classroom</button>`;
+            >Edit Classroom</button>
+            <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
+                Delete Classroom
+            </button>`
+            ;
     }
 
     html += `</div>`;
@@ -192,6 +197,7 @@ export async function one_classroom_page(classroomDocID) {
     //following Pipers create classroom functionality
     if (mod == true) { //if owner of classroom, add listener. This avoids null editButton errors.
         const editButton = document.getElementById('button-edit-class');
+        const deleteButton = document.getElementById('button-delete-classroom'); //delete button on page
         editButton.addEventListener('click', async e => {
 
             const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
@@ -204,7 +210,23 @@ export async function one_classroom_page(classroomDocID) {
             });
             Elements.modalEditClassroom.show();
         })
-    }
+
+        deleteButton.addEventListener('click', async e => {
+            Elements.modalDeleteClassroom.show();
+        })
+        
+        const confirmDeleteClassroom = document.getElementById('yes-delete-classroom-button'); //delete button on modal
+        confirmDeleteClassroom.addEventListener("click", async e => {
+            e.preventDefault();
+            const deletedClassName = classroom.name;
+            await FirebaseController.deleteClassroom(classroomDocID);
+            Utilities.info('Success', `Classroom: ${deletedClassName} deleted.`);
+            await classrooms_page();
+        })
+    } //end of mod listeners
+        
+        
+  
 
     Elements.formEditClassroom.addEventListener('submit', async e => {
         e.preventDefault();

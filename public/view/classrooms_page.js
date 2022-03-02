@@ -206,7 +206,7 @@ export async function classrooms_page() {
                 Elements.previewClassroomFooter.innerHTML=`
                 <form class="form-view-classroom-from-preview" method="post">
                     <input type="hidden" name="docId" value="${classId}">
-                    <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+                    <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Enter Class</button>
                 </form>`;
                 //Adding Case of user is creator to leave
                 if(!classMods.includes(userEmail)){
