@@ -5,10 +5,11 @@ signal answer_selected_scroll
 export (StyleBox) var normalStyleBox
 export (StyleBox) var hoveredStyleBox
 var withinButtonArea = false
-var panelContainer
+#var panelContainer
 
 func _ready():
-	panelContainer = get_node("../../../AnswerPanelContainer")
+	#panelContainer = get_node("../../../AnswerPanelContainer")
+	pass
 
 func _on_ScrollContainer_mouse_entered():
 	withinButtonArea = true

@@ -1,15 +1,16 @@
 extends CanvasLayer
 
-var _questionTimer
+var _questionManager
+export (Texture) var _enemyIdle_tex
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_questionTimer = get_node("../QuestionManager/QuestionTimer")
+	_questionManager = get_node("../QuestionManager")
 	$Vignette.hide()
 
 
 func _on_QuestionTimer_timeout():
-	_questionTimer.stop()
+	_questionManager.stopQuestionTimer()
 	$WhiteOut.show()
 	$WhiteOut.white_out()
 
@@ -19,6 +20,7 @@ func _on_WhiteInAnimationPlayer_animation_finished(anim_name):
 
 
 func _on_WhiteOutAnimationPlayer_animation_finished(anim_name):
+	get_node("../Enemy").texture = _enemyIdle_tex
 	$WhiteIn.show()
 	$WhiteOut.hide()
 	$WhiteIn.white_in()
@@ -27,6 +29,8 @@ func _on_WhiteOutAnimationPlayer_animation_finished(anim_name):
 
 
 func _on_VignetteAnimationPlayer_animation_finished(anim_name):
-	print("giving next question! finished!")
 	$Vignette.hide()
-	_questionTimer.start()
+	$WhiteOut.hide()
+	$WhiteIn.hide()
+	print("giving next question! finished!")
+	_questionManager.startNextQuestion()

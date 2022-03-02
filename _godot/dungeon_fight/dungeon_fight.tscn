@@ -50,7 +50,7 @@ void fragment()
 shader = SubResource( 10 )
 shader_param/color = Color( 0, 0, 0, 1 )
 shader_param/multiplier = -0.122
-shader_param/softness = 12.0
+shader_param/softness = 10.0
 
 [sub_resource type="Animation" id=5]
 length = 0.001
@@ -325,13 +325,13 @@ __meta__ = {
 
 [node name="QuestionManager" type="Node" parent="."]
 script = ExtResource( 9 )
-_enemyIdleTest_tex = ExtResource( 16 )
-_enemyEasyTest_tex = ExtResource( 19 )
-_enemyMediumTest_tex = ExtResource( 18 )
-_enemyHardTest_tex = ExtResource( 17 )
+_enemyIdle_tex = ExtResource( 16 )
+_enemyEasy_tex = ExtResource( 19 )
+_enemyMedium_tex = ExtResource( 18 )
+_enemyHard_tex = ExtResource( 17 )
 
 [node name="QuestionTimer" type="Timer" parent="QuestionManager"]
-wait_time = 1.5
+wait_time = 3.0
 
 [node name="startGameTimer" type="Timer" parent="QuestionManager"]
 
@@ -341,6 +341,7 @@ texture = ExtResource( 16 )
 
 [node name="Effects" type="CanvasLayer" parent="."]
 script = ExtResource( 21 )
+_enemyIdle_tex = ExtResource( 16 )
 
 [node name="Vignette" type="ColorRect" parent="Effects"]
 visible = false

@@ -1,5 +1,6 @@
 extends Node
 
+# for "animations" and progress bar #####################################
 var _progressBarEasy
 var _progressBarMedium
 var _progressBarHard
@@ -7,24 +8,40 @@ var _waitTime
 var _subSectionWaitTime
 var _waitingForAnswer = false
 var _enemy
+export (Texture) var _enemyIdle_tex
+export (Texture) var _enemyEasy_tex
+export (Texture) var _enemyMedium_tex
+export (Texture) var _enemyHard_tex
+var _currentProgressBarSubSection = 0 # 0 = easy, 1 = medium, 2 = hard ###
 
-export (Texture) var _enemyIdleTest_tex
-export (Texture) var _enemyEasyTest_tex
-export (Texture) var _enemyMediumTest_tex
-export (Texture) var _enemyHardTest_tex
+# answer panel selection & randomization ################################
+var _questionPanelText
+var _answerPanels = [ ]
+var count = 0 # TODO: remove, for testing
+var _answerTextCorrect
+var _answerPanelRngSelector = RandomNumberGenerator.new()################
 
-# 0 = easy, 1 = medium, 2 = hard
-var currentProgressBarSubSection = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_questionPanelText = get_node("../QuestionMenu/MainColumn/QuestionTextPanelContainer/MarginContainer/ScrollContainer/QuestionText")
+	
 	_progressBarEasy = get_node("../TimerBar/ProgressBarHbox/ProgressBarEasy")
 	_progressBarMedium = get_node("../TimerBar/ProgressBarHbox/ProgressBarMedium")
 	_progressBarHard = get_node("../TimerBar/ProgressBarHbox/ProgressBarHard")
+	
+	for answerPanelContainer in get_node("../QuestionMenu/MainColumn/TopAnswerRow/").get_children():
+		answerPanelContainer.connect("answer_selected", self, "_on_answerPanelContainer_Clicked")
+		_answerPanels.push_back(answerPanelContainer)
+	for answerPanelContainer in get_node("../QuestionMenu/MainColumn/BottomAnswerRow/").get_children():
+		answerPanelContainer.connect("answer_selected", self, "_on_answerPanelContainer_Clicked")
+		_answerPanels.push_back(answerPanelContainer)
+	
 	_waitTime = $QuestionTimer.wait_time
 	_subSectionWaitTime = $QuestionTimer.wait_time / 3
 	_enemy = get_node("../Enemy")
 	$startGameTimer.start()
+	_answerPanelRngSelector.randomize()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -36,59 +53,74 @@ func _process(delta):
 	# updates percentage to reflect each progress bar subsection
 	
 	if _timeRemaining <= _subSectionWaitTime:
-		currentProgressBarSubSection = 0
+		_currentProgressBarSubSection = 0
 		_progressBarEasy.value = (_timeRemaining / _subSectionWaitTime) * 100
-		_enemy.texture = _enemyEasyTest_tex
+		_enemy.texture = _enemyEasy_tex
 		
 	if _timeRemaining <= _subSectionWaitTime * 2 and _timeRemaining >= _subSectionWaitTime:
-		currentProgressBarSubSection = 1
+		_currentProgressBarSubSection = 1
 		_progressBarMedium.value = ((_timeRemaining - _subSectionWaitTime) / _subSectionWaitTime) * 100
-		_enemy.texture = _enemyMediumTest_tex
+		_enemy.texture = _enemyMedium_tex
 		
 	if _timeRemaining <= _subSectionWaitTime * 3 and _timeRemaining >= _subSectionWaitTime * 2: 
-		currentProgressBarSubSection = 2
+		_currentProgressBarSubSection = 2
 		_progressBarHard.value = ((_timeRemaining - (_subSectionWaitTime * 2)) / _subSectionWaitTime) * 100
-		_enemy.texture = _enemyHardTest_tex
+		_enemy.texture = _enemyHard_tex
 		
-func reset_for_next_question():
-	_progressBarEasy.value = 0
-	_progressBarMedium.value = 0
-	_progressBarHard.value = 0
-	currentProgressBarSubSection = 0
 	
 func startNextQuestion():
 	# TODO: Get next flashcard here
+	resetForNextQuestion()
+	getNextQuestionAndAnswers()
 	$QuestionTimer.start()
 	_waitingForAnswer = true
 	
+func resetForNextQuestion():
+	_progressBarEasy.value = 0
+	_progressBarMedium.value = 0
+	_progressBarHard.value = 0
+	_currentProgressBarSubSection = 0
+	
+func getNextQuestionAndAnswers():
+	var _questionText = "questionText: " + str(count)
+	var _wrongAnswers = [
+		"wrongAnswer1: " + str(count),
+		"wrongAnswer2: " + str(count),
+		"wrongAnswer2: " + str(count)
+	]
+	_answerTextCorrect = "answerTextCorrect: " + str(count)
+	var _selectedPanel = _answerPanelRngSelector.randi_range(0, 3)
+	var _wrongAnswerCounter = 0
+	
+	for i in 4:
+		if i == _selectedPanel:
+			_answerPanels[i].setAnswerText(_answerTextCorrect)
+			continue
+		_answerPanels[i].setAnswerText(_wrongAnswers[_wrongAnswerCounter])
+		_wrongAnswerCounter = _wrongAnswerCounter + 1
+	_questionPanelText.text = _questionText
+	count = count + 1
+	
+func stopQuestionTimer():
+	$QuestionTimer.stop()
+	
+func _on_answerPanelContainer_Clicked(answerPanelText):
+	print("_on_answerPanelContainer_Clicked")
+	stopQuestionTimer()
+	print("panelContents: ", answerPanelText)
+	print("Expected Answer: ", _answerTextCorrect)
+	var correctAnswerClicked = answerPanelText == _answerTextCorrect
+	if correctAnswerClicked:
+		print("Correct Answer Clicked!")
+	else:
+		print("Incorreect Answer Clicked.")
+	resetForNextQuestion()
+	startNextQuestion()
 
 func _on_startGameTimer_timeout():
 	_waitingForAnswer = true
-	$startGameTimer.stop()	
+	$startGameTimer.stop()
 	startNextQuestion()
-
 
 func _on_QuestionTimer_timeout():
 	_waitingForAnswer = false
-
-func processAnswer(answerPanelText):
-	print(answerPanelText)
-	$QuestionTimer.stop()
-	reset_for_next_question()
-
-func _on_Answer1PanelContainer_answer_selected(answerPanelText):
-	processAnswer(answerPanelText)
-	startNextQuestion()
-
-
-func _on_Answer2PanelContainer_answer_selected(answerPanelText):
-	processAnswer(answerPanelText)
-	startNextQuestion()
-
-func _on_Answer3PanelContainer_answer_selected(answerPanelText):
-	processAnswer(answerPanelText)
-	startNextQuestion()
-	
-func _on_Answer4PanelContainer_answer_selected(answerPanelText):
-	processAnswer(answerPanelText)
-	startNextQuestion()
