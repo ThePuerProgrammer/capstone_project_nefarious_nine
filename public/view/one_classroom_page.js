@@ -50,13 +50,14 @@ export async function one_classroom_page(classroomDocID) {
         }
     }
 
-    // adding classroom, members, and leaderboard tabs
+    // adding classroom, chat, members, and leaderboard tabs
     html += `<div class="classroom-page-tab">
         <button id="classroom-gen-button" class="classroom-tab">Classroom</button>
+        <button id="classroom-chat-button" class="classroom-tab">Chat</button>
         <button id="classroom-members-button" class="classroom-tab">Members</button>
         <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard</button>
         </div>`;
-    // could possibly add a new tab for classroom chat?
+
 
 
     // CLASSROOM tab contents
@@ -74,6 +75,11 @@ export async function one_classroom_page(classroomDocID) {
     }
 
     html += `</div>`;
+
+    // future CHAT tab content
+    html += `<div id="Chat" class="one-classroom-tab-content">
+    <h2>Chat</h2>
+    </div>`;
 
     // MEMBERS tab contents
     html+= `<div id="Members" class="one-classroom-tab-content">
@@ -123,12 +129,12 @@ export async function one_classroom_page(classroomDocID) {
         }
         // display gen classroom tab content
         document.getElementById('Classroom').style.display = "block";
-        //e.target.style.backgroundColor = `#A7ADC6`;
-        //e.target.style.color = `#2C1320`;
-        //e.target.style.borderBottom = `#A7ADC6`;
         
         document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
+
+        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-chat-button').style.color = '#2C1320';
 
         document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-members-button').style.color = '#2C1320';
@@ -136,6 +142,31 @@ export async function one_classroom_page(classroomDocID) {
         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
          
+    })
+
+    // get CLASSROOM tab and show it as visible
+    const classroomChatButton = document.getElementById('classroom-chat-button');
+    classroomChatButton.addEventListener('click', e => {
+        // clear all tabs contents
+        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].style.display = "none";
+        }
+        // display chat tab content
+        document.getElementById('Chat').style.display = "block";
+            
+        document.getElementById('classroom-chat-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-chat-button').style.color = '#A7ADC6';
+
+        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-gen-button').style.color = '#2C1320';
+    
+        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-members-button').style.color = '#2C1320';
+    
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
+             
     })
 
     // get MEMBERS tab and show it as visible
@@ -148,15 +179,15 @@ export async function one_classroom_page(classroomDocID) {
         }
         // display members tab content
         document.getElementById('Members').style.display = "block";
-        //e.target.style.backgroundColor = `#A7ADC6`;
-        //e.target.style.color = `#2C1320`;
-        //e.target.style.borderBottom = `#A7ADC6`;
 
         document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-members-button').style.color = '#A7ADC6';
 
         document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-gen-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-chat-button').style.color = '#2C1320';
 
         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
@@ -166,24 +197,24 @@ export async function one_classroom_page(classroomDocID) {
      const classroomLeaderboardButton = document.getElementById('classroom-leaderboard-button');
      classroomLeaderboardButton.addEventListener('click', e => {
         // clear all tabs contents
-         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
-         for (let i = 0; i < tabContents.length; i++) {
-             tabContents[i].style.display = "none";
-         }
-         // display leaderboard tab content
-         document.getElementById('Leaderboard').style.display = "block";
-        // e.target.style.backgroundColor = `#A7ADC6`;
-        // e.target.style.color = `#2C1320`;
-        // e.target.style.borderBottom = `#A7ADC6`;
+        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].style.display = "none";
+        }
+        // display leaderboard tab content
+        document.getElementById('Leaderboard').style.display = "block";
 
         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
 
-         document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
-         document.getElementById('classroom-members-button').style.color = '#2C1320';
- 
-         document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
-         document.getElementById('classroom-gen-button').style.color = '#2C1320';
+        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-gen-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-chat-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-members-button').style.color = '#2C1320';
      })
 
     // sets CLASSROOM as default
