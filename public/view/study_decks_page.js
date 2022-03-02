@@ -270,8 +270,9 @@ export async function study_decks_page() {
     })
 
     const searchDeckButton = document.getElementById('search-decks-button');
+    const searchType = 'deckSearch';
     searchDeckButton.addEventListener('click', async e => {
-        Utilities.searchBox('Search Decks', 'input query', 'searchDecks');
+        Utilities.searchBox('Search Decks', 'input query');
     })
 
 } //end study_decks_page()
