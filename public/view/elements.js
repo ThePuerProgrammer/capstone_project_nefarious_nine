@@ -44,7 +44,7 @@ export const formCreateDeck = document.getElementById('form-create-deck');
 export const formDeckCategorySelect = document.getElementById('select-deck-category');
 export const formCreateAccount = document.getElementById('form-create-account');
 export const formViewDeck = document.getElementById('form-view-deck');
-export const formSearchDeck = document.getElementById('form-search-deck');
+//export const formSearchDeck = document.getElementById('form-search-deck');
 //============================================================================//
 
 // STUDY PAGE
@@ -66,6 +66,9 @@ export const formResetPassword = document.getElementById('form-reset-password');
 
 export const popupInfoTitle = document.getElementById('modal-infobox-title');
 export const popupInfoBody = document.getElementById('modal-infobox-body');
+
+export const searchBoxTitle = document.getElementById('modal-searchbox-title');
+export const searchBoxPlaceholder = document.getElementById('modal-searchbox-placeholder');
 
 export const modalSignIn = new bootstrap.Modal(document.getElementById('modal-signin-form'), { backdrop: 'static' });
 export const modalCreateAFlashCard = new bootstrap.Modal(document.getElementById('modal-create-a-flashcard'));

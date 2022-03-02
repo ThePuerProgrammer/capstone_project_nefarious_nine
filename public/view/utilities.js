@@ -6,6 +6,15 @@ export function info(title, body, closeModal) {
     Elements.popupInfoBody.innerHTML = body;
     $('#modal-infobox').modal('show');
 }
+
+export function searchBox(title, placeholder, closeModal) {
+    if (closeModal) $('#' +closeModal).modal('hide');
+    Elements.searchBoxTitle.innerHTML = title;
+    Elements.searchBoxPlaceholder.innerHTML = placeholder;
+    $('#modal-searchbox').modal('show');
+}
+
+
 //Disables a button so a user cannot click it multiple times
 //incase a page/model takes time to load, could fault or double.
 export function disableButton(button){

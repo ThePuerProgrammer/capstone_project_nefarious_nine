@@ -67,11 +67,13 @@ export async function study_decks_page() {
     Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
-    html += '<h1> Study Decks </h1>';
+    html += '<h1> Study Decks <button class="btn search-btn search-btn-hover" type="click" style="float:right;">Search Decks</button></h1> '
+    ;
 
     //create deck button
     html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark">
-     Create A Deck +</button>`;
+     Create A Deck +</button>
+     `;
 
     // sort select menu
     html += `
@@ -84,7 +86,7 @@ export async function study_decks_page() {
         <option value="date">Date</option>
         <option value="category">Category</option>
     </select>
-    </div>
+    </div>    
     <br><br>
     `
 
