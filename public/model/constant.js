@@ -16,6 +16,8 @@ export const collectionName = {
     FLASHCARDS_DATA: 'flashcards_data',
     CLASSROOMS: 'classrooms',
     BACKEND: 'backend',
+    CLASSROOM_CHATS: 'classroom_chats',
+    MESSAGES: 'messages',
 }
 
 /*****************************************
