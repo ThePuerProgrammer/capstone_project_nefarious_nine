@@ -451,6 +451,18 @@ export async function deleteDeck(uid, docID) {
         .delete();
 }
 
+//============================================================================//
+// DELETE CLASSROOM
+//============================================================================//
+
+export async function deleteClassroom(classroomDocID) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classroomDocID)
+        .delete();
+}
+//===========================================================================//
+
 //===========================================================================//
 //UPDATE DECK 
 //===========================================================================//

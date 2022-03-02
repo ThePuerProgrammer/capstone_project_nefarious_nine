@@ -130,7 +130,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body pomo-bg-color-light pomo-text-color-dark">
-          <form method="post" id="form-create-account" <form>
+          <form method="post" id="form-create-account">
             <div>
               <input type="email" name="email" required placeholder="Email address">
             </div>
@@ -439,7 +439,7 @@
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch"
                   id="form-check-input-is-multiple-choice-edit">
-                <label class="form-check-label" for="form-check-input-is-multiple-choice">Multiple
+                <label class="form-check-label" for="form-check-input-is-multiple-choice-edit">Multiple
                   Choice</label>
               </div>
               <div class="form-check form-switch">
@@ -472,7 +472,8 @@
             <h3 style="text-align:center"><u>Answer Side</u></h3>
             <div id="form-edit-answer-container">
               Answer: <textarea name="answer" id="form-answer-text-input-edit" type="text" name="flashcard-answer"
-                class="form-control" placeholder="At least 4." required minlength="1" maxlength="30"></textarea>
+              class="form-control" required minlength="1" maxlength="30">
+          </textarea>    
             </div>
             <br />
             <div id="form-edit-flashcard-answer-image-container">
@@ -564,7 +565,29 @@
       </div>
     </div>
   </div>
-  <!-- END CREATE CLASSROOM MODAL---------------------------------------------->
+  <!-- END CREATE CLASSROOM MODAL------------------------------------------------>
+
+    <!-- DELETE CLASSROOM Modal ------------------------------------------------->
+  <div class="modal fade" id="modal-delete-classroom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-delete-classroom-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark">
+          <h5 class="modal-title pomo-text-color-light pomo-font-weight-bold" id="modal-delete-classroom-title">Delete Classroom?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+         <form id="form-delete-classroom" method="post">
+            <h3 style="text-align:center">Are you sure you want to delete this classroom?</h3>   
+            <div class="modal-footer pomo-bg-color-md-dark">         
+              <button id="no-delete-classroom-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-bg-color-md-light center" data-bs-dismiss="modal">No, thanks</button>
+              <button id="yes-delete-classroom-button" type="submit" data-bs-toggle="modal" class="btn btn-danger pomo-bg-color-dark center">Yes, delete!</button>                   
+            </div>
+          </form>
+        </div>        
+      </div>
+    </div>
+  </div>
+  <!-- END DELETE CLASSROOM Modal ------------------------------------------------->
 
   <!-- MODAL:PREVIEW CLASSROOM ------------------------------------------------------------------------------------------------------------------------------------>
   <div class="modal fade" id="preview-classroom-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
