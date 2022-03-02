@@ -7,7 +7,10 @@ import * as Deck from '../view/deck_page.js'
 import * as Study from '../view/study_page.js'
 import * as Minigames from '../view/minigames_page.js'
 import * as OneClassroom from '../view/one_classroom_page.js';
+import * as ChillZone from '../view/chillzone_page.js'
+import * as Analytics from '../view/analytics_page.js'
 import * as Search from '../view/search_page.js';
+
 
 export const routePathname = {
     HOME: '/',
@@ -19,7 +22,10 @@ export const routePathname = {
     STUDY: '/study',
     MINIGAMES: '/minigames',
     ONECLASSROOM: '/classroom',
-    SEARCH: '/search'
+    CHILLZONE: '/chillzone',
+    ANALYTICS: '/analytics',
+    SEARCH: '/search',
+
 };
 
 export const routes = [
@@ -32,7 +38,10 @@ export const routes = [
     { pathname: routePathname.STUDY, page: Study.study_page },
     { pathname: routePathname.MINIGAMES, page: Minigames.minigames_page },
     { pathname: routePathname.ONECLASSROOM, page: OneClassroom.one_classroom_page },
+    { pathname: routePathname.CHILLZONE, page: ChillZone.chill_zone_page },
+    { pathname: routePathname.ANALYTICS, page: Analytics.analytics_page },
     { pathname: routePathname.SEARCH, page: Search.search_page },
+
 ];
 
 export function routing(path, hash) {
