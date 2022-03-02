@@ -71,7 +71,7 @@ func _on_data(id):
 	# Data was first exchange from peer. Return
 	if remove_peers.size() != 0:
 		for peer in remove_peers:
-			_peers_awaiting_lobby_confirmation.remove(peer)
+			_peers_awaiting_lobby_confirmation.remove(_peers_awaiting_lobby_confirmation.find(peer))
 		return
 
 	# Else data wasn't related to choosing a lobby
@@ -96,10 +96,11 @@ func create_new_match(lobby):
 		message.game_start = true
 		message.content = new_game
 		_server.get_peer(lobby['queued_players'][0]).put_packet(message.get_raw())
+		lobby['connected_players'].append(lobby['queued_players'][0])
 		lobby['queued_players'].remove(0)
 	
-	for n in new_game:
-		lobby['connected_players'][n] = new_game
+	for i in range(new_game.size()):
+		lobby['connected_players'][i] = new_game
 			
 func _log():
 	pass
