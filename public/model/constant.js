@@ -55,4 +55,7 @@ export const htmlIDs = {
     createClassroom: 'button-create-classroom-modal',
     createClassroomModal: 'create-classroom-modal',
     buttonEditClassroom: 'button-edit-class',
+    miniGamesPage: 'godot-mini-games',
+    chillZonePage: 'chill-zone-page',
+    analyticsPage: 'analytics-page',
 }
