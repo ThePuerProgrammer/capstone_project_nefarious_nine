@@ -1,4 +1,4 @@
-# The following code was taken from this open source project file (MIT License)
+# The following code heavily references this open source project file (MIT License)
 # https://github.com/henriquelalves/SnakeVersusWebRTC/blob/main/godot-project/MultiplayerFramework/WebRTCClient.gd 
 
 extends Node
