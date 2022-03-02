@@ -3,10 +3,7 @@
 
 extends Node
 
-class_name ClientManager
-
-export(String) var websocket_url = "godot-server.captain.perons.com.br"
-export(int) var port = 9080
+class_name ClientMgr
 
 var _rtc : WebRTC_Client
 var _match = []
@@ -22,6 +19,8 @@ var uri : String
 signal on_message(message)
 signal on_players_ready()
 
+signal connected_to_ws_server
+
 func send_data(message : Message):
 	if (players_ready):
 		_rtc.rtc_mp.put_packet(message.get_raw())
@@ -31,10 +30,10 @@ func send_data(message : Message):
 		_client.get_peer(1).put_packet(message.get_raw())
 
 func connect_to_server():
-	uri = "ws://" + websocket_url + ":" + str(port)
+	uri = "ws://" + Constants.WEB_SOCKET_URL + ":" + str(Constants.SERVER_PORT)
 	
 	players_ready = false
-	_rtc = load("res://MultiplayerFramework/WebRTCClient.tscn").instance()
+	_rtc = load('res://multiplayer_engine/WebRTC_Client.tscn').instance()
 	_match = []
 	_rtc_peers = {}
 	_id = 0
@@ -79,6 +78,7 @@ func _closed(was_clean = false):
 	set_process(false)
 
 func _connected(proto = ""):
+	emit_signal('connected_to_ws_server')
 	print("Connected to server!")
 
 func _on_data():

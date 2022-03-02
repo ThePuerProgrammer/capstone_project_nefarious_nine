@@ -20,7 +20,7 @@ _global_script_classes=[ {
 "path": "res://addons/silicon.util.custom_docs/doc_item/class_doc_item.gd"
 }, {
 "base": "Node",
-"class": "ClientManager",
+"class": "ClientMgr",
 "language": "GDScript",
 "path": "res://multiplayer_engine/Client_Mgr.gd"
 }, {
@@ -152,7 +152,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "ArgumentDocItem": "",
 "ClassDocItem": "",
-"ClientManager": "",
+"ClientMgr": "",
 "ConstantDocItem": "",
 "DocExporter": "",
 "DocItem": "",
@@ -180,10 +180,14 @@ _global_script_class_icons={
 "WebRTC_Client": ""
 }
 
+[DefaultProjectBehavior]
+
+isServer=false
+
 [application]
 
 config/name="Pomogame"
-run/main_scene="res://Menu/MenuScreen.tscn"
+run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -194,6 +198,7 @@ CurrentUser="*res://singletons/Current_User.tscn"
 Constants="*res://singletons/Constants.tscn"
 FirebaseController="*res://singletons/Firebase_Controller.tscn"
 Pomotimer="*res://singletons/Pomotimer.gd"
+LobbyDescription="*res://singletons/Lobby_Description.tscn"
 
 [display]
 

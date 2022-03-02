@@ -9,8 +9,6 @@ onready var vote_minigame_checkbutton 	= $"Centered/TabContainer/CreateLobby/Lob
 onready var pword_input_line_edit 		= $'Centered/TabContainer/JoinLobby/JoinHBox/PwordInput'
 onready var join_button 				= $'Centered/TabContainer/JoinLobby/JoinHBox/JoinButton'
 
-onready var client_mgr = ClientMgr.new()
-
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
 
@@ -71,6 +69,8 @@ func _createLobby():
 			'chat_enabled' : chat_enabled_checkbutton.pressed,
 			'vote_enabled' : vote_minigame_checkbutton.pressed
 		}
+		# Global goodness for easy access across nodes
+		LobbyDescription.set_lobby_description(lobby_description)
 		var doc = FirebaseController.add_new_multiplayer_lobby(lobby_description)
 		if doc is GDScriptFunctionState:
 			doc = yield(doc, 'completed')
