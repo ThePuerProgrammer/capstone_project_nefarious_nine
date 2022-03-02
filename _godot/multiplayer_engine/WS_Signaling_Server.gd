@@ -84,7 +84,7 @@ func _process(_delta):
 
 	for lobby in _active_lobbies:
 		if _active_lobbies[lobby]['queued_players'].size() >= _active_lobbies[lobby]['max_players']:
-			create_new_match(lobby)
+			create_new_match(_active_lobbies[lobby])
 
 func create_new_match(lobby):
 	var new_game = []

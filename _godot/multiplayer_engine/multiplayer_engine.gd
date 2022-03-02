@@ -81,7 +81,7 @@ func _createLobby():
 		var doc_name : String = doc['name']
 		var index_of_last_fwd_slash = doc_name.find_last('/')
 		var lobby_id = doc_name.substr(index_of_last_fwd_slash + 1, doc_name.length())
-		LobbyDescription._lobby_id = lobby_id
+		LobbyDescription.set_lobby_id(lobby_id)
 		
 		CurrentUser.peer_id = _generate_peer_id()
 		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
@@ -121,10 +121,18 @@ func _get_available_lobbies():
 		
 		new_lobby.get_node('HBoxContainer/HostNameLabel').text = host
 		new_lobby.get_node('HBoxContainer/PrivacyStatusLabel').text = 'Public' if doc_fields['password'] == '' else 'Private'
-		new_lobby.password = doc_fields['password'] # We are going to need this info when joining
 		new_lobby.get_node('HBoxContainer/ClassroomLabel').text = doc_fields['classroom']
 		new_lobby.get_node('HBoxContainer/PlayerCountLabel').text = doc_fields['player_count']
 		new_lobby.get_node('HBoxContainer/ChatEnabledLabel').text = 'Enabled' if doc_fields['chat_enabled'] else 'Disabled'
+		
+		# We are going to need all of this infor to describe the lobby when we try to join it
+		new_lobby.host = doc_fields['host']
+		new_lobby.password = doc_fields['password']
+		new_lobby.privacy_status = 'Public' if new_lobby.password == '' else 'Private'
+		new_lobby.classroom = doc_fields['classroom']
+		new_lobby.player_count = doc_fields['player_count']
+		new_lobby.max_players = doc_fields['player_count'][2].to_int()
+		new_lobby.chat_enabled = 'Enabled' if doc_fields['chat_enabled'] else 'Disabled'
 		
 		# Connect the signal emitted from the button component of the Lobby Selection instance
 		new_lobby.connect('lobby_button_pressed', self, '_on_lobby_button_pressed')		
@@ -160,7 +168,31 @@ func _on_JoinButton_pressed():
 		pword_input_line_edit.text = ''
 		join_button.disabled = true
 		
-		# JOIN HEREHHERHERHERHERHERHERHERH
+		# Get the docid to describe the lobby
+		var lobby_id = lobby_docids[selected_lobby]
+		LobbyDescription.set_lobby_id(lobby_id)
+		
+		# See, told you we'd need all this
+		var host = available_lobbies[selected_lobby].host
+		var password = available_lobbies[selected_lobby].password
+		var classroom = available_lobbies[selected_lobby].classroom
+		var player_count = available_lobbies[selected_lobby].player_count
+		var chat_enabled = available_lobbies[selected_lobby].chat_enabled
+		
+		# This will be parsed for important information when the WS server gets to work
+		LobbyDescription.set_lobby_description({
+			'host' : host,
+			'password' : password,
+			'classroom' : classroom,
+			'player_count' : player_count,
+			'chat_enabled' : chat_enabled,
+			'vote_enabled' : true
+		})
+		
+		# Let's do this thing
+		CurrentUser.peer_id = _generate_peer_id()
+		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
+			print('Could not change to the waiting for players screen')
 		
 func _generate_peer_id():
 	# A little idea I have to convert the users docid to an int for client/peer id
