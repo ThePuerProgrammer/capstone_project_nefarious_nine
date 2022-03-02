@@ -11,6 +11,11 @@ var _active_lobbies : Dictionary = {
 	#}
 }
 
+# This array will be for polling each new peer 
+# for packets that contain the Firebase docid
+# of the newly created multiplayer_game_lobby
+var _peers_awaiting_lobby_confirmation = []
+
 func _ready():
 	# Connect server signals to local functions
 	_server.connect("client_connected", self, "_connected")
@@ -30,6 +35,7 @@ func _ready():
 	_log()
 
 func _connected(id, proto):
+	_peers_awaiting_lobby_confirmation.append(id)
 	print("Client %d connected with protocol: %s" % [id, proto])
 
 func _close_request(id, code, reason):
@@ -39,6 +45,33 @@ func _disconnected(id, was_clean = false):
 	print("Client %d disconnected, clean: %s" % [id, str(was_clean)])
 
 func _on_data(id):
+	var remove_peers = []
+	for peer in _peers_awaiting_lobby_confirmation:
+		if peer == id:
+			remove_peers.append(peer)
+			var pkt = _server.get_peer(id).get_packet()
+			var data = pkt.byte2var()
+			
+			# Get the firebase document related to the data (docid)
+			var lobby_doc = FirebaseController.get_lobby(data)
+			if lobby_doc is GDScriptFunctionState:
+				lobby_doc = yield(lobby_doc, 'completed')
+			
+			var fields = lobby_doc['doc_fields']
+			_active_lobbies[data] = {
+				'host' : fields['host'],
+				'max_players' : fields['player_count'][2],
+				'queued_players' : [id],
+				'connected_players' : [],
+			}
+	
+	# Data was first exchange from peer. Return
+	if remove_peers.size() != 0:
+		for peer in remove_peers:
+			_peers_awaiting_lobby_confirmation.remove(peer)
+		return		
+
+	# Else
 	var pkt = _server.get_peer(id).get_packet()
 	print("Got data from client %d: %s ... echoing" % [id, pkt.get_string_from_utf8()])
 	_server.get_peer(id).put_packet(pkt)

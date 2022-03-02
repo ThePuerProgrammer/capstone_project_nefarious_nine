@@ -1,13 +1,13 @@
 extends Node
 
-onready var maxPlayersOptionButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/MaxPlayersOptionButton")
-onready var selectClassroomsButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton")
-onready var lobbies_vbox = get_node("Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox")
-onready var lobby_password_line_edit = get_node("Centered/TabContainer/CreateLobby/LobbySettings/PasswordLineEdit")
-onready var chat_enabled_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/ChatEnabledCheckbutton")
-onready var vote_minigame_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton")
-onready var pword_input_line_edit = get_node('Centered/TabContainer/JoinLobby/JoinHBox/PwordInput')
-onready var join_button = get_node('Centered/TabContainer/JoinLobby/JoinHBox/JoinButton')
+onready var maxPlayersOptionButton 		= $"Centered/TabContainer/CreateLobby/LobbySettings/MaxPlayersOptionButton"
+onready var selectClassroomsButton 		= $"Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton"
+onready var lobbies_vbox 				= $"Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox"
+onready var lobby_password_line_edit 	= $"Centered/TabContainer/CreateLobby/LobbySettings/PasswordLineEdit"
+onready var chat_enabled_checkbutton 	= $"Centered/TabContainer/CreateLobby/LobbySettings/ChatEnabledCheckbutton"
+onready var vote_minigame_checkbutton 	= $"Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton"
+onready var pword_input_line_edit 		= $'Centered/TabContainer/JoinLobby/JoinHBox/PwordInput'
+onready var join_button 				= $'Centered/TabContainer/JoinLobby/JoinHBox/JoinButton'
 
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
@@ -18,9 +18,7 @@ var available_lobbies = []
 var lobby_docids = []
 var selected_lobby = -1
 
-var peer
-var peer_id
-var data_channel
+onready var client_mgr = ClientMgr.new()
 
 func _ready():
 	# Max players drop down button items. Disable non numeric
@@ -75,8 +73,13 @@ func _createLobby():
 			'chat_enabled' : chat_enabled_checkbutton.pressed,
 			'vote_enabled' : vote_minigame_checkbutton.pressed
 		}
-		FirebaseController.add_new_multiplayer_lobby(lobby_description)
-		peer_id = _generate_peer_id()
+		var doc = FirebaseController.add_new_multiplayer_lobby(lobby_description)
+		if doc is GDScriptFunctionState:
+			doc = yield(doc, 'completed')
+		print (doc)
+		CurrentUser.peer_id = _generate_peer_id()
+		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
+			print('Could not change to the waiting for players screen')
 		
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
@@ -160,12 +163,12 @@ func _generate_peer_id():
 	# that array is summed together as int values. The original uid becomes the seed hash for an rng
 	# along with the current unix time and the final value is the product of the rng and the int 
 	# representation of the uid. It's not perfect, but it should do for now. 
-	var uid : String = CurrentUser.user_id
+	var uid : String = CurrentUser.user_id if CurrentUser.user_id else "87gs9f7438g12shigdjkhf"
 	var pool_bytes = uid.to_ascii()
 	var bytes_to_int = 0
 	for byte in pool_bytes:
 		bytes_to_int += int(byte)
 	var rng = RandomNumberGenerator.new()
 	rng.seed = hash(uid) + OS.get_unix_time()
-	var random_number = rng.rand_range(1, 100000) 
+	var random_number = rng.randi_range(1, 100000) 
 	return random_number * bytes_to_int

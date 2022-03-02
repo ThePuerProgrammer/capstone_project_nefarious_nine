@@ -1,4 +1,4 @@
-# This class file was taken from the follow open source project (MIT License)
+# This class file was taken from the following open source project (MIT License)
 # https://github.com/henriquelalves/SnakeVersusWebRTC/blob/main/godot-project/MultiplayerFramework/Message.gd
 
 class_name Message
