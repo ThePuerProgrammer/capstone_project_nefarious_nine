@@ -61,13 +61,15 @@ export function addEventListeners() {
     Elements.formDeleteDeckConfirmation.addEventListener('submit', async e=>{
         const yes = e.target.yes.value;
     });
+
+
 }
 
 export async function study_decks_page() {
     Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
-    html += '<h1> Study Decks <button class="btn search-btn search-btn-hover" type="click" style="float:right;">Search Decks</button></h1> '
+    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover" type="click" style="float:right;">Search Decks</button></h1> '
     ;
 
     //create deck button
@@ -267,10 +269,15 @@ export async function study_decks_page() {
         $(`#${Constant.htmlIDs.createDeckModal}`).modal('show');
     })
 
-}
+    const searchDeckButton = document.getElementById('search-decks-button');
+    searchDeckButton.addEventListener('click', async e => {
+        Utilities.searchBox('Search Decks', 'input query');
+    })
+
+} //end study_decks_page()
 
 
-function buildDeckView(deck, flashcards) {
+export function buildDeckView(deck, flashcards) {
     let html = `
     <div id="${deck.docId}" class="deck-card">
         <div class="deck-view-css">

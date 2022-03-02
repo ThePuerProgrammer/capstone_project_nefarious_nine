@@ -7,8 +7,8 @@ export function info(title, body, closeModal) {
     $('#modal-infobox').modal('show');
 }
 
-export function searchBox(title, placeholder, closeModal) {
-    if (closeModal) $('#' +closeModal).modal('hide');
+export function searchBox(title, placeholder) {
+    //if (closeModal) $('#' +closeModal).modal('hide');
     Elements.searchBoxTitle.innerHTML = title;
     Elements.searchBoxPlaceholder.innerHTML = placeholder;
     $('#modal-searchbox').modal('show');
