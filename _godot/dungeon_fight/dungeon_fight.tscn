@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://assets/Resources/floor.tres" type="TileSet" id=1]
 [ext_resource path="res://assets/tilesets/dungeon_fighting/Floor/Sample_Character_Normal_Right.png" type="Texture" id=2]
@@ -24,6 +24,8 @@
 [ext_resource path="res://dungeon_fight/WhiteOut.gd" type="Script" id=22]
 [ext_resource path="res://assets/Resources/vignette_animation.tres" type="Animation" id=23]
 [ext_resource path="res://dungeon_fight/WhiteIn.gd" type="Script" id=24]
+[ext_resource path="res://dungeon_fight/ProgressBar/hp_bar_background.tres" type="StyleBox" id=25]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=26]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24.8649, 65.9436 )
@@ -323,6 +325,34 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="EnemyHpBar" type="ProgressBar" parent="."]
+margin_left = 1491.59
+margin_top = 557.467
+margin_right = 1774.59
+margin_bottom = 592.467
+rect_min_size = Vector2( 283, 35 )
+rect_pivot_offset = Vector2( -30.9324, 39.3935 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 26 )
+custom_styles/fg = ExtResource( 4 )
+custom_styles/bg = ExtResource( 25 )
+value = 100.0
+
+[node name="PlayerHpBar" type="ProgressBar" parent="."]
+margin_left = 1062.29
+margin_top = 708.496
+margin_right = 1345.29
+margin_bottom = 743.496
+rect_min_size = Vector2( 283, 35 )
+rect_pivot_offset = Vector2( -30.9324, 39.3935 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 26 )
+custom_styles/fg = ExtResource( 4 )
+custom_styles/bg = ExtResource( 25 )
+value = 100.0
+
 [node name="QuestionManager" type="Node" parent="."]
 script = ExtResource( 9 )
 _enemyIdle_tex = ExtResource( 16 )
@@ -331,7 +361,7 @@ _enemyMedium_tex = ExtResource( 18 )
 _enemyHard_tex = ExtResource( 17 )
 
 [node name="QuestionTimer" type="Timer" parent="QuestionManager"]
-wait_time = 3.0
+wait_time = 9.0
 
 [node name="startGameTimer" type="Timer" parent="QuestionManager"]
 

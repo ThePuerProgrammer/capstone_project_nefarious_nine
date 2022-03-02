@@ -8,6 +8,7 @@ var _waitTime
 var _subSectionWaitTime
 var _waitingForAnswer = false
 var _enemy
+var _timeRemaining
 export (Texture) var _enemyIdle_tex
 export (Texture) var _enemyEasy_tex
 export (Texture) var _enemyMedium_tex
@@ -21,6 +22,13 @@ var count = 0 # TODO: remove, for testing
 var _answerTextCorrect
 var _answerPanelRngSelector = RandomNumberGenerator.new()################
 
+# combat and damage system ##############################################
+var _playerHpBar
+var _enemyHpBar
+var _playerBaseDamage = 5
+var _enemyBaseDamage = 5
+#########################################################################
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -29,6 +37,9 @@ func _ready():
 	_progressBarEasy = get_node("../TimerBar/ProgressBarHbox/ProgressBarEasy")
 	_progressBarMedium = get_node("../TimerBar/ProgressBarHbox/ProgressBarMedium")
 	_progressBarHard = get_node("../TimerBar/ProgressBarHbox/ProgressBarHard")
+	
+	_playerHpBar = get_node("../PlayerHpBar")
+	_enemyHpBar = get_node("../EnemyHpBar")
 	
 	for answerPanelContainer in get_node("../QuestionMenu/MainColumn/TopAnswerRow/").get_children():
 		answerPanelContainer.connect("answer_selected", self, "_on_answerPanelContainer_Clicked")
@@ -48,7 +59,7 @@ func _process(delta):
 	if $QuestionTimer.is_stopped() or !_waitingForAnswer:
 		return
 	
-	var _timeRemaining = _waitTime - $QuestionTimer.time_left
+	_timeRemaining = _waitTime - $QuestionTimer.time_left
 	
 	# updates percentage to reflect each progress bar subsection
 	
@@ -105,15 +116,19 @@ func stopQuestionTimer():
 	$QuestionTimer.stop()
 	
 func _on_answerPanelContainer_Clicked(answerPanelText):
-	print("_on_answerPanelContainer_Clicked")
 	stopQuestionTimer()
-	print("panelContents: ", answerPanelText)
-	print("Expected Answer: ", _answerTextCorrect)
 	var correctAnswerClicked = answerPanelText == _answerTextCorrect
 	if correctAnswerClicked:
-		print("Correct Answer Clicked!")
+		var newEnemyHp = _enemyHpBar.value - _playerBaseDamage
+		if newEnemyHp < 0:
+			newEnemyHp = 0
+		_enemyHpBar.value = newEnemyHp
 	else:
-		print("Incorreect Answer Clicked.")
+		var damageMultiplier = floor((_timeRemaining / _subSectionWaitTime) + 1)
+		var newPlayerHp = _playerHpBar.value - (_enemyBaseDamage * damageMultiplier)
+		if newPlayerHp < 0:
+			newPlayerHp = 0
+		_playerHpBar.value = newPlayerHp
 	resetForNextQuestion()
 	startNextQuestion()
 
