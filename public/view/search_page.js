@@ -7,6 +7,8 @@ import { currentUser } from '../controller/firebase_auth.js';
 import { buildDeckView } from './study_decks_page.js';
 import * as FirestoreController from '../controller/firebase_controller.js';
 
+let searchType;
+
 export function addEventListeners() {
 
     Elements.formSearchBox.addEventListener('submit', async e => {
@@ -24,23 +26,23 @@ export function addEventListeners() {
         const joinedSearchKeys = searchKeysArray.join(',');
 
         history.pushState(null, null, Routes.routePathname.SEARCH + '#' + joinedSearchKeys);
-        const searchType = e.target.searchType.value;
-        await search_page(joinedSearchKeys, searchType); //for whichever search you're running
+        searchType = Elements.searchBoxType.value;
+        await search_page(joinedSearchKeys, searchKeysArray, searchType); //for whichever search you're running
 
         Utilities.enableButton(button, label);
     });
     
 }
 
-export async function search_page(joinedSearchKeys, searchType) {
+export async function search_page(joinedSearchKeys, searchKeysArray, searchType) {
 
     if (!joinedSearchKeys) {
-        Util.info('Error', 'No Search Query Found');
+        Utilities.info('Error', 'No Search Query Found');
         return;
     }
 
     if (searchKeysArray.length == 0) {
-        Util.info('Erros', 'No Search Query Found');
+        Utilities.info('Erros', 'No Search Query Found');
         return;
     }
 
@@ -51,12 +53,18 @@ export async function search_page(joinedSearchKeys, searchType) {
 
     switch(searchType) {
 
-        case deckSearch:
+        case 'deckSearch':
             const deckList = searchDecks();
             buildDeckView(deckList);
             break;
 
+        default: Utilities.info('No search type detected');
+
     }
+}
+
+export function setSearchType(searchType) {
+    Elements.searchBoxType.value = searchType;
 }
 
 export async function searchDecks() {
@@ -65,7 +73,7 @@ export async function searchDecks() {
         deckList = await FirestoreController.searchDecks(searchKeysArray);
     } catch (e) {
         if (Constants.DEV) console.log(e);
-        Util.info('There was an error with the Search', JSON.stringify(e));
+        Utilities.info('There was an error with the Search', JSON.stringify(e));
         return;
     }
     return deckList;

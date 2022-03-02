@@ -539,9 +539,20 @@ iframe {
 #pomogame-iframe-container {
     height:  0px;
 }
-<<<<<<< HEAD
-/*============================================================================*/
 
+/*HOME SCREEN CARDS*/
+/*============================================================================*/
+.card-img {
+    
+    max-width: 30rem;
+    max-height: 28rem;
+    border-radius: 12px;
+    padding-bottom: 2%;
+}
+
+.card-title {
+    font-size: 40px;
+}
 /*============================================================================*/
 
   /*STYLES FOR SEARCH*/
@@ -566,21 +577,3 @@ iframe {
     background-color: #5F4B66;
     color: #A7ADC6 !important;
 }
-
-=======
-
-/*HOME SCREEN CARDS*/
-/*============================================================================*/
-.card-img {
-    
-    max-width: 30rem;
-    max-height: 28rem;
-    border-radius: 12px;
-    padding-bottom: 2%;
-}
-
-.card-title {
-    font-size: 40px;
-}
-/*============================================================================*/
->>>>>>> origin/main

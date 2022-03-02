@@ -8,6 +8,7 @@ import * as DeckPage from './deck_page.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as EditDeck from '../controller/edit_deck.js'
+import * as Search from './search_page.js'
 
 let confirmation=false;
 
@@ -270,8 +271,9 @@ export async function study_decks_page() {
     })
 
     const searchDeckButton = document.getElementById('search-decks-button');
-    const searchType = 'deckSearch';
     searchDeckButton.addEventListener('click', async e => {
+        const searchtype = 'deckSearch';
+        Search.setSearchType(searchtype);
         Utilities.searchBox('Search Decks', 'input query');
     })
 
