@@ -5,7 +5,6 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as Elements from './elements.js'
 import { Classroom } from '../model/classroom.js'
-import { classrooms_page } from './classrooms_page.js'
 
 let classroomDocID;
 
@@ -51,13 +50,14 @@ export async function one_classroom_page(classroomDocID) {
         }
     }
 
-    // adding classroom, members, and leaderboard tabs
+    // adding classroom, chat, members, and leaderboard tabs
     html += `<div class="classroom-page-tab">
         <button id="classroom-gen-button" class="classroom-tab">Classroom</button>
+        <button id="classroom-chat-button" class="classroom-tab">Chat</button>
         <button id="classroom-members-button" class="classroom-tab">Members</button>
         <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard</button>
         </div>`;
-    // could possibly add a new tab for classroom chat?
+
 
 
     // CLASSROOM tab contents
@@ -66,19 +66,20 @@ export async function one_classroom_page(classroomDocID) {
         <h4>${classroom.subject}, ${classroom.category}</h4>
         <br>`;
     
-    //if current user is a mod, populate the edit classroom button and delete button
+    //if current user is a mod, populate the edit classroom button
     //causes null edit button error
     if (mod == true) {
         //removed doc id from page view -- Blake
         html += `<button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
-            >Edit Classroom</button>
-            <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
-                Delete Classroom
-            </button>`
-            ;
+            >Edit Classroom</button>`;
     }
 
     html += `</div>`;
+
+    // future CHAT tab content
+    html += `<div id="Chat" class="one-classroom-tab-content">
+    <h2>Chat</h2>
+    </div>`;
 
     // MEMBERS tab contents
     html+= `<div id="Members" class="one-classroom-tab-content">
@@ -86,7 +87,7 @@ export async function one_classroom_page(classroomDocID) {
         <div class="column">
         <h2>Members</h2>`;
 
-    // If mod, show members w BAN option
+    // If current user is mod, show members w BAN option
     if (mod == true) {
         members.forEach(member => {
             html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
@@ -121,48 +122,99 @@ export async function one_classroom_page(classroomDocID) {
     // get CLASSROOM tab and show it as visible
     const classroomGenButton = document.getElementById('classroom-gen-button');
     classroomGenButton.addEventListener('click', e => {
+        // clear all tabs contents
         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
         for (let i = 0; i < tabContents.length; i++) {
             tabContents[i].style.display = "none";
         }
+        // display gen classroom tab content
         document.getElementById('Classroom').style.display = "block";
-        e.target.style.backgroundColor = `#A7ADC6`;
-        e.target.style.color = `#2C1320`;
-        e.target.style.borderBottom = `#A7ADC6`;
+        
         document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
+
+        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-chat-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-members-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
          
+    })
+
+    // get CLASSROOM tab and show it as visible
+    const classroomChatButton = document.getElementById('classroom-chat-button');
+    classroomChatButton.addEventListener('click', e => {
+        // clear all tabs contents
+        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].style.display = "none";
+        }
+        // display chat tab content
+        document.getElementById('Chat').style.display = "block";
+            
+        document.getElementById('classroom-chat-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-chat-button').style.color = '#A7ADC6';
+
+        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-gen-button').style.color = '#2C1320';
+    
+        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-members-button').style.color = '#2C1320';
+    
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
+             
     })
 
     // get MEMBERS tab and show it as visible
     const classroomMembersButton = document.getElementById('classroom-members-button');
     classroomMembersButton.addEventListener('click', e => {
+        // clear all tabs contents
         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
         for (let i = 0; i < tabContents.length; i++) {
             tabContents[i].style.display = "none";
         }
+        // display members tab content
         document.getElementById('Members').style.display = "block";
-        e.target.style.backgroundColor = `#A7ADC6`;
-        e.target.style.color = `#2C1320`;
-        e.target.style.borderBottom = `#A7ADC6`;
+
         document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-members-button').style.color = '#A7ADC6';
+
+        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-gen-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-chat-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
     })
 
      // get LEADERBOARD tab and show it as visible
      const classroomLeaderboardButton = document.getElementById('classroom-leaderboard-button');
      classroomLeaderboardButton.addEventListener('click', e => {
         // clear all tabs contents
-         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
-         for (let i = 0; i < tabContents.length; i++) {
-             tabContents[i].style.display = "none";
-         }
-         document.getElementById('Leaderboard').style.display = "block";
-         e.target.style.backgroundColor = `#A7ADC6`;
-         e.target.style.color = `#2C1320`;
-         e.target.style.borderBottom = `#A7ADC6`;
-         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
-         document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
+        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].style.display = "none";
+        }
+        // display leaderboard tab content
+        document.getElementById('Leaderboard').style.display = "block";
+
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
+
+        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-gen-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-chat-button').style.color = '#2C1320';
+
+        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+        document.getElementById('classroom-members-button').style.color = '#2C1320';
      })
 
     // sets CLASSROOM as default
@@ -171,7 +223,6 @@ export async function one_classroom_page(classroomDocID) {
     //following Pipers create classroom functionality
     if (mod == true) { //if owner of classroom, add listener. This avoids null editButton errors.
         const editButton = document.getElementById('button-edit-class');
-        const deleteButton = document.getElementById('button-delete-classroom'); //delete button on page
         editButton.addEventListener('click', async e => {
 
             const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
@@ -184,23 +235,7 @@ export async function one_classroom_page(classroomDocID) {
             });
             Elements.modalEditClassroom.show();
         })
-
-        deleteButton.addEventListener('click', async e => {
-            Elements.modalDeleteClassroom.show();
-        })
-        
-        const confirmDeleteClassroom = document.getElementById('yes-delete-classroom-button'); //delete button on modal
-        confirmDeleteClassroom.addEventListener("click", async e => {
-            e.preventDefault();
-            const deletedClassName = classroom.name;
-            await FirebaseController.deleteClassroom(classroomDocID);
-            Utilities.info('Success', `Classroom: ${deletedClassName} deleted.`);
-            await classrooms_page();
-        })
-    } //end of mod listeners
-        
-        
-  
+    }
 
     Elements.formEditClassroom.addEventListener('submit', async e => {
         e.preventDefault();
