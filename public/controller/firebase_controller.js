@@ -6,6 +6,7 @@ import { FlashcardData } from '../model/flashcard_data.js';
 import { User } from '../model/user.js';
 import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
+import { Message } from '..model/message.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -771,3 +772,33 @@ export async function getCoins(uid) {
     return user.coins;
 }
 //============================================================================//
+
+//============================================================================//
+// Functions for class chat
+//============================================================================//
+export async function addNewMessage(classroomDocID, message) {
+    const docRef = await Firebase.firestore()
+        .collection(Constants.collectionName.CLASSROOM_CHATS)
+        .doc(classroomDocID)
+        .collection(Constants.collectionName.MESSAGES)
+        .add(message.serialize());
+    return docRef.id;
+}
+
+export async function getMessages(classroomDocID) {
+    let messages = [];
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOM_CHATS)
+        .doc(classroomDocID)
+        .collection(Constant.collectionName.MESSAGES)
+        .orderBy('timestamp')
+        .get();
+
+    ref.forEach(doc => {
+        let m = new Message(doc.data());
+        m.set_docID(doc.id);
+        messages.push(m);
+    })
+
+    return messages;
+}

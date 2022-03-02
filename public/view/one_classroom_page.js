@@ -4,11 +4,11 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as Elements from './elements.js'
+import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 
 let classroomDocID;
-let activeUsers = [];
 
 export function addClassroomViewButtonListeners() {
     const viewButtons = document.getElementsByClassName('form-view-classroom');
@@ -110,6 +110,9 @@ export async function one_classroom_page(classroomDocID) {
         html += `<p>${mod}</p>`;
     })
 
+    let messages = [];
+    messages = await FirebaseController.getMessages(classroomDocID);
+
     html += `</div>
         </div>
         </div>`;
@@ -120,7 +123,20 @@ export async function one_classroom_page(classroomDocID) {
         </div>`;
 
     html += `<div id="Chat" class="one-classroom-tab-content">
-    <div class="active-members-count"></div>
+        <div id="chat-body">`
+    if (messages.length > 0) {
+        messages.forEach(m => {
+            html += buildMessageView(m);
+        })
+    } else {
+        html += '<p>No messages have been posted yet...be the first!</p>';
+    }
+    html += `</div>`;
+    html += `<div>
+    <textarea id="add-new-message" placeholder="Send a message..."></textarea>
+    <br>
+    <button id="classroom-message-button">Send</button>
+    </div>
     </div>`;
 
     Elements.root.innerHTML = html;
@@ -128,11 +144,6 @@ export async function one_classroom_page(classroomDocID) {
     // get CLASSROOM tab and show it as visible
     const classroomGenButton = document.getElementById('classroom-gen-button');
     classroomGenButton.addEventListener('click', e => {
-        // removes current user from active chat users
-        if (activeUsers.includes(Auth.currentUser.email)) {
-            const i = activeUsers.indexOf(Auth.currentUser.email);
-            activeUsers.splice(i, 1);
-        }
         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
         for (let i = 0; i < tabContents.length; i++) {
             tabContents[i].style.display = "none";
@@ -141,23 +152,14 @@ export async function one_classroom_page(classroomDocID) {
         e.target.style.backgroundColor = `#A7ADC6`;
         e.target.style.color = `#2C1320`;
         e.target.style.borderBottom = `#A7ADC6`;
-        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
-        document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-members-button').style.color = '#A7ADC6';
-        document.getElementById('classroom-chat-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-chat-button').style.color = '#A7ADC6';
+        document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
 
     })
 
     // get MEMBERS tab and show it as visible
     const classroomMembersButton = document.getElementById('classroom-members-button');
     classroomMembersButton.addEventListener('click', e => {
-        // removes current user from active chat users
-        if (activeUsers.includes(Auth.currentUser.email)) {
-            const i = activeUsers.indexOf(Auth.currentUser.email);
-            activeUsers.splice(i, 1);
-        }
         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
         for (let i = 0; i < tabContents.length; i++) {
             tabContents[i].style.display = "none";
@@ -166,22 +168,13 @@ export async function one_classroom_page(classroomDocID) {
         e.target.style.backgroundColor = `#A7ADC6`;
         e.target.style.color = `#2C1320`;
         e.target.style.borderBottom = `#A7ADC6`;
-        document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
-        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
-        document.getElementById('classroom-chat-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-chat-button').style.color = '#A7ADC6';
+        document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-members-button').style.color = '#A7ADC6';
     })
 
     // get LEADERBOARD tab and show it as visible
     const classroomLeaderboardButton = document.getElementById('classroom-leaderboard-button');
     classroomLeaderboardButton.addEventListener('click', e => {
-        // removes current user from active chat users
-        if (activeUsers.includes(Auth.currentUser.email)) {
-            const i = activeUsers.indexOf(Auth.currentUser.email);
-            activeUsers.splice(i, 1);
-        }
         // clear all tabs contents
         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
         for (let i = 0; i < tabContents.length; i++) {
@@ -191,18 +184,12 @@ export async function one_classroom_page(classroomDocID) {
         e.target.style.backgroundColor = `#A7ADC6`;
         e.target.style.color = `#2C1320`;
         e.target.style.borderBottom = `#A7ADC6`;
-        document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
-        document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-members-button').style.color = '#A7ADC6';
-        document.getElementById('classroom-chat-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-chat-button').style.color = '#A7ADC6';
+        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
     })
 
     const classroomChatButton = document.getElementById('classroom-chat-button');
     classroomChatButton.addEventListener('click', e => {
-        // adds current user to active chat users
-        activeUsers.push(Auth.currentUser.email);
         let tabContents = document.getElementsByClassName("one-classroom-tab-content");
         for (let i = 0; i < tabContents.length; i++) {
             tabContents[i].style.display = "none";
@@ -218,6 +205,25 @@ export async function one_classroom_page(classroomDocID) {
         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
         document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
     })
+
+    const messageSubmitButton = document.getElementById("classroom-message-button");
+    messageSubmitButton.addEventListener('click', async e => {
+        e.preventDefault();
+        const messageElement = document.getElementById('classroom-message');
+        const content = messageElement.value;
+        const email = Auth.currentUser.email;
+        const timestamp = Date.now();
+        const message = new Message({
+            email, content, timestamp,
+        });
+        const docID = await FirebaseController.addNewMessage(classroomDocID, message);
+        message.docId = docID;
+        const messageTag = document.createElement('div');
+        messageTag.innerHTML = buildMessageView(message);
+        document.getElementById('message-reply-body').appendChild(messageTag);
+        document.getElementById('add-new-message').value = '';
+
+    });
 
     // sets CLASSROOM as default
     classroomGenButton.click();
@@ -293,6 +299,17 @@ export async function one_classroom_page(classroomDocID) {
     }
 
 
+}
+
+function buildMessageView(message) {
+    return `
+    <div class="border border-primary">
+        <div class="bg-info text #2C1320">
+            Posted by ${message.sender} at ${new Date(message.timestamp).toString()}
+        </div>
+        ${message.content};
+    </div>
+    <hr>`;
 }
 
 function buildButtons(member, banlist) {
