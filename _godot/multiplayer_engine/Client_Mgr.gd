@@ -92,7 +92,7 @@ func _on_data():
 		_id = message.content
 		_initialised = true
 		print("Logged in with id ", _id)
-	if (message.match_start):
+	if (message.game_start):
 		_match = message.content as Array
 		_player_number = _match.find(_id)
 		print("Match started as player ", _player_number)
