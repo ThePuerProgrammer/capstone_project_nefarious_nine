@@ -8,25 +8,6 @@ import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 
-let classroomDocID;
-let activeUsers = [];
-
-export function addClassroomViewButtonListeners() {
-    const viewButtons = document.getElementsByClassName('form-view-classroom');
-    for (let i = 0; i < viewButtons.length; ++i) {
-        addClassroomViewFormSubmitEvent(viewButtons[i]);
-    }
-}
-
-export function addClassroomViewFormSubmitEvent(form) {
-    form.addEventListener('submit', async e => {
-        e.preventDefault();
-        classroomDocID = e.target.docId.value;
-        history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classroomDocID);
-        await one_classroom_page(classroomDocID);
-    })
-}
-
 export async function one_classroom_page(classroomDocID) {
     Elements.root.innerHTML = '';
     let html = '';
@@ -130,7 +111,7 @@ export async function one_classroom_page(classroomDocID) {
             html += buildMessageView(m);
         })
     } else {
-        html += '<p>No messages have been posted yet...be the first!</p>';
+        html += '<p id="temp">No messages have been posted yet...be the first!</p>';
     }
     html += `</div>`;
     html += `<div>
@@ -221,9 +202,12 @@ export async function one_classroom_page(classroomDocID) {
         message.docId = docID;
         const messageTag = document.createElement('div');
         messageTag.innerHTML = buildMessageView(message);
+        const tempEl = document.getElementById('temp');
+        if(tempEl){
+            tempEl.remove();
+        }
         document.getElementById('message-reply-body').appendChild(messageTag);
         document.getElementById('add-new-message').value = '';
-        await one_classroom_page(classroomDocID);
     });
 
     // sets CLASSROOM as default
