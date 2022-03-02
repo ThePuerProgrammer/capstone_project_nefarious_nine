@@ -451,6 +451,18 @@ export async function deleteDeck(uid, docID) {
         .delete();
 }
 
+//============================================================================//
+// DELETE CLASSROOM
+//============================================================================//
+
+export async function deleteClassroom(classroomDocID) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classroomDocID)
+        .delete();
+}
+//===========================================================================//
+
 //===========================================================================//
 //UPDATE DECK 
 //===========================================================================//
@@ -782,5 +794,19 @@ export async function leaveClassroom(classId, userEmail) {
     const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
     await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
         .update({ members: arrayRemove(userEmail)});
+}
+//============================================================================//
+
+//============================================================================//
+// get user COINS
+//============================================================================//
+export async function getCoins(uid) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .get();
+    
+    const user = new User(ref.data());
+    return user.coins;
 }
 //============================================================================//

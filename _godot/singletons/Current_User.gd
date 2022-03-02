@@ -7,7 +7,7 @@ var user_id
 var user_email = ""
 
 # After successful signin, the current user's user collection
-var userDoc
+var user_doc
 
 var user_is_authenticated = false
 
@@ -47,10 +47,9 @@ func _on_login_failed(code, msg):
 func _on_login_succeeded(_auth_info):
 	user_is_authenticated = true
 	if window != null:
-		var collection : FirestoreCollection = Firebase.Firestore.collection('users')
-		var document_task : FirestoreTask = collection.get(user_id)
-		var document : FirestoreDocument = yield(document_task, "get_document")
-		userDoc = document
+		user_doc = FirebaseController.get_user_document(user_id)
+		if user_doc is GDScriptFunctionState:
+			user_doc = yield(user_doc, "completed")
 	emit_signal("authentication_success")
 
 func authenticate_current_user(password):

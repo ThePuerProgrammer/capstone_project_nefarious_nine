@@ -125,8 +125,10 @@ export async function classrooms_page() {
     }
 
     availableClassroomList.forEach(ac => {
-        html += `
+        if(!ac.banlist.includes(Auth.currentUser.email)){
+            html += `
                 <tr>${buildAvailableClassroom(ac)}</tr>`;
+        }
     })
     html += `</tbody></table></div>`;
 
@@ -153,8 +155,10 @@ export async function classrooms_page() {
         html += '<p>No classrooms found!</p>';
     }
     myClassroomList.forEach(c => {
+        if(!c.banlist.includes(Auth.currentUser.email)){
         html += `
                 <tr>${buildMyClassroom(c)}</tr>`;
+        }
     })
 
     html += `</tbody></table></div>`;
@@ -202,7 +206,7 @@ export async function classrooms_page() {
                 Elements.previewClassroomFooter.innerHTML=`
                 <form class="form-view-classroom-from-preview" method="post">
                     <input type="hidden" name="docId" value="${classId}">
-                    <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+                    <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Enter Class</button>
                 </form>`;
                 //Adding Case of user is creator to leave
                 if(!classMods.includes(userEmail)){
@@ -272,9 +276,9 @@ export async function classrooms_page() {
                         await FirebaseController.leaveClassroom(classId, userEmail);
                         availableClassroomButton.click();
                     });
-                    
-                    
+
                 });
+
             }           
             Elements.modalPreviewClassroom.show();
             Utilities.enableButton(button, label);
@@ -315,8 +319,8 @@ export async function classrooms_page() {
     // sets myclassrooms as default
     myClassroomButton.click();
 
-    const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
 
+    const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
     // CREATE CLASSROOM open modal button listener 
     createClassroomButton.addEventListener('click', async e => {
 
@@ -337,8 +341,7 @@ export async function classrooms_page() {
 
         categories.forEach(category => {
             Elements.formClassCategorySelect.innerHTML += `
-                      <option value="${category}">${category}</option>
-                  `;
+                      <option value="${category}">${category}</option>`;
         });
 
         // opens create Classroom modal
@@ -408,7 +411,17 @@ function buildMyClassroom(classroom) {
 }
 
 function buildAvailableClassroom(classroom) {
-    let html = `
+    let html = classroom.members.includes(Auth.currentUser.email) ? `
+    <td>
+    <form class="form-preview-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docID}"/>
+            <input type="hidden" name="name" value ="${classroom.name}"/>
+            <input type="hidden" name="subject" value ="${classroom.subject}"/>
+            <input type="hidden" name="category" value ="${classroom.category}"/>
+            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
+            <input type="hidden" name="members" value ="${classroom.members}"/>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+    </form></td>` : `
     <td>
     <form class="form-preview-classroom" method="post">
             <input type="hidden" name="docId" value="${classroom.docID}"/>
@@ -418,7 +431,8 @@ function buildAvailableClassroom(classroom) {
             <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
             <input type="hidden" name="members" value ="${classroom.members}"/>
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Preview</button>
-    </form></td>
+    </form></td>`;
+    html += `
     <td>${classroom.name}</td>
     <td>${classroom.subject}</td>
     <td>${classroom.category}</td>

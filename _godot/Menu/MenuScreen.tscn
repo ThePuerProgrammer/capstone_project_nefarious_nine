@@ -8,7 +8,7 @@
 [ext_resource path="res://Menu/MenuScreen.gd" type="Script" id=6]
 [ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=7]
 [ext_resource path="res://authenticate_user/Authenticate_User.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Pomo_BG.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ui_elements/Pomo_BG.tscn" type="PackedScene" id=9]
 
 [node name="MenuScreen" type="Control"]
 anchor_right = 1.0
