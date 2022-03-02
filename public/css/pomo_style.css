@@ -1,3 +1,4 @@
+
 /* CUSTOM BACKGROUND COLORS */
 /*============================================================================*/
 .pomo-bg-color-dark {
@@ -538,3 +539,18 @@ iframe {
 #pomogame-iframe-container {
     height:  0px;
 }
+
+/*HOME SCREEN CARDS*/
+/*============================================================================*/
+.card-img {
+    
+    max-width: 30rem;
+    max-height: 28rem;
+    border-radius: 12px;
+    padding-bottom: 2%;
+}
+
+.card-title {
+    font-size: 40px;
+}
+/*============================================================================*/
