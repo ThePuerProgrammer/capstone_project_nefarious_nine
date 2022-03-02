@@ -681,7 +681,6 @@ export async function updatePet(uid, updatedPet) {
 //============================================================================//
 
 
-// These will both probably need to be redone once classrooms are implemented - Cody
 //============================================================================//
 // Gets all available classrooms
 //============================================================================//
@@ -699,44 +698,6 @@ export async function getAvailableClassrooms() {
 
     return classroomList;
 }
-
-//============================================================================//
-// Gets user's classrooms
-//============================================================================//
-// export async function getMyClassrooms(email) {
-//     let moderatorList = [];
-//     let membersList = [];
-//     // get classes user is member of
-//     const membersRef = await firebase.firestore()
-//         .collection(Constant.collectionName.CLASSROOMS)
-//         .where('members', 'array-contains', email)
-//         .get();
-
-//     membersRef.forEach(doc => {
-//         const cr = new Classroom(doc.data());
-//         cr.set_docID(doc.id);
-//         membersList.push(cr);
-//     })
-//     // get classes user is mod of
-//     const moderatorRef = await firebase.firestore()
-//         .collection(Constant.collectionName.CLASSROOMS)
-//         .where('moderatorList', 'array-contains', email)
-//         .get();
-
-//     moderatorRef.forEach(doc => {
-//         const cr = new Classroom(doc.data());
-//         cr.set_docID(doc.id);
-//         moderatorList.push(cr);
-//     });
-
-//     // combine both lists and remove duplicates
-//     let classroomList = [];
-//     classroomList = membersList.filter(mem => !moderatorList.includes(mem));
-
-
-//     // return final list
-//     return classroomList;
-// }
 
 //============================================================================//
 // Gets one classroom
@@ -785,7 +746,7 @@ export async function getCategories() {
 export async function joinClassroom(classId, userEmail) {
     const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
     await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
-        .update({ members: arrayUnion(userEmail)});
+        .update({ members: arrayUnion(userEmail) });
 }
 //============================================================================//
 //LEAVE Classroom
@@ -793,7 +754,7 @@ export async function joinClassroom(classId, userEmail) {
 export async function leaveClassroom(classId, userEmail) {
     const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
     await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
-        .update({ members: arrayRemove(userEmail)});
+        .update({ members: arrayRemove(userEmail) });
 }
 //============================================================================//
 
@@ -805,7 +766,7 @@ export async function getCoins(uid) {
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .get();
-    
+
     const user = new User(ref.data());
     return user.coins;
 }
