@@ -6,9 +6,9 @@ import * as Elements from '../view/elements.js'
 import { Flashcard } from '../model/flashcard.js';
 import { deck_page } from '../view/deck_page.js'
 
- let imageFile2UploadAnswer;
- let imageFile2UploadQuestion;
-
+let imageFile2UploadAnswer;
+let imageFile2UploadQuestion;
+let isMultipleChoice = Elements.formEditFlashcard.multipleChoiceToggle;
 let imageAnswer = Elements.formEditFlashcard.answerImageContainer;
 let imageQuestion = Elements.formEditFlashcard.questionImageContainer;
 //Adds all event listeners to the perspective buttons and switches.
@@ -52,23 +52,29 @@ export function addEventListeners(){
     Elements.formEditFlashcard.answerImageToggle.addEventListener('click', async (e) => {
         // TOGGLE IS ON
         checkImageAnswer();
-        if(Elements.formEditFlashcard.answerImageToggle.checked){
-            Elements.formCheckInputIsMultipleChoiceEdit.checked=false;
-            //multipleChoiceOffHTML();
+        if(Elements.formEditFlashcard.multipleChoiceToggle){
+            Elements.formEditFlashcard.multipleChoiceToggle=false;
+            checkMultipleChoice()
+            multipleChoiceOffHTML();
         }
     });
+    //Checks for the Multiple Choice Toggle
     Elements.formEditFlashcard.multipleChoiceToggle.addEventListener('click', async (e)=> {
-        //Toggle On
-        if(Elements.formEditFlashcard.multipleChoiceToggle.checked){
+        
+        if(!Elements.formEditFlashcard.multipleChoiceToggle){
+            Elements.formEditFlashcard.multipleChoiceToggle = true;
+        }else{Elements.formEditFlashcard.multipleChoiceToggle=false;}
+
+            //Toggle On
+         if(Elements.formEditFlashcard.multipleChoiceToggle){
             Elements.formEditFlashcard.answerImageToggle.checked=false;
             imageAnswer.style.display = 'none';
-            //multipleChoiceOnHTML();
+            multipleChoiceOnHTML();
         }//Toggle Off
         else{
             Elements.formEditFlashcard.answerImageToggle.checked=false;
             imageAnswer.style.display = 'none';
-
-            //multipleChoiceOffHTML();
+            multipleChoiceOffHTML();
         }
     });
     Elements.formEditFlashcard.form.addEventListener('submit', async e=> {
@@ -88,23 +94,30 @@ export function addEventListeners(){
             answerImageURL:     e.target.answerImageURL.value,
         });
         fc.set_docID(e.target.docId.value);
-       
         let editDeckDocId = window.localStorage.getItem('deckPageDeckDocID');
 
-        const isMultipleChoice = Elements.formEditFlashcard.multipleChoiceToggle;
+        //These are specific to the form at submission
+        const ismultiplechoice = Elements.formEditFlashcard.multipleChoiceToggle;
         const incorrectAnswers = [];
         const isQuestionImage = Elements.formEditFlashcard.questionImageToggle;
         const isAnswerImage = Elements.formEditFlashcard.answerImageToggle;
 
+        // Process form data
+        // Uses attribute "name" on each HTML element to reference the value.
+        const formData = Array.from(Elements.formEditFlashcard.form).reduce(
+            (acc, input) => ({ ...acc, [input.name]: input.value }),
+            {}
+        );
+
         //Check isMultipleChoice and registers value
         //Toggling this real quick
-            if(!isMultipleChoice){
+            if(!ismultiplechoice){
                 console.log("checking mutliple choice worked");
                 fc.isMultipleChoice = false;
                 fc.incorrectAnswers = incorrectAnswers;
             } else{
                 fc.isMultipleChoice = true;
-                if (isMultipleChoice) {
+                if (ismultiplechoice) {
                     if (formData.incorrectAnswer1 != "")
                         incorrectAnswers.push(formData.incorrectAnswer1);
                     if (formData.incorrectAnswer2 != "")
@@ -217,10 +230,16 @@ export async function edit_flashcard(uid, deckId, docId){
     Elements.formEditFlashcard.questionImageTag.src = flashcard.questionImageURL;
     Elements.formEditFlashcard.answerImageTag.src = flashcard.answerImageURL;
     Elements.formEditFlashcard.multipleChoiceToggle = flashcard.isMultipleChoice;
+    Elements.formEditFlashcard.incorrectAnswers =flashcard.incorrectAnswers;
     
+    
+
+    //Getting the values to pass into the correct methods to build HTML
+    const answerCorrect = Elements.formEditFlashcard.form.answer.value;
+    const incorrectAnswersArray = Elements.formEditFlashcard.incorrectAnswers;
+        
     //Verifying Toggles
     let ismultiplechoice = Elements.formEditFlashcard.multipleChoiceToggle;
-    const incorrectAnswers = [];
     const isQuestionImage = Elements.formEditFlashcard.questionImageToggle;
     const isAnswerImage = Elements.formEditFlashcard.answerImageToggle;
 
@@ -240,10 +259,11 @@ export async function edit_flashcard(uid, deckId, docId){
     }
     if(!flashcard.isMultipleChoice){
         ismultiplechoice = false;        
-       // multipleChoiceOffHTML();
+       multipleChoiceOffHTML(answerCorrect);
     } else {
-        ismultiplechoice=true;
-       // multipleChoiceOnHTML();
+        ismultiplechoice = true;
+        checkMultipleChoice();
+        multipleChoiceOnHTML(answerCorrect,incorrectAnswersArray);
     }
 
     Elements.modalEditFlashcard.show();
@@ -297,34 +317,63 @@ function resetFlashcard(){
     Elements.formEditFlashcard.questionImageTag.src="";
     imageFile2UploadAnswer = null;
     imageFile2UploadQuestion = null;
-    //  Looking at How to mess with this area...
-    // Making sure singular choice is displayed next time.
-    // Elements.formAnswerContainer.innerHTML = `
-    //     <label for="form-answer-text-input">Answer:</label>
-    //     <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" placeholder="At least 4." required min length ="1"></textarea>
-    // `;
+    
+}
+//Method to toggle the switch when Answer Image is toggled On
+function checkMultipleChoice(){
+    if(Elements.formCheckInputIsMultipleChoiceEdit.checked){
+        isMultipleChoice.checked = false;
+    }
+    else{
+        isMultipleChoice.checked=true;    
+    }
 }
 
-function multipleChoiceOnHTML(){
-    Elements.formAnswerTextInputEdit.innerHTML= `
-    <label for="form-answer-text-input-edit">Correct Answer:</label>
-    <textarea name="answer" id="form-answer-text-input-edit" class="form-control" rows="1" type="text" name="flashcard-answer" value="${Elements.formEditFlashcard.answerTextInput.innerHTML}" placeholder="(Required) At least 200" required min length ="1"></textarea>
-    <br />
-    <label for="form-answer-text-input-edit">Incorrect Option:</label>
-    <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Required) No more than 4" required min length ="1"></textarea>
-    <br />
-    <label for="form-answer-text-input-edit">Incorrect Option:</label>
-    <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Exactly 4" min length ="1"></textarea>
-    <br />
-    <label for="form-answer-text-input-edit">Incorrect Option:</label>
-    <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" placeholder="(Optional) Probably 4?" min length="1"></textarea>
-    `;
+function multipleChoiceOnHTML(answer,incorrectAnswersArray){
+    let html = (!answer || !incorrectAnswersArray) ? `
+    <div>
+    <label for="form-answer-text-input">Correct Answer:</label>
+     <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" required minlength ="1" maxlength="30"></textarea>
+     <br />
+     <label for="form-answer-text-input">Incorrect Option:</label>
+     <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" required minlength ="1" maxlength="30"></textarea>
+     <br />
+     <label for="form-answer-text-input">Incorrect Option:</label>
+     <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" minlength ="1" maxlength="30"></textarea>
+     <br />
+     <label for="form-answer-text-input">Incorrect Option:</label>
+     <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" minlength="1" maxlength="30"></textarea>
+     </div>`
+    :
+    `<div>
+     <label for="form-answer-text-input">Correct Answer:</label>
+        <textarea name="answer" id="form-answer-text-input" class="form-control" rows="1" type="text" name="flashcard-answer" required minlength ="1" maxlength="30">${answer}</textarea>
+        <br />
+        <label for="form-answer-text-input">Incorrect Option:</label>
+        <textarea name="incorrectAnswer1" class="form-control" rows="1" type="text" name="flashcard-answer" required minlength ="1" maxlength="30">${incorrectAnswersArray[0]}</textarea>
+        <br />
+        <label for="form-answer-text-input">Incorrect Option:</label>
+        <textarea name="incorrectAnswer2" class="form-control" rows="1" type="text" name="flashcard-answer" minlength ="1" maxlength="30">${incorrectAnswersArray[1]}</textarea>
+        <br />
+     <label for="form-answer-text-input">Incorrect Option:</label>
+        <textarea name="incorrectAnswer3" class="form-control" rows="1" type="text" name="flashcard-answer" minlength="1" maxlength="30">${incorrectAnswersArray[2]}</textarea>
+    </div>`;
+    Elements.formAnswerTextInputEdit.innerHTML = html;
 }
 
-function multipleChoiceOffHTML(){
-    Elements.formAnswerTextInputEdit.innerHTML =`
-    <label for="form-answer-text-input-edit">Answer:</label>
-    <textarea name="answer" id="form-answer-text-input-edit" class="form-control" rows="3" type="text" name="flashcard-answer" value="${Elements.formEditFlashcard.answerTextInput.innerHTML}" placeholder="At least 4." required min length ="1"></textarea>
-    `;
+
+function multipleChoiceOffHTML(answer){
+    let html = (!answer) ? `<div>
+    <label for="form-answer-text-input">Answer:</label>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" required minlength ="1" maxlength="30"></textarea>
+    </div>` :
+    `<div>
+    <label for="form-answer-text-input">Answer:</label>
+    <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text" name="flashcard-answer" required minlength ="1" maxlength="30">${answer}</textarea>
+    </div>`;
+
+    Elements.formAnswerTextInputEdit.innerHTML = html;
 }
+
+
 
