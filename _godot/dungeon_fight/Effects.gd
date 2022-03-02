@@ -7,12 +7,14 @@ export (Texture) var _enemyIdle_tex
 func _ready():
 	_questionManager = get_node("../QuestionManager")
 	$Vignette.hide()
-
-
-func _on_QuestionTimer_timeout():
+	
+func startPlayerHitEffects():
 	_questionManager.stopQuestionTimer()
 	$WhiteOut.show()
 	$WhiteOut.white_out()
+
+func _on_QuestionTimer_timeout():
+	startPlayerHitEffects()
 
 
 func _on_WhiteInAnimationPlayer_animation_finished(anim_name):

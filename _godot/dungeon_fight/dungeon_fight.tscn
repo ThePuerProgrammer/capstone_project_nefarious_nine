@@ -365,6 +365,12 @@ wait_time = 9.0
 
 [node name="startGameTimer" type="Timer" parent="QuestionManager"]
 
+[node name="overallGameTimer" type="Timer" parent="QuestionManager"]
+wait_time = 60.0
+
+[node name="gameplayGameTimer" type="Timer" parent="QuestionManager"]
+wait_time = 45.0
+
 [node name="Enemy" type="Sprite" parent="."]
 position = Vector2( 1401.55, 517.46 )
 texture = ExtResource( 16 )

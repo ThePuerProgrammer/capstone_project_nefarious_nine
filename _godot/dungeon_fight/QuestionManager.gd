@@ -27,6 +27,11 @@ var _playerHpBar
 var _enemyHpBar
 var _playerBaseDamage = 5
 var _enemyBaseDamage = 5
+var _effectsCanvasLayer
+#########################################################################
+
+# information for results screen ########################################
+var _totalQuestionsAnsweredCorrectly = 0
 #########################################################################
 
 
@@ -40,6 +45,9 @@ func _ready():
 	
 	_playerHpBar = get_node("../PlayerHpBar")
 	_enemyHpBar = get_node("../EnemyHpBar")
+	_effectsCanvasLayer = get_node("../Effects")
+	
+	_totalQuestionsAnsweredCorrectly = 0
 	
 	for answerPanelContainer in get_node("../QuestionMenu/MainColumn/TopAnswerRow/").get_children():
 		answerPanelContainer.connect("answer_selected", self, "_on_answerPanelContainer_Clicked")
@@ -123,14 +131,15 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 		if newEnemyHp < 0:
 			newEnemyHp = 0
 		_enemyHpBar.value = newEnemyHp
+		_totalQuestionsAnsweredCorrectly = _totalQuestionsAnsweredCorrectly + 1
+		startNextQuestion()
 	else:
 		var damageMultiplier = floor((_timeRemaining / _subSectionWaitTime) + 1)
 		var newPlayerHp = _playerHpBar.value - (_enemyBaseDamage * damageMultiplier)
 		if newPlayerHp < 0:
 			newPlayerHp = 0
 		_playerHpBar.value = newPlayerHp
-	resetForNextQuestion()
-	startNextQuestion()
+		_effectsCanvasLayer.startPlayerHitEffects()
 
 func _on_startGameTimer_timeout():
 	_waitingForAnswer = true
