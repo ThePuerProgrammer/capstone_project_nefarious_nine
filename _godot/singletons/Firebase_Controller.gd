@@ -30,7 +30,6 @@ func add_new_multiplayer_lobby(lobby_fields):
 	var collection : FirestoreCollection = Firebase.Firestore.collection(Constants.COLLECTIONS.MULTIPLAYER_GAME_LOBBIES)
 	var add_task : FirestoreTask = collection.add('', lobby_fields)
 	var document : FirestoreTask = yield(add_task, "task_finished")
-	print(document.data)
 	return document.data
 
 func get_multiplayer_lobbies(classroom_list):

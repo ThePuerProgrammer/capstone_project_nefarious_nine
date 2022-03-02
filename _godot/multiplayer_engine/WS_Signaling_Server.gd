@@ -50,28 +50,31 @@ func _on_data(id):
 		if peer == id:
 			remove_peers.append(peer)
 			var pkt = _server.get_peer(id).get_packet()
-			var data = pkt.byte2var()
+			var data = pkt.get_string_from_utf8()
 			
-			# Get the firebase document related to the data (docid)
-			var lobby_doc = FirebaseController.get_lobby(data)
-			if lobby_doc is GDScriptFunctionState:
-				lobby_doc = yield(lobby_doc, 'completed')
-			
-			var fields = lobby_doc['doc_fields']
-			_active_lobbies[data] = {
-				'host' : fields['host'],
-				'max_players' : fields['player_count'][2],
-				'queued_players' : [id],
-				'connected_players' : [],
-			}
+			if _active_lobbies.has(data):
+				_active_lobbies[data]['queued_players'].append(id)
+			else:
+				# Get the firebase document related to the data (docid)
+				var lobby_doc = FirebaseController.get_lobby(data)
+				if lobby_doc is GDScriptFunctionState:
+					lobby_doc = yield(lobby_doc, 'completed')
+				
+				var fields = lobby_doc['doc_fields']
+				_active_lobbies[data] = {
+					'host' : fields['host'],
+					'max_players' : fields['player_count'][2].to_int(),
+					'queued_players' : [id],
+					'connected_players' : [],
+				}
 	
 	# Data was first exchange from peer. Return
 	if remove_peers.size() != 0:
 		for peer in remove_peers:
 			_peers_awaiting_lobby_confirmation.remove(peer)
-		return		
+		return
 
-	# Else
+	# Else data wasn't related to choosing a lobby
 	var pkt = _server.get_peer(id).get_packet()
 	print("Got data from client %d: %s ... echoing" % [id, pkt.get_string_from_utf8()])
 	_server.get_peer(id).put_packet(pkt)
@@ -80,7 +83,7 @@ func _process(_delta):
 	_server.poll()
 
 	for lobby in _active_lobbies:
-		if lobby['queued_players'].size() >= lobby['max_players']:
+		if _active_lobbies[lobby]['queued_players'].size() >= _active_lobbies[lobby]['max_players']:
 			create_new_match(lobby)
 
 func create_new_match(lobby):

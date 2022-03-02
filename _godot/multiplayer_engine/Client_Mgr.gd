@@ -78,6 +78,7 @@ func _closed(was_clean = false):
 	set_process(false)
 
 func _connected(proto = ""):
+	_client.get_peer(1).put_packet(LobbyDescription._lobby_id.to_utf8())
 	emit_signal('connected_to_ws_server')
 	print("Connected to server!")
 

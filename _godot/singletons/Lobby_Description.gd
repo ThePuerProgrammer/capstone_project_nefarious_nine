@@ -1,6 +1,6 @@
 extends Node
 
-var _lobby_id
+var _lobby_id : String
 
 var _host_name
 var _password

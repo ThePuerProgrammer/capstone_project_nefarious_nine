@@ -71,10 +71,18 @@ func _createLobby():
 		}
 		# Global goodness for easy access across nodes
 		LobbyDescription.set_lobby_description(lobby_description)
+		
+		# Add the lobby to firebase and await its docid
 		var doc = FirebaseController.add_new_multiplayer_lobby(lobby_description)
 		if doc is GDScriptFunctionState:
 			doc = yield(doc, 'completed')
-		print (doc)
+			
+		# Parse the doc for the docid
+		var doc_name : String = doc['name']
+		var index_of_last_fwd_slash = doc_name.find_last('/')
+		var lobby_id = doc_name.substr(index_of_last_fwd_slash + 1, doc_name.length())
+		LobbyDescription._lobby_id = lobby_id
+		
 		CurrentUser.peer_id = _generate_peer_id()
 		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
 			print('Could not change to the waiting for players screen')
@@ -151,6 +159,8 @@ func _on_JoinButton_pressed():
 	else:
 		pword_input_line_edit.text = ''
 		join_button.disabled = true
+		
+		# JOIN HEREHHERHERHERHERHERHERHERH
 		
 func _generate_peer_id():
 	# A little idea I have to convert the users docid to an int for client/peer id
