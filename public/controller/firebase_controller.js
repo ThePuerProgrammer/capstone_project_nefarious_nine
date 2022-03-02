@@ -6,7 +6,7 @@ import { FlashcardData } from '../model/flashcard_data.js';
 import { User } from '../model/user.js';
 import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
-import { Message } from '..model/message.js';
+import { Message } from '../model/message.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -777,10 +777,10 @@ export async function getCoins(uid) {
 // Functions for class chat
 //============================================================================//
 export async function addNewMessage(classroomDocID, message) {
-    const docRef = await Firebase.firestore()
-        .collection(Constants.collectionName.CLASSROOM_CHATS)
+    const docRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOM_CHATS)
         .doc(classroomDocID)
-        .collection(Constants.collectionName.MESSAGES)
+        .collection(Constant.collectionName.MESSAGES)
         .add(message.serialize());
     return docRef.id;
 }

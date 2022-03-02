@@ -9,6 +9,7 @@ import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 
 let classroomDocID;
+let activeUsers = [];
 
 export function addClassroomViewButtonListeners() {
     const viewButtons = document.getElementsByClassName('form-view-classroom');
@@ -123,7 +124,7 @@ export async function one_classroom_page(classroomDocID) {
         </div>`;
 
     html += `<div id="Chat" class="one-classroom-tab-content">
-        <div id="chat-body">`
+        <div id="message-reply-body">`
     if (messages.length > 0) {
         messages.forEach(m => {
             html += buildMessageView(m);
@@ -133,9 +134,9 @@ export async function one_classroom_page(classroomDocID) {
     }
     html += `</div>`;
     html += `<div>
-    <textarea id="add-new-message" placeholder="Send a message..."></textarea>
+    <textarea id="add-new-message" placeholder="Send a message..." style="border: 1px solid #2C1320; width: 700px; height: 150px; background-color: #2C1320; color: #A7ADC6;"></textarea>
     <br>
-    <button id="classroom-message-button">Send</button>
+    <button id="classroom-message-button" style="background-color: #2C1320; color: #A7ADC6;">Send</button>
     </div>
     </div>`;
 
@@ -209,20 +210,20 @@ export async function one_classroom_page(classroomDocID) {
     const messageSubmitButton = document.getElementById("classroom-message-button");
     messageSubmitButton.addEventListener('click', async e => {
         e.preventDefault();
-        const messageElement = document.getElementById('classroom-message');
+        const messageElement = document.getElementById('add-new-message');
         const content = messageElement.value;
-        const email = Auth.currentUser.email;
+        const sender = Auth.currentUser.email;
         const timestamp = Date.now();
         const message = new Message({
-            email, content, timestamp,
-        });
+            sender, content, timestamp,
+        })
         const docID = await FirebaseController.addNewMessage(classroomDocID, message);
         message.docId = docID;
         const messageTag = document.createElement('div');
         messageTag.innerHTML = buildMessageView(message);
         document.getElementById('message-reply-body').appendChild(messageTag);
         document.getElementById('add-new-message').value = '';
-
+        await one_classroom_page(classroomDocID);
     });
 
     // sets CLASSROOM as default
@@ -303,8 +304,8 @@ export async function one_classroom_page(classroomDocID) {
 
 function buildMessageView(message) {
     return `
-    <div class="border border-primary">
-        <div class="bg-info text #2C1320">
+    <div class="border" style="border-color: #2C1320">
+        <div style="background-color: #2C1320; color: #A7ADC6;">
             Posted by ${message.sender} at ${new Date(message.timestamp).toString()}
         </div>
         ${message.content};
