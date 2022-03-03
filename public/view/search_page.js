@@ -4,7 +4,7 @@ import * as Routes from '../controller/routes.js';
 import * as ProtectedMessage from './protected_message.js';
 import * as Constants from '../model/constant.js';
 import { currentUser } from '../controller/firebase_auth.js';
-import { buildDeckView } from './study_decks_page.js';
+import { buildDeckView, buildStudyDecksPage } from './study_decks_page.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
 
 let searchType;
@@ -30,11 +30,14 @@ export function addEventListeners() {
         await search_page(joinedSearchKeys, searchType); //for whichever search you're running
 
         Utilities.enableButton(button, label);
+        e.target.reset();
+        Elements.modalSearchBox.hide();
     });
     
 }
 
 export async function search_page(joinedSearchKeys, searchType) {
+    
 
     if (!joinedSearchKeys) {
         Utilities.info('Error', 'No Search Keys Found');
@@ -57,13 +60,32 @@ export async function search_page(joinedSearchKeys, searchType) {
 
         case 'deckSearch':
             const deckList = searchDecks(searchKeysArray);
-            buildDeckView(deckList);
+            //buildStudyDecksHeader();
+            buildStudyDecksPage(deckList);
             break;
 
         default: Utilities.info('No search type detected');
 
     }
 }
+
+export function buildStudyDecksHeader() {
+    html += '<h1> Study Decks Searched by: </h1> '
+    ;
+}
+
+// export function assembleDeckSearchPage(deckList) {
+//     html += `<div id="deck-container">`
+//     for (let i = 0; i < deckList.length; i++) { //assembles the deck view
+//         let flashcards = await FirebaseController.getFlashcards(currentUser.uid, deckList[i].docId);
+//         html += buildDeckView(deckList[i], flashcards);
+//     }
+//     html += `</div>`
+
+//     if (deckList.length == 0) {
+//         html += '<h2> No searched decks found!</h2>'
+//     }
+// }
 
 export function setSearchType(searchType) {
     Elements.searchBoxType.value = searchType;

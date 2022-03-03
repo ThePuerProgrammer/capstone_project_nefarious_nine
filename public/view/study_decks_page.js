@@ -40,10 +40,7 @@ export function addEventListeners() {
             category,
             keywords,
         });
-
-        //deck.keywords.push(deck.name, deck.subject, deck.category);
-        
-
+       
         try {
             console.log("Creating Deck");
             const docId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
@@ -72,6 +69,19 @@ export function addEventListeners() {
 }
 
 export async function study_decks_page() {
+
+    let deckList = [];
+    try {
+        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid); //this is what's showing up as null
+    } catch (e) {
+        console.log(e);
+    }
+
+    buildStudyDecksPage(deckList);
+    
+} //end study_decks_page()
+
+export async function buildStudyDecksPage(deckList) {
     Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
@@ -98,13 +108,7 @@ export async function study_decks_page() {
     <br><br>
     `
 
-    let deckList = [];
-    try {
-        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid); //this is what's showing up as null
-    } catch (e) {
-        console.log(e);
-    }
-
+    
     html += `<div id="deck-container">`
     for (let i = 0; i < deckList.length; i++) {
         let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
@@ -282,8 +286,7 @@ export async function study_decks_page() {
         Utilities.searchBox('Search Decks', 'input query');
     })
 
-} //end study_decks_page()
-
+}
 
 export function buildDeckView(deck, flashcards) {
     let html = `

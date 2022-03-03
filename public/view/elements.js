@@ -165,6 +165,7 @@ export const previewClassroomLabel = document.getElementById('preview-classroom-
 
 //SEARCH
 //============================================================================//
+export const modalSearchBox = new bootstrap.Modal(document.getElementById('modal-searchbox'));
 export const searchBoxTitle = document.getElementById('modal-searchbox-title');
 export const searchBoxPlaceholder = document.getElementById('modal-searchbox-placeholder');
 export const searchBoxType = document.getElementById('modal-searchbox-type');
