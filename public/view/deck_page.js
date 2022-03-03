@@ -257,7 +257,7 @@ export async function deck_page(deckDocID) {
     }
 
   
-}
+
 
     Elements.root.innerHTML = html;
 
@@ -342,8 +342,8 @@ export async function deck_page(deckDocID) {
         // opens delete flashcard modal
         $(`#${Constant.htmlIDs.deleteFlashcardModal}`).modal('show');
     })
-}
 
+}
 function buildFlashcardView(flashcard) {
     let html = flashcard.questionImageURL != "N/A" ? `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
     <div class="flip-card-inner">
