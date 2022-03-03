@@ -73,6 +73,14 @@ export function setSearchType(searchType) {
     Elements.searchBoxType.value = searchType;
 }
 
+export function cleanDataToKeywords(name, subject, category) { //for decks and classrooms
+    const nameArray = name.toLowerCase(). match(/\S+/g);
+    const subjectArray = subject.toLowerCase(). match(/\S+/g);
+    const categoryArray = category.toLowerCase(). match(/\S+/g);
+    const mergedArray = nameArray.concat(subjectArray, categoryArray);
+    return mergedArray;
+}
+
 export async function searchDecks(searchKeysArray) {
     let deckList;
     try {

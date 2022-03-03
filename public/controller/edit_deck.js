@@ -5,6 +5,7 @@ import * as Utilities from '../view/utilities.js'
 import * as Elements from '../view/elements.js'
 import { Deck } from '../model/Deck.js'
 import { study_decks_page } from '../view/study_decks_page.js'
+import { cleanDataToKeywords } from '../view/search_page.js'
 
 
 export function addEventListeners(){
@@ -16,7 +17,9 @@ export function addEventListeners(){
         const isFavorited = false;
         const category = e.target.selectCategory.value;        
 
-        const keywords = [name.toLowerCase(), subject.toLowerCase(), category.toLowerCase()];
+        const keywords = cleanDataToKeywords(name, subject, category)
+
+        //const keywords = [name.toLowerCase(), subject.toLowerCase(), category.toLowerCase()];
         //Reading Information from the Edit
         const d = new Deck({
             name,
@@ -49,7 +52,6 @@ export function addEventListeners(){
             if(Constant.DEV) console.log(e);
             Utilities.info('Update Deck Error', JSON.stringify(e));
         }
-        await study_decks_page();
         Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
     });
 
