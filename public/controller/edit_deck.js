@@ -10,14 +10,21 @@ import { study_decks_page } from '../view/study_decks_page.js'
 export function addEventListeners(){
     Elements.formEditDeck.form.addEventListener('submit', async e=>{
         e.preventDefault();
+        const name = e.target.name.value;
+        const subject = e.target.subject.value;
+        const dateCreated = e.target.dateCreated.value;
+        const isFavorited = false;
+        const category = e.target.selectCategory.value;        
 
+        const keywords = [name.toLowerCase(), subject.toLowerCase(), category.toLowerCase()];
         //Reading Information from the Edit
         const d = new Deck({
-            name:           e.target.name.value,
-            subject:        e.target.subject.value,
-            dateCreated:    e.target.dateCreated.value,
-            category:       e.target.selectCategory.value,
-            isFavorited:    e.target.isFavorited.value,
+            name,
+            subject,
+            dateCreated,
+            category,
+            isFavorited,
+            keywords,
         });
         d.set_docID(e.target.docId.value);
 
