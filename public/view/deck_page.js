@@ -362,13 +362,13 @@ function buildFlashcardView(flashcard) {
         shuffle(flashcardAnswers);
         // TODO: Find a much better way of doing this
         if (flashcardAnswers.length == 4) {
-            html += `<p class="answer-text">1. ${flashcardAnswers[0]} <br/> 2. ${flashcardAnswers[1]}  
-            <br/> 3. ${flashcardAnswers[2]}  <br/> 4. ${flashcardAnswers[3]}  </p>`
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]} &ensp; 2. ${flashcardAnswers[1]}  
+            <br/> 3. ${flashcardAnswers[2]}  &ensp; 4. ${flashcardAnswers[3]}  </p>`
         } else if (flashcardAnswers.length == 3) {
-            html += `<p class="answer-text">1. ${flashcardAnswers[0]}  <br/> 2. ${flashcardAnswers[1]}
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]}  &ensp; 2. ${flashcardAnswers[1]}
                         <br/> 3. ${flashcardAnswers[2]}</p>`
         } else if (flashcardAnswers.length == 2) {
-            html += `<p class="answer-text">1. ${flashcardAnswers[0]} <br/>  2. ${flashcardAnswers[1]}</p>`
+            html += `<p class="answer-text">1. ${flashcardAnswers[0]} &ensp; 2. ${flashcardAnswers[1]}</p>`
         }
     }
 
