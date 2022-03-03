@@ -14,7 +14,7 @@ export function addEventListeners(){
         const name = e.target.name.value;
         const subject = e.target.subject.value;
         const dateCreated = e.target.dateCreated.value;
-        const isFavorited = false;
+        const isFavorited = e.target.isFavorited.value;
         const category = e.target.selectCategory.value;        
 
         const keywords = cleanDataToKeywords(name, subject, category)
@@ -32,19 +32,14 @@ export function addEventListeners(){
         d.set_docID(e.target.docId.value);
 
         if(d.isFavorited=="false"){
-            // console.log(`Trying comparison false`);
             d.isFavorited=false;
         } else {
-            // console.log(`Trying comparison true`);
             d.isFavorited=true;
         }
 
-        // const isFavorited = Elements.formEditDeck.checkboxIsFavorited
-        // console.log(`Check 1:${d.isFavorited}`)
         //Firestore
         try{
             await FirebaseController.updateDeck(Auth.currentUser.uid, d ,d.docID)
-            // console.log(`Check 2:${d.isFavorited}`)
             //Added an additional load, as not all the updated was loading the first time.
             await study_decks_page();
 
