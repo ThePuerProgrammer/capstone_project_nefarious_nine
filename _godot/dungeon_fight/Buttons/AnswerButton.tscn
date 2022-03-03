@@ -77,9 +77,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="gui_input" from="." to="." method="_on_AnswerPanelContainer_gui_input"]
-[connection signal="mouse_entered" from="." to="." method="_on_AnswerPanelContainer_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_AnswerPanelContainer_mouse_exited"]
 [connection signal="answer_selected_scroll" from="MarginContainer/ScrollContainer" to="." method="_on_ScrollContainer_answer_selected_scroll"]
 [connection signal="gui_input" from="MarginContainer/ScrollContainer" to="MarginContainer/ScrollContainer" method="_on_ScrollContainer_gui_input"]
 [connection signal="mouse_entered" from="MarginContainer/ScrollContainer" to="MarginContainer/ScrollContainer" method="_on_ScrollContainer_mouse_entered"]

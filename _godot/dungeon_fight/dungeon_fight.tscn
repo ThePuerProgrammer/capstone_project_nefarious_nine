@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://assets/Resources/floor.tres" type="TileSet" id=1]
 [ext_resource path="res://assets/tilesets/dungeon_fighting/Floor/Sample_Character_Normal_Right.png" type="Texture" id=2]
@@ -26,6 +26,16 @@
 [ext_resource path="res://dungeon_fight/WhiteIn.gd" type="Script" id=24]
 [ext_resource path="res://dungeon_fight/ProgressBar/hp_bar_background.tres" type="StyleBox" id=25]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=26]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_90pt.tres" type="DynamicFont" id=27]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_26pt.tres" type="DynamicFont" id=28]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f5.png" type="Texture" id=29]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f6.png" type="Texture" id=30]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f4.png" type="Texture" id=31]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f7.png" type="Texture" id=32]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f2.png" type="Texture" id=33]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f3.png" type="Texture" id=34]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f1.png" type="Texture" id=35]
+[ext_resource path="res://dungeon_fight/ResultsUI.gd" type="Script" id=36]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24.8649, 65.9436 )
@@ -34,6 +44,74 @@ extents = Vector2( 24.8649, 65.9436 )
 size = 100
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 14 )
+
+[sub_resource type="Animation" id=13]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.168627, 0.168627, 0.168627, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../ResultsPanelContainer:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 348.5, -600 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "results_background_fade_in"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0.168627, 0.168627, 0.168627, 0 ), Color( 0.168627, 0.168627, 0.168627, 0.882353 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../ResultsPanelContainer:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.5, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 348.5, -600 ), Vector2( 348.5, 163 ) ]
+}
+
+[sub_resource type="DynamicFont" id=11]
+size = 22
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 14 )
+
+[sub_resource type="SpriteFrames" id=12]
+animations = [ {
+"frames": [ ExtResource( 35 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 31 ), ExtResource( 29 ), ExtResource( 30 ), ExtResource( 32 ) ],
+"loop": true,
+"name": "sparkle",
+"speed": 8.0
+} ]
 
 [sub_resource type="Shader" id=10]
 code = "shader_type canvas_item;
@@ -52,7 +130,7 @@ void fragment()
 shader = SubResource( 10 )
 shader_param/color = Color( 0, 0, 0, 1 )
 shader_param/multiplier = -0.122
-shader_param/softness = 10.0
+shader_param/softness = 0.15
 
 [sub_resource type="Animation" id=5]
 length = 0.001
@@ -161,6 +239,10 @@ position = Vector2( 1350.6, 653.718 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightPlayerPosition"]
 shape = SubResource( 1 )
+
+[node name="Enemy" type="Sprite" parent="."]
+position = Vector2( 1401.55, 517.46 )
+texture = ExtResource( 16 )
 
 [node name="TimerBar" type="Control" parent="."]
 margin_left = 1015.8
@@ -337,7 +419,8 @@ size_flags_vertical = 3
 custom_fonts/font = ExtResource( 26 )
 custom_styles/fg = ExtResource( 4 )
 custom_styles/bg = ExtResource( 25 )
-value = 100.0
+max_value = 15.0
+value = 15.0
 
 [node name="PlayerHpBar" type="ProgressBar" parent="."]
 margin_left = 1062.29
@@ -351,7 +434,271 @@ size_flags_vertical = 3
 custom_fonts/font = ExtResource( 26 )
 custom_styles/fg = ExtResource( 4 )
 custom_styles/bg = ExtResource( 25 )
-value = 100.0
+max_value = 15.0
+value = 15.0
+
+[node name="ResultsUI" type="Control" parent="."]
+margin_right = 1920.0
+margin_bottom = 900.0
+script = ExtResource( 36 )
+
+[node name="ShadowedBackground" type="ColorRect" parent="ResultsUI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.168627, 0.168627, 0.168627, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ResultsUI/ShadowedBackground"]
+anims/RESET = SubResource( 13 )
+anims/results_background_fade_in = SubResource( 14 )
+
+[node name="ResultsPanelContainer" type="PanelContainer" parent="ResultsUI"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -611.5
+margin_top = -1050.0
+margin_right = 611.5
+margin_bottom = -476.0
+rect_min_size = Vector2( 0, 300 )
+custom_styles/panel = ExtResource( 8 )
+
+[node name="MarginContainer" type="MarginContainer" parent="ResultsUI/ResultsPanelContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 1219.0
+margin_bottom = 570.0
+custom_constants/margin_right = 12
+custom_constants/margin_top = 8
+custom_constants/margin_left = 12
+custom_constants/margin_bottom = 6
+
+[node name="MainColumn" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1203.0
+margin_bottom = 559.0
+
+[node name="ResultsBar" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn"]
+margin_right = 1191.0
+margin_bottom = 60.0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="ResultsHeaderLabel" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/ResultsBar"]
+margin_right = 1191.0
+margin_bottom = 60.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -7
+custom_constants/shadow_offset_y = 7
+custom_fonts/font = ExtResource( 5 )
+text = "Results"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="MainContentHbox" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn"]
+margin_top = 64.0
+margin_right = 1191.0
+margin_bottom = 551.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="LeftPanel" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
+margin_right = 576.0
+margin_bottom = 487.0
+size_flags_horizontal = 3
+
+[node name="LeftPanelColumn" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel"]
+margin_right = 576.0
+margin_bottom = 487.0
+size_flags_horizontal = 3
+custom_constants/separation = 63
+
+[node name="Spacer" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn"]
+margin_right = 576.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="ResultsHeaderLabel3" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn"]
+margin_top = 63.0
+margin_right = 576.0
+margin_bottom = 85.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 11 )
+text = "Question answered..."
+valign = 1
+autowrap = true
+
+[node name="CorrectRow" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn"]
+margin_top = 148.0
+margin_right = 576.0
+margin_bottom = 238.0
+
+[node name="correctText" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn/CorrectRow"]
+margin_right = 260.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 260, 0 )
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = ExtResource( 28 )
+text = "correct:"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="correctAmount" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn/CorrectRow"]
+margin_left = 264.0
+margin_right = 576.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.470588, 0.827451, 0.419608, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -18
+custom_constants/shadow_offset_y = 8
+custom_fonts/font = ExtResource( 27 )
+text = "999"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="IncorrectRow" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn"]
+margin_top = 301.0
+margin_right = 576.0
+margin_bottom = 391.0
+
+[node name="incorrectText" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn/IncorrectRow"]
+margin_right = 260.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 260, 0 )
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = ExtResource( 28 )
+text = "incorrect:"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="incorrectAmount" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn/IncorrectRow"]
+margin_left = 264.0
+margin_right = 576.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.85098, 0.286275, 0.286275, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -18
+custom_constants/shadow_offset_y = 8
+custom_fonts/font = ExtResource( 27 )
+text = "999"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="PanelDividerMarginContainer" type="MarginContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
+margin_left = 576.0
+margin_right = 614.0
+margin_bottom = 487.0
+custom_constants/margin_right = 13
+custom_constants/margin_top = 18
+custom_constants/margin_bottom = 36
+
+[node name="PanelDivider" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/PanelDividerMarginContainer"]
+margin_top = 18.0
+margin_right = 25.0
+margin_bottom = 451.0
+rect_min_size = Vector2( 25, 0 )
+color = Color( 0.647059, 0.52549, 0.690196, 1 )
+
+[node name="RightPanel" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
+margin_left = 614.0
+margin_right = 1191.0
+margin_bottom = 487.0
+size_flags_horizontal = 3
+
+[node name="RightPanelColumn" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel"]
+margin_right = 577.0
+margin_bottom = 487.0
+size_flags_horizontal = 3
+custom_constants/separation = 64
+
+[node name="Spacer" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn"]
+margin_right = 577.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="PomocoinsTitleText" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn"]
+margin_top = 64.0
+margin_right = 577.0
+margin_bottom = 86.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 11 )
+text = "Pomocoins gained..."
+valign = 1
+autowrap = true
+
+[node name="Spacer2" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn"]
+margin_top = 150.0
+margin_right = 577.0
+margin_bottom = 150.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="PomocoinsNumberText" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn"]
+margin_top = 214.0
+margin_right = 577.0
+margin_bottom = 304.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_colors/font_color = Color( 1, 0.921569, 0.498039, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -18
+custom_constants/shadow_offset_y = 8
+custom_fonts/font = ExtResource( 27 )
+text = "999"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="CoinSparkle1" type="AnimatedSprite" parent="ResultsUI"]
+visible = false
+position = Vector2( 1345.29, 476.758 )
+scale = Vector2( 0.36, 0.36 )
+frames = SubResource( 12 )
+animation = "sparkle"
+frame = 6
+
+[node name="CoinSparkle2" type="AnimatedSprite" parent="ResultsUI"]
+visible = false
+position = Vector2( 1184.51, 504.585 )
+scale = Vector2( 0.36, 0.36 )
+frames = SubResource( 12 )
+animation = "sparkle"
+frame = 4
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
 
 [node name="QuestionManager" type="Node" parent="."]
 script = ExtResource( 9 )
@@ -361,19 +708,16 @@ _enemyMedium_tex = ExtResource( 18 )
 _enemyHard_tex = ExtResource( 17 )
 
 [node name="QuestionTimer" type="Timer" parent="QuestionManager"]
-wait_time = 9.0
+wait_time = 10.0
 
 [node name="startGameTimer" type="Timer" parent="QuestionManager"]
+wait_time = 3.0
 
-[node name="overallGameTimer" type="Timer" parent="QuestionManager"]
+[node name="overallMinigameGameTimer" type="Timer" parent="QuestionManager"]
 wait_time = 60.0
 
 [node name="gameplayGameTimer" type="Timer" parent="QuestionManager"]
 wait_time = 45.0
-
-[node name="Enemy" type="Sprite" parent="."]
-position = Vector2( 1401.55, 517.46 )
-texture = ExtResource( 16 )
 
 [node name="Effects" type="CanvasLayer" parent="."]
 script = ExtResource( 21 )
@@ -410,13 +754,13 @@ script = ExtResource( 24 )
 anims/RESET = SubResource( 8 )
 anims/white_in = SubResource( 9 )
 
-[connection signal="answer_selected" from="QuestionMenu/MainColumn/TopAnswerRow/Answer1PanelContainer" to="QuestionManager" method="_on_Answer1PanelContainer_answer_selected"]
-[connection signal="answer_selected" from="QuestionMenu/MainColumn/TopAnswerRow/Answer2PanelContainer" to="QuestionManager" method="_on_Answer2PanelContainer_answer_selected"]
-[connection signal="answer_selected" from="QuestionMenu/MainColumn/BottomAnswerRow/Answer3PanelContainer" to="QuestionManager" method="_on_Answer3PanelContainer_answer_selected"]
-[connection signal="answer_selected" from="QuestionMenu/MainColumn/BottomAnswerRow/Answer4PanelContainer" to="QuestionManager" method="_on_Answer4PanelContainer_answer_selected"]
+[connection signal="animation_finished" from="ResultsUI/ShadowedBackground/AnimationPlayer" to="ResultsUI" method="_on_AnimationPlayer_animation_finished"]
 [connection signal="timeout" from="QuestionManager/QuestionTimer" to="QuestionManager" method="_on_QuestionTimer_timeout"]
 [connection signal="timeout" from="QuestionManager/QuestionTimer" to="Effects" method="_on_QuestionTimer_timeout"]
 [connection signal="timeout" from="QuestionManager/startGameTimer" to="QuestionManager" method="_on_startGameTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/overallMinigameGameTimer" to="QuestionManager" method="_on_overallMinigameGameTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/gameplayGameTimer" to="QuestionManager" method="_on_gameplayGameTimer_timeout"]
+[connection signal="player_lost_game" from="Effects" to="QuestionManager" method="_on_Effects_player_lost_game"]
 [connection signal="animation_finished" from="Effects/Vignette/VignetteAnimationPlayer" to="Effects" method="_on_VignetteAnimationPlayer_animation_finished"]
 [connection signal="animation_finished" from="Effects/WhiteOut/WhiteOutAnimationPlayer" to="Effects" method="_on_WhiteOutAnimationPlayer_animation_finished"]
 [connection signal="animation_finished" from="Effects/WhiteIn/WhiteInAnimationPlayer" to="Effects" method="_on_WhiteInAnimationPlayer_animation_finished"]

@@ -32,6 +32,8 @@ var _effectsCanvasLayer
 
 # information for results screen ########################################
 var _totalQuestionsAnsweredCorrectly = 0
+var _totalQuestionsAnsweredIncorrectly = 0
+var _resultsUI
 #########################################################################
 
 
@@ -46,8 +48,10 @@ func _ready():
 	_playerHpBar = get_node("../PlayerHpBar")
 	_enemyHpBar = get_node("../EnemyHpBar")
 	_effectsCanvasLayer = get_node("../Effects")
+	_resultsUI = get_node("../ResultsUI")
 	
 	_totalQuestionsAnsweredCorrectly = 0
+	_totalQuestionsAnsweredIncorrectly = 0
 	
 	for answerPanelContainer in get_node("../QuestionMenu/MainColumn/TopAnswerRow/").get_children():
 		answerPanelContainer.connect("answer_selected", self, "_on_answerPanelContainer_Clicked")
@@ -59,11 +63,12 @@ func _ready():
 	_waitTime = $QuestionTimer.wait_time
 	_subSectionWaitTime = $QuestionTimer.wait_time / 3
 	_enemy = get_node("../Enemy")
+	$overallMinigameGameTimer.start()
 	$startGameTimer.start()
 	_answerPanelRngSelector.randomize()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if $QuestionTimer.is_stopped() or !_waitingForAnswer:
 		return
 	
@@ -132,6 +137,9 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 			newEnemyHp = 0
 		_enemyHpBar.value = newEnemyHp
 		_totalQuestionsAnsweredCorrectly = _totalQuestionsAnsweredCorrectly + 1
+		if _enemyHpBar.value == 0:
+			endGame(true, _totalQuestionsAnsweredCorrectly, _totalQuestionsAnsweredIncorrectly)
+			return
 		startNextQuestion()
 	else:
 		var damageMultiplier = floor((_timeRemaining / _subSectionWaitTime) + 1)
@@ -139,7 +147,8 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 		if newPlayerHp < 0:
 			newPlayerHp = 0
 		_playerHpBar.value = newPlayerHp
-		_effectsCanvasLayer.startPlayerHitEffects()
+		_totalQuestionsAnsweredIncorrectly = _totalQuestionsAnsweredIncorrectly + 1
+		_effectsCanvasLayer.startPlayerHitEffects(_playerHpBar.value)
 
 func _on_startGameTimer_timeout():
 	_waitingForAnswer = true
@@ -148,3 +157,23 @@ func _on_startGameTimer_timeout():
 
 func _on_QuestionTimer_timeout():
 	_waitingForAnswer = false
+
+func _on_overallMinigameGameTimer_timeout():
+	endGame(false, _totalQuestionsAnsweredCorrectly, _totalQuestionsAnsweredIncorrectly)
+
+
+func _on_gameplayGameTimer_timeout():
+	# TODO END THE GAME AND SHOW THE RESULTS 
+	pass # Replace with function body.
+
+func _on_Effects_player_lost_game():
+	print("_on_Effects_player_lost_game")
+	endGame(false, _totalQuestionsAnsweredCorrectly, _totalQuestionsAnsweredIncorrectly)
+
+func endGame(playerWon, answeredCorrectly, answeredIncorrectly):
+	stopQuestionTimer()
+	if !$overallMinigameGameTimer.is_stopped():
+		$overallMinigameGameTimer.stop()
+		
+	_resultsUI.showResults(playerWon, answeredCorrectly, answeredIncorrectly)
+	

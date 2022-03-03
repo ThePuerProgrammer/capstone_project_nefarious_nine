@@ -30,7 +30,7 @@ func _ready():
 	_rightPosition = get_node("../RightPlayerPosition").position
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if !_dodgingLeft and !_dodgingRight:
 		get_input()
 
