@@ -25,6 +25,7 @@ export function addEventListeners() {
         const subject = e.target.subject.value;
         const isFavorited = false;
         const category = e.target.selectCategory.value;
+        const keywords = [name, subject, category];
 
         console.log("category is: " + category);
 
@@ -36,8 +37,12 @@ export function addEventListeners() {
             subject,
             dateCreated,
             isFavorited,
-            category
+            category,
+            keywords,
         });
+
+        //deck.keywords.push(deck.name, deck.subject, deck.category);
+        
 
         try {
             console.log("Creating Deck");

@@ -5,7 +5,7 @@ import * as ProtectedMessage from './protected_message.js';
 import * as Constants from '../model/constant.js';
 import { currentUser } from '../controller/firebase_auth.js';
 import { buildDeckView } from './study_decks_page.js';
-import * as FirestoreController from '../controller/firebase_controller.js';
+import * as FirebaseController from '../controller/firebase_controller.js';
 
 let searchType;
 
@@ -27,19 +27,21 @@ export function addEventListeners() {
 
         history.pushState(null, null, Routes.routePathname.SEARCH + '#' + joinedSearchKeys);
         searchType = Elements.searchBoxType.value;
-        await search_page(joinedSearchKeys, searchKeysArray, searchType); //for whichever search you're running
+        await search_page(joinedSearchKeys, searchType); //for whichever search you're running
 
         Utilities.enableButton(button, label);
     });
     
 }
 
-export async function search_page(joinedSearchKeys, searchKeysArray, searchType) {
+export async function search_page(joinedSearchKeys, searchType) {
 
     if (!joinedSearchKeys) {
-        Utilities.info('Error', 'No Search Query Found');
+        Utilities.info('Error', 'No Search Keys Found');
         return;
     }
+
+    const searchKeysArray = joinedSearchKeys.split(',');
 
     if (searchKeysArray.length == 0) {
         Utilities.info('Erros', 'No Search Query Found');
@@ -54,7 +56,7 @@ export async function search_page(joinedSearchKeys, searchKeysArray, searchType)
     switch(searchType) {
 
         case 'deckSearch':
-            const deckList = searchDecks();
+            const deckList = searchDecks(searchKeysArray);
             buildDeckView(deckList);
             break;
 
@@ -67,10 +69,10 @@ export function setSearchType(searchType) {
     Elements.searchBoxType.value = searchType;
 }
 
-export async function searchDecks() {
+export async function searchDecks(searchKeysArray) {
     let deckList;
     try {
-        deckList = await FirestoreController.searchDecks(searchKeysArray);
+        deckList = await FirebaseController.searchDecks(currentUser.uid, searchKeysArray);
     } catch (e) {
         if (Constants.DEV) console.log(e);
         Utilities.info('There was an error with the Search', JSON.stringify(e));
