@@ -578,3 +578,13 @@ iframe {
     background-color: #5F4B66;
     color: #A7ADC6 !important;
 }
+
+.class-search-radio {
+    font-size: 10px;
+    display: inline-block;
+    padding: 1px;
+    margin: 3px;
+    border-radius: 8px;
+    background-color: #A7ADC6;
+    border-color: #2C1320;
+}

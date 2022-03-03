@@ -64,6 +64,15 @@ export async function search_page(joinedSearchKeys, searchType) {
             Utilities.info('You searched for', `${searchKeysInfo}`)
             break;
 
+        case 'classroomSearch':
+            if(classSearchOption1) {
+            } else if (classSearchOption2) {
+
+            } else if (classSearchOption1 && classSearchOption2) {
+                
+            }
+            else console.log("nuttin");
+            break;
         default: Utilities.info('No search type detected');
 
     }

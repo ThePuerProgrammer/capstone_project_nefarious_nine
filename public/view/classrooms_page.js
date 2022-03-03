@@ -6,6 +6,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import { Classroom } from '../model/classroom.js';
 import * as OneClassroomPage from './one_classroom_page.js';
+import * as Search from './search_page.js';
 
 export function addEventListeners() {
     Elements.menuClassrooms.addEventListener('click', async () => {
@@ -59,7 +60,8 @@ export function addEventListeners() {
     $(`#create-classroom-modal`).on('hidden.bs.modal', function (e) {
         Elements.formCreateClassroom.reset();
     });
-}
+    
+} //END CLASSROOMS_PAGE EVENT LISTENERS
 
 export async function classrooms_page() {
     Elements.root.innerHTML = '';
@@ -76,8 +78,27 @@ export async function classrooms_page() {
         <option value="subject">Subject</option>
         <option value="category">Category</option>
     </select>
+    <div class="search-classroom-controls" style="display: flex">
+    <form id="form-search-class-radio" name="choose-class-search-type">
+    <fieldset>
+    <div class="class-search-radio d-flex">
+        <div>
+            <input type="checkbox" id="checkbox-myClassrooms" name="classSearchType" value="myClassrooms" checked>
+            <label for="myClassrooms">My Classrooms</label><br>
+        </div>
+        <div>
+            <input type="checkbox" id="checkbox-notMyClassrooms" name="classSearchType" value="notMyClassrooms">
+            <label for="notMyClassrooms">Not My Classrooms</label><br>
+        </div>
+    </div>
+    </fieldset>
+    </form>
+    <button id="search-classroom-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="fa fa-search"></i>Search Classrooms</button></h1>
+    </div>
     </div>
     </div>`;
+
+
 
     html += `<div id="Available Classrooms" class="classroom-tab-content">`;
 
@@ -390,7 +411,24 @@ export async function classrooms_page() {
             }
         }
     });
-}
+
+    const searchClassroomButton = document.getElementById('search-classroom-button');
+    searchClassroomButton.addEventListener('click', async e => {
+        const searchtype = 'classroomSearch';
+        Search.setSearchType(searchtype);
+        Utilities.searchBox('Search Classroom', 'input query');
+    })
+
+    const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
+    checkBoxMyClassrooms.addEventListener('change', async e => {
+        console.log('huaazh');
+    });
+
+    const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
+    checkBoxNotMyClassrooms.addEventListener('change', async e => {
+        console.log('huaazh 2');
+    });
+} //        END CLASSROOMS_PAGE()
 
 
 function buildMyClassroom(classroom) {
