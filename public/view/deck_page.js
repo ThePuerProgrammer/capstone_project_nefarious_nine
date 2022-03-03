@@ -245,16 +245,18 @@ export async function deck_page(deckDocID) {
     let flashcards;
     try {
         flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckDocID);
+        if (flashcards.length == 0) {
+            html += '<h5>No flashcards found for this deck</h5>';
+        }else{
+            flashcards.forEach(flashcard => {
+            html += buildFlashcardView(flashcard);
+        });
+    }
     } catch (e) {
         console.log(e);
     }
 
-    if (flashcards.length == 0) {
-        html += '<h5>No flashcards found for this deck</h5>';
-    }else{
-        flashcards.forEach(flashcard => {
-        html += buildFlashcardView(flashcard);
-    })
+  
 }
 
     Elements.root.innerHTML = html;
