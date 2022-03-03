@@ -11,27 +11,8 @@ import * as EditFlashCard from '../controller/edit_flashcard.js'
 //Declaration of Image
 let imageFile2UploadQuestion;
 let imageFile2UploadAnswer;
-let deckDocID;
 const imageAnswer = Elements.formContainerAnswerImage;
 const imageQuestion = Elements.formContainerQuestionImage;
-
-
-export function addViewButtonListener() {
-    const viewButtons = document.getElementsByClassName('form-view-deck');
-    for (let i = 0; i < viewButtons.length; ++i) {
-        addViewFormSubmitEvent(viewButtons[i]);
-    }
-}
-
-export function addViewFormSubmitEvent(form) {
-    form.addEventListener('submit', async e => {
-        e.preventDefault();
-        deckDocID = e.target.docId.value;
-        history.pushState(null, null, Routes.routePathname.DECK + '#' + deckDocID);
-        localStorage.setItem("deckPageDeckDocID", deckDocID);
-        await deck_page(deckDocID);
-    })
-}
 
 export function addEventListeners() {
 
@@ -79,7 +60,8 @@ export function addEventListeners() {
                 incorrectAnswers.push(formData.incorrectAnswer3);
         }
 
-        let deckDocID = localStorage.getItem("deckPageDeckDocID");
+        let deckDocID = sessionStorage.getItem("deckId");
+        console.log(deckDocID);
         const flashcard = new Flashcard({
             question,
             isMultipleChoice,
@@ -150,6 +132,7 @@ export function addEventListeners() {
         e.preventDefault();
         // get the value from the select list item
         var f = document.getElementById('value').value;
+        let deckDocID = sessionStorage.getItem('deckId');
         try {
             await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
             Utilities.info("Successfully deleted", "Successfully deleted flashcard", "modal-delete-a-flashcard");
@@ -229,7 +212,11 @@ export function addEventListeners() {
 
 }
 
-export async function deck_page(deckDockID) {
+export async function deck_page(deckDocID) {
+    if(deckDocID == null){
+        deckDocID = sessionStorage.getItem('deckId');
+    }
+    console.log(deckDocID);
     let html = '';
     html += '<h1> Deck Page </h1>';
     //Allows for the create a flashcard button
@@ -245,7 +232,7 @@ export async function deck_page(deckDockID) {
     html += `<button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> - Delete Flashcard</button>`;
     let deck;
     try {
-        deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDockID);
+        deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDocID);
         if (!deck) {
             html += '<h5>Deck not found!</h5>';
         } else {
@@ -257,17 +244,18 @@ export async function deck_page(deckDockID) {
 
     let flashcards;
     try {
-        flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckDockID);
-        if (flashcards.length == 0) {
-            html += '<h5>No flashcards found for this deck</h5>';
-        }
+        flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckDocID);
     } catch (e) {
         console.log(e);
     }
 
-    flashcards.forEach(flashcard => {
+    if (flashcards.length == 0) {
+        html += '<h5>No flashcards found for this deck</h5>';
+    }else{
+        flashcards.forEach(flashcard => {
         html += buildFlashcardView(flashcard);
     })
+}
 
     Elements.root.innerHTML = html;
 
@@ -290,7 +278,7 @@ export async function deck_page(deckDockID) {
             const label = Utilities.disableButton(button);
             //passed by the button on the flashcard
             Utilities.enableButton(button,label);
-            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDockID,e.target.docId.value);
+            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDocID,e.target.docId.value);
         });
     }
 
@@ -316,7 +304,7 @@ export async function deck_page(deckDockID) {
     // Adds event listener for STUDY button
     buttonStudy.addEventListener('click', async e => {
         e.preventDefault();
-        //const docId = e.target.deckDockID.value;
+        //const docId = e.target.deckDocID.value;
 
         // If this is the user's first time studying the deck then we need to create
         //  a deck data for them.
@@ -328,8 +316,8 @@ export async function deck_page(deckDockID) {
                 console.log("Error Creating Data Deck (User's first time studying a deck)", e);
         }
 
-        history.pushState(null, null, Routes.routePathname.STUDY + "#" + deckDockID);
-        localStorage.setItem("deckPageDeckDocID", deckDockID);
+        history.pushState(null, null, Routes.routePathname.STUDY + "#" + deckDocID);
+        localStorage.setItem("deckPageDeckDocID", deckDocID);
         await Study.study_page();
     });
 
