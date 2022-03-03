@@ -47,8 +47,8 @@ export function addEventListeners() {
             classroom.docId = docId;
             localStorage.setItem("classroomPageClassroomDocID", classroom.docId);
             Elements.modalCreateClassroom.hide();
-            history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' +  classroom.docId);
-            await OneClassroomPage.one_classroom_page( classroom.docId);
+            history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classroom.docId);
+            await OneClassroomPage.one_classroom_page(classroom.docId);
         } catch (e) {
             if (Constant.DEV)
                 console.log(e);
@@ -125,7 +125,7 @@ export async function classrooms_page() {
     }
 
     availableClassroomList.forEach(ac => {
-        if(!ac.banlist.includes(Auth.currentUser.email)){
+        if (!ac.banlist.includes(Auth.currentUser.email)) {
             html += `
                 <tr>${buildAvailableClassroom(ac)}</tr>`;
         }
@@ -155,8 +155,8 @@ export async function classrooms_page() {
         html += '<p>No classrooms found!</p>';
     }
     myClassroomList.forEach(c => {
-        if(!c.banlist.includes(Auth.currentUser.email)){
-        html += `
+        if (!c.banlist.includes(Auth.currentUser.email)) {
+            html += `
                 <tr>${buildMyClassroom(c)}</tr>`;
         }
     })
@@ -166,8 +166,8 @@ export async function classrooms_page() {
     Elements.root.innerHTML = html;
 
     const previewForms = document.getElementsByClassName('form-preview-classroom');
-    for(let i=0; i <previewForms.length; i++){
-        previewForms[i].addEventListener('submit', e =>{
+    for (let i = 0; i < previewForms.length; i++) {
+        previewForms[i].addEventListener('submit', e => {
             e.preventDefault();
             const button = e.target.getElementsByTagName('button')[0];
             const label = Utilities.disableButton(button);
@@ -177,12 +177,12 @@ export async function classrooms_page() {
             let classSubject = e.target.subject.value;
             let classCategory = e.target.category.value;
             let classMods = e.target.mods.value;
-            let classMembers = e.target.members.value;   
-            let userEmail = Auth.currentUser.email;    
+            let classMembers = e.target.members.value;
+            let userEmail = Auth.currentUser.email;
 
             //Adding pieces of the Classroom to the Modal
-            Elements.previewClassroomLabel.innerHTML=`Preview of ${className}`;
-            Elements.previewClassroomBody.innerHTML=`
+            Elements.previewClassroomLabel.innerHTML = `Preview of ${className}`;
+            Elements.previewClassroomBody.innerHTML = `
             <center><h3><u>Subject:</u></h3>
             <p>${classSubject}</p>
             <h3><u>Category:</u></h3>
@@ -193,49 +193,49 @@ export async function classrooms_page() {
             //Breaking the string into an array to put each member on a separate line
             const classMembersList = classMembers.split(",");
             //Iterating through the array to print all names
-            if(classMembers.length > 0){
-                for(let j=0; j < classMembersList.length; j++){
+            if (classMembers.length > 0) {
+                for (let j = 0; j < classMembersList.length; j++) {
 
-                    Elements.previewClassroomBody.innerHTML+=`
-                    <center><p>${classMembersList[j]}</p> </center>` ;
+                    Elements.previewClassroomBody.innerHTML += `
+                    <center><p>${classMembersList[j]}</p> </center>`;
                 }
             }
             //Checking to see if the classroom is full
-             //ALREADY ENROLLED
-            if(classMembers.includes(userEmail)){
-                Elements.previewClassroomFooter.innerHTML=`
+            //ALREADY ENROLLED
+            if (classMembers.includes(userEmail)) {
+                Elements.previewClassroomFooter.innerHTML = `
                 <form class="form-view-classroom-from-preview" method="post">
                     <input type="hidden" name="docId" value="${classId}">
                     <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Enter Class</button>
                 </form>`;
                 //Adding Case of user is creator to leave
-                if(!classMods.includes(userEmail)){
-                    Elements.previewClassroomFooter.innerHTML+=`
+                if (!classMods.includes(userEmail)) {
+                    Elements.previewClassroomFooter.innerHTML += `
                     <form class="form-leave-classroom-from-preview" method="post">
                         <input type="hidden" name="docId" value="${classId}">
                         <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Leave</button>
                     </form>`
                 }
-            } else if(classMembersList.length!=classMembers.length){
+            } else if (classMembersList.length != classMembers.length) {
                 //CLASSROOM HAS ROOM
-                Elements.previewClassroomFooter.innerHTML=`
+                Elements.previewClassroomFooter.innerHTML = `
                 <form class="form-join-classroom" method="post">
                     <input type="hidden" name="docId" value="${classId}">
                     <button id="form-join-classroom" class="btn btn-secondary pomo-bg-color-dark 
                         pomo-text-color-light" type="submit" style="padding:5px 10px"> Join</button>
                 </form>`;
-            } else { 
-                   //CLASSROOM FULL
-                   Elements.previewClassroomFooter.innerHTML=`
+            } else {
+                //CLASSROOM FULL
+                Elements.previewClassroomFooter.innerHTML = `
                    <button class="btn btn-secondary pomo-bg-color-dark 
                        pomo-text-color-light" style="padding:5px 10px" disabled> Join</button>
                    `;
-                
+
             }
             //JOIN BUTTON EVENT LISTENER
             const joinClassroom = document.getElementsByClassName('form-join-classroom');
-            for(let i= 0; i < joinClassroom.length; i++){
-                joinClassroom[i].addEventListener('submit', async e=>{
+            for (let i = 0; i < joinClassroom.length; i++) {
+                joinClassroom[i].addEventListener('submit', async e => {
                     e.preventDefault();
                     //Join the classroom
                     await FirebaseController.joinClassroom(classId, userEmail);
@@ -248,7 +248,7 @@ export async function classrooms_page() {
             }
             //VIEW BUTTON EVENT LISTENER
             const viewClassroomFromPreview = document.getElementsByClassName('form-view-classroom-from-preview');
-            for(let i=0; i < viewClassroomFromPreview.length; i++){
+            for (let i = 0; i < viewClassroomFromPreview.length; i++) {
                 viewClassroomFromPreview[i].addEventListener('submit', async e => {
                     e.preventDefault();
                     let classId = e.target.docId.value;
@@ -264,8 +264,8 @@ export async function classrooms_page() {
             }
             //LEAVE BUTTON EVEN LISTENER
             const leaveClassroomFromPreview = document.getElementsByClassName('form-leave-classroom-from-preview');
-            for(let i=0; i <leaveClassroomFromPreview.length; i++){
-                leaveClassroomFromPreview[i].addEventListener('submit', async e=> {
+            for (let i = 0; i < leaveClassroomFromPreview.length; i++) {
+                leaveClassroomFromPreview[i].addEventListener('submit', async e => {
                     e.preventDefault();
                     let classId = e.target.docId.value;
                     console.log('Here');
@@ -273,7 +273,7 @@ export async function classrooms_page() {
                     $('#preview-classroom-modal').modal('hide');
                     Elements.modalLeaveClassroomConfirmation.show();
                     const confirmation = document.getElementById('modal-confirmation-leave-classroom-yes');
-                    confirmation.addEventListener("click", async e=>{
+                    confirmation.addEventListener("click", async e => {
                         console.log('ALSO HERE');
                         await FirebaseController.leaveClassroom(classId, userEmail);
                         availableClassroomButton.click();
@@ -281,13 +281,13 @@ export async function classrooms_page() {
 
                 });
 
-            }           
+            }
             Elements.modalPreviewClassroom.show();
             Utilities.enableButton(button, label);
         });
-        
+
     }
-    
+
 
     // get available class tab and show it as visible
     const availableClassroomButton = document.getElementById('available-classroom-button');

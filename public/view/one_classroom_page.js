@@ -9,8 +9,11 @@ import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 
 export async function one_classroom_page(classroomDocID) {
-    if(classroomDocID == null){
+    window.sessionStorage;
+    if (classroomDocID == null) {
         classroomDocID = sessionStorage.getItem('classId');
+    } else {
+        sessionStorage.setItem('classId', classroomDocID);
     }
     console.log(classroomDocID);
     Elements.root.innerHTML = '';
@@ -209,10 +212,10 @@ export async function one_classroom_page(classroomDocID) {
 
         document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-gen-button').style.color = '#2C1320';
-    
+
         document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-members-button').style.color = '#2C1320';
-    
+
         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
     })
@@ -234,7 +237,7 @@ export async function one_classroom_page(classroomDocID) {
         messageTag.innerHTML = buildMessageView(message);
         const tempEl = document.getElementById('temp');
         // delete temp if it's there
-        if(tempEl){
+        if (tempEl) {
             tempEl.remove();
         }
         document.getElementById('message-reply-body').appendChild(messageTag);
@@ -258,6 +261,7 @@ export async function one_classroom_page(classroomDocID) {
                       <option value="${category}">${category}</option>
                   `;
             });
+            console.log(classroomDocID);
             Elements.modalEditClassroom.show();
         })
 
@@ -282,15 +286,14 @@ export async function one_classroom_page(classroomDocID) {
         e.preventDefault();
 
         const cr = new Classroom({
-            name: e.target.name.value,
-            subject: e.target.subject.value,
+            name: e.target.ename.value,
+            subject: e.target.esubject.value,
             category: e.target.editClassCategory.value,
         });
         cr.set_docID(classroomDocID);
-
+        console.log(cr.docID);
         await FirebaseController.updateClassroom(cr);
         Elements.modalEditClassroom.hide();
-        Elements.root.innerHTML += ''; //Prevents old html from stacking/duplicate class on page
         await one_classroom_page(classroomDocID);
 
     })
