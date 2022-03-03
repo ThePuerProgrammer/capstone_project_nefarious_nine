@@ -483,6 +483,7 @@ export async function updateDeck(uid, deck, deckDocID) {
                 deck.subject = data.subject;
                 deck.dateCreated = data.dateCreated;
                 deck.category = data.category;
+                deck.keywords = data.keywords;
                 //When editing flashcards I found that booleans were difficult
                 //to use here and commented it out isMultiplechoice and was functional
                 //deck.isFavorited = data.isFavorited;
@@ -500,7 +501,7 @@ export async function updateDeck(uid, deck, deckDocID) {
     firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
-        .set(deck.serialize());
+        .update(deck.serialize());
 
     // console.log(`Check 7:${deck.isFavorited}`)
 
