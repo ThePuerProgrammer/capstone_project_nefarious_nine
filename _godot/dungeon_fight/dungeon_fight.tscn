@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://assets/Resources/floor.tres" type="TileSet" id=1]
 [ext_resource path="res://assets/tilesets/dungeon_fighting/Floor/Sample_Character_Normal_Right.png" type="Texture" id=2]
@@ -36,9 +36,15 @@
 [ext_resource path="res://dungeon_fight/art/sparkle_animation/f3.png" type="Texture" id=34]
 [ext_resource path="res://dungeon_fight/art/sparkle_animation/f1.png" type="Texture" id=35]
 [ext_resource path="res://dungeon_fight/ResultsUI.gd" type="Script" id=36]
+[ext_resource path="res://dungeon_fight/UI/action_box_panel.tres" type="StyleBox" id=37]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24.8649, 65.9436 )
+
+[sub_resource type="DynamicFont" id=15]
+size = 14
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 14 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 100
@@ -299,6 +305,40 @@ percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ActionBar" type="VBoxContainer" parent="."]
+margin_left = 1679.52
+margin_top = 733.977
+margin_right = 1939.52
+margin_bottom = 880.977
+custom_constants/separation = 13
+
+[node name="correctText" type="Label" parent="ActionBar"]
+margin_right = 260.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 260, 0 )
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 15 )
+text = "Next Action"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="CenterContainer" type="CenterContainer" parent="ActionBar"]
+margin_top = 27.0
+margin_right = 260.0
+margin_bottom = 147.0
+
+[node name="Panel" type="Panel" parent="ActionBar/CenterContainer"]
+margin_left = 70.0
+margin_right = 190.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 120, 120 )
+custom_styles/panel = ExtResource( 37 )
 
 [node name="QuestionMenu" type="Control" parent="."]
 margin_right = 960.0
@@ -719,6 +759,14 @@ wait_time = 60.0
 [node name="gameplayGameTimer" type="Timer" parent="QuestionManager"]
 wait_time = 45.0
 
+[node name="AnswerIndicatorTimers" type="Node" parent="QuestionManager"]
+
+[node name="Correct" type="Timer" parent="QuestionManager/AnswerIndicatorTimers"]
+wait_time = 3.0
+
+[node name="Incorrect" type="Timer" parent="QuestionManager/AnswerIndicatorTimers"]
+wait_time = 3.0
+
 [node name="Effects" type="CanvasLayer" parent="."]
 script = ExtResource( 21 )
 _enemyIdle_tex = ExtResource( 16 )
@@ -760,6 +808,8 @@ anims/white_in = SubResource( 9 )
 [connection signal="timeout" from="QuestionManager/startGameTimer" to="QuestionManager" method="_on_startGameTimer_timeout"]
 [connection signal="timeout" from="QuestionManager/overallMinigameGameTimer" to="QuestionManager" method="_on_overallMinigameGameTimer_timeout"]
 [connection signal="timeout" from="QuestionManager/gameplayGameTimer" to="QuestionManager" method="_on_gameplayGameTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/AnswerIndicatorTimers/Correct" to="QuestionManager" method="_on_Correct_timeout"]
+[connection signal="timeout" from="QuestionManager/AnswerIndicatorTimers/Incorrect" to="QuestionManager" method="_on_Incorrect_timeout"]
 [connection signal="player_lost_game" from="Effects" to="QuestionManager" method="_on_Effects_player_lost_game"]
 [connection signal="animation_finished" from="Effects/Vignette/VignetteAnimationPlayer" to="Effects" method="_on_VignetteAnimationPlayer_animation_finished"]
 [connection signal="animation_finished" from="Effects/WhiteOut/WhiteOutAnimationPlayer" to="Effects" method="_on_WhiteOutAnimationPlayer_animation_finished"]

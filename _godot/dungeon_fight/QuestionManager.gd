@@ -1,5 +1,7 @@
 extends Node
 
+signal answer_indicators_hidden
+
 # for "animations" and progress bar #####################################
 var _progressBarEasy
 var _progressBarMedium
@@ -28,6 +30,7 @@ var _enemyHpBar
 var _playerBaseDamage = 5
 var _enemyBaseDamage = 5
 var _effectsCanvasLayer
+var _currentAction
 #########################################################################
 
 # information for results screen ########################################
@@ -54,9 +57,11 @@ func _ready():
 	_totalQuestionsAnsweredIncorrectly = 0
 	
 	for answerPanelContainer in get_node("../QuestionMenu/MainColumn/TopAnswerRow/").get_children():
+		#answerPanelContainer.connectToPanel(self, "answer_selected_scroll", "functionName")
 		answerPanelContainer.connect("answer_selected", self, "_on_answerPanelContainer_Clicked")
 		_answerPanels.push_back(answerPanelContainer)
 	for answerPanelContainer in get_node("../QuestionMenu/MainColumn/BottomAnswerRow/").get_children():
+		#answerPanelContainer.connectToPanel(self, "answer_selected_scroll", "functionName")
 		answerPanelContainer.connect("answer_selected", self, "_on_answerPanelContainer_Clicked")
 		_answerPanels.push_back(answerPanelContainer)
 	
@@ -131,16 +136,25 @@ func stopQuestionTimer():
 func _on_answerPanelContainer_Clicked(answerPanelText):
 	stopQuestionTimer()
 	var correctAnswerClicked = answerPanelText == _answerTextCorrect
+	#
+	# User answered question correctly
+	#
 	if correctAnswerClicked:
 		var newEnemyHp = _enemyHpBar.value - _playerBaseDamage
 		if newEnemyHp < 0:
 			newEnemyHp = 0
 		_enemyHpBar.value = newEnemyHp
 		_totalQuestionsAnsweredCorrectly = _totalQuestionsAnsweredCorrectly + 1
+		showAnswerIndicators(true)
+		yield(self, "answer_indicators_hidden")
+		hideAnswerIndicators()
 		if _enemyHpBar.value == 0:
 			endGame(true, _totalQuestionsAnsweredCorrectly, _totalQuestionsAnsweredIncorrectly)
 			return
 		startNextQuestion()
+	#
+	# User answered question incorrecty
+	#
 	else:
 		var damageMultiplier = floor((_timeRemaining / _subSectionWaitTime) + 1)
 		var newPlayerHp = _playerHpBar.value - (_enemyBaseDamage * damageMultiplier)
@@ -161,7 +175,6 @@ func _on_QuestionTimer_timeout():
 func _on_overallMinigameGameTimer_timeout():
 	endGame(false, _totalQuestionsAnsweredCorrectly, _totalQuestionsAnsweredIncorrectly)
 
-
 func _on_gameplayGameTimer_timeout():
 	# TODO END THE GAME AND SHOW THE RESULTS 
 	pass # Replace with function body.
@@ -174,6 +187,34 @@ func endGame(playerWon, answeredCorrectly, answeredIncorrectly):
 	stopQuestionTimer()
 	if !$overallMinigameGameTimer.is_stopped():
 		$overallMinigameGameTimer.stop()
-		
 	_resultsUI.showResults(playerWon, answeredCorrectly, answeredIncorrectly)
 	
+	
+func showAnswerIndicators(userAnsweredCorrectly):
+	if userAnsweredCorrectly:
+		print("started correct timer")
+		$AnswerIndicatorTimers/Correct.start()
+	else:
+		print("started incorrect timer")
+		$AnswerIndicatorTimers/Incorrect.start()
+
+	for answerPanelContainer in _answerPanels:
+		if answerPanelContainer.getAnswerText() == _answerTextCorrect:
+			answerPanelContainer.showAnswerIndicator(true)
+		else:
+			answerPanelContainer.showAnswerIndicator(false)
+			
+func hideAnswerIndicators():
+	for answerPanelContainer in _answerPanels:
+			answerPanelContainer.hideAnswerIndicator()
+
+
+func _on_Correct_timeout():
+	emit_signal("answer_indicators_hidden")
+
+
+func _on_Incorrect_timeout():
+	emit_signal("answer_indicators_hidden")
+	
+func setCurrentAction(newAction):
+	_currentAction = newAction

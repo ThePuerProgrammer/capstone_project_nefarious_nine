@@ -22,12 +22,15 @@ var _endPosition
 var _dodgingLeft
 var _dodgingRight
 
+var _questionManager
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_leftPosition = get_node("../LeftPlayerPosition").position
 	_middlePosition = get_node("../MiddlePlayerPosition").position
 	_rightPosition = get_node("../RightPlayerPosition").position
+	_questionManager = get_node("../QuestionManager")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -40,15 +43,19 @@ func get_input():
 		_startPosition = _middlePosition
 		_endPosition = _leftPosition
 		_dodgingLeft = true
+		_questionManager.setCurrentAction("dodge_left")
 		_t = 0
 	if Input.is_action_just_pressed("dungeon_dodge_right"):
 		_startPosition = _middlePosition
 		_endPosition = _rightPosition
 		_dodgingRight = true
+		_questionManager.setCurrentAction("dodge_right")
 		_t = 0
 	if Input.is_action_just_pressed("dungeon_attack"):
+		_questionManager.setCurrentAction("attack")
 		pass
 	if Input.is_action_just_pressed("dungeon_block"):
+		_questionManager.setCurrentAction("block")
 		pass
 
 
