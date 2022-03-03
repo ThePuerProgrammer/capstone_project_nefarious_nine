@@ -11,6 +11,7 @@ export class Deck {
         this.dateCreated = typeof data.dateCreated =='number' ? data.dateCreated:Number(data.dateCreated);
         this.isFavorited = data.isFavorited;
         this.category = data.category;
+        this.keywords = data.keywords;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
 
@@ -48,6 +49,7 @@ export class Deck {
             dateCreated: this.dateCreated,
             isFavorited: this.isFavorited,
             category: this.category,
+            keywords: this.keywords,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 
@@ -67,6 +69,7 @@ static isSerializedDeck(obj){
     if(!obj.category || typeof obj.category != 'string') return false;
     if(!obj.dateCreated || typeof obj.dateCreated != 'number') return false;
     if(!obj.isFavorited || typeof obj.isFavorited != 'boolean') return false;
+    if(!obj.keywords || typeof obj.keywords != 'array') return false;
 }
 
 /***************************************************************************
@@ -82,6 +85,7 @@ static isSerializedDeck(obj){
         if(this.category) d.category = this.category;
         if(this.isFavorited) d.isFavorited = this.isFavorited;
         if(this.dateCreated) d.dateCreated = this.dateCreated;
+        if(this.keywords) d.keywords = this.keywords;
         return d;
     }
 

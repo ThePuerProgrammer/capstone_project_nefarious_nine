@@ -44,7 +44,6 @@ export const formCreateDeck = document.getElementById('form-create-deck');
 export const formDeckCategorySelect = document.getElementById('select-deck-category');
 export const formCreateAccount = document.getElementById('form-create-account');
 export const formViewDeck = document.getElementById('form-view-deck');
-export const formSearchDeck = document.getElementById('form-search-deck');
 //============================================================================//
 
 // STUDY PAGE
@@ -161,4 +160,14 @@ export const formDeleteClassroom = document.getElementById('form-delete-classroo
 export const previewClassroomFooter = document.getElementById('preview-classroom-modal-footer');
 export const previewClassroomBody = document.getElementById('preview-classroom-modal-body');
 export const previewClassroomLabel = document.getElementById('preview-classroom-modal-label');
+//============================================================================//
+
+
+//SEARCH
+//============================================================================//
+export const modalSearchBox = new bootstrap.Modal(document.getElementById('modal-searchbox'));
+export const searchBoxTitle = document.getElementById('modal-searchbox-title');
+export const searchBoxPlaceholder = document.getElementById('modal-searchbox-placeholder');
+export const searchBoxType = document.getElementById('modal-searchbox-type');
+export const formSearchBox = document.getElementById('form-searchbox');
 //============================================================================//

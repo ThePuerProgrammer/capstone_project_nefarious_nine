@@ -8,6 +8,7 @@ import * as DeckPage from './deck_page.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as EditDeck from '../controller/edit_deck.js'
+import * as Search from './search_page.js'
 
 let confirmation=false;
 
@@ -23,9 +24,9 @@ export function addEventListeners() {
         const name = e.target.name.value;
         const subject = e.target.subject.value;
         const isFavorited = false;
-        const category = e.target.selectCategory.value;
+        const category = e.target.selectCategory.value;        
 
-        console.log("category is: " + category);
+        const keywords = [name.toLowerCase(), subject.toLowerCase(), category.toLowerCase()];
 
         // relevant to Cody's story:
         const dateCreated = Date.now();
@@ -35,9 +36,10 @@ export function addEventListeners() {
             subject,
             dateCreated,
             isFavorited,
-            category
+            category,
+            keywords,
         });
-
+       
         try {
             console.log("Creating Deck");
             const docId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
@@ -61,17 +63,34 @@ export function addEventListeners() {
     Elements.formDeleteDeckConfirmation.addEventListener('submit', async e=>{
         const yes = e.target.yes.value;
     });
+
+
 }
 
 export async function study_decks_page() {
+
+    let deckList = [];
+    try {
+        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid); //this is what's showing up as null
+    } catch (e) {
+        console.log(e);
+    }
+
+    buildStudyDecksPage(deckList);
+    
+} //end study_decks_page()
+
+export async function buildStudyDecksPage(deckList) {
     Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
-    html += '<h1> Study Decks </h1>';
+    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="fa fa-search"></i>Search Decks</button></h1> '
+    ;
 
     //create deck button
     html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark">
-     Create A Deck +</button>`;
+     Create A Deck +</button>
+     `;
 
     // sort select menu
     html += `
@@ -84,17 +103,11 @@ export async function study_decks_page() {
         <option value="date">Date</option>
         <option value="category">Category</option>
     </select>
-    </div>
+    </div>    
     <br><br>
     `
 
-    let deckList = [];
-    try {
-        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
-    } catch (e) {
-        console.log(e);
-    }
-
+    
     html += `<div id="deck-container">`
     for (let i = 0; i < deckList.length; i++) {
         let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
@@ -265,10 +278,16 @@ export async function study_decks_page() {
         $(`#${Constant.htmlIDs.createDeckModal}`).modal('show');
     })
 
+    const searchDeckButton = document.getElementById('search-decks-button');
+    searchDeckButton.addEventListener('click', async e => {
+        const searchtype = 'deckSearch';
+        Search.setSearchType(searchtype);
+        Utilities.searchBox('Search Decks', 'input query');
+    })
+
 }
 
-
-function buildDeckView(deck, flashcards) {
+export function buildDeckView(deck, flashcards) {
     let html = `
     <div id="${deck.docId}" class="deck-card">
         <div class="deck-view-css">

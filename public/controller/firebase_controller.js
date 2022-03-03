@@ -802,3 +802,23 @@ export async function getMessages(classroomDocID) {
 
     return messages;
 }
+
+//============================================================================//
+// SEARCH FUNCTIONS
+//============================================================================//
+
+export async function searchDecks(uid, keywordsArray) {
+    const deckList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .orderBy('dateCreated', 'desc')
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Deck(doc.data());
+        t.set_docID(doc.id);
+        deckList.push(t)
+    })
+    return deckList;
+}
