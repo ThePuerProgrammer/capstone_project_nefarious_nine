@@ -8,12 +8,14 @@ import { buildDeckView, buildStudyDecksPage } from './study_decks_page.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
 
 let searchType;
+let searchKeysInfo;
 
 export function addEventListeners() {
 
     Elements.formSearchBox.addEventListener('submit', async e => {
         e.preventDefault();
         const searchKeys = e.target.searchKeys.value.trim();
+        searchKeysInfo = searchKeys;
         if (searchKeys.length==0) {
             Utilities.info('Error', 'No search key found');
             return;
@@ -36,8 +38,7 @@ export function addEventListeners() {
     
 }
 
-export async function search_page(joinedSearchKeys, searchType) {
-    
+export async function search_page(joinedSearchKeys, searchType) {    
 
     if (!joinedSearchKeys) {
         Utilities.info('Error', 'No Search Keys Found');
@@ -57,35 +58,16 @@ export async function search_page(joinedSearchKeys, searchType) {
     }
 
     switch(searchType) {
-
         case 'deckSearch':
-            const deckList = searchDecks(searchKeysArray);
-            //buildStudyDecksHeader();
+            const deckList = await searchDecks(searchKeysArray);            
             buildStudyDecksPage(deckList);
+            Utilities.info('You searched for', `${searchKeysInfo}`)
             break;
 
         default: Utilities.info('No search type detected');
 
     }
-}
-
-export function buildStudyDecksHeader() {
-    html += '<h1> Study Decks Searched by: </h1> '
-    ;
-}
-
-// export function assembleDeckSearchPage(deckList) {
-//     html += `<div id="deck-container">`
-//     for (let i = 0; i < deckList.length; i++) { //assembles the deck view
-//         let flashcards = await FirebaseController.getFlashcards(currentUser.uid, deckList[i].docId);
-//         html += buildDeckView(deckList[i], flashcards);
-//     }
-//     html += `</div>`
-
-//     if (deckList.length == 0) {
-//         html += '<h2> No searched decks found!</h2>'
-//     }
-// }
+}//END search_page()
 
 export function setSearchType(searchType) {
     Elements.searchBoxType.value = searchType;

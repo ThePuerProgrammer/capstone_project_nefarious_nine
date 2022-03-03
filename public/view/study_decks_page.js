@@ -24,10 +24,9 @@ export function addEventListeners() {
         const name = e.target.name.value;
         const subject = e.target.subject.value;
         const isFavorited = false;
-        const category = e.target.selectCategory.value;
-        const keywords = [name, subject, category];
+        const category = e.target.selectCategory.value;        
 
-        console.log("category is: " + category);
+        const keywords = [name.toLowerCase(), subject.toLowerCase(), category.toLowerCase()];
 
         // relevant to Cody's story:
         const dateCreated = Date.now();
