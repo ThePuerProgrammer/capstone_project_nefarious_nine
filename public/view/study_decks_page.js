@@ -124,7 +124,17 @@ export async function buildStudyDecksPage(deckList) {
 
     Elements.root.innerHTML += html;
     // adds an event listener to each of the view buttons
-    DeckPage.addViewButtonListener();
+    const viewDeckButtons = document.getElementsByClassName('form-view-deck');
+    for(let i = 0; i < viewDeckButtons.length; i++){
+        viewDeckButtons[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            let deckId = e.target.docId.value;
+            window.sessionStorage;
+            sessionStorage.setItem('deckId', deckId);
+            history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+            await DeckPage.deck_page(deckId);
+        })
+    }
 
     const editDeckForms = document.getElementsByClassName('form-edit-deck');
     for(let i=0; i< editDeckForms.length; i++){
