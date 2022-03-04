@@ -6,7 +6,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import { Classroom } from '../model/classroom.js';
 import * as OneClassroomPage from './one_classroom_page.js';
-import * as Search from './search_page.js';
+import { cleanDataToKeywords } from './search_page.js';
 
 export function addEventListeners() {
     Elements.menuClassrooms.addEventListener('click', async () => {
@@ -22,7 +22,7 @@ export function addEventListeners() {
         //const isFavorited = false;
         const category = e.target.selectClassCategory.value;
 
-        const keywords = Search.cleanDataToKeywords(name, subject, category)
+        const keywords = cleanDataToKeywords(name, subject, category)
 
         // add current user as a moderator
         const moderatorList = [];

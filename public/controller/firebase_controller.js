@@ -613,7 +613,7 @@ export async function updateUserInfo(uid, updateInfo) {
 //============================================================================//
 export async function updateClassroom(classroom) {
     await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
-        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category });
+        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category, 'keywords': classroom.keywords });
 }
 //============================================================================//
 //Ban Members
