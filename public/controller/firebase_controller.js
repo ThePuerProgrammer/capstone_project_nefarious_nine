@@ -798,6 +798,7 @@ export async function getMessages(classroomDocID) {
 // SEARCH FUNCTIONS
 //============================================================================//
 
+// DECKS------------------------------------------------------------------------->
 export async function searchDecks(uid, keywordsArray) {
     const deckList = []
     const snapShot = await firebase.firestore()
@@ -813,3 +814,22 @@ export async function searchDecks(uid, keywordsArray) {
     })
     return deckList;
 }
+
+//CLASSROOMS ------------------------------------------------------------------>
+
+export async function searchAllClassrooms(keywordsArray) {
+    const classroomList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Classroom(doc.data());
+        t.set_docID(doc.id);
+        classroomList.push(t)
+    });
+    return classroomList;
+}
+
+//============================================================================//
+

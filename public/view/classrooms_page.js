@@ -22,6 +22,8 @@ export function addEventListeners() {
         //const isFavorited = false;
         const category = e.target.selectClassCategory.value;
 
+        const keywords = Search.cleanDataToKeywords(name, subject, category)
+
         // add current user as a moderator
         const moderatorList = [];
         moderatorList.push(Auth.currentUser.email);
@@ -41,6 +43,7 @@ export function addEventListeners() {
             moderatorList,
             members,
             banlist,
+            keywords,
         });
 
         try {
@@ -99,7 +102,7 @@ export async function classrooms_page() {
     </div>`;
 
 
-
+    //BUILD AVAILABLE CLASSROOMS
     html += `<div id="Available Classrooms" class="classroom-tab-content">`;
 
     let availableClassroomList = [];
@@ -152,6 +155,7 @@ export async function classrooms_page() {
         }
     })
     html += `</tbody></table></div>`;
+    //END AVAILABLE CLASSROOMS
 
     // My Classrooms tab with create classroom button
     html += `<div id="My Classrooms" class="classroom-tab-content">
@@ -184,6 +188,7 @@ export async function classrooms_page() {
 
     html += `</tbody></table></div>`;
 
+    // POPUP MODAL FOR PREVIEWS
     Elements.root.innerHTML = html;
 
     const previewForms = document.getElementsByClassName('form-preview-classroom');
@@ -412,23 +417,52 @@ export async function classrooms_page() {
         }
     });
 
+    // SEARCH CLASSROOMS LISTENERS --------------------------------------------------//   sorry this is so dumb, I R tired -_-
+    const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
+    const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
     const searchClassroomButton = document.getElementById('search-classroom-button');
     searchClassroomButton.addEventListener('click', async e => {
         const searchtype = 'classroomSearch';
-        Search.setSearchType(searchtype);
-        Utilities.searchBox('Search Classroom', 'input query');
-    })
-
-    const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
-    checkBoxMyClassrooms.addEventListener('change', async e => {
-        console.log('huaazh');
+        Search.setSearchType(searchtype);     
+        if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
+            Search.setClassroomSearchOption("allRooms");
+        }
+        else if (checkBoxNotMyClassrooms.checked == true){
+            Search.setClassroomSearchOption("notMyRooms");  
+        } 
+        else if (checkBoxMyClassrooms.checked == true) {
+            Search.setClassroomSearchOption("myRooms"); 
+        } 
+        else Search.setClassroomSearchOption("null"); 
+    
+        Utilities.searchBox('Search Classroom', 'input query');        
     });
 
-    const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
-    checkBoxNotMyClassrooms.addEventListener('change', async e => {
-        console.log('huaazh 2');
+    
+    checkBoxMyClassrooms.addEventListener('change', async e => {     
+         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
+            Search.setClassroomSearchOption("allRooms");
+         }
+        
+        else if (checkBoxMyClassrooms.checked == true){
+            Search.setClassroomSearchOption("myRooms"); 
+        }    else {
+            Search.setClassroomSearchOption("null"); 
+        }        
     });
-} //        END CLASSROOMS_PAGE()
+
+    
+    checkBoxNotMyClassrooms.addEventListener('change', async e => {        
+         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
+             Search.setClassroomSearchOption("allRooms");
+         }
+         else if (checkBoxNotMyClassrooms.checked == true){
+             Search.setClassroomSearchOption("notMyRooms");  
+         } else return;
+    });       
+    // END SEARCH CLASSROOMS LISTENERS------------------------------------------------//
+
+} //END CLASSROOMS_PAGE()-----------------------------------------------------------//
 
 
 function buildMyClassroom(classroom) {
@@ -453,7 +487,7 @@ function buildMyClassroom(classroom) {
     return html;
 }
 
-function buildAvailableClassroom(classroom) {
+export function buildAvailableClassroom(classroom) {
     let html = classroom.members.includes(Auth.currentUser.email) ? `
     <td>
     <form class="form-preview-classroom" method="post">

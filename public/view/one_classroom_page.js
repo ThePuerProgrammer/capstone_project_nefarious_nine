@@ -269,10 +269,12 @@ export async function one_classroom_page(classroomDocID) {
         const confirmDeleteClassroom = document.getElementById('yes-delete-classroom-button'); //delete button on modal
         confirmDeleteClassroom.addEventListener("click", async e => {
             e.preventDefault();
+            await classrooms_page();
             const deletedClassName = classroom.name;
+            
             await FirebaseController.deleteClassroom(classroomDocID);
             Utilities.info('Success', `Classroom: ${deletedClassName} deleted.`);
-            await classrooms_page();
+            
         })
     } //end of mod listeners
 
@@ -282,10 +284,17 @@ export async function one_classroom_page(classroomDocID) {
     Elements.formEditClassroom.addEventListener('submit', async e => {
         e.preventDefault();
 
+        const name = e.target.name.value;
+        const subject = e.target.subject.value;
+        const category = e.target.selectCategory.value;  
+
+        const keywords = cleanDataToKeywords(name, subject, category)
+
         const cr = new Classroom({
-            name: e.target.name.value,
-            subject: e.target.subject.value,
-            category: e.target.editClassCategory.value,
+            name,
+            subject,
+            category,
+            keywords,
         });
         cr.set_docID(classroomDocID);
 
