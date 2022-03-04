@@ -1,5 +1,6 @@
 # This file was written using a direct reference to the following open source file (MIT License)
 # https://github.com/henriquelalves/SnakeVersusWebRTC/blob/main/godot-project/MultiplayerFramework/WebRTCClient.gd
+# which was, itself, a direct reference of the Godot documentation, expanded for exchanging game data
 
 extends Node
 

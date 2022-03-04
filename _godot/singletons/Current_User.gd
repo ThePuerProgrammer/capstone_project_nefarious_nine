@@ -15,6 +15,8 @@ var window
 
 var peer_id
 
+var username
+
 signal failure_to_authenticate_user
 signal authentication_success
 

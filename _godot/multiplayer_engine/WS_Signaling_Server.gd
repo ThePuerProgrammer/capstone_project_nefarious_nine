@@ -42,9 +42,30 @@ func _close_request(id, code, reason):
 	print("Client %d disconnecting with code: %d, reason: %s" % [id, code, reason])
 
 func _disconnected(id, was_clean = false):
+	# Remove the player from the lobby's connected_players array
+	# If that array is empty, the lobby is empty. Delete from firestore
+	for lobby in _active_lobbies:
+		var disconnect_lobby = []
+		var this_lobby = _active_lobbies[lobby]
+		for player in this_lobby['connected_players']:
+			if player == id:
+				disconnect_lobby.append(player)
+		for player in disconnect_lobby:
+			this_lobby['connected_players'].erase(player)
+		if this_lobby['connected_players'].size() == 0:
+			FirebaseController.delete_lobby(lobby)
+			
 	print("Client %d disconnected, clean: %s" % [id, str(was_clean)])
 
 func _on_data(id):
+	# This section is related to the first packet sent after connecting to the server
+	# The idea is simple, when the player connects, they are put in a queue awaiting dictionary
+	# assignment between them and their lobby. As the queue is processed, they are removed from it
+	# If they are the first to create the active lobby, they are assigned as host. Then for them
+	# and any others that join this lobby, they are added to the connected players and the lobby
+	# queue as indexes in the lobby dictionary. A visual of the active lobbies can be seen above
+	# in the variable declaration. 
+	################################################################################################
 	var remove_peers = []
 	for peer in _peers_awaiting_lobby_confirmation:
 		if peer == id:
@@ -54,6 +75,7 @@ func _on_data(id):
 			
 			if _active_lobbies.has(data):
 				_active_lobbies[data]['queued_players'].append(id)
+				_active_lobbies[data]['connected_players'][id] = []
 			else:
 				# Get the firebase document related to the data (docid)
 				var lobby_doc = FirebaseController.get_lobby(data)
@@ -65,19 +87,30 @@ func _on_data(id):
 					'host' : fields['host'],
 					'max_players' : fields['player_count'][2].to_int(),
 					'queued_players' : [id],
-					'connected_players' : [],
+					'connected_players' : {id : []},
 				}
+			var message = Message.new()
+			message.server_login = true
+			message.content = id
+			_server.get_peer(id).put_packet(message.get_raw())
 	
 	# Data was first exchange from peer. Return
 	if remove_peers.size() != 0:
 		for peer in remove_peers:
 			_peers_awaiting_lobby_confirmation.remove(_peers_awaiting_lobby_confirmation.find(peer))
 		return
+	################################################################################################
 
 	# Else data wasn't related to choosing a lobby
-	var pkt = _server.get_peer(id).get_packet()
-	print("Got data from client %d: %s ... echoing" % [id, pkt.get_string_from_utf8()])
-	_server.get_peer(id).put_packet(pkt)
+	var message = Message.new()
+	message.from_raw(_server.get_peer(id).get_packet())
+	for lobby in _active_lobbies:
+		if not _active_lobbies[lobby]['connected_players'].has(id):
+			continue
+		for player_id in _active_lobbies[lobby]['connected_players'][id]:
+			if (player_id != id || (player_id == id && message.is_echo)):
+				_server.get_peer(player_id).put_packet(message.get_raw())
+		break
 
 func _process(_delta):
 	_server.poll()
@@ -96,11 +129,10 @@ func create_new_match(lobby):
 		message.game_start = true
 		message.content = new_game
 		_server.get_peer(lobby['queued_players'][0]).put_packet(message.get_raw())
-		lobby['connected_players'].append(lobby['queued_players'][0])
 		lobby['queued_players'].remove(0)
 	
-	for i in range(new_game.size()):
-		lobby['connected_players'][i] = new_game
+	for player in lobby['connected_players']:
+		lobby['connected_players'][player] = new_game
 			
 func _log():
 	pass

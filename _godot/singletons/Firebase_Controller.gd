@@ -46,3 +46,8 @@ func get_lobby(lobby_id):
 	var document_task : FirestoreTask = collection.get(lobby_id)
 	var document : FirestoreDocument = yield(document_task, "get_document")
 	return document
+
+func delete_lobby(lobby_id):
+	var collection : FirestoreCollection = Firebase.Firestore.collection(Constants.COLLECTIONS.MULTIPLAYER_GAME_LOBBIES)
+	var del_task : FirestoreTask = collection.delete(lobby_id)
+	yield(del_task, "task_finished")
