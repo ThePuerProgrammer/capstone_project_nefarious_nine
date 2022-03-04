@@ -1,4 +1,4 @@
-[gd_scene load_steps=118 format=2]
+[gd_scene load_steps=119 format=2]
 
 [ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_19.png" type="Texture" id=1]
 [ext_resource path="res://dungeon_fight/art/other/Timer.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://dungeon_fight/QuestionManager.gd" type="Script" id=9]
 [ext_resource path="res://dungeon_fight/Buttons/AnswerButton.tscn" type="PackedScene" id=10]
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_foreground.tres" type="StyleBox" id=11]
+[ext_resource path="res://dungeon_fight/PopupMessage.gd" type="Script" id=12]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=14]
 [ext_resource path="res://dungeon_fight/PopupLabel.gd" type="Script" id=15]
 [ext_resource path="res://dungeon_fight/overallMinigameGameTimer.gd" type="Script" id=16]
@@ -247,6 +248,11 @@ animations = [ {
 "name": "dead",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 77 ), ExtResource( 78 ), ExtResource( 81 ), ExtResource( 82 ), ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
+"loop": true,
+"name": "die",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 43 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 48 ) ],
 "loop": true,
 "name": "attack",
@@ -255,11 +261,6 @@ animations = [ {
 "frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 54 ), ExtResource( 46 ), ExtResource( 44 ) ],
 "loop": true,
 "name": "dodge",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 77 ), ExtResource( 78 ), ExtResource( 81 ), ExtResource( 82 ), ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
-"loop": true,
-"name": "die",
 "speed": 5.0
 } ]
 
@@ -280,24 +281,9 @@ animations = [ {
 "name": "die",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
 "loop": true,
-"name": "idle_animation",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 18 ), ExtResource( 70 ), ExtResource( 19 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 1 ) ],
-"loop": true,
-"name": "attack_animation_p2",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 58 ) ],
-"loop": true,
-"name": "first_attack_level",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 66 ) ],
-"loop": true,
-"name": "third_attack_level",
+"name": "hit_effect",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 1 ) ],
@@ -305,14 +291,29 @@ animations = [ {
 "name": "attack_lingering",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 58 ) ],
+"loop": true,
+"name": "first_attack_level",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 63 ) ],
 "loop": true,
 "name": "second_attack_level",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
+"frames": [ ExtResource( 18 ), ExtResource( 70 ), ExtResource( 19 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 1 ) ],
 "loop": true,
-"name": "hit_effect",
+"name": "attack_animation_p2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 66 ) ],
+"loop": true,
+"name": "third_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"loop": true,
+"name": "idle_animation",
 "speed": 5.0
 } ]
 
@@ -713,6 +714,7 @@ margin_top = 142.544
 margin_right = 1586.6
 margin_bottom = 342.544
 rect_min_size = Vector2( 400, 200 )
+script = ExtResource( 12 )
 
 [node name="PopupLabel" type="Label" parent="PopupMessage"]
 margin_left = 0.00012207
@@ -730,9 +732,27 @@ text = "GO!"
 align = 1
 valign = 1
 script = ExtResource( 15 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="PopupLabelSmallText" type="Label" parent="PopupMessage"]
+visible = false
+margin_left = 0.00012207
+margin_right = 400.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 400, 200 )
+size_flags_vertical = 1
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -7
+custom_constants/shadow_offset_y = 7
+custom_fonts/font = ExtResource( 28 )
+align = 1
+valign = 1
+autowrap = true
+script = ExtResource( 15 )
+
+[node name="MessageTimeLength" type="Timer" parent="PopupMessage"]
+wait_time = 5.0
 
 [node name="EnemyHpBar" type="ProgressBar" parent="."]
 margin_left = 1571.5
@@ -746,8 +766,8 @@ size_flags_vertical = 3
 custom_fonts/font = ExtResource( 26 )
 custom_styles/fg = ExtResource( 4 )
 custom_styles/bg = ExtResource( 25 )
-max_value = 50.0
-value = 50.0
+max_value = 40.0
+value = 40.0
 
 [node name="PlayerHpBar" type="ProgressBar" parent="."]
 margin_left = 1094.51
@@ -761,8 +781,8 @@ size_flags_vertical = 3
 custom_fonts/font = ExtResource( 26 )
 custom_styles/fg = ExtResource( 4 )
 custom_styles/bg = ExtResource( 25 )
-max_value = 50.0
-value = 50.0
+max_value = 40.0
+value = 40.0
 
 [node name="TimeLeft" type="Control" parent="."]
 margin_right = 40.0
@@ -791,6 +811,9 @@ valign = 1
 margin_right = 1920.0
 margin_bottom = 900.0
 script = ExtResource( 36 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ShadowedBackground" type="ColorRect" parent="ResultsUI"]
 anchor_right = 1.0
@@ -828,7 +851,7 @@ custom_constants/margin_bottom = 6
 margin_left = 12.0
 margin_top = 8.0
 margin_right = 1203.0
-margin_bottom = 559.0
+margin_bottom = 560.0
 
 [node name="ResultsBar" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn"]
 margin_right = 1191.0
@@ -856,19 +879,19 @@ autowrap = true
 [node name="MainContentHbox" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn"]
 margin_top = 64.0
 margin_right = 1191.0
-margin_bottom = 551.0
+margin_bottom = 552.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
 
 [node name="LeftPanel" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
 margin_right = 576.0
-margin_bottom = 487.0
+margin_bottom = 488.0
 size_flags_horizontal = 3
 
 [node name="LeftPanelColumn" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel"]
 margin_right = 576.0
-margin_bottom = 487.0
+margin_bottom = 488.0
 size_flags_horizontal = 3
 custom_constants/separation = 63
 
@@ -966,7 +989,7 @@ autowrap = true
 [node name="PanelDividerMarginContainer" type="MarginContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
 margin_left = 576.0
 margin_right = 614.0
-margin_bottom = 487.0
+margin_bottom = 488.0
 custom_constants/margin_right = 13
 custom_constants/margin_top = 18
 custom_constants/margin_bottom = 36
@@ -974,19 +997,19 @@ custom_constants/margin_bottom = 36
 [node name="PanelDivider" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/PanelDividerMarginContainer"]
 margin_top = 18.0
 margin_right = 25.0
-margin_bottom = 451.0
+margin_bottom = 452.0
 rect_min_size = Vector2( 25, 0 )
 color = Color( 0.647059, 0.52549, 0.690196, 1 )
 
 [node name="RightPanel" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
 margin_left = 614.0
 margin_right = 1191.0
-margin_bottom = 487.0
+margin_bottom = 488.0
 size_flags_horizontal = 3
 
 [node name="RightPanelColumn" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel"]
 margin_right = 577.0
-margin_bottom = 487.0
+margin_bottom = 488.0
 size_flags_horizontal = 3
 custom_constants/separation = 64
 
@@ -1035,7 +1058,7 @@ autowrap = true
 margin_left = 12.0
 margin_top = 8.0
 margin_right = 1203.0
-margin_bottom = 559.0
+margin_bottom = 560.0
 script = ExtResource( 76 )
 
 [node name="TimeLeftSprite" type="Sprite" parent="ResultsUI/ResultsPanelContainer/MarginContainer/TimeLeft"]
@@ -1076,7 +1099,7 @@ frame = 4
 script = ExtResource( 9 )
 
 [node name="QuestionTimer" type="Timer" parent="QuestionManager"]
-wait_time = 3.0
+wait_time = 7.5
 
 [node name="startGameTimer" type="Timer" parent="QuestionManager"]
 wait_time = 3.0
@@ -1134,6 +1157,7 @@ anims/white_in = SubResource( 9 )
 [connection signal="animation_finished" from="Player/PlayerAnimatedSprite" to="Player" method="_on_PlayerAnimatedSprite_animation_finished"]
 [connection signal="animation_finished" from="Player/PlayerAnimatedSprite" to="QuestionManager" method="_on_PlayerAnimatedSprite_animation_finished"]
 [connection signal="animation_finished" from="Enemy" to="Effects" method="_on_Enemy_animation_finished"]
+[connection signal="timeout" from="PopupMessage/MessageTimeLength" to="PopupMessage" method="_on_MessageTimeLength_timeout"]
 [connection signal="animation_finished" from="ResultsUI/ShadowedBackground/AnimationPlayer" to="ResultsUI" method="_on_AnimationPlayer_animation_finished"]
 [connection signal="animation_finished" from="ResultsUI/ShadowedBackground/AnimationPlayer" to="QuestionManager/overallMinigameGameTimer" method="_on_AnimationPlayer_animation_finished"]
 [connection signal="timeout" from="QuestionManager/QuestionTimer" to="QuestionManager" method="_on_QuestionTimer_timeout"]

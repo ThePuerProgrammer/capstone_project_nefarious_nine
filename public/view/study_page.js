@@ -3,6 +3,7 @@ import * as Routes from "../controller/routes.js";
 import * as FirebaseController from "../controller/firebase_controller.js";
 import * as Constant from "../model/constant.js";
 import * as Auth from "../controller/firebase_auth.js";
+import * as DeckPage from './deck_page.js'
 
 
 let smartStudyOn = false; // To keep track of Smart Study Toggle
@@ -293,7 +294,7 @@ function buildStudyFlashcardView(flashcard) {
 function buildOverviewView(deck, deckLength) {
   let html = "";
   html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light" id="${Constant.htmlIDs.overrideFlashcardBtn}">
-    <h1 style="align: center">${deck.name} Study Overview</h1>
+    <center><h1>${deck.name} Study Overview</h1></centered>
     <br>
     <ul class="list-group list-group-flush list-group-numbered" role="group">`;
 
@@ -324,9 +325,14 @@ function buildOverviewView(deck, deckLength) {
   html += `
   </ul>
   <br>
-  <h4>Score: ${score} / ${deckLength}</h4>
+  <centered><h4>Score: ${score} / ${deckLength}</h4>
   <h4>Coins Earned: ${coins-start_coins}</h4>
-  <h4>Total Coins: ${coins}</h4>
+  <h4>Total Coins: ${coins}</h4></centered>
+  <br>
+  <form class="form-return-to-decks" method="post">
+    <input type="hidden" name="docId" value"${deck.docID}">
+    <button class="btn btn-outline-secondary pomo-bg-color-md-dark pomo-text-color-light" type="submit" style="padding:5px 10px; float: right;">Return</button>
+  </form>
   </div>
   </div>`;
 
@@ -346,6 +352,20 @@ function buildOverviewView(deck, deckLength) {
       await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
       document.getElementById(Constant.htmlIDs.overrideFlashcardBtn).innerHTML =
         buildOverviewView(deck, deckLength);
+    });
+  }
+  const deckPageReturnButton = document.getElementsByClassName('form-return-to-decks');
+  for(let i=0; i <deckPageReturnButton.length; i++){
+    deckPageReturnButton[i].addEventListener('submit', async e=>{
+      e.preventDefault();
+      //let deckId = e.target.docId.value;
+      let deckId = deck.docID;
+      try{
+      history.pushState(null,null, Routes.routePathname.DECK + '#' + deckId);
+      await DeckPage.deck_page(deckId);
+      } catch(e){
+        if(Constant.DEV) console.log(e);
+      }
     });
   }
 

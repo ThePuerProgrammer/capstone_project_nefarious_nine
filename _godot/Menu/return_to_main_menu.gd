@@ -14,3 +14,7 @@ func _on_backButton_pressed():
 
 func _on_FadeIn_fade_in_finished():
 	$FadeIn.hide()
+
+
+func _on_DungeonFightTemporaryNavigation_pressed():
+	get_tree().change_scene('res://dungeon_fight/dungeon_fight.tscn')
