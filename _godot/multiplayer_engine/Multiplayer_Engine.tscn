@@ -1,8 +1,10 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/icons/outline_keyboard_double_arrow_up_black_24dp.png" type="Texture" id=3]
 [ext_resource path="res://multiplayer_engine/multiplayer_engine.gd" type="Script" id=4]
+[ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/icons/outline_key_black_24dp.png" type="Texture" id=7]
 [ext_resource path="res://ui_elements/Pomo_BG.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/icons/outline_sports_esports_black_24dp.png" type="Texture" id=10]
@@ -422,6 +424,12 @@ margin_top = 421.0
 margin_right = 1029.0
 margin_bottom = 479.0
 dialog_text = "Incorrect Password"
+
+[node name="FadeIn" parent="." instance=ExtResource( 5 )]
+visible = false
+
+[node name="FadeOut" parent="." instance=ExtResource( 2 )]
+visible = false
 
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/RefreshButton" to="." method="_on_RefreshButton_pressed"]
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/BackToMainMenuButton" to="." method="_on_Back_To_Main_Menu_Button_pressed"]
