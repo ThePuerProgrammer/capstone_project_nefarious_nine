@@ -5,36 +5,41 @@ import * as Utilities from '../view/utilities.js'
 import * as Elements from '../view/elements.js'
 import { Deck } from '../model/Deck.js'
 import { study_decks_page } from '../view/study_decks_page.js'
+import { cleanDataToKeywords } from '../view/search_page.js'
 
 
 export function addEventListeners(){
     Elements.formEditDeck.form.addEventListener('submit', async e=>{
         e.preventDefault();
+        const name = e.target.name.value;
+        const subject = e.target.subject.value;
+        const dateCreated = e.target.dateCreated.value;
+        const isFavorited = e.target.isFavorited.value;
+        const category = e.target.selectCategory.value;        
 
+        const keywords = cleanDataToKeywords(name, subject, category)
+
+        //const keywords = [name.toLowerCase(), subject.toLowerCase(), category.toLowerCase()];
         //Reading Information from the Edit
         const d = new Deck({
-            name:           e.target.name.value,
-            subject:        e.target.subject.value,
-            dateCreated:    e.target.dateCreated.value,
-            category:       e.target.selectCategory.value,
-            isFavorited:    e.target.isFavorited.value,
+            name,
+            subject,
+            dateCreated,
+            category,
+            isFavorited,
+            keywords,
         });
         d.set_docID(e.target.docId.value);
 
         if(d.isFavorited=="false"){
-            // console.log(`Trying comparison false`);
             d.isFavorited=false;
         } else {
-            // console.log(`Trying comparison true`);
             d.isFavorited=true;
         }
 
-        // const isFavorited = Elements.formEditDeck.checkboxIsFavorited
-        // console.log(`Check 1:${d.isFavorited}`)
         //Firestore
         try{
             await FirebaseController.updateDeck(Auth.currentUser.uid, d ,d.docID)
-            // console.log(`Check 2:${d.isFavorited}`)
             //Added an additional load, as not all the updated was loading the first time.
             await study_decks_page();
 
@@ -42,7 +47,6 @@ export function addEventListeners(){
             if(Constant.DEV) console.log(e);
             Utilities.info('Update Deck Error', JSON.stringify(e));
         }
-        await study_decks_page();
         Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
     });
 

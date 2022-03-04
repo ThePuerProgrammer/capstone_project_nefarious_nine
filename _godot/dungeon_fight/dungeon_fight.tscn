@@ -1,37 +1,398 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=118 format=2]
 
-[ext_resource path="res://assets/Resources/floor.tres" type="TileSet" id=1]
-[ext_resource path="res://assets/tilesets/dungeon_fighting/Floor/Sample_Character_Normal_Right.png" type="Texture" id=2]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_19.png" type="Texture" id=1]
+[ext_resource path="res://dungeon_fight/art/other/Timer.png" type="Texture" id=2]
 [ext_resource path="res://dungeon_fight/player.gd" type="Script" id=3]
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_green_foreground.tres" type="StyleBox" id=4]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_48pt.tres" type="DynamicFont" id=5]
-[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_medium_background.tres" type="StyleBox" id=6]
+[ext_resource path="res://dungeon_fight/ProgressBar/progress_background.tres" type="StyleBox" id=6]
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_yellow_foreground.tres" type="StyleBox" id=7]
 [ext_resource path="res://assets/themes/question_tile.tres" type="StyleBox" id=8]
 [ext_resource path="res://dungeon_fight/QuestionManager.gd" type="Script" id=9]
 [ext_resource path="res://dungeon_fight/Buttons/AnswerButton.tscn" type="PackedScene" id=10]
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_foreground.tres" type="StyleBox" id=11]
-[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_green_background.tres" type="StyleBox" id=12]
-[ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_background.tres" type="StyleBox" id=13]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=14]
 [ext_resource path="res://dungeon_fight/PopupLabel.gd" type="Script" id=15]
-[ext_resource path="res://assets/tilesets/dungeon_fighting/Enemy/Enemy_idle_test.png" type="Texture" id=16]
-[ext_resource path="res://assets/tilesets/dungeon_fighting/Enemy/Enemy_Hard_Test.png" type="Texture" id=17]
-[ext_resource path="res://assets/tilesets/dungeon_fighting/Enemy/Enemy_Medium_Test.png" type="Texture" id=18]
-[ext_resource path="res://assets/tilesets/dungeon_fighting/Enemy/Enemy_Easy_Test.png" type="Texture" id=19]
+[ext_resource path="res://dungeon_fight/overallMinigameGameTimer.gd" type="Script" id=16]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_11.png" type="Texture" id=17]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_14.png" type="Texture" id=18]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_16.png" type="Texture" id=19]
 [ext_resource path="res://dungeon_fight/Vignette.gd" type="Script" id=20]
 [ext_resource path="res://dungeon_fight/Effects.gd" type="Script" id=21]
 [ext_resource path="res://dungeon_fight/WhiteOut.gd" type="Script" id=22]
 [ext_resource path="res://assets/Resources/vignette_animation.tres" type="Animation" id=23]
 [ext_resource path="res://dungeon_fight/WhiteIn.gd" type="Script" id=24]
+[ext_resource path="res://dungeon_fight/ProgressBar/hp_bar_background.tres" type="StyleBox" id=25]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=26]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_90pt.tres" type="DynamicFont" id=27]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_26pt.tres" type="DynamicFont" id=28]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f5.png" type="Texture" id=29]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f6.png" type="Texture" id=30]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f4.png" type="Texture" id=31]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f7.png" type="Texture" id=32]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f2.png" type="Texture" id=33]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f3.png" type="Texture" id=34]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f1.png" type="Texture" id=35]
+[ext_resource path="res://dungeon_fight/ResultsUI.gd" type="Script" id=36]
+[ext_resource path="res://dungeon_fight/UI/action_box_panel.tres" type="StyleBox" id=37]
+[ext_resource path="res://dungeon_fight/art/actions/block.png" type="Texture" id=38]
+[ext_resource path="res://dungeon_fight/ActionBar.gd" type="Script" id=39]
+[ext_resource path="res://dungeon_fight/art/actions/attack.png" type="Texture" id=40]
+[ext_resource path="res://dungeon_fight/art/actions/dodge_right.png" type="Texture" id=41]
+[ext_resource path="res://dungeon_fight/art/actions/dodge_left.png" type="Texture" id=42]
+[ext_resource path="res://dungeon_fight/art/character/attack1/adventurer-attack1-00-1.3.png" type="Texture" id=43]
+[ext_resource path="res://dungeon_fight/art/character/idle/adventurer-idle-2-00-1.3.png" type="Texture" id=44]
+[ext_resource path="res://dungeon_fight/art/character/attack1/adventurer-attack1-01-1.3.png" type="Texture" id=45]
+[ext_resource path="res://dungeon_fight/art/character/dodge/adventurer-smrslt-03-1.3_r.png" type="Texture" id=46]
+[ext_resource path="res://dungeon_fight/art/character/attack1/adventurer-attack1-03-1.3.png" type="Texture" id=47]
+[ext_resource path="res://dungeon_fight/art/character/attack1/adventurer-attack1-04-1.3.png" type="Texture" id=48]
+[ext_resource path="res://dungeon_fight/art/character/idle/adventurer-idle-2-03-1.3.png" type="Texture" id=49]
+[ext_resource path="res://dungeon_fight/art/character/attack1/adventurer-attack1-02-1.3.png" type="Texture" id=50]
+[ext_resource path="res://dungeon_fight/art/character/dodge/adventurer-smrslt-01-1.3_r.png" type="Texture" id=51]
+[ext_resource path="res://dungeon_fight/art/character/idle/adventurer-idle-2-01-1.3.png" type="Texture" id=52]
+[ext_resource path="res://dungeon_fight/art/character/dodge/adventurer-smrslt-00-1.3_r.png" type="Texture" id=53]
+[ext_resource path="res://dungeon_fight/art/character/dodge/adventurer-smrslt-02-1.3_r.png" type="Texture" id=54]
+[ext_resource path="res://dungeon_fight/art/character/idle/adventurer-idle-2-02-1.3.png" type="Texture" id=55]
+[ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_2.png" type="Texture" id=56]
+[ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_7.png" type="Texture" id=57]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/firstAttackLvl.png" type="Texture" id=58]
+[ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_3.png" type="Texture" id=59]
+[ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_6.png" type="Texture" id=60]
+[ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_4.png" type="Texture" id=61]
+[ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_5.png" type="Texture" id=62]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/secondAttackLvl.png" type="Texture" id=63]
+[ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_8.png" type="Texture" id=64]
+[ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_1.png" type="Texture" id=65]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/thirdAttackLvl.png" type="Texture" id=66]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_17.png" type="Texture" id=67]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_18.png" type="Texture" id=68]
+[ext_resource path="res://dungeon_fight/gameplayGameTimer.gd" type="Script" id=69]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_15.png" type="Texture" id=70]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_12.png" type="Texture" id=71]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_13.png" type="Texture" id=72]
+[ext_resource path="res://dungeon_fight/art/enemy/hitEffect/Big-Cultist_Hit_2.png" type="Texture" id=73]
+[ext_resource path="res://dungeon_fight/art/enemy/hitEffect/Big-Cultist_Hit_3.png" type="Texture" id=74]
+[ext_resource path="res://dungeon_fight/art/enemy/hitEffect/Big-Cultist_Hit_1.png" type="Texture" id=75]
+[ext_resource path="res://dungeon_fight/TimeLeft.gd" type="Script" id=76]
+[ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-00-1.3.png" type="Texture" id=77]
+[ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-01-1.3.png" type="Texture" id=78]
+[ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-04-1.3.png" type="Texture" id=79]
+[ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-05-1.3.png" type="Texture" id=80]
+[ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-02-1.3.png" type="Texture" id=81]
+[ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-03-1.3.png" type="Texture" id=82]
+[ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-06-1.3.png" type="Texture" id=83]
+[ext_resource path="res://dungeon_fight/art/enemy/dead/Big-Cultist_Death_12.png" type="Texture" id=84]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_4.png" type="Texture" id=85]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_5.png" type="Texture" id=86]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_2.png" type="Texture" id=87]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_3.png" type="Texture" id=88]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_6.png" type="Texture" id=89]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_1.png" type="Texture" id=90]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_8.png" type="Texture" id=91]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_7.png" type="Texture" id=92]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_10.png" type="Texture" id=93]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_11.png" type="Texture" id=94]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_12.png" type="Texture" id=95]
+[ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_9.png" type="Texture" id=96]
+[ext_resource path="res://dungeon_fight/art/other/floor.png" type="Texture" id=97]
+[ext_resource path="res://dungeon_fight/art/other/wall.png" type="Texture" id=98]
+[ext_resource path="res://dungeon_fight/art/other/FloorPatch.png" type="Texture" id=99]
+
+[sub_resource type="TileSet" id=18]
+1/name = "FloorPatch.png 1"
+1/texture = ExtResource( 99 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 0, 0, 128, 128 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
+2/name = "FloorPatch.png 2"
+2/texture = ExtResource( 99 )
+2/tex_offset = Vector2( 0, 0 )
+2/modulate = Color( 1, 1, 1, 1 )
+2/region = Rect2( 128, 0, 128, 128 )
+2/tile_mode = 0
+2/occluder_offset = Vector2( 0, 0 )
+2/navigation_offset = Vector2( 0, 0 )
+2/shape_offset = Vector2( 0, 0 )
+2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+2/shape_one_way = false
+2/shape_one_way_margin = 0.0
+2/shapes = [  ]
+2/z_index = 0
+3/name = "FloorPatch.png 3"
+3/texture = ExtResource( 99 )
+3/tex_offset = Vector2( 0, 0 )
+3/modulate = Color( 1, 1, 1, 1 )
+3/region = Rect2( 0, 128, 128, 128 )
+3/tile_mode = 0
+3/occluder_offset = Vector2( 0, 0 )
+3/navigation_offset = Vector2( 0, 0 )
+3/shape_offset = Vector2( 0, 0 )
+3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+3/shape_one_way = false
+3/shape_one_way_margin = 0.0
+3/shapes = [  ]
+3/z_index = 0
+4/name = "FloorPatch.png 4"
+4/texture = ExtResource( 99 )
+4/tex_offset = Vector2( 0, 0 )
+4/modulate = Color( 1, 1, 1, 1 )
+4/region = Rect2( 128, 128, 128, 128 )
+4/tile_mode = 0
+4/occluder_offset = Vector2( 0, 0 )
+4/navigation_offset = Vector2( 0, 0 )
+4/shape_offset = Vector2( 0, 0 )
+4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+4/shape_one_way = false
+4/shape_one_way_margin = 0.0
+4/shapes = [  ]
+4/z_index = 0
+5/name = "wall.png 5"
+5/texture = ExtResource( 98 )
+5/tex_offset = Vector2( 0, 0 )
+5/modulate = Color( 1, 1, 1, 1 )
+5/region = Rect2( 0, 0, 128, 160 )
+5/tile_mode = 0
+5/occluder_offset = Vector2( 0, 0 )
+5/navigation_offset = Vector2( 0, 0 )
+5/shape_offset = Vector2( 0, 0 )
+5/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+5/shape_one_way = false
+5/shape_one_way_margin = 0.0
+5/shapes = [  ]
+5/z_index = 0
+6/name = "floor.png 6"
+6/texture = ExtResource( 97 )
+6/tex_offset = Vector2( 0, 0 )
+6/modulate = Color( 1, 1, 1, 1 )
+6/region = Rect2( 0, 0, 128, 128 )
+6/tile_mode = 0
+6/occluder_offset = Vector2( 0, 0 )
+6/navigation_offset = Vector2( 0, 0 )
+6/shape_offset = Vector2( 0, 0 )
+6/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+6/shape_one_way = false
+6/shape_one_way_margin = 0.0
+6/shapes = [  ]
+6/z_index = 0
+
+[sub_resource type="TileSet" id=19]
+0/name = "wall.png 0"
+0/texture = ExtResource( 98 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 128, 160 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+
+[sub_resource type="TileSet" id=20]
+0/name = "wall.png 0"
+0/texture = ExtResource( 98 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 128, 160 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+
+[sub_resource type="TileSet" id=21]
+0/name = "wall.png 0"
+0/texture = ExtResource( 98 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 128, 160 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24.8649, 65.9436 )
+
+[sub_resource type="SpriteFrames" id=16]
+animations = [ {
+"frames": [ ExtResource( 44 ), ExtResource( 52 ), ExtResource( 55 ), ExtResource( 49 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
+"loop": true,
+"name": "dead",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 43 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 48 ) ],
+"loop": true,
+"name": "attack",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 54 ), ExtResource( 46 ), ExtResource( 44 ) ],
+"loop": true,
+"name": "dodge",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 77 ), ExtResource( 78 ), ExtResource( 81 ), ExtResource( 82 ), ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
+"loop": true,
+"name": "die",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=17]
+animations = [ {
+"frames": [ ExtResource( 84 ) ],
+"loop": true,
+"name": "dead",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
+"loop": true,
+"name": "attack_animation_p1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
+"loop": true,
+"name": "die",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"loop": true,
+"name": "idle_animation",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 18 ), ExtResource( 70 ), ExtResource( 19 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "attack_animation_p2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 58 ) ],
+"loop": true,
+"name": "first_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 66 ) ],
+"loop": true,
+"name": "third_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "attack_lingering",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 63 ) ],
+"loop": true,
+"name": "second_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
+"loop": true,
+"name": "hit_effect",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFont" id=15]
+size = 14
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 14 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 100
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 14 )
+
+[sub_resource type="Animation" id=13]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.168627, 0.168627, 0.168627, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../ResultsPanelContainer:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 348.5, -600 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "results_background_fade_in"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0.168627, 0.168627, 0.168627, 0 ), Color( 0.168627, 0.168627, 0.168627, 0.882353 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../ResultsPanelContainer:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.5, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 348.5, -600 ), Vector2( 348.5, 163 ) ]
+}
+
+[sub_resource type="DynamicFont" id=11]
+size = 22
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 14 )
+
+[sub_resource type="SpriteFrames" id=12]
+animations = [ {
+"frames": [ ExtResource( 35 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 31 ), ExtResource( 29 ), ExtResource( 30 ), ExtResource( 32 ) ],
+"loop": true,
+"name": "sparkle",
+"speed": 8.0
+} ]
 
 [sub_resource type="Shader" id=10]
 code = "shader_type canvas_item;
@@ -50,7 +411,7 @@ void fragment()
 shader = SubResource( 10 )
 shader_param/color = Color( 0, 0, 0, 1 )
 shader_param/multiplier = -0.122
-shader_param/softness = 10.0
+shader_param/softness = 0.15
 
 [sub_resource type="Animation" id=5]
 length = 0.001
@@ -119,46 +480,59 @@ tracks/0/keys = {
 
 [node name="dungeon_fight" type="Node2D"]
 
-[node name="Floor" type="TileMap" parent="."]
-mode = 1
-tile_set = ExtResource( 1 )
-cell_size = Vector2( 128, 64 )
+[node name="TileMaps" type="Node2D" parent="."]
+
+[node name="Floor" type="TileMap" parent="TileMaps"]
+tile_set = SubResource( 18 )
+cell_size = Vector2( 128, 128 )
 format = 1
-tile_data = PoolIntArray( -3407800, 0, 0, -393198, 0, 0, -393197, 0, 0, -393196, 0, 0, -393195, 0, 0, -393194, 0, 0, -327662, 0, 0, -327661, 0, 0, -327660, 0, 0, -327659, 0, 0, -327658, 0, 0, -262126, 0, 0, -262125, 0, 0, -262124, 0, 0, -262123, 0, 0, -262122, 0, 0, -196590, 0, 0, -196589, 0, 0, -196588, 0, 0, -196587, 0, 0, -196586, 0, 0, -131054, 0, 0, -131053, 0, 0, -131052, 0, 0, -131051, 0, 0, -131050, 0, 0, -65518, 0, 0, -65517, 0, 0, -65516, 0, 0, -65515, 0, 0, -65514, 0, 0, 18, 0, 0, 19, 0, 0, 20, 0, 0, 21, 0, 0, 22, 0, 0, 65554, 0, 0, 65555, 0, 0, 65556, 0, 0, 65557, 0, 0, 65558, 0, 0 )
+tile_data = PoolIntArray( 0, 6, 0, 1, 6, 0, 2, 6, 0, 3, 6, 0, 4, 6, 0, 5, 6, 0, 6, 6, 0, 7, 6, 0, 8, 6, 0, 9, 6, 0, 10, 6, 0, 11, 6, 0, 12, 6, 0, 13, 6, 0, 14, 6, 0, 65536, 6, 0, 65537, 6, 0, 65538, 6, 0, 65539, 6, 0, 65540, 6, 0, 65541, 6, 0, 65542, 6, 0, 65543, 6, 0, 65544, 6, 0, 65545, 6, 0, 65546, 6, 0, 65547, 6, 0, 65548, 6, 0, 65549, 6, 0, 65550, 6, 0, 131072, 5, 0, 131073, 5, 0, 131074, 5, 0, 131075, 5, 0, 131076, 5, 0, 131077, 5, 0, 131078, 5, 0, 131079, 5, 0, 131080, 5, 0, 131081, 5, 0, 131082, 5, 0, 131083, 5, 0, 131084, 5, 0, 131085, 5, 0, 131086, 5, 0, 131088, 5, 0, 196608, 5, 0, 196609, 5, 0, 196610, 5, 0, 196611, 5, 0, 196612, 5, 0, 196613, 5, 0, 196614, 5, 0, 196615, 5, 0, 196616, 5, 0, 196617, 5, 0, 196618, 5, 0, 196619, 5, 0, 196620, 5, 0, 196621, 5, 0, 196622, 5, 0, 262144, 6, 0, 262145, 6, 0, 262146, 6, 0, 262147, 6, 0, 262148, 6, 0, 262149, 6, 0, 262150, 6, 0, 262151, 6, 0, 262152, 6, 0, 262153, 1, 0, 262154, 2, 0, 262155, 1, 0, 262156, 2, 0, 262157, 6, 0, 262158, 6, 0, 327680, 6, 0, 327681, 6, 0, 327682, 6, 0, 327683, 6, 0, 327684, 6, 0, 327685, 6, 0, 327686, 6, 0, 327687, 6, 0, 327688, 6, 0, 327689, 3, 0, 327690, 4, 0, 327691, 3, 0, 327692, 4, 0, 327693, 6, 0, 327694, 6, 0, 393216, 6, 0, 393217, 6, 0, 393218, 6, 0, 393219, 6, 0, 393220, 6, 0, 393221, 6, 0, 393222, 6, 0, 393223, 6, 0, 393224, 6, 0, 393225, 6, 0, 393226, 6, 0, 393227, 6, 0, 393228, 6, 0, 393229, 6, 0, 393230, 6, 0 )
 
-[node name="Player" type="KinematicBody2D" parent="."]
-position = Vector2( 1286.6, 621.467 )
-script = ExtResource( 3 )
+[node name="Walls1" type="TileMap" parent="TileMaps"]
+tile_set = SubResource( 19 )
+format = 1
+tile_data = PoolIntArray( 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 0, 0, 262153, 0, 0, 262154, 0, 0, 262155, 0, 0, 262156, 0, 0, 262157, 0, 0, 262158, 0, 0, 262159, 0, 0, 262160, 0, 0, 262161, 0, 0, 262162, 0, 0, 262163, 0, 0, 262164, 0, 0, 262165, 0, 0, 262166, 0, 0, 262167, 0, 0, 262168, 0, 0, 262169, 0, 0, 262170, 0, 0, 262171, 0, 0, 262172, 0, 0 )
 
-[node name="Sprite" type="Sprite" parent="Player"]
-texture = ExtResource( 2 )
+[node name="Walls2" type="TileMap" parent="TileMaps"]
+tile_set = SubResource( 20 )
+format = 1
+tile_data = PoolIntArray( 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 131077, 0, 0, 131078, 0, 0, 131079, 0, 0, 131080, 0, 0, 131081, 0, 0, 131082, 0, 0, 131083, 0, 0, 131084, 0, 0, 131085, 0, 0, 131086, 0, 0, 131087, 0, 0, 131088, 0, 0, 131089, 0, 0, 131090, 0, 0, 131091, 0, 0, 131092, 0, 0, 131093, 0, 0, 131094, 0, 0, 131095, 0, 0, 131096, 0, 0, 131097, 0, 0, 131098, 0, 0, 131099, 0, 0, 131100, 0, 0 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource( 1 )
-
-[node name="MiddlePlayerPosition" type="KinematicBody2D" parent="."]
-position = Vector2( 1286.6, 621.467 )
-
-[node name="Sprite" type="Sprite" parent="MiddlePlayerPosition"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MiddlePlayerPosition"]
-shape = SubResource( 1 )
+[node name="Walls3" type="TileMap" parent="TileMaps"]
+tile_set = SubResource( 21 )
+format = 1
+tile_data = PoolIntArray( 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 15, 0, 0, 16, 0, 0, 17, 0, 0, 18, 0, 0, 19, 0, 0, 20, 0, 0, 21, 0, 0, 22, 0, 0, 23, 0, 0, 24, 0, 0, 25, 0, 0, 26, 0, 0, 27, 0, 0, 28, 0, 0 )
 
 [node name="LeftPlayerPosition" type="KinematicBody2D" parent="."]
-position = Vector2( 1222.6, 589.376 )
-
-[node name="Sprite" type="Sprite" parent="LeftPlayerPosition"]
+position = Vector2( 1198.26, 614.679 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPlayerPosition"]
 shape = SubResource( 1 )
 
-[node name="RightPlayerPosition" type="KinematicBody2D" parent="."]
-position = Vector2( 1350.6, 653.718 )
+[node name="MiddlePlayerPosition" type="KinematicBody2D" parent="."]
+position = Vector2( 1383.91, 614.679 )
 
-[node name="Sprite" type="Sprite" parent="RightPlayerPosition"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RightPlayerPosition"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MiddlePlayerPosition"]
 shape = SubResource( 1 )
+
+[node name="Player" type="KinematicBody2D" parent="."]
+position = Vector2( 1383.91, 614.679 )
+script = ExtResource( 3 )
+_speed = 2
+
+[node name="PlayerAnimatedSprite" type="AnimatedSprite" parent="Player"]
+scale = Vector2( 4, 4 )
+frames = SubResource( 16 )
+animation = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource( 1 )
+
+[node name="Enemy" type="AnimatedSprite" parent="."]
+position = Vector2( 1435.29, 503 )
+scale = Vector2( 6, 6 )
+frames = SubResource( 17 )
+animation = "idle_animation"
 
 [node name="TimerBar" type="Control" parent="."]
 margin_left = 1015.8
@@ -171,9 +545,6 @@ rect_min_size = Vector2( 850, 50 )
 margin_right = 40.0
 margin_bottom = 40.0
 custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ProgressBarEasy" type="ProgressBar" parent="TimerBar/ProgressBarHbox"]
 margin_right = 283.0
@@ -182,7 +553,7 @@ rect_min_size = Vector2( 283, 50 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/fg = ExtResource( 4 )
-custom_styles/bg = ExtResource( 12 )
+custom_styles/bg = ExtResource( 6 )
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -210,11 +581,55 @@ rect_min_size = Vector2( 283, 50 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/fg = ExtResource( 11 )
-custom_styles/bg = ExtResource( 13 )
+custom_styles/bg = ExtResource( 6 )
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ActionBar" type="VBoxContainer" parent="."]
+margin_left = 1679.52
+margin_top = 733.977
+margin_right = 1939.52
+margin_bottom = 880.977
+custom_constants/separation = 13
+script = ExtResource( 39 )
+_block_tex = ExtResource( 38 )
+_attack_tex = ExtResource( 40 )
+_dodgeLeft_tex = ExtResource( 42 )
+_dodgeRight_tex = ExtResource( 41 )
+
+[node name="correctText" type="Label" parent="ActionBar"]
+margin_right = 260.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 260, 0 )
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 15 )
+text = "Next Action"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="CenterContainer" type="CenterContainer" parent="ActionBar"]
+margin_top = 27.0
+margin_right = 260.0
+margin_bottom = 147.0
+
+[node name="Panel" type="Panel" parent="ActionBar/CenterContainer"]
+margin_left = 70.0
+margin_right = 190.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 120, 120 )
+custom_styles/panel = ExtResource( 37 )
+
+[node name="ActionSprite" type="Sprite" parent="ActionBar/CenterContainer/Panel"]
+texture = ExtResource( 42 )
+centered = false
+offset = Vector2( 15, 15 )
 
 [node name="QuestionMenu" type="Control" parent="."]
 margin_right = 960.0
@@ -226,9 +641,6 @@ margin_top = 30.0
 margin_right = 960.0
 margin_bottom = 900.0
 custom_constants/separation = 62
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="QuestionTextPanelContainer" type="PanelContainer" parent="QuestionMenu/MainColumn"]
 margin_right = 925.0
@@ -253,8 +665,8 @@ margin_right = 909.0
 margin_bottom = 286.0
 
 [node name="QuestionText" type="Label" parent="QuestionMenu/MainColumn/QuestionTextPanelContainer/MarginContainer/ScrollContainer"]
-margin_right = 889.0
-margin_bottom = 700.0
+margin_right = 901.0
+margin_bottom = 278.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
@@ -262,7 +674,6 @@ custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
 custom_constants/shadow_offset_x = -7
 custom_constants/shadow_offset_y = 7
 custom_fonts/font = ExtResource( 5 )
-text = "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
 align = 1
 valign = 1
 autowrap = true
@@ -323,25 +734,371 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="EnemyHpBar" type="ProgressBar" parent="."]
+margin_left = 1571.5
+margin_top = 386.758
+margin_right = 1854.5
+margin_bottom = 421.758
+rect_min_size = Vector2( 283, 35 )
+rect_pivot_offset = Vector2( -30.9324, 39.3935 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 26 )
+custom_styles/fg = ExtResource( 4 )
+custom_styles/bg = ExtResource( 25 )
+max_value = 50.0
+value = 50.0
+
+[node name="PlayerHpBar" type="ProgressBar" parent="."]
+margin_left = 1094.51
+margin_top = 760.977
+margin_right = 1377.51
+margin_bottom = 795.977
+rect_min_size = Vector2( 283, 35 )
+rect_pivot_offset = Vector2( -30.9324, 39.3935 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 26 )
+custom_styles/fg = ExtResource( 4 )
+custom_styles/bg = ExtResource( 25 )
+max_value = 50.0
+value = 50.0
+
+[node name="TimeLeft" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 76 )
+
+[node name="TimeLeftSprite" type="Sprite" parent="TimeLeft"]
+position = Vector2( 1667.22, 820.523 )
+texture = ExtResource( 2 )
+
+[node name="TimeLeftLabel" type="Label" parent="TimeLeft"]
+margin_left = 1641.53
+margin_top = 808.761
+margin_right = 1693.53
+margin_bottom = 848.761
+rect_min_size = Vector2( 40, 40 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 28 )
+text = "45"
+align = 1
+valign = 1
+
+[node name="ResultsUI" type="Control" parent="."]
+margin_right = 1920.0
+margin_bottom = 900.0
+script = ExtResource( 36 )
+
+[node name="ShadowedBackground" type="ColorRect" parent="ResultsUI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = 6.10352e-05
+color = Color( 0.168627, 0.168627, 0.168627, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ResultsUI/ShadowedBackground"]
+anims/RESET = SubResource( 13 )
+anims/results_background_fade_in = SubResource( 14 )
+
+[node name="ResultsPanelContainer" type="PanelContainer" parent="ResultsUI"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -611.5
+margin_top = -1050.0
+margin_right = 611.5
+margin_bottom = -476.0
+rect_min_size = Vector2( 0, 300 )
+custom_styles/panel = ExtResource( 8 )
+
+[node name="MarginContainer" type="MarginContainer" parent="ResultsUI/ResultsPanelContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 1219.0
+margin_bottom = 570.0
+custom_constants/margin_right = 12
+custom_constants/margin_top = 8
+custom_constants/margin_left = 12
+custom_constants/margin_bottom = 6
+
+[node name="MainColumn" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1203.0
+margin_bottom = 559.0
+
+[node name="ResultsBar" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn"]
+margin_right = 1191.0
+margin_bottom = 60.0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 60 )
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="ResultsHeaderLabel" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/ResultsBar"]
+margin_right = 1191.0
+margin_bottom = 60.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -7
+custom_constants/shadow_offset_y = 7
+custom_fonts/font = ExtResource( 5 )
+text = "Results"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="MainContentHbox" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn"]
+margin_top = 64.0
+margin_right = 1191.0
+margin_bottom = 551.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="LeftPanel" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
+margin_right = 576.0
+margin_bottom = 487.0
+size_flags_horizontal = 3
+
+[node name="LeftPanelColumn" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel"]
+margin_right = 576.0
+margin_bottom = 487.0
+size_flags_horizontal = 3
+custom_constants/separation = 63
+
+[node name="Spacer" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn"]
+margin_right = 576.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="ResultsHeaderLabel3" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn"]
+margin_top = 63.0
+margin_right = 576.0
+margin_bottom = 85.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 11 )
+text = "Question answered..."
+valign = 1
+autowrap = true
+
+[node name="CorrectRow" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn"]
+margin_top = 148.0
+margin_right = 576.0
+margin_bottom = 238.0
+
+[node name="correctText" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn/CorrectRow"]
+margin_right = 260.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 260, 0 )
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = ExtResource( 28 )
+text = "correct:"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="correctAmount" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn/CorrectRow"]
+margin_left = 264.0
+margin_right = 576.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.470588, 0.827451, 0.419608, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -18
+custom_constants/shadow_offset_y = 8
+custom_fonts/font = ExtResource( 27 )
+text = "999"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="IncorrectRow" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn"]
+margin_top = 301.0
+margin_right = 576.0
+margin_bottom = 391.0
+
+[node name="incorrectText" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn/IncorrectRow"]
+margin_right = 260.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 260, 0 )
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = ExtResource( 28 )
+text = "incorrect:"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="incorrectAmount" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/LeftPanel/LeftPanelColumn/IncorrectRow"]
+margin_left = 264.0
+margin_right = 576.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_colors/font_color = Color( 0.85098, 0.286275, 0.286275, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -18
+custom_constants/shadow_offset_y = 8
+custom_fonts/font = ExtResource( 27 )
+text = "999"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="PanelDividerMarginContainer" type="MarginContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
+margin_left = 576.0
+margin_right = 614.0
+margin_bottom = 487.0
+custom_constants/margin_right = 13
+custom_constants/margin_top = 18
+custom_constants/margin_bottom = 36
+
+[node name="PanelDivider" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/PanelDividerMarginContainer"]
+margin_top = 18.0
+margin_right = 25.0
+margin_bottom = 451.0
+rect_min_size = Vector2( 25, 0 )
+color = Color( 0.647059, 0.52549, 0.690196, 1 )
+
+[node name="RightPanel" type="HBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox"]
+margin_left = 614.0
+margin_right = 1191.0
+margin_bottom = 487.0
+size_flags_horizontal = 3
+
+[node name="RightPanelColumn" type="VBoxContainer" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel"]
+margin_right = 577.0
+margin_bottom = 487.0
+size_flags_horizontal = 3
+custom_constants/separation = 64
+
+[node name="Spacer" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn"]
+margin_right = 577.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="PomocoinsTitleText" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn"]
+margin_top = 64.0
+margin_right = 577.0
+margin_bottom = 86.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 11 )
+text = "Pomocoins gained..."
+valign = 1
+autowrap = true
+
+[node name="Spacer2" type="ColorRect" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn"]
+margin_top = 150.0
+margin_right = 577.0
+margin_bottom = 150.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="PomocoinsNumberText" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn"]
+margin_top = 214.0
+margin_right = 577.0
+margin_bottom = 304.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_colors/font_color = Color( 1, 0.921569, 0.498039, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -18
+custom_constants/shadow_offset_y = 8
+custom_fonts/font = ExtResource( 27 )
+text = "999"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="TimeLeft" type="Control" parent="ResultsUI/ResultsPanelContainer/MarginContainer"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1203.0
+margin_bottom = 559.0
+script = ExtResource( 76 )
+
+[node name="TimeLeftSprite" type="Sprite" parent="ResultsUI/ResultsPanelContainer/MarginContainer/TimeLeft"]
+position = Vector2( 1136.47, 489.254 )
+texture = ExtResource( 2 )
+
+[node name="TimeLeftLabel" type="Label" parent="ResultsUI/ResultsPanelContainer/MarginContainer/TimeLeft"]
+margin_left = 1111.1
+margin_top = 477.653
+margin_right = 1163.1
+margin_bottom = 517.653
+rect_min_size = Vector2( 40, 40 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 28 )
+text = "45"
+align = 1
+valign = 1
+
+[node name="CoinSparkle1" type="AnimatedSprite" parent="ResultsUI"]
+visible = false
+position = Vector2( 1345.29, 476.758 )
+scale = Vector2( 0.36, 0.36 )
+frames = SubResource( 12 )
+animation = "sparkle"
+frame = 6
+
+[node name="CoinSparkle2" type="AnimatedSprite" parent="ResultsUI"]
+visible = false
+position = Vector2( 1184.51, 504.585 )
+scale = Vector2( 0.36, 0.36 )
+frames = SubResource( 12 )
+animation = "sparkle"
+frame = 4
+
 [node name="QuestionManager" type="Node" parent="."]
 script = ExtResource( 9 )
-_enemyIdle_tex = ExtResource( 16 )
-_enemyEasy_tex = ExtResource( 19 )
-_enemyMedium_tex = ExtResource( 18 )
-_enemyHard_tex = ExtResource( 17 )
 
 [node name="QuestionTimer" type="Timer" parent="QuestionManager"]
 wait_time = 3.0
 
 [node name="startGameTimer" type="Timer" parent="QuestionManager"]
+wait_time = 3.0
 
-[node name="Enemy" type="Sprite" parent="."]
-position = Vector2( 1401.55, 517.46 )
-texture = ExtResource( 16 )
+[node name="overallMinigameGameTimer" type="Timer" parent="QuestionManager"]
+wait_time = 60.0
+script = ExtResource( 16 )
+
+[node name="gameplayGameTimer" type="Timer" parent="QuestionManager"]
+wait_time = 45.0
+script = ExtResource( 69 )
+
+[node name="AnswerIndicatorTimers" type="Node" parent="QuestionManager"]
+
+[node name="Correct" type="Timer" parent="QuestionManager/AnswerIndicatorTimers"]
+wait_time = 3.0
+
+[node name="Incorrect" type="Timer" parent="QuestionManager/AnswerIndicatorTimers"]
+wait_time = 3.0
 
 [node name="Effects" type="CanvasLayer" parent="."]
 script = ExtResource( 21 )
-_enemyIdle_tex = ExtResource( 16 )
 
 [node name="Vignette" type="ColorRect" parent="Effects"]
 visible = false
@@ -374,13 +1131,21 @@ script = ExtResource( 24 )
 anims/RESET = SubResource( 8 )
 anims/white_in = SubResource( 9 )
 
-[connection signal="answer_selected" from="QuestionMenu/MainColumn/TopAnswerRow/Answer1PanelContainer" to="QuestionManager" method="_on_Answer1PanelContainer_answer_selected"]
-[connection signal="answer_selected" from="QuestionMenu/MainColumn/TopAnswerRow/Answer2PanelContainer" to="QuestionManager" method="_on_Answer2PanelContainer_answer_selected"]
-[connection signal="answer_selected" from="QuestionMenu/MainColumn/BottomAnswerRow/Answer3PanelContainer" to="QuestionManager" method="_on_Answer3PanelContainer_answer_selected"]
-[connection signal="answer_selected" from="QuestionMenu/MainColumn/BottomAnswerRow/Answer4PanelContainer" to="QuestionManager" method="_on_Answer4PanelContainer_answer_selected"]
+[connection signal="animation_finished" from="Player/PlayerAnimatedSprite" to="Player" method="_on_PlayerAnimatedSprite_animation_finished"]
+[connection signal="animation_finished" from="Player/PlayerAnimatedSprite" to="QuestionManager" method="_on_PlayerAnimatedSprite_animation_finished"]
+[connection signal="animation_finished" from="Enemy" to="Effects" method="_on_Enemy_animation_finished"]
+[connection signal="animation_finished" from="ResultsUI/ShadowedBackground/AnimationPlayer" to="ResultsUI" method="_on_AnimationPlayer_animation_finished"]
+[connection signal="animation_finished" from="ResultsUI/ShadowedBackground/AnimationPlayer" to="QuestionManager/overallMinigameGameTimer" method="_on_AnimationPlayer_animation_finished"]
 [connection signal="timeout" from="QuestionManager/QuestionTimer" to="QuestionManager" method="_on_QuestionTimer_timeout"]
 [connection signal="timeout" from="QuestionManager/QuestionTimer" to="Effects" method="_on_QuestionTimer_timeout"]
 [connection signal="timeout" from="QuestionManager/startGameTimer" to="QuestionManager" method="_on_startGameTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/startGameTimer" to="QuestionManager/gameplayGameTimer" method="_on_startGameTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/overallMinigameGameTimer" to="QuestionManager" method="_on_overallMinigameGameTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/gameplayGameTimer" to="QuestionManager" method="_on_gameplayGameTimer_timeout"]
+[connection signal="timeout" from="QuestionManager/AnswerIndicatorTimers/Correct" to="QuestionManager" method="_on_Correct_timeout"]
+[connection signal="timeout" from="QuestionManager/AnswerIndicatorTimers/Incorrect" to="QuestionManager" method="_on_Incorrect_timeout"]
+[connection signal="player_lost_game" from="Effects" to="QuestionManager" method="_on_Effects_player_lost_game"]
+[connection signal="player_may_return" from="Effects" to="Player" method="_on_Effects_player_may_return"]
 [connection signal="animation_finished" from="Effects/Vignette/VignetteAnimationPlayer" to="Effects" method="_on_VignetteAnimationPlayer_animation_finished"]
 [connection signal="animation_finished" from="Effects/WhiteOut/WhiteOutAnimationPlayer" to="Effects" method="_on_WhiteOutAnimationPlayer_animation_finished"]
 [connection signal="animation_finished" from="Effects/WhiteIn/WhiteInAnimationPlayer" to="Effects" method="_on_WhiteInAnimationPlayer_animation_finished"]
