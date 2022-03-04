@@ -94,7 +94,8 @@ export function addEventListeners(){
             answerImageURL:     e.target.answerImageURL.value,
         });
         fc.set_docID(e.target.docId.value);
-        let editDeckDocId = window.localStorage.getItem('deckPageDeckDocID');
+        let editDeckDocId = window.sessionStorage.getItem('deckId');
+        console.log(`Edit_Flashcard_SS:${editDeckDocId}`)
 
         //These are specific to the form at submission
         const ismultiplechoice = Elements.formEditFlashcard.multipleChoiceToggle;

@@ -6,6 +6,7 @@ import { FlashcardData } from '../model/flashcard_data.js';
 import { User } from '../model/user.js';
 import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
+import { Message } from '../model/message.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -482,13 +483,7 @@ export async function updateDeck(uid, deck, deckDocID) {
                 deck.subject = data.subject;
                 deck.dateCreated = data.dateCreated;
                 deck.category = data.category;
-                //When editing flashcards I found that booleans were difficult
-                //to use here and commented it out isMultiplechoice and was functional
-                //deck.isFavorited = data.isFavorited;
-                // console.log("UPDATED");
-                // console.log(`Check 5:${data.category}`)
-                // console.log(`Check 6:${deck.category}`)
-
+                deck.keywords = data.keywords;
             }//Error Code
             else if (Constant.DEV) {
                 console.log(e);
@@ -499,10 +494,7 @@ export async function updateDeck(uid, deck, deckDocID) {
     firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
-        .set(deck.serialize());
-
-    // console.log(`Check 7:${deck.isFavorited}`)
-
+        .update(deck.serialize());
 }
 
 //===========================================================================//
@@ -681,7 +673,6 @@ export async function updatePet(uid, updatedPet) {
 //============================================================================//
 
 
-// These will both probably need to be redone once classrooms are implemented - Cody
 //============================================================================//
 // Gets all available classrooms
 //============================================================================//
@@ -699,44 +690,6 @@ export async function getAvailableClassrooms() {
 
     return classroomList;
 }
-
-//============================================================================//
-// Gets user's classrooms
-//============================================================================//
-// export async function getMyClassrooms(email) {
-//     let moderatorList = [];
-//     let membersList = [];
-//     // get classes user is member of
-//     const membersRef = await firebase.firestore()
-//         .collection(Constant.collectionName.CLASSROOMS)
-//         .where('members', 'array-contains', email)
-//         .get();
-
-//     membersRef.forEach(doc => {
-//         const cr = new Classroom(doc.data());
-//         cr.set_docID(doc.id);
-//         membersList.push(cr);
-//     })
-//     // get classes user is mod of
-//     const moderatorRef = await firebase.firestore()
-//         .collection(Constant.collectionName.CLASSROOMS)
-//         .where('moderatorList', 'array-contains', email)
-//         .get();
-
-//     moderatorRef.forEach(doc => {
-//         const cr = new Classroom(doc.data());
-//         cr.set_docID(doc.id);
-//         moderatorList.push(cr);
-//     });
-
-//     // combine both lists and remove duplicates
-//     let classroomList = [];
-//     classroomList = membersList.filter(mem => !moderatorList.includes(mem));
-
-
-//     // return final list
-//     return classroomList;
-// }
 
 //============================================================================//
 // Gets one classroom
@@ -785,7 +738,7 @@ export async function getCategories() {
 export async function joinClassroom(classId, userEmail) {
     const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
     await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
-        .update({ members: arrayUnion(userEmail)});
+        .update({ members: arrayUnion(userEmail) });
 }
 //============================================================================//
 //LEAVE Classroom
@@ -793,7 +746,7 @@ export async function joinClassroom(classId, userEmail) {
 export async function leaveClassroom(classId, userEmail) {
     const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
     await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
-        .update({ members: arrayRemove(userEmail)});
+        .update({ members: arrayRemove(userEmail) });
 }
 //============================================================================//
 
@@ -805,8 +758,58 @@ export async function getCoins(uid) {
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .get();
-    
+
     const user = new User(ref.data());
     return user.coins;
 }
 //============================================================================//
+
+//============================================================================//
+// Functions for class chat
+//============================================================================//
+export async function addNewMessage(classroomDocID, message) {
+    const docRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOM_CHATS)
+        .doc(classroomDocID)
+        .collection(Constant.collectionName.MESSAGES)
+        .add(message.serialize());
+    return docRef.id;
+}
+
+export async function getMessages(classroomDocID) {
+    let messages = [];
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOM_CHATS)
+        .doc(classroomDocID)
+        .collection(Constant.collectionName.MESSAGES)
+        .orderBy('timestamp')
+        .get();
+
+    ref.forEach(doc => {
+        let m = new Message(doc.data());
+        m.set_docID(doc.id);
+        messages.push(m);
+    })
+
+    return messages;
+}
+
+//============================================================================//
+// SEARCH FUNCTIONS
+//============================================================================//
+
+export async function searchDecks(uid, keywordsArray) {
+    const deckList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .orderBy('dateCreated', 'desc')
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Deck(doc.data());
+        t.set_docID(doc.id);
+        deckList.push(t)
+    })
+    return deckList;
+}

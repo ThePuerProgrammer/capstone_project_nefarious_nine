@@ -255,6 +255,8 @@ export async function classrooms_page() {
                     //Closes modal on button click
                     $('#preview-classroom-modal').modal('hide')
                     //Navigates to classroom webpage
+                    window.sessionStorage;
+                    sessionStorage.setItem('classId', classId);
                     history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classId);
                     await OneClassroomPage.one_classroom_page(classId);
 
@@ -388,18 +390,21 @@ export async function classrooms_page() {
             }
         }
     });
-
-    OneClassroomPage.addClassroomViewButtonListeners();
 }
 
 
 function buildMyClassroom(classroom) {
     let html = `
     <td>
-    <form class="form-view-classroom" method="post">
-            <input type="hidden" name="docId" value="${classroom.docID}">
+    <form class="form-preview-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docID}"/>
+            <input type="hidden" name="name" value ="${classroom.name}"/>
+            <input type="hidden" name="subject" value ="${classroom.subject}"/>
+            <input type="hidden" name="category" value ="${classroom.category}"/>
+            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
+            <input type="hidden" name="members" value ="${classroom.members}"/>
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
-        </form></td>
+    </form></td>
     <td>${classroom.name}</td>
     <td>${classroom.subject}</td>
     <td>${classroom.category}</td>
