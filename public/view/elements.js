@@ -170,4 +170,6 @@ export const searchBoxTitle = document.getElementById('modal-searchbox-title');
 export const searchBoxPlaceholder = document.getElementById('modal-searchbox-placeholder');
 export const searchBoxType = document.getElementById('modal-searchbox-type');
 export const formSearchBox = document.getElementById('form-searchbox');
+export const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
+export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
 //============================================================================//

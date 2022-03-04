@@ -6,9 +6,13 @@ import * as Constants from '../model/constant.js';
 import { currentUser } from '../controller/firebase_auth.js';
 import { buildDeckView, buildStudyDecksPage } from './study_decks_page.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
+import * as Auth from '../controller/firebase_auth.js';
+import  { buildAvailableClassroom } from './classrooms_page.js';
 
 let searchType;
 let searchKeysInfo;
+let classSearchOption;
+
 
 export function addEventListeners() {
 
@@ -20,7 +24,6 @@ export function addEventListeners() {
             Utilities.info('Error', 'No search key found');
             return;
         }
-
         const button = e.target.getElementsByTagName('button')[0];
         const label = Utilities.disableButton(button);
 
@@ -64,6 +67,22 @@ export async function search_page(joinedSearchKeys, searchType) {
             Utilities.info('You searched for', `${searchKeysInfo}`)
             break;
 
+        case 'classroomSearch':
+            if(classSearchOption == "allRooms") {
+                const classroomList = await searchAllClassrooms(searchKeysArray);               
+                buildClassRoomSearchPage(classroomList);
+                Utilities.info('You searched for', `${searchKeysInfo}`)
+            break;
+
+            } else if (classSearchOption == "myRooms") {
+                console.log('box 2 checked');
+
+            } else if (classSearchOption == "notMyRooms") {
+                console.log('exlude search goes here');
+            }
+            else console.log("nuttin");
+            break;
+
         default: Utilities.info('No search type detected');
 
     }
@@ -71,6 +90,10 @@ export async function search_page(joinedSearchKeys, searchType) {
 
 export function setSearchType(searchType) {
     Elements.searchBoxType.value = searchType;
+}
+
+export function setClassroomSearchOption(option) {
+    classSearchOption = option;
 }
 
 export function cleanDataToKeywords(name, subject, category) { //for decks and classrooms
@@ -91,4 +114,28 @@ export async function searchDecks(searchKeysArray) {
         return;
     }
     return deckList;
+}
+
+export async function searchAllClassrooms(searchKeysArray) {
+    let classroomList;
+    try {
+        classroomList = await FirebaseController.searchAllClassrooms(searchKeysArray);
+    } catch (e) {
+        if (Constants.DEV) console.log(e);
+        Utilities.info('There was an error with the Search', JSON.stringify(e));
+        return;
+    }
+    return classroomList;
+}
+
+function buildClassRoomSearchPage(classroomList) {
+    
+    Elements.root.innerHTML = "";
+    //Clears all HTML so it doesn't double
+    let html = ''
+    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="fa fa-search"></i>Search Decks</button></h1> '
+    ;
+
+    
+    return html;
 }
