@@ -6,6 +6,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import { Classroom } from '../model/classroom.js';
 import * as OneClassroomPage from './one_classroom_page.js';
+import { cleanDataToKeywords, setClassroomSearchOption, setSearchType } from './search_page.js';
 
 export function addEventListeners() {
     Elements.menuClassrooms.addEventListener('click', async () => {
@@ -20,6 +21,8 @@ export function addEventListeners() {
         const subject = e.target.subject.value;
         //const isFavorited = false;
         const category = e.target.selectClassCategory.value;
+
+        const keywords = cleanDataToKeywords(name, subject, category)
 
         // add current user as a moderator
         const moderatorList = [];
@@ -40,6 +43,7 @@ export function addEventListeners() {
             moderatorList,
             members,
             banlist,
+            keywords,
         });
 
         try {
@@ -58,14 +62,16 @@ export function addEventListeners() {
     $(`#create-classroom-modal`).on('hidden.bs.modal', function (e) {
         Elements.formCreateClassroom.reset();
     });
-}
+    
+} //END CLASSROOMS_PAGE EVENT LISTENERS
 
 export async function classrooms_page() {
     Elements.root.innerHTML = '';
     let html = '';
 
     html += `<div class="classroom-page-tab"><button id="my-classroom-button" class="classroom-tab">My Classrooms</button>
-    <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>`;
+    <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>
+    `;
 
     html += `<div style="float:right">
     <label for="sort-classrooms">Order by:</label>
@@ -75,9 +81,28 @@ export async function classrooms_page() {
         <option value="subject">Subject</option>
         <option value="category">Category</option>
     </select>
+    <div class="search-classroom-controls" style="display: flex">
+        <form id="form-search-class-radio" name="choose-class-search-type">
+        <fieldset>
+        <div class="search-radio d-flex">
+            <div>
+                <input type="checkbox" id="checkbox-myClassrooms" name="classSearchType" value="myClassrooms" checked>
+                <label for="myClassrooms">My Classrooms</label><br>
+            </div>
+            <div>
+                <input type="checkbox" id="checkbox-notMyClassrooms" name="classSearchType" value="notMyClassrooms" checked>
+                <label for="notMyClassrooms">Not My Classrooms</label><br>
+            </div>
+        </div>
+        </fieldset>
+        </form>
+        <button id="search-classroom-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="fa fa-search"></i>Search Classrooms</button></h1>
+        </div>
     </div>
     </div>`;
 
+
+    //BUILD AVAILABLE CLASSROOMS
     html += `<div id="Available Classrooms" class="classroom-tab-content">`;
 
     let availableClassroomList = [];
@@ -130,6 +155,7 @@ export async function classrooms_page() {
         }
     })
     html += `</tbody></table></div>`;
+    //END AVAILABLE CLASSROOMS
 
     // My Classrooms tab with create classroom button
     html += `<div id="My Classrooms" class="classroom-tab-content">
@@ -162,6 +188,7 @@ export async function classrooms_page() {
 
     html += `</tbody></table></div>`;
 
+    // POPUP MODAL FOR PREVIEWS
     Elements.root.innerHTML = html;
 
     const previewForms = document.getElementsByClassName('form-preview-classroom');
@@ -315,6 +342,8 @@ export async function classrooms_page() {
                         const ebanlist = [];
                         const emoderatorList = [];
 
+                        const keywords = cleanDataToKeywords(name, subject, category)
+
                         const ecr = new Classroom({
                             name,
                             subject,
@@ -322,6 +351,7 @@ export async function classrooms_page() {
                             emoderatorList,
                             emembers,
                             ebanlist,
+                            keywords,
                         });
 
                         ecr.set_docID(e.target.docId.value);
@@ -442,7 +472,53 @@ export async function classrooms_page() {
             }
         }
     });
-}
+
+    // SEARCH CLASSROOMS LISTENERS --------------------------------------------------//   sorry this is so dumb, I R tired -_-
+    const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
+    const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
+    const searchClassroomButton = document.getElementById('search-classroom-button');
+    searchClassroomButton.addEventListener('click', async e => {
+        const searchtype = 'classroomSearch';
+        setSearchType(searchtype);     
+        if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
+            setClassroomSearchOption("allRooms");
+        }
+        else if (checkBoxNotMyClassrooms.checked == true){
+            setClassroomSearchOption("notMyRooms");  
+        } 
+        else if (checkBoxMyClassrooms.checked == true) {
+            setClassroomSearchOption("myRooms"); 
+        } 
+        else setClassroomSearchOption("null"); 
+    
+        Utilities.searchBox('Search Classroom', 'input query');        
+    });
+
+    
+    checkBoxMyClassrooms.addEventListener('change', async e => {     
+         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
+            setClassroomSearchOption("allRooms");
+         }
+        
+        else if (checkBoxMyClassrooms.checked == true){
+            setClassroomSearchOption("myRooms"); 
+        }    else {
+            setClassroomSearchOption("null"); 
+        }        
+    });
+
+    
+    checkBoxNotMyClassrooms.addEventListener('change', async e => {        
+         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
+             setClassroomSearchOption("allRooms");
+         }
+         else if (checkBoxNotMyClassrooms.checked == true){
+             setClassroomSearchOption("notMyRooms");  
+         } else return;
+    });       
+    // END SEARCH CLASSROOMS LISTENERS------------------------------------------------//
+
+} //END CLASSROOMS_PAGE()-----------------------------------------------------------//
 
 
 function buildMyClassroom(classroom) {
@@ -467,7 +543,7 @@ function buildMyClassroom(classroom) {
     return html;
 }
 
-function buildAvailableClassroom(classroom) {
+export function buildAvailableClassroom(classroom) {
     let html = classroom.members.includes(Auth.currentUser.email) ? `
     <td>
     <form class="form-preview-classroom" method="post">

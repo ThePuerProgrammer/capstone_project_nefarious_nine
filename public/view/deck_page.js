@@ -224,39 +224,40 @@ export async function deck_page(deckDocID) {
                 <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-secondary pomo-bg-color-dark"> + Create Flashcard</button>
         `;
 
-    // study deck button
-    html += `
-        <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark">Study</button>
-        `;
+  
 
-    html += `<button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> - Delete Flashcard</button>`;
     let deck;
+    let flashcards;
     try {
         deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDocID);
+        flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deck.docID);
+        if(flashcards.length!=0){
+            // study deck button
+            html += `
+                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark">Study</button>
+                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> - Delete Flashcard</button>`;
+            } else {
+                html += `
+                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled>Study</button>
+                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> - Delete Flashcard</button>
+                `;
+            }
+        
         if (!deck) {
             html += '<h5>Deck not found!</h5>';
         } else {
             html += `<h2 style="align: center">${deck.name}</h2>`;
         }
-    } catch (e) {
-        console.log(e);
-    }
-
-    let flashcards;
-    try {
-        flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckDocID);
         if (flashcards.length == 0) {
             html += '<h5>No flashcards found for this deck</h5>';
         }else{
             flashcards.forEach(flashcard => {
             html += buildFlashcardView(flashcard);
-        });
-    }
+            });
+        }
     } catch (e) {
         console.log(e);
     }
-
-  
 
 
     Elements.root.innerHTML = html;
@@ -265,11 +266,8 @@ export async function deck_page(deckDocID) {
         Constant.htmlIDs.buttonShowCreateAFlashcardModal
     );
 
-    const buttonStudy = document.getElementById(
-        Constant.htmlIDs.buttonStudy
-    );
 
-    const deleteButton = document.getElementById(Constant.htmlIDs.deleteFlashcard);
+
     const editForms = document.getElementsByClassName('form-edit-flashcard')
     for (let i = 0; i < editForms.length; i++) {
         editForms[i].addEventListener('submit', async e => {
@@ -304,6 +302,7 @@ export async function deck_page(deckDocID) {
     });
 
     // Adds event listener for STUDY button
+    const buttonStudy = document.getElementById(Constant.htmlIDs.buttonStudy);
     buttonStudy.addEventListener('click', async e => {
         e.preventDefault();
         //const docId = e.target.deckDocID.value;
@@ -323,6 +322,7 @@ export async function deck_page(deckDocID) {
         await Study.study_page();
     });
 
+    const deleteButton = document.getElementById(Constant.htmlIDs.deleteFlashcard);
     deleteButton.addEventListener('click', async e => {
         e.preventDefault();
         const deleteOption = document.getElementById("delete-option");
@@ -330,7 +330,6 @@ export async function deck_page(deckDocID) {
         for (let i = deleteOption.length; i > 0; i--) {
             deleteOption.remove(i);
         }
-
         // build select list elements from flashcard array
         for (let i = 0; i < flashcards.length; ++i) {
             const el = document.createElement("option");
