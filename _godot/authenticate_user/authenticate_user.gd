@@ -30,10 +30,4 @@ func _on_auth_failure():
 	
 func _on_SignInButton_pressed():
 	submit_button.disabled = true
-		###### for testing only
-	get_node("CenterContainer/SignInPanel/ColorRect/EnterPasswordLabel").text = \
-		"Success!"
-	yield(get_tree().create_timer(0.3), "timeout")
-	emit_signal("success_banner_timeout")
-	return
 	CurrentUser.authenticate_current_user(password_edit.text)
