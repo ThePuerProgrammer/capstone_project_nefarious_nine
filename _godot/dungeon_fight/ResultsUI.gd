@@ -10,11 +10,11 @@ func _ready():
 	_pomocoinsLabel = $ResultsPanelContainer/MarginContainer/MainColumn/MainContentHbox/RightPanel/RightPanelColumn/PomocoinsNumberText
 	hide()
 
-func showResults(playerWon, answeredCorrectly, answeredIncorrectly):
+func showResults(playerWon, answeredCorrectly, answeredIncorrectly, coins):
 	show()
 	_correctNumberLabel.text = str(answeredCorrectly)
 	_incorrectNumberLabel.text = str(answeredIncorrectly)
-	_pomocoinsLabel.text = str(answeredCorrectly * 2)
+	_pomocoinsLabel.text = str(coins)
 	$ShadowedBackground/AnimationPlayer.play("results_background_fade_in")
 
 

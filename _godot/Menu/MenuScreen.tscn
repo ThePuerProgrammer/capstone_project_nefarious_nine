@@ -23,9 +23,6 @@ margin_top = 68.571
 margin_right = 1806.73
 margin_bottom = 851.571
 custom_constants/separation = 50
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Logo" type="TextureRect" parent="MenuContainer"]
 margin_right = 1679.0
