@@ -291,10 +291,7 @@ export async function classrooms_page() {
             for (let i = 0; i < editButton.length; i++) {
                 editButton[i].addEventListener('submit', async e => {
                     e.preventDefault();
-
-                    let classId = e.target.docId.value;
                     const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
-                    console.log(classId);
                     Elements.formEditClassroom.docId.value = e.target.docId.value;
 
                     Elements.formEditClassCategorySelect.innerHTML = '';
@@ -328,13 +325,10 @@ export async function classrooms_page() {
                         });
 
                         ecr.set_docID(e.target.docId.value);
-                        console.log('CR BEFORE ' + ecr.docID);
-                        console.log('docid AFTER ' + e.target.docId.value);
+
                         await FirebaseController.updateClassroom(ecr);
                         Elements.modalEditClassroom.hide();
                         await classrooms_page();
-
-
                     });
                 });
             }
