@@ -70,7 +70,8 @@ export async function classrooms_page() {
     let html = '';
 
     html += `<div class="classroom-page-tab"><button id="my-classroom-button" class="classroom-tab">My Classrooms</button>
-    <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>`;
+    <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>
+    `;
 
     html += `<div style="float:right">
     <label for="sort-classrooms">Order by:</label>
@@ -80,25 +81,23 @@ export async function classrooms_page() {
         <option value="subject">Subject</option>
         <option value="category">Category</option>
     </select>
-    <div class="d-inline-flex p-2 bd-highlight" id="search-classroom-controls">
+    <div class="search-classroom-controls" style="display: flex">
         <form id="form-search-class-radio" name="choose-class-search-type">
-        <fieldset>    
-        <div class="search-radio">
-            <label for="myClassrooms">
+        <fieldset>
+        <div class="search-radio d-flex">
+            <div>
                 <input type="checkbox" id="checkbox-myClassrooms" name="classSearchType" value="myClassrooms" checked>
-                My Classrooms
-            </label>
-        </div>
-        <div class="search-radio">
-            <label for="notMyClassrooms">
+                <label for="myClassrooms">My Classrooms</label><br>
+            </div>
+            <div>
                 <input type="checkbox" id="checkbox-notMyClassrooms" name="classSearchType" value="notMyClassrooms" checked>
-                Not My Classrooms
-            </label>
-        </div>    
+                <label for="notMyClassrooms">Not My Classrooms</label><br>
+            </div>
+        </div>
         </fieldset>
         </form>
         <button id="search-classroom-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="fa fa-search"></i>Search Classrooms</button></h1>
-    </div>
+        </div>
     </div>
     </div>`;
 
@@ -482,7 +481,7 @@ export async function classrooms_page() {
         const searchtype = 'classroomSearch';
         setSearchType(searchtype);     
         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
-            Search.setClassroomSearchOption("allRooms");
+            setClassroomSearchOption("allRooms");
         }
         else if (checkBoxNotMyClassrooms.checked == true){
             setClassroomSearchOption("notMyRooms");  
@@ -498,23 +497,23 @@ export async function classrooms_page() {
     
     checkBoxMyClassrooms.addEventListener('change', async e => {     
          if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
-            Search.setClassroomSearchOption("allRooms");
+            setClassroomSearchOption("allRooms");
          }
         
         else if (checkBoxMyClassrooms.checked == true){
-            Search.setClassroomSearchOption("myRooms"); 
+            setClassroomSearchOption("myRooms"); 
         }    else {
-            Search.setClassroomSearchOption("null"); 
+            setClassroomSearchOption("null"); 
         }        
     });
 
     
     checkBoxNotMyClassrooms.addEventListener('change', async e => {        
          if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
-             Search.setClassroomSearchOption("allRooms");
+             setClassroomSearchOption("allRooms");
          }
          else if (checkBoxNotMyClassrooms.checked == true){
-             Search.setClassroomSearchOption("notMyRooms");  
+             setClassroomSearchOption("notMyRooms");  
          } else return;
     });       
     // END SEARCH CLASSROOMS LISTENERS------------------------------------------------//

@@ -104,7 +104,7 @@ export function cleanDataToKeywords(name, subject, category) { //for decks and c
     const mergedArray = nameArray.concat(subjectArray, categoryArray);
     return mergedArray;
 }
-
+//DECKS
 export async function searchDecks(searchKeysArray) {
     let deckList;
     try {
@@ -116,7 +116,7 @@ export async function searchDecks(searchKeysArray) {
     }
     return deckList;
 }
-
+//CLASSROOMS
 export async function searchAllClassrooms(searchKeysArray) {
     let classroomList;
     try {
@@ -130,12 +130,35 @@ export async function searchAllClassrooms(searchKeysArray) {
 }
 
 function buildClassRoomSearchPage(classroomList) {
-    
-    
     //Clears all HTML so it doesn't double
     let html = ''
-    html += `<h1> Searched Classes>
+    html += `<h1> Searched Classes:
     </h1> `
     ;
+    html += ` <table id="available-classrooms-table" class="table">
+        <thread>
+         <tr>
+            <th scope="col">Preview</th>
+            <th scope="col">Classroom</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Category</th>
+            <th scope="col">Members</th>
+            <th scop="col">Joined</th>
+        </tr>
+        </thread>
+    <tbody>
+    `;
+
+    if (classroomList.length == 0) {
+        html += '<p>No classrooms found!</p>';
+    } 
+    
+    classroomList.forEach(ac => {
+        if (!ac.banlist.includes(Auth.currentUser.email)) {
+            html += `
+                <tr>${buildAvailableClassroom(ac)}</tr>`;
+        }
+    })
+    html += `</tbody></table></div>`;
     Elements.root.innerHTML += html;
 }
