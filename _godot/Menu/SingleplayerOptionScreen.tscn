@@ -6,9 +6,9 @@
 
 [node name="Center" parent="Container" index="0"]
 margin_left = 429.0
-margin_top = 390.0
+margin_top = 370.0
 margin_right = 1491.0
-margin_bottom = 510.0
+margin_bottom = 529.0
 
 [node name="Label" parent="Container/Center" index="0"]
 margin_right = 1062.0
@@ -22,3 +22,8 @@ while I play mini games by myself.
 margin_top = 96.0
 margin_right = 1062.0
 margin_bottom = 120.0
+
+[node name="DungeonFightTemporaryNavigation" parent="Container/Center" index="2"]
+margin_top = 135.0
+margin_right = 1062.0
+margin_bottom = 159.0

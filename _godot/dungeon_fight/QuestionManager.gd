@@ -311,3 +311,4 @@ func _on_PlayerAnimatedSprite_animation_finished():
 
 func _on_overallMinigameGameTimer_timeout():
 	$overallMinigameGameTimer.stop()
+	get_tree().change_scene('res://Menu/SingleplayerOptionScreen.tscn')
