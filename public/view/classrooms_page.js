@@ -6,7 +6,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import { Classroom } from '../model/classroom.js';
 import * as OneClassroomPage from './one_classroom_page.js';
-import { cleanDataToKeywords } from './search_page.js';
+import { cleanDataToKeywords, setClassroomSearchOption, setSearchType } from './search_page.js';
 
 export function addEventListeners() {
     Elements.menuClassrooms.addEventListener('click', async () => {
@@ -85,13 +85,13 @@ export async function classrooms_page() {
         <fieldset>    
         <div class="search-radio">
             <label for="myClassrooms">
-                <input type="radio" id="checkbox-myClassrooms" name="classSearchType" value="myClassrooms" checked>
+                <input type="checkbox" id="checkbox-myClassrooms" name="classSearchType" value="myClassrooms" checked>
                 My Classrooms
             </label>
         </div>
         <div class="search-radio">
             <label for="notMyClassrooms">
-                <input type="radio" id="checkbox-notMyClassrooms" name="classSearchType" value="notMyClassrooms">
+                <input type="checkbox" id="checkbox-notMyClassrooms" name="classSearchType" value="notMyClassrooms" checked>
                 Not My Classrooms
             </label>
         </div>    
@@ -480,17 +480,17 @@ export async function classrooms_page() {
     const searchClassroomButton = document.getElementById('search-classroom-button');
     searchClassroomButton.addEventListener('click', async e => {
         const searchtype = 'classroomSearch';
-        Search.setSearchType(searchtype);     
+        setSearchType(searchtype);     
         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
             Search.setClassroomSearchOption("allRooms");
         }
         else if (checkBoxNotMyClassrooms.checked == true){
-            Search.setClassroomSearchOption("notMyRooms");  
+            setClassroomSearchOption("notMyRooms");  
         } 
         else if (checkBoxMyClassrooms.checked == true) {
-            Search.setClassroomSearchOption("myRooms"); 
+            setClassroomSearchOption("myRooms"); 
         } 
-        else Search.setClassroomSearchOption("null"); 
+        else setClassroomSearchOption("null"); 
     
         Utilities.searchBox('Search Classroom', 'input query');        
     });
