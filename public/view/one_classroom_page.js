@@ -8,13 +8,10 @@ import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 
+
+
+
 export async function one_classroom_page(classroomDocID) {
-    window.sessionStorage;
-    if (classroomDocID == null) {
-        classroomDocID = sessionStorage.getItem('classId');
-    } else {
-        sessionStorage.setItem('classId', classroomDocID);
-    }
     console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';
@@ -28,11 +25,12 @@ export async function one_classroom_page(classroomDocID) {
     }
 
     let members = [];
-    //get members list 
-    for (let k = 0; k < classroom.members.length; k++) {
-        members.push(classroom.members[k]);
+    //get members list
+    if (classroom.members != null) {
+        for (let k = 0; k < classroom.members.length; k++) {
+            members.push(classroom.members[k]);
+        }
     }
-
 
     let mod = false;
     for (let i = 0; i < classroom.moderatorList.length; i++) { //check if current user is a mod
@@ -55,12 +53,11 @@ export async function one_classroom_page(classroomDocID) {
         <h4>${classroom.subject}, ${classroom.category}</h4>
         <br>`;
 
-    //if current user is a mod, populate the edit classroom button and delete button
-    //causes null edit button error
+    //if current user is a mod, populate delete button
+    //prevents null button error
     if (mod == true) {
         //removed doc id from page view -- Blake
-        html += `<button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
-            >Edit Classroom</button>
+        html += `
             <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
                 Delete Classroom
             </button>`
@@ -76,14 +73,16 @@ export async function one_classroom_page(classroomDocID) {
         <h2>Members</h2>`;
 
     // If mod, show members w BAN option
-    if (mod == true) {
+    if (mod == true && members != null) {
         members.forEach(member => {
             html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
         })
     } else {
-        members.forEach(member => {
-            html += `<p>${member}</p>`;
-        })
+        if (members != null) {
+            members.forEach(member => {
+                html += `<p>${member}</p>`;
+            })
+        }
     }
 
     html += `</div>
@@ -247,23 +246,9 @@ export async function one_classroom_page(classroomDocID) {
     // sets CLASSROOM as default
     classroomGenButton.click();
 
-    //following Pipers create classroom functionality
-    if (mod == true) { //if owner of classroom, add listener. This avoids null editButton errors.
-        const editButton = document.getElementById('button-edit-class');
+
+    if (mod == true) { //if owner of classroom, add listener. This avoids null Button errors.
         const deleteButton = document.getElementById('button-delete-classroom'); //delete button on page
-        editButton.addEventListener('click', async e => {
-
-            const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
-
-            Elements.formEditClassCategorySelect.innerHTML = '';
-            categories.forEach(category => {
-                Elements.formEditClassCategorySelect.innerHTML += `
-                      <option value="${category}">${category}</option>
-                  `;
-            });
-            console.log(classroomDocID);
-            Elements.modalEditClassroom.show();
-        })
 
         deleteButton.addEventListener('click', async e => {
             Elements.modalDeleteClassroom.show();
@@ -281,22 +266,6 @@ export async function one_classroom_page(classroomDocID) {
 
 
 
-
-    Elements.formEditClassroom.addEventListener('submit', async e => {
-        e.preventDefault();
-
-        const cr = new Classroom({
-            name: e.target.ename.value,
-            subject: e.target.esubject.value,
-            category: e.target.editClassCategory.value,
-        });
-        cr.set_docID(classroomDocID);
-        console.log(cr.docID);
-        await FirebaseController.updateClassroom(cr);
-        Elements.modalEditClassroom.hide();
-        await one_classroom_page(classroomDocID);
-
-    })
     const banButtons = document.getElementsByClassName('form-ban-members');
     //this will add ban functionality to each member button
     for (let i = 0; i < banButtons.length; ++i) {

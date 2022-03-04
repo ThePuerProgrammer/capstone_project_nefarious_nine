@@ -183,14 +183,15 @@
         </div>
         <div class="modal-body">
           <form id="form-edit-classroom" method="post">
+            <input type="hidden" name="docId">
             <div class="form-group">
               <label class="pomo-text-color-light" for="ename">Name</label>
-              <input class="form-control form-control-lg" type="name" name="ename" placeholder="e.g. DSA Chapter 1"
+              <input class="form-control form-control-lg" type="text" name="ename" placeholder="e.g. DSA Chapter 1"
                 required minlength="2" id="eclass-title">
               <br>
               <br>
               <label class="pomo-text-color-light" for="esubject">Subject</label>
-              <input class="form-control form-control-lg" type="subject" name='esubject'
+              <input class="form-control form-control-lg" type="text" name="esubject"
                 placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="eclass-subject">
               <br>
               <br>
@@ -201,7 +202,7 @@
             </div>
             <br>
             <br>
-            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-edit-deck"
+            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-edit-class"
               type="submit">Submit Changes</button>
           </form>
         </div>

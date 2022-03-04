@@ -45,7 +45,6 @@ export function addEventListeners() {
         try {
             const docId = await FirebaseController.createClassroom(classroom);
             classroom.docId = docId;
-            localStorage.setItem("classroomPageClassroomDocID", classroom.docId);
             Elements.modalCreateClassroom.hide();
             history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classroom.docId);
             await OneClassroomPage.one_classroom_page(classroom.docId);
@@ -215,6 +214,13 @@ export async function classrooms_page() {
                         <input type="hidden" name="docId" value="${classId}">
                         <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Leave</button>
                     </form>`
+                } else {
+                    Elements.previewClassroomFooter.innerHTML += `
+                    <form class="form-edit-classroom-from-preview" method="post">
+                        <input type="hidden" name="docId" value="${classId}">
+                        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
+                    </form>`
+
                 }
             } else if (classMembersList.length != classMembers.length) {
                 //CLASSROOM HAS ROOM
@@ -255,8 +261,7 @@ export async function classrooms_page() {
                     //Closes modal on button click
                     $('#preview-classroom-modal').modal('hide')
                     //Navigates to classroom webpage
-                    window.sessionStorage;
-                    sessionStorage.setItem('classId', classId);
+
                     history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classId);
                     await OneClassroomPage.one_classroom_page(classId);
 
@@ -282,6 +287,59 @@ export async function classrooms_page() {
                 });
 
             }
+            const editButton = document.getElementsByClassName('form-edit-classroom-from-preview');
+            for (let i = 0; i < editButton.length; i++) {
+                editButton[i].addEventListener('submit', async e => {
+                    e.preventDefault();
+
+                    let classId = e.target.docId.value;
+                    const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+                    console.log(classId);
+                    Elements.formEditClassroom.docId.value = e.target.docId.value;
+
+                    Elements.formEditClassCategorySelect.innerHTML = '';
+                    categories.forEach(category => {
+                        Elements.formEditClassCategorySelect.innerHTML += `
+                            <option value="${category}">${category}</option>
+                        `;
+                    });
+
+
+                    $('#preview-classroom-modal').modal('hide');
+                    Elements.modalEditClassroom.show();
+                    Elements.formEditClassroom.addEventListener('submit', async e => {
+
+                        e.preventDefault();
+
+                        const name = e.target.ename.value;
+                        const subject = e.target.esubject.value;
+                        const category = e.target.editClassCategory.value;
+                        const emembers = [];
+                        const ebanlist = [];
+                        const emoderatorList = [];
+
+                        const ecr = new Classroom({
+                            name,
+                            subject,
+                            category,
+                            emoderatorList,
+                            emembers,
+                            ebanlist,
+                        });
+
+                        ecr.set_docID(e.target.docId.value);
+                        console.log('CR BEFORE ' + ecr.docID);
+                        console.log('docid AFTER ' + e.target.docId.value);
+                        await FirebaseController.updateClassroom(ecr);
+                        Elements.modalEditClassroom.hide();
+                        await classrooms_page();
+
+
+                    });
+                });
+            }
+
+
             Elements.modalPreviewClassroom.show();
             Utilities.enableButton(button, label);
         });
