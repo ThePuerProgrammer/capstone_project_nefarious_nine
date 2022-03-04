@@ -64,8 +64,8 @@ normalStyleBox = ExtResource( 2 )
 hoveredStyleBox = ExtResource( 7 )
 
 [node name="answerLabel" type="Label" parent="MarginContainer/ScrollContainer"]
-margin_right = 374.0
-margin_bottom = 543.0
+margin_right = 386.0
+margin_bottom = 186.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
@@ -73,7 +73,6 @@ custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
 custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = 3
 custom_fonts/font = ExtResource( 1 )
-text = "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
 align = 1
 valign = 1
 autowrap = true

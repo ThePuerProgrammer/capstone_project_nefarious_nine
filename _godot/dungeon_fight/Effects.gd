@@ -44,8 +44,8 @@ func startEnemyMissEffect():
 	_enemyAttacking = false
 	_questionManager.stopQuestionTimer()
 
-func _on_QuestionTimer_timeout():
-	startPlayerHitEffects(-1)
+#func _on_QuestionTimer_timeout():
+	#startPlayerHitEffects(-1)
 
 
 func _on_WhiteInAnimationPlayer_animation_finished(_anim_name):

@@ -29,8 +29,8 @@ var _answerPanelRngSelector = RandomNumberGenerator.new()################
 # combat and damage system ##############################################
 var _playerHpBar
 var _enemyHpBar
-var _playerBaseDamage = 5
-var _enemyBaseDamage = 5
+export (int) var _playerBaseDamage = 5
+export (int) var _enemyBaseDamage = 5
 var _effectsCanvasLayer
 var _currentAction
 var _player
@@ -43,6 +43,9 @@ var _playerAttacking = false
 var _totalQuestionsAnsweredCorrectly = 0
 var _totalQuestionsAnsweredIncorrectly = 0
 var _resultsUI
+var _gameOver = false
+export (int) var _coinsPerQuestion = 2
+var _coins = 0
 #########################################################################
 
 
@@ -81,7 +84,7 @@ func _ready():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if $QuestionTimer.is_stopped() or !_waitingForAnswer:
+	if $QuestionTimer.is_stopped() or !_waitingForAnswer or _gameOver:
 		return
 	
 	_timeRemaining = _waitTime - $QuestionTimer.time_left
@@ -108,6 +111,9 @@ func _process(_delta):
 		
 	
 func startNextQuestion():
+	if _gameOver:
+		return
+	
 	# TODO: Get next flashcard here
 	resetForNextQuestion()
 	getNextQuestionAndAnswers()
@@ -152,19 +158,23 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 	if _enemyDead or _playerDead: #or player dead
 		if correctAnswerClicked:
 			_totalQuestionsAnsweredCorrectly = _totalQuestionsAnsweredCorrectly + 1
+			print("====")
+			print(_coins)
+			_coins = _coins + _coinsPerQuestion
+			print(_coins)
 		else:
 			_totalQuestionsAnsweredIncorrectly = _totalQuestionsAnsweredIncorrectly + 1
 		showAnswerIndicators(true)
 		yield(self, "answer_indicators_hidden")
 		hideAnswerIndicators()
 		startNextQuestion()
-			
 	else:
 		#
 		# User answered question correctly
 		#
 		if correctAnswerClicked:
 			_totalQuestionsAnsweredCorrectly = _totalQuestionsAnsweredCorrectly + 1
+			_coins = _coins + _coinsPerQuestion
 			showAnswerIndicators(true)
 			performCurrentAction()
 			yield(self, "answer_indicators_hidden")
@@ -189,6 +199,7 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 			if newPlayerHp == 0:
 				print("player dead")
 				_playerDead = true
+				_coinsPerQuestion = floor(_coinsPerQuestion / 2)
 			_playerHpBar.value = newPlayerHp
 			_totalQuestionsAnsweredIncorrectly = _totalQuestionsAnsweredIncorrectly + 1
 			_effectsCanvasLayer.startPlayerHitEffects(_playerHpBar.value)
@@ -200,16 +211,36 @@ func _on_startGameTimer_timeout():
 	startNextQuestion()
 
 func _on_QuestionTimer_timeout():
+	stopQuestionTimer()
+	if _enemyDead or _playerDead: #or player dead
+		_totalQuestionsAnsweredIncorrectly = _totalQuestionsAnsweredIncorrectly + 1
+		showAnswerIndicators(true)
+		yield(self, "answer_indicators_hidden")
+		hideAnswerIndicators()
+		startNextQuestion()
+		return
+	
+	var damageMultiplier = 4
+	var newPlayerHp = _playerHpBar.value - (_enemyBaseDamage * damageMultiplier)
+	if newPlayerHp < 0:
+		newPlayerHp = 0
+	if newPlayerHp == 0:
+		print("player dead")
+		_playerDead = true
+		_coinsPerQuestion = floor(_coinsPerQuestion / 2)
+	_playerHpBar.value = newPlayerHp
 	_waitingForAnswer = false
+	_effectsCanvasLayer.startPlayerHitEffects(_playerHpBar.value)
 
 func _on_gameplayGameTimer_timeout():
-	endGame(false, _totalQuestionsAnsweredCorrectly, _totalQuestionsAnsweredIncorrectly)
+	endGame(false, _totalQuestionsAnsweredCorrectly, _totalQuestionsAnsweredIncorrectly, _coins)
 
-func endGame(playerWon, answeredCorrectly, answeredIncorrectly):
+func endGame(playerWon, answeredCorrectly, answeredIncorrectly, coins):
 	stopQuestionTimer()
+	_gameOver = true
 	if !$gameplayGameTimer.is_stopped():
 		$gameplayGameTimer.stop()
-	_resultsUI.showResults(playerWon, answeredCorrectly, answeredIncorrectly)
+	_resultsUI.showResults(playerWon, answeredCorrectly, answeredIncorrectly, coins)
 	
 	
 func showAnswerIndicators(userAnsweredCorrectly):
@@ -256,6 +287,7 @@ func attackAction():
 		newEnemyHp = 0
 	if newEnemyHp == 0:
 		_enemyDead = true
+		_coins = _coins + _coinsPerQuestion * 10
 		_enemy.play("die")
 	else:
 		_enemy.play("hit_effect")
