@@ -613,7 +613,7 @@ export async function updateUserInfo(uid, updateInfo) {
 //============================================================================//
 export async function updateClassroom(classroom) {
     await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
-        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category });
+        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category, 'keywords': classroom.keywords });
 }
 //============================================================================//
 //Ban Members
@@ -798,6 +798,7 @@ export async function getMessages(classroomDocID) {
 // SEARCH FUNCTIONS
 //============================================================================//
 
+// DECKS------------------------------------------------------------------------->
 export async function searchDecks(uid, keywordsArray) {
     const deckList = []
     const snapShot = await firebase.firestore()
@@ -813,3 +814,52 @@ export async function searchDecks(uid, keywordsArray) {
     })
     return deckList;
 }
+
+//CLASSROOMS ------------------------------------------------------------------>
+
+export async function searchAllClassrooms(keywordsArray) {
+    const classroomList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Classroom(doc.data());
+        t.set_docID(doc.id);
+        classroomList.push(t)
+    });
+    return classroomList;
+}
+
+export async function searchMyClassrooms(keywordsArray,uid) {
+    const myClassroomList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('members', 'array-contains', uid)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Classroom(doc.data());
+        t.set_docID(doc.id);
+        classroomList.push(t)
+    });
+    return myClassroomList;
+}
+
+export async function searchNotMyClassrooms(keywordsArray,uid) {
+    const myClassroomList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('members', 'does-not-contain', uid)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Classroom(doc.data());
+        t.set_docID(doc.id);
+        classroomList.push(t)
+    });
+    return myClassroomList;
+}
+
+//============================================================================//
+

@@ -8,10 +8,8 @@ import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 
+
 export async function one_classroom_page(classroomDocID) {
-    if(classroomDocID == null){
-        classroomDocID = sessionStorage.getItem('classId');
-    }
     console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';
@@ -25,11 +23,12 @@ export async function one_classroom_page(classroomDocID) {
     }
 
     let members = [];
-    //get members list 
-    for (let k = 0; k < classroom.members.length; k++) {
-        members.push(classroom.members[k]);
+    //get members list
+    if (classroom.members != null) {
+        for (let k = 0; k < classroom.members.length; k++) {
+            members.push(classroom.members[k]);
+        }
     }
-
 
     let mod = false;
     for (let i = 0; i < classroom.moderatorList.length; i++) { //check if current user is a mod
@@ -52,12 +51,11 @@ export async function one_classroom_page(classroomDocID) {
         <h4>${classroom.subject}, ${classroom.category}</h4>
         <br>`;
 
-    //if current user is a mod, populate the edit classroom button and delete button
-    //causes null edit button error
+    //if current user is a mod, populate delete button
+    //prevents null button error
     if (mod == true) {
         //removed doc id from page view -- Blake
-        html += `<button id="button-edit-class" type="click" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
-            >Edit Classroom</button>
+        html += `
             <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
                 Delete Classroom
             </button>`
@@ -73,14 +71,16 @@ export async function one_classroom_page(classroomDocID) {
         <h2>Members</h2>`;
 
     // If mod, show members w BAN option
-    if (mod == true) {
+    if (mod == true && members != null) {
         members.forEach(member => {
             html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
         })
     } else {
-        members.forEach(member => {
-            html += `<p>${member}</p>`;
-        })
+        if (members != null) {
+            members.forEach(member => {
+                html += `<p>${member}</p>`;
+            })
+        }
     }
 
     html += `</div>
@@ -209,10 +209,10 @@ export async function one_classroom_page(classroomDocID) {
 
         document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-gen-button').style.color = '#2C1320';
-    
+
         document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-members-button').style.color = '#2C1320';
-    
+
         document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
     })
@@ -234,7 +234,7 @@ export async function one_classroom_page(classroomDocID) {
         messageTag.innerHTML = buildMessageView(message);
         const tempEl = document.getElementById('temp');
         // delete temp if it's there
-        if(tempEl){
+        if (tempEl) {
             tempEl.remove();
         }
         document.getElementById('message-reply-body').appendChild(messageTag);
@@ -244,22 +244,9 @@ export async function one_classroom_page(classroomDocID) {
     // sets CLASSROOM as default
     classroomGenButton.click();
 
-    //following Pipers create classroom functionality
-    if (mod == true) { //if owner of classroom, add listener. This avoids null editButton errors.
-        const editButton = document.getElementById('button-edit-class');
+
+    if (mod == true) { //if owner of classroom, add listener. This avoids null Button errors.
         const deleteButton = document.getElementById('button-delete-classroom'); //delete button on page
-        editButton.addEventListener('click', async e => {
-
-            const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
-
-            Elements.formEditClassCategorySelect.innerHTML = '';
-            categories.forEach(category => {
-                Elements.formEditClassCategorySelect.innerHTML += `
-                      <option value="${category}">${category}</option>
-                  `;
-            });
-            Elements.modalEditClassroom.show();
-        })
 
         deleteButton.addEventListener('click', async e => {
             Elements.modalDeleteClassroom.show();
@@ -268,32 +255,17 @@ export async function one_classroom_page(classroomDocID) {
         const confirmDeleteClassroom = document.getElementById('yes-delete-classroom-button'); //delete button on modal
         confirmDeleteClassroom.addEventListener("click", async e => {
             e.preventDefault();
+            await classrooms_page();
             const deletedClassName = classroom.name;
+            
             await FirebaseController.deleteClassroom(classroomDocID);
             Utilities.info('Success', `Classroom: ${deletedClassName} deleted.`);
-            await classrooms_page();
+            
         })
     } //end of mod listeners
 
 
 
-
-    Elements.formEditClassroom.addEventListener('submit', async e => {
-        e.preventDefault();
-
-        const cr = new Classroom({
-            name: e.target.name.value,
-            subject: e.target.subject.value,
-            category: e.target.editClassCategory.value,
-        });
-        cr.set_docID(classroomDocID);
-
-        await FirebaseController.updateClassroom(cr);
-        Elements.modalEditClassroom.hide();
-        Elements.root.innerHTML += ''; //Prevents old html from stacking/duplicate class on page
-        await one_classroom_page(classroomDocID);
-
-    })
     const banButtons = document.getElementsByClassName('form-ban-members');
     //this will add ban functionality to each member button
     for (let i = 0; i < banButtons.length; ++i) {

@@ -19,6 +19,9 @@ var lobby_docids = []
 var selected_lobby = -1
 
 func _ready():
+	$FadeIn.show()
+	$FadeIn.fade_in()
+	
 	# Max players drop down button items. Disable non numeric
 	maxPlayersOptionButton.add_item("Select Max")
 	maxPlayersOptionButton.add_item("2")
@@ -51,10 +54,21 @@ func _ready():
 	
 	# Ensure the lobbies are visible as soon as you visit the mp page
 	_get_available_lobbies()
-	
+
+
+# Returning to main menu ###################################################
 func _on_Back_To_Main_Menu_Button_pressed():
+	$FadeOut.show()
+	$FadeOut.fade_out()
+
+func _on_FadeOut_fade_out_finished():
 	if (get_tree().change_scene("res://Menu/MenuScreen.tscn") != OK):
 		print("Failed to change scene")
+	$FadeOut.hide()
+############################################################################
+
+func _on_FadeIn_fade_in_finished():
+	$FadeIn.hide()
 
 func _createLobby():
 	if selectClassroomsButton.get_selected_id() == 0:

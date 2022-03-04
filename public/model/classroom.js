@@ -11,6 +11,7 @@ export class Classroom {
         this.moderatorList = data.moderatorList;
         this.members = data.members;
         this.banlist = data.banlist;
+        this.keywords = data.keywords;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
 
@@ -51,6 +52,7 @@ export class Classroom {
             moderatorList: this.moderatorList,
             members: this.members,
             banlist: this.banlist,
+            keywords: this.keywords,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 

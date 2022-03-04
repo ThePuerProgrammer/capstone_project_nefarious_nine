@@ -9,7 +9,7 @@ func _ready():
 	_messageScreenTime = _startGameTimer.wait_time / 4
 	_gameStarted = false
 
-func _process(delta):
+func _process(_delta):
 	if _gameStarted:
 		return
 	
