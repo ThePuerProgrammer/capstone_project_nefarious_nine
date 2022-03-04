@@ -100,12 +100,14 @@ func _process(_delta):
 			_enemy.play("first_attack_level")
 		
 	if _timeRemaining <= _subSectionWaitTime * 2 and _timeRemaining >= _subSectionWaitTime:
+		_progressBarEasy.value = 100
 		_currentProgressBarSubSection = 1
 		_progressBarMedium.value = ((_timeRemaining - _subSectionWaitTime) / _subSectionWaitTime) * 100
 		if !_enemyDead and !_playerDead:
 			_enemy.play("second_attack_level")
 		
 	if _timeRemaining <= _subSectionWaitTime * 3 and _timeRemaining >= _subSectionWaitTime * 2: 
+		_progressBarMedium.value = 100
 		_currentProgressBarSubSection = 2
 		_progressBarHard.value = ((_timeRemaining - (_subSectionWaitTime * 2)) / _subSectionWaitTime) * 100
 		if !_enemyDead and !_playerDead:
