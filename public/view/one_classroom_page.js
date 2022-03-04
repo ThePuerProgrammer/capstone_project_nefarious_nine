@@ -9,8 +9,6 @@ import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 
 
-
-
 export async function one_classroom_page(classroomDocID) {
     console.log(classroomDocID);
     Elements.root.innerHTML = '';
@@ -257,10 +255,12 @@ export async function one_classroom_page(classroomDocID) {
         const confirmDeleteClassroom = document.getElementById('yes-delete-classroom-button'); //delete button on modal
         confirmDeleteClassroom.addEventListener("click", async e => {
             e.preventDefault();
+            await classrooms_page();
             const deletedClassName = classroom.name;
+            
             await FirebaseController.deleteClassroom(classroomDocID);
             Utilities.info('Success', `Classroom: ${deletedClassName} deleted.`);
-            await classrooms_page();
+            
         })
     } //end of mod listeners
 
