@@ -81,22 +81,24 @@ export async function classrooms_page() {
         <option value="subject">Subject</option>
         <option value="category">Category</option>
     </select>
-    <div class="search-classroom-controls" style="display: flex">
-    <form id="form-search-class-radio" name="choose-class-search-type">
-    <fieldset>
-    <div class="class-search-radio d-flex">
-        <div>
-            <input type="checkbox" id="checkbox-myClassrooms" name="classSearchType" value="myClassrooms" checked>
-            <label for="myClassrooms">My Classrooms</label><br>
+    <div class="d-inline-flex p-2 bd-highlight" id="search-classroom-controls">
+        <form id="form-search-class-radio" name="choose-class-search-type">
+        <fieldset>    
+        <div class="search-radio">
+            <label for="myClassrooms">
+                <input type="radio" id="checkbox-myClassrooms" name="classSearchType" value="myClassrooms" checked>
+                My Classrooms
+            </label>
         </div>
-        <div>
-            <input type="checkbox" id="checkbox-notMyClassrooms" name="classSearchType" value="notMyClassrooms">
-            <label for="notMyClassrooms">Not My Classrooms</label><br>
-        </div>
-    </div>
-    </fieldset>
-    </form>
-    <button id="search-classroom-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="fa fa-search"></i>Search Classrooms</button></h1>
+        <div class="search-radio">
+            <label for="notMyClassrooms">
+                <input type="radio" id="checkbox-notMyClassrooms" name="classSearchType" value="notMyClassrooms">
+                Not My Classrooms
+            </label>
+        </div>    
+        </fieldset>
+        </form>
+        <button id="search-classroom-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="fa fa-search"></i>Search Classrooms</button></h1>
     </div>
     </div>
     </div>`;

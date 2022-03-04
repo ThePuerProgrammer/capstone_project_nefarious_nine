@@ -831,5 +831,35 @@ export async function searchAllClassrooms(keywordsArray) {
     return classroomList;
 }
 
+export async function searchMyClassrooms(keywordsArray,uid) {
+    const myClassroomList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('members', 'array-contains', uid)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Classroom(doc.data());
+        t.set_docID(doc.id);
+        classroomList.push(t)
+    });
+    return myClassroomList;
+}
+
+export async function searchNotMyClassrooms(keywordsArray,uid) {
+    const myClassroomList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('members', 'does-not-contain', uid)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Classroom(doc.data());
+        t.set_docID(doc.id);
+        classroomList.push(t)
+    });
+    return myClassroomList;
+}
+
 //============================================================================//
 
