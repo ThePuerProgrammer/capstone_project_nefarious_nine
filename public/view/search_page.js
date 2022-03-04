@@ -59,7 +59,9 @@ export async function search_page(joinedSearchKeys, searchType) {
         Elements.root.innerHTML = ProtectedMessage.html;
         return;
     }
-
+    //root is under the nav bar
+    Elements.root.innerHTML = "";
+    let html = ''
     switch(searchType) {
         case 'deckSearch':
             const deckList = await searchDecks(searchKeysArray);            
@@ -72,13 +74,12 @@ export async function search_page(joinedSearchKeys, searchType) {
                 const classroomList = await searchAllClassrooms(searchKeysArray);               
                 buildClassRoomSearchPage(classroomList);
                 Utilities.info('You searched for', `${searchKeysInfo}`)
-            break;
 
             } else if (classSearchOption == "myRooms") {
                 console.log('box 2 checked');
 
             } else if (classSearchOption == "notMyRooms") {
-                console.log('exlude search goes here');
+                console.log('exclude search goes here');
             }
             else console.log("nuttin");
             break;
@@ -103,7 +104,7 @@ export function cleanDataToKeywords(name, subject, category) { //for decks and c
     const mergedArray = nameArray.concat(subjectArray, categoryArray);
     return mergedArray;
 }
-
+//DECKS
 export async function searchDecks(searchKeysArray) {
     let deckList;
     try {
@@ -115,7 +116,7 @@ export async function searchDecks(searchKeysArray) {
     }
     return deckList;
 }
-
+//CLASSROOMS
 export async function searchAllClassrooms(searchKeysArray) {
     let classroomList;
     try {
@@ -129,13 +130,35 @@ export async function searchAllClassrooms(searchKeysArray) {
 }
 
 function buildClassRoomSearchPage(classroomList) {
-    
-    Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
-    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="fa fa-search"></i>Search Decks</button></h1> '
+    html += `<h1> Searched Classes:
+    </h1> `
     ;
+    html += ` <table id="available-classrooms-table" class="table">
+        <thread>
+         <tr>
+            <th scope="col">Preview</th>
+            <th scope="col">Classroom</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Category</th>
+            <th scope="col">Members</th>
+            <th scop="col">Joined</th>
+        </tr>
+        </thread>
+    <tbody>
+    `;
 
+    if (classroomList.length == 0) {
+        html += '<p>No classrooms found!</p>';
+    } 
     
-    return html;
+    classroomList.forEach(ac => {
+        if (!ac.banlist.includes(Auth.currentUser.email)) {
+            html += `
+                <tr>${buildAvailableClassroom(ac)}</tr>`;
+        }
+    })
+    html += `</tbody></table></div>`;
+    Elements.root.innerHTML += html;
 }
