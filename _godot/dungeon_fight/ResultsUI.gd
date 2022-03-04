@@ -15,7 +15,7 @@ func showResults(playerWon, answeredCorrectly, answeredIncorrectly):
 	_correctNumberLabel.text = str(answeredCorrectly)
 	_incorrectNumberLabel.text = str(answeredIncorrectly)
 	_pomocoinsLabel.text = str(answeredCorrectly * 2)
-	$ShadowedBackground/AnimationPlayer.play("results_background_fade_in")\
+	$ShadowedBackground/AnimationPlayer.play("results_background_fade_in")
 
 
 
@@ -24,3 +24,6 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 	$CoinSparkle2.show()
 	$CoinSparkle1.play("sparkle")
 	$CoinSparkle2.play("sparkle")
+
+func getResultsTimeLeftContainer():
+	return $ResultsPanelContainer/MarginContainer/TimeLeft
