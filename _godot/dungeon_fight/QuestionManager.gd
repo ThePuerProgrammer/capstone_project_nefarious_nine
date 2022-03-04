@@ -46,12 +46,14 @@ var _resultsUI
 var _gameOver = false
 export (int) var _coinsPerQuestion = 2
 var _coins = 0
+var _popupMessage
 #########################################################################
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_questionPanelText = get_node("../QuestionMenu/MainColumn/QuestionTextPanelContainer/MarginContainer/ScrollContainer/QuestionText")
+	_popupMessage = get_node("../PopupMessage")
 	
 	_progressBarEasy = get_node("../TimerBar/ProgressBarHbox/ProgressBarEasy")
 	_progressBarMedium = get_node("../TimerBar/ProgressBarHbox/ProgressBarMedium")
@@ -62,6 +64,7 @@ func _ready():
 	_effectsCanvasLayer = get_node("../Effects")
 	_resultsUI = get_node("../ResultsUI")
 	_player = get_node("../Player")
+	_enemy = get_node("../Enemy")
 	
 	_totalQuestionsAnsweredCorrectly = 0
 	_totalQuestionsAnsweredIncorrectly = 0
@@ -77,7 +80,6 @@ func _ready():
 	
 	_waitTime = $QuestionTimer.wait_time
 	_subSectionWaitTime = $QuestionTimer.wait_time / 3
-	_enemy = get_node("../Enemy")
 	$overallMinigameGameTimer.start()
 	$startGameTimer.start()
 	_answerPanelRngSelector.randomize()
@@ -158,10 +160,7 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 	if _enemyDead or _playerDead: #or player dead
 		if correctAnswerClicked:
 			_totalQuestionsAnsweredCorrectly = _totalQuestionsAnsweredCorrectly + 1
-			print("====")
-			print(_coins)
 			_coins = _coins + _coinsPerQuestion
-			print(_coins)
 		else:
 			_totalQuestionsAnsweredIncorrectly = _totalQuestionsAnsweredIncorrectly + 1
 		showAnswerIndicators(true)
@@ -200,6 +199,7 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 				print("player dead")
 				_playerDead = true
 				_coinsPerQuestion = floor(_coinsPerQuestion / 2)
+				_popupMessage.showPopupMessage("Nice Try! Keep answering questions to gain more coins!", 10.0)
 			_playerHpBar.value = newPlayerHp
 			_totalQuestionsAnsweredIncorrectly = _totalQuestionsAnsweredIncorrectly + 1
 			_effectsCanvasLayer.startPlayerHitEffects(_playerHpBar.value)
@@ -228,6 +228,7 @@ func _on_QuestionTimer_timeout():
 		print("player dead")
 		_playerDead = true
 		_coinsPerQuestion = floor(_coinsPerQuestion / 2)
+		_popupMessage.showPopupMessage("Nice Try! Keep answering questions to gain more coins!", 10.0)
 	_playerHpBar.value = newPlayerHp
 	_waitingForAnswer = false
 	_effectsCanvasLayer.startPlayerHitEffects(_playerHpBar.value)
@@ -289,6 +290,7 @@ func attackAction():
 		_enemyDead = true
 		_coins = _coins + _coinsPerQuestion * 10
 		_enemy.play("die")
+		_popupMessage.showPopupMessage("Great Work! Keep answering questions to gain more coins!", 5.0)
 	else:
 		_enemy.play("hit_effect")
 	yield(self, "player_attack_animation_finished")
