@@ -64,7 +64,7 @@ func _on_Back_To_Main_Menu_Button_pressed():
 func _on_FadeOut_fade_out_finished():
 	if (get_tree().change_scene("res://Menu/MenuScreen.tscn") != OK):
 		print("Failed to change scene")
-		$FadeOut.hide()
+	$FadeOut.hide()
 ############################################################################
 
 func _on_FadeIn_fade_in_finished():

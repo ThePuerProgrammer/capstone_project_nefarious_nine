@@ -436,3 +436,5 @@ visible = false
 [connection signal="pressed" from="Centered/TabContainer/JoinLobby/JoinHBox/JoinButton" to="." method="_on_JoinButton_pressed"]
 [connection signal="item_selected" from="Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton" to="." method="_on_classroom_selected"]
 [connection signal="pressed" from="Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton" to="." method="_createLobby"]
+[connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]
+[connection signal="fade_out_finished" from="FadeOut" to="." method="_on_FadeOut_fade_out_finished"]
