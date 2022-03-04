@@ -483,13 +483,7 @@ export async function updateDeck(uid, deck, deckDocID) {
                 deck.subject = data.subject;
                 deck.dateCreated = data.dateCreated;
                 deck.category = data.category;
-                //When editing flashcards I found that booleans were difficult
-                //to use here and commented it out isMultiplechoice and was functional
-                //deck.isFavorited = data.isFavorited;
-                // console.log("UPDATED");
-                // console.log(`Check 5:${data.category}`)
-                // console.log(`Check 6:${deck.category}`)
-
+                deck.keywords = data.keywords;
             }//Error Code
             else if (Constant.DEV) {
                 console.log(e);
@@ -500,10 +494,7 @@ export async function updateDeck(uid, deck, deckDocID) {
     firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
-        .set(deck.serialize());
-
-    // console.log(`Check 7:${deck.isFavorited}`)
-
+        .update(deck.serialize());
 }
 
 //===========================================================================//
@@ -801,4 +792,24 @@ export async function getMessages(classroomDocID) {
     })
 
     return messages;
+}
+
+//============================================================================//
+// SEARCH FUNCTIONS
+//============================================================================//
+
+export async function searchDecks(uid, keywordsArray) {
+    const deckList = []
+    const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(uid)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .orderBy('dateCreated', 'desc')
+        .get();
+    snapShot.forEach(doc => {
+        const t = new Deck(doc.data());
+        t.set_docID(doc.id);
+        deckList.push(t)
+    })
+    return deckList;
 }

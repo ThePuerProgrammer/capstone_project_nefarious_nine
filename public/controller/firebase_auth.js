@@ -82,11 +82,11 @@ export function addEventListeners() {
             // Account successfully created from here
             e.target.reset();
 
-            Utilities.info('Account created', `You're signed in as ${emailAddress}`, Constants.htmlIDs.modalCreateAccount); //last param dismisses previous modal 
+            Utilities.info('Account created', `You're signed in as ${emailAddress}`, Constants.htmlIDs.createAccountModal); //last param dismisses previous modal 
 
         } catch (e) {
             if (Constants.DEV) console.log(e);
-            Utilities.info('Failed to create account', JSON.stringify(e), Constants.htmlIDs.modalCreateAccount);
+            Utilities.info('Failed to create account', JSON.stringify(e), Constants.htmlIDs.createAccountModal);
         }
     });
 
