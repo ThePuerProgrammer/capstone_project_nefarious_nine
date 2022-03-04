@@ -13,6 +13,10 @@ var user_is_authenticated = false
 
 var window
 
+var peer_id
+
+var username
+
 signal failure_to_authenticate_user
 signal authentication_success
 

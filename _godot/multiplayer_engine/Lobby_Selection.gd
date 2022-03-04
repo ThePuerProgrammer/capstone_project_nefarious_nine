@@ -4,6 +4,13 @@ signal lobby_button_pressed(lobby_number)
 
 var lobby_number
 var password
+var host
+var privacy_status
+var classroom
+var player_count
+var max_players
+var chat_enabled
+
 const default_color = '#d1d1d1'
 const pressed_color = '#56667A'
 
@@ -16,12 +23,7 @@ onready var chat_enabled_label = get_node("HBoxContainer/ChatEnabledLabel")
 func _ready():
 	pass # Replace with function body.
 
-func set_labels(host, privacy_status, classroom, player_count, chat_enabled):
-	assert(typeof(host) == TYPE_STRING)
-	assert(typeof(privacy_status) == TYPE_STRING)
-	assert(typeof(classroom) == TYPE_STRING)
-	assert(typeof(player_count) == TYPE_STRING)
-	assert(typeof(chat_enabled) == TYPE_STRING)
+func set_labels():
 	host_name_label.text = host
 	privacy_status_label.text = privacy_status
 	classroom_label.text = classroom
