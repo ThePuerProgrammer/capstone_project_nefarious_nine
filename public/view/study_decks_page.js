@@ -295,7 +295,7 @@ export async function buildStudyDecksPage(deckList) {
         Utilities.searchBox('Search Decks', 'input query');
     })
 
-}
+} //buildStudyDecksPage(deckList)
 
 export function buildDeckView(deck, flashcards) {
     let html = `
