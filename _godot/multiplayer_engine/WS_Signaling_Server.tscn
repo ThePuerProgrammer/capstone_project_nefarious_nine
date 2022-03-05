@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://multiplayer_engine/WS_Signaling_Server.gd" type="Script" id=1]
+[ext_resource path="res://authenticate_user/Authenticate_User.tscn" type="PackedScene" id=2]
+
+[node name="WS_Signaling_Server" type="Node"]
+script = ExtResource( 1 )
+
+[node name="Authenticate_User" parent="." instance=ExtResource( 2 )]
