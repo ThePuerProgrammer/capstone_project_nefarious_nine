@@ -278,7 +278,7 @@ function buildStudyFlashcardView(flashcard) {
 
   html += `<div class="study-flashcard-answer pomo-text-color-light">
     <label class="form-label">Answer</label>
-    <input type="answer" name="answer" class="form-control" required minlength="1" id="study-flashcard-answer" autofocus>
+    <input type="answer" name="answer" class="form-control" required minlength="1" id="study-flashcard-answer" autocomplete="off" autofocus>
     <br>`;
 
   html += `<button type="submit" class="btn btn-secondary pomo-bg-color-dark" style="float:right">Answer</button>

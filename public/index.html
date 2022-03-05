@@ -127,13 +127,13 @@
         <div class="modal-body pomo-bg-color-light pomo-text-color-dark">
           <form method="post" id="form-create-account">
             <div>
-              <input type="email" name="email" required placeholder="Email address">
+              <input type="email" name="email" required placeholder="Email address" autocomplete="off">
             </div>
             <div>
-              <input type="password" name="password" required minlength="6" placeholder="Password">
+              <input type="password" name="password" required minlength="6" placeholder="Password" autocomplete="off">
             </div>
             <div>
-              <input type="password" name="passwordConfirm" required minlength="6" placeholder="Confirm Password">
+              <input type="password" name="passwordConfirm" required minlength="6" placeholder="Confirm Password" autocomplete="off"> 
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button type="submit"
@@ -160,7 +160,7 @@
         <div class="modal-body pomo-bg-color-light pomo-text-color-dark">
           <form method="post" id="form-reset-password">
             <div>
-              <input type="email" name="email" required placeholder="email address">
+              <input type="email" name="email" required placeholder="email address" autocomplete="off">
             </div>
             <div>
               <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Reset</button>
@@ -177,7 +177,7 @@
     aria-labelledby="modal-edit-classroom-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
           <h5 class="modal-title pomo-text-color-light" id="modal-edit-classroom-label">Edit Classroom</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -187,12 +187,12 @@
             <div class="form-group">
               <label class="pomo-text-color-light" for="ename">Name</label>
               <input class="form-control form-control-lg" type="text" name="ename" placeholder="e.g. DSA Chapter 1"
-                required minlength="2" id="eclass-title">
+                required minlength="2" id="eclass-title" autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="esubject">Subject</label>
               <input class="form-control form-control-lg" type="text" name="esubject"
-                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="eclass-subject">
+                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="eclass-subject" autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="editClassCategory">Category</label>
@@ -267,12 +267,12 @@
             <div class="form-group">
               <label class="pomo-text-color-light" for="name">Name</label>
               <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
-                required minlength="2" id="deck-title">
+                required minlength="2" id="deck-title" autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
-                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="deck-subject">
+                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="deck-subject" autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="selectCategory">Category</label>
@@ -309,14 +309,14 @@
               <div id="form-edit-deck-name">
                 <label class="pomo-text-color-light" for="name">Name</label>
                 <input class="form-control form-control-lg" type="name" name="name" required minlength="2"
-                  id="deck-title-edit">
+                  id="deck-title-edit" autocomplete="off">
               </div>
               <br>
               <br>
               <div id="form-edit-deck-subject">
                 <label class="pomo-text-color-light" for="subject">Subject</label>
                 <input class="form-control form-control-lg" type="subject" name="subject" required minlength="2"
-                  id="deck-subject-edit">
+                  id="deck-subject-edit" autocomplete="off">
               </div>
               <br>
               <div id="form-edit-deck-category">
@@ -378,7 +378,7 @@
             <label for="form-question-text-input">Question:</label>
             <textarea name="question" id="form-question-text-input" class="form-control" rows="3" type="text"
               name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min
-              length="1"></textarea>
+              length="1" autocomplete="off"></textarea>
             <br />
             <div id="form-question-image-container" style="display: none;">
               <img id="form-add-image-to-flashcard-question-tag"
@@ -393,7 +393,7 @@
             <div id="form-answer-container">
               <label for="form-answer-text-input">Answer:</label>
               <textarea name="answer" id="form-answer-text-input" class="form-control" rows="3" type="text"
-                name="flashcard-answer" placeholder="At least 4." required min length="1"></textarea>
+                name="flashcard-answer" placeholder="At least 4." required min length="1" autocomplete="off"></textarea>
             </div>
             <br />
             <div id="form-answer-image-container" style="display: none;">
@@ -455,7 +455,7 @@
             <h3 style="text-align:center"><u>Question Side</u></h3>
             <div>
               Question: <textarea name="question" type="text" name="flashcard-question" class="form-control" required
-                min length="1"></textarea>
+                min length="1" autocomplete="off"></textarea>
             </div>
             <br />
             <div id="form-edit-flashcard-question-image-container">
@@ -468,7 +468,7 @@
             <h3 style="text-align:center"><u>Answer Side</u></h3>
             <div id="form-edit-answer-container">
               Answer: <textarea name="answer" id="form-answer-text-input-edit" type="text" name="flashcard-answer"
-                class="form-control" required minlength="1" maxlength="30">
+                class="form-control" required minlength="1" maxlength="30" autocomplete="off">
           </textarea>
             </div>
             <br />
@@ -529,8 +529,8 @@
   <div class="modal fade" id="create-classroom-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="create-classroom-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content pomo-bg-color-dark">
-        <div class="modal-header">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
           <h5 class="modal-title pomo-text-color-light" id="create-classroom-modal-label">Create A New Classroom</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -539,12 +539,12 @@
             <div class="form-group">
               <label class="pomo-text-color-light" for="name">Name</label>
               <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. CMSC 4433" required
-                minlength="2" id="class-title">
+                minlength="2" id="class-title" autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
-                placeholder="e.g. Software Design & Development" required minlength="2" id="class-subject">
+                placeholder="e.g. Software Design & Development" required minlength="2" id="class-subject" autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="selectClassCategory">Category</label>
@@ -554,7 +554,7 @@
             </div>
             <br>
             <br>
-            <button class="btn btn-secondary pomo-bg-color-md-dark" style="float:right" id="class-create-deck"
+            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-create-deck"
               type="submit">Create Classroom</button>
           </form>
         </div>
