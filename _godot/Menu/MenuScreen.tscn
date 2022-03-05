@@ -22,10 +22,10 @@ __meta__ = {
 [node name="Lobby_Scene_BG" parent="." instance=ExtResource( 9 )]
 
 [node name="SoundOffButton" type="Button" parent="."]
-margin_left = 65.0
-margin_top = 52.0
-margin_right = 101.0
-margin_bottom = 82.0
+margin_left = 1855.0
+margin_top = 26.0
+margin_right = 1891.0
+margin_bottom = 56.0
 action_mode = 0
 icon = ExtResource( 10 )
 __meta__ = {
