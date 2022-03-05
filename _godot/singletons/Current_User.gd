@@ -36,10 +36,10 @@ func _ready():
 	window = JavaScript.get_interface('window')
 	if window != null:
 		# Snag the user data from the window local storage and remove them
-		user_id = window.localStorage.getItem('userid')
-		user_email = window.localStorage.getItem('email')
-		window.localStorage.removeItem('userid')
-		window.localStorage.removeItem('email')
+		user_id = window.sessionStorage.getItem("userid")
+		user_email = window.sessionStorage.getItem("email")
+		window.sessionStorage.removeItem('userid')
+		window.sessionStorage.removeItem('email')
 
 # Create the user when the login fails
 func _on_login_failed(code, msg):

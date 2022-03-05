@@ -80,13 +80,20 @@ margin_bottom = 600.0
 size_flags_vertical = 3
 
 [node name="StartGameButton" type="Button" parent="CenterContainer/DisplayConnectedPanel/VBoxContainer/CenterContainer"]
-margin_left = 340.0
-margin_top = 79.0
-margin_right = 460.0
-margin_bottom = 119.0
-rect_min_size = Vector2( 120, 40 )
+margin_left = 310.0
+margin_top = 69.0
+margin_right = 490.0
+margin_bottom = 129.0
+rect_min_size = Vector2( 180, 60 )
 disabled = true
 text = "Start Game"
 icon = ExtResource( 3 )
+
+[node name="AcceptDialog" type="AcceptDialog" parent="CenterContainer"]
+margin_left = 824.0
+margin_top = 421.0
+margin_right = 1096.0
+margin_bottom = 479.0
+dialog_text = "Check back soon! We're working on this!"
 
 [connection signal="pressed" from="CenterContainer/DisplayConnectedPanel/VBoxContainer/CenterContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]

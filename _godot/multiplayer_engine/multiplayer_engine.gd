@@ -20,6 +20,8 @@ func _ready():
 	$FadeIn.show()
 	$FadeIn.fade_in()
 	
+	join_button.disabled = true
+	
 	# Max players drop down button items. Disable non numeric
 	maxPlayersOptionButton.add_item("Select Max")
 	maxPlayersOptionButton.add_item("2")
@@ -97,19 +99,21 @@ func _createLobby():
 		var lobby_id = doc_name.substr(index_of_last_fwd_slash + 1, doc_name.length())
 		LobbyDescription.set_lobby_id(lobby_id)
 		
-		CurrentUser.peer_id = _generate_peer_id()
+#		CurrentUser.peer_id = _generate_peer_id()
 		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
 			print('Could not change to the waiting for players screen')
 		
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
+	join_button.disabled = false
 
 func _on_classroom_selected(_index):
 	# Once the user selects a classroom, query for the classroom decks
 	pass
 
 func _on_RefreshButton_pressed():
-	_get_available_lobbies()		
+	_get_available_lobbies()
+	join_button.disabled = true
 
 func _get_available_lobbies():
 	# Remove existing lobby nodes so there aren't duplicates
@@ -163,6 +167,7 @@ func _get_available_lobbies():
 
 func _on_lobby_button_pressed(lobby_number):
 	selected_lobby = lobby_number
+	join_button.disabled = false	
 	if available_lobbies[lobby_number].password == '':
 		pword_input_line_edit.text = ''
 		pword_input_line_edit.editable = false
@@ -191,6 +196,7 @@ func _on_JoinButton_pressed():
 		var password = available_lobbies[selected_lobby].password
 		var classroom = available_lobbies[selected_lobby].classroom
 		var player_count = available_lobbies[selected_lobby].player_count
+		player_count[0] = String(player_count[0].to_int() + 1)
 		var chat_enabled = available_lobbies[selected_lobby].chat_enabled
 		
 		# This will be parsed for important information when the WS server gets to work
@@ -203,8 +209,10 @@ func _on_JoinButton_pressed():
 			'vote_enabled' : true
 		})
 		
+		FirebaseController.update_lobby(lobby_id, { 'player_count' : player_count })
+		
 		# Let's do this thing
-		CurrentUser.peer_id = _generate_peer_id()
+#		CurrentUser.peer_id = _generate_peer_id()
 		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
 			print('Could not change to the waiting for players screen')
 		
