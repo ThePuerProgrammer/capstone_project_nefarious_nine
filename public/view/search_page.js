@@ -98,11 +98,8 @@ export async function search_page(joinedSearchKeys, searchType) {
         default: Utilities.info('No search type detected');
 
     }
-}//END search_page() CONSTRUCTION =======================================================//
+}//END SEARCH_PAGE() CONSTRUCTION =======================================================//
 //=======================================================================================//
-
-
-
 
 export function cleanDataToKeywords(name, subject, category) { //for decks and classrooms
     const nameArray = name.toLowerCase(). match(/\S+/g);
@@ -119,11 +116,6 @@ export function cleanDataToKeywords(name, subject, category) { //for decks and c
 export function setSearchType(searchType) {
     Elements.searchBoxType.value = searchType;
 }
-
-export function setClassroomSearchOption(option) {
-    classSearchOption = option;
-}
-
 
 export async function searchDecks(searchKeysArray) {
     let deckList;
@@ -142,8 +134,9 @@ export async function searchDecks(searchKeysArray) {
 
 
 //CLASSROOMS ==============================================================================//
-//                                                                                        //
+//  All classrooms, the user's classrooms, classrooms the user isn't in                   //
 //=======================================================================================//
+
 
 export async function searchAllClassrooms(searchKeysArray) {
 
@@ -156,42 +149,37 @@ export async function searchAllClassrooms(searchKeysArray) {
         return;
     }
     return classroomList;
-
 }
 
 export async function searchMyClassrooms(searchKeysArray) {
-    let classroomList;
-    
+
+    let classroomList;    
     try {
-
         classroomList = await FirebaseController.searchMyClassrooms(currentUser.email, searchKeysArray);
-
     } catch (e) {
         if (Constants.DEV) console.log(e);
         Utilities.info('There was an error with the Search', JSON.stringify(e));
         return;
     }
     return classroomList;
-
 }
 
 export async function searchNotMyClassrooms(searchKeysArray) { 
-
-    let classroomList;
-    
+    let classroomList;    
     try {
-
-        classroomList = await FirebaseController.searchNotMyClassrooms(currentUser.email, searchKeysArray);
-    
+        classroomList = await FirebaseController.searchNotMyClassrooms(currentUser.email, searchKeysArray);    
     } catch (e) {
         if (Constants.DEV) console.log(e);
         Utilities.info('There was an error with the Search', JSON.stringify(e));
         return;
-    }
-    
+    }    
     return classroomList;
-
 }
+
+export function setClassroomSearchOption(option) {
+    classSearchOption = option;
+}
+
 
 function buildClassRoomSearchPage(classroomList, searchKeysArray) {
     
