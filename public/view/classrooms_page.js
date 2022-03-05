@@ -73,7 +73,7 @@ export async function classrooms_page() {
     <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>
     `;
 
-    html += `<div style="float:right">
+    html += `<div style=":right">
     <label for="sort-classrooms">Order by:</label>
     <select name="sort-classrooms" id="sort-classrooms" style="width: 200px">
         <option selected disabled>Sort classrooms by...</option>

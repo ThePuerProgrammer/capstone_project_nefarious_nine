@@ -7,7 +7,7 @@ import { currentUser } from '../controller/firebase_auth.js';
 import { buildDeckView, buildStudyDecksPage } from './study_decks_page.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
 //import * as Auth from '../controller/firebase_auth.js';
-import  { buildAvailableClassroom } from './classrooms_page.js';
+import  { buildAvailableClassroom, classrooms_page } from './classrooms_page.js';
 
 let searchType;
 let searchKeysInfo;
@@ -194,12 +194,15 @@ export async function searchNotMyClassrooms(searchKeysArray) {
 }
 
 function buildClassRoomSearchPage(classroomList, searchKeysArray) {
-    //const joinedSearchKeys = searchKeysArray.join(',');
+    
     const queryPrint = searchKeysArray.join(',');            
 
     //Clears all HTML so it doesn't double
     let html = ''
     html += `<h1> Searched Classes, in ${classSearchOption}, looking for "${queryPrint}":
+    <br>
+    <button id="search-reset-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px; float: right"><i class="fa fa-search"></i>Reset Search</button></h1>
+
     </h1> `
     ;
     html += ` <table id="available-classrooms-table" class="table">
@@ -228,6 +231,12 @@ function buildClassRoomSearchPage(classroomList, searchKeysArray) {
     })
     html += `</tbody></table></div>`;
     Elements.root.innerHTML += html;
+
+    const searchResetbutton = document.getElementById('search-reset-button');
+    searchResetbutton.addEventListener('click', async e => {
+        e.preventDefault();
+        await classrooms_page();
+    });
 }
 // END OF CLASSROOMS SEARCH================================================================//
 //                                                                                        //
