@@ -28,15 +28,15 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=8]
 shader = SubResource( 7 )
 shader_param/tiled_factor = Vector2( 1, 1 )
-shader_param/aspect_ratio = 0.470313
+shader_param/aspect_ratio = 0.480769
 shader_param/wave_height = 0.04
 shader_param/wave_width_factor = Vector2( 5, 1 )
 shader_param/wave_speed_factor = 0.2
 
 [node name="Lobby_Scene_BG" type="Sprite"]
 material = SubResource( 8 )
-position = Vector2( 961, 451.5 )
-scale = Vector2( 1.875, 0.881836 )
+position = Vector2( 963, 462.5 )
+scale = Vector2( 1.87891, 0.90332 )
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
 

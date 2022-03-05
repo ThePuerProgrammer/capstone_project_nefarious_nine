@@ -74,6 +74,10 @@ func _on_data(id):
 			var data = pkt.get_string_from_utf8()
 			
 			if _active_lobbies.has(data):
+				for player in _active_lobbies[data]['queued_players']:
+					var message = Message.new()
+					message.content = "joining"
+					_server.get_peer(player).put_packet(message.get_raw())
 				_active_lobbies[data]['queued_players'].append(id)
 				_active_lobbies[data]['connected_players'][id] = []
 			else:
