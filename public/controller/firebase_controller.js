@@ -844,56 +844,46 @@ export async function returnMyClassroomsDocId(email) {
 
 export async function searchMyClassrooms(email, keywordsArray) {
     let myClassroomList = []
-    let snapShot;
     const classroomDocIds = await returnMyClassroomsDocId(email);
-    for (const docId of classroomDocIds) {
-        snapShot = await firebase.firestore()
+    
+        const snapShot = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
-        .doc(docId)
         .where('keywords', 'array-contains-any', keywordsArray)
         .get();
-    snapShot.forEach(doc => {
-        const t = new Classroom(doc.data());
-        t.set_docID(doc.id);
-        myClassroomList.push(t)
-    });
-    }
-    
+            
+        for (const docId of classroomDocIds) {
+                snapShot.forEach(doc => {                    
+                    if (doc.id == docId) {       
+                        const t = new Classroom(doc.data());                 
+                        t.set_docID(doc.id);
+                        myClassroomList.push(t)
+                    };                    
+                });
+        }
     return myClassroomList;    
 }
 
-export async function returnNotMyClassrooms(email) {
-    const notMyClassroomDocIdList = []
-    const snapShot = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .where('members', '!array-contains', email) //don't think this works
-        .get();
-    snapShot.forEach(doc => {
-        const t = new Classroom(doc.data());
-        t.set_docID(doc.id);
-        classroomList.push(t)
-    });
-    return notMyClassroomDocIdList;
-}
+export async function searchNotMyClassrooms(email, keywordsArray) {
 
-export async function searchNotMyClassrooms(classroomList, keywordsArray) {
-    let myClassroomList = []
-    let snapShot;
-    const classroomDocIds = await returnNotMyClassroomsDocId(email);
-    for (const docId of classroomDocIds) {
-        snapShot = await firebase.firestore()
+    let classroomList = []
+    const classroomDocIds = await returnMyClassroomsDocId(email);
+    
+        const snapShot = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
-        .doc(docId)
         .where('keywords', 'array-contains-any', keywordsArray)
         .get();
-    snapShot.forEach(doc => {
-        const t = new Classroom(doc.data());
-        t.set_docID(doc.id);
-        myClassroomList.push(t)
-    });
-    }
-    
-    return myClassroomList;    
+            
+        
+        for (const docId of classroomDocIds) {
+            snapShot.forEach(doc => {                    
+                if (doc.id != docId) {       
+                    const t = new Classroom(doc.data());                 
+                    t.set_docID(doc.id);
+                    classroomList.push(t)
+                };                    
+            });
+    }        
+    return classroomList;
 }
 
 //============================================================================//

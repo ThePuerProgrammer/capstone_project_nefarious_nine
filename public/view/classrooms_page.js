@@ -481,13 +481,13 @@ export async function classrooms_page() {
         const searchtype = 'classroomSearch';
         setSearchType(searchtype);     
         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
-            setClassroomSearchOption("allRooms");
+            setClassroomSearchOption("all rooms");
         }
         else if (checkBoxNotMyClassrooms.checked == true){
-            setClassroomSearchOption("notMyRooms");  
+            setClassroomSearchOption("not my rooms");  
         } 
         else if (checkBoxMyClassrooms.checked == true) {
-            setClassroomSearchOption("myRooms"); 
+            setClassroomSearchOption("my rooms"); 
         } 
         else setClassroomSearchOption("null"); 
     
@@ -497,11 +497,11 @@ export async function classrooms_page() {
     
     checkBoxMyClassrooms.addEventListener('change', async e => {     
          if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
-            setClassroomSearchOption("allRooms");
+            setClassroomSearchOption("all rooms");
          }
         
         else if (checkBoxMyClassrooms.checked == true){
-            setClassroomSearchOption("myRooms"); 
+            setClassroomSearchOption("my rooms"); 
         }    else {
             setClassroomSearchOption("null"); 
         }        
@@ -510,10 +510,10 @@ export async function classrooms_page() {
     
     checkBoxNotMyClassrooms.addEventListener('change', async e => {        
          if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
-             setClassroomSearchOption("allRooms");
+             setClassroomSearchOption("all rooms");
          }
          else if (checkBoxNotMyClassrooms.checked == true){
-             setClassroomSearchOption("notMyRooms");  
+             setClassroomSearchOption("not my rooms");  
          } else return;
     });       
     // END SEARCH CLASSROOMS LISTENERS------------------------------------------------//

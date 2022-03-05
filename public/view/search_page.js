@@ -76,21 +76,22 @@ export async function search_page(joinedSearchKeys, searchType) {
             break;
 
         case 'classroomSearch':
-            if(classSearchOption == "allRooms") {
+            if(classSearchOption == "all rooms") { //all the classrooms
                 const classroomList = await searchAllClassrooms(searchKeysArray);               
-                buildClassRoomSearchPage(classroomList);
+                buildClassRoomSearchPage(classroomList, searchKeysArray);
                 Utilities.info('You searched for', `${searchKeysInfo}`)
 
-            } else if (classSearchOption == "myRooms") {
-                const classroomList = await searchMyClassrooms(searchKeysArray);               
-                buildClassRoomSearchPage(classroomList);
+            } 
+            else if (classSearchOption == "my rooms") { //only the user's classrooms
+                const classroomList = await searchMyClassrooms(searchKeysArray);   
+                buildClassRoomSearchPage(classroomList, searchKeysArray);
                 Utilities.info('You searched for', `${searchKeysInfo}`)
             }
-            // } else if (classSearchOption == "notMyRooms") {
-            //     const classroomList = await searchNotMyClassrooms(searchKeysArray);  
-            //     buildClassRoomSearchPage(classroomList);
-            //     Utilities.info('You searched for', `${searchKeysInfo}`)
-            // }
+             else if (classSearchOption == "not my rooms") { //excluding the user's classrooms
+                const classroomList = await searchNotMyClassrooms(searchKeysArray);  
+                buildClassRoomSearchPage(classroomList, searchKeysArray);
+                Utilities.info('You searched for', `${searchKeysInfo}`)
+            }
             else console.log("nuttin");
             break;
 
@@ -159,7 +160,6 @@ export async function searchAllClassrooms(searchKeysArray) {
 }
 
 export async function searchMyClassrooms(searchKeysArray) {
-    let tempClassroomList;
     let classroomList;
     
     try {
@@ -175,9 +175,10 @@ export async function searchMyClassrooms(searchKeysArray) {
 
 }
 
-export async function searchNotMyClassrooms(searchKeysArray) {
+export async function searchNotMyClassrooms(searchKeysArray) { 
 
     let classroomList;
+    
     try {
 
         classroomList = await FirebaseController.searchNotMyClassrooms(currentUser.email, searchKeysArray);
@@ -187,14 +188,18 @@ export async function searchNotMyClassrooms(searchKeysArray) {
         Utilities.info('There was an error with the Search', JSON.stringify(e));
         return;
     }
+    
     return classroomList;
 
 }
 
-function buildClassRoomSearchPage(classroomList) {
+function buildClassRoomSearchPage(classroomList, searchKeysArray) {
+    //const joinedSearchKeys = searchKeysArray.join(',');
+    const queryPrint = searchKeysArray.join(',');            
+
     //Clears all HTML so it doesn't double
     let html = ''
-    html += `<h1> Searched Classes:
+    html += `<h1> Searched Classes, in ${classSearchOption}, looking for "${queryPrint}":
     </h1> `
     ;
     html += ` <table id="available-classrooms-table" class="table">
