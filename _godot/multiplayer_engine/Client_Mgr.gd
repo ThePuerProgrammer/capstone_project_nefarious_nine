@@ -19,16 +19,19 @@ var uri : String
 
 signal on_message(message)
 signal on_players_ready()
+signal player_disconnected()
 
 signal connected_to_ws_server
 
 func send_data(message : Message):
 	if (players_ready):
-		_rtc.rtc_mp.put_packet(message.get_raw())
+		if _rtc.rtc_mp.put_packet(message.get_raw()) != OK:
+			print("Error: put_packet() Client_Mgr line 27")
 		if message.is_echo:
 			emit_signal("on_message", message)
 	else:
-		_client.get_peer(1).put_packet(message.get_raw())
+		if _client.get_peer(1).put_packet(message.get_raw()) != OK:
+			print("Error: put_packet() Client_Mgr line 32")
 
 func connect_to_server():
 	uri = "ws://" + Constants.WEB_SOCKET_URL + ":" + str(Constants.SERVER_PORT)
@@ -42,16 +45,21 @@ func connect_to_server():
 	_client = WebSocketClient.new()
 	_initialised = false
 
-	_client.connect("connection_closed", self, "_closed")
-	_client.connect("connection_error", self, "_closed")
-	_client.connect("connection_established", self, "_connected")
-	_client.connect("data_received", self, "_on_data")
+	var e = OK
+	e += _client.connect("connection_closed", 		self, "_closed")
+	e += _client.connect("connection_error", 		self, "_closed")
+	e += _client.connect("connection_established", 	self, "_connected")
+	e += _client.connect("data_received", 			self, "_on_data")
 	
 	add_child(_rtc)
-	_rtc.connect("on_message", self, "rtc_on_message")
-	_rtc.connect("on_send_message", self, "rtc_on_send_message")
-	_rtc.connect("peer_connected", self, "rtc_on_peer_connected")
-
+	e += _rtc.connect("on_message", 		self, "rtc_on_message")
+	e += _rtc.connect("on_send_message", 	self, "rtc_on_send_message")
+	e += _rtc.connect("peer_connected", 	self, "rtc_on_peer_connected")
+	e += _rtc.connect("peer_disconnected", 	self, "rtc_on_peer_disconnected")
+	
+	if e != OK:
+		print('Error connecting signals in Client Mgr')
+	
 	var err = _client.connect_to_url(uri)
 	if err != OK:
 		set_process(false)
@@ -64,6 +72,12 @@ func rtc_on_peer_connected(id):
 			return
 	players_ready = true
 	emit_signal("on_players_ready")
+	
+func rtc_on_peer_disconnected(id):
+	_rtc_peers[id] = false
+	
+	players_ready = false
+	emit_signal("player_disconnected")
 
 func rtc_on_message(message : Message):
 	emit_signal("on_message", message)
@@ -78,8 +92,9 @@ func _closed(was_clean = false):
 	print("Closed, clean: ", was_clean)
 	set_process(false)
 
-func _connected(proto = ""):
-	_client.get_peer(1).put_packet(LobbyDescription._lobby_id.to_utf8())
+func _connected(_proto = ""):
+	if _client.get_peer(1).put_packet(LobbyDescription._lobby_id.to_utf8()) != OK:
+		print("Error: put_packet() Client_Mgr line 88")
 	emit_signal('connected_to_ws_server')
 	print("Connected to server!")
 
@@ -109,7 +124,7 @@ func _on_data():
 	
 	emit_signal("on_message", message)
 
-func _process(delta):
+func _process(_delta):
 	if (_client != null): _client.poll()
 
 func _notification(what):

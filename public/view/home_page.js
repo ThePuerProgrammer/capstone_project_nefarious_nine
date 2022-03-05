@@ -15,8 +15,8 @@ export function addEventListeners() {
 export async function home_page() {
     Elements.root.innerHTML = ``;
     let html = '';
+    // html += `<body overflow-x: hidden>`
     html += `
-    <body overflow-x: hidden>
     <div style="text-align: center; padding-top: 2%;">
         <h1 class="pomo-text-color-dark pomo-font-weight-bold"> Welcome to Pomobyte! </h1>
         <p class="pomo-text-color-md"> Help Tip: Start your experience by joining a classroom or creating a study deck!<p>
@@ -25,7 +25,7 @@ export async function home_page() {
 
     //Card Display
     html += `
-    <div class="row" style="justify-content: space-evenly; padding-top: 2%;">
+    <div class="row" style="justify-content: space-evenly; max-width: 100%; padding-top: 2%;">
         <div class="card raise pomo-bg-color-md-dark" style="width: 30rem; height: 35rem;">
             <div class="card-body">
                 <h5 class="card-title pomo-font-weight-bold">Study Progress</h5>
@@ -49,8 +49,8 @@ export async function home_page() {
     </div>
     `;
 
-    html += `</body>`
-    Elements.root.innerHTML += html;
+    // html += `</body>`
+    Elements.root.innerHTML = html;
 
     const miniGamesPage = document.getElementById(
         Constant.htmlIDs.miniGamesPage
