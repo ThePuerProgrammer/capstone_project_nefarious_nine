@@ -4,6 +4,7 @@ var _scene_path_to_load
 
 onready var player = get_node("/root/MenuMusic/AudioStreamPlayer")
 onready var auth = get_node("MenuContainer/Authenticate_User")
+onready var music_on = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -44,3 +45,12 @@ func _on_FadeIn_fade_in_finished():
 func _on_MusicStartTimer_timeout():
 	if !player.playing:
 		player.play()
+
+
+func _on_SoundOffButton_pressed():
+	if music_on:
+		music_on = false
+		player.volume_db = -80
+	else:
+		music_on = true
+		player.volume_db = -15
