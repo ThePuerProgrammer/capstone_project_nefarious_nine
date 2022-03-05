@@ -6,13 +6,15 @@ import * as Constants from '../model/constant.js';
 import { currentUser } from '../controller/firebase_auth.js';
 import { buildDeckView, buildStudyDecksPage } from './study_decks_page.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
-import * as Auth from '../controller/firebase_auth.js';
+//import * as Auth from '../controller/firebase_auth.js';
 import  { buildAvailableClassroom } from './classrooms_page.js';
 
 let searchType;
 let searchKeysInfo;
 let classSearchOption;
 
+//SEARCH PAGE EVENT LISTENERS ===========================================================//
+//=======================================================================================//
 
 export function addEventListeners() {
 
@@ -40,6 +42,10 @@ export function addEventListeners() {
     });
     
 }
+
+//END SEARCH PAGE EVENT LISTENERS ========================================================//
+//=======================================================================================//
+
 
 export async function search_page(joinedSearchKeys, searchType) {    
 
@@ -76,18 +82,38 @@ export async function search_page(joinedSearchKeys, searchType) {
                 Utilities.info('You searched for', `${searchKeysInfo}`)
 
             } else if (classSearchOption == "myRooms") {
-                console.log('box 2 checked');
-
-            } else if (classSearchOption == "notMyRooms") {
-                console.log('exclude search goes here');
+                const classroomList = await searchMyClassrooms(searchKeysArray);               
+                buildClassRoomSearchPage(classroomList);
+                Utilities.info('You searched for', `${searchKeysInfo}`)
             }
+            // } else if (classSearchOption == "notMyRooms") {
+            //     const classroomList = await searchNotMyClassrooms(searchKeysArray);  
+            //     buildClassRoomSearchPage(classroomList);
+            //     Utilities.info('You searched for', `${searchKeysInfo}`)
+            // }
             else console.log("nuttin");
             break;
 
         default: Utilities.info('No search type detected');
 
     }
-}//END search_page()
+}//END search_page() CONSTRUCTION =======================================================//
+//=======================================================================================//
+
+
+
+
+export function cleanDataToKeywords(name, subject, category) { //for decks and classrooms
+    const nameArray = name.toLowerCase(). match(/\S+/g);
+    const subjectArray = subject.toLowerCase(). match(/\S+/g);
+    const categoryArray = category.toLowerCase(). match(/\S+/g);
+    const mergedArray = nameArray.concat(subjectArray, categoryArray);
+    return mergedArray;
+}
+
+//DECK SEARCH==============================================================================//
+//                                                                                        //
+//=======================================================================================//
 
 export function setSearchType(searchType) {
     Elements.searchBoxType.value = searchType;
@@ -97,18 +123,11 @@ export function setClassroomSearchOption(option) {
     classSearchOption = option;
 }
 
-export function cleanDataToKeywords(name, subject, category) { //for decks and classrooms
-    const nameArray = name.toLowerCase(). match(/\S+/g);
-    const subjectArray = subject.toLowerCase(). match(/\S+/g);
-    const categoryArray = category.toLowerCase(). match(/\S+/g);
-    const mergedArray = nameArray.concat(subjectArray, categoryArray);
-    return mergedArray;
-}
-//DECKS
+
 export async function searchDecks(searchKeysArray) {
     let deckList;
     try {
-        deckList = await FirebaseController.searchDecks(currentUser.uid, searchKeysArray);
+        deckList = await FirebaseController.searchDecks(currentUser.email, searchKeysArray);
     } catch (e) {
         if (Constants.DEV) console.log(e);
         Utilities.info('There was an error with the Search', JSON.stringify(e));
@@ -116,8 +135,17 @@ export async function searchDecks(searchKeysArray) {
     }
     return deckList;
 }
-//CLASSROOMS
+// END OF DECK SEARCH=====================================================================//
+//=======================================================================================//
+
+
+
+//CLASSROOMS ==============================================================================//
+//                                                                                        //
+//=======================================================================================//
+
 export async function searchAllClassrooms(searchKeysArray) {
+
     let classroomList;
     try {
         classroomList = await FirebaseController.searchAllClassrooms(searchKeysArray);
@@ -127,6 +155,40 @@ export async function searchAllClassrooms(searchKeysArray) {
         return;
     }
     return classroomList;
+
+}
+
+export async function searchMyClassrooms(searchKeysArray) {
+    let tempClassroomList;
+    let classroomList;
+    
+    try {
+
+        classroomList = await FirebaseController.searchMyClassrooms(currentUser.email, searchKeysArray);
+
+    } catch (e) {
+        if (Constants.DEV) console.log(e);
+        Utilities.info('There was an error with the Search', JSON.stringify(e));
+        return;
+    }
+    return classroomList;
+
+}
+
+export async function searchNotMyClassrooms(searchKeysArray) {
+
+    let classroomList;
+    try {
+
+        classroomList = await FirebaseController.searchNotMyClassrooms(currentUser.email, searchKeysArray);
+    
+    } catch (e) {
+        if (Constants.DEV) console.log(e);
+        Utilities.info('There was an error with the Search', JSON.stringify(e));
+        return;
+    }
+    return classroomList;
+
 }
 
 function buildClassRoomSearchPage(classroomList) {
@@ -152,9 +214,9 @@ function buildClassRoomSearchPage(classroomList) {
     if (classroomList.length == 0) {
         html += '<p>No classrooms found!</p>';
     } 
-    
+
     classroomList.forEach(ac => {
-        if (!ac.banlist.includes(Auth.currentUser.email)) {
+        if (!ac.banlist.includes(currentUser.email)) {
             html += `
                 <tr>${buildAvailableClassroom(ac)}</tr>`;
         }
@@ -162,3 +224,7 @@ function buildClassRoomSearchPage(classroomList) {
     html += `</tbody></table></div>`;
     Elements.root.innerHTML += html;
 }
+// END OF CLASSROOMS SEARCH================================================================//
+//                                                                                        //
+//=======================================================================================//
+
