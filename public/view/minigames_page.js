@@ -8,8 +8,8 @@ export async function minigames_page() {
     /* Roloading the page causes an error here. 
      * I'm not sure exactly why, but this becomes null. 
      * Perhaps it just happens too fast? Robust testing needed. */
-    window.localStorage.setItem('userid', Auth.currentUser.uid)
-    window.localStorage.setItem('email', Auth.currentUser.email)
+    window.sessionStorage.setItem('userid', Auth.currentUser.uid)
+    window.sessionStorage.setItem('email', Auth.currentUser.email)
     Elements.root.innerHTML = `
         <div id="pomogame-iframe-container">
             <iframe src="../gd_exports/pomogame.html" id="pomogame-iframe"></iframe>

@@ -8,17 +8,18 @@ class_name WebRTC_Client
 signal on_send_message(message)
 signal on_message(message)
 signal peer_connected(id)
+signal peer_disconnected(id)
 
 var _my_id
 
 onready var rtc_mp : WebRTCMultiplayer = WebRTCMultiplayer.new()
 
 func _ready():
-	rtc_mp.connect("connection_failed", self, "_on_connection_failed")
-	rtc_mp.connect("connection_succeeded", self, "_on_connection_succeeded")
-	rtc_mp.connect("peer_connected", self, "_on_peer_connected")
-	rtc_mp.connect("peer_disconnected", self, "_on_peer_disconnected")
-	rtc_mp.connect("server_disconnected", self, "_on_server_disconnected")
+	rtc_mp.connect("connection_failed", 	self, "_on_connection_failed")
+	rtc_mp.connect("connection_succeeded", 	self, "_on_connection_succeeded")
+	rtc_mp.connect("peer_connected", 		self, "_on_peer_connected")
+	rtc_mp.connect("peer_disconnected", 	self, "_on_peer_disconnected")
+	rtc_mp.connect("server_disconnected", 	self, "_on_server_disconnected")
 
 func initialize(id):
 	_my_id = id
@@ -32,10 +33,12 @@ func _process(delta):
 		message.from_raw(data)
 		emit_signal("on_message", message)
 
-func _on_connection_failed():
+#init to server_compatability = false, never emitted
+func _on_connection_failed(): 
 	print("RTC _on_connection_failed")
 
-func _on_connection_succeeded():
+#init to server_compatability = false, never emitted
+func _on_connection_succeeded(): 
 	print("RTC _on_connection_succeeded")
 
 func _on_peer_connected(id):
@@ -43,6 +46,7 @@ func _on_peer_connected(id):
 	emit_signal("peer_connected", id)
 
 func _on_peer_disconnected(id):
+	emit_signal('peer_disconnected', id)
 	print("RTC _on_peer_disconnected")
 
 func _on_server_disconnected():

@@ -20,6 +20,8 @@ func _ready():
 	$FadeIn.show()
 	$FadeIn.fade_in()
 	
+	join_button.disabled = true
+	
 	# Max players drop down button items. Disable non numeric
 	maxPlayersOptionButton.add_item("Select Max")
 	maxPlayersOptionButton.add_item("2")
@@ -103,13 +105,15 @@ func _createLobby():
 		
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
+	join_button.disabled = false
 
 func _on_classroom_selected(_index):
 	# Once the user selects a classroom, query for the classroom decks
 	pass
 
 func _on_RefreshButton_pressed():
-	_get_available_lobbies()		
+	_get_available_lobbies()
+	join_button.disabled = true
 
 func _get_available_lobbies():
 	# Remove existing lobby nodes so there aren't duplicates
@@ -163,6 +167,7 @@ func _get_available_lobbies():
 
 func _on_lobby_button_pressed(lobby_number):
 	selected_lobby = lobby_number
+	join_button.disabled = false	
 	if available_lobbies[lobby_number].password == '':
 		pword_input_line_edit.text = ''
 		pword_input_line_edit.editable = false
