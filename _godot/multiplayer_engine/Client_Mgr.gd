@@ -20,6 +20,7 @@ var uri : String
 signal on_message(message)
 signal on_players_ready()
 signal player_disconnected()
+signal player_joining_game()
 
 signal connected_to_ws_server
 
@@ -119,6 +120,8 @@ func _on_data():
 				_rtc_peers[player_id] = false
 				_rtc.create_peer(player_id)
 	else:
+		if String(message.content) == "joining":
+			emit_signal("player_joining_game")
 		print("On message: ", message.content)
 		_rtc.on_received_setup_message(message)
 	

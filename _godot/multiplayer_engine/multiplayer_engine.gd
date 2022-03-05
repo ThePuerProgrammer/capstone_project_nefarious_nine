@@ -99,7 +99,7 @@ func _createLobby():
 		var lobby_id = doc_name.substr(index_of_last_fwd_slash + 1, doc_name.length())
 		LobbyDescription.set_lobby_id(lobby_id)
 		
-		CurrentUser.peer_id = _generate_peer_id()
+#		CurrentUser.peer_id = _generate_peer_id()
 		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
 			print('Could not change to the waiting for players screen')
 		
@@ -196,6 +196,7 @@ func _on_JoinButton_pressed():
 		var password = available_lobbies[selected_lobby].password
 		var classroom = available_lobbies[selected_lobby].classroom
 		var player_count = available_lobbies[selected_lobby].player_count
+		player_count[0] = String(player_count[0].to_int() + 1)
 		var chat_enabled = available_lobbies[selected_lobby].chat_enabled
 		
 		# This will be parsed for important information when the WS server gets to work
@@ -208,8 +209,10 @@ func _on_JoinButton_pressed():
 			'vote_enabled' : true
 		})
 		
+		FirebaseController.update_lobby(lobby_id, { 'player_count' : player_count })
+		
 		# Let's do this thing
-		CurrentUser.peer_id = _generate_peer_id()
+#		CurrentUser.peer_id = _generate_peer_id()
 		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
 			print('Could not change to the waiting for players screen')
 		

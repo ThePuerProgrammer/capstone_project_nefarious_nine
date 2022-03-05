@@ -4,12 +4,14 @@ onready var waiting_players_label = $CenterContainer/DisplayConnectedPanel/VBoxC
 onready var joined_players_label  = $CenterContainer/DisplayConnectedPanel/VBoxContainer/JoinedPlayersLabel
 onready var start_game_button 	  = $CenterContainer/DisplayConnectedPanel/VBoxContainer/CenterContainer/StartGameButton
 onready var this_user_is_host = LobbyDescription._host_name == CurrentUser.user_email
+onready var num_of_players =  LobbyDescription._max_players - LobbyDescription._num_of_players
 
 func _ready():
 	var e = OK
 	e += $Client_Mgr.connect("connected_to_ws_server", 	self, '_on_ws_connect')
 	e += $Client_Mgr.connect('on_players_ready', 		self, '_on_game_start')
 	e += $Client_Mgr.connect("player_disconnected",		self, '_on_player_disconnected')
+	e += $Client_Mgr.connect("player_joining_game",		self, '_on_player_joining_game')
 	
 	if e != OK:
 		print("Could not connect signals in waiting screen")
@@ -25,7 +27,6 @@ func _on_StartGameButton_pressed():
 
 func _on_ws_connect():
 	var msg_connect = "Connected!\n Waiting for "
-	var num_of_players =  LobbyDescription._max_players - LobbyDescription._num_of_players
 	msg_connect += String(num_of_players)
 	msg_connect += " more players to join the game" if num_of_players > 1 else " more player to start the game"
 	waiting_players_label.text = msg_connect
@@ -46,3 +47,10 @@ func _on_player_disconnected():
 		start_game_button.disabled = true
 	else:
 		joined_players_label.text = 'Cannot continue. Host must recreate the lobby.'
+
+func _on_player_joining_game():
+	num_of_players -= 1
+	var msg_connect = "Connected!\n Waiting for "
+	msg_connect += String(num_of_players)
+	msg_connect += " more players to join the game" if num_of_players > 1 else " more player to start the game"
+	waiting_players_label.text = msg_connect
