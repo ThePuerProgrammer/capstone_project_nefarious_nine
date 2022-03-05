@@ -15,7 +15,6 @@ export function addEventListeners() {
 export async function home_page() {
     Elements.root.innerHTML = ``;
     let html = '';
-    // html += `<body overflow-x: hidden>`
     html += `
     <div style="text-align: center; padding-top: 2%;">
         <h1 class="pomo-text-color-dark pomo-font-weight-bold"> Welcome to Pomobyte! </h1>
@@ -49,7 +48,6 @@ export async function home_page() {
     </div>
     `;
 
-    // html += `</body>`
     Elements.root.innerHTML = html;
 
     const miniGamesPage = document.getElementById(
