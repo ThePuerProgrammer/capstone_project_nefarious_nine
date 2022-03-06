@@ -120,7 +120,7 @@ export function setSearchType(searchType) {
 export async function searchDecks(searchKeysArray) {
     let deckList;
     try {
-        deckList = await FirebaseController.searchDecks(currentUser.email, searchKeysArray);
+        deckList = await FirebaseController.searchDecks(currentUser.uid, searchKeysArray);
     } catch (e) {
         if (Constants.DEV) console.log(e);
         Utilities.info('There was an error with the Search', JSON.stringify(e));

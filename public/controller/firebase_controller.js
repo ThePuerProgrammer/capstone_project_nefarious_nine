@@ -811,7 +811,7 @@ export async function searchDecks(uid, keywordsArray) {
         const t = new Deck(doc.data());
         t.set_docID(doc.id);
         deckList.push(t)
-    })
+    });
     return deckList;
 }
 
@@ -825,7 +825,7 @@ export async function searchAllClassrooms(keywordsArray) {
     snapShot.forEach(doc => {
         const t = new Classroom(doc.data());
         t.set_docID(doc.id);
-        classroomList.push(t)
+        classroomList.push(t);
     });
     return classroomList;
 }
@@ -837,7 +837,7 @@ export async function returnMyClassroomsDocId(email) {
         .where('members', 'array-contains', email)
         .get();
     snapShot.forEach(doc => {
-        myClassroomDocIdList.push(doc.id)
+        myClassroomDocIdList.push(doc.id);
     });
     return myClassroomDocIdList;
 }
@@ -856,7 +856,7 @@ export async function searchMyClassrooms(email, keywordsArray) {
                     if (doc.id == docId) {       
                         const t = new Classroom(doc.data());                 
                         t.set_docID(doc.id);
-                        myClassroomList.push(t)
+                        myClassroomList.push(t);
                     };                    
                 });
         }
