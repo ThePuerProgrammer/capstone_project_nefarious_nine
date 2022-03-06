@@ -18,3 +18,9 @@ func _on_FadeIn_fade_in_finished():
 
 func _on_DungeonFightTemporaryNavigation_pressed():
 	get_tree().change_scene('res://dungeon_fight/dungeon_fight.tscn')
+
+
+func _on_PomoBlast_pressed():
+	get_tree().change_scene('res://PomoBlast/PomoBlast.tscn')
+	
+	pass # Replace with function body.

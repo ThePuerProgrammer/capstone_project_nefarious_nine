@@ -6,9 +6,9 @@
 
 [node name="Center" parent="Container" index="0"]
 margin_left = 429.0
-margin_top = 370.0
+margin_top = 351.0
 margin_right = 1491.0
-margin_bottom = 529.0
+margin_bottom = 549.0
 
 [node name="Label" parent="Container/Center" index="0"]
 margin_right = 1062.0
@@ -27,3 +27,8 @@ margin_bottom = 120.0
 margin_top = 135.0
 margin_right = 1062.0
 margin_bottom = 159.0
+
+[node name="PomoBlast" parent="Container/Center" index="3"]
+margin_top = 174.0
+margin_right = 1062.0
+margin_bottom = 198.0
