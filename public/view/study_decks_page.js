@@ -144,6 +144,7 @@ export async function buildStudyDecksPage(deckList) {
             //prevents refresh on submit of form
             e.preventDefault();          
             await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
+            await study_decks_page();
         });
     }
     const deleteDeckForms = document.getElementsByClassName('form-delete-deck');

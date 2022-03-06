@@ -308,7 +308,7 @@ export async function classrooms_page() {
                     confirmation.addEventListener("click", async e => {
                         console.log('ALSO HERE');
                         await FirebaseController.leaveClassroom(classId, userEmail);
-                        availableClassroomButton.click();
+                        classrooms_page();
                     });
 
                 });

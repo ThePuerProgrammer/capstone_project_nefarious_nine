@@ -189,6 +189,8 @@ export function addEventListeners(){
             }
             //Update Firestore
             await FirebaseController.updateFlashcard(Auth.currentUser.uid, editDeckDocId,fc,fc.docID);//changed Id to ID
+            await deck_page(editDeckDocId);
+
         } catch(e){
             if(Constant.DEV) console.log(e);
             Utilities.info('Update Flashcard Error', JSON.stringify(e));
@@ -268,6 +270,7 @@ export async function edit_flashcard(uid, deckId, docId){
     }
 
     Elements.modalEditFlashcard.show();
+    await deck_page(editDeckDocId);
 }
 
 //Method to display the container for question image.
