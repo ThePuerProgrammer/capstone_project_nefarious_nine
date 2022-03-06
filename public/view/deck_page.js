@@ -61,6 +61,7 @@ export function addEventListeners() {
         }
 
         let deckDocID = sessionStorage.getItem("deckId");
+        console.log(`Testing Here:${deckDocID}`);
         console.log(deckDocID);
         const flashcard = new Flashcard({
             question,
@@ -213,10 +214,10 @@ export function addEventListeners() {
 }
 
 export async function deck_page(deckDocID) {
-    if(deckDocID == null){
-        deckDocID = sessionStorage.getItem('deckId');
-    }
-    console.log(deckDocID);
+    // if(deckDocID == null){
+    //     deckDocID = sessionStorage.getItem('deckId');
+    // }
+    console.log(`Where I commented out:${deckDocID}`);
     let html = '';
     html += '<h1> Deck Page </h1>';
     //Allows for the create a flashcard button

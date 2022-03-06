@@ -42,13 +42,15 @@ export function addEventListeners() {
        
         try {
             console.log("Creating Deck");
-            const docId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
+            const deckId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
             console.log("Deck Created");
-            deck.docId = docId;
+            deck.docId = deckId;
             localStorage.setItem("deckPageDeckDocID", deck.docId);
+            sessionStorage.setItem('deckId', deckId);
+            history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
             Elements.modalCreateDeck.hide();
-            history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
-            await DeckPage.deck_page(deck.docId);
+            //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
+            await DeckPage.deck_page(deckId);
         } catch (e) {
             if (Constant.DEV)
                 console.log(e);
