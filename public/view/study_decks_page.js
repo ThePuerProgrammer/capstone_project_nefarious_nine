@@ -157,7 +157,6 @@ export async function buildStudyDecksPage(deckList) {
                 confirmation = true;
                 await EditDeck.delete_deck(deckId, confirmation);
             });
-            // await EditDeck.delete_deck(e.target.docId.value,confirmation);
             Utilities.enableButton(button, label);
         });
     }

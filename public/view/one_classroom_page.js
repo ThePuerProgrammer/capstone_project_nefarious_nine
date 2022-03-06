@@ -260,6 +260,8 @@ export async function one_classroom_page(classroomDocID) {
             
             await FirebaseController.deleteClassroom(classroomDocID);
             Utilities.info('Success', `Classroom: ${deletedClassName} deleted.`);
+            await classrooms_page();
+
             
         })
     } //end of mod listeners
