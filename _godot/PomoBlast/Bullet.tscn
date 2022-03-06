@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://PomoBlast/assets/laserRed01.png" type="Texture" id=1]
+[ext_resource path="res://PomoBlast/Bullet.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 18.1985, 3.03203 )
+
+[node name="Bullet" type="Area2D"]
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = 1.5708
+scale = Vector2( 0.75, 0.75 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 1559, 407, 18, 18 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.358677, -0.358675 )
+shape = SubResource( 1 )
+
+[connection signal="body_entered" from="." to="." method="_on_Bullet_body_entered"]

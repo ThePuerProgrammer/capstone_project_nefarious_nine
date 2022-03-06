@@ -1,5 +1,5 @@
 extends KinematicBody2D
-export(PackedScene) var Bullet = preload("res://Bullet.tscn")
+export(PackedScene) var Bullet = preload("res://PomoBlast/Bullet.tscn")
 
 export (int) var speed = 200
 var screenSize
@@ -16,19 +16,19 @@ func _ready():
 
 func get_input():
 	velocity = Vector2()
-	if Input.is_action_pressed('right'):
+	if Input.is_action_pressed("pomo_blast_right"):
 		velocity.x += 1
-	if Input.is_action_pressed('left'):
+	if Input.is_action_pressed("pomo_blast_left"):
 		velocity.x -= 1
-	if Input.is_action_pressed('down'):
+	if Input.is_action_pressed("pomo_blast_down"):
 		velocity.y += 1
-	if Input.is_action_pressed('up'):
+	if Input.is_action_pressed("pomo_blast_up"):
 		velocity.y -= 1
 	velocity = velocity.normalized() * speed
 	
-	if Input.is_action_pressed("shoot"):
+	if Input.is_action_pressed("pomo_blast_shoot"):
 		shoot()
-	if Input.is_action_pressed("dash"):
+	if Input.is_action_pressed("pomo_blast_dash"):
 		velocity = velocity * 5
 		
 		
