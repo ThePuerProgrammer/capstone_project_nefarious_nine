@@ -1,5 +1,4 @@
 extends Node
 
-func ready():
+func _ready():
 	pass
-

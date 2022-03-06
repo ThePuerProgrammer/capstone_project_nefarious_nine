@@ -6,13 +6,15 @@ import * as Constants from '../model/constant.js';
 import { currentUser } from '../controller/firebase_auth.js';
 import { buildDeckView, buildStudyDecksPage } from './study_decks_page.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
-import * as Auth from '../controller/firebase_auth.js';
-import  { buildAvailableClassroom } from './classrooms_page.js';
+//import * as Auth from '../controller/firebase_auth.js';
+import  { buildAvailableClassroom, classrooms_page } from './classrooms_page.js';
 
 let searchType;
 let searchKeysInfo;
 let classSearchOption;
 
+//SEARCH PAGE EVENT LISTENERS ===========================================================//
+//=======================================================================================//
 
 export function addEventListeners() {
 
@@ -40,6 +42,10 @@ export function addEventListeners() {
     });
     
 }
+
+//END SEARCH PAGE EVENT LISTENERS ========================================================//
+//=======================================================================================//
+
 
 export async function search_page(joinedSearchKeys, searchType) {    
 
@@ -70,16 +76,21 @@ export async function search_page(joinedSearchKeys, searchType) {
             break;
 
         case 'classroomSearch':
-            if(classSearchOption == "allRooms") {
+            if(classSearchOption == "all rooms") { //all the classrooms
                 const classroomList = await searchAllClassrooms(searchKeysArray);               
-                buildClassRoomSearchPage(classroomList);
+                buildClassRoomSearchPage(classroomList, searchKeysArray);
                 Utilities.info('You searched for', `${searchKeysInfo}`)
 
-            } else if (classSearchOption == "myRooms") {
-                console.log('box 2 checked');
-
-            } else if (classSearchOption == "notMyRooms") {
-                console.log('exclude search goes here');
+            } 
+            else if (classSearchOption == "my rooms") { //only the user's classrooms
+                const classroomList = await searchMyClassrooms(searchKeysArray);   
+                buildClassRoomSearchPage(classroomList, searchKeysArray);
+                Utilities.info('You searched for', `${searchKeysInfo}`)
+            }
+             else if (classSearchOption == "not my rooms") { //excluding the user's classrooms
+                const classroomList = await searchNotMyClassrooms(searchKeysArray);  
+                buildClassRoomSearchPage(classroomList, searchKeysArray);
+                Utilities.info('You searched for', `${searchKeysInfo}`)
             }
             else console.log("nuttin");
             break;
@@ -87,15 +98,8 @@ export async function search_page(joinedSearchKeys, searchType) {
         default: Utilities.info('No search type detected');
 
     }
-}//END search_page()
-
-export function setSearchType(searchType) {
-    Elements.searchBoxType.value = searchType;
-}
-
-export function setClassroomSearchOption(option) {
-    classSearchOption = option;
-}
+}//END SEARCH_PAGE() CONSTRUCTION =======================================================//
+//=======================================================================================//
 
 export function cleanDataToKeywords(name, subject, category) { //for decks and classrooms
     const nameArray = name.toLowerCase(). match(/\S+/g);
@@ -104,11 +108,19 @@ export function cleanDataToKeywords(name, subject, category) { //for decks and c
     const mergedArray = nameArray.concat(subjectArray, categoryArray);
     return mergedArray;
 }
-//DECKS
+
+//DECK SEARCH==============================================================================//
+//                                                                                        //
+//=======================================================================================//
+
+export function setSearchType(searchType) {
+    Elements.searchBoxType.value = searchType;
+}
+
 export async function searchDecks(searchKeysArray) {
     let deckList;
     try {
-        deckList = await FirebaseController.searchDecks(currentUser.uid, searchKeysArray);
+        deckList = await FirebaseController.searchDecks(currentUser.email, searchKeysArray);
     } catch (e) {
         if (Constants.DEV) console.log(e);
         Utilities.info('There was an error with the Search', JSON.stringify(e));
@@ -116,8 +128,18 @@ export async function searchDecks(searchKeysArray) {
     }
     return deckList;
 }
-//CLASSROOMS
+// END OF DECK SEARCH=====================================================================//
+//=======================================================================================//
+
+
+
+//CLASSROOMS ==============================================================================//
+//  All classrooms, the user's classrooms, classrooms the user isn't in                   //
+//=======================================================================================//
+
+
 export async function searchAllClassrooms(searchKeysArray) {
+
     let classroomList;
     try {
         classroomList = await FirebaseController.searchAllClassrooms(searchKeysArray);
@@ -129,10 +151,46 @@ export async function searchAllClassrooms(searchKeysArray) {
     return classroomList;
 }
 
-function buildClassRoomSearchPage(classroomList) {
+export async function searchMyClassrooms(searchKeysArray) {
+
+    let classroomList;    
+    try {
+        classroomList = await FirebaseController.searchMyClassrooms(currentUser.email, searchKeysArray);
+    } catch (e) {
+        if (Constants.DEV) console.log(e);
+        Utilities.info('There was an error with the Search', JSON.stringify(e));
+        return;
+    }
+    return classroomList;
+}
+
+export async function searchNotMyClassrooms(searchKeysArray) { 
+    let classroomList;    
+    try {
+        classroomList = await FirebaseController.searchNotMyClassrooms(currentUser.email, searchKeysArray);    
+    } catch (e) {
+        if (Constants.DEV) console.log(e);
+        Utilities.info('There was an error with the Search', JSON.stringify(e));
+        return;
+    }    
+    return classroomList;
+}
+
+export function setClassroomSearchOption(option) {
+    classSearchOption = option;
+}
+
+
+function buildClassRoomSearchPage(classroomList, searchKeysArray) {
+    
+    const queryPrint = searchKeysArray.join(',');            
+
     //Clears all HTML so it doesn't double
     let html = ''
-    html += `<h1> Searched Classes:
+    html += `<h1> Searched Classes, in ${classSearchOption}, looking for "${queryPrint}":
+    <br>
+    <button id="search-reset-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px; float: right"><i class="fa fa-search"></i>Reset Search</button></h1>
+
     </h1> `
     ;
     html += ` <table id="available-classrooms-table" class="table">
@@ -152,13 +210,23 @@ function buildClassRoomSearchPage(classroomList) {
     if (classroomList.length == 0) {
         html += '<p>No classrooms found!</p>';
     } 
-    
+
     classroomList.forEach(ac => {
-        if (!ac.banlist.includes(Auth.currentUser.email)) {
+        if (!ac.banlist.includes(currentUser.email)) {
             html += `
                 <tr>${buildAvailableClassroom(ac)}</tr>`;
         }
     })
     html += `</tbody></table></div>`;
     Elements.root.innerHTML += html;
+
+    const searchResetbutton = document.getElementById('search-reset-button');
+    searchResetbutton.addEventListener('click', async e => {
+        e.preventDefault();
+        await classrooms_page();
+    });
 }
+// END OF CLASSROOMS SEARCH================================================================//
+//                                                                                        //
+//=======================================================================================//
+

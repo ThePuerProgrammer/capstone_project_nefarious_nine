@@ -798,7 +798,7 @@ export async function getMessages(classroomDocID) {
 // SEARCH FUNCTIONS
 //============================================================================//
 
-// DECKS------------------------------------------------------------------------->
+// === DECKS==================================================================//
 export async function searchDecks(uid, keywordsArray) {
     const deckList = []
     const snapShot = await firebase.firestore()
@@ -815,12 +815,11 @@ export async function searchDecks(uid, keywordsArray) {
     return deckList;
 }
 
-//CLASSROOMS ------------------------------------------------------------------>
-
+// === CLASSROOMS ============================================================//
 export async function searchAllClassrooms(keywordsArray) {
     const classroomList = []
     const snapShot = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
+        .collection(Constant.collectionName.CLASSROOMS)        
         .where('keywords', 'array-contains-any', keywordsArray)
         .get();
     snapShot.forEach(doc => {
@@ -831,34 +830,60 @@ export async function searchAllClassrooms(keywordsArray) {
     return classroomList;
 }
 
-export async function searchMyClassrooms(keywordsArray,uid) {
-    const myClassroomList = []
+export async function returnMyClassroomsDocId(email) {
+    const myClassroomDocIdList = []
     const snapShot = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
-        .where('members', 'array-contains', uid)
-        .where('keywords', 'array-contains-any', keywordsArray)
+        .where('members', 'array-contains', email)
         .get();
     snapShot.forEach(doc => {
-        const t = new Classroom(doc.data());
-        t.set_docID(doc.id);
-        classroomList.push(t)
+        myClassroomDocIdList.push(doc.id)
     });
-    return myClassroomList;
+    return myClassroomDocIdList;
 }
 
-export async function searchNotMyClassrooms(keywordsArray,uid) {
-    const myClassroomList = []
-    const snapShot = await firebase.firestore()
+export async function searchMyClassrooms(email, keywordsArray) {
+    let myClassroomList = []
+    const classroomDocIds = await returnMyClassroomsDocId(email);
+    
+        const snapShot = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
-        .where('members', 'does-not-contain', uid)
         .where('keywords', 'array-contains-any', keywordsArray)
         .get();
-    snapShot.forEach(doc => {
-        const t = new Classroom(doc.data());
-        t.set_docID(doc.id);
-        classroomList.push(t)
-    });
-    return myClassroomList;
+            
+        for (const docId of classroomDocIds) {
+                snapShot.forEach(doc => {                    
+                    if (doc.id == docId) {       
+                        const t = new Classroom(doc.data());                 
+                        t.set_docID(doc.id);
+                        myClassroomList.push(t)
+                    };                    
+                });
+        }
+    return myClassroomList;    
+}
+
+export async function searchNotMyClassrooms(email, keywordsArray) {
+
+    let classroomList = []
+    const classroomDocIds = await returnMyClassroomsDocId(email);
+    
+        const snapShot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .where('keywords', 'array-contains-any', keywordsArray)
+        .get();
+            
+        
+        for (const docId of classroomDocIds) {
+            snapShot.forEach(doc => {                    
+                if (doc.id != docId) {       
+                    const t = new Classroom(doc.data());                 
+                    t.set_docID(doc.id);
+                    classroomList.push(t)
+                };                    
+            });
+    }        
+    return classroomList;
 }
 
 //============================================================================//

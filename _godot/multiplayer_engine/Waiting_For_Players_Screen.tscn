@@ -1,0 +1,99 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://multiplayer_engine/Waiting_For_Players_Screen.gd" type="Script" id=1]
+[ext_resource path="res://ui_elements/Pomo_BG.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/icons/outline_keyboard_double_arrow_up_black_24dp.png" type="Texture" id=3]
+[ext_resource path="res://assets/fonts/PressStart2P-Regular.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://multiplayer_engine/Client_Mgr.tscn" type="PackedScene" id=5]
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.203922, 0.0705882, 0.160784, 0 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 4 )
+
+[node name="Waiting_For_Players_Screen" type="Node"]
+script = ExtResource( 1 )
+
+[node name="Client_Mgr" parent="." instance=ExtResource( 5 )]
+
+[node name="Lobby_Scene_BG" parent="." instance=ExtResource( 2 )]
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 900.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DisplayConnectedPanel" type="Panel" parent="CenterContainer"]
+margin_left = 560.0
+margin_top = 150.0
+margin_right = 1360.0
+margin_bottom = 750.0
+rect_min_size = Vector2( 800, 600 )
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/DisplayConnectedPanel"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 800, 600 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WaitingPlayersLabel" type="Label" parent="CenterContainer/DisplayConnectedPanel/VBoxContainer"]
+margin_right = 800.0
+margin_bottom = 197.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "Waiting for X more players to start the game"
+align = 1
+valign = 1
+
+[node name="JoinedPlayersLabel" type="Label" parent="CenterContainer/DisplayConnectedPanel/VBoxContainer"]
+margin_top = 201.0
+margin_right = 800.0
+margin_bottom = 398.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Joined Players
+
+"
+align = 1
+valign = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/DisplayConnectedPanel/VBoxContainer"]
+margin_top = 402.0
+margin_right = 800.0
+margin_bottom = 600.0
+size_flags_vertical = 3
+
+[node name="StartGameButton" type="Button" parent="CenterContainer/DisplayConnectedPanel/VBoxContainer/CenterContainer"]
+margin_left = 310.0
+margin_top = 69.0
+margin_right = 490.0
+margin_bottom = 129.0
+rect_min_size = Vector2( 180, 60 )
+disabled = true
+text = "Start Game"
+icon = ExtResource( 3 )
+
+[node name="AcceptDialog" type="AcceptDialog" parent="CenterContainer"]
+margin_left = 824.0
+margin_top = 421.0
+margin_right = 1096.0
+margin_bottom = 479.0
+dialog_text = "Check back soon! We're working on this!"
+
+[connection signal="pressed" from="CenterContainer/DisplayConnectedPanel/VBoxContainer/CenterContainer/StartGameButton" to="." method="_on_StartGameButton_pressed"]

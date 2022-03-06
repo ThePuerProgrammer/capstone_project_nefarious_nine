@@ -1,18 +1,16 @@
 extends Node
 
-onready var maxPlayersOptionButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/MaxPlayersOptionButton")
-onready var selectClassroomsButton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton")
-onready var lobbies_vbox = get_node("Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox")
-onready var lobby_password_line_edit = get_node("Centered/TabContainer/CreateLobby/LobbySettings/PasswordLineEdit")
-onready var chat_enabled_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/ChatEnabledCheckbutton")
-onready var vote_minigame_checkbutton = get_node("Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton")
-onready var pword_input_line_edit = get_node('Centered/TabContainer/JoinLobby/JoinHBox/PwordInput')
-onready var join_button = get_node('Centered/TabContainer/JoinLobby/JoinHBox/JoinButton')
+onready var maxPlayersOptionButton 		= $"Centered/TabContainer/CreateLobby/LobbySettings/MaxPlayersOptionButton"
+onready var selectClassroomsButton 		= $"Centered/TabContainer/CreateLobby/LobbySettings/SelectClassroomOptionsButton"
+onready var lobbies_vbox 				= $"Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox"
+onready var lobby_password_line_edit 	= $"Centered/TabContainer/CreateLobby/LobbySettings/PasswordLineEdit"
+onready var chat_enabled_checkbutton 	= $"Centered/TabContainer/CreateLobby/LobbySettings/ChatEnabledCheckbutton"
+onready var vote_minigame_checkbutton 	= $"Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton"
+onready var pword_input_line_edit 		= $'Centered/TabContainer/JoinLobby/JoinHBox/PwordInput'
+onready var join_button 				= $'Centered/TabContainer/JoinLobby/JoinHBox/JoinButton'
 
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
-
-var decks
 
 var available_lobbies = []
 var lobby_docids = []
@@ -21,6 +19,8 @@ var selected_lobby = -1
 func _ready():
 	$FadeIn.show()
 	$FadeIn.fade_in()
+	
+	join_button.disabled = true
 	
 	# Max players drop down button items. Disable non numeric
 	maxPlayersOptionButton.add_item("Select Max")
@@ -85,17 +85,35 @@ func _createLobby():
 			'chat_enabled' : chat_enabled_checkbutton.pressed,
 			'vote_enabled' : vote_minigame_checkbutton.pressed
 		}
-		FirebaseController.add_new_multiplayer_lobby(lobby_description)
-
+		# Global goodness for easy access across nodes
+		LobbyDescription.set_lobby_description(lobby_description)
+		
+		# Add the lobby to firebase and await its docid
+		var doc = FirebaseController.add_new_multiplayer_lobby(lobby_description)
+		if doc is GDScriptFunctionState:
+			doc = yield(doc, 'completed')
+			
+		# Parse the doc for the docid
+		var doc_name : String = doc['name']
+		var index_of_last_fwd_slash = doc_name.find_last('/')
+		var lobby_id = doc_name.substr(index_of_last_fwd_slash + 1, doc_name.length())
+		LobbyDescription.set_lobby_id(lobby_id)
+		
+#		CurrentUser.peer_id = _generate_peer_id()
+		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
+			print('Could not change to the waiting for players screen')
+		
 func _on_lobby_selection(lobby_number):
 	selected_lobby = lobby_number
+	join_button.disabled = false
 
 func _on_classroom_selected(_index):
 	# Once the user selects a classroom, query for the classroom decks
 	pass
 
 func _on_RefreshButton_pressed():
-	_get_available_lobbies()		
+	_get_available_lobbies()
+	join_button.disabled = true
 
 func _get_available_lobbies():
 	# Remove existing lobby nodes so there aren't duplicates
@@ -121,10 +139,18 @@ func _get_available_lobbies():
 		
 		new_lobby.get_node('HBoxContainer/HostNameLabel').text = host
 		new_lobby.get_node('HBoxContainer/PrivacyStatusLabel').text = 'Public' if doc_fields['password'] == '' else 'Private'
-		new_lobby.password = doc_fields['password'] # We are going to need this info when joining
 		new_lobby.get_node('HBoxContainer/ClassroomLabel').text = doc_fields['classroom']
 		new_lobby.get_node('HBoxContainer/PlayerCountLabel').text = doc_fields['player_count']
 		new_lobby.get_node('HBoxContainer/ChatEnabledLabel').text = 'Enabled' if doc_fields['chat_enabled'] else 'Disabled'
+		
+		# We are going to need all of this infor to describe the lobby when we try to join it
+		new_lobby.host = doc_fields['host']
+		new_lobby.password = doc_fields['password']
+		new_lobby.privacy_status = 'Public' if new_lobby.password == '' else 'Private'
+		new_lobby.classroom = doc_fields['classroom']
+		new_lobby.player_count = doc_fields['player_count']
+		new_lobby.max_players = doc_fields['player_count'][2].to_int()
+		new_lobby.chat_enabled = 'Enabled' if doc_fields['chat_enabled'] else 'Disabled'
 		
 		# Connect the signal emitted from the button component of the Lobby Selection instance
 		new_lobby.connect('lobby_button_pressed', self, '_on_lobby_button_pressed')		
@@ -141,6 +167,7 @@ func _get_available_lobbies():
 
 func _on_lobby_button_pressed(lobby_number):
 	selected_lobby = lobby_number
+	join_button.disabled = false	
 	if available_lobbies[lobby_number].password == '':
 		pword_input_line_edit.text = ''
 		pword_input_line_edit.editable = false
@@ -159,3 +186,51 @@ func _on_JoinButton_pressed():
 	else:
 		pword_input_line_edit.text = ''
 		join_button.disabled = true
+		
+		# Get the docid to describe the lobby
+		var lobby_id = lobby_docids[selected_lobby]
+		LobbyDescription.set_lobby_id(lobby_id)
+		
+		# See, told you we'd need all this
+		var host = available_lobbies[selected_lobby].host
+		var password = available_lobbies[selected_lobby].password
+		var classroom = available_lobbies[selected_lobby].classroom
+		var player_count = available_lobbies[selected_lobby].player_count
+		player_count[0] = String(player_count[0].to_int() + 1)
+		var chat_enabled = available_lobbies[selected_lobby].chat_enabled
+		
+		# This will be parsed for important information when the WS server gets to work
+		LobbyDescription.set_lobby_description({
+			'host' : host,
+			'password' : password,
+			'classroom' : classroom,
+			'player_count' : player_count,
+			'chat_enabled' : chat_enabled,
+			'vote_enabled' : true
+		})
+		
+		FirebaseController.update_lobby(lobby_id, { 'player_count' : player_count })
+		
+		# Let's do this thing
+#		CurrentUser.peer_id = _generate_peer_id()
+		if get_tree().change_scene("res://multiplayer_engine/Waiting_For_Players_Screen.tscn") != OK:
+			print('Could not change to the waiting for players screen')
+		
+func _generate_peer_id():
+	# A little idea I have to convert the users docid to an int for client/peer id
+	# My concern has been that a combination of the uid to int could possibly land on the same number
+	# This solution doesn't entirely eliminate that, but I think it makes it a lot less likely
+	# Without, perhaps, some type of log that shows what ids are currently active, nothing really
+	# could prevent overlap. But in this case, the uid is converted to an array of bytes
+	# that array is summed together as int values. The original uid becomes the seed hash for an rng
+	# along with the current unix time and the final value is the product of the rng and the int 
+	# representation of the uid. It's not perfect, but it should do for now. 
+	var uid : String = CurrentUser.user_id if CurrentUser.user_id else "87gs9f7438g12shigdjkhf"
+	var pool_bytes = uid.to_ascii()
+	var bytes_to_int = 0
+	for byte in pool_bytes:
+		bytes_to_int += int(byte)
+	var rng = RandomNumberGenerator.new()
+	rng.seed = hash(uid) + OS.get_unix_time()
+	var random_number = rng.randi_range(1, 100000) 
+	return random_number * bytes_to_int

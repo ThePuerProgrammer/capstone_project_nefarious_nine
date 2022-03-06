@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon.svg-5c4f39d37c9275a3768de73a392fd315.stex"
+path="res://.import/volume_off.png-c38ada1803105359f578c9dcb4f8e561.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/godot-firebase/icon.svg"
-dest_files=[ "res://.import/icon.svg-5c4f39d37c9275a3768de73a392fd315.stex" ]
+source_file="res://assets/icons/volume_off.png"
+dest_files=[ "res://.import/volume_off.png-c38ada1803105359f578c9dcb4f8e561.stex" ]
 
 [params]
 

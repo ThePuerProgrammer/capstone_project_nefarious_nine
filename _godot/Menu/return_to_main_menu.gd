@@ -6,7 +6,8 @@ func _ready():
 	$FadeIn.fade_in()
 
 func _on_FadeOut_fade_out_finished():
-	get_tree().change_scene('res://Menu/MenuScreen.tscn')
+	if get_tree().change_scene('res://Menu/MenuScreen.tscn') != OK:
+		print("Could not change to MenuScreen.tscn")
 
 func _on_backButton_pressed():
 	$FadeOut.show()

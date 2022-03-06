@@ -84,44 +84,33 @@ rect_min_size = Vector2( 1316, 614 )
 size_flags_vertical = 3
 color = Color( 0.0980392, 0.0980392, 0.0980392, 0.537255 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-scroll_horizontal_enabled = false
+[node name="TableBar" type="Control" parent="Centered/TabContainer/JoinLobby/ServerListBG"]
+margin_right = 1316.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 1316, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LobbiesVBox" type="VBoxContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer"]
-margin_right = 1316.0
-margin_bottom = 614.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TableBar" type="Control" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox"]
-margin_right = 1316.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 1306, 40 )
-
-[node name="ColorRect" type="ColorRect" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar"]
+[node name="ColorRect" type="ColorRect" parent="Centered/TabContainer/JoinLobby/ServerListBG/TableBar"]
 margin_right = 40.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 1306, 40 )
+rect_min_size = Vector2( 1316, 40 )
 color = Color( 0.654902, 0.678431, 0.776471, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColumnTitles" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar"]
+[node name="ColumnTitles" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG/TableBar"]
 margin_right = 40.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 1306, 40 )
+rect_min_size = Vector2( 1316, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
-margin_right = 258.0
+[node name="Label" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/TableBar/ColumnTitles"]
+margin_right = 260.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -131,9 +120,9 @@ text = "Host Name"
 align = 1
 valign = 1
 
-[node name="Label2" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
-margin_left = 262.0
-margin_right = 520.0
+[node name="Label2" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/TableBar/ColumnTitles"]
+margin_left = 264.0
+margin_right = 524.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -143,9 +132,9 @@ text = "Privacy Status"
 align = 1
 valign = 1
 
-[node name="Label3" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
-margin_left = 524.0
-margin_right = 782.0
+[node name="Label3" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/TableBar/ColumnTitles"]
+margin_left = 528.0
+margin_right = 788.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -155,9 +144,9 @@ text = "Classroom"
 align = 1
 valign = 1
 
-[node name="Label4" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
-margin_left = 786.0
-margin_right = 1044.0
+[node name="Label4" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/TableBar/ColumnTitles"]
+margin_left = 792.0
+margin_right = 1052.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -167,9 +156,9 @@ text = "Player Count"
 align = 1
 valign = 1
 
-[node name="Label5" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer/LobbiesVBox/TableBar/ColumnTitles"]
-margin_left = 1048.0
-margin_right = 1306.0
+[node name="Label5" type="Label" parent="Centered/TabContainer/JoinLobby/ServerListBG/TableBar/ColumnTitles"]
+margin_left = 1056.0
+margin_right = 1316.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -178,6 +167,21 @@ custom_fonts/font = ExtResource( 1 )
 text = "Chat Enabled"
 align = 1
 valign = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 40.0
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LobbiesVBox" type="VBoxContainer" parent="Centered/TabContainer/JoinLobby/ServerListBG/ScrollContainer"]
+margin_right = 1316.0
+margin_bottom = 574.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="JoinHBox" type="HBoxContainer" parent="Centered/TabContainer/JoinLobby"]
 margin_top = 664.0
