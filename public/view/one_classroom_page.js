@@ -96,17 +96,34 @@ export async function one_classroom_page(classroomDocID) {
     let messages = [];
     messages = await FirebaseController.getMessages(classroomDocID);
 
+    let leaderboard = [];
+    leaderboard = await FirebaseController.leaderboardByCoins(members);
+    
     html += `</div>
         </div>
         </div>`;
 
     // future LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
-        <h2>Leaderboard</h2>
-        </div>`;
+        <center><h2>Leaderboard</h2>
+        <table class="leaderboard-table">
+            <tr>
+                <th class="leaderboard-th">Rank</th>
+                <th class="leaderboard-th">User</th>
+                <th class="leaderboard-th">Coins</th>
+            </tr>`;
+    if(leaderboard.length >0 ){
+        let index = 1;
+        leaderboard.forEach(e =>{
+            html+= buildLeaderBoard(e, index);
+            index++;
+        });
+    }
+    html+=`</center></div>`;
+       
 
     html += `<div id="Chat" class="one-classroom-tab-content">
-        <div id="message-reply-body">`
+        <div id="message-reply-body">`;
     if (messages.length > 0) {
         messages.forEach(m => {
             html += buildMessageView(m);
@@ -337,3 +354,11 @@ function buildButtons(member, banlist) {
 
 }
 
+function buildLeaderBoard(e,i){
+   return `
+    <tr>
+        <td class="leaderboard-td">${i}</td>
+        <td class="leaderboard-td">${e.email}</td>
+        <td class="leaderboard-td">${e.coins}</td>
+    </tr>`;
+}
