@@ -888,3 +888,26 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
 
 //============================================================================//
 
+//============================================================================//
+// LEADERBOARDS
+//============================================================================//
+export async function leaderboardByCoins(members){
+    let classroomLeadersByCoins = [];
+
+    const ref = await firebase.firestore()
+    .collection(Constant.collectionName.USERS)
+    .where('email', 'in', members)
+    .orderBy('coins', 'desc')
+    .get();
+
+    
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        console.log(`Classmember: ${cm}`);
+        classroomLeadersByCoins.push(cm);
+    })
+
+    return classroomLeadersByCoins;
+}
