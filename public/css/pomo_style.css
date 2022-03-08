@@ -596,4 +596,28 @@ iframe {
     background-color: #2C1320;
 }
 
+/*LEADERBOARD*/
+/*==========================================================================*/
+.leaderboard-table{
+    width: 50%;
+    text-align: center;
+    border:1px solid black;
+    
+}
+.leaderboard-th{
+    width: 50%;
+    text-align: center;
+    border:1px solid black;
+    background-color: #2C1320;
+    color: #A7ADC6;
+}
+.leaderboard-td{
+    width: 50%;
+    text-align: center;
+    border:1px solid black;
+    background-color: #5F4B66;
+    color: #A7ADC6;
+}
+
+/*==========================================================================*/
 

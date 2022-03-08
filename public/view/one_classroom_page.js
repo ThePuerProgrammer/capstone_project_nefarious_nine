@@ -106,11 +106,11 @@ export async function one_classroom_page(classroomDocID) {
     // future LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
         <center><h2>Leaderboard</h2>
-        <table>
+        <table class="leaderboard-table">
             <tr>
-                <th>Rank</th>
-                <th>User</th>
-                <th>Coins</th>
+                <th class="leaderboard-th">Rank</th>
+                <th class="leaderboard-th">User</th>
+                <th class="leaderboard-th">Coins</th>
             </tr>`;
     if(leaderboard.length >0 ){
         let index = 1;
@@ -357,8 +357,8 @@ function buildButtons(member, banlist) {
 function buildLeaderBoard(e,i){
    return `
     <tr>
-        <td>${i}</td>
-        <td>${e.email}</td>
-        <td>${e.coins}</td>
+        <td class="leaderboard-td">${i}</td>
+        <td class="leaderboard-td">${e.email}</td>
+        <td class="leaderboard-td">${e.coins}</td>
     </tr>`;
 }
