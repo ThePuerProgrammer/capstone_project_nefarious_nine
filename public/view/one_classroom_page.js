@@ -57,7 +57,7 @@ export async function one_classroom_page(classroomDocID) {
         //removed doc id from page view -- Blake
         html += `
             <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
-                Delete Classroom
+            <i class="material-icons">delete</i>Delete Classroom
             </button>`
             ;
     }

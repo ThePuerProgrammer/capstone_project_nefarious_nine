@@ -222,7 +222,7 @@ export async function deck_page(deckDocID) {
     html += '<h1> Deck Page </h1>';
     //Allows for the create a flashcard button
     html += `
-                <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-secondary pomo-bg-color-dark"> + Create Flashcard</button>
+                <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">add</i>Create Flashcard</button>
         `;
 
   
@@ -235,12 +235,12 @@ export async function deck_page(deckDocID) {
         if(flashcards.length!=0){
             // study deck button
             html += `
-                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark">Study</button>
-                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> - Delete Flashcard</button>`;
+                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark"><i class="material-icons text-white">local_library</i>Study</button>
+                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">delete</i>Delete Flashcard</button>`;
             } else {
                 html += `
-                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled>Study</button>
-                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> - Delete Flashcard</button>
+                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled><i class="material-icons text-white">local_library</i>Study</button>
+                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> <i class="material-icons text-white">delete</i>Delete Flashcard</button>
                 `;
             }
         
@@ -382,7 +382,7 @@ function buildFlashcardView(flashcard) {
     <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
     <form class="form-edit-flashcard" method="post">
         <input type="hidden" name="docId" value="${flashcard.docID}">
-        <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
+        <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="small material-icons pomo-text-color-light">edit</i>Edit</button>
     </form>
   </div>
   </div>
@@ -392,7 +392,7 @@ function buildFlashcardView(flashcard) {
   <h6>${flashcard.answer}</h6>
   <form class="form-edit-flashcard" method="post">
         <input type="hidden" name="docId" value="${flashcard.docID}">
-        <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
+        <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="small material-icons pomo-text-color-light">edit</i>Edit</button>
   </form>
   </div>
   </div>

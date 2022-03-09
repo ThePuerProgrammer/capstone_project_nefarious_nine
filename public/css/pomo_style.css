@@ -634,5 +634,6 @@ iframe {
 .material-icons{
     text-align: center;
     vertical-align:middle;
+    padding-right: 5px;
 }
 /*==========================================================================*/

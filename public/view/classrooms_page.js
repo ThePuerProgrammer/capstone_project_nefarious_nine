@@ -69,8 +69,8 @@ export async function classrooms_page() {
     Elements.root.innerHTML = '';
     let html = '';
 
-    html += `<div class="classroom-page-tab"><button id="my-classroom-button" class="classroom-tab">My Classrooms</button>
-    <button id="available-classroom-button" class="classroom-tab">Available Classrooms</button>
+    html += `<div class="classroom-page-tab"><button id="my-classroom-button" class="classroom-tab"><i class="material-icons">nature_people</i>My Classrooms</button>
+    <button id="available-classroom-button" class="classroom-tab"><i class="material-icons">nature</i>Available Classrooms</button>
     `;
 
     html += `<div style="float:right; display: inline-block;">
@@ -96,7 +96,7 @@ export async function classrooms_page() {
         </div>
         </fieldset>
         </form>
-        <button id="search-classroom-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="fa fa-search"></i>Search Classrooms</button></h1>
+        <button id="search-classroom-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="material-icons">search</i>Search Classrooms</button></h1>
         </div>
     </div>
     </div>`;
@@ -160,7 +160,7 @@ export async function classrooms_page() {
     // My Classrooms tab with create classroom button
     html += `<div id="My Classrooms" class="classroom-tab-content">
         <button id="${Constant.htmlIDs.createClassroom}" type="button" class="btn btn-secondary pomo-bg-color-dark">
-        Create Classroom</button>`;
+        <i class="material-icons text-white">add</i> Create Classroom</button>`;
 
     html += `<table id="my-classrooms-table" class="table">
          <thread>
@@ -232,20 +232,20 @@ export async function classrooms_page() {
                 Elements.previewClassroomFooter.innerHTML = `
                 <form class="form-view-classroom-from-preview" method="post">
                     <input type="hidden" name="docId" value="${classId}">
-                    <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Enter Class</button>
+                    <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">forward</i>Enter Class</button>
                 </form>`;
                 //Adding Case of user is creator to leave
                 if (!classMods.includes(userEmail)) {
                     Elements.previewClassroomFooter.innerHTML += `
                     <form class="form-leave-classroom-from-preview" method="post">
                         <input type="hidden" name="docId" value="${classId}">
-                        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Leave</button>
+                        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">directions_walk</i>Leave</button>
                     </form>`
                 } else {
                     Elements.previewClassroomFooter.innerHTML += `
                     <form class="form-edit-classroom-from-preview" method="post">
                         <input type="hidden" name="docId" value="${classId}">
-                        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Edit</button>
+                        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"> <i class="material-icons pomo-text-color-light">edit</i>Edit</button>
                     </form>`
 
                 }
@@ -255,13 +255,13 @@ export async function classrooms_page() {
                 <form class="form-join-classroom" method="post">
                     <input type="hidden" name="docId" value="${classId}">
                     <button id="form-join-classroom" class="btn btn-secondary pomo-bg-color-dark 
-                        pomo-text-color-light" type="submit" style="padding:5px 10px"> Join</button>
+                        pomo-text-color-light" type="submit" style="padding:5px 10px"> <i class="material-icons pomo-text-color-light">person_add</i>Join</button>
                 </form>`;
             } else {
                 //CLASSROOM FULL
                 Elements.previewClassroomFooter.innerHTML = `
                    <button class="btn btn-secondary pomo-bg-color-dark 
-                       pomo-text-color-light" style="padding:5px 10px" disabled> Join</button>
+                       pomo-text-color-light" style="padding:5px 10px" disabled> <i class="material-icons pomo-text-color-light">person_add</i>Join</button>
                    `;
 
             }
@@ -531,7 +531,7 @@ function buildMyClassroom(classroom) {
             <input type="hidden" name="category" value ="${classroom.category}"/>
             <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
             <input type="hidden" name="members" value ="${classroom.members}"/>
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"> <i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
     </form></td>
     <td>${classroom.name}</td>
     <td>${classroom.subject}</td>
@@ -553,7 +553,7 @@ export function buildAvailableClassroom(classroom) {
             <input type="hidden" name="category" value ="${classroom.category}"/>
             <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
             <input type="hidden" name="members" value ="${classroom.members}"/>
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"> <i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
     </form></td>` : `
     <td>
     <form class="form-preview-classroom" method="post">
@@ -563,7 +563,7 @@ export function buildAvailableClassroom(classroom) {
             <input type="hidden" name="category" value ="${classroom.category}"/>
             <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
             <input type="hidden" name="members" value ="${classroom.members}"/>
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">Preview</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">visibility</i>Preview</button>
     </form></td>`;
     html += `
     <td>${classroom.name}</td>
