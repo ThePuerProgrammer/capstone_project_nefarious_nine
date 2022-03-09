@@ -39,10 +39,10 @@ export async function one_classroom_page(classroomDocID) {
 
     // adding classroom, members, and leaderboard tabs
     html += `<div class="classroom-page-tab">
-        <button id="classroom-gen-button" class="classroom-tab">Classroom</button>
-        <button id="classroom-members-button" class="classroom-tab">Members</button>
-        <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard</button>
-        <button id="classroom-chat-button" class="classroom-tab">Chat</button>
+        <button id="classroom-gen-button" class="classroom-tab">Classroom<i class="small material-icons">school</i></button>
+        <button id="classroom-members-button" class="classroom-tab">Members <i class="small material-icons">group</i></button>
+        <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard <i class="small material-icons">insert_chart</i></button>
+        <button id="classroom-chat-button" class="classroom-tab">Chat <i class="small material-icons">chat</i></button>
         </div>`;
 
     // CLASSROOM tab contents
@@ -93,9 +93,7 @@ export async function one_classroom_page(classroomDocID) {
         html += `<p>${mod}</p>`;
     })
 
-    let messages = [];
-    messages = await FirebaseController.getMessages(classroomDocID);
-
+    
     let leaderboard = [];
     leaderboard = await FirebaseController.leaderboardByCoins(members);
     
@@ -103,7 +101,7 @@ export async function one_classroom_page(classroomDocID) {
         </div>
         </div>`;
 
-    // future LEADERBOARD tab content
+    // LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
         <center><h2>Leaderboard</h2>
         <table class="leaderboard-table">
@@ -112,6 +110,7 @@ export async function one_classroom_page(classroomDocID) {
                 <th class="leaderboard-th">User</th>
                 <th class="leaderboard-th">Coins</th>
             </tr>`;
+
     if(leaderboard.length >0 ){
         let index = 1;
         leaderboard.forEach(e =>{
@@ -119,8 +118,10 @@ export async function one_classroom_page(classroomDocID) {
             index++;
         });
     }
-    html+=`</center></div>`;
+    html+=`</table></center></div>`;
        
+    let messages = [];
+    messages = await FirebaseController.getMessages(classroomDocID);
 
     html += `<div id="Chat" class="one-classroom-tab-content">
         <div id="message-reply-body">`;

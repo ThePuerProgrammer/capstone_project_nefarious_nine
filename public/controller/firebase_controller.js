@@ -905,7 +905,6 @@ export async function leaderboardByCoins(members){
     ref.forEach(doc => {
         let cm = new User(doc.data());
         cm.set_docID(doc.id);
-        console.log(`Classmember: ${cm}`);
         classroomLeadersByCoins.push(cm);
     })
 
