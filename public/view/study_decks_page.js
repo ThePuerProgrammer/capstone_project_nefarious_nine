@@ -327,14 +327,18 @@ export function buildDeckView(deck, flashcards) {
 
     // ternary operator to check if a deck is favorited or not
     html += deck.isFavorited ? `<div class="form-check">
+    <span class="favorite-deck">
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>        
-    <label class="form-check-label" for="favorited">Favorite deck</label>
+    </span>
+    <label class= "form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite</i>Favorite deck</label>
     </div>
     </div>
     </div>
     ` : `<div class="form-check">
+    <span class="unfavorite-deck">
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
-    <label class="form-check-label pomo-text-color-light" for="favorited">Favorite deck</label>
+    </span>
+    <label class="form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite_border</i>Favorite deck</label>
 </div>
 </div>
 </div>`;

@@ -621,3 +621,9 @@ iframe {
 
 /*==========================================================================*/
 
+.favorite-deck{
+    display: none;
+}
+.unfavorite-deck{
+    display: none;
+}
