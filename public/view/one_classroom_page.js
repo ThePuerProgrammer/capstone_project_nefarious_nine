@@ -103,7 +103,7 @@ export async function one_classroom_page(classroomDocID) {
 
     // LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
-        <center><h2>Leaderboard</h2>
+        <center><h2>Leaderboard</h2> <button
         <table class="leaderboard-table">
             <tr>
                 <th class="leaderboard-th">Rank</th>
