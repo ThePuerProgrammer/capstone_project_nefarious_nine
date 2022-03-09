@@ -621,9 +621,18 @@ iframe {
 
 /*==========================================================================*/
 
+/*FAVORITE DECK ICONS*/
+/*==========================================================================*/
 .favorite-deck{
     display: none;
+    text-align: center;
 }
 .unfavorite-deck{
     display: none;
+    text-align: center;
 }
+.material-icons{
+    text-align: center;
+    vertical-align:middle;
+}
+/*==========================================================================*/

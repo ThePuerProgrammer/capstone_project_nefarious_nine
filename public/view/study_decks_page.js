@@ -90,8 +90,8 @@ export async function buildStudyDecksPage(deckList) {
     ;
 
     //create deck button
-    html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark">
-     Create A Deck +</button>
+    html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">
+     Create A Deck <i class="material-icons pomo-text-color-light">add</i></button>
      `;
 
     // sort select menu
@@ -313,15 +313,15 @@ export function buildDeckView(deck, flashcards) {
         <div class="btn-group">
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">View</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
         </form>
         <form class="form-edit-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Edit</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
         </form>
         <form class="form-delete-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Delete</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
         </form>
         </div>`;
 
