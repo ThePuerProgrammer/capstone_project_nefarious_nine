@@ -420,12 +420,40 @@ export async function getFlashcards(uid, docId) {
 // Delete flashcards
 //============================================================================//
 export async function deleteFlashcard(uid, docID, flashcardId) {
-    await firebase.firestore()
+    //Flashcard Reference
+    const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
         .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
-        .delete();
-    //Maybe add a delete of the image here after flashcard delete, keeping data consistent
+        .get();
+    //Creating a quick Flashcard so I can delete the Image
+    
+    const flashcard = new Flashcard(ref.data());
+        flashcard.set_docID(docID);
+    //Image Name Capture
+    const questionImageName = flashcard.questionImageName;
+    const answerImageName = flashcard.answerImageName;
+    
+    //Deletion
+    try{
+    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
+    .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+    .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
+    .delete();
+    } catch(e) {console.log(e);}
+    
+    //Deleting Question Image
+    if(questionImageName != null && questionImageName != 'N/A'){
+    const refQuestion = firebase.storage().ref()
+                .child(Constant.storageFolderName.FLASHCARD_IMAGES + questionImageName);
+    await refQuestion.delete();    
+    }
+    //Deleting Answer Image
+    if(answerImageName != null && answerImageName != 'N/A'){
+        const refAnswer = firebase.storage().ref()
+                    .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
+        await refAnswer.delete();    
+        }
 }
 
 //============================================================================//
@@ -905,7 +933,6 @@ export async function leaderboardByCoins(members){
     ref.forEach(doc => {
         let cm = new User(doc.data());
         cm.set_docID(doc.id);
-        console.log(`Classmember: ${cm}`);
         classroomLeadersByCoins.push(cm);
     })
 
