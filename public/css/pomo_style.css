@@ -624,13 +624,15 @@ iframe {
 /*FAVORITE DECK ICONS & OTHER ICONS*/
 /*==========================================================================*/
 .favorite-deck{
-    display: none;
+    /* display: none; */
     text-align: center;
+    vertical-align: middle;
 }
 .unfavorite-deck{
-    display: none;
     text-align: center;
+    vertical-align: middle;
 }
+
 .material-icons{
     text-align: center;
     vertical-align:middle;

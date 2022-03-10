@@ -39,10 +39,10 @@ export async function one_classroom_page(classroomDocID) {
 
     // adding classroom, members, and leaderboard tabs
     html += `<div class="classroom-page-tab">
-        <button id="classroom-gen-button" class="classroom-tab">Classroom<i class="small material-icons">school</i></button>
-        <button id="classroom-members-button" class="classroom-tab">Members <i class="small material-icons">group</i></button>
-        <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard <i class="small material-icons">insert_chart</i></button>
-        <button id="classroom-chat-button" class="classroom-tab">Chat <i class="small material-icons">chat</i></button>
+        <button id="classroom-gen-button" class="classroom-tab"><i class="small material-icons">school</i>Classroom</button>
+        <button id="classroom-members-button" class="classroom-tab"><i class="small material-icons">group</i>Members</button>
+        <button id="classroom-leaderboard-button" class="classroom-tab"><i class="small material-icons">insert_chart</i>Leaderboard</button>
+        <button id="classroom-chat-button" class="classroom-tab"><i class="small material-icons">chat</i>Chat</button>
         </div>`;
 
     // CLASSROOM tab contents
@@ -142,7 +142,7 @@ export async function one_classroom_page(classroomDocID) {
     html += `<div>
     <textarea id="add-new-message" placeholder="Send a message..." style="border: 1px solid #2C1320; width: 700px; height: 150px; background-color: #2C1320; color: #A7ADC6;"></textarea>
     <br>
-    <button id="classroom-message-button" style="background-color: #2C1320; color: #A7ADC6;">Send</button>
+    <button id="classroom-message-button" style="background-color: #2C1320; color: #A7ADC6;"><i class="small material-icons">send</i> Send</button>
     </div>
     </div>`;
 
