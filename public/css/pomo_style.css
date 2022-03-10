@@ -596,4 +596,45 @@ iframe {
     background-color: #2C1320;
 }
 
+/*LEADERBOARD*/
+/*==========================================================================*/
+
+.leaderboard-table{
+    width: 75%;
+    text-align: center;
+    border:1px solid black;
+    
+}
+.leaderboard-th{
+    
+    text-align: center;
+    border:1px solid black;
+    background-color: #2C1320;
+    color: #A7ADC6;
+}
+.leaderboard-td{
+    text-align: center;
+    border:1px solid black;
+    background-color: #5F4B66;
+    color: #A7ADC6;
+}
+
+/*==========================================================================*/
+
+/*FAVORITE DECK ICONS & OTHER ICONS*/
+/*==========================================================================*/
+.favorite-deck{
+    display: none;
+    text-align: center;
+}
+.unfavorite-deck{
+    display: none;
+    text-align: center;
+}
+.material-icons{
+    text-align: center;
+    vertical-align:middle;
+    padding-right: 5px;
+}
+/*==========================================================================*/
 

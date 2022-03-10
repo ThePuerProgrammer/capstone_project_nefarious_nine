@@ -39,10 +39,10 @@ export async function one_classroom_page(classroomDocID) {
 
     // adding classroom, members, and leaderboard tabs
     html += `<div class="classroom-page-tab">
-        <button id="classroom-gen-button" class="classroom-tab">Classroom</button>
-        <button id="classroom-members-button" class="classroom-tab">Members</button>
-        <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard</button>
-        <button id="classroom-chat-button" class="classroom-tab">Chat</button>
+        <button id="classroom-gen-button" class="classroom-tab">Classroom<i class="small material-icons">school</i></button>
+        <button id="classroom-members-button" class="classroom-tab">Members <i class="small material-icons">group</i></button>
+        <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard <i class="small material-icons">insert_chart</i></button>
+        <button id="classroom-chat-button" class="classroom-tab">Chat <i class="small material-icons">chat</i></button>
         </div>`;
 
     // CLASSROOM tab contents
@@ -57,7 +57,7 @@ export async function one_classroom_page(classroomDocID) {
         //removed doc id from page view -- Blake
         html += `
             <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
-                Delete Classroom
+            <i class="material-icons">delete</i>Delete Classroom
             </button>`
             ;
     }
@@ -93,20 +93,38 @@ export async function one_classroom_page(classroomDocID) {
         html += `<p>${mod}</p>`;
     })
 
-    let messages = [];
-    messages = await FirebaseController.getMessages(classroomDocID);
-
+    
+    let leaderboard = [];
+    leaderboard = await FirebaseController.leaderboardByCoins(members);
+    
     html += `</div>
         </div>
         </div>`;
 
-    // future LEADERBOARD tab content
+    // LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
-        <h2>Leaderboard</h2>
-        </div>`;
+    <center><h2>Leaderboard</h2>  
+        <table class="leaderboard-table">
+            <tr>
+                <th class="leaderboard-th">Rank</th>
+                <th class="leaderboard-th">User</th>
+                <th class="leaderboard-th">Coins</th>
+            </tr>`;
+
+    if(leaderboard.length >0 ){
+        let index = 1;
+        leaderboard.forEach(e =>{
+            html+= buildLeaderBoard(e, index);
+            index++;
+        });
+    }
+    html+=`</table></center></div>`;
+       
+    let messages = [];
+    messages = await FirebaseController.getMessages(classroomDocID);
 
     html += `<div id="Chat" class="one-classroom-tab-content">
-        <div id="message-reply-body">`
+        <div id="message-reply-body">`;
     if (messages.length > 0) {
         messages.forEach(m => {
             html += buildMessageView(m);
@@ -337,3 +355,11 @@ function buildButtons(member, banlist) {
 
 }
 
+function buildLeaderBoard(e,i){
+   return `
+    <tr>
+        <td class="leaderboard-td">${i}</td>
+        <td class="leaderboard-td">${e.email}</td>
+        <td class="leaderboard-td">${e.coins}</td>
+    </tr>`;
+}

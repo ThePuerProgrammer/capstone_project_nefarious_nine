@@ -86,12 +86,12 @@ export async function buildStudyDecksPage(deckList) {
     Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
-    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="fa fa-search"></i>Search Decks</button></h1> '
+    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="material-icons">search</i>Search Decks</button></h1> '
     ;
 
     //create deck button
-    html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark">
-     Create A Deck +</button>
+    html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">
+    <i class="material-icons pomo-text-color-light">add</i> Create A Deck</button>
      `;
 
     // sort select menu
@@ -144,6 +144,7 @@ export async function buildStudyDecksPage(deckList) {
             //prevents refresh on submit of form
             e.preventDefault();          
             await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
+            await study_decks_page();
         });
     }
     const deleteDeckForms = document.getElementsByClassName('form-delete-deck');
@@ -312,28 +313,32 @@ export function buildDeckView(deck, flashcards) {
         <div class="btn-group">
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">View</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
         </form>
         <form class="form-edit-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Edit</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
         </form>
         <form class="form-delete-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;">Delete</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
         </form>
         </div>`;
 
     // ternary operator to check if a deck is favorited or not
     html += deck.isFavorited ? `<div class="form-check">
+    <span class="favorite-deck">
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>        
-    <label class="form-check-label" for="favorited">Favorite deck</label>
+    </span>
+    <label class= "form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite</i>Favorite deck</label>
     </div>
     </div>
     </div>
     ` : `<div class="form-check">
+    <span class="unfavorite-deck">
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
-    <label class="form-check-label pomo-text-color-light" for="favorited">Favorite deck</label>
+    </span>
+    <label class="form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite_border</i>Favorite deck</label>
 </div>
 </div>
 </div>`;

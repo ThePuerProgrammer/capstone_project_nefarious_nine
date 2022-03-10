@@ -95,7 +95,6 @@ export async function edit_deck(uid, deckId){
     //Showing the data loaded into the modal
     Elements.modalEditDeck.show();
 
-
 }
 
 export async function delete_deck(docId,confirmation){

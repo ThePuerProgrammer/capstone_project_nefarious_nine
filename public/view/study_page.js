@@ -331,7 +331,7 @@ function buildOverviewView(deck, deckLength) {
   <br>
   <form class="form-return-to-decks" method="post">
     <input type="hidden" name="docId" value"${deck.docID}">
-    <button class="btn btn-outline-secondary pomo-bg-color-md-dark pomo-text-color-light" type="submit" style="padding:5px 10px; float: right;">Return</button>
+    <button class="btn btn-outline-secondary pomo-bg-color-md-dark pomo-text-color-light" type="submit" style="padding:5px 10px; float: right;"> <i class="material-icons pomo-text-color-light">keyboard_return</i>Return</button>
   </form>
   </div>
   </div>`;
