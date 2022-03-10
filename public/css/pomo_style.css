@@ -638,3 +638,18 @@ iframe {
 }
 /*==========================================================================*/
 
+/*LEADERBOARD SELECTION*/
+/*==========================================================================*/
+.leaderboard-selection-button-css{
+    padding-top:10px;
+}
+.leaderboard-main-row{
+    justify-content: center;
+    display: flex;
+    position: relative;
+}
+.leaderboard-button-category {
+position: absolute;
+right:0px;
+}
+/*==========================================================================*/

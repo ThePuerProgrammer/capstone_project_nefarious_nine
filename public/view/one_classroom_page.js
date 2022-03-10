@@ -103,7 +103,11 @@ export async function one_classroom_page(classroomDocID) {
 
     // LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
-    <center><h2>Leaderboard</h2>  
+    <center>
+    <div class="leaderboard-main-row"><h2>Leaderboard</h2><div class="leaderboard-button-category"><button id="button-leaderboard-select-modal" type="button" class="btn btn-secondary pomo-bg-color-dark" style="float:right;"> <i class="material-icons text-white">star</i>Select Category</button>
+    </div></div>
+
+        <br/>
         <table class="leaderboard-table">
             <tr>
                 <th class="leaderboard-th">Rank</th>
@@ -144,6 +148,13 @@ export async function one_classroom_page(classroomDocID) {
 
     Elements.root.innerHTML = html;
 
+    const chooseCategory = document.getElementById('button-leaderboard-select-modal');
+    chooseCategory.addEventListener('click', async e =>{
+        e.preventDefault();
+        const selectOption = document.getElementById('select-option');
+        console.log('click');
+        $(`#modal-leaderboard-select`).modal('show');
+    })
     // get CLASSROOM tab and show it as visible
     const classroomGenButton = document.getElementById('classroom-gen-button');
     classroomGenButton.addEventListener('click', e => {
