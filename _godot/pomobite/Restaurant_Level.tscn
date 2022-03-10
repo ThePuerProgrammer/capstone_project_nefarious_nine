@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
+[ext_resource path="res://assets/art/AnimationFrames/Jesse_Waiter.png" type="Texture" id=3]
+[ext_resource path="res://assets/art/AnimationFrames/Susan_Waiter.png" type="Texture" id=4]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Pomobite_Restaurant_Tileset.png 0"
@@ -527,6 +529,22 @@
 9/shapes = [  ]
 9/z_index = 0
 
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
 [node name="Restaurant_Level" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -548,3 +566,15 @@ tile_set = SubResource( 3 )
 cell_size = Vector2( 4, 4 )
 format = 1
 tile_data = PoolIntArray( 196632, 0, 0, 196688, 0, 0, 196984, 0, 0, 197040, 0, 0, 917554, 4, 0, 917559, 4, 0, 917610, 4, 0, 917615, 4, 0, 917869, 4, 0, 917874, 4, 0, 917925, 4, 0, 917930, 4, 0, 2621632, 536870917, 0, 2621716, 5, 0, 3080386, 2, 0, 3080390, 536870914, 0, 3080394, 2, 0, 3080466, 2, 0, 3080470, 536870914, 0, 3080474, 2, 0, 3145883, 1, 0, 3146047, 1, 0, 3801227, 3, 0, 3801301, 3, 0, 3801347, 3, 0, 3801421, 3, 0, 3866783, 6, 0, 3866785, 7, 0, 3866788, 8, 0, 3866938, 6, 0, 3866940, 7, 0, 3866943, 8, 0, 4194336, 6, 0, 4194338, 7, 0, 4194341, 8, 0, 4194392, 6, 0, 4194394, 7, 0, 4194397, 8, 0, 4194688, 6, 0, 4194690, 7, 0, 4194693, 8, 0, 4194744, 6, 0, 4194746, 7, 0, 4194749, 8, 0, 4390946, 9, 0, 4391002, 9, 0, 4391298, 9, 0, 4391354, 9, 0, 7340064, 6, 0, 7340066, 7, 0, 7340069, 8, 0, 7340120, 6, 0, 7340122, 7, 0, 7340125, 8, 0, 7340416, 6, 0, 7340418, 7, 0, 7340421, 8, 0, 7340472, 6, 0, 7340474, 7, 0, 7340477, 8, 0, 7536674, 9, 0, 7536730, 9, 0, 7537026, 9, 0, 7537082, 9, 0, 10616867, 8, 0, 10616923, 8, 0, 10617219, 8, 0, 10682811, 8, 0, 10747935, 7, 0, 10747942, 6, 0, 10747991, 7, 0, 10747998, 6, 0, 10748287, 7, 0, 10748294, 6, 0, 10813474, 9, 0, 10813530, 9, 0, 10813826, 9, 0, 10813879, 7, 0, 10813886, 6, 0, 10879418, 9, 0 )
+
+[node name="Player1" type="Node2D" parent="."]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Player1"]
+position = Vector2( 1144, 358 )
+frames = SubResource( 4 )
+
+[node name="Player2" type="Node2D" parent="."]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Player2"]
+position = Vector2( 750, 352 )
+frames = SubResource( 5 )
