@@ -10,7 +10,7 @@
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 
 [sub_resource type="ConvexPolygonShape2D" id=23]
-points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
+points = PoolVector2Array( 0, 0, 32, 0, 32, 40, 0, 40 )
 
 [sub_resource type="ConvexPolygonShape2D" id=25]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -731,7 +731,7 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 19, 16 )
 
-[sub_resource type="SpriteFrames" id=5]
+[sub_resource type="SpriteFrames" id=26]
 animations = [ {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
@@ -777,9 +777,15 @@ frames = SubResource( 4 )
 position = Vector2( 1, 16 )
 shape = SubResource( 7 )
 
-[node name="Player2" type="Node2D" parent="."]
-visible = false
+[node name="Player2" type="KinematicBody2D" parent="."]
+position = Vector2( 720, 500 )
+collision/safe_margin = 0.8
+script = ExtResource( 5 )
+move_speed = 200.0
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Player2"]
-visible = false
-frames = SubResource( 5 )
+frames = SubResource( 26 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player2"]
+position = Vector2( 1, 16 )
+shape = SubResource( 7 )

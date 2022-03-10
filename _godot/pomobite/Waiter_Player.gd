@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 export var move_speed = 300.0
+var player = true
 
 func _ready():
 	pass
@@ -17,8 +18,6 @@ func process_movement():
 	velocity.y += vertical
 	velocity *= move_speed
 	move_and_slide(velocity)
-#	self.position.x += Input.get_axis("ui_left", "ui_right") * move_speed * delta
-#	self.position.y += Input.get_axis("ui_up", "ui_down") * move_speed * delta
 
 func process_animation():
 	pass
