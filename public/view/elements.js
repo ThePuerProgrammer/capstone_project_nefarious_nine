@@ -44,6 +44,7 @@ export const formCreateDeck = document.getElementById('form-create-deck');
 export const formDeckCategorySelect = document.getElementById('select-deck-category');
 export const formCreateAccount = document.getElementById('form-create-account');
 export const formViewDeck = document.getElementById('form-view-deck');
+export const formClassSelect = document.getElementById('select-deck-classroom');
 //============================================================================//
 
 // STUDY PAGE
@@ -77,9 +78,9 @@ export const modalEditDeck = new bootstrap.Modal(document.getElementById('modal-
 export const modalCreateClassroom = new bootstrap.Modal(document.getElementById('create-classroom-modal'));
 export const modalDeleteDeckConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-delete-deck', { backdrop: 'static' }));
 export const modalEditClassroom = new bootstrap.Modal(document.getElementById('modal-edit-classroom', { backdrop: 'static' }));
-export const modalPreviewClassroom = new bootstrap.Modal(document.getElementById('preview-classroom-modal', {backdrop:'static'}));
-export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-leave-classroom', {backdrop: 'static'}));
-export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', {backdrop: 'static'}));
+export const modalPreviewClassroom = new bootstrap.Modal(document.getElementById('preview-classroom-modal', { backdrop: 'static' }));
+export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-leave-classroom', { backdrop: 'static' }));
+export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', { backdrop: 'static' }));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -139,6 +140,7 @@ export const formEditDeck = {
 }
 export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
 export const formDeleteDeckConfirmation = document.getElementById('form-delete-deck-confirmation');
+export const formEditDeckClassroomSelect = document.getElementById('select-deck-classroom-edit');
 //==========================================================================//
 //PET ADOPTION
 //============================================================================//

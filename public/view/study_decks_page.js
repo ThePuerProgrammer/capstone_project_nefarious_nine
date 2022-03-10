@@ -10,7 +10,8 @@ import * as Utilities from './utilities.js'
 import * as EditDeck from '../controller/edit_deck.js'
 import * as Search from './search_page.js'
 
-let confirmation=false;
+let confirmation = false;
+let noClassDeckSelected = false;
 
 export function addEventListeners() {
     Elements.menuStudyDecks.addEventListener('click', async () => {
@@ -24,10 +25,15 @@ export function addEventListeners() {
         const name = e.target.name.value;
         const subject = e.target.subject.value;
         const isFavorited = false;
-        const category = e.target.selectCategory.value;   
-        
+        const category = e.target.selectCategory.value;
+        const isClassDeck = e.target.selectClassroom.value;
+        //NOTE: If no class was chosen, isClassDeck value will be false.
+        // Otherwise, the value will be the CLASSROOM DOC ID tied to the deck.
+
+        //if there is no class selected, the deck is not a class deck
+
         const keywords = Search.cleanDataToKeywords(name, subject, category)
-        
+
         // relevant to Cody's story:
         const dateCreated = Date.now();
 
@@ -38,22 +44,44 @@ export function addEventListeners() {
             isFavorited,
             category,
             keywords,
+            isClassDeck,
         });
-       
-        try {
-            console.log("Creating Deck");
-            const deckId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
-            console.log("Deck Created");
-            deck.docId = deckId;
-            localStorage.setItem("deckPageDeckDocID", deck.docId);
-            sessionStorage.setItem('deckId', deckId);
-            history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
-            Elements.modalCreateDeck.hide();
-            //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
-            await DeckPage.deck_page(deckId);
-        } catch (e) {
-            if (Constant.DEV)
-                console.log(e);
+        console.log('CLASS DOC ID' + deck.isClassDeck);
+        console.log('CLASS DOC ID' + isClassDeck);
+
+        if (isClassDeck == "false") { //if no class is tied to this deck
+            try {
+                console.log("Creating Deck");
+                const deckId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
+                console.log("Deck Created");
+                deck.docId = deckId;
+                localStorage.setItem("deckPageDeckDocID", deck.docId);
+                sessionStorage.setItem('deckId', deckId);
+                history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+                Elements.modalCreateDeck.hide();
+                //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
+                await DeckPage.deck_page(deckId, deck.isClassDeck);
+            } catch (e) {
+                if (Constant.DEV)
+                    console.log(e);
+            }
+        } else { // a class is tied to this deck, isClassDeck is now the classroom DOCID its tied to
+            try {
+                console.log("Creating Deck");
+                const deckId = await FirebaseController.createClassDeck(deck.isClassDeck, deck);
+                console.log("Deck Created");
+                deck.docId = deckId;
+                localStorage.setItem("deckPageDeckDocID", deck.docId);
+                sessionStorage.setItem('deckId', deckId);
+                history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+                Elements.modalCreateDeck.hide();
+                //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
+                await DeckPage.deck_page(deckId, deck.isClassDeck);
+            } catch (e) {
+                if (Constant.DEV)
+                    console.log(e);
+            }
+
         }
 
     });
@@ -62,7 +90,7 @@ export function addEventListeners() {
     $(`#create-deck-modal`).on('hidden.bs.modal', function (e) {
         Elements.formCreateDeck.reset();
     });
-    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e=>{
+    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e => {
         const yes = e.target.yes.value;
     });
 
@@ -74,20 +102,59 @@ export async function study_decks_page() {
     let deckList = [];
     try {
         deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid); //this is what's showing up as null
+
     } catch (e) {
         console.log(e);
     }
 
+
+
     buildStudyDecksPage(deckList);
-    
+
 } //end study_decks_page()
 
 export async function buildStudyDecksPage(deckList) {
+    let availableClassroomList = [];
+    let classDecks = [];
+    try {
+        availableClassroomList = await FirebaseController.getAvailableClassrooms();
+    } catch (e) {
+        Utilities.info('Error getting available classrooms', JSON.stringify(e));
+        console.log(e);
+    }
+
+
+    // get my classrooms
+    let myClassroomList = [];
+    for (let i = 0; i < availableClassroomList.length; i++) {
+        if (availableClassroomList[i].moderatorList.includes(Auth.currentUser.email)) {
+            myClassroomList.push(availableClassroomList[i]);
+            let tempDeck = await FirebaseController.getClassDecks(availableClassroomList[i].docID);
+            if (tempDeck.length < 1) {
+                continue;
+            }
+            classDecks.push(tempDeck);
+            tempDeck = [];
+        } else {
+            //keep looping to fill myclassroom list
+            continue;
+        }
+
+    }
+    //push our class decks onto the deckList for build view, 
+    //might want to distinguish which are class decks or not for the view
+    for (let i = 0; i < classDecks.length; i++) {
+        deckList.push(...classDecks[i]);
+    }
+
+
+
+
     Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
     html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="material-icons">search</i>Search Decks</button></h1> '
-    ;
+        ;
 
     //create deck button
     html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">
@@ -109,12 +176,17 @@ export async function buildStudyDecksPage(deckList) {
     <br><br>
     `
 
-    
+
     html += `<div id="deck-container">`
     for (let i = 0; i < deckList.length; i++) {
         let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
         html += buildDeckView(deckList[i], flashcards);
     }
+    // for (let i = 0; i < deckList.length; i++) {
+    //     let flashcards = await FirebaseController.getClassDeckFlashcards(, deckList[i].docId);
+    //     html += buildDeckView(deckList[i], flashcards);
+    // }
+
     html += `</div>`
 
     if (deckList.length == 0) {
@@ -124,41 +196,59 @@ export async function buildStudyDecksPage(deckList) {
 
 
 
+
+
     Elements.root.innerHTML += html;
     // adds an event listener to each of the view buttons
     const viewDeckButtons = document.getElementsByClassName('form-view-deck');
-    for(let i = 0; i < viewDeckButtons.length; i++){
+    for (let i = 0; i < viewDeckButtons.length; i++) {
         viewDeckButtons[i].addEventListener('submit', async e => {
             e.preventDefault();
             let deckId = e.target.docId.value;
+            let isClassDeck = e.target.classdocId.value;
+            console.log("check for form view deck submit event " + e.target.classdocId.value);
+
             window.sessionStorage;
             sessionStorage.setItem('deckId', deckId);
+
             history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
-            await DeckPage.deck_page(deckId);
+            await DeckPage.deck_page(deckId, isClassDeck);
         })
     }
 
     const editDeckForms = document.getElementsByClassName('form-edit-deck');
-    for(let i=0; i< editDeckForms.length; i++){
-        editDeckForms[i].addEventListener('submit', async e=>{
+    for (let i = 0; i < editDeckForms.length; i++) {
+        editDeckForms[i].addEventListener('submit', async e => {
             //prevents refresh on submit of form
-            e.preventDefault();          
-            await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
+
+            e.preventDefault();
+            if (e.target.classdocId.value == "false") { //if not a class deck
+                await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
+            } else {//else is a class deck
+                await EditDeck.edit_class_deck(e.target.classdocId.value, e.target.docId.value);
+            }
+
             await study_decks_page();
         });
     }
     const deleteDeckForms = document.getElementsByClassName('form-delete-deck');
-    for(let i=0; i < deleteDeckForms.length; i++){
+    for (let i = 0; i < deleteDeckForms.length; i++) {
         deleteDeckForms[i].addEventListener('submit', async e => {
             e.preventDefault();
             const button = e.target.getElementsByTagName('button')[0];
             const label = Utilities.disableButton(button);
             let deckId = e.target.docId.value;
+            let classDocID = e.target.classdocId.value;
             Elements.modalDeleteDeckConfirmation.show();
             const button2 = document.getElementById('modal-confirmation-delete-deck-yes');
-            button2.addEventListener("click", async e =>{
-                confirmation = true;
-                await EditDeck.delete_deck(deckId, confirmation);
+            button2.addEventListener("click", async e => {
+                if (classDocID == "false") {
+                    confirmation = true;
+                    await EditDeck.delete_deck(deckId, confirmation);
+                } else {
+                    confirmation = true;
+                    await EditDeck.delete_class_deck(deckId, confirmation, classDocID);
+                }
             });
             Utilities.enableButton(button, label);
         });
@@ -265,7 +355,7 @@ export async function buildStudyDecksPage(deckList) {
     // restructured create deck button to add category dropdown menu
     createDeckButton.addEventListener('click', async e => {
 
-       // const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+        // const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
 
         // call Firebase func. to retrieve categories list
         let categories;
@@ -286,6 +376,22 @@ export async function buildStudyDecksPage(deckList) {
                   `;
         });
 
+        Elements.formClassSelect.innerHTML = '';
+        //logic for if the dropdown box selection on create deck is NONE or is a CLASSROOM
+        Elements.formClassSelect.innerHTML += `
+                    <option value="${noClassDeckSelected}">None</option>
+                  `;
+        myClassroomList.forEach(myclass => {
+            console.log(myclass.docID);
+            Elements.formClassSelect.innerHTML += `
+                      <option value="${myclass.docID}">${myclass.name}</option>
+                  `;
+
+        });
+
+
+
+
         // opens create Deck modal
         $(`#${Constant.htmlIDs.createDeckModal}`).modal('show');
     })
@@ -300,6 +406,7 @@ export async function buildStudyDecksPage(deckList) {
 } //buildStudyDecksPage(deckList)
 
 export function buildDeckView(deck, flashcards) {
+    window.sessionStorage;
     let html = `
     <div id="${deck.docId}" class="deck-card">
         <div class="deck-view-css">
@@ -313,14 +420,17 @@ export function buildDeckView(deck, flashcards) {
         <div class="btn-group">
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
+            <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
         </form>
         <form class="form-edit-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
+            <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
         </form>
         <form class="form-delete-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
+            <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
         </form>
         </div>`;
@@ -328,7 +438,7 @@ export function buildDeckView(deck, flashcards) {
     // ternary operator to check if a deck is favorited or not
     html += deck.isFavorited ? `<div class="form-check">
     <span class="favorite-deck">
-    <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>        
+    <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
     </span>
     <label class= "form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite</i>Favorite deck</label>
     </div>
