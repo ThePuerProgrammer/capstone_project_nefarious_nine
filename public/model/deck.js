@@ -12,6 +12,7 @@ export class Deck {
         this.isFavorited = data.isFavorited;
         this.category = data.category;
         this.keywords = data.keywords;
+        this.flashcardNumber = 0;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
 
@@ -50,6 +51,7 @@ export class Deck {
             isFavorited: this.isFavorited,
             category: this.category,
             keywords: this.keywords,
+            flashcardNumber: this.flashcardNumber
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 
@@ -86,6 +88,8 @@ static isSerializedDeck(obj){
         if(this.isFavorited) d.isFavorited = this.isFavorited;
         if(this.dateCreated) d.dateCreated = this.dateCreated;
         if(this.keywords) d.keywords = this.keywords;
+        if(this.flashcardNumber) d.flashcardNumber = this.flashcardNumber;
+
         return d;
     }
 

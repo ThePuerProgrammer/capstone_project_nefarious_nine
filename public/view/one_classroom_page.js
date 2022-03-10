@@ -94,9 +94,12 @@ export async function one_classroom_page(classroomDocID) {
     })
 
     
-    let leaderboard = [];
-    leaderboard = await FirebaseController.leaderboardByCoins(members);
-    
+    //let leaderboardCoins = [];
+    //leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+    let leaderboardDecks = [];
+    leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+    //let leaderboardFlashcards = [];
+    //leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
     html += `</div>
         </div>
         </div>`;
@@ -113,11 +116,12 @@ export async function one_classroom_page(classroomDocID) {
                 <th class="leaderboard-th">Rank</th>
                 <th class="leaderboard-th">User</th>
                 <th class="leaderboard-th">Coins</th>
+                <th class="leaderboard-th">Decks</th>
             </tr>`;
 
-    if(leaderboard.length >0 ){
+    if(leaderboardDecks.length >0 ){
         let index = 1;
-        leaderboard.forEach(e =>{
+        leaderboardDecks.forEach(e =>{
             html+= buildLeaderBoard(e, index);
             index++;
         });
@@ -154,6 +158,12 @@ export async function one_classroom_page(classroomDocID) {
         const selectOption = document.getElementById('select-option');
         console.log('click');
         $(`#modal-leaderboard-select`).modal('show');
+        Elements.formLeaderboardCategorySelect.addeventListener('submit', async e=>{
+            e.preventDefault();
+            const selection = e.target.option.value;
+            console.log(`Selection submitted: ${selection}`);
+            //await FirebaseController.
+        });
     })
     // get CLASSROOM tab and show it as visible
     const classroomGenButton = document.getElementById('classroom-gen-button');
@@ -372,5 +382,6 @@ function buildLeaderBoard(e,i){
         <td class="leaderboard-td">${i}</td>
         <td class="leaderboard-td">${e.email}</td>
         <td class="leaderboard-td">${e.coins}</td>
+        <td class="leaderboard-td">${e.deckNumber}</td>
     </tr>`;
 }

@@ -309,6 +309,7 @@
             <input type="hidden" name="docId" />
             <input type="hidden" name="isFavorited" />
             <input type="hidden" name="dateCreated" />
+            <input type="hidden" name="flashcardNumber"/>
             <div class="form-group">
               <div id="form-edit-deck-name">
                 <label class="pomo-text-color-light" for="name">Name</label>
@@ -718,21 +719,27 @@
           </div>
           <div class="modal-body">
             <form id="leaderboard-select">
-              <select class="form-select-category-leaderboard" id="select-option" onChange="update()">
+              <select class="form-select-category-leaderboard" id="select-option" onChange="select()">
                 <option selected>Choose a Category</option>
                 <option value="coins" id="value">Coins</option>
                 <option value="decks" id="value"># of Decks</option>
                 <option value="points" id="value">Points</option>
+                <option value="flashcards" id="value"># of Flashcards</option>
               </select>
               <script type="text/javascript">
-                function update() {
+                function select() {
                   var select = document.getElementById('select-option');
                   var option = select.options[select.selectedIndex];
                   document.getElementById('value').value = option.value;
-                  console.log(option.value);
-                  
+                  console.log(`${option.value}`)
+                  if(option.value=="coins"){console.log(`Made it to coins`)}
+                  if(option.value=="decks"){console.log(`Made it to decks`)}
+                  if(option.value=="points"){console.log(`Made it to points`)}
+                  if(option.value=="flashcards"){console.log(`Made it to flashcards`)}
+
+
                 }
-                update()
+                select()
               </script>
               <br>
               <div class="leaderboard-selection-button-css">

@@ -177,4 +177,6 @@ export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyCl
 //LEADERBOARD
 //===========================================================================//
 export const modalLeaderboardCategorySelect = new bootstrap.Modal(document.getElementById('modal-leaderboard-select', {backdrop: 'static'}));
+export const formLeaderboardCategorySelect = document.getElementById('leaderboard-select');
+
 //===========================================================================//

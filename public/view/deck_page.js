@@ -119,6 +119,7 @@ export function addEventListeners() {
                 `Flashcard: ${flashcard.question} has been added!`,
                 "modal-create-a-flashcard"
             );
+            await FirebaseController.updateFlashcardCount(Auth.currentUser.uid,deckDocID);
         } catch (e) {
             if (Constant.DEV) console.log(e);
             Utilities.info(

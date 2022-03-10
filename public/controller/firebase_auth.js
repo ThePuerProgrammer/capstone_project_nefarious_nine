@@ -60,12 +60,14 @@ export function addEventListeners() {
             const decksStudying = [];
             const coins = 0;
             const pet = "";
+            const deckNumber = 0;
 
             const newUserModel = new User({
                 email,
                 decksStudying,
                 coins,
                 pet,
+                deckNumber,
             });
 
             // Creates user Auth Account AND adds user account to users collections
@@ -76,7 +78,9 @@ export function addEventListeners() {
             });
 
             console.log("ADDING USER TO FIRESTORE");
-            firebase.firestore().collection(Constants.collectionName.USERS).doc(uid).set(newUserModel.serialize());
+            /*  This was missing await, making me 
+                thing that it wasn't being added fast enough for the user to be browsing.*/
+            await firebase.firestore().collection(Constants.collectionName.USERS).doc(uid).set(newUserModel.serialize());
             console.log("ADDED USER TO FIRESTORE");
       
             // Account successfully created from here

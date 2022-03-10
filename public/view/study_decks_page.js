@@ -49,6 +49,7 @@ export function addEventListeners() {
             sessionStorage.setItem('deckId', deckId);
             history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
             Elements.modalCreateDeck.hide();
+            await FirebaseController.updateDeckCount(Auth.currentUser.uid);
             //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
             await DeckPage.deck_page(deckId);
         } catch (e) {
