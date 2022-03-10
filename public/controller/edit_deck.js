@@ -15,7 +15,8 @@ export function addEventListeners(){
         const subject = e.target.subject.value;
         const dateCreated = e.target.dateCreated.value;
         const isFavorited = e.target.isFavorited.value;
-        const category = e.target.selectCategory.value;        
+        const category = e.target.selectCategory.value;
+        const flashcardNumber = e.target.flashcardNumber.value;        
 
         const keywords = cleanDataToKeywords(name, subject, category)
 
@@ -28,6 +29,7 @@ export function addEventListeners(){
             category,
             isFavorited,
             keywords,
+            flashcardNumber
         });
         d.set_docID(e.target.docId.value);
 
@@ -36,6 +38,8 @@ export function addEventListeners(){
         } else {
             d.isFavorited=true;
         }
+        //Updates count as Deck is edited
+        d.flashcardNumber=await FirebaseController.updateFlashcardCount(Auth.currentUser.uid,d.docID);
 
         //Firestore
         try{
@@ -84,6 +88,7 @@ export async function edit_deck(uid, deckId){
     if(deck.category){deck.category;}else if(typeof obj==='undefined'){deck.category='Misc'};
     Elements.formEditDeck.form.selectCategory.value = deck.category;
     Elements.formEditDeck.form.isFavorited.value = deck.isFavorited;
+    Elements.formEditDeck.form.flashcardNumber.value = deck.flashcardNumber;
 
     //Adding the Categories...THINGS
     const categories =["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
@@ -102,11 +107,16 @@ export async function delete_deck(docId,confirmation){
         try{
             await FirebaseController.deleteDeck(Auth.currentUser.uid, docId);
             Utilities.info(`Success`, `The desired deck as successfully deleted.`,);
+            //This is called twice before page load, due to it not registering the change
+            await FirebaseController.updateDeckCount(Auth.currentUser.uid);
+
 
         } catch(e){
             if(Constant.DEV)console.log(e);
             Utilities.info(`Delete Deck Error`, JSON.stringify(e));
         }
+        //This is called twice before page load, due to it not registering the change
+        await FirebaseController.updateDeckCount(Auth.currentUser.uid);
         await study_decks_page();
     }
 }

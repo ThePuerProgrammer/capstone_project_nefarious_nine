@@ -5,6 +5,7 @@ export class User{
         this.defaultTimerSetting = [30, 3];
         this.coins = data.coins;
         this.pet = data.pet;
+        this.deckNumber = data.deckNumber;
         // TODO: SHOP STUFF
     }
 
@@ -39,6 +40,7 @@ export class User{
                 defaultTimerSetting: this.defaultTimerSetting,
                 coins: this.coins,
                 pet: this.pet,
+                deckNumber: this.deckNumber,
             };
         }
 
@@ -49,6 +51,7 @@ export class User{
            user.decksStudying = data.decksStudying;
            user.coins = data.coins;
            user.pet = data.pet;
+           user.deckNumber = data.deckNumber;
            return user;
         }
 
@@ -63,18 +66,5 @@ export class User{
             if(!obj.email || typeof obj.email != 'string') return false;
             // TODO: decks studying type check
         }
-
-/***************************************************************************
- *                  (UNDER CONSTRUCTION FOR A LATER STORY)
- *                  Serialization For Editing/Updating
- * *************************************************************************
- *      This will allow updating to be serialized, prevents errors on the 
- *      firebase side.  
-***************************************************************************/
-        // serializeForUpdate(){
-        //     const flashcard = {};
-        //     if(this.imageName) flashcard.imageName = this.imageName;
-        //     if(this.imageURL) flashcard.imageURL = this.imageURL;
-        // }
 
 }

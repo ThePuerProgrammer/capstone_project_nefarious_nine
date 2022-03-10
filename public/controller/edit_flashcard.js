@@ -130,14 +130,14 @@ export function addEventListeners(){
             }
 
             //Testing things within the console, can be deleted
-            console.log(`isQuestionImage.checked${isQuestionImage.checked}`);
-            console.log(`isAnswerImage.checked${isAnswerImage.checked}`);
+            /* console.log(`isQuestionImage.checked${isQuestionImage.checked}`);
+             console.log(`isAnswerImage.checked${isAnswerImage.checked}`);
             if(imageFile2UploadAnswer){
             console.log(`answerImageUPLOAD${imageFile2UploadAnswer.value}`);
             }
             if(imageFile2UploadQuestion){
             console.log(`questionImageUPLOAD${imageFile2UploadQuestion.value}`);
-            }
+            }*/
         
 
         //Firestore

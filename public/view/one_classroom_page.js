@@ -39,10 +39,10 @@ export async function one_classroom_page(classroomDocID) {
 
     // adding classroom, members, and leaderboard tabs
     html += `<div class="classroom-page-tab">
-        <button id="classroom-gen-button" class="classroom-tab">Classroom<i class="small material-icons">school</i></button>
-        <button id="classroom-members-button" class="classroom-tab">Members <i class="small material-icons">group</i></button>
-        <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard <i class="small material-icons">insert_chart</i></button>
-        <button id="classroom-chat-button" class="classroom-tab">Chat <i class="small material-icons">chat</i></button>
+        <button id="classroom-gen-button" class="classroom-tab"><i class="small material-icons">school</i>Classroom</button>
+        <button id="classroom-members-button" class="classroom-tab"><i class="small material-icons">group</i>Members</button>
+        <button id="classroom-leaderboard-button" class="classroom-tab"><i class="small material-icons">insert_chart</i>Leaderboard</button>
+        <button id="classroom-chat-button" class="classroom-tab"><i class="small material-icons">chat</i>Chat</button>
         </div>`;
 
     // CLASSROOM tab contents
@@ -94,26 +94,34 @@ export async function one_classroom_page(classroomDocID) {
     })
 
     
-    let leaderboard = [];
-    leaderboard = await FirebaseController.leaderboardByCoins(members);
-    
+    //let leaderboardCoins = [];
+    //leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+    let leaderboardDecks = [];
+    leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+    //let leaderboardFlashcards = [];
+    //leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
     html += `</div>
         </div>
         </div>`;
 
     // LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
-    <center><h2>Leaderboard</h2>  
+    <center>
+    <div class="leaderboard-main-row"><h2>Leaderboard</h2><div class="leaderboard-button-category"><button id="button-leaderboard-select-modal" type="button" class="btn btn-secondary pomo-bg-color-dark" style="float:right;"> <i class="material-icons text-white">star</i>Select Category</button>
+    </div></div>
+
+        <br/>
         <table class="leaderboard-table">
             <tr>
                 <th class="leaderboard-th">Rank</th>
                 <th class="leaderboard-th">User</th>
                 <th class="leaderboard-th">Coins</th>
+                <th class="leaderboard-th">Decks</th>
             </tr>`;
 
-    if(leaderboard.length >0 ){
+    if(leaderboardDecks.length >0 ){
         let index = 1;
-        leaderboard.forEach(e =>{
+        leaderboardDecks.forEach(e =>{
             html+= buildLeaderBoard(e, index);
             index++;
         });
@@ -138,12 +146,25 @@ export async function one_classroom_page(classroomDocID) {
     html += `<div>
     <textarea id="add-new-message" placeholder="Send a message..." style="border: 1px solid #2C1320; width: 700px; height: 150px; background-color: #2C1320; color: #A7ADC6;"></textarea>
     <br>
-    <button id="classroom-message-button" style="background-color: #2C1320; color: #A7ADC6;">Send</button>
+    <button id="classroom-message-button" style="background-color: #2C1320; color: #A7ADC6;"><i class="small material-icons">send</i> Send</button>
     </div>
     </div>`;
 
     Elements.root.innerHTML = html;
 
+    const chooseCategory = document.getElementById('button-leaderboard-select-modal');
+    chooseCategory.addEventListener('click', async e =>{
+        e.preventDefault();
+        const selectOption = document.getElementById('select-option');
+        console.log('click');
+        $(`#modal-leaderboard-select`).modal('show');
+        Elements.formLeaderboardCategorySelect.addeventListener('submit', async e=>{
+            e.preventDefault();
+            const selection = e.target.option.value;
+            console.log(`Selection submitted: ${selection}`);
+            //await FirebaseController.
+        });
+    })
     // get CLASSROOM tab and show it as visible
     const classroomGenButton = document.getElementById('classroom-gen-button');
     classroomGenButton.addEventListener('click', e => {
@@ -361,5 +382,6 @@ function buildLeaderBoard(e,i){
         <td class="leaderboard-td">${i}</td>
         <td class="leaderboard-td">${e.email}</td>
         <td class="leaderboard-td">${e.coins}</td>
+        <td class="leaderboard-td">${e.deckNumber}</td>
     </tr>`;
 }

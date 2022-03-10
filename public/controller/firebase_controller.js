@@ -928,8 +928,6 @@ export async function leaderboardByCoins(members){
     .orderBy('coins', 'desc')
     .get();
 
-    
-
     ref.forEach(doc => {
         let cm = new User(doc.data());
         cm.set_docID(doc.id);
@@ -938,3 +936,109 @@ export async function leaderboardByCoins(members){
 
     return classroomLeadersByCoins;
 }
+//Gets the count of the decks and updates it to a new field in user
+export async function leaderboardByDecks(members){
+    let classroomLeadersByDecks = [];
+
+    const ref = await firebase.firestore()
+    .collection(Constant.collectionName.USERS)
+    .where('email', 'in', members)
+    .orderBy('deckNumber', 'desc')
+    .get();
+    
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByDecks.push(cm);
+    })
+
+    return classroomLeadersByDecks;
+
+}
+//Gets the count of the decks and updates it to a new field in user
+export async function leaderboardByFlashcards(members){
+    const ref = await firebase.firestore()
+    .collection(Constant.collectionName.USERS)
+    .where('email', 'in', members)
+    .get().then((querySnapshot)=>{
+        querySnapshot.forEach(async (doc)=>{
+            const userdocId = doc.id ;
+            const countDeck = await firebase.firestore()
+            .collection(Constant.collectionName.USERS).doc(userdocId)
+            .collection(Constant.collectionName.OWNED_DECKS)
+            .get()
+            
+        });
+    });
+}
+
+//============================================================================//
+// UPDATE COUNTS
+//============================================================================//
+/*  This is used to maintain the data needed for the leaderboards query.
+ *  These functions were based of an initialy query, but found it easier to add
+ *  them as fields to the parent document of each subcollection. This should make
+ *  Producing the leaderboards data much faster and less taxing, as it initially
+ *  had nested upon nest querries.                                            */
+/*  PREVIOUSLY USED QUERY:
+    export async function updateFlashcardCount(currentUser, deckId){
+    const ref = await firebase.firestore()
+    .collection(Constant.collectionName.USERS)
+    .where('email', 'in', members)
+    .get().then((querySnapshot)=>{
+        querySnapshot.forEach(async (doc)=>{
+            const userdocId = doc.id ;
+            const countDeck = await firebase.firestore()
+            .collection(Constant.collectionName.USERS).doc(userdocId)
+            .collection(Constant.collectionName.OWNED_DECKS)
+            .get().then((querySnapshot2)=>{
+                querySnapshot2.forEach(async (doc) =>{
+                    const countFlash = await firebase.firestore()
+                    .collection(Constant.collectionName.USERS).doc(userdocId)
+                    .collection(Constant.collectionName.OWNED_DECKS).doc(doc.id)
+                    .collection(Constant.collectionName.FLASHCARDS)
+                    .get()
+                    console.log(`Doc ID:${doc.id} Size:${countFlash.size}`);
+                    await firebase.firestore()
+                    .collection(Constant.collectionName.USERS).doc(userdocId)
+                    .collection(Constant.collectionName.OWNED_DECKS).doc(doc.id)
+                    .update({'flashcardNumber': countFlash.size});
+                });
+            });
+        });
+    });
+}                                                                             */
+//============================================================================//
+//FLASHCARD COUNT
+export async function updateFlashcardCount(currentUser, deckId){
+    //This grabs all flashcards within the deck, so we can get a count on them
+    const countFlash = await firebase.firestore()
+    .collection(Constant.collectionName.USERS).doc(currentUser)
+    .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+    .collection(Constant.collectionName.FLASHCARDS)
+    .get()
+    
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+    .collection(Constant.collectionName.USERS).doc(currentUser)
+    .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+    .update({'flashcardNumber': countFlash.size});
+    
+    //Used in Edit Deck when updating to retain the flashcardNumber 
+    return countFlash.size;
+             
+}
+//DECK COUNT
+export async function updateDeckCount(currentUser){
+    //This grabs all the decks owned by a user, so we can get a count on them
+    const countDeck = await firebase.firestore()
+    .collection(Constant.collectionName.USERS).doc(currentUser)
+    .collection(Constant.collectionName.OWNED_DECKS)
+    .get()
+    //This updates the deck number by counting the previous get() reference
+    await firebase.firestore().collection(Constant.collectionName.USERS).doc(currentUser)
+    .update({'deckNumber': countDeck.size});
+    //Used when deleting a deck
+    return countDeck;
+}
+//============================================================================//

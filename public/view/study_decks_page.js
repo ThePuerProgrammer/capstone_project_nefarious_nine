@@ -49,6 +49,7 @@ export function addEventListeners() {
             sessionStorage.setItem('deckId', deckId);
             history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
             Elements.modalCreateDeck.hide();
+            await FirebaseController.updateDeckCount(Auth.currentUser.uid);
             //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
             await DeckPage.deck_page(deckId);
         } catch (e) {
@@ -163,6 +164,16 @@ export async function buildStudyDecksPage(deckList) {
             Utilities.enableButton(button, label);
         });
     }
+    const favoritedCheckboxes = document.getElementsByClassName("favorite-checkbox");
+    for (let i = 0; i < favoritedCheckboxes.length; ++i) {
+        favoritedCheckboxes[i].addEventListener('change', async e => {
+            const docId = e.target.value;
+            console.log(docId);
+            const favorited = deckList.find(deck => docId == deck.docId).isFavorited ? false : true;
+            await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
+            await study_decks_page();
+        });
+    }
 
 
     const sortDeckSelect = document.getElementById("sort-decks");
@@ -249,17 +260,6 @@ export async function buildStudyDecksPage(deckList) {
         // If you've made it this far, then thank you for for following along
     })
 
-    const favoritedCheckboxes = document.getElementsByClassName("favorite-checkbox");
-    for (let i = 0; i < favoritedCheckboxes.length; ++i) {
-        favoritedCheckboxes[i].addEventListener('change', async e => {
-            const docId = e.target.value;
-            console.log(docId);
-            const favorited = deckList.find(deck => docId == deck.docId).isFavorited ? false : true;
-            await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
-            await study_decks_page();
-        });
-    }
-
     const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
 
     // restructured create deck button to add category dropdown menu
@@ -330,6 +330,7 @@ export function buildDeckView(deck, flashcards) {
     <span class="favorite-deck">
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>        
     </span>
+
     <label class= "form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite</i>Favorite deck</label>
     </div>
     </div>
@@ -339,7 +340,8 @@ export function buildDeckView(deck, flashcards) {
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
     </span>
     <label class="form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite_border</i>Favorite deck</label>
-</div>
+    
+    </div>
 </div>
 </div>`;
     return html;
