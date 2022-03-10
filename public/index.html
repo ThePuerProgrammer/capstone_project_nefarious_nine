@@ -137,7 +137,8 @@
               <input type="password" name="password" required minlength="6" placeholder="Password" autocomplete="off">
             </div>
             <div>
-              <input type="password" name="passwordConfirm" required minlength="6" placeholder="Confirm Password" autocomplete="off"> 
+              <input type="password" name="passwordConfirm" required minlength="6" placeholder="Confirm Password"
+                autocomplete="off">
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button type="submit"
@@ -196,7 +197,8 @@
               <br>
               <label class="pomo-text-color-light" for="esubject">Subject</label>
               <input class="form-control form-control-lg" type="text" name="esubject"
-                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="eclass-subject" autocomplete="off">
+                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="eclass-subject"
+                autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="editClassCategory">Category</label>
@@ -268,6 +270,7 @@
         </div>
         <div class="modal-body">
           <form id="form-create-deck" method="post">
+            <input type="hidden" name="classDeckdocId" />
             <div class="form-group">
               <label class="pomo-text-color-light" for="name">Name</label>
               <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
@@ -276,12 +279,19 @@
               <br>
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
-                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="deck-subject" autocomplete="off">
+                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="deck-subject"
+                autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="selectCategory">Category</label>
               <br>
               <select id="select-deck-category" name="selectCategory" class="form-select-deck-category"
+                aria-label="Default select example" style="width:300px;"></select>
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="selectClassroom">Classroom</label>
+              <br>
+              <select id="select-deck-classroom" name="selectClassroom" class="form-select-deck-classroom"
                 aria-label="Default select example" style="width:300px;"></select>
             </div>
             <br>
@@ -309,7 +319,8 @@
             <input type="hidden" name="docId" />
             <input type="hidden" name="isFavorited" />
             <input type="hidden" name="dateCreated" />
-            <input type="hidden" name="flashcardNumber"/>
+            <input type="hidden" name="flashcardNumber" />
+            <input type="hidden" name="classDocId" />
             <div class="form-group">
               <div id="form-edit-deck-name">
                 <label class="pomo-text-color-light" for="name">Name</label>
@@ -330,6 +341,7 @@
                 <select id="select-deck-category-edit" name="selectCategory" class="form-select-deck-category"
                   aria-label="Default select example" style="width:300px;"></select>
               </div>
+              <br>
             </div>
             <br>
             <br>
@@ -382,8 +394,8 @@
             <!-- QUESTION INPUT -->
             <label for="form-question-text-input">Question:</label>
             <textarea name="question" id="form-question-text-input" class="form-control" rows="3" type="text"
-              name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min
-              length="1" autocomplete="off"></textarea>
+              name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min length="1"
+              autocomplete="off"></textarea>
             <br />
             <div id="form-question-image-container" style="display: none;">
               <img id="form-add-image-to-flashcard-question-tag"
@@ -549,7 +561,8 @@
               <br>
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
-                placeholder="e.g. Software Design & Development" required minlength="2" id="class-subject" autocomplete="off">
+                placeholder="e.g. Software Design & Development" required minlength="2" id="class-subject"
+                autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="selectClassCategory">Category</label>
@@ -675,15 +688,17 @@
         <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
           <h5 class="modal-title" id="modal-searchbox-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>       
-          <div style="display: inline-block; margin-left: 50px;">
-            <form id="form-searchbox" class="d-flex" method="get" action="">            
-                    <input name="searchKeys" class="form-control border-end-0 border rounded-pill" placeholder id="modal-searchbox-placeholder" type="Search" value="">   
-                    <input type="hidden" id="modal-searchbox-type" name="searchType" value="" />      
-                    <button class ="btn search-btn" type="submit" style="margin: 8px 8px 8px 8px;" name="search-submit" value="Search">Search</button>                
-            </form>
-          </div>
-        
+        </div>
+        <div style="display: inline-block; margin-left: 50px;">
+          <form id="form-searchbox" class="d-flex" method="get" action="">
+            <input name="searchKeys" class="form-control border-end-0 border rounded-pill" placeholder
+              id="modal-searchbox-placeholder" type="Search" value="">
+            <input type="hidden" id="modal-searchbox-type" name="searchType" value="" />
+            <button class="btn search-btn" type="submit" style="margin: 8px 8px 8px 8px;" name="search-submit"
+              value="Search">Search</button>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
@@ -711,48 +726,48 @@
   <div class="modal fade" id="modal-leaderboard-select" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="leaderboard-select-modal-label" aria-hidden=" true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content pomo-bg-color-md-dark">
-          <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
-            <h5 class="modal-title pomo-text-color-light" id="leaderboard-select-modal-label">Choose Category
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="leaderboard-select">
-              <select class="form-select-category-leaderboard" id="select-option" onChange="select()">
-                <option selected>Choose a Category</option>
-                <option value="coins" id="value">Coins</option>
-                <option value="decks" id="value"># of Decks</option>
-                <option value="points" id="value">Points</option>
-                <option value="flashcards" id="value"># of Flashcards</option>
-              </select>
-              <script type="text/javascript">
-                function select() {
-                  var select = document.getElementById('select-option');
-                  var option = select.options[select.selectedIndex];
-                  document.getElementById('value').value = option.value;
-                  console.log(`${option.value}`)
-                  if(option.value=="coins"){console.log(`Made it to coins`)}
-                  if(option.value=="decks"){console.log(`Made it to decks`)}
-                  if(option.value=="points"){console.log(`Made it to points`)}
-                  if(option.value=="flashcards"){console.log(`Made it to flashcards`)}
-
-
-                }
-                select()
-              </script>
-              <br>
-              <div class="leaderboard-selection-button-css">
-                <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Select</button>
-              </div>
-              </form>
-          </div>
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title pomo-text-color-light" id="leaderboard-select-modal-label">Choose Category
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <form id="leaderboard-select">
+            <select class="form-select-category-leaderboard" id="select-option" onChange="select()">
+              <option selected>Choose a Category</option>
+              <option value="coins" id="value">Coins</option>
+              <option value="decks" id="value"># of Decks</option>
+              <option value="points" id="value">Points</option>
+              <option value="flashcards" id="value"># of Flashcards</option>
+            </select>
+            <script type="text/javascript">
+              function select() {
+                var select = document.getElementById('select-option');
+                var option = select.options[select.selectedIndex];
+                document.getElementById('value').value = option.value;
+                console.log(`${option.value}`)
+                if (option.value == "coins") { console.log(`Made it to coins`) }
+                if (option.value == "decks") { console.log(`Made it to decks`) }
+                if (option.value == "points") { console.log(`Made it to points`) }
+                if (option.value == "flashcards") { console.log(`Made it to flashcards`) }
+
+
+              }
+              select()
+            </script>
+            <br>
+            <div class="leaderboard-selection-button-css">
+              <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Select</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
   <!--END OF LEADERBOARD SELECT-------------------------------------------------->
-  
+
   <!-- SPA TARGET IS ROOT -->
   <div id="root"></div>
 
