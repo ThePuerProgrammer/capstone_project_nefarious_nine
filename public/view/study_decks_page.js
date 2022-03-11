@@ -179,8 +179,14 @@ export async function buildStudyDecksPage(deckList) {
 
     html += `<div id="deck-container">`
     for (let i = 0; i < deckList.length; i++) {
-        let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
-        html += buildDeckView(deckList[i], flashcards);
+
+        if(deckList[i].isClassDeck=="false" || deckList[i].isClassDeck==false){
+            let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
+            html += buildDeckView(deckList[i], flashcards);
+        } else {
+            let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
+            html += buildDeckView(deckList[i], flashcards);
+        }
     }
     // for (let i = 0; i < deckList.length; i++) {
     //     let flashcards = await FirebaseController.getClassDeckFlashcards(, deckList[i].docId);

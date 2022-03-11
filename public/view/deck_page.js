@@ -318,9 +318,11 @@ export async function deck_page(deckDocID, isClassDeck) {
             //passed by the button on the flashcard
             Utilities.enableButton(button, label);
             console.log(isClassDeck);
-            // if(isClassDeck=='false'){
-            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDocID, e.target.docId.value);
-            //}
+            if(isClassDeck=='false'){ //USER FLASHCARD
+                await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDocID, e.target.docId.value);
+            } else { //CLASSROOM FLASHCARD 
+                await EditFlashCard.edit_classroomflashcard(isClassDeck, deckDocID, e.target.docId.value);
+            }
             //Loads a fresh page after the update
             //  await deck_page(e.target.docId.value); //CHANGE THIS // fix this
         });
