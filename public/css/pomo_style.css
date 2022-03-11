@@ -650,9 +650,15 @@ iframe {
     display: flex;
     position: relative;
 }
-.leaderboard-button-category {
-position: absolute;
-right:0px;
+/* .leaderboard-button-category {
+    position: absolute;
+    right:0px;
+} */
+
+.leaderboard-th button{
+    display: inline-block;
+    border: none;
+    text-align: center;
 }
 /*==========================================================================*/
 

@@ -61,6 +61,7 @@ export function addEventListeners() {
             const coins = 0;
             const pet = "bunny";
             const deckNumber = 0;
+            const flashcardNumber = 0;
             const userBio = "";
 
             const user_mail = email.split('@');
@@ -76,6 +77,7 @@ export function addEventListeners() {
                 coins,
                 pet,
                 deckNumber,
+                flashcardNumber,
                 profilePhotoName,
                 profilePhotoURL,
                 userBio,
