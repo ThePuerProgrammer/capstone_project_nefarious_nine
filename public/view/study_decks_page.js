@@ -27,6 +27,7 @@ export function addEventListeners() {
         const isFavorited = false;
         const category = e.target.selectCategory.value;
         const isClassDeck = e.target.selectClassroom.value;
+        const flashcardNumber = 0;
         //NOTE: If no class was chosen, isClassDeck value will be false.
         // Otherwise, the value will be the CLASSROOM DOC ID tied to the deck.
 
@@ -45,6 +46,7 @@ export function addEventListeners() {
             category,
             keywords,
             isClassDeck,
+            flashcardNumber,
         });
 
 
