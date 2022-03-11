@@ -7,6 +7,7 @@ import { User } from '../model/user.js';
 import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
+import { HelpTicket } from '../model/help_ticket.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -1340,15 +1341,93 @@ export async function updateDeckCount(currentUser) {
 }
 //============================================================================//
 
+//============================================================================//
+// Submit a help ticket
+//============================================================================//
+export async function submitHelpTicket(helpTicket) {
+    const helpTicketRef = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS).add(helpTicket.serialize());
+    return helpTicketRef;
+}
+
+export async function uploadHelpTicketImage(imageFile, imageName) {
+    if (!imageName) {
+        imageName = Date.now() + imageFile.name;
+    }
+    const ref = firebase.storage().ref().child(Constant.storageFolderName.HELPTICKET_IMAGES + imageName);
+    const taskSnapShot = await ref.put(imageFile);
+    const imageURL = await taskSnapShot.ref.getDownloadURL();
+    return { imageName, imageURL };
+}
+
+export async function updateHelpTicket(helpTicketDocId, update) {
+    await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).update(update);
+}
+
+//============================================================================//
+// User help ticket functions
+//============================================================================//
+export async function getUserHelpTickets(email) {
+    let helpTickets = [];
+    const helpTicketSnapshot = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .where('submittedBy', '==', email)
+        .orderBy('timestamp', 'desc')
+        .get();
+    helpTicketSnapshot.forEach(doc => {
+        const ht = new HelpTicket(doc.data());
+        ht.set_docID(doc.id);
+        helpTickets.push(ht);
+    })
+
+    return helpTickets;
+}
+
+export async function getOneHelpTicket(helpTicketDocId) {
+    const helpTicketRef = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .doc(helpTicketDocId)
+        .get();
+
+    if (!helpTicketRef.exists) return null;
+
+    const helpTicket = new HelpTicket(helpTicketRef.data());
+    helpTicket.set_docID(helpTicketDocId);
+    return helpTicket;
+}
+
+export async function closeHelpTicket(helpTicketDocId, imageName) {
+    await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).delete();
+    if (imageName != '') {
+        await firebase.storage().ref().child(Constant.storageFolderName.HELPTICKET_IMAGES + imageName).delete();
+    }
+}
+//============================================================================//
+// Help ticket functions for admin
+//============================================================================//
+export async function getHelpTickets() {
+    let helpTickets = [];
+    const helpTicketSnapshot = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .orderBy('timestamp', 'desc')
+        .get();
+    helpTicketSnapshot.forEach(doc => {
+        const ht = new HelpTicket(doc.data());
+        ht.set_docID(doc.id);
+        helpTickets.push(ht);
+    })
+
+    return helpTickets;
+}
 
 //============================================================================//
 // Get USER
 //============================================================================//
 export async function getUser(uid) {
     const ref = await firebase.firestore()
-    .collection(Constant.collectionName.USERS)
-    .doc(uid)
-    .get();
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .get();
 
     const user = new User(ref.data());
     return user;
