@@ -5,7 +5,7 @@ export class HelpTicket {
         this.category = data.category;
         this.title = data.title;
         this.description = data.description;
-        this.feedback = []; // wird mit feedback in form einer nachrichtenklasse gefuellt
+        this.feedback = data.feedback; // wird mit feedback in form einer nachrichtenklasse gefuellt
         this.helpTicketImageName = data.helpTicketImageName;
         this.helpTicketImageURL = data.helpTicketImageURL;
         this.status = data.status;
