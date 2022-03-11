@@ -182,10 +182,12 @@ export async function buildStudyDecksPage(deckList) {
 
         if(deckList[i].isClassDeck=="false" || deckList[i].isClassDeck==false){
             let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
-            html += buildDeckView(deckList[i], flashcards);
+            html += buildDeckView(deckList[i], flashcards, 'false');
         } else {
             let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
-            html += buildDeckView(deckList[i], flashcards);
+            let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck) 
+
+            html += buildDeckView(deckList[i], flashcards, clase);
         }
     }
     // for (let i = 0; i < deckList.length; i++) {
@@ -411,7 +413,7 @@ export async function buildStudyDecksPage(deckList) {
 
 } //buildStudyDecksPage(deckList)
 
-export function buildDeckView(deck, flashcards) {
+export function buildDeckView(deck, flashcards,clase) {
     window.sessionStorage;
     let html = `
     <div id="${deck.docId}" class="deck-card">
@@ -421,8 +423,10 @@ export function buildDeckView(deck, flashcards) {
             <h6 class="card-text" >Subject: ${deck.subject}</h6>
             <h6 class="card-text">Category: ${deck.category}</h6>
             <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
-            <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
-        </div>
+            <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>`
+            html+= (deck.isClassDeck !="false" && deck.isClassDeck !=false) ? 
+            `<p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">school</i>${clase.name}</p></div>`:`<p></p></div>`;
+        html+=`
         <div class="btn-group">
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
@@ -456,9 +460,9 @@ export function buildDeckView(deck, flashcards) {
     <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
     </span>
     <label class="form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite_border</i>Favorite deck</label>
-    
-    </div>
-</div>
-</div>`;
+    </div></div></div>`;
+
+
+
     return html;
 }

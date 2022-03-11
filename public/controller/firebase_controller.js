@@ -464,7 +464,25 @@ export async function getClassDeckByDocID(classDocID, deckDocID) {
     deckModel.set_docID(deckDocID);
     return deckModel;
 }
+//============================================================================//
+// This function will pull in a single CLASSROOM from it's docId
+//============================================================================//
+export async function getClassroomByDocID(classDocID) {
+    const classRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .get();
 
+    if (!classRef.exists) {
+        if (Constant.DEV)
+            console.log("! Deck reference does not exist");
+        return null;
+    }
+
+    const classModel = new Classroom(classRef.data());
+    classModel.set_docID(classDocID);
+    return classModel;
+}
 
 
 
@@ -1236,19 +1254,28 @@ export async function leaderboardByDecks(members) {
 }
 //Gets the count of the decks and updates it to a new field in user
 export async function leaderboardByFlashcards(members) {
+    let classroomLeadersByFlashcards = [];
+
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .where('email', 'in', members)
         .get().then((querySnapshot) => {
             querySnapshot.forEach(async (doc) => {
                 const userdocId = doc.id;
+                let sum = 0;
                 const countDeck = await firebase.firestore()
                     .collection(Constant.collectionName.USERS).doc(userdocId)
                     .collection(Constant.collectionName.OWNED_DECKS)
                     .get()
-
+                countDeck.forEach(doc => {
+                    let d = new Deck(doc.data());
+                    d.set_docID(doc.id);
+                    sum+=d.flashcardNumber
+                });
+                classroomLeadersByFlashcards.push(sum);
             });
         });
+        return classroomLeadersByFlashcards;
 }
 
 //============================================================================//

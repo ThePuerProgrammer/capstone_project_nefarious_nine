@@ -722,51 +722,7 @@
     </div>
   </div>
   <!-- END OF POPUP INFO BOX----------------------------------------------------->
-  <!-- MODAL: LEADERBOARD SELECT------------------------------------------------->
-  <div class="modal fade" id="modal-leaderboard-select" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="leaderboard-select-modal-label" aria-hidden=" true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
-          <h5 class="modal-title pomo-text-color-light" id="leaderboard-select-modal-label">Choose Category
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="leaderboard-select">
-            <select class="form-select-category-leaderboard" id="select-option" onChange="select()">
-              <option selected>Choose a Category</option>
-              <option value="coins" id="value">Coins</option>
-              <option value="decks" id="value"># of Decks</option>
-              <option value="points" id="value">Points</option>
-              <option value="flashcards" id="value"># of Flashcards</option>
-            </select>
-            <script type="text/javascript">
-              function select() {
-                var select = document.getElementById('select-option');
-                var option = select.options[select.selectedIndex];
-                document.getElementById('value').value = option.value;
-                console.log(`${option.value}`)
-                if (option.value == "coins") { console.log(`Made it to coins`) }
-                if (option.value == "decks") { console.log(`Made it to decks`) }
-                if (option.value == "points") { console.log(`Made it to points`) }
-                if (option.value == "flashcards") { console.log(`Made it to flashcards`) }
 
-
-              }
-              select()
-            </script>
-            <br>
-            <div class="leaderboard-selection-button-css">
-              <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Select</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--END OF LEADERBOARD SELECT-------------------------------------------------->
 
   <!-- SPA TARGET IS ROOT -->
   <div id="root"></div>

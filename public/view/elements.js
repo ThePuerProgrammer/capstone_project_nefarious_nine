@@ -175,10 +175,3 @@ export const formSearchBox = document.getElementById('form-searchbox');
 export const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
 export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
 //============================================================================//
-
-//LEADERBOARD
-//===========================================================================//
-export const modalLeaderboardCategorySelect = new bootstrap.Modal(document.getElementById('modal-leaderboard-select', {backdrop: 'static'}));
-export const formLeaderboardCategorySelect = document.getElementById('leaderboard-select');
-
-//===========================================================================//

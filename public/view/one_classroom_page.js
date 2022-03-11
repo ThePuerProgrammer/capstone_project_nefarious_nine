@@ -106,8 +106,7 @@ export async function one_classroom_page(classroomDocID) {
     //MEMEMBERS TAB END------------------------------------------------------
 
     
-    //let leaderboardCoins = [];
-    //leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+    
     let leaderboardDecks = [];
     leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
     //let leaderboardFlashcards = [];
@@ -119,16 +118,16 @@ export async function one_classroom_page(classroomDocID) {
     // LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
     <center>
-    <div class="leaderboard-main-row"><h2>Leaderboard</h2><div class="leaderboard-button-category"><button id="button-leaderboard-select-modal" type="button" class="btn btn-secondary pomo-bg-color-dark" style="float:right;"> <i class="material-icons text-white">star</i>Select Category</button>
-    </div></div>
+    <div class="leaderboard-main-row"><h2>Leaderboard</h2></div>
 
         <br/>
         <table class="leaderboard-table">
             <tr>
                 <th class="leaderboard-th">Rank</th>
                 <th class="leaderboard-th">User</th>
-                <th class="leaderboard-th">Coins</th>
-                <th class="leaderboard-th">Decks</th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardCoins}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong>Coins</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardDecks}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Decks</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardFlashcards}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Flashcards</strong></span></button></th>
             </tr>`;
 
     if(leaderboardDecks.length >0 ){
@@ -233,6 +232,50 @@ export async function one_classroom_page(classroomDocID) {
         document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-members-button').style.color = '#2C1320';
     })
+
+    //html+=`</table></center></div>`;
+    //SORT BY COINS
+    const sortByCoinsButton = document.getElementById(Constant.htmlIDs.leaderboardCoins);
+    sortByCoinsButton.addEventListener('click', async e=>{
+        console.log('clicked COINS');
+        let leaderboardCoins = [];
+        leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+        if(leaderboardCoins.length>0){           
+            let index = 1;
+            leaderboardDecks.forEach(e =>{
+                html+= buildLeaderBoard(e, index);
+                index++;
+            });
+        }
+    });
+    //SORT BY DECKS
+    const sortByDecksButton = document.getElementById(Constant.htmlIDs.leaderboardDecks);
+    sortByDecksButton.addEventListener('click', async e=>{
+        console.log('clicked DECKS');
+        let leaderboardDecks = [];
+        leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+        if(leaderboardDecks.length>0){           
+            let index = 1;
+            leaderboardDecks.forEach(e =>{
+                html+= buildLeaderBoard(e, index);
+                index++;
+            });
+        }
+    });
+    //SORT BY FLASHCARDS
+    const sortByFlashcardsButton = document.getElementById(Constant.htmlIDs.leaderboardFlashcards);
+    sortByFlashcardsButton.addEventListener('click', async e=>{
+        console.log('clicked FLASHCARDS');
+        let leaderboardFlashcards = [];
+        leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
+        if(leaderboardFlashcards.length>0){           
+            let index = 1;
+            leaderboardFlashcards.forEach(e =>{
+                html+= buildLeaderBoard(e, index);
+                index++;
+            });
+        }
+    });
 
     // get CHAT tab and show it as visible 
     const classroomChatButton = document.getElementById('classroom-chat-button');
@@ -385,6 +428,7 @@ function buildLeaderBoard(e,i){
         <td class="leaderboard-td">${e.email}</td>
         <td class="leaderboard-td">${e.coins}</td>
         <td class="leaderboard-td">${e.deckNumber}</td>
+        <td class="leaderboard-td">${[i-1]}</td>
     </tr>`;
 }
 
