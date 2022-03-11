@@ -1,6 +1,37 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://pomobite/Waiter_Player.gd" type="Script" id=1]
+[ext_resource path="res://assets/art/AnimationFrames/Jesse_Waiter1.png" type="Texture" id=2]
+[ext_resource path="res://assets/art/AnimationFrames/Jesse_Waiter2.png" type="Texture" id=3]
 
-[node name="Waiter_Player" type="Node2D"]
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "up",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "down",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 19, 16 )
+
+[node name="Player1" type="KinematicBody2D"]
+position = Vector2( 1200, 500 )
+z_index = 1
+z_as_relative = false
+collision/safe_margin = 0.8
 script = ExtResource( 1 )
+move_speed = 200.0
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 4 )
+animation = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 1, 16 )
+shape = SubResource( 7 )

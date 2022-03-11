@@ -22,7 +22,11 @@ func process_movement():
 	var _v = move_and_slide(velocity)
 
 func process_animation():
-	pass
+	var input = Input.get_axis("ui_up", "ui_down")
+	if input < 0:
+		$AnimatedSprite.animation = "up"
+	elif input > 0:
+		$AnimatedSprite.animation = "down"
 
 func set_z():
 	if player2.position.y < self.position.y:
