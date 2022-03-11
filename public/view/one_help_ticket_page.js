@@ -47,7 +47,7 @@ export async function one_help_ticket_page(helpTicketDocId) {
     let feedback = [];
     if (helpTicket.feedback.length > 0) {
         for (let i = 0; i < helpTicket.feedback.length; i++) {
-            feedback.push(helpTicket[i]);
+            feedback.push(helpTicket.feedback[i]);
             html += buildFeedbackView(feedback[i]);
         }
     }
