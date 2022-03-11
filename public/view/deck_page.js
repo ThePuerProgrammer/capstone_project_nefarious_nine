@@ -101,7 +101,7 @@ export function addEventListeners() {
                 flashcard.answerImageName = "N/A";
                 flashcard.answerImageURL = "N/A";
             }
-
+            if(isClassDeck=="false"){//USER FLASHCARDS
             const docId = await FirebaseController.createFlashcard(
                 Auth.currentUser.uid,
                 deckDocID,
@@ -123,6 +123,30 @@ export function addEventListeners() {
                 "modal-create-a-flashcard"
             );
             await FirebaseController.updateFlashcardCount(Auth.currentUser.uid,deckDocID);
+            } else { //CLASSROOM FLASHCARDS
+                    const docId = await FirebaseController.createClassFlashcard(
+                        isClassDeck,
+                        deckDocID,
+                        flashcard
+                    );
+                    //flashcard.set_docID(docId);
+                    flashcard.docID = docId;
+                    // }
+                    if (Constant.DEV) {
+                        console.log(
+                            `Flashcard created in deck with doc id [${deckDocID}]:`
+                        );
+                        console.log("Flashcard Contents: ");
+                        console.log(flashcard);
+                    }
+                    Utilities.info(
+                        "Success!",
+                        `Flashcard: ${flashcard.question} has been added!`,
+                        "modal-create-a-flashcard"
+                    );
+                    await FirebaseController.updateClassFlashcardCount(isClassDeck,deckDocID);
+            }
+            
         } catch (e) {
             if (Constant.DEV) console.log(e);
             Utilities.info(
