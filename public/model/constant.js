@@ -67,4 +67,8 @@ export const htmlIDs = {
     miniGamesPage: 'godot-mini-games',
     chillZonePage: 'chill-zone-page',
     analyticsPage: 'analytics-page',
+    leaderboardCoins: 'button-leaderboard-coins',
+    leaderboardDecks: 'button-leaderboard-decks',
+    leaderboardFlashcards: 'button-leaderboard-flashcards',
+
 }
