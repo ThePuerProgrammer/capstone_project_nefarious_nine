@@ -189,12 +189,12 @@ export function addEventListeners(){
                 fc.questionImageURL = "N/A";
             }
             //Update Firestore
-            if(isClassDeck=="false"){
+            if(isClassDeck=="false" || isClassDeck==false){
                 await FirebaseController.updateFlashcard(Auth.currentUser.uid, editDeckDocId,fc,fc.docID);//changed Id to ID
-                await deck_page(editDeckDocId);
+                await deck_page(editDeckDocId, isClassDeck);
             } else {
                 await FirebaseController.updateClassroomFlashcard(isClassDeck, editDeckDocId,fc,fc.docID);//changed Id to ID
-                await deck_page(editDeckDocId);
+                await deck_page(editDeckDocId, isClassDeck);
             }
 
         } catch(e){
@@ -207,7 +207,7 @@ export function addEventListeners(){
             `Flashcard: ${fc.question} has been updated!`,
             "modal-edit-a-flashcard"
         );
-        await deck_page(editDeckDocId);
+        await deck_page(editDeckDocId, isClassDeck);
 
     });
 

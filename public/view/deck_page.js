@@ -247,9 +247,9 @@ export function addEventListeners() {
 }
 
 export async function deck_page(deckDocID, isClassDeck) {
-    // if(deckDocID == null){
-    //     deckDocID = sessionStorage.getItem('deckId');
-    // }
+    if(deckDocID == null){
+        deckDocID = sessionStorage.getItem('deckId');
+    }
     console.log(isClassDeck);
     console.log(`Where I commented out:${deckDocID}`);
     let html = '';
@@ -264,7 +264,7 @@ export async function deck_page(deckDocID, isClassDeck) {
     let deck;
     let flashcards;
     try {
-        if (isClassDeck == "false") {
+        if (isClassDeck == "false" || isClassDeck == false) {
             console.log("deck_page no class check for is class deck " + isClassDeck);
             deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDocID);
             flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deck.docID);
