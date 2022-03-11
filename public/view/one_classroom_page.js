@@ -121,15 +121,18 @@ export async function one_classroom_page(classroomDocID) {
     <div class="leaderboard-main-row"><h2>Leaderboard</h2></div>
 
         <br/>
-        <table class="leaderboard-table">
+        <div id="leaderboard-table">
+        <table class="leaderboard-table-default">
+            <thead>
             <tr>
                 <th class="leaderboard-th">Rank</th>
                 <th class="leaderboard-th">User</th>
                 <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardCoins}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong>Coins</strong></span></button></th>
                 <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardDecks}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Decks</strong></span></button></th>
                 <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardFlashcards}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Flashcards</strong></span></button></th>
-            </tr>`;
-
+            </tr>
+            </thead>
+            <tbody id="leaderboard-fields">`;
     if(leaderboardDecks.length >0 ){
         let index = 1;
         leaderboardDecks.forEach(e =>{
@@ -137,8 +140,8 @@ export async function one_classroom_page(classroomDocID) {
             index++;
         });
     }
-    html+=`</table></center></div>`;
-       
+    html+=`</tbody></table></div></center></div>`;
+       //HERE
     let messages = [];
     messages = await FirebaseController.getMessages(classroomDocID);
 
@@ -240,13 +243,24 @@ export async function one_classroom_page(classroomDocID) {
         console.log('clicked COINS');
         let leaderboardCoins = [];
         leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+        document.getElementById('leaderboard-fields').innerHTML=''
+
+        let html2 = ``;
+       
         if(leaderboardCoins.length>0){           
             let index = 1;
-            leaderboardDecks.forEach(e =>{
-                html+= buildLeaderBoard(e, index);
+            leaderboardCoins.forEach(e =>{
+                html2+= buildLeaderBoard(e, index);
                 index++;
             });
         }
+        html2+=`</tbody>`;
+        document.getElementById('leaderboard-fields').innerHTML=html2;
+
+
+        //swapContent(html2);
+        //swapContent('Const.htmlIDs.leaderboardCoins');//RETURNED ONLY THE BUTTON
+       
     });
     //SORT BY DECKS
     const sortByDecksButton = document.getElementById(Constant.htmlIDs.leaderboardDecks);
@@ -254,13 +268,20 @@ export async function one_classroom_page(classroomDocID) {
         console.log('clicked DECKS');
         let leaderboardDecks = [];
         leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+        document.getElementById('leaderboard-fields').innerHTML=''
+        let html2 = ``;
+       
+
         if(leaderboardDecks.length>0){           
             let index = 1;
             leaderboardDecks.forEach(e =>{
-                html+= buildLeaderBoard(e, index);
+                html2+= buildLeaderBoard(e, index);
                 index++;
             });
         }
+        html2+=`</tbody>`;
+        document.getElementById('leaderboard-fields').innerHTML=html2;
+
     });
     //SORT BY FLASHCARDS
     const sortByFlashcardsButton = document.getElementById(Constant.htmlIDs.leaderboardFlashcards);
@@ -268,6 +289,8 @@ export async function one_classroom_page(classroomDocID) {
         console.log('clicked FLASHCARDS');
         let leaderboardFlashcards = [];
         leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
+        document.getElementById('leaderboard-fields').innerHTML=''
+
         if(leaderboardFlashcards.length>0){           
             let index = 1;
             leaderboardFlashcards.forEach(e =>{
@@ -275,6 +298,9 @@ export async function one_classroom_page(classroomDocID) {
                 index++;
             });
         }
+        html2+=`</tbody>`;
+        document.getElementById('leaderboard-fields').innerHTML=html2;
+
     });
 
     // get CHAT tab and show it as visible 
@@ -430,6 +456,17 @@ function buildLeaderBoard(e,i){
         <td class="leaderboard-td">${e.deckNumber}</td>
         <td class="leaderboard-td">${[i-1]}</td>
     </tr>`;
+}
+//REFERENCE:https://stackoverflow.com/questions/37347690/how-to-replace-div-with-another-div-in-javascript
+
+function swapContent (id) {
+    const main = document.getElementById('leaderboard-table').lastElementChild;
+    const div = document.getElementById(id).lastElementChild;
+    //const clone = div.cloneNode();
+    const clone = div.cloneNode(true);
+    while (main.firstChild) main.firstChild.remove();
+
+    main.appendChild(clone);
 }
 
 // function buildDeckView(deck){
