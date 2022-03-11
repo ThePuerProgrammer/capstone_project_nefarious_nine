@@ -1316,6 +1316,8 @@ export async function leaderboardByFlashcards(members) {
 }                                                                             */
 //============================================================================//
 //FLASHCARD COUNT
+//===============
+//For DECKS
 export async function updateFlashcardCount(currentUser, deckId) {
     //This grabs all flashcards within the deck, so we can get a count on them
     const countFlash = await firebase.firestore()
@@ -1334,6 +1336,28 @@ export async function updateFlashcardCount(currentUser, deckId) {
     return countFlash.size;
 
 }
+//For USER
+export async function updateFlashcardCountForUser(currentUser) {
+    let deckList=[];
+    let flashcardCount=0;
+    //This grabs all the decks owned by a user, so we can get a count on them
+    const countDeck = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .get()
+    //This collects all decks into an array so I may count up the the flashcards
+        countDeck.forEach(doc => {
+            let deck = new Deck(doc.data());
+            deck.set_docID(doc.id);
+            deckList.push(deck);
+        });
+    for(let i=0; i<deckList.length;i++){
+        flashcardCount+=deckList[i].flashcardNumber;
+        console.log(`FlashcardCount:${flashcardCount}`);
+    }
+    console.log(`After Loop:${flashcardCount}`);
+}
+
 export async function updateClassFlashcardCount(classroomId, deckId) {
     //This grabs all flashcards within the deck, so we can get a count on them
     const countFlash = await firebase.firestore()

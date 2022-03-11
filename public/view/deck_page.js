@@ -123,6 +123,8 @@ export function addEventListeners() {
                 "modal-create-a-flashcard"
             );
             await FirebaseController.updateFlashcardCount(Auth.currentUser.uid,deckDocID);
+            setTimeout(200);
+            await FirebaseController.updateFlashcardCountForUser(Auth.currentUser.uid);
             } else { //CLASSROOM FLASHCARDS
                     const docId = await FirebaseController.createClassFlashcard(
                         isClassDeck,
