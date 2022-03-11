@@ -12,6 +12,7 @@ export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 export const modalMenuResetPassword = document.getElementById('reset-password');
+export const menuHelpTickets = document.getElementById('menu-help-tickets');
 
 // TEMPORARY Element for temporary button
 export const menuTempGodot = document.getElementById('menu-temp-godot');
@@ -81,6 +82,7 @@ export const modalEditClassroom = new bootstrap.Modal(document.getElementById('m
 export const modalPreviewClassroom = new bootstrap.Modal(document.getElementById('preview-classroom-modal', { backdrop: 'static' }));
 export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-leave-classroom', { backdrop: 'static' }));
 export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', { backdrop: 'static' }));
+export const modalSubmitHelpTicket = new bootstrap.Modal(document.getElementById('modal-submit-help-ticket', { backdrop: 'static' }));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -110,6 +112,15 @@ export const formCheckInputIsImageAnswer = document.getElementById('form-check-i
 export const formContainerAnswerImage = document.getElementById('form-answer-image-container');
 export const formContainerQuestionImage = document.getElementById('form-question-image-container');
 //===========================================================================//
+
+// Submit help ticket
+//============================================================================//
+export const formSubmitHelpTicket = {
+    form: document.getElementById('form-submit-help-ticket'),
+    imageTag: document.getElementById('form-add-image-to-help-ticket-tag'),
+    imageButton: document.getElementById('form-add-image-to-help-ticket-button'),
+}
+
 
 //EDIT FLASHCARD
 //==========================================================================//
@@ -175,3 +186,4 @@ export const formSearchBox = document.getElementById('form-searchbox');
 export const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
 export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
 //============================================================================//
+

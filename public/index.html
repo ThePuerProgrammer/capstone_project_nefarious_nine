@@ -56,10 +56,15 @@
             </li>
           </ul>
         </div>
-        <div class="modal-postauth">
+        <div class=" modal-postauth">
           <div style="flex-grow: 2;"></div>
           <div style="flex-grow: 1;">
             <ul class="navbar-nav">
+              <li class="nav-item" style="display: inline;">
+                <button type="button" class="btn" id="menu-help-tickets">
+                  <img src="./assets/images/help_outline_black_24dp.svg" alt="Help tickets" width="24" height="24">
+                </button>
+              </li>
               <li class="nav-item" style="display: inline;">
                 <button type="button" class="btn" id="menu-settings">
                   <img src="./assets/images/settings_black_24dp.svg" alt="Settings" width="24" height="24">
@@ -681,6 +686,58 @@
   </div>
   <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
 
+  <!-- MODAL: Submit a help ticket ---------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-submit-help-ticket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-submit-help-ticket-title">Submit help ticket</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-submit-help-ticket" method="post">
+            <br />
+            <label class="pomo-text-color-light" for="help-ticket-title">Title</label>
+            <input class="form-control form-control-lg" type="help-ticket-title" name="helpTicketTitle"
+              placeholder="Give a brief title to your ticket..." required minlength="2" id="help-ticket-title"
+              autocomplete="off">
+            <br />
+            <br />
+            <div id="form-help-ticket-description-container">
+              <label for="form-help-ticket-description-input">Description:</label>
+              <textarea name="helpTicketDescription" id="form-help-ticket-description-input" class="form-control"
+                rows="3" type="text" required min length="1" placeholder="Describe your issue..."
+                autocomplete="off"></textarea>
+            </div>
+            <label class="pomo-text-color-light" for="helpTicketCategory">Category</label>
+            <br>
+            <select id="help-ticket-category" name="helpTicketCategory" class="form-select-help-ticket-category"
+              aria-label="Default select example" style="width:300px;">
+              <option selected disabled>Choose a category...</option>
+              <option value="help-ticket-classrooms">Classrooms</option>
+              <option value="help-ticket-decks">Decks</option>
+              <option value="help-ticket-flashcards">Flashcards</option>
+              <option value="help-ticket-games">Minigames</option>
+              <option value="help-ticket-users">Users</option>
+            </select>
+            <br>
+            <div id="form-help-ticket-image-container">
+              <img id="form-add-image-to-help-ticket-tag"
+                style="height: 100%; width:100%; object-fit:contain; display: block;" />
+              Image:
+              <input id="form-add-image-to-help-ticket-button" type="file" value="upload" />
+            </div>
+            <div>
+              <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End submit a help ticket----------------------------------------------------------------------------------------->
+
   <!--MODAL: SEARCH------------------------------------------------------------>
   <div class="modal fade" id="modal-searchbox" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -703,6 +760,8 @@
     </div>
   </div>
   <!-- END OF MODAL: SEARCH------------------------------------------------------>
+
+
 
 
   <!-- Modal: Popup Info Box -------------------------------------------------->
