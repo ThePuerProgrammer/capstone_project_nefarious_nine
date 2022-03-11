@@ -20,10 +20,23 @@ export async function profile_page() {
     }
 
     let html = '';
-    html += '<h1> Profile Page </h1>';
-    html += `<p> username: ${user.username}</p>`;
-    html += `<p> pet: ${user.pet}</p>`;
-    html += `<p> pfp: ${user.profilePhotoName}</p>`;
+
+    // EDIT PROFILE button
+    html += `<div class="edit-profile-btn">
+        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px; float:right">
+        <i class="material-icons pomo-text-color-light">edit</i>Edit Profile</button></div>`;
+
+    html += `<div class="user-profile">
+        <img src="${user.profilePhotoURL}" style="width: 200px; height: 200px" class="center">
+        <br>
+        <h3 class="user-username pomo-text-color-dark">${user.username}</h3>`;
+    
+    // if user bio, display
+    if(user.userBio != "") {
+        html += `<p>${user.userBio}</p>`;
+    } 
+
+    html += `</div>`;
     
     Elements.root.innerHTML = html;
 }
