@@ -1363,6 +1363,7 @@ export async function uploadHelpTicketImage(imageFile, imageName) {
 export async function updateHelpTicket(helpTicketDocId, update) {
     await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).update(update);
 }
+
 //============================================================================//
 // User help ticket functions
 //============================================================================//
