@@ -18,6 +18,7 @@ export const collectionName = {
     BACKEND: 'backend',
     CLASSROOM_CHATS: 'classroom_chats',
     MESSAGES: 'messages',
+    FLASHCARDS_DATA_SUFFIX: '_flashcard_data'
 }
 
 /*****************************************

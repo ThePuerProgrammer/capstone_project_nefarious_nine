@@ -124,6 +124,85 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
 //===========================================================================//
 
 //============================================================================//
+// Update Flashcard Data
+// 
+// 1. Check if data exists
+//   [Data Exists] Grab the data
+//   [Data doesn't exist]  
+//
+// This new update flashcard date will check if there exists a flashcard date
+//  set for today. If there does not exist one, then we will create one for today.
+//  If there is one for today, will we that as the data set that we pull/update
+//  from.
+//============================================================================//
+export async function updateFlashcardData_NEW_WIP(uid, deckDocID, flashcardDocID, userAnsweredCorrectly) {
+    // -- ENSURING WE HAVE A DATA SET FOR TODAY TO UPDATE TO -- 
+    let todaysFlashcardDataExists = false;
+    // Check if the flashcard_data for today exists.
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection("TODO: TODAYS DATE" + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .limit(1)
+        .get()
+        .then(collection => {
+            todaysFlashcardDataExists = collection.docs.length > 0;
+        });
+
+    // Today's flashcard data does NOT exist. Create a new collection for today.
+    if (!todaysFlashcardDataExists) {
+        // TODO: Add FB function to do this.
+    }
+
+
+
+
+    // Making the reference to the flashcard data
+    const flashcardDataExistsRef = firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID);
+
+    // FlashcardData Model
+    //  If flashcard does't not exist, this model will be used to create 
+    //  flashcard data as-is.
+    //  If flashcard does exist, streak will be updated.
+    //  If user answered incorrectly, this streak will be used
+    let flashcardData = new FlashcardData({
+        streak: 0,
+        lastAccessed: Date.now()
+    });
+
+    // Using the flashcard data reference to check if it exists
+    await flashcardDataExistsRef.get().then((doc) => {
+        if (doc.exists && userAnsweredCorrectly) // only use old streak if user answered correctly
+            flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
+    });
+
+    if (userAnsweredCorrectly)
+        flashcardData.streak++;  // Answered correctly, increment streak.
+
+    // Update flashcardData result on Firebase
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID)
+        .set(flashcardData.serialize());
+
+    console.log("flashcardDataStreak", flashcardData.streak);
+    return flashcardData
+}
+//===========================================================================//
+
+//============================================================================//
 // Creates deck data if the user doesn't have a deck data for the deck they
 //  are going to study
 //============================================================================//
