@@ -50,7 +50,7 @@ export function addEventListeners() {
         });
 
 
-        if (isClassDeck == "false") { //if no class is tied to this deck
+        if (isClassDeck == "false" || isClassDeck == false) { //if no class is tied to this deck
             try {
                 console.log("Creating Deck");
                 const deckId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
@@ -253,7 +253,7 @@ export async function buildStudyDecksPage(deckList) {
             Elements.modalDeleteDeckConfirmation.show();
             const button2 = document.getElementById('modal-confirmation-delete-deck-yes');
             button2.addEventListener("click", async e => {
-                if (classDocID == "false") {
+                if (classDocID == "false" || classDocID == false) {
                     confirmation = true;
                     await EditDeck.delete_deck(deckId, confirmation);
                 } else {
