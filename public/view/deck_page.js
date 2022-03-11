@@ -61,6 +61,7 @@ export function addEventListeners() {
         }
 
         let deckDocID = sessionStorage.getItem("deckId");
+        let isClassDeck = sessionStorage.getItem('isClassDeck');
         console.log(`Testing Here:${deckDocID}`);
         console.log(deckDocID);
 
@@ -100,7 +101,7 @@ export function addEventListeners() {
                 flashcard.answerImageName = "N/A";
                 flashcard.answerImageURL = "N/A";
             }
-
+            if(isClassDeck=="false"){//USER FLASHCARDS
             const docId = await FirebaseController.createFlashcard(
                 Auth.currentUser.uid,
                 deckDocID,
@@ -122,6 +123,30 @@ export function addEventListeners() {
                 "modal-create-a-flashcard"
             );
             await FirebaseController.updateFlashcardCount(Auth.currentUser.uid,deckDocID);
+            } else { //CLASSROOM FLASHCARDS
+                    const docId = await FirebaseController.createClassFlashcard(
+                        isClassDeck,
+                        deckDocID,
+                        flashcard
+                    );
+                    //flashcard.set_docID(docId);
+                    flashcard.docID = docId;
+                    // }
+                    if (Constant.DEV) {
+                        console.log(
+                            `Flashcard created in deck with doc id [${deckDocID}]:`
+                        );
+                        console.log("Flashcard Contents: ");
+                        console.log(flashcard);
+                    }
+                    Utilities.info(
+                        "Success!",
+                        `Flashcard: ${flashcard.question} has been added!`,
+                        "modal-create-a-flashcard"
+                    );
+                    await FirebaseController.updateClassFlashcardCount(isClassDeck,deckDocID);
+            }
+            
         } catch (e) {
             if (Constant.DEV) console.log(e);
             Utilities.info(
@@ -130,13 +155,14 @@ export function addEventListeners() {
                 "modal-create-a-flashcard"
             );
         }
-        await deck_page(deckDocID, isClassDeck);
+        await deck_page(deckDocID,isClassDeck);
     });
     Elements.formDeleteFlashcard.addEventListener('submit', async (e) => {
         e.preventDefault();
         // get the value from the select list item
         var f = document.getElementById('value').value;
         let deckDocID = sessionStorage.getItem('deckId');
+        let isClassDeck = sessionStorage.getItem('isClassDeck');
         try {
             await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
             Utilities.info("Successfully deleted", "Successfully deleted flashcard", "modal-delete-a-flashcard");
@@ -145,7 +171,7 @@ export function addEventListeners() {
             Utilities.info("Error", JSON.stringify(e), "modal-delete-a-flashcard");
         }
         // refresh the page
-        await deck_page(deckDocID, isClassDeck);
+        await deck_page(deckDocID,isClassDeck);
     });
     // Event listener to change the answer view depending on whether or not
     //    multiple choice is checked or not
@@ -291,9 +317,14 @@ export async function deck_page(deckDocID, isClassDeck) {
             const label = Utilities.disableButton(button);
             //passed by the button on the flashcard
             Utilities.enableButton(button, label);
-            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDocID, e.target.docId.value);
+            console.log(isClassDeck);
+            if(isClassDeck=='false'){ //USER FLASHCARD
+                await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDocID, e.target.docId.value);
+            } else { //CLASSROOM FLASHCARD 
+                await EditFlashCard.edit_classroomflashcard(isClassDeck, deckDocID, e.target.docId.value);
+            }
             //Loads a fresh page after the update
-            // await deck_page(e.target.docId.value); CHANGE THIS // fix this
+            //  await deck_page(e.target.docId.value); //CHANGE THIS // fix this
         });
     }
 
