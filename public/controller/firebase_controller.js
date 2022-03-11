@@ -1390,3 +1390,18 @@ export async function updateDeckCount(currentUser) {
     return countDeck;
 }
 //============================================================================//
+
+
+//============================================================================//
+// Get USER
+//============================================================================//
+export async function getUser(uid) {
+    const ref = await firebase.firestore()
+    .collection(Constant.collectionName.USERS)
+    .doc(uid)
+    .get();
+
+    const user = new User(ref.data());
+    return user;
+}
+//============================================================================//

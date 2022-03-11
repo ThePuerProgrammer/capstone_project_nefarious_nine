@@ -650,14 +650,30 @@ iframe {
     display: flex;
     position: relative;
 }
-.leaderboard-button-category {
-position: absolute;
-right:0px;
-}
+/* .leaderboard-button-category {
+    position: absolute;
+    right:0px;
+} */
 
 .leaderboard-th button{
     display: inline-block;
     border: none;
     text-align: center;
 }
+/*==========================================================================*/
+
+/* PROFILE PAGE */
+/*==========================================================================*/
+.edit-profile-btn{
+    padding: 10px 20px;
+}
+.user-profile{
+    padding: 50px 20px;
+    height: 100%;
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+
+
 /*==========================================================================*/
