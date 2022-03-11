@@ -7,6 +7,7 @@ import { User } from '../model/user.js';
 import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
+import { HelpTicket } from '../model/help_ticket.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -1338,4 +1339,48 @@ export async function updateDeckCount(currentUser) {
     //Used when deleting a deck
     return countDeck;
 }
+//============================================================================//
+
+//============================================================================//
+// Submit a help ticket
+//============================================================================//
+export async function submitHelpTicket(helpTicket) {
+    const helpTicketRef = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS).add(helpTicket.serialize());
+    return helpTicketRef;
+}
+
+export async function uploadHelpTicketImage(imageFile, imageName) {
+    if (!imageName) {
+        imageName = Date.now() + imageFile.name;
+    }
+    const ref = firebase.storage().ref().child(Constant.storageFolderName.HELPTICKET_IMAGES + imageName);
+    const taskSnapShot = await ref.put(imageFile);
+    const imageURL = await taskSnapShot.ref.getDownloadURL();
+    return { imageName, imageURL };
+}
+//============================================================================//
+// Get help tickets for user
+//============================================================================//
+export async function getUserHelpTickets(email) {
+    let helpTickets = [];
+    const helpTicketSnapshot = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .where('submittedBy', '==', email)
+        .orderBy('timestamp', 'desc')
+        .get();
+    helpTicketSnapshot.forEach(doc => {
+        const ht = new HelpTicket(doc.data());
+        ht.set_docID(doc.id);
+        helpTickets.push(ht);
+    })
+
+    return helpTickets;
+}
+//============================================================================//
+// Get help tickets for admin
+//============================================================================//
+
+//============================================================================//
+// Help ticket status update
 //============================================================================//
