@@ -210,6 +210,7 @@ export async function buildStudyDecksPage(deckList) {
 
             window.sessionStorage;
             sessionStorage.setItem('deckId', deckId);
+            sessionStorage.setItem('isClassDeck', isClassDeck)
 
             history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
             await DeckPage.deck_page(deckId, isClassDeck);
@@ -220,15 +221,15 @@ export async function buildStudyDecksPage(deckList) {
     for (let i = 0; i < editDeckForms.length; i++) {
         editDeckForms[i].addEventListener('submit', async e => {
             //prevents refresh on submit of form
-
             e.preventDefault();
             if (e.target.classdocId.value == "false") { //if not a class deck
                 await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
             } else {//else is a class deck
-                await EditDeck.edit_class_deck(e.target.classdocId.value, e.target.docId.value);
+                let classDocID = e.target.classdocId.value
+                await EditDeck.edit_class_deck(classDocID, e.target.docId.value);
             }
-
-            await study_decks_page();
+            setTimeout(await study_decks_page(),2000);
+            // await study_decks_page();
         });
     }
     const deleteDeckForms = document.getElementsByClassName('form-delete-deck');

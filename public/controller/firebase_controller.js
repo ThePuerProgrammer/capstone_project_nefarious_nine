@@ -1241,6 +1241,24 @@ export async function updateFlashcardCount(currentUser, deckId) {
     return countFlash.size;
 
 }
+export async function updateClassFlashcardCount(classroomId, deckId) {
+    //This grabs all flashcards within the deck, so we can get a count on them
+    const countFlash = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classroomId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .collection(Constant.collectionName.FLASHCARDS)
+        .get()
+
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classroomId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .update({ 'flashcardNumber': countFlash.size });
+
+    //Used in Edit Deck when updating to retain the flashcardNumber 
+    return countFlash.size;
+
+}
 //DECK COUNT
 export async function updateDeckCount(currentUser) {
     //This grabs all the decks owned by a user, so we can get a count on them

@@ -41,11 +41,13 @@ export function addEventListeners() {
             d.isFavorited = true;
         }
         //Updates count as Deck is edited
-        d.flashcardNumber = await FirebaseController.updateFlashcardCount(Auth.currentUser.uid, d.docID);
+        //d.flashcardNumber = await FirebaseController.updateFlashcardCount(Auth.currentUser.uid, d.docID);
 
         //Firestore
         if (d.isClassDeck == "false") { //if user deck
             try {
+                //Updates count as Deck is edited
+                d.flashcardNumber = await FirebaseController.updateFlashcardCount(Auth.currentUser.uid, d.docID);
                 await FirebaseController.updateDeck(Auth.currentUser.uid, d, d.docID)
                 //Added an additional load, as not all the updated was loading the first time.
                 await study_decks_page();
@@ -58,6 +60,8 @@ export function addEventListeners() {
             Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
         } else { //else is a class deck
             try {
+                //Updates count as Deck is edited
+                d.flashcardNumber = await FirebaseController.updateClassFlashcardCount(d.isClassDeck, d.docID);
                 await FirebaseController.updateClassDeck(d, d.docID, d.isClassDeck);
                 //Added an additional load, as not all the updated was loading the first time.
                 await study_decks_page();
