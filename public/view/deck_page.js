@@ -169,6 +169,7 @@ export function addEventListeners() {
             await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
             Utilities.info("Successfully deleted", "Successfully deleted flashcard", "modal-delete-a-flashcard");
             await FirebaseController.updateFlashcardCount(Auth.currentUser.uid,deckDocID);
+            await FirebaseController.updateFlashcardCountForUser(Auth.currentUser.uid);
         } catch (e) {
             Utilities.info("Error", JSON.stringify(e), "modal-delete-a-flashcard");
         }

@@ -1259,22 +1259,14 @@ export async function leaderboardByFlashcards(members) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .where('email', 'in', members)
-        .get().then((querySnapshot) => {
-            querySnapshot.forEach(async (doc) => {
-                const userdocId = doc.id;
-                let sum = 0;
-                const countDeck = await firebase.firestore()
-                    .collection(Constant.collectionName.USERS).doc(userdocId)
-                    .collection(Constant.collectionName.OWNED_DECKS)
-                    .get()
-                countDeck.forEach(doc => {
-                    let d = new Deck(doc.data());
-                    d.set_docID(doc.id);
-                    sum+=d.flashcardNumber
-                });
-                classroomLeadersByFlashcards.push(sum);
-            });
-        });
+        .orderBy('flashcardNumber','desc')
+        .get()
+
+        ref.forEach(doc => {
+            let cm = new User(doc.data());
+            cm.set_docID(doc.id);
+            classroomLeadersByFlashcards.push(cm);
+        })
         return classroomLeadersByFlashcards;
 }
 
@@ -1331,7 +1323,11 @@ export async function updateFlashcardCount(currentUser, deckId) {
         .collection(Constant.collectionName.USERS).doc(currentUser)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
         .update({ 'flashcardNumber': countFlash.size });
-
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .update({ 'flashcardNumber': countFlash.size });
     //Used in Edit Deck when updating to retain the flashcardNumber 
     return countFlash.size;
 
@@ -1353,9 +1349,14 @@ export async function updateFlashcardCountForUser(currentUser) {
         });
     for(let i=0; i<deckList.length;i++){
         flashcardCount+=deckList[i].flashcardNumber;
-        console.log(`FlashcardCount:${flashcardCount}`);
     }
-    console.log(`After Loop:${flashcardCount}`);
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+    .collection(Constant.collectionName.USERS).doc(currentUser)
+    .update({ 'flashcardNumber': flashcardCount });
+    
+    return flashcardCount;
+    
 }
 
 export async function updateClassFlashcardCount(classroomId, deckId) {

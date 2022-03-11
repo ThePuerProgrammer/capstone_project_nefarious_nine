@@ -174,6 +174,7 @@ export async function delete_deck(docId, confirmation) {
             Utilities.info(`Success`, `The desired deck as successfully deleted.`,);
             //This is called twice before page load, due to it not registering the change
             await FirebaseController.updateDeckCount(Auth.currentUser.uid);
+            await FirebaseController.updateClassFlashcardCount(Auth.currentUser.uid);
 
 
         } catch (e) {

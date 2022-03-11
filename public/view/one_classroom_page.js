@@ -290,11 +290,11 @@ export async function one_classroom_page(classroomDocID) {
         let leaderboardFlashcards = [];
         leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
         document.getElementById('leaderboard-fields').innerHTML=''
-
+        let html2='';
         if(leaderboardFlashcards.length>0){           
             let index = 1;
             leaderboardFlashcards.forEach(e =>{
-                html+= buildLeaderBoard(e, index);
+                html2+= buildLeaderBoard(e, index);
                 index++;
             });
         }
@@ -454,7 +454,7 @@ function buildLeaderBoard(e,i){
         <td class="leaderboard-td">${e.email}</td>
         <td class="leaderboard-td">${e.coins}</td>
         <td class="leaderboard-td">${e.deckNumber}</td>
-        <td class="leaderboard-td">${[i-1]}</td>
+        <td class="leaderboard-td">${e.flashcardNumber}</td>
     </tr>`;
 }
 //REFERENCE:https://stackoverflow.com/questions/37347690/how-to-replace-div-with-another-div-in-javascript
