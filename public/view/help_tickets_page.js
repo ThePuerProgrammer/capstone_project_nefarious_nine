@@ -5,6 +5,7 @@ import * as Auth from '../controller/firebase_auth.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
 import * as Utilities from './utilities.js';
 import { HelpTicket } from '../model/help_ticket.js';
+import * as OneHelpTicket from './one_help_ticket_page.js';
 
 let imageFile2UploadHelpTicket;
 
@@ -39,7 +40,36 @@ export async function help_tickets_page() {
     let helpTickets = [];
     // if else anweisung um festzustellen, ob der benutzer ist admin oder nicht
     if (Auth.currentUser.email == Constant.ADMIN) {
-        html += '<h1>Signed in as admin</h1>';
+        html += '<h1>Help tickets</h1>';
+        try {
+            helpTickets = await FirebaseController.getHelpTickets();
+        } catch (e) {
+            console.log(e);
+            Utilities.info('Failed to get help tickets', JSON.stringify(e));
+        }
+
+        if (helpTickets.length === 0) {
+            html += '<p id="temp-help">No help tickets have been submitted</p>';
+        } else {
+            html += `<table id="help-tickets-table" class="table">
+                <thread>
+                    <tr>
+                        <th scope="col">View</th>
+                        <th scope="col">Ticket</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Feedback</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thread>
+                <tbody>`;
+
+            helpTickets.forEach(helpticket => {
+                html += `<tr>${buildHelpTicket(helpticket)}</tr>`;
+            })
+            html += `</tbody>
+            </table>`;
+        }
     } else {
         html += '<h1>Help tickets</h1>'
         try {
@@ -78,13 +108,26 @@ export async function help_tickets_page() {
 
     Elements.root.innerHTML += html;
 
+    const helpTicketViewButtons = document.getElementsByClassName('form-view-help-ticket');
+    for (let i = 0; i < helpTicketViewButtons.length; i++) {
+        helpTicketViewButtons[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            let helpTicketDocId = e.target.docId.value;
+            history.pushState(null, null, Routes.routePathname.ONEHELPTICKET + '#' + helpTicketDocId);
+            await OneHelpTicket.one_help_ticket_page(helpTicketDocId);
+        })
+    }
+
+
     const submitNewHelpTicket = document.getElementById('submit-help-ticket');
-    submitNewHelpTicket.addEventListener('click', () => {
-        Elements.formSubmitHelpTicket.form.reset();
-        Elements.formSubmitHelpTicket.imageTag.src = '';
-        imageFile2UploadHelpTicket = null;
-        Elements.modalSubmitHelpTicket.show();
-    });
+    if (submitNewHelpTicket) {
+        submitNewHelpTicket.addEventListener('click', () => {
+            Elements.formSubmitHelpTicket.form.reset();
+            Elements.formSubmitHelpTicket.imageTag.src = '';
+            imageFile2UploadHelpTicket = null;
+            Elements.modalSubmitHelpTicket.show();
+        });
+    }
 }
 
 async function createNewHelpTicket(form) {
@@ -114,7 +157,6 @@ async function createNewHelpTicket(form) {
         description,
         feedback,
         status: "Open",
-        resolved: false,
     })
 
     helpTicket.helpTicketImageName = imageName;
@@ -132,7 +174,7 @@ function buildHelpTicket(helpticket) {
     <td>
         <form class="form-view-help-ticket" method="post">
             <input type="hidden" name="docId" value="${helpticket.docID}">
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;">View</button>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
         </form>
     </td>
     <td>${helpticket.title}</td>

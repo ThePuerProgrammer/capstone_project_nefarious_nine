@@ -9,7 +9,6 @@ export class HelpTicket {
         this.helpTicketImageName = data.helpTicketImageName;
         this.helpTicketImageURL = data.helpTicketImageURL;
         this.status = data.status;
-        this.resolved = data.resolved;
     }
 
     /**************************************************
@@ -33,7 +32,6 @@ export class HelpTicket {
             helpTicketImageName: this.helpTicketImageName,
             helpTicketImageURL: this.helpTicketImageURL,
             status: this.status,
-            resolved: this.resolved,
         }
     }
 }

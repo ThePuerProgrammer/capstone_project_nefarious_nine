@@ -1359,8 +1359,12 @@ export async function uploadHelpTicketImage(imageFile, imageName) {
     const imageURL = await taskSnapShot.ref.getDownloadURL();
     return { imageName, imageURL };
 }
+
+export async function updateHelpTicket(helpTicketDocId, update) {
+    await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).update(update);
+}
 //============================================================================//
-// Get help tickets for user
+// User help ticket functions
 //============================================================================//
 export async function getUserHelpTickets(email) {
     let helpTickets = [];
@@ -1377,10 +1381,40 @@ export async function getUserHelpTickets(email) {
 
     return helpTickets;
 }
-//============================================================================//
-// Get help tickets for admin
-//============================================================================//
 
+export async function getOneHelpTicket(helpTicketDocId) {
+    const helpTicketRef = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .doc(helpTicketDocId)
+        .get();
+
+    if (!helpTicketRef.exists) return null;
+
+    const helpTicket = new HelpTicket(helpTicketRef.data());
+    helpTicket.set_docID(helpTicketDocId);
+    return helpTicket;
+}
+
+export async function closeHelpTicket(helpTicketDocId, imageName) {
+    await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).delete();
+    if (imageName != '') {
+        await firebase.storage().ref().child(Constant.storageFolderName.HELPTICKET_IMAGES + imageName).delete();
+    }
+}
 //============================================================================//
-// Help ticket status update
+// Help ticket functions for admin
 //============================================================================//
+export async function getHelpTickets() {
+    let helpTickets = [];
+    const helpTicketSnapshot = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .orderBy('timestamp', 'desc')
+        .get();
+    helpTicketSnapshot.forEach(doc => {
+        const ht = new HelpTicket(doc.data());
+        ht.set_docID(doc.id);
+        helpTickets.push(ht);
+    })
+
+    return helpTickets;
+}
