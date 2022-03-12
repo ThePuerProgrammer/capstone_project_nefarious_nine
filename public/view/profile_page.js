@@ -37,6 +37,12 @@ export async function profile_page() {
     } 
 
     html += `</div>`;
+
+    html += `<div class="equipped-pomopet">
+        <img src="${user.pomopet.petPhotoURL}" style="width: 200px; height: 200px; margin-bottom: -16px;" class="center">
+        <hr class="pomopet-bar">
+        <h4 class="pomo-text-color-dark" style="font-size: 20px;" >${user.pomopet.name}</h4>
+        </div>`;
     
     Elements.root.innerHTML = html;
 }

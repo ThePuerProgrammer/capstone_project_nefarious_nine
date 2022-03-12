@@ -64,6 +64,12 @@ export function addEventListeners() {
             const flashcardNumber = 0;
             const userBio = "";
 
+            const pomopet = {
+                type: "bunny",
+                name: "bunny",
+                petPhotoURL: "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fbunny.png?alt=media&token=c7f2df72-dbe3-4ca1-bdf0-6c9d85404a7f",
+            }
+
             const user_mail = email.split('@');
             const username = user_mail[0]; // get first portion of user's email as default username
 
@@ -81,6 +87,7 @@ export function addEventListeners() {
                 profilePhotoName,
                 profilePhotoURL,
                 userBio,
+                pomopet,
             });
 
             // Creates user Auth Account AND adds user account to users collections
