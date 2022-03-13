@@ -106,9 +106,9 @@ export async function one_classroom_page(classroomDocID) {
     //MEMEMBERS TAB END------------------------------------------------------
 
     
-    //Fetchs the order by Coins
-    let leaderboardCoins = [];
-    leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+    //Fetchs Default Leaderboard
+    let leaderboardDefault = [];
+    leaderboardDefault = await FirebaseController.leaderboardDefault(members);
 
     html += `</div>
         </div>
@@ -133,9 +133,9 @@ export async function one_classroom_page(classroomDocID) {
             </thead>
             <tbody id="leaderboard-fields">`;
             //Builds the cells below the buttons
-            if(leaderboardCoins.length>0){           
+            if(leaderboardDefault.length>0){           
                 let index = 1;
-                leaderboardCoins.forEach(e =>{
+                leaderboardDefault.forEach(e =>{
                     html+= buildLeaderBoard(e, index);
                     index++;
                 });
