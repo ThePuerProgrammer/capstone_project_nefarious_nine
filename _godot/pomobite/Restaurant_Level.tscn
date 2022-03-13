@@ -735,10 +735,10 @@ points = PoolVector2Array( 0, 0, 160, 0, 160, 32, 0, 32 )
 9/z_index = 0
 
 [sub_resource type="RectangleShape2D" id=33]
-extents = Vector2( 15.625, 15.625 )
+extents = Vector2( 15.625, 23.125 )
 
 [sub_resource type="RectangleShape2D" id=34]
-extents = Vector2( 16.25, 15.625 )
+extents = Vector2( 16.25, 23.125 )
 
 [sub_resource type="RectangleShape2D" id=27]
 extents = Vector2( 32, 16.5 )
@@ -1105,7 +1105,7 @@ shader = SubResource( 29 )
 shader_param/overlay = false
 shader_param/scanlines_opacity = 0.05
 shader_param/scanlines_width = 0.01
-shader_param/grille_opacity = 0.005
+shader_param/grille_opacity = 0.05
 shader_param/resolution = Vector2( 640, 480 )
 shader_param/pixelate = true
 shader_param/roll = true
@@ -1117,7 +1117,7 @@ shader_param/noise_opacity = 0.006
 shader_param/noise_speed = 5.0
 shader_param/static_noise_intensity = 0.01
 shader_param/aberration = 0.001
-shader_param/brightness = 0.65
+shader_param/brightness = 0.96
 shader_param/discolor = true
 shader_param/warp_amount = 0.2
 shader_param/clip_warp = false
@@ -1181,7 +1181,7 @@ texture = ExtResource( 6 )
 [node name="Area2D" type="Area2D" parent="POS1"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="POS1/Area2D"]
-position = Vector2( -1.875, 40.625 )
+position = Vector2( -1.875, 48.125 )
 scale = Vector2( 1, 1 )
 shape = SubResource( 33 )
 
@@ -1193,7 +1193,8 @@ texture = ExtResource( 6 )
 [node name="Area2D" type="Area2D" parent="POS2"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="POS2/Area2D"]
-position = Vector2( 0, 40.625 )
+position = Vector2( 0, 48.125 )
+scale = Vector2( 1, 1 )
 shape = SubResource( 34 )
 
 [node name="Logo" type="Sprite" parent="."]
