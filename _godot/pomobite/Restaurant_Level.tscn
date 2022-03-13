@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png" type="Texture" id=9]
 [ext_resource path="res://assets/textures/PomoBITE_Textures/wall_block.png" type="Texture" id=10]
 [ext_resource path="res://assets/fonts/PressStart2P-Regular.ttf" type="DynamicFontData" id=11]
+[ext_resource path="res://pomobite/Fire_Particles.tscn" type="PackedScene" id=12]
 
 [sub_resource type="ShaderMaterial" id=38]
 
@@ -1166,11 +1167,174 @@ cell_size = Vector2( 4, 4 )
 format = 1
 tile_data = PoolIntArray( 196632, 0, 0, 196688, 0, 0, 196984, 0, 0, 197040, 0, 0, 917554, 4, 0, 917559, 4, 0, 917610, 4, 0, 917615, 4, 0, 917869, 4, 0, 917874, 4, 0, 917925, 4, 0, 917930, 4, 0, 2621632, 536870917, 0, 2621716, 5, 0, 3080386, 2, 0, 3080390, 536870914, 0, 3080394, 2, 0, 3080466, 2, 0, 3080470, 536870914, 0, 3080474, 2, 0, 3145883, 1, 0, 3146047, 1, 0, 3801227, 3, 0, 3801301, 3, 0, 3801347, 3, 0, 3801421, 3, 0, 3866783, 6, 0, 3866785, 7, 0, 3866788, 8, 0, 3866938, 6, 0, 3866940, 7, 0, 3866943, 8, 0, 4194336, 6, 0, 4194338, 7, 0, 4194341, 8, 0, 4194392, 6, 0, 4194394, 7, 0, 4194397, 8, 0, 4194688, 6, 0, 4194690, 7, 0, 4194693, 8, 0, 4194744, 6, 0, 4194746, 7, 0, 4194749, 8, 0, 4390946, 9, 0, 4391002, 9, 0, 4391298, 9, 0, 4391354, 9, 0, 7340064, 6, 0, 7340066, 7, 0, 7340069, 8, 0, 7340120, 6, 0, 7340122, 7, 0, 7340125, 8, 0, 7340416, 6, 0, 7340418, 7, 0, 7340421, 8, 0, 7340472, 6, 0, 7340474, 7, 0, 7340477, 8, 0, 7536674, 9, 0, 7536730, 9, 0, 7537026, 9, 0, 7537082, 9, 0, 8782036, 1, 0, 8782086, 1, 0, 10616867, 8, 0, 10616923, 8, 0, 10617219, 8, 0, 10682811, 8, 0, 10747935, 7, 0, 10747942, 6, 0, 10747991, 7, 0, 10747998, 6, 0, 10748287, 7, 0, 10748294, 6, 0, 10813474, 9, 0, 10813530, 9, 0, 10813826, 9, 0, 10813879, 7, 0, 10813886, 6, 0, 10879418, 9, 0 )
 
+[node name="FireParticlesLeft" type="Node" parent="."]
+
+[node name="Particles2D" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 576, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D2" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 576, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D3" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 648, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D4" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 624, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D5" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 600, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D6" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 672, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D7" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 648, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D8" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 624, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D9" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 600, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D10" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 672, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D11" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 768, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D12" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 816, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D13" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 840, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D14" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 864, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D15" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 840, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D16" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 864, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D17" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 816, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D18" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 792, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D19" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 792, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D20" parent="FireParticlesLeft" instance=ExtResource( 12 )]
+position = Vector2( 768, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="FireParticlesRight" type="Node" parent="."]
+
+[node name="Particles2D" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1056, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D2" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1056, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D3" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1128, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D4" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1104, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D5" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1080, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D6" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1152, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D7" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1128, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D8" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1104, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D9" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1080, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D10" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1152, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D11" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1248, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D12" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1296, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D13" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1320, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D14" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1344, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D15" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1320, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D16" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1344, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D17" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1296, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D18" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1272, 72 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D19" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1272, 86 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Particles2D20" parent="FireParticlesRight" instance=ExtResource( 12 )]
+position = Vector2( 1248, 86 )
+scale = Vector2( 0.4, 0.4 )
+
 [node name="Player1" parent="." instance=ExtResource( 3 )]
 collision/safe_margin = 0.001
 
 [node name="Player2" parent="." instance=ExtResource( 4 )]
-visible = false
 position = Vector2( 721, 500 )
 
 [node name="POS1" type="Sprite" parent="."]
@@ -1219,6 +1383,7 @@ visible = false
 material = SubResource( 32 )
 position = Vector2( 963, 437.5 )
 scale = Vector2( 72.3125, 40.0313 )
+z_index = 2
 
 [node name="Sprite" type="Sprite" parent="POSWall"]
 self_modulate = Color( 0.956863, 0.909804, 0.678431, 1 )
@@ -1230,6 +1395,7 @@ texture = ExtResource( 10 )
 [node name="POSZoom" type="Sprite" parent="."]
 visible = false
 position = Vector2( 960, 530 )
+z_index = 3
 texture = ExtResource( 5 )
 
 [node name="POSScreen" type="Sprite" parent="POSZoom"]
