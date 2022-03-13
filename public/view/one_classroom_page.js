@@ -106,11 +106,10 @@ export async function one_classroom_page(classroomDocID) {
     //MEMEMBERS TAB END------------------------------------------------------
 
     
-    
-    let leaderboardDecks = [];
-    leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
-    //let leaderboardFlashcards = [];
-    //leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
+    //Fetchs the order by Coins
+    let leaderboardCoins = [];
+    leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+
     html += `</div>
         </div>
         </div>`;
@@ -133,13 +132,14 @@ export async function one_classroom_page(classroomDocID) {
             </tr>
             </thead>
             <tbody id="leaderboard-fields">`;
-    if(leaderboardDecks.length >0 ){
-        let index = 1;
-        leaderboardDecks.forEach(e =>{
-            html+= buildLeaderBoard(e, index);
-            index++;
-        });
-    }
+            //Builds the cells below the buttons
+            if(leaderboardCoins.length>0){           
+                let index = 1;
+                leaderboardCoins.forEach(e =>{
+                    html+= buildLeaderBoard(e, index);
+                    index++;
+                });
+            }
     html+=`</tbody></table></div></center></div>`;
        //HERE
     let messages = [];
