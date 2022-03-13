@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Jesse_Waiter2.png-d3d6ce7049ba0e029a916c96d971c03b.stex"
+path="res://.import/Jesse_Waiter6.png-199a53ea701d59108bfef481dd22310d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/AnimationFrames/Jesse_Waiter2.png"
-dest_files=[ "res://.import/Jesse_Waiter2.png-d3d6ce7049ba0e029a916c96d971c03b.stex" ]
+source_file="res://assets/art/AnimationFrames/PomoBITE_Frames/Jesse_Waiter6.png"
+dest_files=[ "res://.import/Jesse_Waiter6.png-199a53ea701d59108bfef481dd22310d.stex" ]
 
 [params]
 

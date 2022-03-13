@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Susan_Waiter.png-aed065eaae52fb4052f730e8ae134fdb.stex"
+path="res://.import/wall_block.png-a7d8017272b1bfa43aff4aeefea1bc24.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/AnimationFrames/Susan_Waiter.png"
-dest_files=[ "res://.import/Susan_Waiter.png-aed065eaae52fb4052f730e8ae134fdb.stex" ]
+source_file="res://assets/textures/PomoBITE_Textures/wall_block.png"
+dest_files=[ "res://.import/wall_block.png-a7d8017272b1bfa43aff4aeefea1bc24.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=1
 flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false

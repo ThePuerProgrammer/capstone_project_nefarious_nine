@@ -8,28 +8,22 @@ var vertical = 0
 var moving_down = true
 var moving_sideways = false
 var last_pressed_key = Vector2.DOWN
-var movable = true
+
+var player_is_controlled = false
 
 var u = "ui_up"
 var d = "ui_down"
 var l = "ui_left"
 var r = "ui_right"
 
-signal interact()
-
 func _ready():
 	pass
 
 func _physics_process(_delta):
-	poll_interaction()
-	if movable:
+	if player_is_controlled:
 		process_movement()
 		process_animation()
 		set_z()
-
-func poll_interaction():
-	if Input.is_action_just_pressed("ui_select"):
-		emit_signal("interact")
 
 func process_movement():
 	if Input.is_action_just_pressed(u) or Input.is_action_just_pressed(d):
