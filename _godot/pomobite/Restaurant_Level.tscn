@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://assets/textures/PomoBITE_Textures/wall_block.png" type="Texture" id=10]
 [ext_resource path="res://assets/fonts/PressStart2P-Regular.ttf" type="DynamicFontData" id=11]
 [ext_resource path="res://pomobite/Fire_Particles.tscn" type="PackedScene" id=12]
+[ext_resource path="res://pomobite/Bubble_Particles.tscn" type="PackedScene" id=13]
 
 [sub_resource type="ShaderMaterial" id=38]
 
@@ -1167,7 +1168,7 @@ cell_size = Vector2( 4, 4 )
 format = 1
 tile_data = PoolIntArray( 196632, 0, 0, 196688, 0, 0, 196984, 0, 0, 197040, 0, 0, 917554, 4, 0, 917559, 4, 0, 917610, 4, 0, 917615, 4, 0, 917869, 4, 0, 917874, 4, 0, 917925, 4, 0, 917930, 4, 0, 2621632, 536870917, 0, 2621716, 5, 0, 3080386, 2, 0, 3080390, 536870914, 0, 3080394, 2, 0, 3080466, 2, 0, 3080470, 536870914, 0, 3080474, 2, 0, 3145883, 1, 0, 3146047, 1, 0, 3801227, 3, 0, 3801301, 3, 0, 3801347, 3, 0, 3801421, 3, 0, 3866783, 6, 0, 3866785, 7, 0, 3866788, 8, 0, 3866938, 6, 0, 3866940, 7, 0, 3866943, 8, 0, 4194336, 6, 0, 4194338, 7, 0, 4194341, 8, 0, 4194392, 6, 0, 4194394, 7, 0, 4194397, 8, 0, 4194688, 6, 0, 4194690, 7, 0, 4194693, 8, 0, 4194744, 6, 0, 4194746, 7, 0, 4194749, 8, 0, 4390946, 9, 0, 4391002, 9, 0, 4391298, 9, 0, 4391354, 9, 0, 7340064, 6, 0, 7340066, 7, 0, 7340069, 8, 0, 7340120, 6, 0, 7340122, 7, 0, 7340125, 8, 0, 7340416, 6, 0, 7340418, 7, 0, 7340421, 8, 0, 7340472, 6, 0, 7340474, 7, 0, 7340477, 8, 0, 7536674, 9, 0, 7536730, 9, 0, 7537026, 9, 0, 7537082, 9, 0, 8782036, 1, 0, 8782086, 1, 0, 10616867, 8, 0, 10616923, 8, 0, 10617219, 8, 0, 10682811, 8, 0, 10747935, 7, 0, 10747942, 6, 0, 10747991, 7, 0, 10747998, 6, 0, 10748287, 7, 0, 10748294, 6, 0, 10813474, 9, 0, 10813530, 9, 0, 10813826, 9, 0, 10813879, 7, 0, 10813886, 6, 0, 10879418, 9, 0 )
 
-[node name="FireParticlesLeft" type="Node" parent="."]
+[node name="FireParticlesLeft" type="Node2D" parent="."]
 
 [node name="Particles2D" parent="FireParticlesLeft" instance=ExtResource( 12 )]
 position = Vector2( 576, 86 )
@@ -1249,7 +1250,7 @@ scale = Vector2( 0.4, 0.4 )
 position = Vector2( 768, 86 )
 scale = Vector2( 0.4, 0.4 )
 
-[node name="FireParticlesRight" type="Node" parent="."]
+[node name="FireParticlesRight" type="Node2D" parent="."]
 
 [node name="Particles2D" parent="FireParticlesRight" instance=ExtResource( 12 )]
 position = Vector2( 1056, 86 )
@@ -1330,6 +1331,22 @@ scale = Vector2( 0.4, 0.4 )
 [node name="Particles2D20" parent="FireParticlesRight" instance=ExtResource( 12 )]
 position = Vector2( 1248, 86 )
 scale = Vector2( 0.4, 0.4 )
+
+[node name="LeftTubBubbles" type="Node2D" parent="."]
+
+[node name="Bubble_Particles" parent="LeftTubBubbles" instance=ExtResource( 13 )]
+position = Vector2( 892, 347 )
+
+[node name="Bubble_Particles2" parent="LeftTubBubbles" instance=ExtResource( 13 )]
+position = Vector2( 892, 316 )
+
+[node name="RightTubBubbles" type="Node2D" parent="."]
+
+[node name="Bubble_Particles" parent="RightTubBubbles" instance=ExtResource( 13 )]
+position = Vector2( 1027, 350 )
+
+[node name="Bubble_Particles2" parent="RightTubBubbles" instance=ExtResource( 13 )]
+position = Vector2( 1027, 319 )
 
 [node name="Player1" parent="." instance=ExtResource( 3 )]
 collision/safe_margin = 0.001
