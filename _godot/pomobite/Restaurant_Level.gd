@@ -109,13 +109,13 @@ func _on_Table12Button_pressed():
 
 func _on_POS_right_area_entered(_area):
 	if show_hint:
-		$PopupDialog.rect_position = Vector2($POS1.position.x + 20, $POS1.position.y - 60)
+		$PopupDialog.rect_position = Vector2($LevelSprites/POS1.position.x + 20, $LevelSprites/POS1.position.y - 60)
 		$PopupDialog.popup()
 	pos_right_usable = true
 
 func _on_POS_left_area_entered(_area):
 	if show_hint:
-		$PopupDialog.rect_position = Vector2($POS2.position.x + 20, $POS2.position.y - 60)
+		$PopupDialog.rect_position = Vector2($LevelSprites/POS2.position.x + 20, $LevelSprites/POS2.position.y - 60)
 		$PopupDialog.popup()
 	pos_left_usable = true
 
