@@ -1,16 +1,20 @@
 extends Node2D
 
+onready var pos = Vector2(0.0, 0.0)
+var frame_count = 0
+var animation_switch = false
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(_delta):
+	frame_count += 1
+	if pos.y < global_position.y - 3 && !animation_switch:
+		$AnimatedSprite.animation = "down"
+		animation_switch = true
+	else:
+		$AnimatedSprite.animation = "stationary_down"
+		
+	if frame_count == 25:
+		pos = global_position
+		frame_count = 0
