@@ -235,3 +235,51 @@ func _on_Table12_area_entered(area):
 
 func _on_Table12_area_exited(area):
 	pass # Replace with function body.
+
+
+func _on_Soda1_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Soda1_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Soda2_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Soda2_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Soda3_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Soda3_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Soda4_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Soda4_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Trash1_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Trash1_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Trash2_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Trash2_area_exited(area):
+	pass # Replace with function body.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -1143,6 +1143,12 @@ extents = Vector2( 48, 77 )
 [sub_resource type="RectangleShape2D" id=43]
 extents = Vector2( 111.5, 80.5 )
 
+[sub_resource type="RectangleShape2D" id=44]
+extents = Vector2( 48, 23 )
+
+[sub_resource type="RectangleShape2D" id=45]
+extents = Vector2( 31, 17 )
+
 [node name="Restaurant_Level" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -1826,6 +1832,70 @@ __meta__ = {
 position = Vector2( 12.5, 14.5 )
 shape = SubResource( 43 )
 
+[node name="SodaAreas" type="Node2D" parent="."]
+
+[node name="Soda1" type="Area2D" parent="SodaAreas"]
+position = Vector2( 106, 86 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SodaAreas/Soda1"]
+position = Vector2( 38, 13 )
+shape = SubResource( 44 )
+
+[node name="Soda2" type="Area2D" parent="SodaAreas"]
+position = Vector2( 330, 86 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SodaAreas/Soda2"]
+position = Vector2( 38, 13 )
+shape = SubResource( 44 )
+
+[node name="Soda3" type="Area2D" parent="SodaAreas"]
+position = Vector2( 1514, 86 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SodaAreas/Soda3"]
+position = Vector2( 38, 13 )
+shape = SubResource( 44 )
+
+[node name="Soda4" type="Area2D" parent="SodaAreas"]
+position = Vector2( 1738, 86 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SodaAreas/Soda4"]
+position = Vector2( 38, 13 )
+shape = SubResource( 44 )
+
+[node name="TrashAreas" type="Node2D" parent="."]
+
+[node name="Trash1" type="Area2D" parent="TrashAreas"]
+position = Vector2( 555, 544 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TrashAreas/Trash1"]
+position = Vector2( 21, 35 )
+shape = SubResource( 45 )
+
+[node name="Trash2" type="Area2D" parent="TrashAreas"]
+position = Vector2( 1323, 544 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TrashAreas/Trash2"]
+position = Vector2( 21, 35 )
+shape = SubResource( 45 )
+
 [connection signal="area_entered" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_entered"]
 [connection signal="area_exited" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_exited"]
 [connection signal="area_entered" from="LevelSprites/POS2/Area2D" to="." method="_on_POS_left_area_entered"]
@@ -1871,3 +1941,11 @@ shape = SubResource( 43 )
 [connection signal="area_exited" from="TableAreas/Table11" to="." method="_on_Table11_area_exited"]
 [connection signal="area_entered" from="TableAreas/Table12" to="." method="_on_Table12_area_entered"]
 [connection signal="area_exited" from="TableAreas/Table12" to="." method="_on_Table12_area_exited"]
+[connection signal="area_entered" from="SodaAreas/Soda1" to="." method="_on_Soda1_area_entered"]
+[connection signal="area_exited" from="SodaAreas/Soda1" to="." method="_on_Soda1_area_exited"]
+[connection signal="area_entered" from="SodaAreas/Soda2" to="." method="_on_Soda2_area_entered"]
+[connection signal="area_exited" from="SodaAreas/Soda2" to="." method="_on_Soda2_area_exited"]
+[connection signal="area_entered" from="SodaAreas/Soda3" to="." method="_on_Soda3_area_entered"]
+[connection signal="area_exited" from="SodaAreas/Soda3" to="." method="_on_Soda3_area_exited"]
+[connection signal="area_entered" from="SodaAreas/Soda4" to="." method="_on_Soda4_area_entered"]
+[connection signal="area_exited" from="SodaAreas/Soda4" to="." method="_on_Soda4_area_exited"]
