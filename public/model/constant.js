@@ -4,6 +4,11 @@
 export const DEV = true
 
 /*****************************************
+ * Admin constant until we get accounts
+ * working better
+ *****************************************/
+export const ADMIN = 'admin@test.com'
+/*****************************************
  *          COLLECTION NAMES
  ***************************************** 
  * Where we reference the collection names
@@ -18,6 +23,7 @@ export const collectionName = {
     BACKEND: 'backend',
     CLASSROOM_CHATS: 'classroom_chats',
     MESSAGES: 'messages',
+    HELPTICKETS: 'help_tickets',
 }
 
 /*****************************************
@@ -30,6 +36,7 @@ export const collectionName = {
  ******************************************/
 export const storageFolderName = {
     FLASHCARD_IMAGES: 'flashcard_images/',
+    HELPTICKET_IMAGES: 'helpticket_images/',
 }
 
 /*****************************************
@@ -60,4 +67,8 @@ export const htmlIDs = {
     miniGamesPage: 'godot-mini-games',
     chillZonePage: 'chill-zone-page',
     analyticsPage: 'analytics-page',
+    leaderboardCoins: 'button-leaderboard-coins',
+    leaderboardDecks: 'button-leaderboard-decks',
+    leaderboardFlashcards: 'button-leaderboard-flashcards',
+
 }

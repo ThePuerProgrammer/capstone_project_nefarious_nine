@@ -7,6 +7,7 @@ import * as Elements from './elements.js'
 import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
+import { buildStudyDecksPage } from './study_decks_page.js'
 
 
 export async function one_classroom_page(classroomDocID) {
@@ -39,10 +40,10 @@ export async function one_classroom_page(classroomDocID) {
 
     // adding classroom, members, and leaderboard tabs
     html += `<div class="classroom-page-tab">
-        <button id="classroom-gen-button" class="classroom-tab">Classroom<i class="small material-icons">school</i></button>
-        <button id="classroom-members-button" class="classroom-tab">Members <i class="small material-icons">group</i></button>
-        <button id="classroom-leaderboard-button" class="classroom-tab">Leaderboard <i class="small material-icons">insert_chart</i></button>
-        <button id="classroom-chat-button" class="classroom-tab">Chat <i class="small material-icons">chat</i></button>
+        <button id="classroom-gen-button" class="classroom-tab"><i class="small material-icons">school</i>Classroom</button>
+        <button id="classroom-members-button" class="classroom-tab"><i class="small material-icons">group</i>Members</button>
+        <button id="classroom-leaderboard-button" class="classroom-tab"><i class="small material-icons">insert_chart</i>Leaderboard</button>
+        <button id="classroom-chat-button" class="classroom-tab"><i class="small material-icons">chat</i>Chat</button>
         </div>`;
 
     // CLASSROOM tab contents
@@ -61,8 +62,18 @@ export async function one_classroom_page(classroomDocID) {
             </button>`
             ;
     }
+    //Building Decks
+    // let deckList = [];
+    // try {
+    //     deckList = await FirebaseController.getClassDecks(classroom.docID);
+
+    // } catch (e) {
+    //     console.log(e);
+    // }
+    // buildStudyDecksPage(deckList);
 
     html += `</div>`;
+    //CLASSROOM TAB END-----------------------------------------------------
 
     // MEMBERS tab contents
     html += `<div id="Members" class="one-classroom-tab-content">
@@ -92,34 +103,45 @@ export async function one_classroom_page(classroomDocID) {
     mods.forEach(mod => {
         html += `<p>${mod}</p>`;
     })
+    //MEMEMBERS TAB END------------------------------------------------------
 
     
-    let leaderboard = [];
-    leaderboard = await FirebaseController.leaderboardByCoins(members);
     
+    let leaderboardDecks = [];
+    leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+    //let leaderboardFlashcards = [];
+    //leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
     html += `</div>
         </div>
         </div>`;
 
     // LEADERBOARD tab content
     html += `<div id="Leaderboard" class="one-classroom-tab-content">
-    <center><h2>Leaderboard</h2>  
-        <table class="leaderboard-table">
+    <center>
+    <div class="leaderboard-main-row"><h2>Leaderboard</h2></div>
+
+        <br/>
+        <div id="leaderboard-table">
+        <table class="leaderboard-table-default">
+            <thead>
             <tr>
                 <th class="leaderboard-th">Rank</th>
                 <th class="leaderboard-th">User</th>
-                <th class="leaderboard-th">Coins</th>
-            </tr>`;
-
-    if(leaderboard.length >0 ){
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardCoins}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong>Coins</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardDecks}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Decks</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardFlashcards}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Flashcards</strong></span></button></th>
+            </tr>
+            </thead>
+            <tbody id="leaderboard-fields">`;
+    if(leaderboardDecks.length >0 ){
         let index = 1;
-        leaderboard.forEach(e =>{
+        leaderboardDecks.forEach(e =>{
             html+= buildLeaderBoard(e, index);
             index++;
         });
     }
-    html+=`</table></center></div>`;
-       
+    html+=`</tbody></table></div></center></div>`;
+       //HERE
     let messages = [];
     messages = await FirebaseController.getMessages(classroomDocID);
 
@@ -133,16 +155,18 @@ export async function one_classroom_page(classroomDocID) {
         html += '<p id="temp">No messages have been posted yet...be the first!</p>';
     }
     html += `</div>`;
+    //LEADERBOARD TAB END----------------------------------------------------------
 
     // CHAT tab content
     html += `<div>
     <textarea id="add-new-message" placeholder="Send a message..." style="border: 1px solid #2C1320; width: 700px; height: 150px; background-color: #2C1320; color: #A7ADC6;"></textarea>
     <br>
-    <button id="classroom-message-button" style="background-color: #2C1320; color: #A7ADC6;">Send</button>
+    <button id="classroom-message-button" style="background-color: #2C1320; color: #A7ADC6;"><i class="small material-icons">send</i> Send</button>
     </div>
     </div>`;
 
     Elements.root.innerHTML = html;
+
 
     // get CLASSROOM tab and show it as visible
     const classroomGenButton = document.getElementById('classroom-gen-button');
@@ -211,6 +235,73 @@ export async function one_classroom_page(classroomDocID) {
         document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
         document.getElementById('classroom-members-button').style.color = '#2C1320';
     })
+
+    //html+=`</table></center></div>`;
+    //SORT BY COINS
+    const sortByCoinsButton = document.getElementById(Constant.htmlIDs.leaderboardCoins);
+    sortByCoinsButton.addEventListener('click', async e=>{
+        console.log('clicked COINS');
+        let leaderboardCoins = [];
+        leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+        document.getElementById('leaderboard-fields').innerHTML=''
+
+        let html2 = ``;
+       
+        if(leaderboardCoins.length>0){           
+            let index = 1;
+            leaderboardCoins.forEach(e =>{
+                html2+= buildLeaderBoard(e, index);
+                index++;
+            });
+        }
+        html2+=`</tbody>`;
+        document.getElementById('leaderboard-fields').innerHTML=html2;
+
+
+        //swapContent(html2);
+        //swapContent('Const.htmlIDs.leaderboardCoins');//RETURNED ONLY THE BUTTON
+       
+    });
+    //SORT BY DECKS
+    const sortByDecksButton = document.getElementById(Constant.htmlIDs.leaderboardDecks);
+    sortByDecksButton.addEventListener('click', async e=>{
+        console.log('clicked DECKS');
+        let leaderboardDecks = [];
+        leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+        document.getElementById('leaderboard-fields').innerHTML=''
+        let html2 = ``;
+       
+
+        if(leaderboardDecks.length>0){           
+            let index = 1;
+            leaderboardDecks.forEach(e =>{
+                html2+= buildLeaderBoard(e, index);
+                index++;
+            });
+        }
+        html2+=`</tbody>`;
+        document.getElementById('leaderboard-fields').innerHTML=html2;
+
+    });
+    //SORT BY FLASHCARDS
+    const sortByFlashcardsButton = document.getElementById(Constant.htmlIDs.leaderboardFlashcards);
+    sortByFlashcardsButton.addEventListener('click', async e=>{
+        console.log('clicked FLASHCARDS');
+        let leaderboardFlashcards = [];
+        leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
+        document.getElementById('leaderboard-fields').innerHTML=''
+        let html2='';
+        if(leaderboardFlashcards.length>0){           
+            let index = 1;
+            leaderboardFlashcards.forEach(e =>{
+                html2+= buildLeaderBoard(e, index);
+                index++;
+            });
+        }
+        html2+=`</tbody>`;
+        document.getElementById('leaderboard-fields').innerHTML=html2;
+
+    });
 
     // get CHAT tab and show it as visible 
     const classroomChatButton = document.getElementById('classroom-chat-button');
@@ -305,9 +396,10 @@ export async function one_classroom_page(classroomDocID) {
             await one_classroom_page(classroomDocID);
         })
     }
-
-
 }
+
+
+
 
 function buildMessageView(message) {
     return `
@@ -361,5 +453,69 @@ function buildLeaderBoard(e,i){
         <td class="leaderboard-td">${i}</td>
         <td class="leaderboard-td">${e.email}</td>
         <td class="leaderboard-td">${e.coins}</td>
+        <td class="leaderboard-td">${e.deckNumber}</td>
+        <td class="leaderboard-td">${e.flashcardNumber}</td>
     </tr>`;
 }
+//REFERENCE:https://stackoverflow.com/questions/37347690/how-to-replace-div-with-another-div-in-javascript
+
+function swapContent (id) {
+    const main = document.getElementById('leaderboard-table').lastElementChild;
+    const div = document.getElementById(id).lastElementChild;
+    //const clone = div.cloneNode();
+    const clone = div.cloneNode(true);
+    while (main.firstChild) main.firstChild.remove();
+
+    main.appendChild(clone);
+}
+
+// function buildDeckView(deck){
+//     window.sessionStorage;
+//     let html = `
+//     <div id="${deck.docId}" class="deck-card">
+//         <div class="deck-view-css">
+//         <div class="card-body">
+//             <h5 class="card-text">${deck.name}</h5>
+//             <h6 class="card-text" >Subject: ${deck.subject}</h6>
+//             <h6 class="card-text">Category: ${deck.category}</h6>
+//             <h7 class="card-text"># of flashcards: ${deck.flashcardNumber}</h7>
+//             <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
+//         </div>
+//         <div class="btn-group">
+//         <form class="form-view-deck" method="post">
+//             <input type="hidden" name="docId" value="${deck.docId}">
+//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
+//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
+//         </form>
+//         <form class="form-edit-deck" method="post">
+//             <input type="hidden" name="docId" value="${deck.docId}">
+//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
+//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
+//         </form>
+//         <form class="form-delete-deck" method="post">
+//             <input type="hidden" name="docId" value="${deck.docId}">
+//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
+//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
+//         </form>
+//         </div>`;
+
+//     // ternary operator to check if a deck is favorited or not
+//     html += deck.isFavorited ? `<div class="form-check">
+//         <span class="favorite-deck">
+//         <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
+//         </span>
+
+//         <label class= "form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite</i>Favorite deck</label>
+//         </div>
+//         </div>
+//         </div>
+//         ` : `<div class="form-check">
+//         <span class="unfavorite-deck">
+//         <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
+//         </span>
+//         <label class="form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite_border</i>Favorite deck</label>
+//         </div>
+//         </div>
+//         </div>`;
+//     return html;
+// }

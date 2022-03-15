@@ -12,6 +12,7 @@ export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 export const modalMenuResetPassword = document.getElementById('reset-password');
+export const menuHelpTickets = document.getElementById('menu-help-tickets');
 
 // TEMPORARY Element for temporary button
 export const menuTempGodot = document.getElementById('menu-temp-godot');
@@ -44,6 +45,7 @@ export const formCreateDeck = document.getElementById('form-create-deck');
 export const formDeckCategorySelect = document.getElementById('select-deck-category');
 export const formCreateAccount = document.getElementById('form-create-account');
 export const formViewDeck = document.getElementById('form-view-deck');
+export const formClassSelect = document.getElementById('select-deck-classroom');
 //============================================================================//
 
 // STUDY PAGE
@@ -77,9 +79,10 @@ export const modalEditDeck = new bootstrap.Modal(document.getElementById('modal-
 export const modalCreateClassroom = new bootstrap.Modal(document.getElementById('create-classroom-modal'));
 export const modalDeleteDeckConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-delete-deck', { backdrop: 'static' }));
 export const modalEditClassroom = new bootstrap.Modal(document.getElementById('modal-edit-classroom', { backdrop: 'static' }));
-export const modalPreviewClassroom = new bootstrap.Modal(document.getElementById('preview-classroom-modal', {backdrop:'static'}));
-export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-leave-classroom', {backdrop: 'static'}));
-export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', {backdrop: 'static'}));
+export const modalPreviewClassroom = new bootstrap.Modal(document.getElementById('preview-classroom-modal', { backdrop: 'static' }));
+export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-leave-classroom', { backdrop: 'static' }));
+export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', { backdrop: 'static' }));
+export const modalSubmitHelpTicket = new bootstrap.Modal(document.getElementById('modal-submit-help-ticket', { backdrop: 'static' }));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -110,6 +113,15 @@ export const formContainerAnswerImage = document.getElementById('form-answer-ima
 export const formContainerQuestionImage = document.getElementById('form-question-image-container');
 //===========================================================================//
 
+// Submit help ticket
+//============================================================================//
+export const formSubmitHelpTicket = {
+    form: document.getElementById('form-submit-help-ticket'),
+    imageTag: document.getElementById('form-add-image-to-help-ticket-tag'),
+    imageButton: document.getElementById('form-add-image-to-help-ticket-button'),
+}
+
+
 //EDIT FLASHCARD
 //==========================================================================//
 export const formEditFlashcard = {
@@ -139,6 +151,7 @@ export const formEditDeck = {
 }
 export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
 export const formDeleteDeckConfirmation = document.getElementById('form-delete-deck-confirmation');
+export const formEditDeckClassroomSelect = document.getElementById('select-deck-classroom-edit');
 //==========================================================================//
 //PET ADOPTION
 //============================================================================//
@@ -173,3 +186,4 @@ export const formSearchBox = document.getElementById('form-searchbox');
 export const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
 export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
 //============================================================================//
+

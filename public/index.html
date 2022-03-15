@@ -56,10 +56,15 @@
             </li>
           </ul>
         </div>
-        <div class="modal-postauth">
+        <div class=" modal-postauth">
           <div style="flex-grow: 2;"></div>
           <div style="flex-grow: 1;">
             <ul class="navbar-nav">
+              <li class="nav-item" style="display: inline;">
+                <button type="button" class="btn" id="menu-help-tickets">
+                  <img src="./assets/images/help_outline_black_24dp.svg" alt="Help tickets" width="24" height="24">
+                </button>
+              </li>
               <li class="nav-item" style="display: inline;">
                 <button type="button" class="btn" id="menu-settings">
                   <img src="./assets/images/settings_black_24dp.svg" alt="Settings" width="24" height="24">
@@ -137,7 +142,8 @@
               <input type="password" name="password" required minlength="6" placeholder="Password" autocomplete="off">
             </div>
             <div>
-              <input type="password" name="passwordConfirm" required minlength="6" placeholder="Confirm Password" autocomplete="off"> 
+              <input type="password" name="passwordConfirm" required minlength="6" placeholder="Confirm Password"
+                autocomplete="off">
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button type="submit"
@@ -196,7 +202,8 @@
               <br>
               <label class="pomo-text-color-light" for="esubject">Subject</label>
               <input class="form-control form-control-lg" type="text" name="esubject"
-                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="eclass-subject" autocomplete="off">
+                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="eclass-subject"
+                autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="editClassCategory">Category</label>
@@ -268,6 +275,7 @@
         </div>
         <div class="modal-body">
           <form id="form-create-deck" method="post">
+            <input type="hidden" name="classDeckdocId" />
             <div class="form-group">
               <label class="pomo-text-color-light" for="name">Name</label>
               <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
@@ -276,12 +284,19 @@
               <br>
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
-                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="deck-subject" autocomplete="off">
+                placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="deck-subject"
+                autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="selectCategory">Category</label>
               <br>
               <select id="select-deck-category" name="selectCategory" class="form-select-deck-category"
+                aria-label="Default select example" style="width:300px;"></select>
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="selectClassroom">Classroom</label>
+              <br>
+              <select id="select-deck-classroom" name="selectClassroom" class="form-select-deck-classroom"
                 aria-label="Default select example" style="width:300px;"></select>
             </div>
             <br>
@@ -309,6 +324,8 @@
             <input type="hidden" name="docId" />
             <input type="hidden" name="isFavorited" />
             <input type="hidden" name="dateCreated" />
+            <input type="hidden" name="flashcardNumber" />
+            <input type="hidden" name="classDocId" />
             <div class="form-group">
               <div id="form-edit-deck-name">
                 <label class="pomo-text-color-light" for="name">Name</label>
@@ -329,6 +346,7 @@
                 <select id="select-deck-category-edit" name="selectCategory" class="form-select-deck-category"
                   aria-label="Default select example" style="width:300px;"></select>
               </div>
+              <br>
             </div>
             <br>
             <br>
@@ -381,8 +399,8 @@
             <!-- QUESTION INPUT -->
             <label for="form-question-text-input">Question:</label>
             <textarea name="question" id="form-question-text-input" class="form-control" rows="3" type="text"
-              name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min
-              length="1" autocomplete="off"></textarea>
+              name="flashcard-question" placeholder="How many snakes can fit on a plane?" required min length="1"
+              autocomplete="off"></textarea>
             <br />
             <div id="form-question-image-container" style="display: none;">
               <img id="form-add-image-to-flashcard-question-tag"
@@ -548,7 +566,8 @@
               <br>
               <label class="pomo-text-color-light" for="subject">Subject</label>
               <input class="form-control form-control-lg" type="subject" name='subject'
-                placeholder="e.g. Software Design & Development" required minlength="2" id="class-subject" autocomplete="off">
+                placeholder="e.g. Software Design & Development" required minlength="2" id="class-subject"
+                autocomplete="off">
               <br>
               <br>
               <label class="pomo-text-color-light" for="selectClassCategory">Category</label>
@@ -667,6 +686,58 @@
   </div>
   <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
 
+  <!-- MODAL: Submit a help ticket ---------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-submit-help-ticket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-submit-help-ticket-title">Submit help ticket</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-submit-help-ticket" method="post">
+            <br />
+            <label class="pomo-text-color-light" for="help-ticket-title">Title</label>
+            <input class="form-control form-control-lg" type="help-ticket-title" name="helpTicketTitle"
+              placeholder="Give a brief title to your ticket..." required minlength="2" id="help-ticket-title"
+              autocomplete="off">
+            <br />
+            <br />
+            <div id="form-help-ticket-description-container">
+              <label for="form-help-ticket-description-input">Description:</label>
+              <textarea name="helpTicketDescription" id="form-help-ticket-description-input" class="form-control"
+                rows="3" type="text" required min length="1" placeholder="Describe your issue..."
+                autocomplete="off"></textarea>
+            </div>
+            <label class="pomo-text-color-light" for="helpTicketCategory">Category</label>
+            <br>
+            <select id="help-ticket-category" name="helpTicketCategory" class="form-select-help-ticket-category"
+              aria-label="Default select example" style="width:300px;">
+              <option selected disabled>Choose a category...</option>
+              <option value="help-ticket-classrooms">Classrooms</option>
+              <option value="help-ticket-decks">Decks</option>
+              <option value="help-ticket-flashcards">Flashcards</option>
+              <option value="help-ticket-games">Minigames</option>
+              <option value="help-ticket-users">Users</option>
+            </select>
+            <br>
+            <div id="form-help-ticket-image-container">
+              <img id="form-add-image-to-help-ticket-tag"
+                style="height: 100%; width:100%; object-fit:contain; display: block;" />
+              Image:
+              <input id="form-add-image-to-help-ticket-button" type="file" value="upload" />
+            </div>
+            <div>
+              <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End submit a help ticket----------------------------------------------------------------------------------------->
+
   <!--MODAL: SEARCH------------------------------------------------------------>
   <div class="modal fade" id="modal-searchbox" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -674,19 +745,23 @@
         <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
           <h5 class="modal-title" id="modal-searchbox-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>       
-          <div style="display: inline-block; margin-left: 50px;">
-            <form id="form-searchbox" class="d-flex" method="get" action="">            
-                    <input name="searchKeys" class="form-control border-end-0 border rounded-pill" placeholder id="modal-searchbox-placeholder" type="Search" value="">   
-                    <input type="hidden" id="modal-searchbox-type" name="searchType" value="" />      
-                    <button class ="btn search-btn" type="submit" style="margin: 8px 8px 8px 8px;" name="search-submit" value="Search">Search</button>                
-            </form>
-          </div>
-        
+        </div>
+        <div style="display: inline-block; margin-left: 50px;">
+          <form id="form-searchbox" class="d-flex" method="get" action="">
+            <input name="searchKeys" class="form-control border-end-0 border rounded-pill" placeholder
+              id="modal-searchbox-placeholder" type="Search" value="">
+            <input type="hidden" id="modal-searchbox-type" name="searchType" value="" />
+            <button class="btn search-btn" type="submit" style="margin: 8px 8px 8px 8px;" name="search-submit"
+              value="Search">Search</button>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
   <!-- END OF MODAL: SEARCH------------------------------------------------------>
+
+
 
 
   <!-- Modal: Popup Info Box -------------------------------------------------->
@@ -706,6 +781,8 @@
     </div>
   </div>
   <!-- END OF POPUP INFO BOX----------------------------------------------------->
+
+
   <!-- SPA TARGET IS ROOT -->
   <div id="root"></div>
 
