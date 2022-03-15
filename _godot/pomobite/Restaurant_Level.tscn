@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -1137,6 +1137,12 @@ _data = {
 [sub_resource type="RectangleShape2D" id=41]
 extents = Vector2( 15, 17 )
 
+[sub_resource type="RectangleShape2D" id=42]
+extents = Vector2( 48, 77 )
+
+[sub_resource type="RectangleShape2D" id=43]
+extents = Vector2( 111.5, 80.5 )
+
 [node name="Restaurant_Level" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -1618,6 +1624,7 @@ script = ExtResource( 18 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Paths/ChefAPath/PathFollow2D/Chef_NPC"]
 frames = ExtResource( 17 )
 animation = "side"
+frame = 1
 playing = true
 
 [node name="Area2D" type="Area2D" parent="Paths/ChefAPath/PathFollow2D/Chef_NPC"]
@@ -1672,7 +1679,6 @@ script = ExtResource( 18 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Paths/ChefCPath/PathFollow2D/Chef_NPC"]
 frames = ExtResource( 17 )
 animation = "side"
-frame = 3
 playing = true
 
 [node name="Area2D" type="Area2D" parent="Paths/ChefCPath/PathFollow2D/Chef_NPC"]
@@ -1706,6 +1712,120 @@ z_index = -1
 wait_time = 2.0
 one_shot = true
 
+[node name="TableAreas" type="Node2D" parent="."]
+
+[node name="Table1" type="Area2D" parent="TableAreas"]
+position = Vector2( 144, 288 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table1"]
+shape = SubResource( 42 )
+
+[node name="Table2" type="Area2D" parent="TableAreas"]
+position = Vector2( 368, 288 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table2"]
+shape = SubResource( 42 )
+
+[node name="Table3" type="Area2D" parent="TableAreas"]
+position = Vector2( 145, 480 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table3"]
+shape = SubResource( 42 )
+
+[node name="Table4" type="Area2D" parent="TableAreas"]
+position = Vector2( 368, 480 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table4"]
+shape = SubResource( 42 )
+
+[node name="Table5" type="Area2D" parent="TableAreas"]
+position = Vector2( 131, 674 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table5"]
+position = Vector2( 12.5, 14.5 )
+shape = SubResource( 43 )
+
+[node name="Table6" type="Area2D" parent="TableAreas"]
+position = Vector2( 357, 674 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table6"]
+position = Vector2( 12.5, 14.5 )
+shape = SubResource( 43 )
+
+[node name="Table7" type="Area2D" parent="TableAreas"]
+position = Vector2( 1552, 288 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table7"]
+shape = SubResource( 42 )
+
+[node name="Table8" type="Area2D" parent="TableAreas"]
+position = Vector2( 1776, 288 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table8"]
+shape = SubResource( 42 )
+
+[node name="Table9" type="Area2D" parent="TableAreas"]
+position = Vector2( 1552, 480 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table9"]
+shape = SubResource( 42 )
+
+[node name="Table10" type="Area2D" parent="TableAreas"]
+position = Vector2( 1776, 480 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table10"]
+shape = SubResource( 42 )
+
+[node name="Table11" type="Area2D" parent="TableAreas"]
+position = Vector2( 1539, 674 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table11"]
+position = Vector2( 12.5, 14.5 )
+shape = SubResource( 43 )
+
+[node name="Table12" type="Area2D" parent="TableAreas"]
+position = Vector2( 1764, 674 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table12"]
+position = Vector2( 12.5, 14.5 )
+shape = SubResource( 43 )
+
 [connection signal="area_entered" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_entered"]
 [connection signal="area_exited" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_exited"]
 [connection signal="area_entered" from="LevelSprites/POS2/Area2D" to="." method="_on_POS_left_area_entered"]
@@ -1727,3 +1847,27 @@ one_shot = true
 [connection signal="timeout" from="Paths/ChefBPath/PauseMovementTimer" to="Paths/ChefBPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="timeout" from="Paths/ChefCPath/PauseMovementTimer" to="Paths/ChefCPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="timeout" from="Paths/ChefDPath/PauseMovementTimer" to="Paths/ChefDPath" method="_on_PauseMovementTimer_timeout"]
+[connection signal="area_entered" from="TableAreas/Table1" to="." method="_on_Table1_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table1" to="." method="_on_Table1_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table2" to="." method="_on_Table2_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table2" to="." method="_on_Table2_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table3" to="." method="_on_Table3_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table3" to="." method="_on_Table3_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table4" to="." method="_on_Table4_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table4" to="." method="_on_Table4_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table5" to="." method="_on_Table5_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table5" to="." method="_on_Table5_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table6" to="." method="_on_Table6_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table6" to="." method="_on_Table6_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table7" to="." method="_on_Table7_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table7" to="." method="_on_Table7_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table8" to="." method="_on_Table8_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table8" to="." method="_on_Table8_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table9" to="." method="_on_Table9_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table9" to="." method="_on_Table9_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table10" to="." method="_on_Table10_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table10" to="." method="_on_Table10_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table11" to="." method="_on_Table11_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table11" to="." method="_on_Table11_area_exited"]
+[connection signal="area_entered" from="TableAreas/Table12" to="." method="_on_Table12_area_entered"]
+[connection signal="area_exited" from="TableAreas/Table12" to="." method="_on_Table12_area_exited"]

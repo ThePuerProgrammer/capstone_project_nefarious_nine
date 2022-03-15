@@ -27,7 +27,7 @@ onready var table_buttons = [
 	$POSZoom/POSScreen/Table9Button,
 	$POSZoom/POSScreen/Table10Button,
 	$POSZoom/POSScreen/Table11Button,
-	$POSZoom/POSScreen/Table12Button
+	$POSZoom/POSScreen/Table12Button,
 ]
 
 func _ready():
@@ -40,7 +40,7 @@ func _ready():
 		print("Cannot connect signals")
 	
 func _on_player_1_interact():
-	show_hint = false
+#	show_hint = false
 	$PopupDialog.hide()
 	if pos_right_usable or pos_left_usable:
 		if !pos_wall.visible:
@@ -139,3 +139,99 @@ func _on_BackButton_pressed():
 	$POSZoom/POSScreen/BackButton.disabled = true
 	pos_screen.set_texture(pos_default_screen)
 ####################################################################################################
+
+
+func _on_Table1_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table1_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table2_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table2_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table3_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table3_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table4_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table4_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table5_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table5_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table6_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table6_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table7_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table7_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table8_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table8_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table9_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table9_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table10_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table10_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table11_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table11_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Table12_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Table12_area_exited(area):
+	pass # Replace with function body.
