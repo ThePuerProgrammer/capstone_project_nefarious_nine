@@ -1,20 +1,34 @@
 extends Node2D
 
-onready var pos = Vector2(0.0, 0.0)
-var frame_count = 0
-var animation_switch = false
+var _h
+var _v
+
+onready var pause_movement = false
 
 func _ready():
-	pass # Replace with function body.
+	_h = int(global_position.x)
+	_v = int(global_position.y)
 
 func _process(_delta):
-	frame_count += 1
-	if pos.y < global_position.y - 3 && !animation_switch:
+	if pause_movement:
+		if $AnimatedSprite.animation == "down":
+			$AnimatedSprite.animation = "stationary_down"
+		elif $AnimatedSprite.animation == "up":
+			$AnimatedSprite.animation = "stationary_up"
+		elif $AnimatedSprite.animation == "side":
+			$AnimatedSprite.animation = "stationary_side"
+		return
+	
+	if _v < int(global_position.y - 0.1) && $AnimatedSprite.animation != "down":
 		$AnimatedSprite.animation = "down"
-		animation_switch = true
-	else:
-		$AnimatedSprite.animation = "stationary_down"
+	elif _v > int(global_position.y + 0.1) && $AnimatedSprite.animation != "up":
+		$AnimatedSprite.animation = "up"
+	elif _h < int(global_position.x - 0.1) && ($AnimatedSprite.flip_h or $AnimatedSprite.animation != "side"):
+		$AnimatedSprite.flip_h = false
+		$AnimatedSprite.animation = "side"
+	elif _h > int(global_position.x + 0.1) && (not $AnimatedSprite.flip_h or $AnimatedSprite.animation != "side"):
+		$AnimatedSprite.flip_h = true
+		$AnimatedSprite.animation = "side"
 		
-	if frame_count == 25:
-		pos = global_position
-		frame_count = 0
+	_h = int(global_position.x)
+	_v = int(global_position.y)

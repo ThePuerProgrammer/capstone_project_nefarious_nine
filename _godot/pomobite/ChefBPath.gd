@@ -22,13 +22,13 @@ func _process(delta):
 		$PathFollow2D/Chef_NPC.pause_movement = true
 		return
 	
-	if f < 0.0015:
+	if f < 0.0014:
 		forward = not forward
 	
 	if forward:
-		$PathFollow2D.offset += 50 * delta
+		$PathFollow2D.offset -= 45 * delta
 	else:
-		$PathFollow2D.offset -= 50 * delta
+		$PathFollow2D.offset += 45 * delta
 
 
 func _on_PauseMovementTimer_timeout():
