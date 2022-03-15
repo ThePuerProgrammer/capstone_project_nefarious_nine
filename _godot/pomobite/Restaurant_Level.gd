@@ -283,3 +283,35 @@ func _on_Trash2_area_entered(area):
 
 func _on_Trash2_area_exited(area):
 	pass # Replace with function body.
+
+
+func _on_Expo1_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Expo1_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_Expo2_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_Expo2_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_DishPit1_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_DishPit1_area_exited(area):
+	pass # Replace with function body.
+
+
+func _on_DishPit2_area_entered(area):
+	pass # Replace with function body.
+
+
+func _on_DishPit2_area_exited(area):
+	pass # Replace with function body.

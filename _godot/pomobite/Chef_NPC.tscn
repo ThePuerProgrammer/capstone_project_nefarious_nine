@@ -11,8 +11,7 @@ script = ExtResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = ExtResource( 2 )
-animation = "side"
-frame = 1
+animation = "stationary_down"
 playing = true
 
 [node name="Area2D" type="Area2D" parent="."]

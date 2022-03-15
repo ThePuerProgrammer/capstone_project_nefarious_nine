@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=2]
+[gd_scene load_steps=59 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -1149,6 +1149,12 @@ extents = Vector2( 48, 23 )
 [sub_resource type="RectangleShape2D" id=45]
 extents = Vector2( 31, 17 )
 
+[sub_resource type="RectangleShape2D" id=46]
+extents = Vector2( 106, 21 )
+
+[sub_resource type="RectangleShape2D" id=47]
+extents = Vector2( 10, 62 )
+
 [node name="Restaurant_Level" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -1629,8 +1635,7 @@ script = ExtResource( 18 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Paths/ChefAPath/PathFollow2D/Chef_NPC"]
 frames = ExtResource( 17 )
-animation = "side"
-frame = 1
+animation = "stationary_down"
 playing = true
 
 [node name="Area2D" type="Area2D" parent="Paths/ChefAPath/PathFollow2D/Chef_NPC"]
@@ -1684,7 +1689,7 @@ script = ExtResource( 18 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Paths/ChefCPath/PathFollow2D/Chef_NPC"]
 frames = ExtResource( 17 )
-animation = "side"
+animation = "stationary_down"
 playing = true
 
 [node name="Area2D" type="Area2D" parent="Paths/ChefCPath/PathFollow2D/Chef_NPC"]
@@ -1718,183 +1723,229 @@ z_index = -1
 wait_time = 2.0
 one_shot = true
 
-[node name="TableAreas" type="Node2D" parent="."]
+[node name="Area2Ds" type="Node2D" parent="."]
 
-[node name="Table1" type="Area2D" parent="TableAreas"]
+[node name="TableAreas" type="Node2D" parent="Area2Ds"]
+
+[node name="Table1" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 144, 288 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table1"]
 shape = SubResource( 42 )
 
-[node name="Table2" type="Area2D" parent="TableAreas"]
+[node name="Table2" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 368, 288 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table2"]
 shape = SubResource( 42 )
 
-[node name="Table3" type="Area2D" parent="TableAreas"]
+[node name="Table3" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 145, 480 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table3"]
 shape = SubResource( 42 )
 
-[node name="Table4" type="Area2D" parent="TableAreas"]
+[node name="Table4" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 368, 480 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table4"]
 shape = SubResource( 42 )
 
-[node name="Table5" type="Area2D" parent="TableAreas"]
+[node name="Table5" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 131, 674 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table5"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table5"]
 position = Vector2( 12.5, 14.5 )
 shape = SubResource( 43 )
 
-[node name="Table6" type="Area2D" parent="TableAreas"]
+[node name="Table6" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 357, 674 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table6"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table6"]
 position = Vector2( 12.5, 14.5 )
 shape = SubResource( 43 )
 
-[node name="Table7" type="Area2D" parent="TableAreas"]
+[node name="Table7" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 1552, 288 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table7"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table7"]
 shape = SubResource( 42 )
 
-[node name="Table8" type="Area2D" parent="TableAreas"]
+[node name="Table8" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 1776, 288 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table8"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table8"]
 shape = SubResource( 42 )
 
-[node name="Table9" type="Area2D" parent="TableAreas"]
+[node name="Table9" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 1552, 480 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table9"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table9"]
 shape = SubResource( 42 )
 
-[node name="Table10" type="Area2D" parent="TableAreas"]
+[node name="Table10" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 1776, 480 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table10"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table10"]
 shape = SubResource( 42 )
 
-[node name="Table11" type="Area2D" parent="TableAreas"]
+[node name="Table11" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 1539, 674 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table11"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table11"]
 position = Vector2( 12.5, 14.5 )
 shape = SubResource( 43 )
 
-[node name="Table12" type="Area2D" parent="TableAreas"]
+[node name="Table12" type="Area2D" parent="Area2Ds/TableAreas"]
 position = Vector2( 1764, 674 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TableAreas/Table12"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TableAreas/Table12"]
 position = Vector2( 12.5, 14.5 )
 shape = SubResource( 43 )
 
-[node name="SodaAreas" type="Node2D" parent="."]
+[node name="SodaAreas" type="Node2D" parent="Area2Ds"]
 
-[node name="Soda1" type="Area2D" parent="SodaAreas"]
+[node name="Soda1" type="Area2D" parent="Area2Ds/SodaAreas"]
 position = Vector2( 106, 86 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SodaAreas/Soda1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/SodaAreas/Soda1"]
 position = Vector2( 38, 13 )
 shape = SubResource( 44 )
 
-[node name="Soda2" type="Area2D" parent="SodaAreas"]
+[node name="Soda2" type="Area2D" parent="Area2Ds/SodaAreas"]
 position = Vector2( 330, 86 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SodaAreas/Soda2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/SodaAreas/Soda2"]
 position = Vector2( 38, 13 )
 shape = SubResource( 44 )
 
-[node name="Soda3" type="Area2D" parent="SodaAreas"]
+[node name="Soda3" type="Area2D" parent="Area2Ds/SodaAreas"]
 position = Vector2( 1514, 86 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SodaAreas/Soda3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/SodaAreas/Soda3"]
 position = Vector2( 38, 13 )
 shape = SubResource( 44 )
 
-[node name="Soda4" type="Area2D" parent="SodaAreas"]
+[node name="Soda4" type="Area2D" parent="Area2Ds/SodaAreas"]
 position = Vector2( 1738, 86 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SodaAreas/Soda4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/SodaAreas/Soda4"]
 position = Vector2( 38, 13 )
 shape = SubResource( 44 )
 
-[node name="TrashAreas" type="Node2D" parent="."]
+[node name="TrashAreas" type="Node2D" parent="Area2Ds"]
 
-[node name="Trash1" type="Area2D" parent="TrashAreas"]
+[node name="Trash1" type="Area2D" parent="Area2Ds/TrashAreas"]
 position = Vector2( 555, 544 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TrashAreas/Trash1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TrashAreas/Trash1"]
 position = Vector2( 21, 35 )
 shape = SubResource( 45 )
 
-[node name="Trash2" type="Area2D" parent="TrashAreas"]
+[node name="Trash2" type="Area2D" parent="Area2Ds/TrashAreas"]
 position = Vector2( 1323, 544 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TrashAreas/Trash2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/TrashAreas/Trash2"]
 position = Vector2( 21, 35 )
 shape = SubResource( 45 )
+
+[node name="ExpoAreas" type="Node2D" parent="Area2Ds"]
+
+[node name="Expo1" type="Area2D" parent="Area2Ds/ExpoAreas"]
+position = Vector2( 625, 236 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/ExpoAreas/Expo1"]
+position = Vector2( 95, 11 )
+shape = SubResource( 46 )
+
+[node name="Expo2" type="Area2D" parent="Area2Ds/ExpoAreas"]
+position = Vector2( 1105, 236 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/ExpoAreas/Expo2"]
+position = Vector2( 95, 11 )
+shape = SubResource( 46 )
+
+[node name="DishAreas" type="Node2D" parent="Area2Ds"]
+
+[node name="DishPit1" type="Area2D" parent="Area2Ds/DishAreas"]
+position = Vector2( 856, 298 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/DishAreas/DishPit1"]
+position = Vector2( 0, 52 )
+shape = SubResource( 47 )
+
+[node name="DishPit2" type="Area2D" parent="Area2Ds/DishAreas"]
+position = Vector2( 1065, 298 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/DishAreas/DishPit2"]
+position = Vector2( 0, 52 )
+shape = SubResource( 47 )
 
 [connection signal="area_entered" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_entered"]
 [connection signal="area_exited" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_exited"]
@@ -1917,35 +1968,47 @@ shape = SubResource( 45 )
 [connection signal="timeout" from="Paths/ChefBPath/PauseMovementTimer" to="Paths/ChefBPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="timeout" from="Paths/ChefCPath/PauseMovementTimer" to="Paths/ChefCPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="timeout" from="Paths/ChefDPath/PauseMovementTimer" to="Paths/ChefDPath" method="_on_PauseMovementTimer_timeout"]
-[connection signal="area_entered" from="TableAreas/Table1" to="." method="_on_Table1_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table1" to="." method="_on_Table1_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table2" to="." method="_on_Table2_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table2" to="." method="_on_Table2_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table3" to="." method="_on_Table3_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table3" to="." method="_on_Table3_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table4" to="." method="_on_Table4_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table4" to="." method="_on_Table4_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table5" to="." method="_on_Table5_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table5" to="." method="_on_Table5_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table6" to="." method="_on_Table6_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table6" to="." method="_on_Table6_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table7" to="." method="_on_Table7_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table7" to="." method="_on_Table7_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table8" to="." method="_on_Table8_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table8" to="." method="_on_Table8_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table9" to="." method="_on_Table9_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table9" to="." method="_on_Table9_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table10" to="." method="_on_Table10_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table10" to="." method="_on_Table10_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table11" to="." method="_on_Table11_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table11" to="." method="_on_Table11_area_exited"]
-[connection signal="area_entered" from="TableAreas/Table12" to="." method="_on_Table12_area_entered"]
-[connection signal="area_exited" from="TableAreas/Table12" to="." method="_on_Table12_area_exited"]
-[connection signal="area_entered" from="SodaAreas/Soda1" to="." method="_on_Soda1_area_entered"]
-[connection signal="area_exited" from="SodaAreas/Soda1" to="." method="_on_Soda1_area_exited"]
-[connection signal="area_entered" from="SodaAreas/Soda2" to="." method="_on_Soda2_area_entered"]
-[connection signal="area_exited" from="SodaAreas/Soda2" to="." method="_on_Soda2_area_exited"]
-[connection signal="area_entered" from="SodaAreas/Soda3" to="." method="_on_Soda3_area_entered"]
-[connection signal="area_exited" from="SodaAreas/Soda3" to="." method="_on_Soda3_area_exited"]
-[connection signal="area_entered" from="SodaAreas/Soda4" to="." method="_on_Soda4_area_entered"]
-[connection signal="area_exited" from="SodaAreas/Soda4" to="." method="_on_Soda4_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table1" to="." method="_on_Table1_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table1" to="." method="_on_Table1_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table2" to="." method="_on_Table2_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table2" to="." method="_on_Table2_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table3" to="." method="_on_Table3_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table3" to="." method="_on_Table3_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table4" to="." method="_on_Table4_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table4" to="." method="_on_Table4_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table5" to="." method="_on_Table5_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table5" to="." method="_on_Table5_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table6" to="." method="_on_Table6_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table6" to="." method="_on_Table6_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table7" to="." method="_on_Table7_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table7" to="." method="_on_Table7_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table8" to="." method="_on_Table8_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table8" to="." method="_on_Table8_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table9" to="." method="_on_Table9_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table9" to="." method="_on_Table9_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table10" to="." method="_on_Table10_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table10" to="." method="_on_Table10_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table11" to="." method="_on_Table11_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table11" to="." method="_on_Table11_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TableAreas/Table12" to="." method="_on_Table12_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TableAreas/Table12" to="." method="_on_Table12_area_exited"]
+[connection signal="area_entered" from="Area2Ds/SodaAreas/Soda1" to="." method="_on_Soda1_area_entered"]
+[connection signal="area_exited" from="Area2Ds/SodaAreas/Soda1" to="." method="_on_Soda1_area_exited"]
+[connection signal="area_entered" from="Area2Ds/SodaAreas/Soda2" to="." method="_on_Soda2_area_entered"]
+[connection signal="area_exited" from="Area2Ds/SodaAreas/Soda2" to="." method="_on_Soda2_area_exited"]
+[connection signal="area_entered" from="Area2Ds/SodaAreas/Soda3" to="." method="_on_Soda3_area_entered"]
+[connection signal="area_exited" from="Area2Ds/SodaAreas/Soda3" to="." method="_on_Soda3_area_exited"]
+[connection signal="area_entered" from="Area2Ds/SodaAreas/Soda4" to="." method="_on_Soda4_area_entered"]
+[connection signal="area_exited" from="Area2Ds/SodaAreas/Soda4" to="." method="_on_Soda4_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TrashAreas/Trash1" to="." method="_on_Trash1_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TrashAreas/Trash1" to="." method="_on_Trash1_area_exited"]
+[connection signal="area_entered" from="Area2Ds/TrashAreas/Trash2" to="." method="_on_Trash2_area_entered"]
+[connection signal="area_exited" from="Area2Ds/TrashAreas/Trash2" to="." method="_on_Trash2_area_exited"]
+[connection signal="area_entered" from="Area2Ds/ExpoAreas/Expo1" to="." method="_on_Expo1_area_entered"]
+[connection signal="area_exited" from="Area2Ds/ExpoAreas/Expo1" to="." method="_on_Expo1_area_exited"]
+[connection signal="area_entered" from="Area2Ds/ExpoAreas/Expo2" to="." method="_on_Expo2_area_entered"]
+[connection signal="area_exited" from="Area2Ds/ExpoAreas/Expo2" to="." method="_on_Expo2_area_exited"]
+[connection signal="area_entered" from="Area2Ds/DishAreas/DishPit1" to="." method="_on_DishPit1_area_entered"]
+[connection signal="area_exited" from="Area2Ds/DishAreas/DishPit1" to="." method="_on_DishPit1_area_exited"]
+[connection signal="area_entered" from="Area2Ds/DishAreas/DishPit2" to="." method="_on_DishPit2_area_entered"]
+[connection signal="area_exited" from="Area2Ds/DishAreas/DishPit2" to="." method="_on_DishPit2_area_exited"]
