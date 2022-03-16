@@ -1387,7 +1387,7 @@ position = Vector2( 1029, 319 )
 collision/safe_margin = 0.001
 
 [node name="Player2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 721, 500 )
+position = Vector2( 685, 647 )
 
 [node name="LevelSprites" type="Node2D" parent="."]
 

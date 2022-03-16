@@ -1,12 +1,11 @@
 extends Node2D
 
-onready var pos_wall = $POSWall
-onready var pos_zoom = $POSZoom
+onready var pos_wall 			= $POSWall
+onready var pos_zoom 			= $POSZoom
+onready var pos_screen 			= $POSZoom/POSScreen
+onready var pos_right_usable 	= false
+onready var pos_left_usable 	= false
 
-onready var pos_screen = $POSZoom/POSScreen
-
-var pos_right_usable = false
-var pos_left_usable = false
 var tables = {
 	tables_entered = [
 		false, false, false, false, false, false,
@@ -14,16 +13,14 @@ var tables = {
 	],
 }
 
-var soda_machine_area_entered = false
-var expo_area_entered = false
-var trash_area_entered = false
-
-var pos_table_menu = preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
-var pos_default_screen = preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
-
-var selected_table = 1
-
-var show_hint = true
+var soda_machine_area_entered 	= false
+var expo_area_entered 			= false
+var trash_area_entered 			= false
+var dish_area_entered 			= false
+var pos_table_menu 				= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
+var pos_default_screen 			= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
+var selected_table 				= 1
+var show_hint 					= true
 
 onready var table_buttons = [
 	$POSZoom/POSScreen/Table1Button,
@@ -48,6 +45,7 @@ func _ready():
 	$Player2.visible = true
 	if $Player1.connect("interact", self, "_on_player_1_interact") != OK:
 		print("Cannot connect signals")
+
 	
 func _on_player_1_interact():
 #	show_hint = false
@@ -67,55 +65,68 @@ func _on_player_1_interact():
 			$Player1.movable = true
 			$Player2.visible = true
 
+
 # POS LOGIC
 ####################################################################################################
 func _on_Table1Button_pressed():
 	selected_table = 1
 	_go_to_table_menu()
 
+
 func _on_Table2Button_pressed():
 	selected_table = 2
 	_go_to_table_menu()
+
 
 func _on_Table3Button_pressed():
 	selected_table = 3
 	_go_to_table_menu()
 	
+	
 func _on_Table4Button_pressed():
 	selected_table = 4
 	_go_to_table_menu()
+	
 	
 func _on_Table5Button_pressed():
 	selected_table = 5
 	_go_to_table_menu()
 	
+	
 func _on_Table6Button_pressed():
 	selected_table = 6
 	_go_to_table_menu()
+	
 	
 func _on_Table7Button_pressed():
 	selected_table = 7
 	_go_to_table_menu()
 	
+	
 func _on_Table8Button_pressed():
 	selected_table = 8
 	_go_to_table_menu()
 	
+	
 func _on_Table9Button_pressed():
 	selected_table = 9
 	_go_to_table_menu()
+
 	
 func _on_Table10Button_pressed():
 	selected_table = 10
 	_go_to_table_menu()
+
 	
 func _on_Table11Button_pressed():
 	selected_table = 11
 	_go_to_table_menu()
+
 	
 func _on_Table12Button_pressed():
 	selected_table = 12
 	_go_to_table_menu()
+
 
 func _on_POS_right_area_entered(_area):
 	if show_hint:
@@ -123,19 +134,23 @@ func _on_POS_right_area_entered(_area):
 		$PopupDialog.popup()
 	pos_right_usable = true
 
+
 func _on_POS_left_area_entered(_area):
 	if show_hint:
 		$PopupDialog.rect_position = Vector2($LevelSprites/POS2.position.x - 40, $LevelSprites/POS2.position.y - 60)
 		$PopupDialog.popup()
 	pos_left_usable = true
 
+
 func _on_POS_right_area_exited(_area):
 	$PopupDialog.hide()
 	pos_right_usable = false
 
+
 func _on_POS_left_area_exited(_area):
 	$PopupDialog.hide()
 	pos_left_usable = false
+
 	
 func _go_to_table_menu():
 	for table in table_buttons:
@@ -143,11 +158,14 @@ func _go_to_table_menu():
 	$POSZoom/POSScreen/BackButton.disabled = false
 	pos_screen.set_texture(pos_table_menu)
 
+
 func _on_BackButton_pressed():
 	for table in table_buttons:
 		table.disabled = false
 	$POSZoom/POSScreen/BackButton.disabled = true
 	pos_screen.set_texture(pos_default_screen)
+
+
 ####################################################################################################
 
 # TABLES LOGIC
@@ -255,15 +273,17 @@ func set_table_popup(var table, var number):
 		$PopupDialog.rect_position.x += 12
 	$PopupDialog.popup()
 	tables['tables_entered'][number - 1] = true
+
 	
 func hide_table_popup(var number):
+	tables['tables_entered'][number - 1] = false	
 	var all_exited = true
 	for table in tables['tables_entered']:
-		if table:
-			all_exited == false
+		if table == true:
+			all_exited = false
 	if all_exited:		
 		$PopupDialog.hide()
-	tables['tables_entered'][number - 1] = false
+
 	
 ####################################################################################################
 
@@ -299,15 +319,18 @@ func _on_Soda4_area_entered(_area):
 
 func _on_Soda4_area_exited(_area):
 	hide_soda_popup()
+
 	
 func show_soda_popup(var machine):
 	soda_machine_area_entered = true
 	$PopupDialog.rect_position = machine.position
 	$PopupDialog.popup()
+
 	
 func hide_soda_popup():
 	soda_machine_area_entered = false
 	$PopupDialog.hide()
+
 
 ####################################################################################################
 
@@ -327,17 +350,20 @@ func _on_Trash2_area_entered(_area):
 
 func _on_Trash2_area_exited(_area):
 	hide_trash_popup()
+
 	
 func show_trash_popup(var trashcan):
 	trash_area_entered = true
 	$PopupDialog.rect_position = trashcan.position
-	$PopupDialog.rect_position.x -= 40
-	$PopupDialog.rect_position.y -= 80
+	$PopupDialog.rect_position.x -= 20
+	$PopupDialog.rect_position.y -= 65
 	$PopupDialog.show()
+
 	
 func hide_trash_popup():
 	trash_area_entered = false
 	$PopupDialog.hide()
+
 	
 ####################################################################################################
 
@@ -366,27 +392,44 @@ func show_expo_popup(var expo):
 	$PopupDialog.rect_position.y -= 80
 	$PopupDialog.show()
 
+
 func hide_expo_popup():
 	expo_area_entered = false
 	$PopupDialog.hide()
+
 	
 ####################################################################################################
 
 # DISHPIT LOGIC
 ####################################################################################################
 func _on_DishPit1_area_entered(_area):
-	pass # Replace with function body.
+	show_dish_popup($Area2Ds/DishAreas/DishPit1, false)
 
 
 func _on_DishPit1_area_exited(_area):
-	pass # Replace with function body.
+	hide_dish_popup()
 
 
 func _on_DishPit2_area_entered(_area):
-	pass # Replace with function body.
+	show_dish_popup($Area2Ds/DishAreas/DishPit2, true)
 
 
 func _on_DishPit2_area_exited(_area):
-	pass # Replace with function body.
+	hide_dish_popup()
 
+
+func show_dish_popup(var dishpit, var b):
+	dish_area_entered = true
+	$PopupDialog.rect_position = dishpit.position
+	if b:
+		$PopupDialog.rect_position.x -= 80
+	$PopupDialog.rect_position.y += 80
+	$PopupDialog.show()
+
+	
+func hide_dish_popup():
+	dish_area_entered = false
+	$PopupDialog.hide()
+
+	
 ####################################################################################################
