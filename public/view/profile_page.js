@@ -2,16 +2,34 @@ import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
+import * as Constant from '../model/constant.js'
 
 export function addEventListeners() {
     Elements.menuProfile.addEventListener('click', async () => {
         history.pushState(null, null, Routes.routePathname.PROFILE);
         await profile_page();
     });
+
+    // EDIT PROFILE Submit button event listener
+    Elements.formEditProfile.addEventListener('submit', async e => {
+        e.preventDefault();
+        const username = e.target.username.value;
+        const bio = e.target.bio.value;
+
+        try {
+            await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio);
+            await profile_page();
+            Elements.modalEditProfile.hide();
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }
+    });
 }
 
 export async function profile_page() {
 
+    // retrieve user info from Firebase
     let user;
     try {
         user = await FirebaseController.getUser(Auth.currentUser.uid);
@@ -21,10 +39,11 @@ export async function profile_page() {
 
     let html = '';
 
-    // EDIT PROFILE button
+    // EDIT PROFILE button    
     html += `<div class="edit-profile-btn">
-        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px; float:right">
-        <i class="material-icons pomo-text-color-light">edit</i>Edit Profile</button></div>`;
+        <button id="${Constant.htmlIDs.editProfile}" type="button" class="btn btn-secondary pomo-bg-color-dark" style="padding:5px 12px; float:right">
+        <i class="material-icons pomo-text-color-light">edit</i>Edit Profile</button>
+        </div>`;
 
     html += `<div class="user-profile">
         <img src="${user.profilePhotoURL}" style="width: 200px; height: 200px" class="center">
@@ -45,4 +64,21 @@ export async function profile_page() {
         </div>`;
     
     Elements.root.innerHTML = html;
+
+    const editProfileButton = document.getElementById(Constant.htmlIDs.editProfile);
+    // EDIT PROFILE open modal button listener 
+    editProfileButton.addEventListener('click', async e => {
+
+        // Firebase func. to retrieve profile info
+       /* try {
+            categories = await FirebaseController.getCategories();
+            //console.log(cat);
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }*/
+
+        // opens edit Profile modal
+        $(`#${Constant.htmlIDs.editProfileModal}`).modal('show');
+    });
 }

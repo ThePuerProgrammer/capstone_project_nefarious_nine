@@ -83,6 +83,7 @@ export const modalPreviewClassroom = new bootstrap.Modal(document.getElementById
 export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-leave-classroom', { backdrop: 'static' }));
 export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', { backdrop: 'static' }));
 export const modalSubmitHelpTicket = new bootstrap.Modal(document.getElementById('modal-submit-help-ticket', { backdrop: 'static' }));
+export const modalEditProfile = new bootstrap.Modal(document.getElementById('edit-profile-modal'));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -187,3 +188,8 @@ export const checkBoxMyClassrooms = document.getElementById('checkbox-myClassroo
 export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
 //============================================================================//
 
+
+//PROFILE PAGE
+//============================================================================//
+export const formEditProfile = document.getElementById('form-edit-profile');
+//============================================================================//

@@ -1485,3 +1485,25 @@ export async function getUser(uid) {
     return user;
 }
 //============================================================================//
+
+//============================================================================//
+//UPDATE USER PROFILE
+//============================================================================//
+export async function updateUserProfile(uid, username, userBio) {
+    await firebase.firestore().collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'username': username, 'userBio': userBio});
+}
+//============================================================================//
+
+//============================================================================//
+// UPDATE POMOPET
+//============================================================================//
+export async function updatePomopet(uid, pomopet) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({'pomopet': pomopet});
+}
+//============================================================================//
+
