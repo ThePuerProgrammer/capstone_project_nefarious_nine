@@ -271,7 +271,8 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
         .collection(lastAccessed + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .get();
 
-    console.log("Trying to copy flashcard data");
+    // iterate through the lastAccessed flashcard data and add each flashcard data
+    //  document to todays flaschard data
     cachedFlashcardData.forEach( async doc => {
         console.log("Flashcard received! ", doc.id);
         await firebase.firestore()
@@ -282,7 +283,17 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
             .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
             .doc(doc.id)
             .set(doc.data())
-    })
+    });
+
+    // add cached date to array list for the deck data
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            cachedDates: firebase.firestore.FieldValue.arrayUnion(todaysDate)
+        });
 }
 
 
@@ -322,7 +333,59 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
         .set({
             lastAccessed: Utilites.getCurrentDate(),
             dateCreated: Utilites.getCurrentDate(),
+            cachedDates: [],
         });
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns true if a date's flashcard data cache exists, and false otherwise.
+//============================================================================//
+export async function getDeckDataCachedFlashcardDataDates(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    return deckDataRef.data().cachedDates;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the number of flaschard within a streak group for a given flashcard
+//  data cache
+//============================================================================//
+export async function getStreakGroupCountForFlashcardDataCache(uid, deckDocID, date, streak) {
+    let flashcardDataCacheRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(date + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .where('streak', '==', streak)
+        .get()
+    
+    return flashcardDataCacheRef.docs.length;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the number of flaschard within a streak group for a given flashcard
+//  data cache
+//============================================================================//
+export async function getStreakGroupCountAndAboveForFlashcardDataCache(uid, deckDocID, date, streak) {
+    let flashcardDataCacheRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(date + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .where('streak', '>=', streak)
+        .get();
+    
+    return flashcardDataCacheRef.docs.length;
 }
 //===========================================================================//
 
