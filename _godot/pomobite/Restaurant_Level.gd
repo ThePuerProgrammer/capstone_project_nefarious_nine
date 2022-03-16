@@ -16,6 +16,7 @@ var tables = {
 
 var soda_machine_area_entered = false
 var expo_area_entered = false
+var trash_area_entered = false
 
 var pos_table_menu = preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
 var pos_default_screen = preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
@@ -313,20 +314,31 @@ func hide_soda_popup():
 # TRASH LOGIC
 ####################################################################################################
 func _on_Trash1_area_entered(_area):
-	pass # Replace with function body.
+	show_trash_popup($Area2Ds/TrashAreas/Trash1)
 
 
 func _on_Trash1_area_exited(_area):
-	pass # Replace with function body.
+	hide_trash_popup()
 
 
 func _on_Trash2_area_entered(_area):
-	pass # Replace with function body.
+	show_trash_popup($Area2Ds/TrashAreas/Trash2)
 
 
 func _on_Trash2_area_exited(_area):
-	pass # Replace with function body.
-
+	hide_trash_popup()
+	
+func show_trash_popup(var trashcan):
+	trash_area_entered = true
+	$PopupDialog.rect_position = trashcan.position
+	$PopupDialog.rect_position.x -= 40
+	$PopupDialog.rect_position.y -= 80
+	$PopupDialog.show()
+	
+func hide_trash_popup():
+	trash_area_entered = false
+	$PopupDialog.hide()
+	
 ####################################################################################################
 
 # EXPO LOGIC
