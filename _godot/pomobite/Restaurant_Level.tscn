@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=2]
+[gd_scene load_steps=79 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -1158,6 +1158,66 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 944, 1147, 0, 0, 0, 0, 944, 817 )
 }
 
+[sub_resource type="Curve2D" id=56]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 512, 684, 0, 0, 0, 0, 512, 592, 0, 0, 0, 0, 256, 592, 0, 0, 0, 0, 256, 192, 0, 0, 0, 0, 145, 192, 0, 0, 0, 0, 145, 221 )
+}
+
+[sub_resource type="Curve2D" id=57]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 512, 684, 0, 0, 0, 0, 512, 592, 0, 0, 0, 0, 256, 592, 0, 0, 0, 0, 256, 192, 0, 0, 0, 0, 369, 192, 0, 0, 0, 0, 369, 220 )
+}
+
+[sub_resource type="Curve2D" id=58]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 512, 684, 0, 0, 0, 0, 512, 592, 0, 0, 0, 0, 256, 592, 0, 0, 0, 0, 256, 384, 0, 0, 0, 0, 145, 384, 0, 0, 0, 0, 145, 413 )
+}
+
+[sub_resource type="Curve2D" id=59]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 512, 684, 0, 0, 0, 0, 512, 592, 0, 0, 0, 0, 256, 592, 0, 0, 0, 0, 256, 384, 0, 0, 0, 0, 369, 384, 0, 0, 0, 0, 369, 413 )
+}
+
+[sub_resource type="Curve2D" id=60]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 512, 684, 0, 0, 0, 0, 512, 592, 0, 0, 0, 0, 256, 592, 0, 0, 0, 0, 51, 592, 0, 0, 0, 0, 51, 621 )
+}
+
+[sub_resource type="Curve2D" id=61]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 512, 684, 0, 0, 0, 0, 512, 672, 0, 0, 0, 0, 480, 672 )
+}
+
+[sub_resource type="Curve2D" id=62]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 1408, 684, 0, 0, 0, 0, 1408, 592, 0, 0, 0, 0, 1664, 592, 0, 0, 0, 0, 1664, 192, 0, 0, 0, 0, 1553, 192, 0, 0, 0, 0, 1553, 221 )
+}
+
+[sub_resource type="Curve2D" id=63]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 1408, 684, 0, 0, 0, 0, 1408, 592, 0, 0, 0, 0, 1664, 592, 0, 0, 0, 0, 1664, 192, 0, 0, 0, 0, 1777, 192, 0, 0, 0, 0, 1777, 221 )
+}
+
+[sub_resource type="Curve2D" id=64]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 1408, 684, 0, 0, 0, 0, 1408, 592, 0, 0, 0, 0, 1664, 592, 0, 0, 0, 0, 1664, 384, 0, 0, 0, 0, 1553, 384, 0, 0, 0, 0, 1553, 413 )
+}
+
+[sub_resource type="Curve2D" id=65]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 1408, 684, 0, 0, 0, 0, 1408, 592, 0, 0, 0, 0, 1664, 592, 0, 0, 0, 0, 1664, 384, 0, 0, 0, 0, 1777, 384, 0, 0, 0, 0, 1777, 413 )
+}
+
+[sub_resource type="Curve2D" id=66]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 1408, 684, 0, 0, 0, 0, 1408, 672, 0, 0, 0, 0, 1440, 672 )
+}
+
+[sub_resource type="Curve2D" id=67]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 1408, 684, 0, 0, 0, 0, 1408, 592, 0, 0, 0, 0, 1664, 592, 0, 0, 0, 0, 1868, 592, 0, 0, 0, 0, 1868, 619 )
+}
+
 [sub_resource type="RectangleShape2D" id=42]
 extents = Vector2( 48, 77 )
 
@@ -1175,6 +1235,142 @@ extents = Vector2( 106, 21 )
 
 [sub_resource type="RectangleShape2D" id=47]
 extents = Vector2( 10, 62 )
+
+[sub_resource type="Shader" id=52]
+code = "/*
+Shader from Godot Shaders - the free shader library.
+godotshaders.com/shader/waveforms
+
+This shader is under CC0 license. Feel free to use, improve and 
+change this shader according to your needs and consider sharing 
+the modified result to godotshaders.com.
+*/
+
+shader_type canvas_item;
+render_mode blend_premul_alpha;
+
+uniform int lines = 80; // Amount of lines the waveform is build up of
+uniform float amplitude : hint_range(0.0, 1.0) = 0.75; // Height of the wave
+uniform float frequency : hint_range(0.0, 0.5) = 0.05; // Set a lower value for a smoother wave
+uniform float intensity : hint_range(0.0, 1.0) = 0.75; // Lower values creates gaps in the wave while higher make the wave more solid
+uniform float line_sharpness : hint_range(0.0, 1.0) = 0.1; // Fuzzy edges on each line
+uniform float line_size : hint_range(0.0, 1.0) = 0.9; // Thickness of the lines
+uniform float fade : hint_range(0.0, 0.5) = 0.1; // Blurres the top and bottom of the lines
+uniform float rest_size : hint_range(-2., 2.) = -0.2; // The size of the lines when the line is not animating, i.e at value 0. Tweak if Fade is used.
+uniform float edge : hint_range(0.0, 0.5) = 0.2; // How close to the edges should the animation beginn
+uniform float speed = 0.5; // Speed of wave animation
+uniform vec4 color : hint_color = vec4(.5, 0.2, 0.5, 1.0); // Color of wave
+uniform bool dot_matrix = false; 
+uniform int dot_matriz_size = 80;
+
+uniform bool speech_sim = true; // Toggle to simulate speach. Will create a more erratic movement in the wave
+uniform float speech_intensity : hint_range(0.0, 2.0) = 0.8; // How fast will the speech movement be
+uniform float progress : hint_range(0.0, 1.0) = 1.0; // Use to turn the animation on and off from outside the shader. 0 - off, 1 - on. Can animate values between which will shrink the wave.
+
+float random(vec2 uv) {
+	return fract(sin(dot(uv.xy,
+	vec2(12.9898,78.233))) * 43758.5453123);
+}
+
+float noise(vec2 uv) {
+	vec2 uv_index = floor(uv);
+	vec2 uv_fract = fract(uv);
+
+	// Four corners in 2D of a tile
+	float a = random(uv_index);
+	float b = random(uv_index + vec2(1.0, 0.0));
+	float c = random(uv_index + vec2(0.0, 1.0));
+	float d = random(uv_index + vec2(1.0, 1.0));
+
+	vec2 blur = smoothstep(0.0, 1.0, uv_fract);
+
+	return mix(a, b, blur.x) +
+				(c - a) * blur.y * (1.0 - blur.x) +
+				(d - b) * blur.x * blur.y;
+}
+
+float fbm(vec2 uv) {
+	int octaves = 4;
+	float amp = 0.5;
+	float freq = 4.;
+	float value = 0.0;
+	
+	for(int i = 0; i < octaves; i++) {
+		value += amp * noise(freq * uv - 0.5);
+		amp *= 0.6;
+		freq *= 2.;
+	}
+	return value;
+}
+
+
+void fragment()
+{
+	// Some initialising
+	float time = TIME;
+	vec4 c = vec4(vec3(0.0), 1.0);
+	float f_columns = float(lines);
+	
+	// Make some distance to the edges before the animation starts
+	float cutoff = smoothstep(0.0, edge, (round ((UV.x) * (f_columns) ) / f_columns) );
+	cutoff *= 1. - smoothstep(1.-edge, 1.0, (round ((UV.x) * (f_columns) ) / f_columns) );
+
+	// Speech simulation setup
+	float ss = 1.0;
+	if (speech_sim == true){
+		ss = fbm(vec2(1.0, time * speed * 1.3) * speech_intensity) * 1.5;
+	}
+	
+	// Create the noise that controlls the animation
+	float noise = fbm(vec2( round( (UV.x) * f_columns ) * frequency, time * speed) ) * ss * progress;
+	noise *= cutoff; // Apply edge cutoff
+	
+	// Make wave values based on the noise
+	float wave = smoothstep(1.-intensity, 1.0, noise) * amplitude;
+	wave = wave + (rest_size * 0.2);
+	
+	// Create the lines
+	float line = abs( sin(( f_columns * 3.1416 * UV.x) + 1.5) );
+	line = smoothstep(1.-line_size, (1.-line_size) + (1.-line_sharpness), line);
+	
+	// Simulate dot_matrix
+	if (dot_matrix){
+		float dm = abs( sin(( float(dot_matriz_size) * 3.1416 * UV.y) + 1.5) );
+		dm = smoothstep(1.-line_size, (1.-line_size) + (1.-line_sharpness), dm);
+		line *= dm;
+	}
+	
+	// Duplicate mask on top an bottom and apply to line
+	float mask = 1.0 - smoothstep(wave, wave + fade, abs(UV.y - 0.5) * 2.);
+	line *= mask;
+	
+	c = vec4(line) * color;
+	
+	COLOR = c;
+}"
+
+[sub_resource type="ShaderMaterial" id=53]
+shader = SubResource( 52 )
+shader_param/lines = 80
+shader_param/amplitude = 0.75
+shader_param/frequency = 0.05
+shader_param/intensity = 0.75
+shader_param/line_sharpness = 0.1
+shader_param/line_size = 0.9
+shader_param/fade = 0.1
+shader_param/rest_size = -0.2
+shader_param/edge = 0.2
+shader_param/speed = 0.5
+shader_param/color = Color( 0.5, 0.2, 0.5, 1 )
+shader_param/dot_matrix = false
+shader_param/dot_matriz_size = 80
+shader_param/speech_sim = true
+shader_param/speech_intensity = 0.8
+shader_param/progress = 1.0
+
+[sub_resource type="DynamicFont" id=54]
+size = 8
+font_data = ExtResource( 11 )
 
 [node name="Restaurant_Level" type="Node2D"]
 script = ExtResource( 1 )
@@ -1408,7 +1604,7 @@ position = Vector2( 1029, 319 )
 collision/safe_margin = 0.001
 
 [node name="Player2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 685, 647 )
+position = Vector2( 641, 564 )
 
 [node name="LevelSprites" type="Node2D" parent="."]
 
@@ -1634,7 +1830,9 @@ __meta__ = {
 
 [node name="Paths" type="Node2D" parent="."]
 
-[node name="ChefAPath" type="Path2D" parent="Paths"]
+[node name="ChefPaths" type="Node2D" parent="Paths"]
+
+[node name="ChefAPath" type="Path2D" parent="Paths/ChefPaths"]
 position = Vector2( 3.35803, 2.13635 )
 scale = Vector2( 0.993827, 0.984848 )
 curve = SubResource( 40 )
@@ -1643,31 +1841,31 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Paths/ChefAPath"]
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/ChefPaths/ChefAPath"]
 position = Vector2( 689.901, 205.985 )
 rotate = false
 
-[node name="Chef_NPC" type="Node2D" parent="Paths/ChefAPath/PathFollow2D"]
+[node name="Chef_NPC" type="Node2D" parent="Paths/ChefPaths/ChefAPath/PathFollow2D"]
 position = Vector2( -1.00616, -25.4 )
 z_index = -1
 script = ExtResource( 18 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="Paths/ChefAPath/PathFollow2D/Chef_NPC"]
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Paths/ChefPaths/ChefAPath/PathFollow2D/Chef_NPC"]
 frames = ExtResource( 17 )
 animation = "stationary_down"
 playing = true
 
-[node name="Area2D" type="Area2D" parent="Paths/ChefAPath/PathFollow2D/Chef_NPC"]
+[node name="Area2D" type="Area2D" parent="Paths/ChefPaths/ChefAPath/PathFollow2D/Chef_NPC"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Paths/ChefAPath/PathFollow2D/Chef_NPC/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paths/ChefPaths/ChefAPath/PathFollow2D/Chef_NPC/Area2D"]
 position = Vector2( 1, 15 )
 shape = SubResource( 41 )
 
-[node name="PauseMovementTimer" type="Timer" parent="Paths/ChefAPath"]
+[node name="PauseMovementTimer" type="Timer" parent="Paths/ChefPaths/ChefAPath"]
 wait_time = 2.0
 one_shot = true
 
-[node name="ChefBPath" type="Path2D" parent="Paths"]
+[node name="ChefBPath" type="Path2D" parent="Paths/ChefPaths"]
 position = Vector2( 176, 2.13635 )
 scale = Vector2( 0.993827, 0.984848 )
 curve = SubResource( 40 )
@@ -1676,19 +1874,19 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Paths/ChefBPath"]
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/ChefPaths/ChefBPath"]
 position = Vector2( 689.901, 205.985 )
 rotate = false
 
-[node name="Chef_NPC" parent="Paths/ChefBPath/PathFollow2D" instance=ExtResource( 14 )]
+[node name="Chef_NPC" parent="Paths/ChefPaths/ChefBPath/PathFollow2D" instance=ExtResource( 14 )]
 position = Vector2( -1.00616, -25.4 )
 z_index = -1
 
-[node name="PauseMovementTimer" type="Timer" parent="Paths/ChefBPath"]
+[node name="PauseMovementTimer" type="Timer" parent="Paths/ChefPaths/ChefBPath"]
 wait_time = 2.0
 one_shot = true
 
-[node name="ChefCPath" type="Path2D" parent="Paths"]
+[node name="ChefCPath" type="Path2D" parent="Paths/ChefPaths"]
 position = Vector2( 653, 2 )
 scale = Vector2( 0.993827, 0.984848 )
 curve = SubResource( 40 )
@@ -1697,31 +1895,31 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Paths/ChefCPath"]
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/ChefPaths/ChefCPath"]
 position = Vector2( 689.901, 205.985 )
 rotate = false
 
-[node name="Chef_NPC" type="Node2D" parent="Paths/ChefCPath/PathFollow2D"]
+[node name="Chef_NPC" type="Node2D" parent="Paths/ChefPaths/ChefCPath/PathFollow2D"]
 position = Vector2( -1.00616, -25.4 )
 z_index = -1
 script = ExtResource( 18 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="Paths/ChefCPath/PathFollow2D/Chef_NPC"]
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Paths/ChefPaths/ChefCPath/PathFollow2D/Chef_NPC"]
 frames = ExtResource( 17 )
 animation = "stationary_down"
 playing = true
 
-[node name="Area2D" type="Area2D" parent="Paths/ChefCPath/PathFollow2D/Chef_NPC"]
+[node name="Area2D" type="Area2D" parent="Paths/ChefPaths/ChefCPath/PathFollow2D/Chef_NPC"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Paths/ChefCPath/PathFollow2D/Chef_NPC/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paths/ChefPaths/ChefCPath/PathFollow2D/Chef_NPC/Area2D"]
 position = Vector2( 1, 15 )
 shape = SubResource( 41 )
 
-[node name="PauseMovementTimer" type="Timer" parent="Paths/ChefCPath"]
+[node name="PauseMovementTimer" type="Timer" parent="Paths/ChefPaths/ChefCPath"]
 wait_time = 2.0
 one_shot = true
 
-[node name="ChefDPath" type="Path2D" parent="Paths"]
+[node name="ChefDPath" type="Path2D" parent="Paths/ChefPaths"]
 position = Vector2( 485, 2.13635 )
 scale = Vector2( 0.993827, 0.984848 )
 curve = SubResource( 40 )
@@ -1730,15 +1928,15 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Paths/ChefDPath"]
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/ChefPaths/ChefDPath"]
 position = Vector2( 689.901, 205.985 )
 rotate = false
 
-[node name="Chef_NPC" parent="Paths/ChefDPath/PathFollow2D" instance=ExtResource( 14 )]
+[node name="Chef_NPC" parent="Paths/ChefPaths/ChefDPath/PathFollow2D" instance=ExtResource( 14 )]
 position = Vector2( -1.00616, -25.4 )
 z_index = -1
 
-[node name="PauseMovementTimer" type="Timer" parent="Paths/ChefDPath"]
+[node name="PauseMovementTimer" type="Timer" parent="Paths/ChefPaths/ChefDPath"]
 wait_time = 2.0
 one_shot = true
 
@@ -1793,6 +1991,66 @@ rotate = false
 loop = false
 
 [node name="HostPaths" type="Node2D" parent="Paths"]
+
+[node name="HostToTable1" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 56 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable1"]
+
+[node name="HostToTable2" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 57 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable2"]
+
+[node name="HostToTable3" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 58 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable3"]
+
+[node name="HostToTable4" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 59 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable4"]
+
+[node name="HostToTable5" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 60 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable5"]
+
+[node name="HostToTable6" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 61 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable6"]
+
+[node name="HostToTable7" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 62 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable7"]
+
+[node name="HostToTable8" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 63 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable8"]
+
+[node name="HostToTable9" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 64 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable9"]
+
+[node name="HostToTable10" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 65 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable10"]
+
+[node name="HostToTable11" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 66 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable11"]
+
+[node name="HostToTable12" type="Path2D" parent="Paths/HostPaths"]
+curve = SubResource( 67 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable12"]
 
 [node name="Area2Ds" type="Node2D" parent="."]
 
@@ -2022,7 +2280,37 @@ shape = SubResource( 47 )
 position = Vector2( 960, 652 )
 
 [node name="CustomerWalkInTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 0.5
+
+[node name="ConversationDialogue" type="PopupDialog" parent="."]
+margin_right = 169.0
+margin_bottom = 73.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Waveforms" type="Panel" parent="ConversationDialogue"]
+material = SubResource( 53 )
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 165.0
+margin_bottom = 26.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ConversationDialogue"]
+margin_left = 5.0
+margin_top = 26.0
+margin_right = 165.0
+margin_bottom = 70.0
+custom_fonts/font = SubResource( 54 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DialogueTimer" type="Timer" parent="ConversationDialogue"]
+wait_time = 0.05
 
 [connection signal="ready_to_be_seated" from="." to="." method="_on_Restaurant_Level_ready_to_be_seated"]
 [connection signal="area_entered" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_entered"]
@@ -2042,10 +2330,10 @@ wait_time = 5.0
 [connection signal="pressed" from="POSZoom/POSScreen/Table11Button" to="." method="_on_Table11Button_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/Table12Button" to="." method="_on_Table12Button_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/BackButton" to="." method="_on_BackButton_pressed"]
-[connection signal="timeout" from="Paths/ChefAPath/PauseMovementTimer" to="Paths/ChefAPath" method="_on_PauseMovementTimer_timeout"]
-[connection signal="timeout" from="Paths/ChefBPath/PauseMovementTimer" to="Paths/ChefBPath" method="_on_PauseMovementTimer_timeout"]
-[connection signal="timeout" from="Paths/ChefCPath/PauseMovementTimer" to="Paths/ChefCPath" method="_on_PauseMovementTimer_timeout"]
-[connection signal="timeout" from="Paths/ChefDPath/PauseMovementTimer" to="Paths/ChefDPath" method="_on_PauseMovementTimer_timeout"]
+[connection signal="timeout" from="Paths/ChefPaths/ChefAPath/PauseMovementTimer" to="Paths/ChefPaths/ChefAPath" method="_on_PauseMovementTimer_timeout"]
+[connection signal="timeout" from="Paths/ChefPaths/ChefBPath/PauseMovementTimer" to="Paths/ChefPaths/ChefBPath" method="_on_PauseMovementTimer_timeout"]
+[connection signal="timeout" from="Paths/ChefPaths/ChefCPath/PauseMovementTimer" to="Paths/ChefPaths/ChefCPath" method="_on_PauseMovementTimer_timeout"]
+[connection signal="timeout" from="Paths/ChefPaths/ChefDPath/PauseMovementTimer" to="Paths/ChefPaths/ChefDPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="area_entered" from="Area2Ds/TableAreas/Table1" to="." method="_on_Table1_area_entered"]
 [connection signal="area_exited" from="Area2Ds/TableAreas/Table1" to="." method="_on_Table1_area_exited"]
 [connection signal="area_entered" from="Area2Ds/TableAreas/Table2" to="." method="_on_Table2_area_entered"]
@@ -2091,3 +2379,4 @@ wait_time = 5.0
 [connection signal="area_entered" from="Area2Ds/DishAreas/DishPit2" to="." method="_on_DishPit2_area_entered"]
 [connection signal="area_exited" from="Area2Ds/DishAreas/DishPit2" to="." method="_on_DishPit2_area_exited"]
 [connection signal="timeout" from="CustomerWalkInTimer" to="." method="_on_CustomerWalkInTimer_timeout"]
+[connection signal="timeout" from="ConversationDialogue/DialogueTimer" to="." method="_on_DialogueTimer_timeout"]

@@ -7,6 +7,7 @@ onready var pos_zoom 					= $POSZoom
 onready var pos_screen 					= $POSZoom/POSScreen
 onready var customer_paths 				= $Paths/CustomerPaths
 onready var customer_walkin_timer		= $CustomerWalkInTimer
+onready var conversation_dialogue		= $ConversationDialogue
 onready var opening_restaurant			= true
 onready var walk_in						= false
 onready var pos_right_usable 			= false
@@ -16,12 +17,16 @@ onready var expo_area_entered 			= false
 onready var trash_area_entered 			= false
 onready var dish_area_entered 			= false
 
-var pos_table_menu 				= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
-var pos_default_screen 			= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
-var customer_npc				= preload("res://pomobite/Customer_NPC.tscn")
-var selected_table 				= 1
-var show_hint 					= true
-var ticks					
+var pos_table_menu 		= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
+var pos_default_screen 	= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
+var customer_npc		= preload("res://pomobite/Customer_NPC.tscn")
+var selected_table 		= 1
+var show_hint 			= true
+var ticks				
+var conversation_index
+var convo_type
+
+const greeting_string : String = "Hi!\nWelcome to PomoBITE!\nI'll take you to\nyour table!"
 
 var tables = {
 	tables_entered = [
@@ -469,6 +474,7 @@ func _on_CustomerWalkInTimer_timeout():
 	
 	var paths = customer_paths.get_children()
 	for path in paths:
+		print(path)
 		var instance = customer_npc.instance()
 		path.get_child(0).add_child(instance)
 	
@@ -476,4 +482,21 @@ func _on_CustomerWalkInTimer_timeout():
 
 
 func _on_Restaurant_Level_ready_to_be_seated(patrons):
+	conversation_dialogue.rect_position = $Host_NPC.position
+	conversation_dialogue.show()
+	conversation_index = 0
+	convo_type = 0
+	$ConversationDialogue/DialogueTimer.start()
 	print(patrons)
+
+
+func _on_DialogueTimer_timeout():
+	var label = conversation_dialogue.get_child(1)
+	if convo_type == 0:
+		label.text += greeting_string[conversation_index]
+		conversation_index += 1
+		if conversation_index == greeting_string.length():
+			conversation_index = 0
+			$ConversationDialogue/DialogueTimer.stop()
+			yield(get_tree().create_timer(1.0), "timeout")
+			conversation_dialogue.hide()
