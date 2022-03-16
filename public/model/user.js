@@ -1,10 +1,16 @@
 export class User{
     constructor(data){
         this.email = data.email;
+        this.username = data.username;
         this.decksStudying = data.decksStudying;
         this.defaultTimerSetting = [30, 3];
         this.coins = data.coins;
         this.pet = data.pet;
+        this.deckNumber = data.deckNumber;
+        this.flashcardNumber = data.flashcardNumber;
+        this.profilePhotoName = data.profilePhotoName;
+        this.profilePhotoURL = data.profilePhotoURL;
+        this.userBio = data.userBio;
         // TODO: SHOP STUFF
     }
 
@@ -35,10 +41,16 @@ export class User{
                         // for each flashcard.
             return {
                 email: this.email,
+                username: this.username,
                 decksStudying: this.decksStudying,
                 defaultTimerSetting: this.defaultTimerSetting,
                 coins: this.coins,
                 pet: this.pet,
+                deckNumber: this.deckNumber,
+                flashcardNumber: this.flashcardNumber,
+                profilePhotoName: this.profilePhotoName,
+                profilePhotoURL: this.profilePhotoURL,
+                userBio: this.userBio,
             };
         }
 
@@ -46,9 +58,15 @@ export class User{
            const user = new User(data);
            user.defaultTimerSetting = data.defaultTimerSetting;
            user.email = data.email;
+           user.username = data.username;
            user.decksStudying = data.decksStudying;
            user.coins = data.coins;
            user.pet = data.pet;
+           user.deckNumber = data.deckNumber;
+           user.flashcardNumber = data.flashcardNumber;
+           user.profilePhotoName = data.profilePhotoName;
+           user.profilePhotoURL = data.profilePhotoURL;
+           user.userBio = data.userBio;
            return user;
         }
 
@@ -60,21 +78,10 @@ export class User{
 ***************************************************************************/
         static isSerializedProduct(obj){
             
-            if(!obj.email || typeof obj.email != 'string') return false;
+            if(!obj.email || typeof obj.email != 'string') return false;  
+            if(!obj.profilePhotoURL || !obj.profilePhotoURL.include('https')) return false; 
+            if(!obj.profilePhotoURL || typeof obj.profilePhotoURL != 'string') return false;
             // TODO: decks studying type check
         }
-
-/***************************************************************************
- *                  (UNDER CONSTRUCTION FOR A LATER STORY)
- *                  Serialization For Editing/Updating
- * *************************************************************************
- *      This will allow updating to be serialized, prevents errors on the 
- *      firebase side.  
-***************************************************************************/
-        // serializeForUpdate(){
-        //     const flashcard = {};
-        //     if(this.imageName) flashcard.imageName = this.imageName;
-        //     if(this.imageURL) flashcard.imageURL = this.imageURL;
-        // }
 
 }

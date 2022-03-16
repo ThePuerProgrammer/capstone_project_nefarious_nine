@@ -61,8 +61,11 @@ export function addEventListeners() {
         }
 
         let deckDocID = sessionStorage.getItem("deckId");
+        let isClassDeck = sessionStorage.getItem('isClassDeck');
         console.log(`Testing Here:${deckDocID}`);
         console.log(deckDocID);
+
+
         const flashcard = new Flashcard({
             question,
             isMultipleChoice,
@@ -98,7 +101,7 @@ export function addEventListeners() {
                 flashcard.answerImageName = "N/A";
                 flashcard.answerImageURL = "N/A";
             }
-
+            if(isClassDeck=="false"){//USER FLASHCARDS
             const docId = await FirebaseController.createFlashcard(
                 Auth.currentUser.uid,
                 deckDocID,
@@ -119,6 +122,33 @@ export function addEventListeners() {
                 `Flashcard: ${flashcard.question} has been added!`,
                 "modal-create-a-flashcard"
             );
+            await FirebaseController.updateFlashcardCount(Auth.currentUser.uid,deckDocID);
+            setTimeout(200);
+            await FirebaseController.updateFlashcardCountForUser(Auth.currentUser.uid);
+            } else { //CLASSROOM FLASHCARDS
+                    const docId = await FirebaseController.createClassFlashcard(
+                        isClassDeck,
+                        deckDocID,
+                        flashcard
+                    );
+                    //flashcard.set_docID(docId);
+                    flashcard.docID = docId;
+                    // }
+                    if (Constant.DEV) {
+                        console.log(
+                            `Flashcard created in deck with doc id [${deckDocID}]:`
+                        );
+                        console.log("Flashcard Contents: ");
+                        console.log(flashcard);
+                    }
+                    Utilities.info(
+                        "Success!",
+                        `Flashcard: ${flashcard.question} has been added!`,
+                        "modal-create-a-flashcard"
+                    );
+                    await FirebaseController.updateClassFlashcardCount(isClassDeck,deckDocID);
+            }
+            
         } catch (e) {
             if (Constant.DEV) console.log(e);
             Utilities.info(
@@ -127,21 +157,24 @@ export function addEventListeners() {
                 "modal-create-a-flashcard"
             );
         }
-        await deck_page(deckDocID);
+        await deck_page(deckDocID,isClassDeck);
     });
     Elements.formDeleteFlashcard.addEventListener('submit', async (e) => {
         e.preventDefault();
         // get the value from the select list item
         var f = document.getElementById('value').value;
         let deckDocID = sessionStorage.getItem('deckId');
+        let isClassDeck = sessionStorage.getItem('isClassDeck');
         try {
             await FirebaseController.deleteFlashcard(Auth.currentUser.uid, deckDocID, f);
             Utilities.info("Successfully deleted", "Successfully deleted flashcard", "modal-delete-a-flashcard");
+            await FirebaseController.updateFlashcardCount(Auth.currentUser.uid,deckDocID);
+            await FirebaseController.updateFlashcardCountForUser(Auth.currentUser.uid);
         } catch (e) {
             Utilities.info("Error", JSON.stringify(e), "modal-delete-a-flashcard");
         }
         // refresh the page
-        await deck_page(deckDocID);
+        await deck_page(deckDocID,isClassDeck);
     });
     // Event listener to change the answer view depending on whether or not
     //    multiple choice is checked or not
@@ -213,10 +246,11 @@ export function addEventListeners() {
 
 }
 
-export async function deck_page(deckDocID) {
-    // if(deckDocID == null){
-    //     deckDocID = sessionStorage.getItem('deckId');
-    // }
+export async function deck_page(deckDocID, isClassDeck) {
+    if(deckDocID == null){
+        deckDocID = sessionStorage.getItem('deckId');
+    }
+    console.log(isClassDeck);
     console.log(`Where I commented out:${deckDocID}`);
     let html = '';
     html += '<h1> Deck Page </h1>';
@@ -225,25 +259,32 @@ export async function deck_page(deckDocID) {
                 <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">add</i>Create Flashcard</button>
         `;
 
-  
+
 
     let deck;
     let flashcards;
     try {
-        deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDocID);
-        flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deck.docID);
-        if(flashcards.length!=0){
+        if (isClassDeck == "false" || isClassDeck == false) {
+            console.log("deck_page no class check for is class deck " + isClassDeck);
+            deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDocID);
+            flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deck.docID);
+        } else {
+            //note: class selected is either the doc id of a selected classroom or false
+            deck = await FirebaseController.getClassDeckByDocID(isClassDeck, deckDocID);
+            flashcards = await FirebaseController.getClassDeckFlashcards(isClassDeck, deck.docID);
+        }
+        if (flashcards.length != 0) {
             // study deck button
             html += `
                 <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark"><i class="material-icons text-white">local_library</i>Study</button>
                 <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">delete</i>Delete Flashcard</button>`;
-            } else {
-                html += `
+        } else {
+            html += `
                 <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled><i class="material-icons text-white">local_library</i>Study</button>
                 <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> <i class="material-icons text-white">delete</i>Delete Flashcard</button>
                 `;
-            }
-        
+        }
+
         if (!deck) {
             html += '<h5>Deck not found!</h5>';
         } else {
@@ -251,9 +292,9 @@ export async function deck_page(deckDocID) {
         }
         if (flashcards.length == 0) {
             html += '<h5>No flashcards found for this deck</h5>';
-        }else{
+        } else {
             flashcards.forEach(flashcard => {
-            html += buildFlashcardView(flashcard);
+                html += buildFlashcardView(flashcard);
             });
         }
     } catch (e) {
@@ -278,10 +319,15 @@ export async function deck_page(deckDocID) {
             const button = e.target.getElementsByTagName('button')[0];
             const label = Utilities.disableButton(button);
             //passed by the button on the flashcard
-            Utilities.enableButton(button,label);
-            await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDocID,e.target.docId.value);
+            Utilities.enableButton(button, label);
+            console.log(isClassDeck);
+            if(isClassDeck=='false'){ //USER FLASHCARD
+                await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDocID, e.target.docId.value);
+            } else { //CLASSROOM FLASHCARD 
+                await EditFlashCard.edit_classroomflashcard(isClassDeck, deckDocID, e.target.docId.value);
+            }
             //Loads a fresh page after the update
-            await deck_page(e.target.docId.value);
+            //  await deck_page(e.target.docId.value); //CHANGE THIS // fix this
         });
     }
 

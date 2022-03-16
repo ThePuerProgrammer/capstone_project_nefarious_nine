@@ -95,6 +95,7 @@ export function addEventListeners(){
         });
         fc.set_docID(e.target.docId.value);
         let editDeckDocId = window.sessionStorage.getItem('deckId');
+        let isClassDeck = window.sessionStorage.getItem('isClassDeck');
         console.log(`Edit_Flashcard_SS:${editDeckDocId}`)
 
         //These are specific to the form at submission
@@ -130,14 +131,14 @@ export function addEventListeners(){
             }
 
             //Testing things within the console, can be deleted
-            console.log(`isQuestionImage.checked${isQuestionImage.checked}`);
-            console.log(`isAnswerImage.checked${isAnswerImage.checked}`);
+            /* console.log(`isQuestionImage.checked${isQuestionImage.checked}`);
+             console.log(`isAnswerImage.checked${isAnswerImage.checked}`);
             if(imageFile2UploadAnswer){
             console.log(`answerImageUPLOAD${imageFile2UploadAnswer.value}`);
             }
             if(imageFile2UploadQuestion){
             console.log(`questionImageUPLOAD${imageFile2UploadQuestion.value}`);
-            }
+            }*/
         
 
         //Firestore
@@ -188,8 +189,13 @@ export function addEventListeners(){
                 fc.questionImageURL = "N/A";
             }
             //Update Firestore
-            await FirebaseController.updateFlashcard(Auth.currentUser.uid, editDeckDocId,fc,fc.docID);//changed Id to ID
-            await deck_page(editDeckDocId);
+            if(isClassDeck=="false" || isClassDeck==false){
+                await FirebaseController.updateFlashcard(Auth.currentUser.uid, editDeckDocId,fc,fc.docID);//changed Id to ID
+                await deck_page(editDeckDocId, isClassDeck);
+            } else {
+                await FirebaseController.updateClassroomFlashcard(isClassDeck, editDeckDocId,fc,fc.docID);//changed Id to ID
+                await deck_page(editDeckDocId, isClassDeck);
+            }
 
         } catch(e){
             if(Constant.DEV) console.log(e);
@@ -201,7 +207,7 @@ export function addEventListeners(){
             `Flashcard: ${fc.question} has been updated!`,
             "modal-edit-a-flashcard"
         );
-        await deck_page(editDeckDocId);
+        await deck_page(editDeckDocId, isClassDeck);
 
     });
 
@@ -214,6 +220,71 @@ export async function edit_flashcard(uid, deckId, docId){
     
     try{
         flashcard = await FirebaseController.getFlashCardById(uid,deckId,docId);
+        if(!flashcard){
+            Utilities.info('getFlashCardById Error', 'No flashcard found by the id');
+            return;
+        }
+    } catch (e){
+        if(Constant.DEV) console.log(e);
+        Utilities.info('Error Firebase Controller', JSON.stringify(e));
+        return;
+    }
+
+    //Getting Elements from Firebase to Edit
+    Elements.formEditFlashcard.form.docId.value = flashcard.docID;
+    Elements.formEditFlashcard.form.questionImageName.value = flashcard.questionImageName;
+    Elements.formEditFlashcard.form.answerImageName.value = flashcard.answerImageName;
+    Elements.formEditFlashcard.form.question.value = flashcard.question;
+    Elements.formEditFlashcard.form.answer.value = flashcard.answer;
+    Elements.formEditFlashcard.questionImageTag.src = flashcard.questionImageURL;
+    Elements.formEditFlashcard.answerImageTag.src = flashcard.answerImageURL;
+    Elements.formEditFlashcard.multipleChoiceToggle = flashcard.isMultipleChoice;
+    Elements.formEditFlashcard.incorrectAnswers =flashcard.incorrectAnswers;
+    
+    
+
+    //Getting the values to pass into the correct methods to build HTML
+    const answerCorrect = Elements.formEditFlashcard.form.answer.value;
+    const incorrectAnswersArray = Elements.formEditFlashcard.incorrectAnswers;
+        
+    //Verifying Toggles
+    let ismultiplechoice = Elements.formEditFlashcard.multipleChoiceToggle;
+    const isQuestionImage = Elements.formEditFlashcard.questionImageToggle;
+    const isAnswerImage = Elements.formEditFlashcard.answerImageToggle;
+
+    if(!flashcard.questionImageName||flashcard.questionImageName=='N/A'){
+        isQuestionImage.checked=false;
+        imageQuestion.style.display='none';
+    } else {
+        isQuestionImage.checked=true;
+        imageQuestion.style.display='block';
+    }
+    if(!flashcard.answerImageName||flashcard.answerImageName=='N/A'){
+        isAnswerImage.checked=false;
+        imageAnswer.style.display='none';
+    } else {
+        isAnswerImage.checked=true;
+        imageAnswer.style.display='block';
+    }
+    if(!flashcard.isMultipleChoice){
+        ismultiplechoice = false;        
+       multipleChoiceOffHTML(answerCorrect);
+    } else {
+        ismultiplechoice = true;
+        checkMultipleChoice();
+        multipleChoiceOnHTML(answerCorrect,incorrectAnswersArray);
+    }
+
+    Elements.modalEditFlashcard.show();
+    await deck_page(editDeckDocId);
+}
+
+export async function edit_classroomflashcard(isClassDeck, deckId, docId){
+    resetFlashcard();
+    let flashcard;
+    
+    try{
+        flashcard = await FirebaseController.getClassroomFlashCardById(isClassDeck,deckId,docId);
         if(!flashcard){
             Utilities.info('getFlashCardById Error', 'No flashcard found by the id');
             return;

@@ -7,6 +7,7 @@ import { User } from '../model/user.js';
 import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
+import { HelpTicket } from '../model/help_ticket.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -20,6 +21,20 @@ export async function createDeck(uid, deck) {
     return ref.id;
 }
 //============================================================================//
+
+//============================================================================//
+// CREATE A DECK FOR A CLASSROOM
+//============================================================================//
+export async function createClassDeck(docID, deck) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(docID)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .add(deck.serialize());
+    return ref.id;
+}
+//============================================================================//
+
 
 //============================================================================//
 // CREATE A Flashcard
@@ -39,6 +54,18 @@ export async function createFlashcard(uid, deckDocID, flashcardModel) {
 }
 //============================================================================//
 
+export async function createClassFlashcard(classDocID, deckDocID, flashcardModel) {
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS)
+        .add(flashcardModel.serialize());
+
+    return ref.id;
+}
 
 //============================================================================//
 //CREATE FLASHCARD IMAGE Question
@@ -420,6 +447,36 @@ export async function getUserDecks(uid) {
 
     return deckList;
 }
+
+//============================================================================//
+// This function pulls all decks from the highest level owned_decks collection
+// in firestore. This is purely for testing for the time being and will later be
+// modified to accomodate users / classrooms
+//============================================================================//
+export async function getClassDecks(classDocID) {
+    let deckList = [];
+    const classOwnedDecks = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .orderBy('isFavorited', 'desc')
+        .orderBy('name', 'asc')
+        .get();
+
+
+    classOwnedDecks.forEach(doc => {
+        const d = new Deck(doc.data());
+        d.docId = doc.id;
+        deckList.push(d);
+    });
+
+    // localStorage.set(Constant.collectionName.OWNED_DECKS, deckList);
+
+    return deckList;
+}
+
+
+
 //============================================================================//
 
 //============================================================================//
@@ -466,6 +523,49 @@ export async function getUserDeckById(uid, deckDocID) {
     return deckModel;
 }
 
+//============================================================================//
+// This function will pull in a single CLASS deck from it's docId
+//============================================================================//
+export async function getClassDeckByDocID(classDocID, deckDocID) {
+    const deckRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .doc(deckDocID)
+        .get();
+
+    if (!deckRef.exists) {
+        if (Constant.DEV)
+            console.log("! Deck reference does not exist");
+        return null;
+    }
+
+    const deckModel = new Deck(deckRef.data());
+    deckModel.set_docID(deckDocID);
+    return deckModel;
+}
+//============================================================================//
+// This function will pull in a single CLASSROOM from it's docId
+//============================================================================//
+export async function getClassroomByDocID(classDocID) {
+    const classRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .get();
+
+    if (!classRef.exists) {
+        if (Constant.DEV)
+            console.log("! Deck reference does not exist");
+        return null;
+    }
+
+    const classModel = new Classroom(classRef.data());
+    classModel.set_docID(classDocID);
+    return classModel;
+}
+
+
+
 
 //============================================================================//
 // Favorite a deck
@@ -477,8 +577,18 @@ export async function favoriteDeck(uid, deckDocID, favorited) {
 }
 
 //============================================================================//
+// Favorite a class deck
+//============================================================================//
+export async function favoriteClassDeck(classDocID, deckDocID, favorited) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID).collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .update({ 'isFavorited': favorited });
+}
+
+//============================================================================//
 // Get flashcards for a specific deck
 //============================================================================//
+//USERS
 export async function getFlashcards(uid, docId) {
     let flashcards = [];
     const snapshot = await firebase.firestore()
@@ -493,6 +603,40 @@ export async function getFlashcards(uid, docId) {
 
     return flashcards;
 }
+//CLASSROOMS
+export async function getClassroomFlashcards(isClassDeck, docId) {
+    let flashcards = [];
+    const snapshot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(isClassDeck)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docId)
+        .collection(Constant.collectionName.FLASHCARDS).get();
+    snapshot.forEach(doc => {
+        const f = new Flashcard(doc.data());
+        f.set_docID(doc.id);
+        flashcards.push(f);
+    })
+
+    return flashcards;
+}
+
+//============================================================================//
+// Get flashcards for a specific CLASS deck
+//============================================================================//
+export async function getClassDeckFlashcards(classDocID, docId) {
+    let flashcards = [];
+    const snapshot = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classDocID)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docId)
+        .collection(Constant.collectionName.FLASHCARDS).get();
+    snapshot.forEach(doc => {
+        const f = new Flashcard(doc.data());
+        f.set_docID(doc.id);
+        flashcards.push(f);
+    })
+
+    return flashcards;
+}
+
 
 
 //============================================================================//
@@ -506,34 +650,72 @@ export async function deleteFlashcard(uid, docID, flashcardId) {
         .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
         .get();
     //Creating a quick Flashcard so I can delete the Image
-    
+
     const flashcard = new Flashcard(ref.data());
-        flashcard.set_docID(docID);
+    flashcard.set_docID(docID);
     //Image Name Capture
     const questionImageName = flashcard.questionImageName;
     const answerImageName = flashcard.answerImageName;
-    
+
     //Deletion
-    try{
-    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
-    .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
-    .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
-    .delete();
-    } catch(e) {console.log(e);}
-    
+    try {
+        await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
+            .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+            .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
+            .delete();
+    } catch (e) { console.log(e); }
+
     //Deleting Question Image
-    if(questionImageName != null && questionImageName != 'N/A'){
-    const refQuestion = firebase.storage().ref()
-                .child(Constant.storageFolderName.FLASHCARD_IMAGES + questionImageName);
-    await refQuestion.delete();    
+    if (questionImageName != null && questionImageName != 'N/A') {
+        const refQuestion = firebase.storage().ref()
+            .child(Constant.storageFolderName.FLASHCARD_IMAGES + questionImageName);
+        await refQuestion.delete();
     }
     //Deleting Answer Image
-    if(answerImageName != null && answerImageName != 'N/A'){
+    if (answerImageName != null && answerImageName != 'N/A') {
         const refAnswer = firebase.storage().ref()
-                    .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
-        await refAnswer.delete();    
-        }
+            .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
+        await refAnswer.delete();
+    }
 }
+
+export async function deleteClassFlashcard(classDocId, docID, flashcardId) {
+    //Flashcard Reference
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classDocId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
+        .get();
+    //Creating a quick Flashcard so I can delete the Image
+
+    const flashcard = new Flashcard(ref.data());
+    flashcard.set_docID(docID);
+    //Image Name Capture
+    const questionImageName = flashcard.questionImageName;
+    const answerImageName = flashcard.answerImageName;
+
+    //Deletion
+    try {
+        await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classDocId)
+            .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+            .collection(Constant.collectionName.FLASHCARDS).doc(flashcardId)
+            .delete();
+    } catch (e) { console.log(e); }
+
+    //Deleting Question Image
+    if (questionImageName != null && questionImageName != 'N/A') {
+        const refQuestion = firebase.storage().ref()
+            .child(Constant.storageFolderName.FLASHCARD_IMAGES + questionImageName);
+        await refQuestion.delete();
+    }
+    //Deleting Answer Image
+    if (answerImageName != null && answerImageName != 'N/A') {
+        const refAnswer = firebase.storage().ref()
+            .child(Constant.storageFolderName.FLASHCARD_IMAGES + answerImageName);
+        await refAnswer.delete();
+    }
+}
+
 
 //============================================================================//
 // DELETE DECK
@@ -560,6 +742,31 @@ export async function deleteDeck(uid, docID) {
 }
 
 //============================================================================//
+// DELETE CLASS DECK
+//============================================================================//
+export async function deleteClassDeck(classDocId, docID) {
+    //Get All flashcards
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classDocId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .collection(Constant.collectionName.FLASHCARDS)
+        .get();
+    //Deletes each flashcard as it is pulled
+    ref.forEach(doc => {
+        const f = new Flashcard(doc.data());
+        f.set_docID(doc.id);
+        deleteFlashcard(uid, docID, f.docID);
+    });
+
+    //Delete Deck
+    await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classDocId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
+        .delete();
+}
+
+
+//============================================================================//
 // DELETE CLASSROOM
 //============================================================================//
 
@@ -580,6 +787,9 @@ export async function deleteClassroom(classroomDocID) {
     same.  As I have given a declaration of data for data.question below.
 ============================================================================*/
 export async function updateDeck(uid, deck, deckDocID) {
+
+    //trying to put logic here with if statement to check if deck belongs to a class causes issues
+    //therefore im building a separate function for class decks :[ -- blake
     const data = deck.serializeForUpdate();
     const deckRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
@@ -591,22 +801,59 @@ export async function updateDeck(uid, deck, deckDocID) {
                 deck.dateCreated = data.dateCreated;
                 deck.category = data.category;
                 deck.keywords = data.keywords;
+                deck.isClassroom = data.isClassroom;
             }//Error Code
             else if (Constant.DEV) {
                 console.log(e);
                 Utilites.info('Update Error Firebase', JSON.stringify(e));
             }
+
         });
+
 
     firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .update(deck.serialize());
+
 }
+export async function updateClassDeck(deck, deckDocID, classDocId) {
+    //trying to put logic here with if statement to check if deck belongs to a class causes issues
+    //therefore im building a separate function for class decks :[ -- blake
+    const data = deck.serializeForUpdate();
+    const deckRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classDocId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .get().then((doc) => {
+            if (doc.exists) {
+                deck.name = data.name;
+                deck.subject = data.subject;
+                deck.dateCreated = data.dateCreated;
+                deck.category = data.category;
+                deck.keywords = data.keywords;
+                deck.isClassroom = data.isClassroom;
+            }//Error Code
+            else if (Constant.DEV) {
+                console.log(e);
+                Utilites.info('Update Error Firebase', JSON.stringify(e));
+            }
+
+        });
+
+
+    firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classDocId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .update(deck.serialize());
+
+}
+
 
 //===========================================================================//
 //EDIT FLASHCARD 
 //===========================================================================//
+//USER
+//======
 export async function getFlashCardById(uid, deckDocID, docID) {
     const flashRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(uid)
@@ -620,6 +867,23 @@ export async function getFlashCardById(uid, deckDocID, docID) {
         return null;
     }
 }
+//CLASSROOM
+//==========
+export async function getClassroomFlashCardById(isClassDeck, deckDocID, docID) {
+    const flashRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(isClassDeck)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID).get();
+    if (flashRef.exists) {
+        const flashcard = new Flashcard(flashRef.data());
+        flashcard.set_docID(docID);
+        return flashcard;
+    } else {
+        return null;
+    }
+}
+
+
 //===========================================================================//
 //UPDATE FLASHCARD 
 //===========================================================================//
@@ -628,6 +892,8 @@ export async function getFlashCardById(uid, deckDocID, docID) {
     both doc.data().'field' like doc.data().question and data.question work the
     same.  As I have given a declaration of data for data.question below.
 ============================================================================*/
+//USER
+//=======
 export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
     const data = flashcard.serializeForUpdate();
     const flashRef = await firebase.firestore()
@@ -658,7 +924,38 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
         .collection(Constant.collectionName.FLASHCARDS).doc(docID)
         .set(flashcard.serialize());
 }
+//CLASSROOM
+//==========
+export async function updateClassroomFlashcard(isClassDeck, deckDocID, flashcard, docID) {
+    const data = flashcard.serializeForUpdate();
+    const flashRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(isClassDeck)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID)
+        .get().then((doc) => {
+            if (doc.exists) {
+                flashcard.question = data.question;
+                flashcard.answer = data.answer;
+                //flashcard.isMultipleChoice = data.isMultipleChoice;
+                flashcard.incorrectAnswers = data.incorrectAnswers;
+                flashcard.questionImageName = data.questionImageName;
+                flashcard.questionImageURL = data.questionImageURL;
+                flashcard.answerImageName = data.answerImageName;
+                flashcard.answerImageURL = data.answerImageURL;
+                console.log("UPDATED");
+            }//Error Code
+            else if (Constant.DEV) {
+                console.log(e);
+                Utilites.info('Update Error Firebase', JSON.stringify(e));
+            }
+        });
 
+    firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(isClassDeck)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS).doc(docID)
+        .set(flashcard.serialize());
+}
 //============================================================================//
 // EXISTING IMAGE FOR UPDATE
 //============================================================================//
@@ -926,7 +1223,7 @@ export async function searchDecks(uid, keywordsArray) {
 export async function searchAllClassrooms(keywordsArray) {
     const classroomList = []
     const snapShot = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)        
+        .collection(Constant.collectionName.CLASSROOMS)
         .where('keywords', 'array-contains-any', keywordsArray)
         .get();
     snapShot.forEach(doc => {
@@ -952,44 +1249,44 @@ export async function returnMyClassroomsDocId(email) {
 export async function searchMyClassrooms(email, keywordsArray) {
     let myClassroomList = []
     const classroomDocIds = await returnMyClassroomsDocId(email);
-    
-        const snapShot = await firebase.firestore()
+
+    const snapShot = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
         .where('keywords', 'array-contains-any', keywordsArray)
         .get();
-            
-        for (const docId of classroomDocIds) {
-                snapShot.forEach(doc => {                    
-                    if (doc.id == docId) {       
-                        const t = new Classroom(doc.data());                 
-                        t.set_docID(doc.id);
-                        myClassroomList.push(t);
-                    };                    
-                });
-        }
-    return myClassroomList;    
+
+    for (const docId of classroomDocIds) {
+        snapShot.forEach(doc => {
+            if (doc.id == docId) {
+                const t = new Classroom(doc.data());
+                t.set_docID(doc.id);
+                myClassroomList.push(t);
+            };
+        });
+    }
+    return myClassroomList;
 }
 
 export async function searchNotMyClassrooms(email, keywordsArray) {
 
     let classroomList = []
     const classroomDocIds = await returnMyClassroomsDocId(email);
-    
-        const snapShot = await firebase.firestore()
+
+    const snapShot = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS)
         .where('keywords', 'array-contains-any', keywordsArray)
         .get();
-            
-        
-        for (const docId of classroomDocIds) {
-            snapShot.forEach(doc => {                    
-                if (doc.id != docId) {       
-                    const t = new Classroom(doc.data());                 
-                    t.set_docID(doc.id);
-                    classroomList.push(t)
-                };                    
-            });
-    }        
+
+
+    for (const docId of classroomDocIds) {
+        snapShot.forEach(doc => {
+            if (doc.id != docId) {
+                const t = new Classroom(doc.data());
+                t.set_docID(doc.id);
+                classroomList.push(t)
+            };
+        });
+    }
     return classroomList;
 }
 
@@ -998,16 +1295,15 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
 //============================================================================//
 // LEADERBOARDS
 //============================================================================//
-export async function leaderboardByCoins(members){
+export async function leaderboardByCoins(members) {
     let classroomLeadersByCoins = [];
 
     const ref = await firebase.firestore()
-    .collection(Constant.collectionName.USERS)
-    .where('email', 'in', members)
-    .orderBy('coins', 'desc')
-    .get();
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('coins', 'desc')
+        .get();
 
-    
 
     ref.forEach(doc => {
         let cm = new User(doc.data());
@@ -1017,3 +1313,254 @@ export async function leaderboardByCoins(members){
 
     return classroomLeadersByCoins;
 }
+//Gets the count of the decks and updates it to a new field in user
+export async function leaderboardByDecks(members) {
+    let classroomLeadersByDecks = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('deckNumber', 'desc')
+        .get();
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByDecks.push(cm);
+    })
+
+    return classroomLeadersByDecks;
+
+}
+//Gets the count of the decks and updates it to a new field in user
+export async function leaderboardByFlashcards(members) {
+    let classroomLeadersByFlashcards = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('flashcardNumber','desc')
+        .get()
+
+        ref.forEach(doc => {
+            let cm = new User(doc.data());
+            cm.set_docID(doc.id);
+            classroomLeadersByFlashcards.push(cm);
+        })
+        return classroomLeadersByFlashcards;
+}
+
+//============================================================================//
+// UPDATE COUNTS
+//============================================================================//
+/*  This is used to maintain the data needed for the leaderboards query.
+ *  These functions were based of an initialy query, but found it easier to add
+ *  them as fields to the parent document of each subcollection. This should make
+ *  Producing the leaderboards data much faster and less taxing, as it initially
+ *  had nested upon nest querries.                                            */
+/*  PREVIOUSLY USED QUERY:
+    export async function updateFlashcardCount(currentUser, deckId){
+    const ref = await firebase.firestore()
+    .collection(Constant.collectionName.USERS)
+    .where('email', 'in', members)
+    .get().then((querySnapshot)=>{
+        querySnapshot.forEach(async (doc)=>{
+            const userdocId = doc.id ;
+            const countDeck = await firebase.firestore()
+            .collection(Constant.collectionName.USERS).doc(userdocId)
+            .collection(Constant.collectionName.OWNED_DECKS)
+            .get().then((querySnapshot2)=>{
+                querySnapshot2.forEach(async (doc) =>{
+                    const countFlash = await firebase.firestore()
+                    .collection(Constant.collectionName.USERS).doc(userdocId)
+                    .collection(Constant.collectionName.OWNED_DECKS).doc(doc.id)
+                    .collection(Constant.collectionName.FLASHCARDS)
+                    .get()
+                    console.log(`Doc ID:${doc.id} Size:${countFlash.size}`);
+                    await firebase.firestore()
+                    .collection(Constant.collectionName.USERS).doc(userdocId)
+                    .collection(Constant.collectionName.OWNED_DECKS).doc(doc.id)
+                    .update({'flashcardNumber': countFlash.size});
+                });
+            });
+        });
+    });
+}                                                                             */
+//============================================================================//
+//FLASHCARD COUNT
+//===============
+//For DECKS
+export async function updateFlashcardCount(currentUser, deckId) {
+    //This grabs all flashcards within the deck, so we can get a count on them
+    const countFlash = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .collection(Constant.collectionName.FLASHCARDS)
+        .get()
+
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .update({ 'flashcardNumber': countFlash.size });
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .update({ 'flashcardNumber': countFlash.size });
+    //Used in Edit Deck when updating to retain the flashcardNumber 
+    return countFlash.size;
+
+}
+//For USER
+export async function updateFlashcardCountForUser(currentUser) {
+    let deckList=[];
+    let flashcardCount=0;
+    //This grabs all the decks owned by a user, so we can get a count on them
+    const countDeck = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .get()
+    //This collects all decks into an array so I may count up the the flashcards
+        countDeck.forEach(doc => {
+            let deck = new Deck(doc.data());
+            deck.set_docID(doc.id);
+            deckList.push(deck);
+        });
+    for(let i=0; i<deckList.length;i++){
+        flashcardCount+=deckList[i].flashcardNumber;
+    }
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+    .collection(Constant.collectionName.USERS).doc(currentUser)
+    .update({ 'flashcardNumber': flashcardCount });
+    
+    return flashcardCount;
+    
+}
+
+export async function updateClassFlashcardCount(classroomId, deckId) {
+    //This grabs all flashcards within the deck, so we can get a count on them
+    const countFlash = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classroomId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .collection(Constant.collectionName.FLASHCARDS)
+        .get()
+
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS).doc(classroomId)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .update({ 'flashcardNumber': countFlash.size });
+
+    //Used in Edit Deck when updating to retain the flashcardNumber 
+    return countFlash.size;
+
+}
+//DECK COUNT
+export async function updateDeckCount(currentUser) {
+    //This grabs all the decks owned by a user, so we can get a count on them
+    const countDeck = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .get()
+    //This updates the deck number by counting the previous get() reference
+    await firebase.firestore().collection(Constant.collectionName.USERS).doc(currentUser)
+        .update({ 'deckNumber': countDeck.size });
+    //Used when deleting a deck
+    return countDeck;
+}
+//============================================================================//
+
+//============================================================================//
+// Submit a help ticket
+//============================================================================//
+export async function submitHelpTicket(helpTicket) {
+    const helpTicketRef = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS).add(helpTicket.serialize());
+    return helpTicketRef;
+}
+
+export async function uploadHelpTicketImage(imageFile, imageName) {
+    if (!imageName) {
+        imageName = Date.now() + imageFile.name;
+    }
+    const ref = firebase.storage().ref().child(Constant.storageFolderName.HELPTICKET_IMAGES + imageName);
+    const taskSnapShot = await ref.put(imageFile);
+    const imageURL = await taskSnapShot.ref.getDownloadURL();
+    return { imageName, imageURL };
+}
+
+export async function updateHelpTicket(helpTicketDocId, update) {
+    await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).update(update);
+}
+
+//============================================================================//
+// User help ticket functions
+//============================================================================//
+export async function getUserHelpTickets(email) {
+    let helpTickets = [];
+    const helpTicketSnapshot = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .where('submittedBy', '==', email)
+        .orderBy('timestamp', 'desc')
+        .get();
+    helpTicketSnapshot.forEach(doc => {
+        const ht = new HelpTicket(doc.data());
+        ht.set_docID(doc.id);
+        helpTickets.push(ht);
+    })
+
+    return helpTickets;
+}
+
+export async function getOneHelpTicket(helpTicketDocId) {
+    const helpTicketRef = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .doc(helpTicketDocId)
+        .get();
+
+    if (!helpTicketRef.exists) return null;
+
+    const helpTicket = new HelpTicket(helpTicketRef.data());
+    helpTicket.set_docID(helpTicketDocId);
+    return helpTicket;
+}
+
+export async function closeHelpTicket(helpTicketDocId, imageName) {
+    await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).delete();
+    if (imageName != '') {
+        await firebase.storage().ref().child(Constant.storageFolderName.HELPTICKET_IMAGES + imageName).delete();
+    }
+}
+//============================================================================//
+// Help ticket functions for admin
+//============================================================================//
+export async function getHelpTickets() {
+    let helpTickets = [];
+    const helpTicketSnapshot = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .orderBy('timestamp', 'desc')
+        .get();
+    helpTicketSnapshot.forEach(doc => {
+        const ht = new HelpTicket(doc.data());
+        ht.set_docID(doc.id);
+        helpTickets.push(ht);
+    })
+
+    return helpTickets;
+}
+
+//============================================================================//
+// Get USER
+//============================================================================//
+export async function getUser(uid) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .get();
+
+    const user = new User(ref.data());
+    return user;
+}
+//============================================================================//

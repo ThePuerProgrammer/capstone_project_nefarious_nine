@@ -59,13 +59,28 @@ export function addEventListeners() {
             const email = emailAddress;
             const decksStudying = [];
             const coins = 0;
-            const pet = "";
+            const pet = "bunny";
+            const deckNumber = 0;
+            const flashcardNumber = 0;
+            const userBio = "";
+
+            const user_mail = email.split('@');
+            const username = user_mail[0]; // get first portion of user's email as default username
+
+            const profilePhotoName = "pfp2.png";
+            const profilePhotoURL = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/profile_pictures%2Fpfp2.png?alt=media&token=84da9075-bb5c-4b2b-abd2-ca0bb0aab422";
 
             const newUserModel = new User({
                 email,
+                username,
                 decksStudying,
                 coins,
                 pet,
+                deckNumber,
+                flashcardNumber,
+                profilePhotoName,
+                profilePhotoURL,
+                userBio,
             });
 
             // Creates user Auth Account AND adds user account to users collections
@@ -76,7 +91,9 @@ export function addEventListeners() {
             });
 
             console.log("ADDING USER TO FIRESTORE");
-            firebase.firestore().collection(Constants.collectionName.USERS).doc(uid).set(newUserModel.serialize());
+            /*  This was missing await, making me 
+                thing that it wasn't being added fast enough for the user to be browsing.*/
+            await firebase.firestore().collection(Constants.collectionName.USERS).doc(uid).set(newUserModel.serialize());
             console.log("ADDED USER TO FIRESTORE");
       
             // Account successfully created from here
