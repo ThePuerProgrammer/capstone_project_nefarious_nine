@@ -71,5 +71,6 @@ export const htmlIDs = {
     leaderboardCoins: 'button-leaderboard-coins',
     leaderboardDecks: 'button-leaderboard-decks',
     leaderboardFlashcards: 'button-leaderboard-flashcards',
-
+    analyticsSelectDeck: 'analytics-select-deck',
+    analyticsSelectStatistics: 'analytics-select-statistics'
 }
