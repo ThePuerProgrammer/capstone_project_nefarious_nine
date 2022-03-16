@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -1137,6 +1137,26 @@ _data = {
 [sub_resource type="RectangleShape2D" id=41]
 extents = Vector2( 15, 17 )
 
+[sub_resource type="Curve2D" id=48]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 992, 1127, 0, 0, 0, 0, 992, 782 )
+}
+
+[sub_resource type="Curve2D" id=49]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 1090, 0, 0, 0, 0, 960, 764 )
+}
+
+[sub_resource type="Curve2D" id=50]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 928, 1108, 0, 0, 0, 0, 928, 785 )
+}
+
+[sub_resource type="Curve2D" id=51]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 944, 1147, 0, 0, 0, 0, 944, 817 )
+}
+
 [sub_resource type="RectangleShape2D" id=42]
 extents = Vector2( 48, 77 )
 
@@ -1611,8 +1631,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NPCs" type="Node2D" parent="."]
-
 [node name="Paths" type="Node2D" parent="."]
 
 [node name="ChefAPath" type="Path2D" parent="Paths"]
@@ -1722,6 +1740,52 @@ z_index = -1
 [node name="PauseMovementTimer" type="Timer" parent="Paths/ChefDPath"]
 wait_time = 2.0
 one_shot = true
+
+[node name="CustomerPaths" type="Node2D" parent="Paths"]
+
+[node name="EntranceA" type="Path2D" parent="Paths/CustomerPaths"]
+curve = SubResource( 48 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceA"]
+position = Vector2( 992, 1127 )
+rotation = -1.5708
+loop = false
+
+[node name="EntranceB" type="Path2D" parent="Paths/CustomerPaths"]
+curve = SubResource( 49 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceB"]
+position = Vector2( 960, 1090 )
+rotation = -1.57078
+loop = false
+
+[node name="EntranceC" type="Path2D" parent="Paths/CustomerPaths"]
+curve = SubResource( 50 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceC"]
+position = Vector2( 928, 1108 )
+rotation = -1.5708
+loop = false
+
+[node name="EntranceD" type="Path2D" parent="Paths/CustomerPaths"]
+curve = SubResource( 51 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceD"]
+position = Vector2( 944, 1147 )
+rotation = -1.57081
+loop = false
 
 [node name="Area2Ds" type="Node2D" parent="."]
 
@@ -1947,6 +2011,10 @@ __meta__ = {
 position = Vector2( 0, 52 )
 shape = SubResource( 47 )
 
+[node name="CustomerWalkInTimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[connection signal="ready_to_be_seated" from="." to="." method="_on_Restaurant_Level_ready_to_be_seated"]
 [connection signal="area_entered" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_entered"]
 [connection signal="area_exited" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_exited"]
 [connection signal="area_entered" from="LevelSprites/POS2/Area2D" to="." method="_on_POS_left_area_entered"]
@@ -2012,3 +2080,4 @@ shape = SubResource( 47 )
 [connection signal="area_exited" from="Area2Ds/DishAreas/DishPit1" to="." method="_on_DishPit1_area_exited"]
 [connection signal="area_entered" from="Area2Ds/DishAreas/DishPit2" to="." method="_on_DishPit2_area_entered"]
 [connection signal="area_exited" from="Area2Ds/DishAreas/DishPit2" to="." method="_on_DishPit2_area_exited"]
+[connection signal="timeout" from="CustomerWalkInTimer" to="." method="_on_CustomerWalkInTimer_timeout"]

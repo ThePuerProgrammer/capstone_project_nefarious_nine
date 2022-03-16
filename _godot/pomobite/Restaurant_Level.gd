@@ -1,10 +1,27 @@
 extends Node2D
 
-onready var pos_wall 			= $POSWall
-onready var pos_zoom 			= $POSZoom
-onready var pos_screen 			= $POSZoom/POSScreen
-onready var pos_right_usable 	= false
-onready var pos_left_usable 	= false
+signal ready_to_be_seated(patrons)
+
+onready var pos_wall 					= $POSWall
+onready var pos_zoom 					= $POSZoom
+onready var pos_screen 					= $POSZoom/POSScreen
+onready var customer_paths 				= $Paths/CustomerPaths
+onready var customer_walkin_timer		= $CustomerWalkInTimer
+onready var opening_restaurant			= true
+onready var walk_in						= false
+onready var pos_right_usable 			= false
+onready var pos_left_usable 			= false
+onready var soda_machine_area_entered 	= false
+onready var expo_area_entered 			= false
+onready var trash_area_entered 			= false
+onready var dish_area_entered 			= false
+
+var pos_table_menu 				= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
+var pos_default_screen 			= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
+var customer_npc				= preload("res://pomobite/Customer_NPC.tscn")
+var selected_table 				= 1
+var show_hint 					= true
+var ticks					
 
 var tables = {
 	tables_entered = [
@@ -12,15 +29,6 @@ var tables = {
 		false, false, false, false, false, false
 	],
 }
-
-var soda_machine_area_entered 	= false
-var expo_area_entered 			= false
-var trash_area_entered 			= false
-var dish_area_entered 			= false
-var pos_table_menu 				= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
-var pos_default_screen 			= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
-var selected_table 				= 1
-var show_hint 					= true
 
 onready var table_buttons = [
 	$POSZoom/POSScreen/Table1Button,
@@ -38,6 +46,7 @@ onready var table_buttons = [
 ]
 
 func _ready():
+	ticks = OS.get_system_time_msecs()
 	$POSZoom/POSScreen/BackButton.disabled = true
 	pos_wall.visible = false
 	pos_zoom.visible = false
@@ -45,8 +54,28 @@ func _ready():
 	$Player2.visible = true
 	if $Player1.connect("interact", self, "_on_player_1_interact") != OK:
 		print("Cannot connect signals")
-
+	customer_walkin_timer.start()
 	
+
+func _process(_delta):
+	if walk_in:
+		var paths = customer_paths.get_children()
+		var all_max_units = true
+		var patrons = []
+		for path in paths:
+			var follower = path.get_child(0)
+			patrons.append(follower.get_child(0))
+			if follower.unit_offset < 1.0:
+				follower.offset += 0.5
+				all_max_units = false
+		if all_max_units:
+			walk_in = false
+			var msec = OS.get_system_time_msecs()
+			if msec - ticks >= 1000:
+				emit_signal("ready_to_be_seated", patrons)
+			ticks = msec
+	
+
 func _on_player_1_interact():
 #	show_hint = false
 	$PopupDialog.hide()
@@ -433,3 +462,18 @@ func hide_dish_popup():
 
 	
 ####################################################################################################
+func _on_CustomerWalkInTimer_timeout():
+	if opening_restaurant:
+		opening_restaurant = false
+		customer_walkin_timer.wait_time = 30
+	
+	var paths = customer_paths.get_children()
+	for path in paths:
+		var instance = customer_npc.instance()
+		path.get_child(0).add_child(instance)
+	
+	walk_in = true
+
+
+func _on_Restaurant_Level_ready_to_be_seated(patrons):
+	print(patrons)
