@@ -7,6 +7,12 @@ onready var pos_screen = $POSZoom/POSScreen
 
 var pos_right_usable = false
 var pos_left_usable = false
+var tables = {
+	tables_entered = [
+		false, false, false, false, false, false,
+		false, false, false, false, false, false
+	],
+}
 
 var pos_table_menu = preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
 var pos_default_screen = preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
@@ -140,178 +146,211 @@ func _on_BackButton_pressed():
 	pos_screen.set_texture(pos_default_screen)
 ####################################################################################################
 
+# TABLES LOGIC
+####################################################################################################
+func _on_Table1_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table1, 1)
 
-func _on_Table1_area_entered(area):
+
+func _on_Table1_area_exited(_area):
+	hide_table_popup(1)
+	
+
+func _on_Table2_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table2, 2)
+
+
+func _on_Table2_area_exited(_area):
+	hide_table_popup(2)
+
+
+func _on_Table3_area_entered(_area):
+		set_table_popup($Area2Ds/TableAreas/Table3, 3)
+
+
+func _on_Table3_area_exited(_area):
+	hide_table_popup(3)
+
+
+func _on_Table4_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table4, 4)
+
+
+func _on_Table4_area_exited(_area):
+	hide_table_popup(4)
+
+
+func _on_Table5_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table5, 5)
+
+
+func _on_Table5_area_exited(_area):
+	hide_table_popup(5)
+
+
+func _on_Table6_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table6, 6)
+
+
+func _on_Table6_area_exited(_area):
+	hide_table_popup(6)
+
+
+func _on_Table7_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table7, 7)
+
+
+func _on_Table7_area_exited(_area):
+	hide_table_popup(7)
+
+
+func _on_Table8_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table8, 8)
+
+
+func _on_Table8_area_exited(_area):
+	hide_table_popup(8)
+
+
+func _on_Table9_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table9, 9)
+
+
+func _on_Table9_area_exited(_area):
+	hide_table_popup(9)
+
+
+func _on_Table10_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table10, 10)
+
+
+func _on_Table10_area_exited(_area):
+	hide_table_popup(10)
+
+
+func _on_Table11_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table11, 11)
+
+
+func _on_Table11_area_exited(_area):
+	hide_table_popup(11)
+
+
+func _on_Table12_area_entered(_area):
+	set_table_popup($Area2Ds/TableAreas/Table12, 12)
+
+
+func _on_Table12_area_exited(_area):
+	hide_table_popup(12)
+
+
+func set_table_popup(var table, var number):
+	$PopupDialog.rect_position = table.position
+	$PopupDialog.rect_position.x -= 42
+	if number == 5 or number == 6 or number == 11 or number == 12:
+		$PopupDialog.rect_position.x += 12
+	$PopupDialog.popup()
+	tables['tables_entered'][number - 1] = true
+	
+func hide_table_popup(var number):
+	var all_exited = true
+	for table in tables['tables_entered']:
+		if table:
+			all_exited == false
+	if all_exited:		
+		$PopupDialog.hide()
+	tables['tables_entered'][number - 1] = false
+	
+####################################################################################################
+
+# SODA LOGIC
+####################################################################################################
+func _on_Soda1_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table1_area_exited(area):
+func _on_Soda1_area_exited(_area):
 	pass # Replace with function body.
 
 
-func _on_Table2_area_entered(area):
+func _on_Soda2_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table2_area_exited(area):
+func _on_Soda2_area_exited(_area):
 	pass # Replace with function body.
 
 
-func _on_Table3_area_entered(area):
+func _on_Soda3_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table3_area_exited(area):
+func _on_Soda3_area_exited(_area):
 	pass # Replace with function body.
 
 
-func _on_Table4_area_entered(area):
+func _on_Soda4_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table4_area_exited(area):
+func _on_Soda4_area_exited(_area):
+	pass # Replace with function body.
+
+####################################################################################################
+
+# TRASH LOGIC
+####################################################################################################
+func _on_Trash1_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table5_area_entered(area):
+func _on_Trash1_area_exited(_area):
 	pass # Replace with function body.
 
 
-func _on_Table5_area_exited(area):
+func _on_Trash2_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table6_area_entered(area):
+func _on_Trash2_area_exited(_area):
+	pass # Replace with function body.
+
+####################################################################################################
+
+# EXPO LOGIC
+####################################################################################################
+func _on_Expo1_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table6_area_exited(area):
+func _on_Expo1_area_exited(_area):
 	pass # Replace with function body.
 
 
-func _on_Table7_area_entered(area):
+func _on_Expo2_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table7_area_exited(area):
+func _on_Expo2_area_exited(_area):
+	pass # Replace with function body.
+
+####################################################################################################
+
+# DISHPIT LOGIC
+####################################################################################################
+func _on_DishPit1_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table8_area_entered(area):
+func _on_DishPit1_area_exited(_area):
 	pass # Replace with function body.
 
 
-func _on_Table8_area_exited(area):
+func _on_DishPit2_area_entered(_area):
 	pass # Replace with function body.
 
 
-func _on_Table9_area_entered(area):
+func _on_DishPit2_area_exited(_area):
 	pass # Replace with function body.
 
-
-func _on_Table9_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Table10_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Table10_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Table11_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Table11_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Table12_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Table12_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Soda1_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Soda1_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Soda2_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Soda2_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Soda3_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Soda3_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Soda4_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Soda4_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Trash1_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Trash1_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Trash2_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Trash2_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Expo1_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Expo1_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_Expo2_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_Expo2_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_DishPit1_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_DishPit1_area_exited(area):
-	pass # Replace with function body.
-
-
-func _on_DishPit2_area_entered(area):
-	pass # Replace with function body.
-
-
-func _on_DishPit2_area_exited(area):
-	pass # Replace with function body.
+####################################################################################################
