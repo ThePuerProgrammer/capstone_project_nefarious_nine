@@ -14,6 +14,9 @@ var tables = {
 	],
 }
 
+var soda_machine_area_entered = false
+var expo_area_entered = false
+
 var pos_table_menu = preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
 var pos_default_screen = preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
 
@@ -115,13 +118,13 @@ func _on_Table12Button_pressed():
 
 func _on_POS_right_area_entered(_area):
 	if show_hint:
-		$PopupDialog.rect_position = Vector2($LevelSprites/POS1.position.x + 20, $LevelSprites/POS1.position.y - 60)
+		$PopupDialog.rect_position = Vector2($LevelSprites/POS1.position.x - 40, $LevelSprites/POS1.position.y - 60)
 		$PopupDialog.popup()
 	pos_right_usable = true
 
 func _on_POS_left_area_entered(_area):
 	if show_hint:
-		$PopupDialog.rect_position = Vector2($LevelSprites/POS2.position.x + 20, $LevelSprites/POS2.position.y - 60)
+		$PopupDialog.rect_position = Vector2($LevelSprites/POS2.position.x - 40, $LevelSprites/POS2.position.y - 60)
 		$PopupDialog.popup()
 	pos_left_usable = true
 
@@ -266,35 +269,44 @@ func hide_table_popup(var number):
 # SODA LOGIC
 ####################################################################################################
 func _on_Soda1_area_entered(_area):
-	pass # Replace with function body.
+	show_soda_popup($Area2Ds/SodaAreas/Soda1)
 
 
 func _on_Soda1_area_exited(_area):
-	pass # Replace with function body.
+	hide_soda_popup()
 
 
 func _on_Soda2_area_entered(_area):
-	pass # Replace with function body.
+	show_soda_popup($Area2Ds/SodaAreas/Soda2)
 
 
 func _on_Soda2_area_exited(_area):
-	pass # Replace with function body.
+	hide_soda_popup()
 
 
 func _on_Soda3_area_entered(_area):
-	pass # Replace with function body.
+	show_soda_popup($Area2Ds/SodaAreas/Soda3)
 
 
 func _on_Soda3_area_exited(_area):
-	pass # Replace with function body.
+	hide_soda_popup()
 
 
 func _on_Soda4_area_entered(_area):
-	pass # Replace with function body.
+	show_soda_popup($Area2Ds/SodaAreas/Soda4)
 
 
 func _on_Soda4_area_exited(_area):
-	pass # Replace with function body.
+	hide_soda_popup()
+	
+func show_soda_popup(var machine):
+	soda_machine_area_entered = true
+	$PopupDialog.rect_position = machine.position
+	$PopupDialog.popup()
+	
+func hide_soda_popup():
+	soda_machine_area_entered = false
+	$PopupDialog.hide()
 
 ####################################################################################################
 
@@ -320,20 +332,32 @@ func _on_Trash2_area_exited(_area):
 # EXPO LOGIC
 ####################################################################################################
 func _on_Expo1_area_entered(_area):
-	pass # Replace with function body.
+	show_expo_popup($Area2Ds/ExpoAreas/Expo1)
 
 
 func _on_Expo1_area_exited(_area):
-	pass # Replace with function body.
+	hide_expo_popup()
 
 
 func _on_Expo2_area_entered(_area):
-	pass # Replace with function body.
+	show_expo_popup($Area2Ds/ExpoAreas/Expo2)
 
 
 func _on_Expo2_area_exited(_area):
-	pass # Replace with function body.
+	hide_expo_popup()
 
+
+func show_expo_popup(var expo):
+	expo_area_entered = true
+	$PopupDialog.rect_position = expo.position
+	$PopupDialog.rect_position.x += 52
+	$PopupDialog.rect_position.y -= 80
+	$PopupDialog.show()
+
+func hide_expo_popup():
+	expo_area_entered = false
+	$PopupDialog.hide()
+	
 ####################################################################################################
 
 # DISHPIT LOGIC
