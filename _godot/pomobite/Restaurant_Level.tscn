@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://pomobite/ChefBPath.gd" type="Script" id=16]
 [ext_resource path="res://assets/art/AnimationFrames/PomoBITE_Frames/Chef_NPC_B.tres" type="SpriteFrames" id=17]
 [ext_resource path="res://pomobite/Chef_NPC.gd" type="Script" id=18]
+[ext_resource path="res://pomobite/Host_NPC.tscn" type="PackedScene" id=19]
 
 [sub_resource type="DynamicFont" id=39]
 size = 10
@@ -1752,6 +1753,7 @@ __meta__ = {
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceA"]
 position = Vector2( 992, 1127 )
 rotation = -1.5708
+rotate = false
 loop = false
 
 [node name="EntranceB" type="Path2D" parent="Paths/CustomerPaths"]
@@ -1763,6 +1765,7 @@ __meta__ = {
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceB"]
 position = Vector2( 960, 1090 )
 rotation = -1.57078
+rotate = false
 loop = false
 
 [node name="EntranceC" type="Path2D" parent="Paths/CustomerPaths"]
@@ -1774,6 +1777,7 @@ __meta__ = {
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceC"]
 position = Vector2( 928, 1108 )
 rotation = -1.5708
+rotate = false
 loop = false
 
 [node name="EntranceD" type="Path2D" parent="Paths/CustomerPaths"]
@@ -1785,7 +1789,10 @@ __meta__ = {
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceD"]
 position = Vector2( 944, 1147 )
 rotation = -1.57081
+rotate = false
 loop = false
+
+[node name="HostPaths" type="Node2D" parent="Paths"]
 
 [node name="Area2Ds" type="Node2D" parent="."]
 
@@ -2010,6 +2017,9 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2Ds/DishAreas/DishPit2"]
 position = Vector2( 0, 52 )
 shape = SubResource( 47 )
+
+[node name="Host_NPC" parent="." instance=ExtResource( 19 )]
+position = Vector2( 960, 652 )
 
 [node name="CustomerWalkInTimer" type="Timer" parent="."]
 wait_time = 5.0
