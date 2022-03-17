@@ -72,5 +72,9 @@ export const htmlIDs = {
     leaderboardDecks: 'button-leaderboard-decks',
     leaderboardFlashcards: 'button-leaderboard-flashcards',
     analyticsSelectDeck: 'analytics-select-deck',
-    analyticsSelectStatistics: 'analytics-select-statistics'
+    analyticsSelectStatistics: 'analytics-select-statistics',
+    loadingIcon: 'loading-icon',
+    analyticsChart: 'analytics-chart',
+    analyticsChartContainer: 'analytics-chart-container',
+    analyticsPageContainer: 'analytics-page-container'
 }
