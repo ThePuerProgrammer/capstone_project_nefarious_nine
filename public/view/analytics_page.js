@@ -15,7 +15,7 @@ var chartOptions = {
         0: { color: '#4b85cc' },
         1: { color: '#a763bf' },
         2: { color: '#701b47' },
-    }
+    },
 }
 
 var analyticsPageContainer;
@@ -168,6 +168,7 @@ async function drawAreaGraph() {
     chartOptions.title = 'Flaschard Mastery';
     chartOptions.hAxis = { title: 'Date' };
     chartOptions.vAxis = { title: '# of flashcard in the respective streak group', minValue: 0 };
+    chartOptions.vAxis.format = "#";
     let data = google.visualization.arrayToDataTable(dataArray);
 
 
