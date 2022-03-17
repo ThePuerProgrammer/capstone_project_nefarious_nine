@@ -33,6 +33,7 @@ export function addEventListeners() {
 
     // Event listener for UPLOAD IMAGE button on Edit Profile modal
     Elements.formEditProfile.profilePictureButton.addEventListener('change', e => {
+        e.preventDefault();
         imageFile2UploadProfile = e.target.files[0];
 
         if(!imageFile2UploadProfile){
@@ -96,6 +97,7 @@ export async function profile_page() {
 
     // EDIT PROFILE open modal button listener 
     editProfileButton.addEventListener('click', async e => {
+        e.preventDefault();
 
         // doesn't seem necesarry to retrieve user info from firebase again, but can be added if needed
         // retrieve user info from Firebase
@@ -106,9 +108,9 @@ export async function profile_page() {
             console.log(e);
         }*/
 
-        Elements.formEditProfile.profilePictureTag.src += `${user.profilePhotoURL}`;
-        Elements.formEditProfile.username.value += `${user.username}`;
-        Elements.formEditProfile.userBio.value += `${user.userBio}`;
+        Elements.formEditProfile.profilePictureTag.src = `${user.profilePhotoURL}`;
+        Elements.formEditProfile.username.value = `${user.username}`;
+        Elements.formEditProfile.userBio.value = `${user.userBio}`;
 
         // opens edit Profile modal
         $(`#${Constant.htmlIDs.editProfileModal}`).modal('show');
