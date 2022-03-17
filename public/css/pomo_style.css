@@ -688,6 +688,12 @@ iframe {
     width: 100%;
     background-color:#2C1320;
     color: #2C1320;
+}
+
+.pfp {
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
   }
 
 /*==========================================================================*/

@@ -195,6 +195,8 @@ export const formEditProfile = {
     form: document.getElementById('form-edit-profile'),
     profilePictureTag: document.getElementById('form-edit-profile-picture-tag'),
     profilePictureButton: document.getElementById('form-edit-profile-picture-button'),
+    username: document.getElementById('username'),
+    userBio: document.getElementById('bio'),
 }
 // Profile Picture
 export const formContainerProfilePicture = document.getElementById('form-edit-profile-picture');

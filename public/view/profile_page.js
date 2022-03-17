@@ -36,7 +36,7 @@ export function addEventListeners() {
         imageFile2UploadProfile = e.target.files[0];
 
         if(!imageFile2UploadProfile){
-            Elements.formEditProfile.profilePictureTag.src='';
+            Elements.formEditProfile.profilePictureTag.src=''; // TODO make it display pfp ?
             return;
         }
 
@@ -44,6 +44,11 @@ export function addEventListeners() {
         const reader = new FileReader();
         reader.onload = () => (Elements.formEditProfile.profilePictureTag.src= reader.result);
         reader.readAsDataURL(imageFile2UploadProfile);
+    });
+
+     // Clears EDIT PROFILE input fields when user closes modal
+    $(`#edit-profile-modal`).on('hidden.bs.modal', function (e) {
+        Elements.formEditProfile.form.reset();
     });
 }
 
@@ -66,7 +71,7 @@ export async function profile_page() {
         </div>`;
 
     html += `<div class="user-profile">
-        <img src="${user.profilePhotoURL}" style="width: 200px; height: 200px" class="center">
+        <img src="${user.profilePhotoURL}" style="width: 200px; height: 200px; object-fit: cover;" class="center pfp">
         <br>
         <h3 class="user-username pomo-text-color-dark">${user.username}</h3>`;
     
@@ -85,18 +90,25 @@ export async function profile_page() {
     
     Elements.root.innerHTML = html;
 
+    //** DYNAMIC EVENT LISTENERS **//
+
     const editProfileButton = document.getElementById(Constant.htmlIDs.editProfile);
+
     // EDIT PROFILE open modal button listener 
     editProfileButton.addEventListener('click', async e => {
 
-        // Firebase func. to retrieve profile info
-       /* try {
-            categories = await FirebaseController.getCategories();
-            //console.log(cat);
-        } catch (e) {
-            if (Constant.DEV)
-                console.log(e);
+        // doesn't seem necesarry to retrieve user info from firebase again, but can be added if needed
+        // retrieve user info from Firebase
+       /* let user;
+        try {
+            user = await FirebaseController.getUser(Auth.currentUser.uid);
+        }catch (e) {
+            console.log(e);
         }*/
+
+        Elements.formEditProfile.profilePictureTag.src += `${user.profilePhotoURL}`;
+        Elements.formEditProfile.username.value += `${user.username}`;
+        Elements.formEditProfile.userBio.value += `${user.userBio}`;
 
         // opens edit Profile modal
         $(`#${Constant.htmlIDs.editProfileModal}`).modal('show');
