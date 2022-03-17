@@ -145,8 +145,12 @@ export const formEditDeckClassroomSelect = document.getElementById('select-deck-
 //PET ADOPTION
 //============================================================================//
 export const formPomodoption = document.getElementById('form-pomodoption');
+export const submitAdoption = document.getElementById('submit-adoption');
 //============================================================================//
-
+//COINS
+//============================================================================//
+export const coinCount = document.getElementById('coin-count');
+//============================================================================//
 //CLASSROOMS PAGE
 //============================================================================//
 export const formCreateClassroom = document.getElementById('form-create-classroom');

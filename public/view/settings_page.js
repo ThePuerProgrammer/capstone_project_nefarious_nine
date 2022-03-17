@@ -10,13 +10,14 @@ export function addEventListeners() {
     await settings_page();
   });
 
+  var petSelected = "Bunny";
+
   Elements.formPomodoption.addEventListener("click", async (e) => {
     //e.preventDefault();
 
     //console.log("SUBMIT POMOPET PRESSED")
 
     const pets = document.getElementsByName("pet");
-    var petSelected = "Bunny";
     document.getElementById("pet-selected").innerHTML =
       "Adopt The " + petSelected + "?";
 
@@ -28,18 +29,24 @@ export function addEventListeners() {
       }
     }
 
+    /* try {
+      await FirebaseController.updatePet(Auth.currentUser.uid, petSelected);
+      Elements.modalCreateDeck.hide();
+    } catch (e) {
+      if (Constant.DEV) console.log(e);
+    } */
+
+  });
+
+  Elements.submitAdoption.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
     try {
       await FirebaseController.updatePet(Auth.currentUser.uid, petSelected);
       Elements.modalCreateDeck.hide();
     } catch (e) {
       if (Constant.DEV) console.log(e);
     }
-
-    //console.log("POMOPET SELECTED: " + petSelected);
-
-    //await FirebaseController.updatePet(Auth.currentUser.uid, petSelected);
-
-    // Utilities.info('Adoption Successful.', `You now own a ${petSelected}!`, Constants.htmlIDs.modalPomodoption);
   });
 }
 
