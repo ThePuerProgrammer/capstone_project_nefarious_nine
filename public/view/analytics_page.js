@@ -20,6 +20,8 @@ var chartOptions = {
 
 var analyticsPageContainer;
 
+let notEnoughSRSData = false;
+
 var currentSelectedDeckID;
 
 var dataArray = [];
@@ -67,8 +69,9 @@ export async function analytics_page() {
             currentSelectedDeckID = e.target.value;
             removeChart();
             addSpinner();
-            await getNewData();
-            drawAreaGraph();
+            let graphSuccessfullyCreated = await getNewData();
+            if (graphSuccessfullyCreated)
+                drawAreaGraph();
         });
         
         currentSelectedDeckID = userDecks[0].docId;
@@ -77,6 +80,9 @@ export async function analytics_page() {
 
         google.charts.load('current', { 
             callback: function () {
+                if (notEnoughSRSData)
+                    return;
+                
                 drawAreaGraph();
                 $(window).resize(drawAreaGraph);
             },
@@ -102,6 +108,15 @@ async function getNewData() {
     ];
 
     let deckData = await FirebaseController.getUserDataDeckById(Auth.currentUser.uid, currentSelectedDeckID);
+    
+    // If there are less than 2 cachedDates, then there is not SRS data to display, so quit early
+    if (deckData.cachedDates.length < 2) {
+        removeSpinner();
+        addMessageInsteadOfChart("This deck does not have contain enough SRS data to view Flashcard Mastery analytics. Try studying this deck in \"Smart Study\" at least 2 days and return here to see your progress!");
+        selectorsEnabled(false);
+        return false;
+    }
+    
     let startDate = new Date(deckData.dateCreated);
     let endDate = new Date(deckData.lastAccessed);
     let differenceInTime = endDate.getTime() - startDate.getTime();
@@ -138,8 +153,15 @@ async function getNewData() {
     }
 
     removeSpinner();
+
+    // TODO: if (userHasNoDeckData)
+    //          add message instead
+    //       else
+    //          add chart
     addChart();
     selectorsEnabled(false);
+
+    return true;
 }
 
 async function drawAreaGraph() {
@@ -175,7 +197,25 @@ function addChart() {
     );
 }
 
+function addMessageInsteadOfChart(message) {
+    notEnoughSRSData = true;
+    
+    Elements.root.insertAdjacentHTML('beforeend', `
+        <div id="${Constant.htmlIDs.analyticsChartContainer}">
+            <br/ >
+            <br/ >
+            <br/ >
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="col-5">
+                    <h3 class="text-center">${message}</h3>
+                </div>
+            </div>
+        </div>`
+    );
+}
+
 function removeChart() {
+    notEnoughSRSData = false;
     let analyticsChartContainer = document.getElementById(Constant.htmlIDs.analyticsChartContainer);
     analyticsChartContainer.parentElement.removeChild(analyticsChartContainer);
 }
