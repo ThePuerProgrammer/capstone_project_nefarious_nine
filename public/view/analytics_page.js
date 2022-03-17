@@ -7,13 +7,18 @@ import * as Utilities from './utilities.js'
 var chartOptions = {
     title: 'Pomobyte Statistics',
     width: '100%',
-    height: 800,
+    height: '100%',
     backgroundColor: "#A7ADC6",
     is3D: true,
-    legend: 'top'
+    legend: 'top',
+    series: {
+        0: { color: '#4b85cc' },
+        1: { color: '#a763bf' },
+        2: { color: '#701b47' },
+    }
 }
 
-var needNewData = true;
+var analyticsPageContainer;
 
 var currentSelectedDeckID;
 
@@ -26,12 +31,14 @@ export async function analytics_page() {
     
     if (userDecks.length != 0) {
         Elements.root.innerHTML = `
-            <div class="container pt-3">
+            <div id="${Constant.htmlIDs.analyticsPageContainer}" class="container pt-4 pb-1">
                 <div class="row">
                     <div class="col-6">
+                        <h3>Selected Deck</h3>
                         <select id="${Constant.htmlIDs.analyticsSelectDeck}" name="selectedDeck" class="form-select"></select>
                     </div>
                     <div class="col-6">
+                        <h3>Analytics</h3>
                         <select id="${Constant.htmlIDs.analyticsSelectStatistics}" name="selectedStatistics" class="form-select">
                             <option value="flashcard-mastery">Flashcard Mastery</option>
                         </select>
@@ -40,18 +47,26 @@ export async function analytics_page() {
             </div>
         `;
 
+        analyticsPageContainer = document.getElementById(Constant.htmlIDs.analyticsPageContainer);
+
+        addSpinner();
+
         var analyticsSelectDeck = document.getElementById(
             Constant.htmlIDs.analyticsSelectDeck
         );
 
+        // add all of the user's deck to the deck selector
         userDecks.forEach(deck => 
             analyticsSelectDeck.innerHTML += `
                 <option value="${deck.docId}">${deck.name}</option>
             `
         );
         
+        // For redrawing graph on deck selection change
         analyticsSelectDeck.addEventListener('change', async e => {
             currentSelectedDeckID = e.target.value;
+            removeChart();
+            addSpinner();
             await getNewData();
             drawAreaGraph();
         });
@@ -59,8 +74,6 @@ export async function analytics_page() {
         currentSelectedDeckID = userDecks[0].docId;
 
         await getNewData();
-        
-        Elements.root.insertAdjacentHTML('beforeend', `<div id="analytics-chart"></div>`);
 
         google.charts.load('current', { 
             callback: function () {
@@ -72,17 +85,18 @@ export async function analytics_page() {
     }
     else {
         Elements.root.innerHTML = `
-            <div class="container d-flex justify-content-center pt-5">
+            <div id="${Constant.htmlIDs.analyticsPageContainer}" class="container d-flex justify-content-center pt-5">
                 <h3>
                     You do not own any decks! Try creating one in the <i>Study Decks</i> tab
                 </h3>
             </div>
         `;
     }
-    
 }
 
 async function getNewData() {
+    selectorsEnabled(true);
+
     dataArray = [ // date vs streak count
         ['Date', 'Okay (Streak 1-2)', 'Good (Streak 3-5)', 'Mastered (Streak 6+)']
     ];
@@ -122,16 +136,51 @@ async function getNewData() {
         // increments to next day by one
         displayDate.setDate(displayDate.getDate() + 1);
     }
+
+    removeSpinner();
+    addChart();
+    selectorsEnabled(false);
 }
 
 async function drawAreaGraph() {
     chartOptions.title = 'Flaschard Mastery';
-    chartOptions.hAxis = { title: 'Date' }
-    chartOptions.vAxis = { title: '# of flashcard in the respective streak group', minValue: 0 }
+    chartOptions.hAxis = { title: 'Date' };
+    chartOptions.vAxis = { title: '# of flashcard in the respective streak group', minValue: 0 };
     let data = google.visualization.arrayToDataTable(dataArray);
 
 
     // Instantiate and draw the chart.
-    let chart = new google.visualization.AreaChart(document.getElementById('analytics-chart'));
+    let chart = new google.visualization.AreaChart(document.getElementById(Constant.htmlIDs.analyticsChart));
     chart.draw(data, chartOptions);
+}
+
+function addSpinner() {
+    Elements.root.insertAdjacentHTML('beforeend', 
+        `<div id="${Constant.htmlIDs.loadingIcon}" class="d-flex justify-content-center mt-5">
+            <div class="spinner-grow" role="status"></div>
+        </div>
+    `);
+}
+
+function removeSpinner() {
+    let loadingIconElem = document.getElementById(Constant.htmlIDs.loadingIcon);
+    loadingIconElem.parentElement.removeChild(loadingIconElem);
+}
+
+function addChart() {
+    Elements.root.insertAdjacentHTML('beforeend', `
+        <div id="${Constant.htmlIDs.analyticsChartContainer}">
+            <div style="min-height: 47rem;" id="${Constant.htmlIDs.analyticsChart}"></div>
+        </div>`
+    );
+}
+
+function removeChart() {
+    let analyticsChartContainer = document.getElementById(Constant.htmlIDs.analyticsChartContainer);
+    analyticsChartContainer.parentElement.removeChild(analyticsChartContainer);
+}
+
+function selectorsEnabled(areEnabled) {
+    $(`#${Constant.htmlIDs.analyticsSelectDeck}`).prop('disabled', areEnabled);
+    $(`#${Constant.htmlIDs.analyticsSelectStatistics}`).prop('disabled', areEnabled);
 }
