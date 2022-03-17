@@ -772,6 +772,11 @@
        </div>
        <div class="modal-body">
          <form id="form-edit-profile" method="post">
+          <div id="form-edit-profile-picture-container">
+            <img id="form-edit-profile-picture-tag"
+              style=" height: 100%; width: 100%; object-fit: contain; display: block;">
+            <input id="form-edit-profile-picture-button" type="file" value="upload" />
+          </div>
            <div class="form-group">
              <label class="pomo-text-color-light" for="username">Username</label>
              <input class="form-control form-control-lg" type="username" name="username"
@@ -793,7 +798,6 @@
    </div>
   </div>
   <!-- END UPDATE PROFILE MODAL---------------------------------------------->
-
 
   <!-- Modal: Popup Info Box -------------------------------------------------->
   <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

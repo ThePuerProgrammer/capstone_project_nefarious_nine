@@ -4,6 +4,10 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 
+//Declaration of Image
+let imageFile2UploadProfile;
+//const profilePic = Elements.formContainerProfilePicture;
+
 export function addEventListeners() {
     Elements.menuProfile.addEventListener('click', async () => {
         history.pushState(null, null, Routes.routePathname.PROFILE);
@@ -11,19 +15,35 @@ export function addEventListeners() {
     });
 
     // EDIT PROFILE Submit button event listener
-    Elements.formEditProfile.addEventListener('submit', async e => {
+    Elements.formEditProfile.form.addEventListener('submit', async e => {
         e.preventDefault();
         const username = e.target.username.value;
         const bio = e.target.bio.value;
-
+ 
         try {
-            await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio);
+            const {profilePictureName, profilePictureURL} = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile);
+            await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, profilePictureName, profilePictureURL);
             await profile_page();
             Elements.modalEditProfile.hide();
         } catch (e) {
             if (Constant.DEV)
                 console.log(e);
         }
+    });
+
+    // Event listener for UPLOAD IMAGE button on Edit Profile modal
+    Elements.formEditProfile.profilePictureButton.addEventListener('change', e => {
+        imageFile2UploadProfile = e.target.files[0];
+
+        if(!imageFile2UploadProfile){
+            Elements.formEditProfile.profilePictureTag.src='';
+            return;
+        }
+
+        //Loads the Image and displays preview
+        const reader = new FileReader();
+        reader.onload = () => (Elements.formEditProfile.profilePictureTag.src= reader.result);
+        reader.readAsDataURL(imageFile2UploadProfile);
     });
 }
 

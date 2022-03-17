@@ -1489,13 +1489,24 @@ export async function getUser(uid) {
 //============================================================================//
 //UPDATE USER PROFILE
 //============================================================================//
-export async function updateUserProfile(uid, username, userBio) {
+export async function updateUserProfile(uid, username, userBio, profilePhotoName, profilePhotoURL) {
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({ 'username': username, 'userBio': userBio});
+        .update({ 'username': username, 'userBio': userBio, 'profilePhotoName':profilePhotoName, 'profilePhotoURL':profilePhotoURL});
 }
-//============================================================================//
 
+// UPLOAD PROFILE PICTURE
+export async function uploadProfilePicture(profilePicturerFile, profilePictureName) {
+    //image doesn't have a name
+    if (!profilePictureName) {
+        profilePictureName = Date.now() + profilePicturerFile.name + 'pfp';
+    }
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.PROFILE_PICTURES + profilePictureName);
+    const taskSnapShot = await ref.put(profilePicturerFile);
+    const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
+    return { profilePictureName, profilePictureURL};
+}
 //============================================================================//
 // UPDATE POMOPET
 //============================================================================//

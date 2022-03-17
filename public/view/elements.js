@@ -191,5 +191,11 @@ export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyCl
 
 //PROFILE PAGE
 //============================================================================//
-export const formEditProfile = document.getElementById('form-edit-profile');
+export const formEditProfile = {
+    form: document.getElementById('form-edit-profile'),
+    profilePictureTag: document.getElementById('form-edit-profile-picture-tag'),
+    profilePictureButton: document.getElementById('form-edit-profile-picture-button'),
+}
+// Profile Picture
+export const formContainerProfilePicture = document.getElementById('form-edit-profile-picture');
 //============================================================================//
