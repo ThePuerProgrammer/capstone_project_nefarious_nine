@@ -21,8 +21,14 @@ export function addEventListeners() {
         const bio = e.target.bio.value;
  
         try {
-            const {profilePictureName, profilePictureURL} = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile);
-            await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, profilePictureName, profilePictureURL);
+            // if updated pfp
+            if(imageFile2UploadProfile != null) {
+                const {profilePictureName, profilePictureURL} = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile);
+                console.log("UPLOADED IMAGE")
+                await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, profilePictureName, profilePictureURL);
+            } else {
+                await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, null, null);
+            }
             await profile_page();
             Elements.modalEditProfile.hide();
         } catch (e) {

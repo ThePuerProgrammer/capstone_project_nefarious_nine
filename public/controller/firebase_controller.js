@@ -1490,9 +1490,15 @@ export async function getUser(uid) {
 //UPDATE USER PROFILE
 //============================================================================//
 export async function updateUserProfile(uid, username, userBio, profilePhotoName, profilePhotoURL) {
-    await firebase.firestore().collection(Constant.collectionName.USERS)
+    if((profilePhotoURL != null) && (profilePhotoName != null)){
+        await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({ 'username': username, 'userBio': userBio, 'profilePhotoName':profilePhotoName, 'profilePhotoURL':profilePhotoURL});
+        .update({'username': username, 'userBio': userBio, 'profilePhotoName':profilePhotoName, 'profilePhotoURL':profilePhotoURL});
+    } else {
+        await firebase.firestore().collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .update({'username': username, 'userBio': userBio});
+    }
 }
 
 // UPLOAD PROFILE PICTURE
