@@ -11,6 +11,7 @@ export class User{
         this.profilePhotoName = data.profilePhotoName;
         this.profilePhotoURL = data.profilePhotoURL;
         this.userBio = data.userBio;
+        this.pomopet = data.pomopet;
         // TODO: SHOP STUFF
     }
 
@@ -51,6 +52,7 @@ export class User{
                 profilePhotoName: this.profilePhotoName,
                 profilePhotoURL: this.profilePhotoURL,
                 userBio: this.userBio,
+                pomopet: this.pomopet,
             };
         }
 
@@ -67,6 +69,7 @@ export class User{
            user.profilePhotoName = data.profilePhotoName;
            user.profilePhotoURL = data.profilePhotoURL;
            user.userBio = data.userBio;
+           user.pomopet = data.pomopet;
            return user;
         }
 

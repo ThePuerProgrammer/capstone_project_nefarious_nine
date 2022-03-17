@@ -37,6 +37,8 @@ export const collectionName = {
 export const storageFolderName = {
     FLASHCARD_IMAGES: 'flashcard_images/',
     HELPTICKET_IMAGES: 'helpticket_images/',
+    POMOPETS: 'pomopets/',
+    PROFILE_PICTURES: 'profile_pictures/',
 }
 
 /*****************************************
@@ -70,5 +72,7 @@ export const htmlIDs = {
     leaderboardCoins: 'button-leaderboard-coins',
     leaderboardDecks: 'button-leaderboard-decks',
     leaderboardFlashcards: 'button-leaderboard-flashcards',
+    editProfile: 'button-edit-profile-modal',
+    editProfileModal: 'edit-profile-modal',
 
 }
