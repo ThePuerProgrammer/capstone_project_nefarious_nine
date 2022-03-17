@@ -23,6 +23,7 @@ export const collectionName = {
     BACKEND: 'backend',
     CLASSROOM_CHATS: 'classroom_chats',
     MESSAGES: 'messages',
+    FLASHCARDS_DATA_SUFFIX: '_flashcard_data',
     HELPTICKETS: 'help_tickets',
 }
 
@@ -72,6 +73,12 @@ export const htmlIDs = {
     leaderboardCoins: 'button-leaderboard-coins',
     leaderboardDecks: 'button-leaderboard-decks',
     leaderboardFlashcards: 'button-leaderboard-flashcards',
+    analyticsSelectDeck: 'analytics-select-deck',
+    analyticsSelectStatistics: 'analytics-select-statistics',
+    loadingIcon: 'loading-icon',
+    analyticsChart: 'analytics-chart',
+    analyticsChartContainer: 'analytics-chart-container',
+    analyticsPageContainer: 'analytics-page-container',
     editProfile: 'button-edit-profile-modal',
     editProfileModal: 'edit-profile-modal',
 

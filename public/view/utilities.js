@@ -35,3 +35,27 @@ export function print(DEV, developer, msg) {
         console.log(msg);
     }
 }
+
+// Returns today's date formatted as MM/DD/YYYY
+// https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
+export function getCurrentDate() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = mm + '-' + dd + '-' + yyyy;
+
+    // return "03-16-2022"; // FOR TESTING ONLY
+
+    return today;
+}
+
+// Changes the format of the given date to be mm-dd-yyyy
+export function getFormattedDate(date) {
+    var dd = String(date.getDate()).padStart(2, '0');
+    var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = date.getFullYear();
+
+    return mm + '-' + dd + '-' + yyyy;
+}

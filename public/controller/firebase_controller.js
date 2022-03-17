@@ -99,21 +99,118 @@ export async function uploadImageToFlashcardAnswer(answerImageFile, answerImageN
 }
 //==========================================================================//
 
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//                   !! OLD UPDATE FLASHCARD DATA FUNCTION !!
+//             Keeping around temporarily in case the new one breaks
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// //============================================================================//
+// // Update Flashcard Data
+// // 
+// // 1. Check if data exists
+// //   [Data Exists] Grab the data
+// //   [Data doesn't exist]  
+// //============================================================================//
+// export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAnsweredCorrectly) {
+//     // Making the reference to the flashcard data
+//     const flashcardDataExistsRef = firebase.firestore()
+//         .collection(Constant.collectionName.USERS)
+//         .doc(uid)
+//         .collection(Constant.collectionName.DECK_DATA)
+//         .doc(deckDocID)
+//         .collection(Constant.collectionName.FLASHCARDS_DATA)
+//         .doc(flashcardDocID);
+
+//     // FlashcardData Model
+//     //  If flashcard does't not exist, this model will be used to create 
+//     //  flashcard data as-is.
+//     //  If flashcard does exist, streak will be updated.
+//     //  If user answered incorrectly, this streak will be used
+//     let flashcardData = new FlashcardData({
+//         streak: 0,
+//         lastAccessed: Date.now()
+//     });
+
+//     // Using the flashcard data reference to check if it exists
+//     await flashcardDataExistsRef.get().then((doc) => {
+//         if (doc.exists && userAnsweredCorrectly) // only use old streak if user answered correctly
+//             flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
+//     });
+
+//     if (userAnsweredCorrectly)
+//         flashcardData.streak++;  // Answered correctly, increment streak.
+
+//     // Update flashcardData result on Firebase
+//     await firebase.firestore()
+//         .collection(Constant.collectionName.USERS)
+//         .doc(uid)
+//         .collection(Constant.collectionName.DECK_DATA)
+//         .doc(deckDocID)
+//         .collection(Constant.collectionName.FLASHCARDS_DATA)
+//         .doc(flashcardDocID)
+//         .set(flashcardData.serialize());
+
+//     console.log("flashcardDataStreak", flashcardData.streak);
+//     return flashcardData
+// }
+// //===========================================================================//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 //============================================================================//
 // Update Flashcard Data
 // 
 // 1. Check if data exists
 //   [Data Exists] Grab the data
 //   [Data doesn't exist]  
+//
+// This new update flashcard date will check if there exists a flashcard date
+//  set for today. If there does not exist one, then we will create one for today.
+//  If there is one for today, will we that as the data set that we pull/update
+//  from.
 //============================================================================//
 export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAnsweredCorrectly) {
+    // -- ENSURING WE HAVE A DATA SET FOR TODAY TO UPDATE TO -- 
+    let todaysFlashcardDataExists = false;
+    let todaysDate = Utilites.getCurrentDate();
+    // Check if the flashcard_data for today exists.
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .limit(1)
+        .get()
+        .then(collection => {
+            todaysFlashcardDataExists = collection.docs.length > 0;
+        });
+
+    // Today's flashcard data does NOT exist. Copy last used collection 
+    console.log("Today's flashcard data exist?", todaysFlashcardDataExists)
+    if (!todaysFlashcardDataExists) {
+        await copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate);
+    }
+
+    // Update lastAccessed for deck data document
+    const deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            lastAccessed: todaysDate
+        });
+
+
     // Making the reference to the flashcard data
     const flashcardDataExistsRef = firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .doc(flashcardDocID);
 
     // FlashcardData Model
@@ -141,13 +238,67 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .doc(flashcardDocID)
         .set(flashcardData.serialize());
 
     console.log("flashcardDataStreak", flashcardData.streak);
     return flashcardData
 }
+
+
+
+// Helper function for updateFlashcardData
+async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) {
+    console.log("Starting new date copy for flaschard");
+
+    // Grab deck data document to get the last accessed date
+    const deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+    
+        let lastAccessed = deckDataRef.data().lastAccessed;
+        console.log("last studied: ", lastAccessed);
+    
+    const cachedFlashcardData = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(lastAccessed + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .get();
+
+    // iterate through the lastAccessed flashcard data and add each flashcard data
+    //  document to todays flaschard data
+    cachedFlashcardData.forEach( async doc => {
+        console.log("Flashcard received! ", doc.id);
+        await firebase.firestore()
+            .collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .collection(Constant.collectionName.DECK_DATA)
+            .doc(deckDocID)
+            .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+            .doc(doc.id)
+            .set(doc.data())
+    });
+
+    // add cached date to array list for the deck data
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            cachedDates: firebase.firestore.FieldValue.arrayUnion(todaysDate)
+        });
+}
+
+
+
+
 //===========================================================================//
 
 //============================================================================//
@@ -165,7 +316,8 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
         .doc(deckDocID);
 
     // Using the deck data exists reference to check if it exists
-    deckDataExistsRef.get().then((doc) => {
+    await deckDataExistsRef.get().then((doc) => {
+        console.log("doc exists?", doc.exists);
         deckDataExists = doc.exists;
     });
 
@@ -173,12 +325,67 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
         return;
 
     //Deck doesn't exist, create a deck data document
-    firebase.firestore()
+    await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .set({});
+        .set({
+            lastAccessed: Utilites.getCurrentDate(),
+            dateCreated: Utilites.getCurrentDate(),
+            cachedDates: [],
+        });
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns true if a date's flashcard data cache exists, and false otherwise.
+//============================================================================//
+export async function getDeckDataCachedFlashcardDataDates(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    return deckDataRef.data().cachedDates;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the number of flaschard within a streak group for a given flashcard
+//  data cache
+//============================================================================//
+export async function getStreakGroupCountForFlashcardDataCache(uid, deckDocID, date, streak) {
+    let flashcardDataCacheRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(date + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .where('streak', '==', streak)
+        .get()
+    
+    return flashcardDataCacheRef.docs.length;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the number of flaschard within a streak group for a given flashcard
+//  data cache
+//============================================================================//
+export async function getStreakGroupCountAndAboveForFlashcardDataCache(uid, deckDocID, date, streak) {
+    let flashcardDataCacheRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(date + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .where('streak', '>=', streak)
+        .get();
+    
+    return flashcardDataCacheRef.docs.length;
 }
 //===========================================================================//
 
@@ -193,7 +400,7 @@ export async function getFlashcardsDataFromDeck(uid, deckDocID) {
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .collection(Utilites.getCurrentDate() + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .get();
 
     flashcardsDataRef.forEach(doc => {
@@ -255,19 +462,20 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .collection(Utilites.getCurrentDate() + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .where("streak", "==", targetedStreakGroup)
-        .orderBy("lastAccessed", "asc")
-        .limit(1)
         .get();
 
     let flashcardsReceived = 0;
+    let lastLowest = Number.MAX_SAFE_INTEGER;
     nextFlashcard.forEach((doc) => {
         streakGroupHasFlashcards = doc.exists;
         flashcardsReceived++;
 
-        if (streakGroupHasFlashcards)
+        if (streakGroupHasFlashcards && doc.data().lastAccessed < lastLowest) {
             nextFlashcardDocID = doc.id;
+            lastLowest = doc.data().lastAccessed;
+        }
     });
 
     if (flashcardsReceived == 0) {
@@ -292,7 +500,7 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
             .doc(uid)
             .collection(Constant.collectionName.DECK_DATA)
             .doc(deckDocID)
-            .collection(Constant.collectionName.FLASHCARDS_DATA)
+            .collection(Utilites.getCurrentDate() + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
             .orderBy("lastAccessed", "asc")
             .limit(1)
             .get();
@@ -442,6 +650,28 @@ export async function getUserDeckById(uid, deckDocID) {
     const deckModel = new Deck(deckRef.data());
     deckModel.set_docID(deckDocID);
     return deckModel;
+}
+
+//============================================================================//
+// This function will pull the data for a single deck by its dock id
+//  Note: this does not grab the cached flashcard data, only the deck data info
+//  (i.e. last accessed and date created)
+//============================================================================//
+export async function getUserDataDeckById(uid, deckDocID) {
+    const deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    if (!deckDataRef.exists) {
+        if (Constant.DEV)
+            console.log("! Deck Data reference does not exist");
+        return null;
+    }
+
+    return deckDataRef.data();
 }
 
 //============================================================================//
