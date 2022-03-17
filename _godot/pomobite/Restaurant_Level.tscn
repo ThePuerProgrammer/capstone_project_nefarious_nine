@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=2]
+[gd_scene load_steps=89 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -18,7 +18,8 @@
 [ext_resource path="res://pomobite/ChefBPath.gd" type="Script" id=16]
 [ext_resource path="res://assets/art/AnimationFrames/PomoBITE_Frames/Chef_NPC_B.tres" type="SpriteFrames" id=17]
 [ext_resource path="res://pomobite/Chef_NPC.gd" type="Script" id=18]
-[ext_resource path="res://pomobite/Host_NPC.tscn" type="PackedScene" id=19]
+[ext_resource path="res://icon.png" type="Texture" id=19]
+[ext_resource path="res://pomobite/Host_NPC.gd" type="Script" id=20]
 
 [sub_resource type="DynamicFont" id=39]
 size = 10
@@ -1218,6 +1219,46 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 960, 684, 0, 0, 0, 0, 1408, 684, 0, 0, 0, 0, 1408, 592, 0, 0, 0, 0, 1664, 592, 0, 0, 0, 0, 1868, 592, 0, 0, 0, 0, 1868, 619 )
 }
 
+[sub_resource type="Curve2D" id=68]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 992, 782, 0, 0, 0, 0, 1120, 782, 0, 0, 0, 0, 1120, 684 )
+}
+
+[sub_resource type="Curve2D" id=69]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 764, 0, 0, 0, 0, 1088, 764, 0, 0, 0, 0, 1088, 684 )
+}
+
+[sub_resource type="Curve2D" id=70]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 928, 785, 0, 0, 0, 0, 1056, 785, 0, 0, 0, 0, 1056, 684 )
+}
+
+[sub_resource type="Curve2D" id=71]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 944, 817, 0, 0, 0, 0, 1024, 817, 0, 0, 0, 0, 1024, 684 )
+}
+
+[sub_resource type="Curve2D" id=72]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 928, 785, 0, 0, 0, 0, 800, 785, 0, 0, 0, 0, 800, 684 )
+}
+
+[sub_resource type="Curve2D" id=73]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 764, 0, 0, 0, 0, 832, 764, 0, 0, 0, 0, 832, 684 )
+}
+
+[sub_resource type="Curve2D" id=74]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 944, 817, 0, 0, 0, 0, 864, 817, 0, 0, 0, 0, 864, 684 )
+}
+
+[sub_resource type="Curve2D" id=75]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 992, 782, 0, 0, 0, 0, 896, 782, 0, 0, 0, 0, 896, 684 )
+}
+
 [sub_resource type="RectangleShape2D" id=42]
 extents = Vector2( 48, 77 )
 
@@ -1235,6 +1276,14 @@ extents = Vector2( 106, 21 )
 
 [sub_resource type="RectangleShape2D" id=47]
 extents = Vector2( 10, 62 )
+
+[sub_resource type="SpriteFrames" id=76]
+animations = [ {
+"frames": [ ExtResource( 19 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [sub_resource type="Shader" id=52]
 code = "/*
@@ -1996,61 +2045,167 @@ loop = false
 curve = SubResource( 56 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable1"]
+position = Vector2( 960, 684 )
+rotation = 3.14159
+rotate = false
+loop = false
 
 [node name="HostToTable2" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 57 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable2"]
+position = Vector2( 960, 684 )
+rotation = 3.14159
+rotate = false
+loop = false
 
 [node name="HostToTable3" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 58 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable3"]
+position = Vector2( 960, 684 )
+rotation = 3.14159
+rotate = false
+loop = false
 
 [node name="HostToTable4" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 59 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable4"]
+position = Vector2( 960, 684 )
+rotation = 3.14159
+rotate = false
+loop = false
 
 [node name="HostToTable5" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 60 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable5"]
+position = Vector2( 960, 684 )
+rotation = 3.14159
+rotate = false
+loop = false
 
 [node name="HostToTable6" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 61 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable6"]
+position = Vector2( 960, 684 )
+rotation = 3.14159
+rotate = false
+loop = false
 
 [node name="HostToTable7" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 62 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable7"]
+position = Vector2( 960, 684 )
+rotate = false
+loop = false
 
 [node name="HostToTable8" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 63 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable8"]
+position = Vector2( 960, 684 )
+rotate = false
+loop = false
 
 [node name="HostToTable9" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 64 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable9"]
+position = Vector2( 960, 684 )
+rotate = false
+loop = false
 
 [node name="HostToTable10" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 65 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable10"]
+position = Vector2( 960, 684 )
+rotate = false
+loop = false
 
 [node name="HostToTable11" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 66 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable11"]
+position = Vector2( 960, 684 )
+rotate = false
+loop = false
 
 [node name="HostToTable12" type="Path2D" parent="Paths/HostPaths"]
 curve = SubResource( 67 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/HostPaths/HostToTable12"]
+position = Vector2( 960, 684 )
+rotate = false
+loop = false
+
+[node name="FollowHostPaths" type="Node2D" parent="Paths"]
+
+[node name="RightPaths" type="Node2D" parent="Paths/FollowHostPaths"]
+
+[node name="RightPathA" type="Path2D" parent="Paths/FollowHostPaths/RightPaths"]
+curve = SubResource( 68 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/FollowHostPaths/RightPaths/RightPathA"]
+position = Vector2( 992, 782 )
+rotate = false
+loop = false
+
+[node name="RightPathB" type="Path2D" parent="Paths/FollowHostPaths/RightPaths"]
+curve = SubResource( 69 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/FollowHostPaths/RightPaths/RightPathB"]
+rotate = false
+loop = false
+
+[node name="RightPathC" type="Path2D" parent="Paths/FollowHostPaths/RightPaths"]
+curve = SubResource( 70 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/FollowHostPaths/RightPaths/RightPathC"]
+rotate = false
+loop = false
+
+[node name="RightPathD" type="Path2D" parent="Paths/FollowHostPaths/RightPaths"]
+curve = SubResource( 71 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/FollowHostPaths/RightPaths/RightPathD"]
+rotate = false
+loop = false
+
+[node name="LeftPaths" type="Node2D" parent="Paths/FollowHostPaths"]
+
+[node name="LeftPathA" type="Path2D" parent="Paths/FollowHostPaths/LeftPaths"]
+curve = SubResource( 72 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/FollowHostPaths/LeftPaths/LeftPathA"]
+rotate = false
+loop = false
+
+[node name="LeftPathB" type="Path2D" parent="Paths/FollowHostPaths/LeftPaths"]
+curve = SubResource( 73 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/FollowHostPaths/LeftPaths/LeftPathB"]
+rotate = false
+loop = false
+
+[node name="LeftPathC" type="Path2D" parent="Paths/FollowHostPaths/LeftPaths"]
+curve = SubResource( 74 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/FollowHostPaths/LeftPaths/LeftPathC"]
+position = Vector2( 944, 817 )
+rotate = false
+loop = false
+
+[node name="LeftPathD" type="Path2D" parent="Paths/FollowHostPaths/LeftPaths"]
+curve = SubResource( 75 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/FollowHostPaths/LeftPaths/LeftPathD"]
+rotate = false
+loop = false
 
 [node name="Area2Ds" type="Node2D" parent="."]
 
@@ -2276,8 +2431,12 @@ __meta__ = {
 position = Vector2( 0, 52 )
 shape = SubResource( 47 )
 
-[node name="Host_NPC" parent="." instance=ExtResource( 19 )]
+[node name="Host_NPC" type="Node2D" parent="."]
 position = Vector2( 960, 652 )
+script = ExtResource( 20 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Host_NPC"]
+frames = SubResource( 76 )
 
 [node name="CustomerWalkInTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -2313,6 +2472,7 @@ __meta__ = {
 wait_time = 0.05
 
 [connection signal="ready_to_be_seated" from="." to="." method="_on_Restaurant_Level_ready_to_be_seated"]
+[connection signal="seat_guests" from="." to="." method="_on_Restaurant_Level_seat_guests"]
 [connection signal="area_entered" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_entered"]
 [connection signal="area_exited" from="LevelSprites/POS1/Area2D" to="." method="_on_POS_right_area_exited"]
 [connection signal="area_entered" from="LevelSprites/POS2/Area2D" to="." method="_on_POS_left_area_entered"]

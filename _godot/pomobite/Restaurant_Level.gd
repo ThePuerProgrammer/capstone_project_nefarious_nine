@@ -1,6 +1,7 @@
 extends Node2D
 
 signal ready_to_be_seated(patrons)
+signal seat_guests()
 
 onready var pos_wall 					= $POSWall
 onready var pos_zoom 					= $POSZoom
@@ -8,6 +9,8 @@ onready var pos_screen 					= $POSZoom/POSScreen
 onready var customer_paths 				= $Paths/CustomerPaths
 onready var customer_walkin_timer		= $CustomerWalkInTimer
 onready var conversation_dialogue		= $ConversationDialogue
+onready var right_paths					= $Paths/FollowHostPaths/RightPaths
+onready var left_paths					= $Paths/FollowHostPaths/LeftPaths
 onready var opening_restaurant			= true
 onready var walk_in						= false
 onready var pos_right_usable 			= false
@@ -16,15 +19,23 @@ onready var soda_machine_area_entered 	= false
 onready var expo_area_entered 			= false
 onready var trash_area_entered 			= false
 onready var dish_area_entered 			= false
+onready var host_to_table				= false
+onready var host_back_to_host_stand		= false
+onready var left_player_section			= false
+onready var customer_to_host_path		= false
+onready var customer_path_h_offset		= 200
 
 var pos_table_menu 		= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
 var pos_default_screen 	= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
 var customer_npc		= preload("res://pomobite/Customer_NPC.tscn")
+var host_npc			= preload("res://pomobite/Host_NPC.tscn")
 var selected_table 		= 1
 var show_hint 			= true
 var ticks				
 var conversation_index
 var convo_type
+var controlled_player
+var host_path
 
 const greeting_string : String = "Hi!\nWelcome to PomoBITE!\nI'll take you to\nyour table!"
 
@@ -33,6 +44,10 @@ var tables = {
 		false, false, false, false, false, false,
 		false, false, false, false, false, false
 	],
+	tables_sat = [
+		false, false, false, false, false, false,
+		false, false, false, false, false, false
+	]
 }
 
 onready var table_buttons = [
@@ -51,6 +66,8 @@ onready var table_buttons = [
 ]
 
 func _ready():
+	controlled_player = 1 # This will need to be adjusted for multiplayer
+	# But I'm trying to prepare for that in the code as is
 	ticks = OS.get_system_time_msecs()
 	$POSZoom/POSScreen/BackButton.disabled = true
 	pos_wall.visible = false
@@ -79,6 +96,57 @@ func _process(_delta):
 			if msec - ticks >= 1000:
 				emit_signal("ready_to_be_seated", patrons)
 			ticks = msec
+	
+	if host_to_table:
+		var host_path_substr = host_path.substr(0, host_path.length() - 13)
+		for path in get_node(host_path_substr).get_children():
+			if path.unit_offset < 1.0:
+				path.offset += 0.5
+			else:
+				emit_signal("seat_guests")
+				host_to_table = false
+		
+		if customer_to_host_path:
+			if left_player_section:
+				for path in left_paths.get_children():
+					if path.get_child(0).unit_offset < 1.0:
+						path.get_child(0).offset += 0.3
+					else:
+						pass
+			else:
+				var all_added = true
+				var reset_path = []
+				for path in right_paths.get_children():
+					if path.get_child(0).unit_offset < 1.0:
+						path.get_child(0).offset += 0.3
+						all_added = false
+					elif get_node(host_path_substr).get_children().size() < 5:
+						var follower = PathFollow2D.new()
+						follower.loop = false
+						follower.rotate = false
+						follower.offset = customer_path_h_offset
+						customer_path_h_offset -= 50
+						var customer = customer_npc.instance()
+						follower.add_child(customer)
+						get_node(host_path_substr).add_child(follower)
+						reset_path.append(path.get_child(0))
+					else:
+						customer_path_h_offset = 200
+						
+				for path in reset_path:
+					path.offset = 0.0
+					path.unit_offset = 0.0
+					var f = path.get_child(0)
+					if f:
+						f.queue_free()
+
+				if all_added:
+					customer_to_host_path = false
+			
+	if host_back_to_host_stand:
+		if get_node(host_path).unit_offset > 0.0:
+			get_node(host_path).offset -= 1.0
+	
 	
 
 func _on_player_1_interact():
@@ -470,11 +538,10 @@ func hide_dish_popup():
 func _on_CustomerWalkInTimer_timeout():
 	if opening_restaurant:
 		opening_restaurant = false
-		customer_walkin_timer.wait_time = 30
+		customer_walkin_timer.wait_time = 60
 	
 	var paths = customer_paths.get_children()
 	for path in paths:
-		print(path)
 		var instance = customer_npc.instance()
 		path.get_child(0).add_child(instance)
 	
@@ -487,7 +554,6 @@ func _on_Restaurant_Level_ready_to_be_seated(patrons):
 	conversation_index = 0
 	convo_type = 0
 	$ConversationDialogue/DialogueTimer.start()
-	print(patrons)
 
 
 func _on_DialogueTimer_timeout():
@@ -499,4 +565,39 @@ func _on_DialogueTimer_timeout():
 			conversation_index = 0
 			$ConversationDialogue/DialogueTimer.stop()
 			yield(get_tree().create_timer(1.0), "timeout")
+			label.text = ""
 			conversation_dialogue.hide()
+			var from
+			var to
+			if left_player_section:
+				from = 0
+				to = 6
+			else:
+				from = 6
+				to = 12
+			for i in range(from, to):
+				if !tables["tables_sat"][i]:
+					tables["tables_sat"][i] = true
+					host_path = "Paths/HostPaths/HostToTable" + String(i + 1) + "/PathFollow2D"
+					var host_instance = host_npc.instance()
+					get_node(host_path).add_child(host_instance)
+					get_node(host_path).v_offset -= 28
+					$Host_NPC.visible = false
+					host_to_table = true
+					if left_player_section:
+						for path in left_paths.get_children():
+							var customer = customer_npc.instance()
+							path.get_child(0).add_child(customer)
+					else:
+						for path in right_paths.get_children():
+							var customer = customer_npc.instance()
+							path.get_child(0).add_child(customer)
+					for customer in customer_paths.get_children():
+						customer.get_child(0).offset = 0.0
+					
+					customer_to_host_path = true
+					break
+
+
+func _on_Restaurant_Level_seat_guests():
+	print("seating guests")
