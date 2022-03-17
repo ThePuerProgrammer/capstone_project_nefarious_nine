@@ -38,6 +38,8 @@ export const collectionName = {
 export const storageFolderName = {
     FLASHCARD_IMAGES: 'flashcard_images/',
     HELPTICKET_IMAGES: 'helpticket_images/',
+    POMOPETS: 'pomopets/',
+    PROFILE_PICTURES: 'profile_pictures/',
 }
 
 /*****************************************
@@ -76,5 +78,8 @@ export const htmlIDs = {
     loadingIcon: 'loading-icon',
     analyticsChart: 'analytics-chart',
     analyticsChartContainer: 'analytics-chart-container',
-    analyticsPageContainer: 'analytics-page-container'
+    analyticsPageContainer: 'analytics-page-container',
+    editProfile: 'button-edit-profile-modal',
+    editProfileModal: 'edit-profile-modal',
+
 }

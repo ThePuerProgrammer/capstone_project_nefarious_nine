@@ -1715,3 +1715,42 @@ export async function getUser(uid) {
     return user;
 }
 //============================================================================//
+
+//============================================================================//
+//UPDATE USER PROFILE
+//============================================================================//
+export async function updateUserProfile(uid, username, userBio, profilePhotoName, profilePhotoURL) {
+    if((profilePhotoURL != null) && (profilePhotoName != null)){
+        await firebase.firestore().collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({'username': username, 'userBio': userBio, 'profilePhotoName':profilePhotoName, 'profilePhotoURL':profilePhotoURL});
+    } else {
+        await firebase.firestore().collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .update({'username': username, 'userBio': userBio});
+    }
+}
+
+// UPLOAD PROFILE PICTURE
+export async function uploadProfilePicture(profilePicturerFile, profilePictureName) {
+    //image doesn't have a name
+    if (!profilePictureName) {
+        profilePictureName = Date.now() + profilePicturerFile.name + 'pfp';
+    }
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.PROFILE_PICTURES + profilePictureName);
+    const taskSnapShot = await ref.put(profilePicturerFile);
+    const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
+    return { profilePictureName, profilePictureURL};
+}
+//============================================================================//
+// UPDATE POMOPET
+//============================================================================//
+export async function updatePomopet(uid, pomopet) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({'pomopet': pomopet});
+}
+//============================================================================//
+
