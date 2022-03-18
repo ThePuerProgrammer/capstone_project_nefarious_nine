@@ -99,65 +99,6 @@ export async function uploadImageToFlashcardAnswer(answerImageFile, answerImageN
 }
 //==========================================================================//
 
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                   !! OLD UPDATE FLASHCARD DATA FUNCTION !!
-//             Keeping around temporarily in case the new one breaks
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// //============================================================================//
-// // Update Flashcard Data
-// // 
-// // 1. Check if data exists
-// //   [Data Exists] Grab the data
-// //   [Data doesn't exist]  
-// //============================================================================//
-// export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAnsweredCorrectly) {
-//     // Making the reference to the flashcard data
-//     const flashcardDataExistsRef = firebase.firestore()
-//         .collection(Constant.collectionName.USERS)
-//         .doc(uid)
-//         .collection(Constant.collectionName.DECK_DATA)
-//         .doc(deckDocID)
-//         .collection(Constant.collectionName.FLASHCARDS_DATA)
-//         .doc(flashcardDocID);
-
-//     // FlashcardData Model
-//     //  If flashcard does't not exist, this model will be used to create 
-//     //  flashcard data as-is.
-//     //  If flashcard does exist, streak will be updated.
-//     //  If user answered incorrectly, this streak will be used
-//     let flashcardData = new FlashcardData({
-//         streak: 0,
-//         lastAccessed: Date.now()
-//     });
-
-//     // Using the flashcard data reference to check if it exists
-//     await flashcardDataExistsRef.get().then((doc) => {
-//         if (doc.exists && userAnsweredCorrectly) // only use old streak if user answered correctly
-//             flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
-//     });
-
-//     if (userAnsweredCorrectly)
-//         flashcardData.streak++;  // Answered correctly, increment streak.
-
-//     // Update flashcardData result on Firebase
-//     await firebase.firestore()
-//         .collection(Constant.collectionName.USERS)
-//         .doc(uid)
-//         .collection(Constant.collectionName.DECK_DATA)
-//         .doc(deckDocID)
-//         .collection(Constant.collectionName.FLASHCARDS_DATA)
-//         .doc(flashcardDocID)
-//         .set(flashcardData.serialize());
-
-//     console.log("flashcardDataStreak", flashcardData.streak);
-//     return flashcardData
-// }
-// //===========================================================================//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 //============================================================================//
 // Update Flashcard Data
 // 
@@ -193,14 +134,14 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
         await copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate);
     }
 
-    // Update lastAccessed for deck data document
+    // Update lastSRSAccess for deck data document
     const deckDataRef = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .update({
-            lastAccessed: todaysDate
+            lastSRSAccess: todaysDate
         });
 
 
@@ -243,7 +184,7 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
         .set(flashcardData.serialize());
 
     console.log("flashcardDataStreak", flashcardData.streak);
-    return flashcardData
+    return flashcardData;
 }
 
 
@@ -259,19 +200,19 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .get();
-
-    let lastAccessed = deckDataRef.data().lastAccessed;
-    console.log("last studied: ", lastAccessed);
-
+    
+    let lastSRSAccess = deckDataRef.data().lastSRSAccess;
+    console.log("last studied: ", lastSRSAccess);
+    
     const cachedFlashcardData = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .collection(lastAccessed + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .collection(lastSRSAccess + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .get();
 
-    // iterate through the lastAccessed flashcard data and add each flashcard data
+    // iterate through the lastSRSAccess flashcard data and add each flashcard data
     //  document to todays flaschard data
     cachedFlashcardData.forEach(async doc => {
         console.log("Flashcard received! ", doc.id);
@@ -375,15 +316,18 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .set({
-            lastAccessed: Utilites.getCurrentDate(),
+            lastSRSAccess: Utilites.getCurrentDate(),
             dateCreated: Utilites.getCurrentDate(),
+            lastStudied: Utilites.getCurrentDate(),
             cachedDates: [],
+            timeStudiedByDay: {
+            },
         });
 }
 //===========================================================================//
 
 //============================================================================//
-// Returns true if a date's flashcard data cache exists, and false otherwise.
+// Returns the cached dates of the dates studied with Smart Study on.
 //============================================================================//
 export async function getDeckDataCachedFlashcardDataDates(uid, deckDocID) {
     let deckDataRef = await firebase.firestore()
@@ -394,6 +338,23 @@ export async function getDeckDataCachedFlashcardDataDates(uid, deckDocID) {
         .get();
 
     return deckDataRef.data().cachedDates;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the Map (JS object) that contains the amount of time spent studying
+//  a deck on a specific day. As of 03/18/2022, it only tracks time studying a
+//  deck on the study_page
+//============================================================================//
+export async function getDeckDataTimeStudiedByDay(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    return deckDataRef.data().timeStudiedByDay;
 }
 //===========================================================================//
 
@@ -414,6 +375,38 @@ export async function getStreakGroupCountForFlashcardDataCache(uid, deckDocID, d
     return flashcardDataCacheRef.docs.length;
 }
 //===========================================================================//
+
+//============================================================================//
+// Returns the number of flaschard within a streak group for a given flashcard
+//  data cache
+//============================================================================//
+export async function getDeckData(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+    
+    return deckDataRef.data();
+}
+//===========================================================================//
+
+//============================================================================//
+// Updates the lastStudied field for a given deck data
+//============================================================================//
+export async function updateDeckDataLastStudied(uid, deckDocID) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            lastStudied: Utilites.getCurrentDate(),
+        });
+}
+//===========================================================================//
+
 
 //============================================================================//
 // Returns the number of flaschard within a streak group for a given flashcard
@@ -1980,3 +1973,46 @@ export async function updatePomopet(uid, pomopet) {
 }
 //============================================================================//
 
+
+
+//============================================================================//
+// LOG TIME SPENT STUDYING.
+//  Use in any instance when the user nagivagtes away from the study_page.
+//  It grabs the time saved in the local storage "studyStartTime", gets the 
+//  difference, and uploads it to the respective decks data document. It saves
+//  it to that days cached time spent studying.
+//============================================================================//
+export async function logTimeSpentStudying(uid, deckDocID) {
+    localStorage.setItem("studyTimeTracked", "true");
+    console.log('logging time spent');
+
+    let deckData = await getDeckData(uid, deckDocID);
+    let timeStudiedByDayMap = deckData.timeStudiedByDay; // getting this so we can get total time spent studying today
+
+    let timeSpentStudyingNow = new Date().getTime() - localStorage.getItem("studyStartTime"); // (Current time - time started studying) = total time spent studying this session
+    let timeSpentStudyingEarlierToday = timeStudiedByDayMap[Utilites.getCurrentDate()]; // total time spent studying today on this deck
+    if (timeSpentStudyingEarlierToday == undefined)
+        timeSpentStudyingEarlierToday = 0; // If it is the first time studying this deck today
+    let timeSpentStudyingTotalTodayMs = timeSpentStudyingNow + timeSpentStudyingEarlierToday;
+
+    console.log(timeSpentStudyingTotalTodayMs);
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log("This session: [ms] ", timeSpentStudyingNow);
+    console.log("This session: [s] ", (timeSpentStudyingNow / 1000));
+    console.log("Last session: [ms] ", timeSpentStudyingEarlierToday);
+    console.log("Last session: [s] ", (timeSpentStudyingEarlierToday / 1000));
+    console.log("Total: [ms] ", timeSpentStudyingTotalTodayMs);
+    console.log("Total: [s] ", (timeSpentStudyingTotalTodayMs / 1000));
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    timeStudiedByDayMap[Utilites.getCurrentDate()] = timeSpentStudyingTotalTodayMs; // update today's total study time in the map
+
+    await firebase.firestore() // update today's total study time in cloud firestore
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            timeStudiedByDay: timeStudiedByDayMap
+        });
+}
+//============================================================================//
