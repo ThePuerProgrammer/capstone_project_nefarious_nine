@@ -283,7 +283,7 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
 //===========================================================================//
 
 //============================================================================//
-// Returns true if a date's flashcard data cache exists, and false otherwise.
+// Returns the cached dates of the dates studied with Smart Study on.
 //============================================================================//
 export async function getDeckDataCachedFlashcardDataDates(uid, deckDocID) {
     let deckDataRef = await firebase.firestore()
@@ -294,6 +294,23 @@ export async function getDeckDataCachedFlashcardDataDates(uid, deckDocID) {
         .get();
 
     return deckDataRef.data().cachedDates;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the Map (JS object) that contains the amount of time spent studying
+//  a deck on a specific day. As of 03/18/2022, it only tracks time studying a
+//  deck on the study_page
+//============================================================================//
+export async function getDeckDataTimeStudiedByDay(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    return deckDataRef.data().timeStudiedByDay;
 }
 //===========================================================================//
 
