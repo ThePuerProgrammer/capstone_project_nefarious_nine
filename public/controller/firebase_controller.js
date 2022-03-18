@@ -259,10 +259,10 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .get();
-    
-        let lastAccessed = deckDataRef.data().lastAccessed;
-        console.log("last studied: ", lastAccessed);
-    
+
+    let lastAccessed = deckDataRef.data().lastAccessed;
+    console.log("last studied: ", lastAccessed);
+
     const cachedFlashcardData = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
@@ -273,7 +273,7 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
 
     // iterate through the lastAccessed flashcard data and add each flashcard data
     //  document to todays flaschard data
-    cachedFlashcardData.forEach( async doc => {
+    cachedFlashcardData.forEach(async doc => {
         console.log("Flashcard received! ", doc.id);
         await firebase.firestore()
             .collection(Constant.collectionName.USERS)
@@ -299,6 +299,50 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
 
 
 
+//same as above but for classrooms
+
+export async function updateClassFlashcardData(classDocID, deckDocID, flashcardDocID, userAnsweredCorrectly) {
+    // Making the reference to the flashcard data
+    const flashcardDataExistsRef = firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID);
+
+    // FlashcardData Model
+    //  If flashcard does't not exist, this model will be used to create 
+    //  flashcard data as-is.
+    //  If flashcard does exist, streak will be updated.
+    //  If user answered incorrectly, this streak will be used
+    let flashcardData = new FlashcardData({
+        streak: 0,
+        lastAccessed: Date.now()
+    });
+
+    // Using the flashcard data reference to check if it exists
+    await flashcardDataExistsRef.get().then((doc) => {
+        if (doc.exists && userAnsweredCorrectly) // only use old streak if user answered correctly
+            flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
+    });
+
+    if (userAnsweredCorrectly)
+        flashcardData.streak++;  // Answered correctly, increment streak.
+
+    // Update flashcardData result on Firebase
+    await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID)
+        .set(flashcardData.serialize());
+
+    console.log("flashcardDataStreak", flashcardData.streak);
+    return flashcardData
+}
 //===========================================================================//
 
 //============================================================================//
@@ -366,7 +410,7 @@ export async function getStreakGroupCountForFlashcardDataCache(uid, deckDocID, d
         .collection(date + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .where('streak', '==', streak)
         .get()
-    
+
     return flashcardDataCacheRef.docs.length;
 }
 //===========================================================================//
@@ -384,9 +428,38 @@ export async function getStreakGroupCountAndAboveForFlashcardDataCache(uid, deck
         .collection(date + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .where('streak', '>=', streak)
         .get();
-    
+
     return flashcardDataCacheRef.docs.length;
 }
+
+
+export async function createClassDeckDataIfNeeded(classDocID, deckDocID) {
+    let deckDataExists = false;
+
+    // Making the reference to the deck data
+    const deckDataExistsRef = firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID);
+
+    // Using the deck data exists reference to check if it exists
+    deckDataExistsRef.get().then((doc) => {
+        deckDataExists = doc.exists;
+    });
+
+    if (deckDataExists) // Deck exists, no need to create a deck data document
+        return;
+
+    //Deck doesn't exist, create a deck data document
+    firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .set({});
+}
+
 //===========================================================================//
 
 //============================================================================//
@@ -411,6 +484,27 @@ export async function getFlashcardsDataFromDeck(uid, deckDocID) {
 
     return flashcardsDataList;
 }
+
+export async function getClassFlashcardsDataFromDeck(classDocID, deckDocID) {
+    let flashcardsDataList = [];
+
+    const flashcardsDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .get();
+
+    flashcardsDataRef.forEach(doc => {
+        const flashcardData = new FlashcardData(doc.data());
+        flashcardData.set_docID(doc.id);
+        flashcardsDataList.push(flashcardData);
+    })
+
+    return flashcardsDataList;
+}
+
 //===========================================================================//
 
 //============================================================================//
@@ -547,7 +641,138 @@ async function getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentl
     return null;
 }
 //===========================================================================//
+//same as above for classrooms
+//===========================================================================//
 
+export async function getNextClassSmartStudyFlashcard(classDocID, deckDocID, flashcardsCurrentlyStudying) {
+
+    let targetedStreakGroup = 0;
+    let randomNumber = Math.random();
+
+    // console.log("Random Number Chosen: ", randomNumber);
+
+    if (randomNumber >= 0.46875) { // Streak 0 OR New Card
+        randomNumber = Math.random();
+
+        if (randomNumber >= 0.75) { // New card Odds
+            // Getting new card...
+            let newFlashcard = await getClassFlashcardNotInFlashcardData(classDocID, deckDocID, flashcardsCurrentlyStudying);
+
+            if (newFlashcard == null) {
+                targetedStreakGroup = 0; // There are no new flashcards, so default to showing streak 0
+            }
+            else {
+                return newFlashcard; // There was a new flashcard!
+            }
+        }
+        else { // Streak 0 Odds 
+            targetedStreakGroup = 0
+        }
+    }
+    else if (randomNumber >= 0.21875) { // Streak 1 Odds
+        targetedStreakGroup = 1
+    }
+    else if (randomNumber >= 0.09375) { // Streak 2 Odds
+        targetedStreakGroup = 2
+    }
+    else if (randomNumber >= 0.06125) { // Streak 3 Odds
+        targetedStreakGroup = 3
+    }
+    else if (randomNumber >= 0) { // Streak 2 Odds
+        targetedStreakGroup = 4
+    }
+
+    let streakGroupHasFlashcards = true;
+    // Grabs oldest interacted with flashcard from the targeted streak group
+    let nextFlashcardDocID;
+    let nextFlashcard = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .where("streak", "==", targetedStreakGroup)
+        .orderBy("lastAccessed", "asc")
+        .limit(1)
+        .get();
+
+    let flashcardsReceived = 0;
+    nextFlashcard.forEach((doc) => {
+        streakGroupHasFlashcards = doc.exists;
+        flashcardsReceived++;
+
+        if (streakGroupHasFlashcards)
+            nextFlashcardDocID = doc.id;
+    });
+
+    if (flashcardsReceived == 0) {
+        streakGroupHasFlashcards = false
+    }
+
+    // Since it is possible for user to have no cards in a streak group, take precautions to 
+    //  always get a flashcard
+    if (!streakGroupHasFlashcards) { // if streak group contained no flashcard data
+
+
+        // First, try and get new flashcard
+        let newFlashcard = await getClassFlashcardNotInFlashcardData(classDocID, deckDocID, flashcardsCurrentlyStudying);
+
+        if (newFlashcard != null) { // newFlashcard == null means there are no new flashcards
+            return newFlashcard; // Returning the new flashcard
+        }
+
+        // No new flashcards exists. Pulling the oldest lastAccessed flashcard from all Streak Categories
+        nextFlashcard = await firebase.firestore()
+            .collection(Constant.collectionName.CLASSROOMS)
+            .doc(classDocID)
+            .collection(Constant.collectionName.DECK_DATA)
+            .doc(deckDocID)
+            .collection(Constant.collectionName.FLASHCARDS_DATA)
+            .orderBy("lastAccessed", "asc")
+            .limit(1)
+            .get();
+
+        nextFlashcard.forEach((doc) => {
+            if (doc.exists)
+                nextFlashcardDocID = doc.id;
+        });
+    }
+
+
+    let nextFlashcardModel;
+    for (let i = 0; i < flashcardsCurrentlyStudying.length; i++) {
+        if (flashcardsCurrentlyStudying[i].docID == nextFlashcardDocID) {
+            nextFlashcardModel = flashcardsCurrentlyStudying[i];
+            break;
+        }
+    }
+
+    return nextFlashcardModel;
+}
+
+// Helper function for getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurrentlyStudying)
+//  Returns new if there are no new flashcards
+async function getClassFlashcardNotInFlashcardData(classDocID, deckDocID, flashcardsCurrentlyStudying) {
+    let flashcardsDataList = await getClassFlashcardsDataFromDeck(classDocID, deckDocID);
+
+    // Find first occurence of a flashcard that isn't in our flashcards data list
+    for (let i = 0; i < flashcardsCurrentlyStudying.length; i++) {
+
+        let flashcardInDataList = false;
+        for (let j = 0; j < flashcardsDataList.length; j++) {
+            if (flashcardsDataList[j].docID == flashcardsCurrentlyStudying[i].docID) {
+                flashcardInDataList = true;
+                break;
+            }
+        }
+
+        if (!flashcardInDataList) {
+            return flashcardsCurrentlyStudying[i];
+        }
+    }
+
+    return null;
+}
 
 
 
@@ -726,6 +951,7 @@ export async function favoriteDeck(uid, deckDocID, favorited) {
         .doc(uid).collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .update({ 'isFavorited': favorited });
 }
+
 
 //============================================================================//
 // Favorite a class deck
@@ -1490,15 +1716,15 @@ export async function leaderboardByFlashcards(members) {
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .where('email', 'in', members)
-        .orderBy('flashcardNumber','desc')
+        .orderBy('flashcardNumber', 'desc')
         .get()
 
-        ref.forEach(doc => {
-            let cm = new User(doc.data());
-            cm.set_docID(doc.id);
-            classroomLeadersByFlashcards.push(cm);
-        })
-        return classroomLeadersByFlashcards;
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByFlashcards.push(cm);
+    })
+    return classroomLeadersByFlashcards;
 }
 
 //============================================================================//
@@ -1565,29 +1791,29 @@ export async function updateFlashcardCount(currentUser, deckId) {
 }
 //For USER
 export async function updateFlashcardCountForUser(currentUser) {
-    let deckList=[];
-    let flashcardCount=0;
+    let deckList = [];
+    let flashcardCount = 0;
     //This grabs all the decks owned by a user, so we can get a count on them
     const countDeck = await firebase.firestore()
         .collection(Constant.collectionName.USERS).doc(currentUser)
         .collection(Constant.collectionName.OWNED_DECKS)
         .get()
     //This collects all decks into an array so I may count up the the flashcards
-        countDeck.forEach(doc => {
-            let deck = new Deck(doc.data());
-            deck.set_docID(doc.id);
-            deckList.push(deck);
-        });
-    for(let i=0; i<deckList.length;i++){
-        flashcardCount+=deckList[i].flashcardNumber;
+    countDeck.forEach(doc => {
+        let deck = new Deck(doc.data());
+        deck.set_docID(doc.id);
+        deckList.push(deck);
+    });
+    for (let i = 0; i < deckList.length; i++) {
+        flashcardCount += deckList[i].flashcardNumber;
     }
     //This updates the flashcard number by counting the previous get() reference
     await firebase.firestore()
-    .collection(Constant.collectionName.USERS).doc(currentUser)
-    .update({ 'flashcardNumber': flashcardCount });
-    
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .update({ 'flashcardNumber': flashcardCount });
+
     return flashcardCount;
-    
+
 }
 
 export async function updateClassFlashcardCount(classroomId, deckId) {
@@ -1720,14 +1946,14 @@ export async function getUser(uid) {
 //UPDATE USER PROFILE
 //============================================================================//
 export async function updateUserProfile(uid, username, userBio, profilePhotoName, profilePhotoURL) {
-    if((profilePhotoURL != null) && (profilePhotoName != null)){
+    if ((profilePhotoURL != null) && (profilePhotoName != null)) {
         await firebase.firestore().collection(Constant.collectionName.USERS)
-        .doc(uid)
-        .update({'username': username, 'userBio': userBio, 'profilePhotoName':profilePhotoName, 'profilePhotoURL':profilePhotoURL});
+            .doc(uid)
+            .update({ 'username': username, 'userBio': userBio, 'profilePhotoName': profilePhotoName, 'profilePhotoURL': profilePhotoURL });
     } else {
         await firebase.firestore().collection(Constant.collectionName.USERS)
             .doc(uid)
-            .update({'username': username, 'userBio': userBio});
+            .update({ 'username': username, 'userBio': userBio });
     }
 }
 
@@ -1741,7 +1967,7 @@ export async function uploadProfilePicture(profilePicturerFile, profilePictureNa
         .child(Constant.storageFolderName.PROFILE_PICTURES + profilePictureName);
     const taskSnapShot = await ref.put(profilePicturerFile);
     const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
-    return { profilePictureName, profilePictureURL};
+    return { profilePictureName, profilePictureURL };
 }
 //============================================================================//
 // UPDATE POMOPET
@@ -1750,7 +1976,7 @@ export async function updatePomopet(uid, pomopet) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({'pomopet': pomopet});
+        .update({ 'pomopet': pomopet });
 }
 //============================================================================//
 
