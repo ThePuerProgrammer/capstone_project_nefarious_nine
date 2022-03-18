@@ -118,7 +118,7 @@ async function getNewData() {
     }
     
     let startDate = new Date(deckData.dateCreated);
-    let endDate = new Date(deckData.lastAccessed);
+    let endDate = new Date(deckData.lastSRSAccess);
     let differenceInTime = endDate.getTime() - startDate.getTime();
     let differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
