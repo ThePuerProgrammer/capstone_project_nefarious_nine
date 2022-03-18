@@ -2,13 +2,13 @@ extends Node2D
 
 signal ready_to_be_seated(patrons)
 signal seat_guests()
+signal return_to_host_stand()
 
 onready var pos_wall 					= $POSWall
 onready var pos_zoom 					= $POSZoom
 onready var pos_screen 					= $POSZoom/POSScreen
 onready var customer_paths 				= $Paths/CustomerPaths
 onready var customer_walkin_timer		= $CustomerWalkInTimer
-onready var conversation_dialogue		= $ConversationDialogue
 onready var right_paths					= $Paths/FollowHostPaths/RightPaths
 onready var left_paths					= $Paths/FollowHostPaths/LeftPaths
 onready var opening_restaurant			= true
@@ -29,15 +29,18 @@ var pos_table_menu 		= preload("res://assets/textures/PomoBITE_Textures/Table_Me
 var pos_default_screen 	= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
 var customer_npc		= preload("res://pomobite/Customer_NPC.tscn")
 var host_npc			= preload("res://pomobite/Host_NPC.tscn")
+var convo_dialogue		= preload("res://pomobite/ConversationDialogue.tscn")
 var selected_table 		= 1
 var show_hint 			= true
 var ticks				
 var conversation_index
-var convo_type
 var controlled_player
 var host_path
+var offset_queue
+var current_focused_table
+var dialogue_queue
 
-const greeting_string : String = "Hi!\nWelcome to PomoBITE!\nI'll take you to\nyour table!"
+var convo_string
 
 var tables = {
 	tables_entered = [
@@ -47,8 +50,46 @@ var tables = {
 	tables_sat = [
 		false, false, false, false, false, false,
 		false, false, false, false, false, false
-	]
+	],
+	seat_positions = {
+		table1 = [],
+		table2 = [],
+		table3 = [],
+		table4 = [],
+		table5 = [],
+		table6 = [],
+		table7 = [Vector2(1484, 248), Vector2(1484, 312), Vector2(1620, 248), Vector2(1620, 312)],
+		table8 = [Vector2(1708, 248), Vector2(1708, 312), Vector2(1848, 248), Vector2(1848, 312)],
+		table9 = [Vector2(1484, 440), Vector2(1484, 504), Vector2(1620, 440), Vector2(1620, 504)],
+		table10 = [],
+		table11 = [],
+		table12 = [],
+	},
+	guests = {
+		table1 = [], table2 = [], table3 = [], table4 = [], table5 = [], table6 = [],
+		table7 = [], table8 = [], table9 = [], table10 = [], table11 = [], table12 = [],
+	},
+	drink_order_taken = [
+		false, false, false, false, false, false,
+		false, false, false, false, false, false
+	],
+	food_order_taken = [
+		false, false, false, false, false, false,
+		false, false, false, false, false, false
+	],
+	orders = {
+		table1 = [], table2 = [], table3 = [], table4 = [], table5 = [], table6 = [],
+		table7 = [], table8 = [], table9 = [], table10 = [], table11 = [], table12 = [],
+	},
+	check_delivered = [
+		false, false, false, false, false, false,
+		false, false, false, false, false, false
+	],
 }
+
+var drink_orders = ["water", "tea", "bepis", "spripe", "dr popper"]
+
+var food_orders = ["number 1", "number 2", "number 3"]
 
 onready var table_buttons = [
 	$POSZoom/POSScreen/Table1Button,
@@ -98,55 +139,70 @@ func _process(_delta):
 			ticks = msec
 	
 	if host_to_table:
-		var host_path_substr = host_path.substr(0, host_path.length() - 13)
-		for path in get_node(host_path_substr).get_children():
+		for path in get_node(host_path).get_children():
 			if path.unit_offset < 1.0:
-				path.offset += 0.5
+				path.offset += 1.0
 			else:
-				emit_signal("seat_guests")
+				var msec = OS.get_system_time_msecs()
+				if msec - ticks >= 1000:
+					emit_signal("seat_guests")
 				host_to_table = false
 		
 		if customer_to_host_path:
 			if left_player_section:
 				for path in left_paths.get_children():
 					if path.get_child(0).unit_offset < 1.0:
-						path.get_child(0).offset += 0.3
+						path.get_child(0).offset += 0.8
 					else:
 						pass
 			else:
 				var all_added = true
 				var reset_path = []
 				for path in right_paths.get_children():
+					if path.get_children().size() == 0:
+						continue
+					
 					if path.get_child(0).unit_offset < 1.0:
-						path.get_child(0).offset += 0.3
+						path.get_child(0).offset += 0.8
 						all_added = false
-					elif get_node(host_path_substr).get_children().size() < 5:
-						var follower = PathFollow2D.new()
-						follower.loop = false
-						follower.rotate = false
-						follower.offset = customer_path_h_offset
-						customer_path_h_offset -= 50
-						var customer = customer_npc.instance()
-						follower.add_child(customer)
-						get_node(host_path_substr).add_child(follower)
-						reset_path.append(path.get_child(0))
-					else:
-						customer_path_h_offset = 200
-						
-				for path in reset_path:
-					path.offset = 0.0
-					path.unit_offset = 0.0
-					var f = path.get_child(0)
-					if f:
-						f.queue_free()
+					
+					if path.get_child(0).unit_offset == 1.0:
+						path.get_child(0).queue_free()
+						var pf2d = PathFollow2D.new()
+						pf2d.rotate = false
+						pf2d.loop = false
+						pf2d.v_offset -= 28
+						pf2d.offset = offset_queue[0]
+						offset_queue.pop_front()
+						pf2d.add_child(customer_npc.instance())
+						get_node(host_path).add_child(pf2d)
 
 				if all_added:
+					print("all deleted")
 					customer_to_host_path = false
 			
 	if host_back_to_host_stand:
-		if get_node(host_path).unit_offset > 0.0:
-			get_node(host_path).offset -= 1.0
-	
+		if get_node(host_path).get_child(0).unit_offset > 0.0:
+			get_node(host_path).get_child(0).offset -= 1.0
+		
+		if get_node(host_path).get_child(0).unit_offset <= 0.0:
+			host_back_to_host_stand = false
+			if current_focused_table > 6:
+				convo_string = "Hey Right, you've\nbeen sat at " + String(current_focused_table)
+			else:
+				convo_string = "Hey Left, you've\nbeen sat at " + String(current_focused_table)
+			var conversation_dialogue = convo_dialogue.instance()
+			$Dialogues.add_child(conversation_dialogue)	
+			if dialogue_queue == null:
+				dialogue_queue = []
+			dialogue_queue.append([conversation_dialogue, 2])
+			conversation_dialogue.rect_position = get_node(host_path).get_child(0).position
+			conversation_dialogue.show()
+			conversation_index = 0
+			conversation_dialogue.get_child(2).connect("timeout", self, "_on_DialogueTimer_timeout")
+			conversation_dialogue.get_child(2).start()
+			get_node(host_path).get_child(0).queue_free()
+			$Host_NPC.visible = true
 	
 
 func _on_player_1_interact():
@@ -538,7 +594,7 @@ func hide_dish_popup():
 func _on_CustomerWalkInTimer_timeout():
 	if opening_restaurant:
 		opening_restaurant = false
-		customer_walkin_timer.wait_time = 60
+		customer_walkin_timer.wait_time = 45
 	
 	var paths = customer_paths.get_children()
 	for path in paths:
@@ -549,24 +605,34 @@ func _on_CustomerWalkInTimer_timeout():
 
 
 func _on_Restaurant_Level_ready_to_be_seated(patrons):
+	convo_string = "Hi!\nWelcome to PomoBITE!\nI'll take you to\nyour table!"
+	var conversation_dialogue = convo_dialogue.instance()
+	if dialogue_queue == null:
+		dialogue_queue = []
+	dialogue_queue.append([conversation_dialogue, 0])
+	$Dialogues.add_child(conversation_dialogue)
 	conversation_dialogue.rect_position = $Host_NPC.position
 	conversation_dialogue.show()
 	conversation_index = 0
-	convo_type = 0
-	$ConversationDialogue/DialogueTimer.start()
+	conversation_dialogue.get_child(2).start()
+	conversation_dialogue.get_child(2).connect("timeout", self, "_on_DialogueTimer_timeout")
 
 
 func _on_DialogueTimer_timeout():
+	var conversation_dialogue = dialogue_queue[0][0]
+	var convo_type = dialogue_queue[0][1]
 	var label = conversation_dialogue.get_child(1)
 	if convo_type == 0:
-		label.text += greeting_string[conversation_index]
+		label.text += convo_string[conversation_index]
 		conversation_index += 1
-		if conversation_index == greeting_string.length():
+		if conversation_index == convo_string.length():
+			dialogue_queue.pop_front()
 			conversation_index = 0
-			$ConversationDialogue/DialogueTimer.stop()
+			conversation_dialogue.get_child(2).stop()
 			yield(get_tree().create_timer(1.0), "timeout")
 			label.text = ""
 			conversation_dialogue.hide()
+			$Dialogues.remove_child(conversation_dialogue)
 			var from
 			var to
 			if left_player_section:
@@ -578,10 +644,15 @@ func _on_DialogueTimer_timeout():
 			for i in range(from, to):
 				if !tables["tables_sat"][i]:
 					tables["tables_sat"][i] = true
-					host_path = "Paths/HostPaths/HostToTable" + String(i + 1) + "/PathFollow2D"
+					host_path = "Paths/HostPaths/HostToTable" + String(i + 1)
+					current_focused_table = i + 1
+					var pf2d = PathFollow2D.new()
+					pf2d.loop = false
+					pf2d.rotate = false
+					pf2d.v_offset -= 28
 					var host_instance = host_npc.instance()
-					get_node(host_path).add_child(host_instance)
-					get_node(host_path).v_offset -= 28
+					pf2d.add_child(host_instance)
+					get_node(host_path).add_child(pf2d)
 					$Host_NPC.visible = false
 					host_to_table = true
 					if left_player_section:
@@ -589,15 +660,56 @@ func _on_DialogueTimer_timeout():
 							var customer = customer_npc.instance()
 							path.get_child(0).add_child(customer)
 					else:
+						offset_queue = [120, 20, 180, 80]
 						for path in right_paths.get_children():
-							var customer = customer_npc.instance()
-							path.get_child(0).add_child(customer)
+							var follower = PathFollow2D.new()
+							follower.rotate = false
+							follower.loop = false
+							follower.add_child(customer_npc.instance())
+							path.add_child(follower)
 					for customer in customer_paths.get_children():
 						customer.get_child(0).offset = 0.0
 					
 					customer_to_host_path = true
 					break
-
+					
+	else:
+		label.text += convo_string[conversation_index]
+		conversation_index += 1
+		if conversation_index == convo_string.length():
+			dialogue_queue.pop_front()
+			conversation_index = 0
+			conversation_dialogue.get_child(2).stop()
+			yield(get_tree().create_timer(1.0), "timeout")
+			label.text = ""
+			conversation_dialogue.hide()
+			$Dialogues.remove_child(conversation_dialogue)
+			if convo_type == 1:
+				emit_signal("return_to_host_stand")
+			
 
 func _on_Restaurant_Level_seat_guests():
-	print("seating guests")
+	var hp = get_node(host_path).get_children()
+	for i in range(1, hp.size()):
+		hp[i].get_child(0).queue_free()
+	for i in range(0, 4):
+		var customer = customer_npc.instance()
+		var table = "table" + String(current_focused_table)
+		customer.position = tables["seat_positions"][table][i]
+		$Customers.add_child(customer)
+		
+	convo_string = "Your server will be\nright with you.\nEnjoy your meal!"
+	var conversation_dialogue = convo_dialogue.instance()
+	$Dialogues.add_child(conversation_dialogue)	
+	if dialogue_queue == null:
+		dialogue_queue = []
+	dialogue_queue.append([conversation_dialogue, 1])
+	conversation_dialogue.rect_position = get_node(host_path).get_child(0).position
+	conversation_dialogue.show()
+	conversation_index = 0
+	conversation_dialogue.get_child(2).start()
+	conversation_dialogue.get_child(2).connect("timeout", self, "_on_DialogueTimer_timeout")
+
+
+func _on_Restaurant_Level_return_to_host_stand():
+	host_back_to_host_stand = true
