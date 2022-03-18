@@ -20,9 +20,11 @@ var chartOptions = {
 
 var analyticsPageContainer;
 
-let notEnoughSRSData = false;
+let notEnoughData = false;
 
 var currentSelectedDeckID;
+var currentSelectedDeckName;
+var currentSelectedAnalyticsType;
 
 var dataArray = [];
 
@@ -37,12 +39,13 @@ export async function analytics_page() {
                 <div class="row">
                     <div class="col-6">
                         <h3>Selected Deck</h3>
-                        <select id="${Constant.htmlIDs.analyticsSelectDeck}" name="selectedDeck" class="form-select"></select>
+                        <select id="${Constant.htmlIDs.analyticsSelectDeck}" class="form-select"></select>
                     </div>
                     <div class="col-6">
                         <h3>Analytics</h3>
                         <select id="${Constant.htmlIDs.analyticsSelectStatistics}" name="selectedStatistics" class="form-select">
                             <option value="flashcard-mastery">Flashcard Mastery</option>
+                            <option value="time-spent-studying">Time Spent Studying</option>
                         </select>
                     </div>
                 </div>
@@ -53,38 +56,54 @@ export async function analytics_page() {
 
         addSpinner();
 
-        var analyticsSelectDeck = document.getElementById(
+        let analyticsSelectDeck = document.getElementById(
             Constant.htmlIDs.analyticsSelectDeck
+        );
+        let analyticsSelectStatistics = document.getElementById(
+            Constant.htmlIDs.analyticsSelectStatistics
         );
 
         // add all of the user's deck to the deck selector
         userDecks.forEach(deck => 
             analyticsSelectDeck.innerHTML += `
-                <option value="${deck.docId}">${deck.name}</option>
+                <option value="${deck.docId}" name="${deck.name}">${deck.name}</option>
             `
         );
         
-        // For redrawing graph on deck selection change
+        // For refetching data & redrawing graph on deck selection change
         analyticsSelectDeck.addEventListener('change', async e => {
+            // Get docID of selected deck
             currentSelectedDeckID = e.target.value;
+            // get name of selected deck
+            currentSelectedDeckName = e.target.options[e.target.selectedIndex].getAttribute("name");
             removeChart();
             addSpinner();
             let graphSuccessfullyCreated = await getNewData();
             if (graphSuccessfullyCreated)
-                drawAreaGraph();
+                drawAreaChart();
+        });
+
+        // For refetching data & redrawing graph on analytics change
+        analyticsSelectStatistics.addEventListener('change', async e => {
+            currentSelectedAnalyticsType = e.target.value;
+            console.log(currentSelectedAnalyticsType);
+            removeChart();
+            addSpinner();
+            let graphSuccessfullyCreated = await getNewData();
+            console.log("graph successfully created? ", graphSuccessfullyCreated);
+            if (graphSuccessfullyCreated)
+                drawAreaChart();
         });
         
         currentSelectedDeckID = userDecks[0].docId;
+        currentSelectedAnalyticsType = "flashcard-mastery";
 
         await getNewData();
 
         google.charts.load('current', { 
             callback: function () {
-                if (notEnoughSRSData)
-                    return;
-                
-                drawAreaGraph();
-                $(window).resize(drawAreaGraph);
+                $(window).resize(drawAreaChart);
+                drawAreaChart();
             },
             packages: ['corechart'] 
         });
@@ -101,6 +120,23 @@ export async function analytics_page() {
 }
 
 async function getNewData() {
+    if (currentSelectedAnalyticsType == "flashcard-mastery") {
+        chartOptions.title = `Flaschard Mastery for deck \"${currentSelectedDeckName}\"`;
+        chartOptions.hAxis = { title: 'Date' };
+        chartOptions.vAxis = { title: '# of flashcard in the respective streak group', minValue: 0 };
+        chartOptions.vAxis.format = "#";
+        return await getFlashcardMasteryData();
+    }
+    else if (currentSelectedAnalyticsType == "time-spent-studying") {
+        chartOptions.title = `Time Spent Studying for deck \"${currentSelectedDeckName}\"`;
+        chartOptions.hAxis = { title: 'Date' };
+        chartOptions.vAxis = { title: 'Time Spent Studying Deck (Minutes)', minValue: 0 };
+        // chartOptions.vAxis.format = "#";
+        return await getTimeSpentStudyingData();
+    }
+}
+
+async function getFlashcardMasteryData() {
     selectorsEnabled(true);
 
     dataArray = [ // date vs streak count
@@ -154,23 +190,62 @@ async function getNewData() {
 
     removeSpinner();
 
-    // TODO: if (userHasNoDeckData)
-    //          add message instead
-    //       else
-    //          add chart
     addChart();
     selectorsEnabled(false);
 
     return true;
 }
 
-async function drawAreaGraph() {
-    chartOptions.title = 'Flaschard Mastery';
-    chartOptions.hAxis = { title: 'Date' };
-    chartOptions.vAxis = { title: '# of flashcard in the respective streak group', minValue: 0 };
-    chartOptions.vAxis.format = "#";
-    let data = google.visualization.arrayToDataTable(dataArray);
+async function getTimeSpentStudyingData() {
+    selectorsEnabled(true);
 
+    dataArray = [ // date vs streak count
+        ['Date', 'Time (Minutes)']
+    ];
+
+    let deckData = await FirebaseController.getUserDataDeckById(Auth.currentUser.uid, currentSelectedDeckID);
+    let timeStudiedByDayMap = await FirebaseController.getDeckDataTimeStudiedByDay(Auth.currentUser.uid, currentSelectedDeckID);
+    
+    // If there are less than 2 unique dates where the user studied this deck, then there is not enough data to display, so quit early
+    if (Object.keys(timeStudiedByDayMap).length < 2) {
+        removeSpinner();
+        addMessageInsteadOfChart("This deck does not have contain enough Time-Studied data to view Time Spent Studying analytics. Try studying this deck in \"Regular\" or \"Smart Study\" at least 2 days and return here to see your progress!");
+        selectorsEnabled(false);
+        return false;
+    }
+    
+    let startDate = new Date(deckData.dateCreated);
+    let lastStudied = new Date(deckData.lastStudied);
+    let differenceInTime = lastStudied.getTime() - startDate.getTime();
+    let differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+
+    let displayDate = new Date(deckData.dateCreated);
+    for (let i = 0; i < differenceInDays + 1; i++) {
+        let formattedDisplayDate = Utilities.getFormattedDate(displayDate);
+        let timeStudiedDataPoint = 0;
+        
+        if (formattedDisplayDate in timeStudiedByDayMap) {
+            timeStudiedDataPoint = timeStudiedByDayMap[formattedDisplayDate] / 1000 / 60;
+        }
+
+        dataArray.push( [formattedDisplayDate, timeStudiedDataPoint] );
+
+        // increments to next day by one
+        displayDate.setDate(displayDate.getDate() + 1);
+    }
+
+    removeSpinner();
+    addChart();
+    selectorsEnabled(false);
+
+    return true;
+}
+
+async function drawAreaChart() {
+    if (notEnoughData)
+        return;
+
+    let data = google.visualization.arrayToDataTable(dataArray);
 
     // Instantiate and draw the chart.
     let chart = new google.visualization.AreaChart(document.getElementById(Constant.htmlIDs.analyticsChart));
@@ -199,7 +274,7 @@ function addChart() {
 }
 
 function addMessageInsteadOfChart(message) {
-    notEnoughSRSData = true;
+    notEnoughData = true;
     
     Elements.root.insertAdjacentHTML('beforeend', `
         <div id="${Constant.htmlIDs.analyticsChartContainer}">
@@ -216,7 +291,7 @@ function addMessageInsteadOfChart(message) {
 }
 
 function removeChart() {
-    notEnoughSRSData = false;
+    notEnoughData = false;
     let analyticsChartContainer = document.getElementById(Constant.htmlIDs.analyticsChartContainer);
     analyticsChartContainer.parentElement.removeChild(analyticsChartContainer);
 }
