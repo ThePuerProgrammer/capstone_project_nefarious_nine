@@ -182,12 +182,12 @@ export async function buildStudyDecksPage(deckList) {
     html += `<div id="deck-container">`
     for (let i = 0; i < deckList.length; i++) {
 
-        if(deckList[i].isClassDeck=="false" || deckList[i].isClassDeck==false){
+        if (deckList[i].isClassDeck == "false" || deckList[i].isClassDeck == false) {
             let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
             html += buildDeckView(deckList[i], flashcards, 'false');
         } else {
             let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
-            let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck) 
+            let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
 
             html += buildDeckView(deckList[i], flashcards, clase);
         }
@@ -238,7 +238,7 @@ export async function buildStudyDecksPage(deckList) {
                 let classDocID = e.target.classdocId.value
                 await EditDeck.edit_class_deck(classDocID, e.target.docId.value);
             }
-            setTimeout(await study_decks_page(),2000);
+            setTimeout(await study_decks_page(), 2000);
             // await study_decks_page();
         });
     }
@@ -258,20 +258,46 @@ export async function buildStudyDecksPage(deckList) {
                     await EditDeck.delete_deck(deckId, confirmation);
                 } else {
                     confirmation = true;
-                    await EditDeck.delete_class_deck(deckId, confirmation, classDocID);
+                    await EditDeck.delete_class_deck(deckId, confirmation, classDocID, firebase.auth().currentUser.uid);
                 }
             });
             Utilities.enableButton(button, label);
         });
     }
-    const favoritedCheckboxes = document.getElementsByClassName("favorite-checkbox");
+    const favoritedCheckboxes = document.getElementsByClassName("form-favorite-deck");
     for (let i = 0; i < favoritedCheckboxes.length; ++i) {
-        favoritedCheckboxes[i].addEventListener('change', async e => {
-            const docId = e.target.value;
-            console.log(docId);
+        favoritedCheckboxes[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            const docId = e.target.deckDocId.value;
+            const isClassDeck = e.target.isClassDeck.value;
+
             const favorited = deckList.find(deck => docId == deck.docId).isFavorited ? false : true;
-            await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
-            await study_decks_page();
+            if (isClassDeck == "false" || isClassDeck == false) {
+                await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
+                await study_decks_page();
+            } else {
+                await FirebaseController.favoriteClassDeck(isClassDeck, docId, favorited);
+                await study_decks_page();
+            }
+
+        });
+    }
+
+    const unfavoritedCheckboxes = document.getElementsByClassName("form-unfavorite-deck");
+    for (let i = 0; i < unfavoritedCheckboxes.length; ++i) {
+        unfavoritedCheckboxes[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            const docId = e.target.deckDocId.value;
+            const isClassDeck = e.target.isClassDeck.value;
+
+            const favorited = deckList.find(deck => docId == deck.docId).isFavorited ? false : true;
+            if (isClassDeck == "false" || isClassDeck == false) {
+                await FirebaseController.favoriteDeck(Auth.currentUser.uid, docId, favorited);
+                await study_decks_page();
+            } else {
+                await FirebaseController.favoriteClassDeck(isClassDeck, docId, favorited);
+                await study_decks_page();
+            }
         });
     }
 
@@ -415,7 +441,7 @@ export async function buildStudyDecksPage(deckList) {
 
 } //buildStudyDecksPage(deckList)
 
-export function buildDeckView(deck, flashcards,clase) {
+export function buildDeckView(deck, flashcards, clase) {
     window.sessionStorage;
     let html = `
     <div id="${deck.docId}" class="deck-card">
@@ -426,9 +452,9 @@ export function buildDeckView(deck, flashcards,clase) {
             <h6 class="card-text">Category: ${deck.category}</h6>
             <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
             <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>`
-            html+= (deck.isClassDeck !="false" && deck.isClassDeck !=false) ? 
-            `<p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">school</i>${clase.name}</p></div>`:`<p></p></div>`;
-        html+=`
+    html += (deck.isClassDeck != "false" && deck.isClassDeck != false) ?
+        `<p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">school</i>${clase.name}</p></div>` : `<p></p></div>`;
+    html += `
         <div class="btn-group">
         <form class="form-view-deck" method="post">
             <input type="hidden" name="docId" value="${deck.docId}">
@@ -447,22 +473,24 @@ export function buildDeckView(deck, flashcards,clase) {
         </form>
         </div>`;
 
-    // ternary operator to check if a deck is favorited or not
-    html += deck.isFavorited ? `<div class="form-check">
-    <span class="favorite-deck">
-    <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
-    </span>
-
-    <label class= "form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite</i>Favorite deck</label>
+    // ternary operator to check if a deck is favorited or not // my changes messed up horizontal view, idk why tho --blake
+    html += deck.isFavorited ? ` 
+    <form class="form-favorite-deck" method="post">
+    <input type="hidden" name="isClassDeck" value="${deck.isClassDeck}">
+    <input type="hidden" name="deckDocId" value="${deck.docId}">
+    <button id="fav-btn" class="btn btn-link-secondary pomo-text-color-light" type="submit" style="border:none;box-shadow:none;" for="favorited"><i class="material-icons">favorite</i></button>
+    </form>
     </div>
     </div>
     </div>
-    ` : `<div class="form-check">
-    <span class="unfavorite-deck">
-    <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
-    </span>
-    <label class="form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite_border</i>Favorite deck</label>
-    </div></div></div>`;
+    ` : `
+    <form class="form-unfavorite-deck" method="post">
+    <input type="hidden" name="isClassDeck" value="${deck.isClassDeck}">
+    <input type="hidden" name="deckDocId" value="${deck.docId}">
+    <button id="unfav-btn" class="btn btn-link-secondary pomo-text-color-light" type="submit" style="border:none;box-shadow:none;" for="favorited"><i class="material-icons">favorite_border</i></button>
+    </form>
+    </div></div></div>
+    `;
 
 
 
