@@ -638,6 +638,8 @@ iframe {
     vertical-align:middle;
     padding-right: 5px;
 }
+
+
 /*==========================================================================*/
 
 /*LEADERBOARD SELECTION*/
@@ -675,5 +677,25 @@ iframe {
     text-align: center;
 }
 
+.equipped-pomopet {
+    padding: 10px 30px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.pomopet-bar {
+    border: none;
+    height: 5px !important;
+    width: 100%;
+    background-color:#2C1320;
+    color: #2C1320;
+}
+
+.pfp {
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+  }
 
 /*==========================================================================*/

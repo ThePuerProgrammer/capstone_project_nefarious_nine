@@ -44,7 +44,7 @@ export function addEventListeners() {
         //d.flashcardNumber = await FirebaseController.updateFlashcardCount(Auth.currentUser.uid, d.docID);
 
         //Firestore
-        if (d.isClassDeck == "false" || d.isClassDeck ==false) { //if user deck
+        if (d.isClassDeck == "false" || d.isClassDeck == false) { //if user deck
             try {
                 //Updates count as Deck is edited
                 d.flashcardNumber = await FirebaseController.updateFlashcardCount(Auth.currentUser.uid, d.docID);
@@ -186,19 +186,20 @@ export async function delete_deck(docId, confirmation) {
     }
 }
 
-export async function delete_class_deck(docId, confirmation, classDocId) {
+export async function delete_class_deck(docId, confirmation, classDocId, uid) {
     if (confirmation) {
         try {
+            await FirebaseController.updateClassFlashcardCount(classDocId, docId);
             await FirebaseController.deleteClassDeck(classDocId, docId);
             Utilities.info(`Success`, `The desired deck as successfully deleted.`,);
-            await FirebaseController.updateClassFlashcardCount(classDocId, docId);
 
         } catch (e) {
             if (Constant.DEV) console.log(e);
             Utilities.info(`Delete Deck Error`, JSON.stringify(e));
         }
         //This is called twice before page load, due to it not registering the change
-        await FirebaseController.updateDeckCount(Auth.currentUser.uid);
+        await FirebaseController.updateDeckCount(uid);
+        //auth.currentuser.uid is not passing
         await study_decks_page();
     }
 }
