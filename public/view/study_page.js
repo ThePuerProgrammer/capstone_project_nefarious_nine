@@ -14,7 +14,7 @@ let coins = 0; // keep track of coins earned
 let user_answers = []; //array of user_history
 let skipFlashcardRefresh = false;
 
-export function addEventListeners() {}
+export function addEventListeners() { }
 
 
 // Only on entering study page 
@@ -39,8 +39,9 @@ export async function study_page() {
 
   Elements.root.innerHTML = "";
   let html = "";
-  
+  let isClassDeck = localStorage.getItem('isClassDeck');
   // get COINS from firebase
+
   try {
     coins = await FirebaseController.getCoins(Auth.currentUser.uid);
     start_coins = coins;
@@ -48,17 +49,27 @@ export async function study_page() {
     console.log(e);
   }
 
+  // get DECK info from firebase
   let deck;
-  try {
-    deck = await FirebaseController.getUserDeckById(
-      Auth.currentUser.uid,
-      deckDocId
-    );
-    if (!deck) {
-      html += "<h5>Deck not found!</h5>";
+  if (isClassDeck == "false") {
+    try {
+      deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDocId);
+      if (!deck) {
+        html += "<h5>Deck not found!</h5>";
+      }
+    } catch (e) {
+      console.log(e);
     }
-  } catch (e) {
-    console.log(e);
+  } else {
+    try {
+      deck = await FirebaseController.getClassDeckByDocID(isClassDeck, deckDocId);
+      if (!deck) {
+        html += "<h5>Deck not found!</h5>";
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
   }
 
   html += `<h1 style="align: center">${deck.name}</h1>`;
@@ -82,22 +93,35 @@ export async function study_page() {
       </div>
     </div>
   `;
-      
+
   let flashcard;
   let deckLength = 0;
   let flashcards;
   // get FLASHCARDS info from firebase
-  try {
-    flashcards = await FirebaseController.getFlashcards(
-      Auth.currentUser.uid,
-      deckDocId
-    );
-    if (flashcards.length == 0) {
-      html += "<h5>No flashcards found for this deck</h5>";
+  if (deck.isClassDeck == "false" || deck.isClassDeck == false) {
+    try {
+      flashcards = await FirebaseController.getFlashcards(
+        Auth.currentUser.uid,
+        deckDocId
+      );
+      if (flashcards.length == 0) {
+        html += "<h5>No flashcards found for this deck</h5>";
+      }
     }
-  } 
-  catch (e) {
-    console.log(e);
+    catch (e) {
+      console.log(e);
+    }
+  } else {
+    try {
+      flashcards = await FirebaseController.getClassroomFlashcards(isClassDeck, deckDocId);
+      if (flashcards.length == 0) {
+        html += "<h5>No flashcards found for this deck</h5>";
+      }
+    }
+    catch (e) {
+      console.log(e);
+    }
+
   }
 
   // set deck length and build individual flashcard view
@@ -105,7 +129,11 @@ export async function study_page() {
   flashcard = flashcards[count];
 
   if (smartStudyOn) {
-    flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards)
+    if (deck.isClassDeck == "false" || deck.isClassDeck == false) {
+      flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards);
+    } else {
+      flashcard = await FirebaseController.getNextClassSmartStudyFlashcard(deck.isClassDeck, deck.docID, flashcards)
+    }
   }
 
   html += buildStudyFlashcardView(flashcard);
@@ -145,16 +173,20 @@ export async function study_page() {
 
     smartStudyOn = smartStudyCheckbox.checked;
     if (smartStudyOn) {
-      smartStudyIndicator.classList.add("streak-incorrect"); 
+      smartStudyIndicator.classList.add("streak-incorrect");
       smartStudyIndicator.classList.remove("streak-correct");
       smartStudyIndicator.innerHTML = "Paused";
-      flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards);
+      if (deck.isClassDeck == "false" || deck.isClassDeck == false) {
+        flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards);
+      } else {
+        flashcard = await FirebaseController.getNextClassSmartStudyFlashcard(deck.isClassDeck, deck.docID, flashcards);
+      }
       formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
       smartStudyPopupTextContainer.style.opacity = '100';
     }
     else { // Smart Study Off
       smartStudyIndicator.classList.add("streak-correct");
-      smartStudyIndicator.classList.remove("streak-incorrect"); 
+      smartStudyIndicator.classList.remove("streak-incorrect");
       smartStudyIndicator.innerHTML = "Resumed";
       flashcard = flashcards[count]; // Go back to Normal Study
       formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
@@ -163,18 +195,18 @@ export async function study_page() {
   });
 
   smartStudyPopupTextContainer.addEventListener('transitionend', (e) => {
-      if (smartStudyPopupTextContainer.style.opacity == '0') {
-        if (skipFlashcardRefresh) {
-          skipFlashcardRefresh = false;
-          return;
-        }
+    if (smartStudyPopupTextContainer.style.opacity == '0') {
+      if (skipFlashcardRefresh) {
+        skipFlashcardRefresh = false;
+        return;
+      }
 
-        formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
-        studyFlashcardAnswer.value = "";
-      }
-      else {
-        smartStudyPopupTextContainer.style.opacity = '0';
-      }
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      studyFlashcardAnswer.value = "";
+    }
+    else {
+      smartStudyPopupTextContainer.style.opacity = '0';
+    }
   });
 
 
@@ -182,20 +214,31 @@ export async function study_page() {
   formAnswerFlashcard.addEventListener("submit", async (e) => {
     e.preventDefault();
     const answer = e.target.answer.value;
-
+    const isClassDeck = localStorage.getItem('isClassDeck');
     // === SMART STUDY ===
     if (smartStudyOn) {
       let userAnsweredCorrectly = checkAnswer(answer, flashcard);
       let updatedFlashcardData;
-      try {
+      if (isClassDeck == "false" || isClassDeck == false) {
+        try {
           updatedFlashcardData = await FirebaseController.updateFlashcardData(Auth.currentUser.uid, localStorage.getItem("deckPageDeckDocID"), flashcard.docID, userAnsweredCorrectly);
-      }
-      catch (e) {
-      if (Constant.DEV)
-          console.log("Error updating data for flashcard");
+        }
+        catch (e) {
+          if (Constant.DEV)
+            console.log("Error updating data for flashcard");
+        }
+      } else {
+        try {
+          updatedFlashcardData = await FirebaseController.updateClassFlashcardData(isClassDeck, localStorage.getItem("deckPageDeckDocID"), flashcard.docID, userAnsweredCorrectly);
+        }
+        catch (e) {
+          if (Constant.DEV)
+            console.log("Error updating data for flashcard");
+        }
+
       }
 
-      
+
       // updating popup contents to have streak notifcation
       smartStudyPopupTextContainer.innerHTML = `
         <div class="row">
@@ -207,22 +250,33 @@ export async function study_page() {
             </div>
         </div>
       `;
-  
+
       // Get needed elements for displaying Streak
       const smartStudyIndicator = document.getElementById(Constant.htmlIDs.smartStudyIndicator);
-      
+
       // Update
       smartStudyIndicator.classList.remove(userAnsweredCorrectly ? "streak-incorrect" : "streak-correct"); // remove old score styling
       smartStudyIndicator.classList.add(userAnsweredCorrectly ? "streak-correct" : "streak-incorrect"); // add new score styling
       smartStudyIndicator.innerHTML = updatedFlashcardData.streak;
 
       // Update next flashcard
-      try {
-        flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards)
-      }
-      catch (e) {
-        if (Constant.DEV)
-          console.log("Error getting next smart study flashcard");
+      if (isClassDeck == "false" || isClassDeck == false) {
+        try {
+          flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards);
+        }
+        catch (e) {
+          if (Constant.DEV)
+            console.log("Error getting next smart study flashcard");
+        }
+      } else {
+        try {
+          flashcard = await FirebaseController.getNextClassSmartStudyFlashcard(isClassDeck, deck.docID, flashcards);
+        }
+        catch (e) {
+          if (Constant.DEV)
+            console.log("Error getting next smart study flashcard");
+        }
+
       }
 
       // When transition ends, we set opacity to 0. When "set to 0" 
@@ -340,7 +394,7 @@ function buildOverviewView(deck, deckLength) {
   </ul>
   <br>
   <centered><h4>Score: ${score} / ${deckLength}</h4>
-  <h4>Coins Earned: ${coins-start_coins}</h4>
+  <h4>Coins Earned: ${coins - start_coins}</h4>
   <h4>Total Coins: ${coins}</h4></centered>
   <br>
   <form class="form-return-to-decks" method="post">
@@ -373,16 +427,16 @@ function buildOverviewView(deck, deckLength) {
     });
   }
   const deckPageReturnButton = document.getElementsByClassName('form-return-to-decks');
-  for(let i=0; i <deckPageReturnButton.length; i++){
-    deckPageReturnButton[i].addEventListener('submit', async e=>{
+  for (let i = 0; i < deckPageReturnButton.length; i++) {
+    deckPageReturnButton[i].addEventListener('submit', async e => {
       e.preventDefault();
       //let deckId = e.target.docId.value;
       let deckId = deck.docID;
-      try{
-      history.pushState(null,null, Routes.routePathname.DECK + '#' + deckId);
-      await DeckPage.deck_page(deckId);
-      } catch(e){
-        if(Constant.DEV) console.log(e);
+      try {
+        history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+        await DeckPage.deck_page(deckId);
+      } catch (e) {
+        if (Constant.DEV) console.log(e);
       }
     });
   }
@@ -401,7 +455,7 @@ function checkAnswer(answer, flashcard) {
     score++;
     coins += 3
     user_history.correct = true;
-  } 
+  }
   else {
     user_history.correct = false;
     user_history.flashcard = flashcard_answer;
