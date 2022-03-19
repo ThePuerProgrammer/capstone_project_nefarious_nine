@@ -1141,22 +1141,22 @@ extents = Vector2( 15, 17 )
 
 [sub_resource type="Curve2D" id=48]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 992, 1127, 0, 0, 0, 0, 992, 782 )
+"points": PoolVector2Array( 0, 0, 0, 0, 992, 1024, 0, 0, 0, 0, 992, 782 )
 }
 
 [sub_resource type="Curve2D" id=49]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 960, 1090, 0, 0, 0, 0, 960, 764 )
+"points": PoolVector2Array( 0, 0, 0, 0, 960, 1008, 0, 0, 0, 0, 960, 764 )
 }
 
 [sub_resource type="Curve2D" id=50]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 928, 1108, 0, 0, 0, 0, 928, 785 )
+"points": PoolVector2Array( 0, 0, 0, 0, 928, 1033, 0, 0, 0, 0, 928, 785 )
 }
 
 [sub_resource type="Curve2D" id=51]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 944, 1147, 0, 0, 0, 0, 944, 817 )
+"points": PoolVector2Array( 0, 0, 0, 0, 944, 1048, 0, 0, 0, 0, 944, 817 )
 }
 
 [sub_resource type="Curve2D" id=56]
