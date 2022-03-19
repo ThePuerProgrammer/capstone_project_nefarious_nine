@@ -7,6 +7,7 @@ import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Study from './study_page.js'
 import * as EditFlashCard from '../controller/edit_flashcard.js'
+import { saveStudyTime } from './study_page.js'
 
 //Declaration of Image
 let imageFile2UploadQuestion;
@@ -257,12 +258,19 @@ export function addEventListeners() {
 }
 
 export async function deck_page(deckDocID, isClassDeck) {
+
+    if (localStorage.getItem("studyTimeTracked") == "false") { // user backed out of study page, so save time
+        saveStudyTime();
+    }
+
     if (deckDocID == null) {
         deckDocID = sessionStorage.getItem('deckId');
     }
+    
     if (isClassDeck == null) {
         isClassDeck = sessionStorage.getItem('isClassDeck');
     }
+
     console.log(isClassDeck);
     console.log(`Where I commented out:${deckDocID}`);
     let html = '';

@@ -81,5 +81,5 @@ export const htmlIDs = {
     analyticsPageContainer: 'analytics-page-container',
     editProfile: 'button-edit-profile-modal',
     editProfileModal: 'edit-profile-modal',
-
+    studyPageReturnToDeckPageButton: 'study-page-return-to-deck-page-button',
 }

@@ -19,11 +19,26 @@ export function addEventListeners() { }
 
 // Only on entering study page 
 export async function study_page() {
+  // get DECK info from firebase
+  let deckDocId = localStorage.getItem("deckPageDeckDocID");
+
+  // update last time studied
+  try {
+    FirebaseController.updateDeckDataLastStudied(Auth.currentUser.uid, deckDocId);
+  }
+  catch (e) {
+    console.log("Error updating deck data lastStudied: ", e);
+  }
+
+  // save time spent studying
+  localStorage.setItem("studyStartTime", new Date().getTime());
+  localStorage.setItem("studyTimeTracked", "false");
+  assignPageLeaveListeners(); // for tracking how long a user spent studying a deck
+
   reset(); // start by resetting globals
 
   Elements.root.innerHTML = "";
   let html = "";
-  let deckDocId = localStorage.getItem("deckPageDeckDocID");
   let isClassDeck = localStorage.getItem('isClassDeck');
   // get COINS from firebase
 
@@ -35,7 +50,6 @@ export async function study_page() {
   }
 
   // get DECK info from firebase
-
   let deck;
   if (isClassDeck == "false") {
     try {
@@ -385,12 +399,16 @@ function buildOverviewView(deck, deckLength) {
   <br>
   <form class="form-return-to-decks" method="post">
     <input type="hidden" name="docId" value"${deck.docID}">
-    <button class="btn btn-outline-secondary pomo-bg-color-md-dark pomo-text-color-light" type="submit" style="padding:5px 10px; float: right;"> <i class="material-icons pomo-text-color-light">keyboard_return</i>Return</button>
+    <button id="${Constant.htmlIDs.studyPageReturnToDeckPageButton}" class="btn btn-outline-secondary pomo-bg-color-md-dark pomo-text-color-light" type="submit" style="padding:5px 10px; float: right;"> <i class="material-icons pomo-text-color-light">keyboard_return</i>Return</button>
   </form>
   </div>
   </div>`;
 
   Elements.root.innerHTML += html;
+
+  // For tracking time spent studying
+  const returnToDeckPageButton = document.getElementById(Constant.htmlIDs.studyPageReturnToDeckPageButton);
+  returnToDeckPageButton.addEventListener('click', saveStudyTime);
 
   const overrideCheckboxes =
     document.getElementsByClassName("form-check-input");
@@ -422,7 +440,6 @@ function buildOverviewView(deck, deckLength) {
       }
     });
   }
-
 }
 
 // checks whether answer entered by user matches correct answer
@@ -455,4 +472,29 @@ function reset() {
   count = 0; // reset count
   score = 0;
   coins = 0;
+}
+
+function assignPageLeaveListeners() {
+  Elements.menuHome.addEventListener('click', saveStudyTime);
+  Elements.menuClassrooms.addEventListener('click', saveStudyTime);
+  Elements.menuStudyDecks.addEventListener('click', saveStudyTime);
+  Elements.menuHelpTickets.addEventListener('click', saveStudyTime);
+  Elements.menuSettings.addEventListener('click', saveStudyTime);
+  Elements.menuProfile.addEventListener('click', saveStudyTime);
+  Elements.menuSignOut.addEventListener('click', saveStudyTime);
+}
+
+function removePageLeaveListeners() {
+  Elements.menuHome.removeEventListener('click', saveStudyTime);
+  Elements.menuClassrooms.removeEventListener('click', saveStudyTime);
+  Elements.menuStudyDecks.removeEventListener('click', saveStudyTime);
+  Elements.menuHelpTickets.removeEventListener('click', saveStudyTime);
+  Elements.menuSettings.removeEventListener('click', saveStudyTime);
+  Elements.menuProfile.removeEventListener('click', saveStudyTime);
+  Elements.menuSignOut.removeEventListener('click', saveStudyTime);
+}
+
+export function saveStudyTime() {
+  FirebaseController.logTimeSpentStudying(Auth.currentUser.uid, localStorage.getItem("deckPageDeckDocID"));
+  removePageLeaveListeners();
 }
