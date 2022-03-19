@@ -149,7 +149,6 @@ export async function analytics_page() {
             removeChart();
             addSpinner();
             let graphSuccessfullyCreated = await getNewData();
-            console.log("graph successfully created? ", graphSuccessfullyCreated);
             if (graphSuccessfullyCreated)
                 drawChart();
         });
@@ -227,7 +226,6 @@ async function getFlashcardMasteryData() {
         let formattedDisplayDate = Utilities.getFormattedDate(displayDate);
         
         if (deckDataCachedFlashcardDataDates.includes(formattedDisplayDate)) {
-            console.log("Exists!");
             okayCount = 0;
             goodCount = 0;
             masteredCount = 0;
@@ -313,9 +311,6 @@ async function getTimeSpentStudyingData() {
     for (let i = fillerIndexes.length - 1; i >= 0; i--) {
         dataArrayNoFiller.splice(fillerIndexes[i], 1);
     }
-    console.log("data array no filler");
-    console.log(dataArrayNoFiller);
-
     removeSpinner();
     addChart();
     selectorsEnabled(false);
@@ -324,7 +319,6 @@ async function getTimeSpentStudyingData() {
 }
 
 async function drawChart() {
-    console.log("made it");
     if (notEnoughData)
         return;
 
@@ -332,13 +326,9 @@ async function drawChart() {
     let data;
 
     if ($(`#${Constant.htmlIDs.hideFillerDaysSwitch}`).is(':checked')) {
-        console.log("checked");
-        console.log(dataArrayNoFiller);
         data = google.visualization.arrayToDataTable(dataArrayNoFiller);
     }
     else {
-        console.log("not checked");
-        console.log(dataArrayWithFiller);
         data = google.visualization.arrayToDataTable(dataArrayWithFiller);
     }
 
@@ -415,7 +405,6 @@ function addHideFillerDaysSwitch() {
     
     let hideFillerDaysSwitch = document.getElementById(Constant.htmlIDs.hideFillerDaysSwitch);
     hideFillerDaysSwitch.addEventListener('click', (e) => {
-        console.log("clicked");
         drawChart();
     });
 }
