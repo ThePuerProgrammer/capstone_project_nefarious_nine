@@ -445,7 +445,7 @@ input {
 /*============================================================================*/
 
 /*Hides radio buttons*/
-[type=radio] { 
+.hidden-radio-button { 
     position: static;
     opacity: 0;
     width: 0;
