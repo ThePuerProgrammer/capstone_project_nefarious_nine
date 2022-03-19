@@ -82,4 +82,12 @@ export const htmlIDs = {
     editProfile: 'button-edit-profile-modal',
     editProfileModal: 'edit-profile-modal',
     studyPageReturnToDeckPageButton: 'study-page-return-to-deck-page-button',
+    areaChartRadioButton: 'area-chart-radio-button',
+    columnChartRadioButton: 'column-chart-radio-button',
+    pieChartRadioButton: 'pie-chart-radio-button',
+    hideFillerDaysSwitchRow: 'hide-filler-days-switch-row',
+    hideFillerDaysSwitch: 'hide-filler-days-switch',
+    chartViewSettingsColumn: 'chart-view-settings-column',
+    chartViewRadioButtonRow: 'chart-view-radio-button-row',
+    pieChartRadioButtonContainer: 'pie-chart-radio-button-container',
 }
