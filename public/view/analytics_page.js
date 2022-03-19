@@ -20,48 +20,102 @@ var chartOptions = {
 
 var analyticsPageContainer;
 
-let notEnoughData = false;
+var notEnoughData = false;
 
 var currentSelectedDeckID;
 var currentSelectedDeckName;
 var currentSelectedAnalyticsType;
+var currentSelectedChartType;
 
-var dataArray = [];
+var dataArrayWithFiller = [];
+var dataArrayNoFiller = [];
+
+let hideFillerDaysSwitchRowHTML = `
+<div class="row form-check form-switch justify-content-center" id="${Constant.htmlIDs.hideFillerDaysSwitchRow}" style="float: none;">
+    <input class="form-check-input" type="checkbox" id="${Constant.htmlIDs.hideFillerDaysSwitch}">
+    <label class="form-check-label" for="flexSwitchCheckDefault" style="width: 40%">Hide days I did not study</label>
+</div>`;
+
+let pieChartRadioButtonHTML = `
+<div class="form-check col-4" id="${Constant.htmlIDs.pieChartRadioButtonContainer}">
+    <input class="form-check-input" type="radio" name="flexRadioDefault" id="${Constant.htmlIDs.pieChartRadioButton}">
+    <label class="form-check-label" for="pie-chart-radio-button">Pie Chart</label>
+</div>`;
 
 export function addEventListeners() {}
 
 export async function analytics_page() {
     let userDecks = await FirebaseController.getUserDecks(Auth.currentUser.uid);
+    currentSelectedChartType = "areaChart";
+    currentSelectedAnalyticsType = "time-spent-studying";
     
     if (userDecks.length != 0) {
         Elements.root.innerHTML = `
-            <div id="${Constant.htmlIDs.analyticsPageContainer}" class="container pt-4 pb-1">
-                <div class="row">
-                    <div class="col-6">
-                        <h3>Selected Deck</h3>
-                        <select id="${Constant.htmlIDs.analyticsSelectDeck}" class="form-select"></select>
-                    </div>
-                    <div class="col-6">
-                        <h3>Analytics</h3>
-                        <select id="${Constant.htmlIDs.analyticsSelectStatistics}" name="selectedStatistics" class="form-select">
-                            <option value="flashcard-mastery">Flashcard Mastery</option>
-                            <option value="time-spent-studying">Time Spent Studying</option>
-                        </select>
+            <div class="container pt-4 pb-1" id="${Constant.htmlIDs.analyticsPageContainer}">
+                <div class="card analytics-header-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3">
+                                <h3>Selected Deck</h3>
+                                <select id="${Constant.htmlIDs.analyticsSelectDeck}" class="form-select"></select>
+                            </div>
+                            <div class="col-3">
+                                <h3>Analytics</h3>
+                                <select id="${Constant.htmlIDs.analyticsSelectStatistics}" name="selectedStatistics" class="form-select">
+                                    <option value="time-spent-studying">Time Spent Studying</option>
+                                    <option value="flashcard-mastery">Flashcard Mastery</option>
+                                </select>
+                            </div>
+                            <div class="div col-6" id=${Constant.htmlIDs.chartViewSettingsColumn}>
+                                <div class="row">
+                                    <h5 class="text-center">Chart View Settings</h5>
+                                </div>
+                                <div class="row" id=${Constant.htmlIDs.chartViewRadioButtonRow}>
+                                    <div class="form-check col-4">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="${Constant.htmlIDs.areaChartRadioButton}" checked>
+                                        <label class="form-check-label" for="area-chart-radio-button">Area Chart</label>
+                                    </div>
+                                    <div class="form-check col-4">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="${Constant.htmlIDs.columnChartRadioButton}">
+                                        <label class="form-check-label" for="column-chart-radio-button">Column Chart</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         `;
 
+        addHideFillerDaysSwitch(hideFillerDaysSwitchRowHTML);
+        addPieChartRadioButton(pieChartRadioButtonHTML);
+        addSpinner(); // To show user the page is loading
+        
         analyticsPageContainer = document.getElementById(Constant.htmlIDs.analyticsPageContainer);
+        let analyticsSelectDeck = document.getElementById(Constant.htmlIDs.analyticsSelectDeck);
+        let analyticsSelectStatistics = document.getElementById(Constant.htmlIDs.analyticsSelectStatistics);
+        let areaChartRadioButton = document.getElementById(Constant.htmlIDs.areaChartRadioButton);
+        let columnChartRadioButton = document.getElementById(Constant.htmlIDs.columnChartRadioButton);
 
-        addSpinner();
+        areaChartRadioButton.addEventListener('click', (e) => {
+            currentSelectedChartType = "areaChart";
 
-        let analyticsSelectDeck = document.getElementById(
-            Constant.htmlIDs.analyticsSelectDeck
-        );
-        let analyticsSelectStatistics = document.getElementById(
-            Constant.htmlIDs.analyticsSelectStatistics
-        );
+            let hideFillerDaysSwitchRow = document.getElementById(Constant.htmlIDs.hideFillerDaysSwitchRow);
+            if (!hideFillerDaysSwitchRow) // Only add the "hide filler" switch if it doesn't exist
+                addHideFillerDaysSwitch(hideFillerDaysSwitchRowHTML);
+
+            drawChart();
+        });
+        columnChartRadioButton.addEventListener('click', (e) => {
+            currentSelectedChartType = "columnChart";
+
+            let hideFillerDaysSwitchRow = document.getElementById(Constant.htmlIDs.hideFillerDaysSwitchRow);
+            if (!hideFillerDaysSwitchRow) // Only add the "hide filler" switch if it doesn't exist
+                addHideFillerDaysSwitch(hideFillerDaysSwitchRowHTML);
+
+            drawChart();
+        });
+
 
         // add all of the user's deck to the deck selector
         userDecks.forEach(deck => 
@@ -80,30 +134,34 @@ export async function analytics_page() {
             addSpinner();
             let graphSuccessfullyCreated = await getNewData();
             if (graphSuccessfullyCreated)
-                drawAreaChart();
+                drawChart();
         });
 
         // For refetching data & redrawing graph on analytics change
         analyticsSelectStatistics.addEventListener('change', async e => {
             currentSelectedAnalyticsType = e.target.value;
-            console.log(currentSelectedAnalyticsType);
+            if (currentSelectedAnalyticsType == "flashcard-mastery") {
+                removePieChartRadioButton();
+            }
+            else {
+                addPieChartRadioButton(pieChartRadioButtonHTML);
+            }
             removeChart();
             addSpinner();
             let graphSuccessfullyCreated = await getNewData();
             console.log("graph successfully created? ", graphSuccessfullyCreated);
             if (graphSuccessfullyCreated)
-                drawAreaChart();
+                drawChart();
         });
         
         currentSelectedDeckID = userDecks[0].docId;
-        currentSelectedAnalyticsType = "flashcard-mastery";
 
         await getNewData();
 
         google.charts.load('current', { 
             callback: function () {
-                $(window).resize(drawAreaChart);
-                drawAreaChart();
+                $(window).resize(drawChart);
+                drawChart();
             },
             packages: ['corechart'] 
         });
@@ -139,9 +197,11 @@ async function getNewData() {
 async function getFlashcardMasteryData() {
     selectorsEnabled(true);
 
-    dataArray = [ // date vs streak count
+    dataArrayWithFiller = [ // date vs streak count
         ['Date', 'Okay (Streak 1-2)', 'Good (Streak 3-5)', 'Mastered (Streak 6+)']
     ];
+
+    let fillerIndexes = [];
 
     let deckData = await FirebaseController.getUserDataDeckById(Auth.currentUser.uid, currentSelectedDeckID);
     
@@ -179,13 +239,22 @@ async function getFlashcardMasteryData() {
             goodCount += await FirebaseController.getStreakGroupCountForFlashcardDataCache(Auth.currentUser.uid, currentSelectedDeckID, formattedDisplayDate, 5);
             masteredCount += await FirebaseController.getStreakGroupCountAndAboveForFlashcardDataCache(Auth.currentUser.uid, currentSelectedDeckID, formattedDisplayDate, 6);
         }
+        else {
+            fillerIndexes.push(i + 1); // offset by 1 due to first element being header information for data
+        }
 
-        dataArray.push(
+        dataArrayWithFiller.push(
             [formattedDisplayDate, okayCount, goodCount, masteredCount]
         );
 
         // increments to next day by one
         displayDate.setDate(displayDate.getDate() + 1);
+    }
+
+    // Remove filler data from array and store in dataArrayNoFiller
+    dataArrayNoFiller = [...dataArrayWithFiller];
+    for (let i = fillerIndexes.length - 1; i >= 0; i--) {
+        dataArrayNoFiller.splice(fillerIndexes[i], 1);
     }
 
     removeSpinner();
@@ -199,9 +268,11 @@ async function getFlashcardMasteryData() {
 async function getTimeSpentStudyingData() {
     selectorsEnabled(true);
 
-    dataArray = [ // date vs streak count
+    dataArrayWithFiller = [ // date vs streak count
         ['Date', 'Time (Minutes)']
     ];
+
+    let fillerIndexes = [];
 
     let deckData = await FirebaseController.getUserDataDeckById(Auth.currentUser.uid, currentSelectedDeckID);
     let timeStudiedByDayMap = await FirebaseController.getDeckDataTimeStudiedByDay(Auth.currentUser.uid, currentSelectedDeckID);
@@ -227,12 +298,23 @@ async function getTimeSpentStudyingData() {
         if (formattedDisplayDate in timeStudiedByDayMap) {
             timeStudiedDataPoint = timeStudiedByDayMap[formattedDisplayDate] / 1000 / 60;
         }
+        else {
+            fillerIndexes.push(i + 1); // offset by 1 due to first element being header information for data
+        }
 
-        dataArray.push( [formattedDisplayDate, timeStudiedDataPoint] );
+        dataArrayWithFiller.push( [formattedDisplayDate, timeStudiedDataPoint] );
 
         // increments to next day by one
         displayDate.setDate(displayDate.getDate() + 1);
     }
+
+    //Remove filler data from array and store in dataArrayNoFiller
+    dataArrayNoFiller = [...dataArrayWithFiller];
+    for (let i = fillerIndexes.length - 1; i >= 0; i--) {
+        dataArrayNoFiller.splice(fillerIndexes[i], 1);
+    }
+    console.log("data array no filler");
+    console.log(dataArrayNoFiller);
 
     removeSpinner();
     addChart();
@@ -241,15 +323,37 @@ async function getTimeSpentStudyingData() {
     return true;
 }
 
-async function drawAreaChart() {
+async function drawChart() {
+    console.log("made it");
     if (notEnoughData)
         return;
 
-    let data = google.visualization.arrayToDataTable(dataArray);
+    let chart;
+    let data;
 
-    // Instantiate and draw the chart.
-    let chart = new google.visualization.AreaChart(document.getElementById(Constant.htmlIDs.analyticsChart));
-    chart.draw(data, chartOptions);
+    if ($(`#${Constant.htmlIDs.hideFillerDaysSwitch}`).is(':checked')) {
+        console.log("checked");
+        console.log(dataArrayNoFiller);
+        data = google.visualization.arrayToDataTable(dataArrayNoFiller);
+    }
+    else {
+        console.log("not checked");
+        console.log(dataArrayWithFiller);
+        data = google.visualization.arrayToDataTable(dataArrayWithFiller);
+    }
+
+    if (currentSelectedChartType == "areaChart") {
+        chart = new google.visualization.AreaChart(document.getElementById(Constant.htmlIDs.analyticsChart));
+        chart.draw(data, chartOptions);
+    }
+    else if (currentSelectedChartType == "pieChart") {
+        chart = new google.visualization.PieChart(document.getElementById(Constant.htmlIDs.analyticsChart));
+        chart.draw(data, chartOptions);
+    }
+    else if (currentSelectedChartType == "columnChart") {
+        chart = new google.visualization.ColumnChart(document.getElementById(Constant.htmlIDs.analyticsChart));
+        chart.draw(data, chartOptions);
+    }
 }
 
 function addSpinner() {
@@ -299,4 +403,46 @@ function removeChart() {
 function selectorsEnabled(areEnabled) {
     $(`#${Constant.htmlIDs.analyticsSelectDeck}`).prop('disabled', areEnabled);
     $(`#${Constant.htmlIDs.analyticsSelectStatistics}`).prop('disabled', areEnabled);
+    $(`#${Constant.htmlIDs.areaChartRadioButton}`).prop('disabled', areEnabled);
+    $(`#${Constant.htmlIDs.pieChartRadioButton}`).prop('disabled', areEnabled);
+    $(`#${Constant.htmlIDs.columnChartRadioButton}`).prop('disabled', areEnabled);
+    $(`#${Constant.htmlIDs.hideFillerDaysSwitch}`).prop('disabled', areEnabled);
+}
+
+function addHideFillerDaysSwitch() {
+    let chartViewSettingsColumn = document.getElementById(Constant.htmlIDs.chartViewSettingsColumn);
+    chartViewSettingsColumn.insertAdjacentHTML('beforeend', hideFillerDaysSwitchRowHTML);
+    
+    let hideFillerDaysSwitch = document.getElementById(Constant.htmlIDs.hideFillerDaysSwitch);
+    hideFillerDaysSwitch.addEventListener('click', (e) => {
+        console.log("clicked");
+        drawChart();
+    });
+}
+
+function removePieChartRadioButton() {
+    let pieChartRadioButtonContainer = document.getElementById(Constant.htmlIDs.pieChartRadioButtonContainer);
+    pieChartRadioButtonContainer.parentElement.removeChild(pieChartRadioButtonContainer);
+
+    if (currentSelectedChartType == "pieChart") {
+        currentSelectedChartType = "areaChart";
+        $(`#${Constant.htmlIDs.areaChartRadioButton}`).prop("checked", true);
+        addHideFillerDaysSwitch(hideFillerDaysSwitchRowHTML);
+        drawChart();
+    }
+}
+
+function addPieChartRadioButton() {
+    let chartViewRadioButtonRow = document.getElementById(Constant.htmlIDs.chartViewRadioButtonRow);
+
+    chartViewRadioButtonRow.insertAdjacentHTML('beforeend', pieChartRadioButtonHTML);
+    
+    let pieChartRadioButton = document.getElementById(Constant.htmlIDs.pieChartRadioButton);
+
+    pieChartRadioButton.addEventListener('click', (e) => {
+        currentSelectedChartType = "pieChart";
+        let hideFillerDaysSwitchRow = document.getElementById(Constant.htmlIDs.hideFillerDaysSwitchRow);
+        hideFillerDaysSwitchRow.parentElement.removeChild(hideFillerDaysSwitchRow); // Pie chart does not display filler days by default
+        drawChart();
+    });
 }
