@@ -83,7 +83,7 @@ export const htmlIDs = {
     editProfileModal: 'edit-profile-modal',
     studyPageReturnToDeckPageButton: 'study-page-return-to-deck-page-button',
     areaChartRadioButton: 'area-chart-radio-button',
-    barChartRadioButton: 'bar-chart-radio-button',
+    columnChartRadioButton: 'column-chart-radio-button',
     pieChartRadioButton: 'pie-chart-radio-button',
     hideFillerDaysSwitchRow: 'hide-filler-days-switch-row',
     hideFillerDaysSwitch: 'hide-filler-days-switch',
