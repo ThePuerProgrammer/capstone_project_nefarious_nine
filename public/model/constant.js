@@ -88,4 +88,6 @@ export const htmlIDs = {
     hideFillerDaysSwitchRow: 'hide-filler-days-switch-row',
     hideFillerDaysSwitch: 'hide-filler-days-switch',
     chartViewSettingsColumn: 'chart-view-settings-column',
+    chartViewRadioButtonRow: 'chart-view-radio-button-row',
+    pieChartRadioButtonContainer: 'pie-chart-radio-button-container',
 }
