@@ -17,10 +17,10 @@ var chartOptions = {
         2: { color: '#701b47' },
     },
 }
-
 var analyticsPageContainer;
 
 var notEnoughData = false;
+var minGraphHeight = "43rem";
 
 var currentSelectedDeckID;
 var currentSelectedDeckName;
@@ -362,7 +362,7 @@ function removeSpinner() {
 function addChart() {
     Elements.root.insertAdjacentHTML('beforeend', `
         <div id="${Constant.htmlIDs.analyticsChartContainer}">
-            <div style="min-height: 47rem;" id="${Constant.htmlIDs.analyticsChart}"></div>
+            <div style="min-height: ${minGraphHeight};" id="${Constant.htmlIDs.analyticsChart}"></div>
         </div>`
     );
 }
