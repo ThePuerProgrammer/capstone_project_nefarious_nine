@@ -1962,6 +1962,7 @@ export async function uploadProfilePicture(profilePicturerFile, profilePictureNa
     const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
     return { profilePictureName, profilePictureURL };
 }
+
 //============================================================================//
 // UPDATE POMOPET
 //============================================================================//
@@ -1972,7 +1973,6 @@ export async function updatePomopet(uid, pomopet) {
         .update({ 'pomopet': pomopet });
 }
 //============================================================================//
-
 
 
 //============================================================================//

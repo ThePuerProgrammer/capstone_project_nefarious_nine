@@ -90,4 +90,5 @@ export const htmlIDs = {
     chartViewSettingsColumn: 'chart-view-settings-column',
     chartViewRadioButtonRow: 'chart-view-radio-button-row',
     pieChartRadioButtonContainer: 'pie-chart-radio-button-container',
+    formEditPomopetName: 'form-edit-pomopet-name',
 }
