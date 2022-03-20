@@ -669,6 +669,7 @@ iframe {
 .edit-profile-btn{
     padding: 10px 20px;
 }
+
 .user-profile{
     padding: 50px 20px;
     height: 100%;
@@ -690,6 +691,21 @@ iframe {
     width: 100%;
     background-color:#2C1320;
     color: #2C1320;
+}
+
+.pomopet-edit-name-btn {
+    border: none;
+    background-color: inherit;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.pomopet-edit-name-form {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;  
 }
 
 .pfp {
