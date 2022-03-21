@@ -445,7 +445,7 @@ input {
 /*============================================================================*/
 
 /*Hides radio buttons*/
-[type=radio] { 
+.hidden-radio-button { 
     position: static;
     opacity: 0;
     width: 0;
@@ -638,6 +638,8 @@ iframe {
     vertical-align:middle;
     padding-right: 5px;
 }
+
+
 /*==========================================================================*/
 
 /*LEADERBOARD SELECTION*/
@@ -667,6 +669,7 @@ iframe {
 .edit-profile-btn{
     padding: 10px 20px;
 }
+
 .user-profile{
     padding: 50px 20px;
     height: 100%;
@@ -675,5 +678,50 @@ iframe {
     text-align: center;
 }
 
+.equipped-pomopet {
+    padding: 10px 30px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.pomopet-bar {
+    border: none;
+    height: 5px !important;
+    width: 100%;
+    background-color:#2C1320;
+    color: #2C1320;
+}
+
+.pomopet-edit-name-btn {
+    border: none;
+    background-color: inherit;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.pomopet-edit-name-form {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;  
+}
+
+.pfp {
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+  }
+
+/*==========================================================================*/
+
+/* ANALYTICS PAGE */
+/*==========================================================================*/
+
+.analytics-header-card {
+    background-color: #939dc3;
+    border: 5px solid #5F4B66 !important;
+}
 
 /*==========================================================================*/
