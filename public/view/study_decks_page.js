@@ -479,6 +479,7 @@ export function buildDeckView(deck, flashcards, clase) {
     <input type="hidden" name="isClassDeck" value="${deck.isClassDeck}">
     <input type="hidden" name="deckDocId" value="${deck.docId}">
     <button id="fav-btn" class="btn btn-link-secondary pomo-text-color-light" type="submit" style="border:none;box-shadow:none;" for="favorited"><i class="material-icons">favorite</i></button>
+    <label class="pomo-text-color-light" for="favorited">Favorited</label>
     </form>
     </div>
     </div>
@@ -488,6 +489,7 @@ export function buildDeckView(deck, flashcards, clase) {
     <input type="hidden" name="isClassDeck" value="${deck.isClassDeck}">
     <input type="hidden" name="deckDocId" value="${deck.docId}">
     <button id="unfav-btn" class="btn btn-link-secondary pomo-text-color-light" type="submit" style="border:none;box-shadow:none;" for="favorited"><i class="material-icons">favorite_border</i></button>
+    <label class="pomo-text-color-light" for="favorited">Not Favorited</label>
     </form>
     </div></div></div>
     `;
