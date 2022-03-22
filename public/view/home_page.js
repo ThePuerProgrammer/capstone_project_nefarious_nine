@@ -13,6 +13,9 @@ export function addEventListeners() {
 }
 
 export async function home_page() {
+
+    Elements.coinCount.innerHTML = localStorage.getItem('usercoins');
+
     Elements.root.innerHTML = ``;
     let html = '';
     html += `
