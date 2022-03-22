@@ -12,7 +12,7 @@ export class Deck {
         this.isFavorited = data.isFavorited;
         this.category = data.category;
         this.keywords = data.keywords;
-        this.flashcardNumber = 0;
+        this.flashcardNumber = data.flashcardNumber;
         this.isClassDeck = data.isClassDeck;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic

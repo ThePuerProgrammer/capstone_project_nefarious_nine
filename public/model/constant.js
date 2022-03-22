@@ -4,6 +4,11 @@
 export const DEV = true
 
 /*****************************************
+ * Admin constant until we get accounts
+ * working better
+ *****************************************/
+export const ADMIN = 'admin@test.com'
+/*****************************************
  *          COLLECTION NAMES
  ***************************************** 
  * Where we reference the collection names
@@ -18,6 +23,8 @@ export const collectionName = {
     BACKEND: 'backend',
     CLASSROOM_CHATS: 'classroom_chats',
     MESSAGES: 'messages',
+    FLASHCARDS_DATA_SUFFIX: '_flashcard_data',
+    HELPTICKETS: 'help_tickets',
 }
 
 /*****************************************
@@ -30,6 +37,9 @@ export const collectionName = {
  ******************************************/
 export const storageFolderName = {
     FLASHCARD_IMAGES: 'flashcard_images/',
+    HELPTICKET_IMAGES: 'helpticket_images/',
+    POMOPETS: 'pomopets/',
+    PROFILE_PICTURES: 'profile_pictures/',
 }
 
 /*****************************************
@@ -60,4 +70,25 @@ export const htmlIDs = {
     miniGamesPage: 'godot-mini-games',
     chillZonePage: 'chill-zone-page',
     analyticsPage: 'analytics-page',
+    leaderboardCoins: 'button-leaderboard-coins',
+    leaderboardDecks: 'button-leaderboard-decks',
+    leaderboardFlashcards: 'button-leaderboard-flashcards',
+    analyticsSelectDeck: 'analytics-select-deck',
+    analyticsSelectStatistics: 'analytics-select-statistics',
+    loadingIcon: 'loading-icon',
+    analyticsChart: 'analytics-chart',
+    analyticsChartContainer: 'analytics-chart-container',
+    analyticsPageContainer: 'analytics-page-container',
+    editProfile: 'button-edit-profile-modal',
+    editProfileModal: 'edit-profile-modal',
+    studyPageReturnToDeckPageButton: 'study-page-return-to-deck-page-button',
+    areaChartRadioButton: 'area-chart-radio-button',
+    columnChartRadioButton: 'column-chart-radio-button',
+    pieChartRadioButton: 'pie-chart-radio-button',
+    hideFillerDaysSwitchRow: 'hide-filler-days-switch-row',
+    hideFillerDaysSwitch: 'hide-filler-days-switch',
+    chartViewSettingsColumn: 'chart-view-settings-column',
+    chartViewRadioButtonRow: 'chart-view-radio-button-row',
+    pieChartRadioButtonContainer: 'pie-chart-radio-button-container',
+    formEditPomopetName: 'form-edit-pomopet-name',
 }

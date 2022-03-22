@@ -7,9 +7,11 @@ export class User{
         this.coins = data.coins;
         this.pet = data.pet;
         this.deckNumber = data.deckNumber;
+        this.flashcardNumber = data.flashcardNumber;
         this.profilePhotoName = data.profilePhotoName;
         this.profilePhotoURL = data.profilePhotoURL;
         this.userBio = data.userBio;
+        this.pomopet = data.pomopet;
         // TODO: SHOP STUFF
     }
 
@@ -46,9 +48,11 @@ export class User{
                 coins: this.coins,
                 pet: this.pet,
                 deckNumber: this.deckNumber,
+                flashcardNumber: this.flashcardNumber,
                 profilePhotoName: this.profilePhotoName,
                 profilePhotoURL: this.profilePhotoURL,
                 userBio: this.userBio,
+                pomopet: this.pomopet,
             };
         }
 
@@ -61,9 +65,11 @@ export class User{
            user.coins = data.coins;
            user.pet = data.pet;
            user.deckNumber = data.deckNumber;
+           user.flashcardNumber = data.flashcardNumber;
            user.profilePhotoName = data.profilePhotoName;
            user.profilePhotoURL = data.profilePhotoURL;
            user.userBio = data.userBio;
+           user.pomopet = data.pomopet;
            return user;
         }
 

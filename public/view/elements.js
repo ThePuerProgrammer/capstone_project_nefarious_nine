@@ -12,9 +12,7 @@ export const menuProfile = document.getElementById('menu-profile');
 export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 export const modalMenuResetPassword = document.getElementById('reset-password');
-
-// TEMPORARY Element for temporary button
-export const menuTempGodot = document.getElementById('menu-temp-godot');
+export const menuHelpTickets = document.getElementById('menu-help-tickets');
 
 // pomo timer buttons
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
@@ -81,6 +79,8 @@ export const modalEditClassroom = new bootstrap.Modal(document.getElementById('m
 export const modalPreviewClassroom = new bootstrap.Modal(document.getElementById('preview-classroom-modal', { backdrop: 'static' }));
 export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-leave-classroom', { backdrop: 'static' }));
 export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', { backdrop: 'static' }));
+export const modalSubmitHelpTicket = new bootstrap.Modal(document.getElementById('modal-submit-help-ticket', { backdrop: 'static' }));
+export const modalEditProfile = new bootstrap.Modal(document.getElementById('edit-profile-modal'));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -110,6 +110,15 @@ export const formCheckInputIsImageAnswer = document.getElementById('form-check-i
 export const formContainerAnswerImage = document.getElementById('form-answer-image-container');
 export const formContainerQuestionImage = document.getElementById('form-question-image-container');
 //===========================================================================//
+
+// Submit help ticket
+//============================================================================//
+export const formSubmitHelpTicket = {
+    form: document.getElementById('form-submit-help-ticket'),
+    imageTag: document.getElementById('form-add-image-to-help-ticket-tag'),
+    imageButton: document.getElementById('form-add-image-to-help-ticket-button'),
+}
+
 
 //EDIT FLASHCARD
 //==========================================================================//
@@ -180,9 +189,16 @@ export const checkBoxMyClassrooms = document.getElementById('checkbox-myClassroo
 export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
 //============================================================================//
 
-//LEADERBOARD
-//===========================================================================//
-export const modalLeaderboardCategorySelect = new bootstrap.Modal(document.getElementById('modal-leaderboard-select', {backdrop: 'static'}));
-export const formLeaderboardCategorySelect = document.getElementById('leaderboard-select');
 
-//===========================================================================//
+//PROFILE PAGE
+//============================================================================//
+export const formEditProfile = {
+    form: document.getElementById('form-edit-profile'),
+    profilePictureTag: document.getElementById('form-edit-profile-picture-tag'),
+    profilePictureButton: document.getElementById('form-edit-profile-picture-button'),
+    username: document.getElementById('username'),
+    userBio: document.getElementById('bio'),
+}
+// Profile Picture
+export const formContainerProfilePicture = document.getElementById('form-edit-profile-picture');
+//============================================================================//

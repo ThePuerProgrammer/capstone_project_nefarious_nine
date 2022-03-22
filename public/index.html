@@ -22,6 +22,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
+  <!-- GOOGLE CHARTS FOR ANALYTICS -->
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+
   <title>Pomobyte</title>
 </head>
 
@@ -56,7 +59,7 @@
             </li>
           </ul>
         </div>
-        <div class="modal-postauth">
+        <div class=" modal-postauth">
           <div style="flex-grow: 2;"></div>
           <div style="flex-grow: 1;">
             <ul class="navbar-nav">
@@ -64,6 +67,11 @@
                 <div id="coin-display" class="coin-display">
                   <p id="coin-count" class="coin-text"></p>
                 </div>
+              </li>
+              <li class="nav-item" style="display: inline;">
+                <button type="button" class="btn" id="menu-help-tickets">
+                  <img src="./assets/images/help_outline_black_24dp.svg" alt="Help tickets" width="24" height="24">
+                </button>
               </li>
               <li class="nav-item" style="display: inline;">
                 <button type="button" class="btn" id="menu-settings">
@@ -240,15 +248,15 @@
             <div id="pet-selected"></div>
             <div class="row" style="padding-bottom: 20%;">
               <label class="raise" style="width: 70px;">
-                <input type="radio" class="resize" name="pet" value="Bunny" checked>
+                <input type="radio" class="resize hidden-radio-button" name="pet" value="Bunny" checked>
                 <img src="./assets/images/pet_sprites/bunny Sprite.png" width="150" height="150">
               </label>
               <label class="raise resize" style="width: 70px; left: 15%;">
-                <input type="radio" class="resize" name="pet" value="Dog">
+                <input type="radio" class="resize hidden-radio-button" name="pet" value="Dog">
                 <img src="./assets/images/pet_sprites/Rembo Sprite.png" width="150" height="150">
               </label>
               <label class="raise resize" style="width: 70px; left: 30%;">
-                <input type="radio" class="resize" name="pet" value="Cat">
+                <input type="radio" class="resize hidden-radio-button" name="pet" value="Cat">
                 <img src="./assets/images/pet_sprites/Cat Sprite.png" width="150" height="150">
               </label>
             </div>
@@ -686,6 +694,58 @@
   </div>
   <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
 
+  <!-- MODAL: Submit a help ticket ---------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-submit-help-ticket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-submit-help-ticket-title">Submit help ticket</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-submit-help-ticket" method="post">
+            <br />
+            <label class="pomo-text-color-light" for="help-ticket-title">Title</label>
+            <input class="form-control form-control-lg" type="help-ticket-title" name="helpTicketTitle"
+              placeholder="Give a brief title to your ticket..." required minlength="2" id="help-ticket-title"
+              autocomplete="off">
+            <br />
+            <br />
+            <div id="form-help-ticket-description-container">
+              <label for="form-help-ticket-description-input">Description:</label>
+              <textarea name="helpTicketDescription" id="form-help-ticket-description-input" class="form-control"
+                rows="3" type="text" required min length="1" placeholder="Describe your issue..."
+                autocomplete="off"></textarea>
+            </div>
+            <label class="pomo-text-color-light" for="helpTicketCategory">Category</label>
+            <br>
+            <select id="help-ticket-category" name="helpTicketCategory" class="form-select-help-ticket-category"
+              aria-label="Default select example" style="width:300px;">
+              <option selected disabled>Choose a category...</option>
+              <option value="help-ticket-classrooms">Classrooms</option>
+              <option value="help-ticket-decks">Decks</option>
+              <option value="help-ticket-flashcards">Flashcards</option>
+              <option value="help-ticket-games">Minigames</option>
+              <option value="help-ticket-users">Users</option>
+            </select>
+            <br>
+            <div id="form-help-ticket-image-container">
+              <img id="form-add-image-to-help-ticket-tag"
+                style="height: 100%; width:100%; object-fit:contain; display: block;" />
+              Image:
+              <input id="form-add-image-to-help-ticket-button" type="file" value="upload" />
+            </div>
+            <div>
+              <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End submit a help ticket----------------------------------------------------------------------------------------->
+
   <!--MODAL: SEARCH------------------------------------------------------------>
   <div class="modal fade" id="modal-searchbox" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -709,6 +769,41 @@
   </div>
   <!-- END OF MODAL: SEARCH------------------------------------------------------>
 
+  <!-- EDIT PROFILE MODAL----------------------------------------------------->
+   <div class="modal fade" id="edit-profile-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+   aria-labelledby="edit-profile-modal-label" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+     <div class="modal-content pomo-bg-color-md-dark">
+       <div class="modal-header pomo-text-color-light">
+         <h5 class="modal-title pomo-text-color-light" id="edit-profile-modal-label">Edit Profile</h5>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div class="modal-body">
+         <form id="form-edit-profile" method="post">
+          <div id="form-edit-profile-picture-container">
+            <img id="form-edit-profile-picture-tag"
+              style=" height: 200px; width: 200px; object-fit: cover; display: block;" class="center pfp">
+              <br>
+            <label class="pomo-text-color-light" for="form-edit-profile-picture-button">Update Profile Picture</label>
+            <input id="form-edit-profile-picture-button" type="file" value="upload" />
+          </div>
+           <div class="form-group">
+             <label class="pomo-text-color-light" for="username">Username</label>
+             <input class="form-control form-control-lg" type="username" name="username"
+               required minlength="2" id="username" autocomplete="off">
+             <label class="pomo-text-color-light" for="bio">Bio</label>
+             <textarea class="form-control form-control-lg" type="bio" name='bio' id="bio"
+               autocomplete="off" placeholder="Tell us a little bit about yourself..."></textarea>
+             <br>
+           </div>
+           <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="user-update-profile"
+             type="submit">Update</button>
+         </form>
+       </div>
+     </div>
+   </div>
+  </div>
+  <!-- END UPDATE PROFILE MODAL---------------------------------------------->
 
   <!-- Modal: Popup Info Box -------------------------------------------------->
   <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -727,51 +822,7 @@
     </div>
   </div>
   <!-- END OF POPUP INFO BOX----------------------------------------------------->
-  <!-- MODAL: LEADERBOARD SELECT------------------------------------------------->
-  <div class="modal fade" id="modal-leaderboard-select" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="leaderboard-select-modal-label" aria-hidden=" true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
-          <h5 class="modal-title pomo-text-color-light" id="leaderboard-select-modal-label">Choose Category
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="leaderboard-select">
-            <select class="form-select-category-leaderboard" id="select-option" onChange="select()">
-              <option selected>Choose a Category</option>
-              <option value="coins" id="value">Coins</option>
-              <option value="decks" id="value"># of Decks</option>
-              <option value="points" id="value">Points</option>
-              <option value="flashcards" id="value"># of Flashcards</option>
-            </select>
-            <script type="text/javascript">
-              function select() {
-                var select = document.getElementById('select-option');
-                var option = select.options[select.selectedIndex];
-                document.getElementById('value').value = option.value;
-                console.log(`${option.value}`)
-                if (option.value == "coins") { console.log(`Made it to coins`) }
-                if (option.value == "decks") { console.log(`Made it to decks`) }
-                if (option.value == "points") { console.log(`Made it to points`) }
-                if (option.value == "flashcards") { console.log(`Made it to flashcards`) }
 
-
-              }
-              select()
-            </script>
-            <br>
-            <div class="leaderboard-selection-button-css">
-              <button type="submit" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Select</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--END OF LEADERBOARD SELECT-------------------------------------------------->
 
   <!-- SPA TARGET IS ROOT -->
   <div id="root"></div>

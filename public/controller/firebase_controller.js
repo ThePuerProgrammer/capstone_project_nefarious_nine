@@ -8,6 +8,7 @@ import { User } from '../model/user.js';
 import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
+import { HelpTicket } from '../model/help_ticket.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -105,15 +106,53 @@ export async function uploadImageToFlashcardAnswer(answerImageFile, answerImageN
 // 1. Check if data exists
 //   [Data Exists] Grab the data
 //   [Data doesn't exist]  
+//
+// This new update flashcard date will check if there exists a flashcard date
+//  set for today. If there does not exist one, then we will create one for today.
+//  If there is one for today, will we that as the data set that we pull/update
+//  from.
 //============================================================================//
 export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAnsweredCorrectly) {
+    // -- ENSURING WE HAVE A DATA SET FOR TODAY TO UPDATE TO -- 
+    let todaysFlashcardDataExists = false;
+    let todaysDate = Utilites.getCurrentDate();
+    // Check if the flashcard_data for today exists.
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .limit(1)
+        .get()
+        .then(collection => {
+            todaysFlashcardDataExists = collection.docs.length > 0;
+        });
+
+    // Today's flashcard data does NOT exist. Copy last used collection 
+    console.log("Today's flashcard data exist?", todaysFlashcardDataExists)
+    if (!todaysFlashcardDataExists) {
+        await copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate);
+    }
+
+    // Update lastSRSAccess for deck data document
+    const deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            lastSRSAccess: todaysDate
+        });
+
+
     // Making the reference to the flashcard data
     const flashcardDataExistsRef = firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .doc(flashcardDocID);
 
     // FlashcardData Model
@@ -141,6 +180,104 @@ export async function updateFlashcardData(uid, deckDocID, flashcardDocID, userAn
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
+        .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .doc(flashcardDocID)
+        .set(flashcardData.serialize());
+
+    console.log("flashcardDataStreak", flashcardData.streak);
+    return flashcardData;
+}
+
+
+
+// Helper function for updateFlashcardData
+async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) {
+    console.log("Starting new date copy for flaschard");
+
+    // Grab deck data document to get the last accessed date
+    const deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+    
+    let lastSRSAccess = deckDataRef.data().lastSRSAccess;
+    console.log("last studied: ", lastSRSAccess);
+    
+    const cachedFlashcardData = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(lastSRSAccess + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .get();
+
+    // iterate through the lastSRSAccess flashcard data and add each flashcard data
+    //  document to todays flaschard data
+    cachedFlashcardData.forEach(async doc => {
+        console.log("Flashcard received! ", doc.id);
+        await firebase.firestore()
+            .collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .collection(Constant.collectionName.DECK_DATA)
+            .doc(deckDocID)
+            .collection(todaysDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+            .doc(doc.id)
+            .set(doc.data())
+    });
+
+    // add cached date to array list for the deck data
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            cachedDates: firebase.firestore.FieldValue.arrayUnion(todaysDate)
+        });
+}
+
+
+
+
+//same as above but for classrooms
+
+export async function updateClassFlashcardData(classDocID, deckDocID, flashcardDocID, userAnsweredCorrectly) {
+    // Making the reference to the flashcard data
+    const flashcardDataExistsRef = firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .doc(flashcardDocID);
+
+    // FlashcardData Model
+    //  If flashcard does't not exist, this model will be used to create 
+    //  flashcard data as-is.
+    //  If flashcard does exist, streak will be updated.
+    //  If user answered incorrectly, this streak will be used
+    let flashcardData = new FlashcardData({
+        streak: 0,
+        lastAccessed: Date.now()
+    });
+
+    // Using the flashcard data reference to check if it exists
+    await flashcardDataExistsRef.get().then((doc) => {
+        if (doc.exists && userAnsweredCorrectly) // only use old streak if user answered correctly
+            flashcardData.streak = doc.data().streak; // Flashcard data exists, get streak on flashcard
+    });
+
+    if (userAnsweredCorrectly)
+        flashcardData.streak++;  // Answered correctly, increment streak.
+
+    // Update flashcardData result on Firebase
+    await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS_DATA)
         .doc(flashcardDocID)
         .set(flashcardData.serialize());
@@ -165,6 +302,142 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
         .doc(deckDocID);
 
     // Using the deck data exists reference to check if it exists
+    await deckDataExistsRef.get().then((doc) => {
+        console.log("doc exists?", doc.exists);
+        deckDataExists = doc.exists;
+    });
+
+    if (deckDataExists) // Deck exists, no need to create a deck data document
+        return;
+
+    //Deck doesn't exist, create a deck data document
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .set({
+            lastSRSAccess: Utilites.getCurrentDate(),
+            dateCreated: Utilites.getCurrentDate(),
+            lastStudied: Utilites.getCurrentDate(),
+            cachedDates: [],
+            timeStudiedByDay: {
+            },
+        });
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the cached dates of the dates studied with Smart Study on.
+//============================================================================//
+export async function getDeckDataCachedFlashcardDataDates(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    return deckDataRef.data().cachedDates;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the Map (JS object) that contains the amount of time spent studying
+//  a deck on a specific day. As of 03/18/2022, it only tracks time studying a
+//  deck on the study_page
+//============================================================================//
+export async function getDeckDataTimeStudiedByDay(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    return deckDataRef.data().timeStudiedByDay;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the number of flaschard within a streak group for a given flashcard
+//  data cache
+//============================================================================//
+export async function getStreakGroupCountForFlashcardDataCache(uid, deckDocID, date, streak) {
+    let flashcardDataCacheRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(date + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .where('streak', '==', streak)
+        .get()
+
+    return flashcardDataCacheRef.docs.length;
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the number of flaschard within a streak group for a given flashcard
+//  data cache
+//============================================================================//
+export async function getDeckData(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+    
+    return deckDataRef.data();
+}
+//===========================================================================//
+
+//============================================================================//
+// Updates the lastStudied field for a given deck data
+//============================================================================//
+export async function updateDeckDataLastStudied(uid, deckDocID) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            lastStudied: Utilites.getCurrentDate(),
+        });
+}
+//===========================================================================//
+
+
+//============================================================================//
+// Returns the number of flaschard within a streak group for a given flashcard
+//  data cache
+//============================================================================//
+export async function getStreakGroupCountAndAboveForFlashcardDataCache(uid, deckDocID, date, streak) {
+    let flashcardDataCacheRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(date + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .where('streak', '>=', streak)
+        .get();
+
+    return flashcardDataCacheRef.docs.length;
+}
+
+
+export async function createClassDeckDataIfNeeded(classDocID, deckDocID) {
+    let deckDataExists = false;
+
+    // Making the reference to the deck data
+    const deckDataExistsRef = firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID);
+
+    // Using the deck data exists reference to check if it exists
     deckDataExistsRef.get().then((doc) => {
         deckDataExists = doc.exists;
     });
@@ -174,12 +447,13 @@ export async function createDeckDataIfNeeded(uid, deckDocID) {
 
     //Deck doesn't exist, create a deck data document
     firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .doc(uid)
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .set({});
 }
+
 //===========================================================================//
 
 //============================================================================//
@@ -193,6 +467,26 @@ export async function getFlashcardsDataFromDeck(uid, deckDocID) {
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
+        .collection(Utilites.getCurrentDate() + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .get();
+
+    flashcardsDataRef.forEach(doc => {
+        const flashcardData = new FlashcardData(doc.data());
+        flashcardData.set_docID(doc.id);
+        flashcardsDataList.push(flashcardData);
+    })
+
+    return flashcardsDataList;
+}
+
+export async function getClassFlashcardsDataFromDeck(classDocID, deckDocID) {
+    let flashcardsDataList = [];
+
+    const flashcardsDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
         .collection(Constant.collectionName.FLASHCARDS_DATA)
         .get();
 
@@ -204,6 +498,7 @@ export async function getFlashcardsDataFromDeck(uid, deckDocID) {
 
     return flashcardsDataList;
 }
+
 //===========================================================================//
 
 //============================================================================//
@@ -255,19 +550,20 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
         .doc(uid)
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
-        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .collection(Utilites.getCurrentDate() + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
         .where("streak", "==", targetedStreakGroup)
-        .orderBy("lastAccessed", "asc")
-        .limit(1)
         .get();
 
     let flashcardsReceived = 0;
+    let lastLowest = Number.MAX_SAFE_INTEGER;
     nextFlashcard.forEach((doc) => {
         streakGroupHasFlashcards = doc.exists;
         flashcardsReceived++;
 
-        if (streakGroupHasFlashcards)
+        if (streakGroupHasFlashcards && doc.data().lastAccessed < lastLowest) {
             nextFlashcardDocID = doc.id;
+            lastLowest = doc.data().lastAccessed;
+        }
     });
 
     if (flashcardsReceived == 0) {
@@ -292,7 +588,7 @@ export async function getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurre
             .doc(uid)
             .collection(Constant.collectionName.DECK_DATA)
             .doc(deckDocID)
-            .collection(Constant.collectionName.FLASHCARDS_DATA)
+            .collection(Utilites.getCurrentDate() + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
             .orderBy("lastAccessed", "asc")
             .limit(1)
             .get();
@@ -339,7 +635,138 @@ async function getFlashcardNotInFlashcardData(uid, deckDocID, flashcardsCurrentl
     return null;
 }
 //===========================================================================//
+//same as above for classrooms
+//===========================================================================//
 
+export async function getNextClassSmartStudyFlashcard(classDocID, deckDocID, flashcardsCurrentlyStudying) {
+
+    let targetedStreakGroup = 0;
+    let randomNumber = Math.random();
+
+    // console.log("Random Number Chosen: ", randomNumber);
+
+    if (randomNumber >= 0.46875) { // Streak 0 OR New Card
+        randomNumber = Math.random();
+
+        if (randomNumber >= 0.75) { // New card Odds
+            // Getting new card...
+            let newFlashcard = await getClassFlashcardNotInFlashcardData(classDocID, deckDocID, flashcardsCurrentlyStudying);
+
+            if (newFlashcard == null) {
+                targetedStreakGroup = 0; // There are no new flashcards, so default to showing streak 0
+            }
+            else {
+                return newFlashcard; // There was a new flashcard!
+            }
+        }
+        else { // Streak 0 Odds 
+            targetedStreakGroup = 0
+        }
+    }
+    else if (randomNumber >= 0.21875) { // Streak 1 Odds
+        targetedStreakGroup = 1
+    }
+    else if (randomNumber >= 0.09375) { // Streak 2 Odds
+        targetedStreakGroup = 2
+    }
+    else if (randomNumber >= 0.06125) { // Streak 3 Odds
+        targetedStreakGroup = 3
+    }
+    else if (randomNumber >= 0) { // Streak 2 Odds
+        targetedStreakGroup = 4
+    }
+
+    let streakGroupHasFlashcards = true;
+    // Grabs oldest interacted with flashcard from the targeted streak group
+    let nextFlashcardDocID;
+    let nextFlashcard = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(Constant.collectionName.FLASHCARDS_DATA)
+        .where("streak", "==", targetedStreakGroup)
+        .orderBy("lastAccessed", "asc")
+        .limit(1)
+        .get();
+
+    let flashcardsReceived = 0;
+    nextFlashcard.forEach((doc) => {
+        streakGroupHasFlashcards = doc.exists;
+        flashcardsReceived++;
+
+        if (streakGroupHasFlashcards)
+            nextFlashcardDocID = doc.id;
+    });
+
+    if (flashcardsReceived == 0) {
+        streakGroupHasFlashcards = false
+    }
+
+    // Since it is possible for user to have no cards in a streak group, take precautions to 
+    //  always get a flashcard
+    if (!streakGroupHasFlashcards) { // if streak group contained no flashcard data
+
+
+        // First, try and get new flashcard
+        let newFlashcard = await getClassFlashcardNotInFlashcardData(classDocID, deckDocID, flashcardsCurrentlyStudying);
+
+        if (newFlashcard != null) { // newFlashcard == null means there are no new flashcards
+            return newFlashcard; // Returning the new flashcard
+        }
+
+        // No new flashcards exists. Pulling the oldest lastAccessed flashcard from all Streak Categories
+        nextFlashcard = await firebase.firestore()
+            .collection(Constant.collectionName.CLASSROOMS)
+            .doc(classDocID)
+            .collection(Constant.collectionName.DECK_DATA)
+            .doc(deckDocID)
+            .collection(Constant.collectionName.FLASHCARDS_DATA)
+            .orderBy("lastAccessed", "asc")
+            .limit(1)
+            .get();
+
+        nextFlashcard.forEach((doc) => {
+            if (doc.exists)
+                nextFlashcardDocID = doc.id;
+        });
+    }
+
+
+    let nextFlashcardModel;
+    for (let i = 0; i < flashcardsCurrentlyStudying.length; i++) {
+        if (flashcardsCurrentlyStudying[i].docID == nextFlashcardDocID) {
+            nextFlashcardModel = flashcardsCurrentlyStudying[i];
+            break;
+        }
+    }
+
+    return nextFlashcardModel;
+}
+
+// Helper function for getNextSmartStudyFlashcard(uid, deckDocID, flashcardsCurrentlyStudying)
+//  Returns new if there are no new flashcards
+async function getClassFlashcardNotInFlashcardData(classDocID, deckDocID, flashcardsCurrentlyStudying) {
+    let flashcardsDataList = await getClassFlashcardsDataFromDeck(classDocID, deckDocID);
+
+    // Find first occurence of a flashcard that isn't in our flashcards data list
+    for (let i = 0; i < flashcardsCurrentlyStudying.length; i++) {
+
+        let flashcardInDataList = false;
+        for (let j = 0; j < flashcardsDataList.length; j++) {
+            if (flashcardsDataList[j].docID == flashcardsCurrentlyStudying[i].docID) {
+                flashcardInDataList = true;
+                break;
+            }
+        }
+
+        if (!flashcardInDataList) {
+            return flashcardsCurrentlyStudying[i];
+        }
+    }
+
+    return null;
+}
 
 
 
@@ -445,6 +872,28 @@ export async function getUserDeckById(uid, deckDocID) {
 }
 
 //============================================================================//
+// This function will pull the data for a single deck by its dock id
+//  Note: this does not grab the cached flashcard data, only the deck data info
+//  (i.e. last accessed and date created)
+//============================================================================//
+export async function getUserDataDeckById(uid, deckDocID) {
+    const deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    if (!deckDataRef.exists) {
+        if (Constant.DEV)
+            console.log("! Deck Data reference does not exist");
+        return null;
+    }
+
+    return deckDataRef.data();
+}
+
+//============================================================================//
 // This function will pull in a single CLASS deck from it's docId
 //============================================================================//
 export async function getClassDeckByDocID(classDocID, deckDocID) {
@@ -465,7 +914,25 @@ export async function getClassDeckByDocID(classDocID, deckDocID) {
     deckModel.set_docID(deckDocID);
     return deckModel;
 }
+//============================================================================//
+// This function will pull in a single CLASSROOM from it's docId
+//============================================================================//
+export async function getClassroomByDocID(classDocID) {
+    const classRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocID)
+        .get();
 
+    if (!classRef.exists) {
+        if (Constant.DEV)
+            console.log("! Deck reference does not exist");
+        return null;
+    }
+
+    const classModel = new Classroom(classRef.data());
+    classModel.set_docID(classDocID);
+    return classModel;
+}
 
 
 
@@ -478,6 +945,7 @@ export async function favoriteDeck(uid, deckDocID, favorited) {
         .doc(uid).collection(Constant.collectionName.OWNED_DECKS).doc(deckDocID)
         .update({ 'isFavorited': favorited });
 }
+
 
 //============================================================================//
 // Favorite a class deck
@@ -1239,19 +1707,20 @@ export async function leaderboardByDecks(members) {
 }
 //Gets the count of the decks and updates it to a new field in user
 export async function leaderboardByFlashcards(members) {
+    let classroomLeadersByFlashcards = [];
+
     const ref = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .where('email', 'in', members)
-        .get().then((querySnapshot) => {
-            querySnapshot.forEach(async (doc) => {
-                const userdocId = doc.id;
-                const countDeck = await firebase.firestore()
-                    .collection(Constant.collectionName.USERS).doc(userdocId)
-                    .collection(Constant.collectionName.OWNED_DECKS)
-                    .get()
+        .orderBy('flashcardNumber', 'desc')
+        .get()
 
-            });
-        });
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByFlashcards.push(cm);
+    })
+    return classroomLeadersByFlashcards;
 }
 
 //============================================================================//
@@ -1292,6 +1761,8 @@ export async function leaderboardByFlashcards(members) {
 }                                                                             */
 //============================================================================//
 //FLASHCARD COUNT
+//===============
+//For DECKS
 export async function updateFlashcardCount(currentUser, deckId) {
     //This grabs all flashcards within the deck, so we can get a count on them
     const countFlash = await firebase.firestore()
@@ -1305,11 +1776,42 @@ export async function updateFlashcardCount(currentUser, deckId) {
         .collection(Constant.collectionName.USERS).doc(currentUser)
         .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
         .update({ 'flashcardNumber': countFlash.size });
-
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS).doc(deckId)
+        .update({ 'flashcardNumber': countFlash.size });
     //Used in Edit Deck when updating to retain the flashcardNumber 
     return countFlash.size;
 
 }
+//For USER
+export async function updateFlashcardCountForUser(currentUser) {
+    let deckList = [];
+    let flashcardCount = 0;
+    //This grabs all the decks owned by a user, so we can get a count on them
+    const countDeck = await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .collection(Constant.collectionName.OWNED_DECKS)
+        .get()
+    //This collects all decks into an array so I may count up the the flashcards
+    countDeck.forEach(doc => {
+        let deck = new Deck(doc.data());
+        deck.set_docID(doc.id);
+        deckList.push(deck);
+    });
+    for (let i = 0; i < deckList.length; i++) {
+        flashcardCount += deckList[i].flashcardNumber;
+    }
+    //This updates the flashcard number by counting the previous get() reference
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS).doc(currentUser)
+        .update({ 'flashcardNumber': flashcardCount });
+
+    return flashcardCount;
+
+}
+
 export async function updateClassFlashcardCount(classroomId, deckId) {
     //This grabs all flashcards within the deck, so we can get a count on them
     const countFlash = await firebase.firestore()
@@ -1343,17 +1845,177 @@ export async function updateDeckCount(currentUser) {
 }
 //============================================================================//
 
+//============================================================================//
+// Submit a help ticket
+//============================================================================//
+export async function submitHelpTicket(helpTicket) {
+    const helpTicketRef = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS).add(helpTicket.serialize());
+    return helpTicketRef;
+}
+
+export async function uploadHelpTicketImage(imageFile, imageName) {
+    if (!imageName) {
+        imageName = Date.now() + imageFile.name;
+    }
+    const ref = firebase.storage().ref().child(Constant.storageFolderName.HELPTICKET_IMAGES + imageName);
+    const taskSnapShot = await ref.put(imageFile);
+    const imageURL = await taskSnapShot.ref.getDownloadURL();
+    return { imageName, imageURL };
+}
+
+export async function updateHelpTicket(helpTicketDocId, update) {
+    await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).update(update);
+}
+
+//============================================================================//
+// User help ticket functions
+//============================================================================//
+export async function getUserHelpTickets(email) {
+    let helpTickets = [];
+    const helpTicketSnapshot = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .where('submittedBy', '==', email)
+        .orderBy('timestamp', 'desc')
+        .get();
+    helpTicketSnapshot.forEach(doc => {
+        const ht = new HelpTicket(doc.data());
+        ht.set_docID(doc.id);
+        helpTickets.push(ht);
+    })
+
+    return helpTickets;
+}
+
+export async function getOneHelpTicket(helpTicketDocId) {
+    const helpTicketRef = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .doc(helpTicketDocId)
+        .get();
+
+    if (!helpTicketRef.exists) return null;
+
+    const helpTicket = new HelpTicket(helpTicketRef.data());
+    helpTicket.set_docID(helpTicketDocId);
+    return helpTicket;
+}
+
+export async function closeHelpTicket(helpTicketDocId, imageName) {
+    await firebase.firestore().collection(Constant.collectionName.HELPTICKETS).doc(helpTicketDocId).delete();
+    if (imageName != '') {
+        await firebase.storage().ref().child(Constant.storageFolderName.HELPTICKET_IMAGES + imageName).delete();
+    }
+}
+//============================================================================//
+// Help ticket functions for admin
+//============================================================================//
+export async function getHelpTickets() {
+    let helpTickets = [];
+    const helpTicketSnapshot = await firebase.firestore()
+        .collection(Constant.collectionName.HELPTICKETS)
+        .orderBy('timestamp', 'desc')
+        .get();
+    helpTicketSnapshot.forEach(doc => {
+        const ht = new HelpTicket(doc.data());
+        ht.set_docID(doc.id);
+        helpTickets.push(ht);
+    })
+
+    return helpTickets;
+}
 
 //============================================================================//
 // Get USER
 //============================================================================//
 export async function getUser(uid) {
     const ref = await firebase.firestore()
-    .collection(Constant.collectionName.USERS)
-    .doc(uid)
-    .get();
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .get();
 
     const user = new User(ref.data());
     return user;
+}
+//============================================================================//
+
+//============================================================================//
+//UPDATE USER PROFILE
+//============================================================================//
+export async function updateUserProfile(uid, username, userBio, profilePhotoName, profilePhotoURL) {
+    if ((profilePhotoURL != null) && (profilePhotoName != null)) {
+        await firebase.firestore().collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .update({ 'username': username, 'userBio': userBio, 'profilePhotoName': profilePhotoName, 'profilePhotoURL': profilePhotoURL });
+    } else {
+        await firebase.firestore().collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .update({ 'username': username, 'userBio': userBio });
+    }
+}
+
+// UPLOAD PROFILE PICTURE
+export async function uploadProfilePicture(profilePicturerFile, profilePictureName) {
+    //image doesn't have a name
+    if (!profilePictureName) {
+        profilePictureName = Date.now() + profilePicturerFile.name + 'pfp';
+    }
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.PROFILE_PICTURES + profilePictureName);
+    const taskSnapShot = await ref.put(profilePicturerFile);
+    const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
+    return { profilePictureName, profilePictureURL };
+}
+
+//============================================================================//
+// UPDATE POMOPET
+//============================================================================//
+export async function updatePomopet(uid, pomopet) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'pomopet': pomopet });
+}
+//============================================================================//
+
+
+//============================================================================//
+// LOG TIME SPENT STUDYING.
+//  Use in any instance when the user nagivagtes away from the study_page.
+//  It grabs the time saved in the local storage "studyStartTime", gets the 
+//  difference, and uploads it to the respective decks data document. It saves
+//  it to that days cached time spent studying.
+//============================================================================//
+export async function logTimeSpentStudying(uid, deckDocID) {
+    localStorage.setItem("studyTimeTracked", "true");
+    console.log('logging time spent');
+
+    let deckData = await getDeckData(uid, deckDocID);
+    let timeStudiedByDayMap = deckData.timeStudiedByDay; // getting this so we can get total time spent studying today
+
+    let timeSpentStudyingNow = new Date().getTime() - localStorage.getItem("studyStartTime"); // (Current time - time started studying) = total time spent studying this session
+    let timeSpentStudyingEarlierToday = timeStudiedByDayMap[Utilites.getCurrentDate()]; // total time spent studying today on this deck
+    if (timeSpentStudyingEarlierToday == undefined)
+        timeSpentStudyingEarlierToday = 0; // If it is the first time studying this deck today
+    let timeSpentStudyingTotalTodayMs = timeSpentStudyingNow + timeSpentStudyingEarlierToday;
+
+    console.log(timeSpentStudyingTotalTodayMs);
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log("This session: [ms] ", timeSpentStudyingNow);
+    console.log("This session: [s] ", (timeSpentStudyingNow / 1000));
+    console.log("Last session: [ms] ", timeSpentStudyingEarlierToday);
+    console.log("Last session: [s] ", (timeSpentStudyingEarlierToday / 1000));
+    console.log("Total: [ms] ", timeSpentStudyingTotalTodayMs);
+    console.log("Total: [s] ", (timeSpentStudyingTotalTodayMs / 1000));
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    timeStudiedByDayMap[Utilites.getCurrentDate()] = timeSpentStudyingTotalTodayMs; // update today's total study time in the map
+
+    await firebase.firestore() // update today's total study time in cloud firestore
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .update({
+            timeStudiedByDay: timeStudiedByDayMap
+        });
 }
 //============================================================================//
