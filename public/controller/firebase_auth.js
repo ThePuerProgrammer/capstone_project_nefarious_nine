@@ -28,6 +28,7 @@ export function addEventListeners() {
                     // Getting UID for localStorage!
                     uid = cred.user.uid;
                 });
+            //grab user data
             
             // Saving UID in local storage for referencing user's Firestore data
             localStorage.setItem("uid", uid); // Retrievable with localStorage.getItem("uid")
