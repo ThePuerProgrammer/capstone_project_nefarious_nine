@@ -12,6 +12,7 @@ import * as Analytics from '../view/analytics_page.js'
 import * as Search from '../view/search_page.js';
 import * as HelpTicketsPage from '../view/help_tickets_page.js';
 import * as OneHelpTicketPage from '../view/one_help_ticket_page.js';
+import * as ShopPage from '../view/pomoshop_page.js';
 
 
 export const routePathname = {
@@ -29,6 +30,7 @@ export const routePathname = {
     SEARCH: '/search',
     HELPTICKETSPAGE: '/helptickets',
     ONEHELPTICKET: '/helpticket',
+    POMOSHOP: '/pomoshop',
 };
 
 export const routes = [
@@ -46,6 +48,7 @@ export const routes = [
     { pathname: routePathname.SEARCH, page: Search.search_page },
     { pathname: routePathname.HELPTICKETSPAGE, page: HelpTicketsPage.help_tickets_page },
     { pathname: routePathname.ONEHELPTICKET, page: OneHelpTicketPage.one_help_ticket_page },
+    { pathname: routePathname.POMOSHOP, page: ShopPage.shop_page },
 
 ];
 
