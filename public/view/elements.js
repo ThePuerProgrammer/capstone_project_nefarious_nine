@@ -151,7 +151,10 @@ export const formEditDeck = {
 export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
 export const formDeleteDeckConfirmation = document.getElementById('form-delete-deck-confirmation');
 export const formEditDeckClassroomSelect = document.getElementById('select-deck-classroom-edit');
-
+//Coin Display
+//==========================================================================//
+export const coinCount = document.getElementById('coin-count');
+//==========================================================================//
 //==========================================================================//
 //PET ADOPTION
 //============================================================================//
