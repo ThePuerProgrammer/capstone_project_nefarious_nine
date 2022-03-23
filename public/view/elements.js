@@ -13,6 +13,7 @@ export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 export const modalMenuResetPassword = document.getElementById('reset-password');
 export const menuHelpTickets = document.getElementById('menu-help-tickets');
+export const menuShop = document.getElementById('menu-shop');
 
 // pomo timer buttons
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
@@ -81,6 +82,7 @@ export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getE
 export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', { backdrop: 'static' }));
 export const modalSubmitHelpTicket = new bootstrap.Modal(document.getElementById('modal-submit-help-ticket', { backdrop: 'static' }));
 export const modalEditProfile = new bootstrap.Modal(document.getElementById('edit-profile-modal'));
+export const modalPomodoption = new bootstrap.Modal(document.getElementById('modal-pomodoption'));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -150,12 +152,20 @@ export const formEditDeck = {
 export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
 export const formDeleteDeckConfirmation = document.getElementById('form-delete-deck-confirmation');
 export const formEditDeckClassroomSelect = document.getElementById('select-deck-classroom-edit');
+//Coin Display
+//==========================================================================//
+export const coinCount = document.getElementById('coin-count');
+//==========================================================================//
 //==========================================================================//
 //PET ADOPTION
 //============================================================================//
-export const formPomodoption = document.getElementById('form-pomodoption');
+export const formPomodoption = {
+    form: document.getElementById('form-pomodoption'),
+    bunnyButton: document.getElementById('bunny-btn'),
+    dogButton: document.getElementById('dog-btn'),
+    catButton: document.getElementById('cat-btn'),
+}
 //============================================================================//
-
 //CLASSROOMS PAGE
 //============================================================================//
 export const formCreateClassroom = document.getElementById('form-create-classroom');
