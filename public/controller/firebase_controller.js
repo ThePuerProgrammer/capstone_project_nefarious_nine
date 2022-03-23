@@ -1438,19 +1438,6 @@ export async function updateCoins(uid, coins) {
 }
 
 //============================================================================//
-// UPDATE USER PET
-//============================================================================//
-export async function updatePet(uid, updatedPet) {
-    await firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .doc(uid)
-        .update({ 'pet': updatedPet });
-
-}
-//============================================================================//
-
-
-//============================================================================//
 // Gets all available classrooms
 //============================================================================//
 export async function getAvailableClassrooms() {

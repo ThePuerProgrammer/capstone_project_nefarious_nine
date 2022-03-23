@@ -5,7 +5,6 @@ export class User{
         this.decksStudying = data.decksStudying;
         this.defaultTimerSetting = [30, 3];
         this.coins = data.coins;
-        this.pet = data.pet;
         this.deckNumber = data.deckNumber;
         this.flashcardNumber = data.flashcardNumber;
         this.profilePhotoName = data.profilePhotoName;
@@ -46,7 +45,6 @@ export class User{
                 decksStudying: this.decksStudying,
                 defaultTimerSetting: this.defaultTimerSetting,
                 coins: this.coins,
-                pet: this.pet,
                 deckNumber: this.deckNumber,
                 flashcardNumber: this.flashcardNumber,
                 profilePhotoName: this.profilePhotoName,
@@ -63,7 +61,6 @@ export class User{
            user.username = data.username;
            user.decksStudying = data.decksStudying;
            user.coins = data.coins;
-           user.pet = data.pet;
            user.deckNumber = data.deckNumber;
            user.flashcardNumber = data.flashcardNumber;
            user.profilePhotoName = data.profilePhotoName;

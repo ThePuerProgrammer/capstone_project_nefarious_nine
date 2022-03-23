@@ -5,7 +5,8 @@ import { User } from '../model/user.js'
 import * as Elements from '../view/elements.js'
 import * as Utilities from '../view/utilities.js'
 import * as Constants from '../model/constant.js'
-import * as CreatePage from '../view/create_account_page.js'
+//import * as CreatePage from '../view/create_account_page.js'
+import * as HomePage from '../view/home_page.js'
 import { routing, routePathname } from './routes.js';
 
 
@@ -61,7 +62,6 @@ export function addEventListeners() {
             const email = emailAddress;
             const decksStudying = [];
             const coins = 0;
-            const pet = "bunny";
             const deckNumber = 0;
             const flashcardNumber = 0;
             const userBio = "";
@@ -83,7 +83,6 @@ export function addEventListeners() {
                 username,
                 decksStudying,
                 coins,
-                pet,
                 deckNumber,
                 flashcardNumber,
                 profilePhotoName,
@@ -106,10 +105,10 @@ export function addEventListeners() {
             console.log("ADDED USER TO FIRESTORE");
       
             // Account successfully created from here
-            e.target.reset();
+            e.target.reset();            
 
             Utilities.info('Account created', `You're signed in as ${emailAddress}`, Constants.htmlIDs.createAccountModal); //last param dismisses previous modal 
-
+            Elements.modalCreateAccount.hide();
         } catch (e) {
             if (Constants.DEV) console.log(e);
             Utilities.info('Failed to create account', JSON.stringify(e), Constants.htmlIDs.createAccountModal);
@@ -120,6 +119,7 @@ export function addEventListeners() {
         try {
             await signOut(auth);
             Utilities.info('Notice', `You're securely signed out!`); //last param dismisses previous modal 
+            await HomePage.home_page();
 
         } catch (e) {
             Utilities.info('Sign Out Error', JSON.stringify(e));
@@ -153,7 +153,7 @@ export function addEventListeners() {
         } catch (e) {
             Utilities.info('Password reset error ', JSON.stringify(e));
             if (Constants.DEV)
-                console.log('Password reset errror ' + e);
+                console.log('Password reset error ' + e);
         }
     })
 
@@ -191,7 +191,7 @@ function authStateChangeObserver(user) {
 
         history.pushState(null, null, routePathname.HOME);
 
-        Elements.root.innerHTML = CreatePage.html;
+        Elements.root.innerHTML = HomePage.html;
     }
 }
 
