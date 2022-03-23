@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=2]
+[gd_scene load_steps=87 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://pomobite/Chef_NPC.gd" type="Script" id=18]
 [ext_resource path="res://icon.png" type="Texture" id=19]
 [ext_resource path="res://pomobite/Host_NPC.gd" type="Script" id=20]
+[ext_resource path="res://pomobite/Fryer_Oil_Particles.tscn" type="PackedScene" id=21]
 
 [sub_resource type="DynamicFont" id=39]
 size = 10
@@ -1513,6 +1514,28 @@ position = Vector2( 1029, 350 )
 [node name="Bubble_Particles2" parent="ParticleEffects/RightTubBubbles" instance=ExtResource( 13 )]
 position = Vector2( 1029, 319 )
 
+[node name="FryerOilParticles" type="Node2D" parent="ParticleEffects"]
+
+[node name="Fryer_Oil_Particles" parent="ParticleEffects/FryerOilParticles" instance=ExtResource( 21 )]
+position = Vector2( 704, 76 )
+amount = 120
+lifetime = 0.5
+
+[node name="Fryer_Oil_Particles2" parent="ParticleEffects/FryerOilParticles" instance=ExtResource( 21 )]
+position = Vector2( 736, 76 )
+amount = 120
+lifetime = 0.5
+
+[node name="Fryer_Oil_Particles3" parent="ParticleEffects/FryerOilParticles" instance=ExtResource( 21 )]
+position = Vector2( 1184, 76 )
+amount = 120
+lifetime = 0.5
+
+[node name="Fryer_Oil_Particles4" parent="ParticleEffects/FryerOilParticles" instance=ExtResource( 21 )]
+position = Vector2( 1216, 76 )
+amount = 120
+lifetime = 0.5
+
 [node name="Player1" parent="." instance=ExtResource( 3 )]
 collision/safe_margin = 0.001
 
@@ -1862,7 +1885,7 @@ __meta__ = {
 }
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceA"]
-position = Vector2( 992, 1127 )
+position = Vector2( 992, 1024 )
 rotation = -1.5708
 rotate = false
 loop = false
@@ -1874,7 +1897,7 @@ __meta__ = {
 }
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceB"]
-position = Vector2( 960, 1090 )
+position = Vector2( 960, 1008 )
 rotation = -1.57078
 rotate = false
 loop = false
@@ -1886,7 +1909,7 @@ __meta__ = {
 }
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceC"]
-position = Vector2( 928, 1108 )
+position = Vector2( 928, 1033 )
 rotation = -1.5708
 rotate = false
 loop = false
@@ -1898,7 +1921,7 @@ __meta__ = {
 }
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Paths/CustomerPaths/EntranceD"]
-position = Vector2( 944, 1147 )
+position = Vector2( 944, 1048 )
 rotation = -1.57081
 rotate = false
 loop = false

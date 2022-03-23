@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/textures/PomoBITE_Textures/bubble2.png" type="Texture" id=1]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.00315457, 1 )
+colors = PoolColorArray( 0.998932, 1, 0.863281, 1, 0.990234, 0.88229, 0.696259, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0 ), 0.0, 1.45147, 0, 0, Vector2( 0.6, 0.307954 ), -1.81294, -1.81294, 0, 0, Vector2( 0.85, 0 ), 1.00246, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+lifetime_randomness = 0.47
+flag_disable_z = true
+spread = 180.0
+flatness = 1.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 60.0
+initial_velocity_random = 0.6
+angular_velocity = 35.0
+angular_velocity_random = 0.48
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = -120.0
+scale_curve = SubResource( 4 )
+color_ramp = SubResource( 2 )
+
+[node name="Fryer_Oil_Particles" type="Particles2D"]
+amount = 150
+lifetime = 0.75
+process_material = SubResource( 5 )
+texture = ExtResource( 1 )
