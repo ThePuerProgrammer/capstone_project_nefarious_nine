@@ -59,7 +59,6 @@ export function addEventListeners() {
             const email = emailAddress;
             const decksStudying = [];
             const coins = 0;
-            const pet = "bunny";
             const deckNumber = 0;
             const flashcardNumber = 0;
             const userBio = "";
@@ -81,7 +80,6 @@ export function addEventListeners() {
                 username,
                 decksStudying,
                 coins,
-                pet,
                 deckNumber,
                 flashcardNumber,
                 profilePhotoName,

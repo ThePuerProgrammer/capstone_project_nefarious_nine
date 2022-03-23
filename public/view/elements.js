@@ -81,6 +81,7 @@ export const modalLeaveClassroomConfirmation = new bootstrap.Modal(document.getE
 export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById('modal-delete-classroom', { backdrop: 'static' }));
 export const modalSubmitHelpTicket = new bootstrap.Modal(document.getElementById('modal-submit-help-ticket', { backdrop: 'static' }));
 export const modalEditProfile = new bootstrap.Modal(document.getElementById('edit-profile-modal'));
+export const modalPomodoption = new bootstrap.Modal(document.getElementById('modal-pomodoption'));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -150,10 +151,16 @@ export const formEditDeck = {
 export const formEditDeckCategorySelect = document.getElementById('select-deck-category-edit');
 export const formDeleteDeckConfirmation = document.getElementById('form-delete-deck-confirmation');
 export const formEditDeckClassroomSelect = document.getElementById('select-deck-classroom-edit');
+
 //==========================================================================//
 //PET ADOPTION
 //============================================================================//
-export const formPomodoption = document.getElementById('form-pomodoption');
+export const formPomodoption = {
+    form: document.getElementById('form-pomodoption'),
+    bunnyButton: document.getElementById('bunny-btn'),
+    dogButton: document.getElementById('dog-btn'),
+    catButton: document.getElementById('cat-btn'),
+}
 //============================================================================//
 
 //CLASSROOMS PAGE
