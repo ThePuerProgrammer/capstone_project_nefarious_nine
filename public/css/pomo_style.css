@@ -736,9 +736,11 @@ iframe {
 }
 
 .coin-text {
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 500;
-    text-align: right;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
     color: #2C1320;
     padding-right: 5%;
 }
