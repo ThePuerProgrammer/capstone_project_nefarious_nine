@@ -29,7 +29,9 @@ export function addEventListeners() {
                     // Getting UID for localStorage!
                     uid = cred.user.uid;
                 });
-            
+            //grab user data
+            var userdata = await FirebaseController.getUser(uid);
+            localStorage.setItem("usercoins", userdata.coins);
             // Saving UID in local storage for referencing user's Firestore data
             localStorage.setItem("uid", uid); // Retrievable with localStorage.getItem("uid")
             Utilities.info('Welcome', `You're now signed in as ${email}`);
@@ -88,7 +90,7 @@ export function addEventListeners() {
                 userBio,
                 pomopet,
             });
-
+            localStorage.setItem("usercoins", newUserModel.coins);
             // Creates user Auth Account AND adds user account to users collections
             //  * uid of the Auth account matches the Doc ID of the user document!
             await createUserWithEmailAndPassword(auth, emailAddress, password)
