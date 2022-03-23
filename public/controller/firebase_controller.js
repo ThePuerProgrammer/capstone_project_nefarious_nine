@@ -1,5 +1,6 @@
 import * as Constant from '../model/constant.js'
 import * as Utilites from '../view/utilities.js'
+import * as Element from '../view/elements.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
@@ -1432,6 +1433,8 @@ export async function getUserTimerDefault(uid) {
 export async function updateCoins(uid, coins) {
     await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
         .update({ 'coins': coins });
+
+    Element.coinCount.innerHTML = coins;
 }
 
 //============================================================================//
