@@ -189,7 +189,7 @@ function authStateChangeObserver(user) {
 
         history.pushState(null, null, routePathname.HOME);
 
-        Elements.root.innerHTML = HomePage.html;
+       //Elements.root.innerHTML = HomePage.html;
     }
 }
 
