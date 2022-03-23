@@ -15,6 +15,8 @@ let imageFile2UploadAnswer;
 const imageAnswer = Elements.formContainerAnswerImage;
 const imageQuestion = Elements.formContainerQuestionImage;
 
+var isClassDeck_global; // temp bug fix for classroom decks from Noah
+
 export function addEventListeners() {
 
 
@@ -102,7 +104,10 @@ export function addEventListeners() {
                 flashcard.answerImageName = "N/A";
                 flashcard.answerImageURL = "N/A";
             }
-            if (isClassDeck == "false") {//USER FLASHCARDS
+
+            console.log("Is class deck value: ", isClassDeck_global);
+
+            if (isClassDeck_global == "false") {//USER FLASHCARDS
                 const docId = await FirebaseController.createFlashcard(
                     Auth.currentUser.uid,
                     deckDocID,
@@ -128,7 +133,7 @@ export function addEventListeners() {
                 await FirebaseController.updateFlashcardCountForUser(Auth.currentUser.uid);
             } else { //CLASSROOM FLASHCARDS
                 const docId = await FirebaseController.createClassFlashcard(
-                    isClassDeck,
+                    isClassDeck_global,
                     deckDocID,
                     flashcard
                 );
@@ -147,7 +152,7 @@ export function addEventListeners() {
                     `Flashcard: ${flashcard.question} has been added!`,
                     "modal-create-a-flashcard"
                 );
-                await FirebaseController.updateClassFlashcardCount(isClassDeck, deckDocID);
+                await FirebaseController.updateClassFlashcardCount(isClassDeck_global, deckDocID);
             }
 
         } catch (e) {
@@ -158,7 +163,7 @@ export function addEventListeners() {
                 "modal-create-a-flashcard"
             );
         }
-        await deck_page(deckDocID, isClassDeck);
+        await deck_page(deckDocID, isClassDeck_global);
     });
     Elements.formDeleteFlashcard.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -185,7 +190,7 @@ export function addEventListeners() {
             }
 
         }        // refresh the page
-        await deck_page(deckDocID, isClassDeck);
+        await deck_page(deckDocID, isClassDeck_global);
     });
     // Event listener to change the answer view depending on whether or not
     //    multiple choice is checked or not
@@ -258,6 +263,7 @@ export function addEventListeners() {
 }
 
 export async function deck_page(deckDocID, isClassDeck) {
+    isClassDeck_global = isClassDeck; // Temp bug fix from Noah!
 
     if (localStorage.getItem("studyTimeTracked") == "false") { // user backed out of study page, so save time
         saveStudyTime();
@@ -288,12 +294,12 @@ export async function deck_page(deckDocID, isClassDeck) {
         if (isClassDeck == "false" || isClassDeck == false) {
             console.log("deck_page no class check for is class deck " + isClassDeck);
             deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDocID);
-            flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deck.docID);
+            flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckDocID);
         } else {
 
             //note: class selected is either the doc id of a selected classroom or false
             deck = await FirebaseController.getClassDeckByDocID(isClassDeck, deckDocID);
-            flashcards = await FirebaseController.getClassDeckFlashcards(isClassDeck, deck.docID);
+            flashcards = await FirebaseController.getClassDeckFlashcards(isClassDeck, deckDocID);
         }
         if (flashcards.length != 0) {
             // study deck button
