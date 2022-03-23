@@ -204,8 +204,8 @@ async function getFlashcardMasteryData() {
 
     let deckData = await FirebaseController.getUserDataDeckById(Auth.currentUser.uid, currentSelectedDeckID);
     
-    // If there are less than 2 cachedDates, then there is not SRS data to display, so quit early
-    if (deckData.cachedDates.length < 2) {
+    // If there are less than 2 cachedDates or the deck hasn't been studied yet, then there is not SRS data to display, so quit early
+    if (deckData == null || deckData.cachedDates.length < 2) {
         removeSpinner();
         addMessageInsteadOfChart("This deck does not have contain enough SRS data to view Flashcard Mastery analytics. Try studying this deck in \"Smart Study\" at least 2 days and return here to see your progress!");
         selectorsEnabled(false);
@@ -273,6 +273,15 @@ async function getTimeSpentStudyingData() {
     let fillerIndexes = [];
 
     let deckData = await FirebaseController.getUserDataDeckById(Auth.currentUser.uid, currentSelectedDeckID);
+
+    // If the deck has not been studied yet, quit fetching data and displaying a message to the user
+    if (deckData == null) {
+        removeSpinner();
+        addMessageInsteadOfChart("This deck does not have contain enough Time-Studied data to view Time Spent Studying analytics. Try studying this deck in \"Regular\" or \"Smart Study\" at least 2 days and return here to see your progress!");
+        selectorsEnabled(false);
+        return false;
+    }
+
     let timeStudiedByDayMap = await FirebaseController.getDeckDataTimeStudiedByDay(Auth.currentUser.uid, currentSelectedDeckID);
     
     // If there are less than 2 unique dates where the user studied this deck, then there is not enough data to display, so quit early
