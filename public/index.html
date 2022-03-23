@@ -47,6 +47,10 @@
               <button type="button" class="btn pomo-text-color-light" data-bs-toggle="modal"
                 data-bs-target="#modal-signin-form">Sign In</button>
             </li>
+            <li class="nav-item modal-preauth">
+              <button type="button" class="btn pomo-text-color-light" data-bs-toggle="modal"
+                data-bs-target="#modal-create-account">Create Account</button>
+            </li>
             <li class="nav-item modal-postauth">
               <button type="button" class="btn pomo-text-color-light" id="menu-home">Home</button>
             </li>
@@ -63,6 +67,16 @@
           <div style="flex-grow: 2;"></div>
           <div style="flex-grow: 1;">
             <ul class="navbar-nav">
+              <li class="nav-item" style="display: inline;">
+                <button type="button" class="btn" id="menu-shop">
+                  <img src="./assets/images/store_black_24dp.svg" alt="Shop" width="24" height="24">
+                </button> 
+              </li>
+              <li>
+                <div id="coin-display" class="coin-display">
+                  <p id="coin-count" class="coin-text"></p>
+                </div>
+              </li>
               <li class="nav-item" style="display: inline;">
                 <button type="button" class="btn" id="menu-help-tickets">
                   <img src="./assets/images/help_outline_black_24dp.svg" alt="Help tickets" width="24" height="24">
@@ -243,20 +257,20 @@
             <div id="pet-selected"></div>
             <div class="row" style="padding-bottom: 20%;">
               <label class="raise" style="width: 70px;">
-                <input type="radio" class="resize" name="pet" value="Bunny" checked>
+                <input type="radio" class="resize hidden-radio-button" id="bunny-btn" name="pet" value="Bunny">
                 <img src="./assets/images/pet_sprites/bunny Sprite.png" width="150" height="150">
               </label>
               <label class="raise resize" style="width: 70px; left: 15%;">
-                <input type="radio" class="resize" name="pet" value="Dog">
+                <input type="radio" class="resize hidden-radio-button" id="dog-btn"  name="pet" value="Dog">
                 <img src="./assets/images/pet_sprites/Rembo Sprite.png" width="150" height="150">
               </label>
               <label class="raise resize" style="width: 70px; left: 30%;">
-                <input type="radio" class="resize" name="pet" value="Cat">
+                <input type="radio" class="resize hidden-radio-button" id="cat-btn" name="pet" value="Cat">
                 <img src="./assets/images/pet_sprites/Cat Sprite.png" width="150" height="150">
               </label>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" button
+              <button class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" id="submit-adoption" button
                 type="submit">Adopt</button>
             </div>
           </form>

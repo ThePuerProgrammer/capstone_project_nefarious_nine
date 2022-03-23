@@ -445,7 +445,7 @@ input {
 /*============================================================================*/
 
 /*Hides radio buttons*/
-[type=radio] { 
+.hidden-radio-button { 
     position: static;
     opacity: 0;
     width: 0;
@@ -669,6 +669,7 @@ iframe {
 .edit-profile-btn{
     padding: 10px 20px;
 }
+
 .user-profile{
     padding: 50px 20px;
     height: 100%;
@@ -692,10 +693,55 @@ iframe {
     color: #2C1320;
 }
 
+.pomopet-edit-name-btn {
+    border: none;
+    background-color: inherit;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.pomopet-edit-name-form {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;  
+}
+
 .pfp {
     height: 250px;
     width: 250px;
     border-radius: 50%;
   }
 
+/*==========================================================================*/
+
+/* ANALYTICS PAGE */
+/*==========================================================================*/
+
+.analytics-header-card {
+    background-color: #939dc3;
+    border: 5px solid #5F4B66 !important;
+}
+
+/*==========================================================================*/
+
+/*COIN DISPLAY BOX*/
+/*==========================================================================*/
+.coin-display {
+    width: 85px;
+    height: 35px;
+    border-radius: 50px;
+    background-color: #A7ADC6;
+}
+
+.coin-text {
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+    color: #2C1320;
+    padding-right: 5%;
+}
 /*==========================================================================*/
