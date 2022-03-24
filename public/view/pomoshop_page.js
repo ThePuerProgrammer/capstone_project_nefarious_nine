@@ -20,7 +20,7 @@ export async function shop_page() {
     <button id="accessories-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Accessories</button><br>
     </div><div id="pomoshop" style="text-align: center;"><h1>Welcome to the PomoShop!</h1><div id="default-tag"><h3>Showing skins and accessories</h3></div></div>`;
 
-    Elements.root.innerHTML += html;
+    Elements.root.innerHTML = html;
 
     // button listeners to show different items within the shop
     const defaultShopButton = document.getElementById('default-shop-button');
