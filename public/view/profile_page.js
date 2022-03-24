@@ -5,8 +5,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 
 //Declaration of Image
-let imageFile2UploadProfile;
-//const profilePic = Elements.formContainerProfilePicture;
+let imageFile2UploadProfile = "";
 
 export function addEventListeners() {
     Elements.menuProfile.addEventListener('click', async () => {
@@ -22,9 +21,8 @@ export function addEventListeners() {
  
         try {
             // if updated pfp
-            if(imageFile2UploadProfile != null) {
+            if(imageFile2UploadProfile != "") {
                 const {profilePictureName, profilePictureURL} = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile);
-                console.log("UPLOADED IMAGE")
                 await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, profilePictureName, profilePictureURL);
             } else {
                 await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, null, null);
@@ -93,11 +91,20 @@ export async function profile_page() {
     <img src="${user.pomopet.petPhotoURL}" style="width: 200px; height: 200px; margin-bottom: -16px;" class="center">
     <hr class="pomopet-bar">`;
 
-    html += `<div id="pomopet-edit-name">
+    html += `<div id="pomopet-edit-name-display">
         <button type="button" class="pomopet-edit-name-btn pomo-text-color-dark" id="pomopet-edit-name-btn" 
             style="font-size: 25px; font-weight: bold;">${user.pomopet.name}</button>
-    </div>
     </div>`;
+
+    html += `<div id="pomopet-edit-name-form-display" style="display:none;">
+        <form class="pomopet-edit-name-form" id="${Constant.htmlIDs.formEditPomopetName}">
+        <input type="pomopet-name" class="form-control" style="flex: 3; margin-right: 20px;"
+            id="pomopet-name" type="name" name='name' value="${user.pomopet.name}" placeholder="press esc to cancel" required minlength="1" autocomplete="off">
+        <button type="submit" class="btn btn-secondary pomo-bg-color-md-dark" style="flex: 1;">Save</button>
+        </form>
+        </div>`;
+
+    html += `</div>`;
     
     Elements.root.innerHTML = html;
 
@@ -133,38 +140,37 @@ export async function profile_page() {
     pomopetEditNameButton.addEventListener('click', async e => {
         e.preventDefault();
 
-        document.getElementById("pomopet-edit-name").innerHTML = `
-        <form class="pomopet-edit-name-form" id="${Constant.htmlIDs.formEditPomopetName}">
-            <input type="pomopet-name" class="form-control" style="flex: 3; margin-right: 20px;"
-                id="pomopet-name" type="name" name='name' value="${user.pomopet.name}" placeholder="press esc to cancel" required minlength="1" autocomplete="off">
-            <button type="submit" class="btn btn-secondary pomo-bg-color-md-dark"  style="flex: 1;">Save</button>
-            </form>`;
+        document.getElementById("pomopet-edit-name-display").style.display = "none";
+        document.getElementById("pomopet-edit-name-form-display").style.display = "block";
 
-        // POMOPET SAVE button listener
-        const formEditPomopetName = document.getElementById(Constant.htmlIDs.formEditPomopetName);
-        formEditPomopetName.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const pomopetName = e.target.name.value;
-            console.log(pomopetName)
+    });
 
-            user.pomopet.name = pomopetName;
+    // POMOPET SAVE button listener
+    const formEditPomopetName = document.getElementById(Constant.htmlIDs.formEditPomopetName);
+    formEditPomopetName.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pomopetName = e.target.name.value;
+        console.log(pomopetName)
 
-            try {
-                await FirebaseController.updatePomopet(Auth.currentUser.uid, user.pomopet);
-                await profile_page();
-            } catch (e) {
-                if (Constant.DEV)
-                    console.log(e);
-            }
-        });
+        user.pomopet.name = pomopetName;
 
-        // ESC key press listener
-        /*formEditPomopetName.addEventListener('keydown', (e) => {
-            if (e.key == "Escape") {
-              console.log("esc pressed");
-              document.getElementById("pomopet-edit-name").innerHTML = `<button type="button" class="pomopet-edit-name pomo-text-color-dark" 
-                id="pomopet-edit-name-btn" style="font-size: 25px; font-weight: bold;">${user.pomopet.name}</button>`;
-            }
-          });*/
+        try {
+            await FirebaseController.updatePomopet(Auth.currentUser.uid, user.pomopet);
+            await profile_page();
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }
+
+        document.getElementById("pomopet-edit-name-form-display").style.display = "none";
+        document.getElementById("pomopet-edit-name-display").style.display = "block";
+    });
+
+    // ESC key press listener
+    formEditPomopetName.addEventListener('keydown', (e) => {
+        if (e.key == "Escape") {
+            document.getElementById("pomopet-edit-name-form-display").style.display = "none";
+            document.getElementById("pomopet-edit-name-display").style.display = "block";
+        }
     });
 }
