@@ -13,6 +13,7 @@ export const menuSettings = document.getElementById('menu-settings');
 export const menuSignOut = document.getElementById('menu-signout');
 export const modalMenuResetPassword = document.getElementById('reset-password');
 export const menuHelpTickets = document.getElementById('menu-help-tickets');
+export const menuShop = document.getElementById('menu-shop');
 
 // pomo timer buttons
 export const pomoTimerToggleButton = document.getElementById('pomo-timer-toggle-button')
