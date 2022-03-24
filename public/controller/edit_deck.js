@@ -50,7 +50,7 @@ export function addEventListeners() {
                 d.flashcardNumber = await FirebaseController.updateFlashcardCount(Auth.currentUser.uid, d.docID);
                 await FirebaseController.updateDeck(Auth.currentUser.uid, d, d.docID)
                 //Added an additional load, as not all the updated was loading the first time.
-                await study_decks_page();
+                setTimeout(200);
 
 
             } catch (e) {
@@ -58,6 +58,7 @@ export function addEventListeners() {
                 Utilities.info('Update Deck Error', JSON.stringify(e));
             }
             Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
+            await study_decks_page();
         } else { //else is a class deck
             try {
                 //Updates count as Deck is edited

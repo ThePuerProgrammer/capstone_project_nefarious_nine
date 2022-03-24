@@ -298,7 +298,6 @@ text = "           Add to Queue:"
 align = 2
 
 [node name="No_Games_Selected_Popup_Alert" type="AcceptDialog" parent="." index="14"]
-visible = true
 margin_left = 787.0
 margin_top = 403.0
 margin_right = 1075.0
@@ -311,7 +310,6 @@ __meta__ = {
 }
 
 [node name="No_Selection_Method_Choosen_Popup_Alert" type="AcceptDialog" parent="." index="15"]
-visible = true
 margin_left = 795.0
 margin_top = 400.0
 margin_right = 1073.0
@@ -321,7 +319,6 @@ size_flags_vertical = 3
 dialog_text = "You Must Select A Method To Pull Decks!"
 
 [node name="No_Deck_Selected_Popup_Alert" type="AcceptDialog" parent="." index="16"]
-visible = true
 margin_left = 849.0
 margin_top = 400.0
 margin_right = 1024.0
@@ -331,7 +328,6 @@ size_flags_vertical = 3
 dialog_text = "You Must Select A Deck!!"
 
 [node name="No_Category_Selected_Popup_Alert" type="AcceptDialog" parent="." index="17"]
-visible = true
 margin_left = 849.0
 margin_top = 400.0
 margin_right = 1024.0
@@ -341,7 +337,6 @@ size_flags_vertical = 3
 dialog_text = "You Must Select A Category!!"
 
 [node name="No_Time_Selected_Popup_Alert" type="AcceptDialog" parent="." index="18"]
-visible = true
 margin_left = 787.0
 margin_top = 400.0
 margin_right = 1085.0
