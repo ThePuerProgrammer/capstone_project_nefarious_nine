@@ -1435,6 +1435,7 @@ export async function updateCoins(uid, coins) {
         .update({ 'coins': coins });
 
     Element.coinCount.innerHTML = coins;
+    localStorage.setItem('usercoins', coins);
 }
 
 //============================================================================//

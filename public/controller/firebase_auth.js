@@ -72,6 +72,14 @@ export function addEventListeners() {
                 petPhotoURL: "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fbunny.png?alt=media&token=c7f2df72-dbe3-4ca1-bdf0-6c9d85404a7f",
             }
 
+            let nowInMs = Date.now();
+            const pomopetData = {
+                lastWashed: nowInMs,
+                lastFed: nowInMs,
+                lastPet: nowInMs,
+                lastPoopPickUp: nowInMs,
+            }
+
             const user_mail = email.split('@');
             const username = user_mail[0]; // get first portion of user's email as default username
 
@@ -89,6 +97,7 @@ export function addEventListeners() {
                 profilePhotoURL,
                 userBio,
                 pomopet,
+                pomopetData
             });
             localStorage.setItem("usercoins", newUserModel.coins);
             // Creates user Auth Account AND adds user account to users collections
