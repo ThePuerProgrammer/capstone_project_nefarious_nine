@@ -189,7 +189,7 @@ function buildClassRoomSearchPage(classroomList, searchKeysArray) {
     let html = ''
     html += `<h1> Searched Classes, in ${classSearchOption}, looking for "${queryPrint}":
     <br>
-    <button id="search-reset-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px; float: right"><i class="fa fa-search"></i>Reset Search</button></h1>
+    <button id="search-reset-button" class="btn search-btn search-btn-reset search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px; float: right"><i class="fa fa-search"></i>Reset Search</button></h1>
 
     </h1> `
     ;

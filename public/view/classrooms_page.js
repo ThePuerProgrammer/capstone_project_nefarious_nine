@@ -96,7 +96,7 @@ export async function classrooms_page() {
         </div>
         </fieldset>
         </form>
-        <button id="search-classroom-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="material-icons">search</i>Search Classrooms</button></h1>
+        <button id="search-classroom-button" class="btn search-btn search-btn-classroom search-btn-hover rounded-pill ms-n3" type="click" style="margin: 5px;"><i class="material-icons">search</i>Search Classrooms</button></h1>
         </div>
     </div>
     </div>`;

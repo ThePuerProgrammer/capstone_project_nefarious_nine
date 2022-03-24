@@ -1638,15 +1638,18 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
         .get();
 
 
-    for (const docId of classroomDocIds) {
-        snapShot.forEach(doc => {
+    
+    snapShot.forEach(doc => {
+        for (const docId of classroomDocIds) {
             if (doc.id != docId) {
                 const t = new Classroom(doc.data());
                 t.set_docID(doc.id);
-                classroomList.push(t)
+                classroomList.push(t)                
             };
-        });
-    }
+            break //moves to next snapshot doc after pushing to classroomList
+        }
+    });
+    
     return classroomList;
 }
 
