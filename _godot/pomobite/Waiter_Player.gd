@@ -16,6 +16,7 @@ var l = "ui_left"
 var r = "ui_right"
 
 signal interact()
+signal poop()
 
 func _ready():
 	pass
@@ -30,6 +31,7 @@ func _physics_process(_delta):
 func poll_interaction():
 	if Input.is_action_just_pressed("ui_select"):
 		emit_signal("interact")
+		emit_signal("poop")
 
 func process_movement():
 	if Input.is_action_just_pressed(u) or Input.is_action_just_pressed(d):
@@ -84,3 +86,4 @@ func set_z():
 		z_index = 2
 	else:
 		z_index = 1
+

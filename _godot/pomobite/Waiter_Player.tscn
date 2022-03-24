@@ -23,24 +23,24 @@ animations = [ {
 "name": "side",
 "speed": 8.0
 }, {
-"frames": [ ExtResource( 7 ) ],
-"loop": false,
-"name": "stationary_down",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 9 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 7 ) ],
 "loop": true,
 "name": "down",
 "speed": 8.0
+}, {
+"frames": [ ExtResource( 10 ) ],
+"loop": false,
+"name": "stationary_up",
+"speed": 5.0
 }, {
 "frames": [ ExtResource( 8 ) ],
 "loop": false,
 "name": "stationary_side",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 10 ) ],
+"frames": [ ExtResource( 7 ) ],
 "loop": false,
-"name": "stationary_up",
+"name": "stationary_down",
 "speed": 5.0
 } ]
 
