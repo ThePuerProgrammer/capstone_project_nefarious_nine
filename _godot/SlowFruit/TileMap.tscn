@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://SlowFruit/assets/longGround.PNG" type="Texture" id=2]
+
+[node name="TileMap" type="Node2D"]
+
+[node name="CollisionObjects" type="Node2D" parent="."]
+
+[node name="Floor" type="StaticBody2D" parent="CollisionObjects"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/Floor"]
+
+[node name="Sprite" type="Sprite" parent="CollisionObjects/Floor"]
+position = Vector2( 416, 16 )
+scale = Vector2( 1.22899, 1 )
+texture = ExtResource( 2 )
+region_rect = Rect2( 1, 0, 0, 0 )
