@@ -14,6 +14,7 @@ export class Deck {
         this.keywords = data.keywords;
         this.flashcardNumber = data.flashcardNumber;
         this.isClassDeck = data.isClassDeck;
+        this.owned_by = data.owned_by;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
     }
@@ -54,6 +55,7 @@ export class Deck {
             keywords: this.keywords,
             flashcardNumber: this.flashcardNumber,
             isClassDeck: this.isClassDeck,
+            owned_by: this.owned_by,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 
@@ -74,6 +76,7 @@ export class Deck {
         if (!obj.dateCreated || typeof obj.dateCreated != 'number') return false;
         if (!obj.isFavorited || typeof obj.isFavorited != 'boolean') return false;
         if (!obj.keywords || typeof obj.keywords != 'array') return false;
+        if(!obj.owned_by || typeof obj.owned_by != 'string') return false;
     }
 
     /***************************************************************************
@@ -92,6 +95,7 @@ export class Deck {
         if (this.keywords) d.keywords = this.keywords;
         if (this.flashcardNumber) d.flashcardNumber = this.flashcardNumber;
         if (this.isClassDeck) d.isClassDeck = this.isClassDeck;
+        if (this.owned_by) d.owned_by = this.owned_by;
 
         return d;
     }

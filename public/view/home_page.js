@@ -4,6 +4,7 @@ import * as Constant from '../model/constant.js'
 import * as Minigames from './minigames_page.js'
 import * as ChillZone from './chillzone_page.js'
 import * as Analytics from './analytics_page.js'
+import * as Coins from '../controller/coins.js'
 
 export function addEventListeners() {
     Elements.menuHome.addEventListener('click', async() => {
@@ -16,9 +17,8 @@ export async function home_page() {
 
     //shows user coin count for coin display in navbar
     //currently has a bug where coins do not reset after switching user, temp fix is to refresh the page
-    if(Elements.coinCount.innerHTML == '' || Elements.coinCount.innerHTML == null) {
-        Elements.coinCount.innerHTML = localStorage.getItem('usercoins');
-    };
+    Coins.get_coins();
+
 
     Elements.root.innerHTML = ``;
     let html = '';

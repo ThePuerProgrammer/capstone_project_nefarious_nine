@@ -4,6 +4,7 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as Elements from './elements.js'
+import * as Coins from '../controller/coins.js'
 import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
@@ -11,6 +12,7 @@ import { buildStudyDecksPage } from './study_decks_page.js'
 
 
 export async function one_classroom_page(classroomDocID) {
+    Coins.get_coins();
     console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';

@@ -1,5 +1,6 @@
 import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
+import * as Coins from '../controller/coins.js'
 import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
@@ -263,6 +264,8 @@ export function addEventListeners() {
 }
 
 export async function deck_page(deckDocID, isClassDeck) {
+    Coins.get_coins();
+
     isClassDeck_global = isClassDeck; // Temp bug fix from Noah!
 
     if (localStorage.getItem("studyTimeTracked") == "false") { // user backed out of study page, so save time

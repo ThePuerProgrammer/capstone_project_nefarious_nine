@@ -4,6 +4,7 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Utilities from './utilities.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
+import * as Coins from '../controller/coins.js'
 import { Classroom } from '../model/classroom.js';
 import * as OneClassroomPage from './one_classroom_page.js';
 import { cleanDataToKeywords, setClassroomSearchOption, setSearchType } from './search_page.js';
@@ -66,6 +67,7 @@ export function addEventListeners() {
 } //END CLASSROOMS_PAGE EVENT LISTENERS
 
 export async function classrooms_page() {
+    Coins.get_coins();
     Elements.root.innerHTML = '';
     let html = '';
 

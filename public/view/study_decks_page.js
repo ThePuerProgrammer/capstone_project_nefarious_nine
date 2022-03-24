@@ -9,6 +9,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as EditDeck from '../controller/edit_deck.js'
 import * as Search from './search_page.js'
+import * as Coins from '../controller/coins.js'
 
 let confirmation = false;
 let noClassDeckSelected = false;
@@ -28,6 +29,7 @@ export function addEventListeners() {
         const category = e.target.selectCategory.value;
         const isClassDeck = e.target.selectClassroom.value;
         const flashcardNumber = 0;
+        const owned_by = Auth.currentUser.uid;
         //NOTE: If no class was chosen, isClassDeck value will be false.
         // Otherwise, the value will be the CLASSROOM DOC ID tied to the deck.
 
@@ -47,6 +49,7 @@ export function addEventListeners() {
             keywords,
             isClassDeck,
             flashcardNumber,
+            owned_by,
         });
 
 
@@ -100,6 +103,8 @@ export function addEventListeners() {
 }
 
 export async function study_decks_page() {
+    Coins.get_coins();
+
 
     let deckList = [];
     try {
@@ -152,9 +157,9 @@ export async function buildStudyDecksPage(deckList) {
 
 
 
-    Elements.root.innerHTML = "";
+    Elements.root.innerHTML = ""
     //Clears all HTML so it doesn't double
-    let html = ''
+    let html = ``
     html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="material-icons">search</i>Search Decks</button></h1> '
         ;
 
@@ -185,17 +190,16 @@ export async function buildStudyDecksPage(deckList) {
         if (deckList[i].isClassDeck == "false" || deckList[i].isClassDeck == false) {
             let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
             html += buildDeckView(deckList[i], flashcards, 'false');
+
         } else {
             let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
-            let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
+            // let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
+            html += buildDeckView(deckList[i], flashcards, deckList[i].isClassDeck);
 
-            html += buildDeckView(deckList[i], flashcards, clase);
         }
+
     }
-    // for (let i = 0; i < deckList.length; i++) {
-    //     let flashcards = await FirebaseController.getClassDeckFlashcards(, deckList[i].docId);
-    //     html += buildDeckView(deckList[i], flashcards);
-    // }
+   
 
     html += `</div>`
 
