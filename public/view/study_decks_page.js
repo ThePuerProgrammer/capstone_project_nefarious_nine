@@ -29,7 +29,7 @@ export function addEventListeners() {
         const category = e.target.selectCategory.value;
         const isClassDeck = e.target.selectClassroom.value;
         const flashcardNumber = 0;
-        const owned_by = Auth.currentUser.uid;
+        const created_by = Auth.currentUser.uid
         //NOTE: If no class was chosen, isClassDeck value will be false.
         // Otherwise, the value will be the CLASSROOM DOC ID tied to the deck.
 
@@ -49,12 +49,16 @@ export function addEventListeners() {
             keywords,
             isClassDeck,
             flashcardNumber,
-            owned_by,
+            created_by,
+            
         });
 
 
         if (isClassDeck == "false" || isClassDeck == false) { //if no class is tied to this deck
             try {
+                //Passes UID Since it is a Personal Deck
+                //deck.created_by=Auth.currentUser.uid;
+
                 console.log("Creating Deck");
                 const deckId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
                 console.log("Deck Created");
@@ -72,6 +76,9 @@ export function addEventListeners() {
             }
         } else { // a class is tied to this deck, isClassDeck is now the classroom DOCID its tied to
             try {
+                //Passes Class ID, since it is a Class Deck
+                //deck.created_by=isClassDeck;
+
                 console.log("Creating Deck");
                 const deckId = await FirebaseController.createClassDeck(deck.isClassDeck, deck);
                 console.log("Deck Created");
@@ -193,8 +200,8 @@ export async function buildStudyDecksPage(deckList) {
 
         } else {
             let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
-            // let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
-            html += buildDeckView(deckList[i], flashcards, deckList[i].isClassDeck);
+            let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
+            html += buildDeckView(deckList[i], flashcards, clase);
 
         }
 
@@ -394,8 +401,6 @@ export async function buildStudyDecksPage(deckList) {
 
     // restructured create deck button to add category dropdown menu
     createDeckButton.addEventListener('click', async e => {
-
-        // const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
 
         // call Firebase func. to retrieve categories list
         let categories;
