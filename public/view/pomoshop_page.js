@@ -1,6 +1,7 @@
 import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
 import * as Constant from '../model/constant.js'
+import * as Coins from '../controller/coins.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
 import { Pomoshop } from '../model/pomoshop.js'
@@ -17,6 +18,7 @@ export function addEventListeners() {
 }
 
 export async function shop_page() {
+    Coins.get_coins();
     // retrieve pomoshop items from Firebase
     let items;
     try {

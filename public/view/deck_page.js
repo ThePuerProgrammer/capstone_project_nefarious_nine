@@ -1,5 +1,6 @@
 import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
+import * as Coins from '../controller/coins.js'
 import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
@@ -48,8 +49,8 @@ export function addEventListeners() {
         const isQuestionImage = Elements.formCheckInputIsImageQuestion.checked;
         const isAnswerImage = Elements.formCheckInputIsImageAnswer.checked;
 
-        console.log("testing");
-        console.log(formData);
+        // console.log("testing");
+        // console.log(formData);
 
         const incorrectAnswers = [];
 
@@ -65,8 +66,8 @@ export function addEventListeners() {
 
         let deckDocID = sessionStorage.getItem("deckId");
         let isClassDeck = sessionStorage.getItem('isClassDeck');
-        console.log(`Testing Here:${deckDocID}`);
-        console.log(deckDocID);
+        // console.log(`Testing Here:${deckDocID}`);
+        // console.log(deckDocID);
 
 
         const flashcard = new Flashcard({
@@ -76,7 +77,7 @@ export function addEventListeners() {
             incorrectAnswers,
         });
 
-        console.log(flashcard);
+        // console.log(flashcard);
 
         try {
             //Question Image
@@ -169,7 +170,7 @@ export function addEventListeners() {
         e.preventDefault();
         // get the value from the select list item
         var f = document.getElementById('value').value;
-
+        console.log(`What is the flashcard:${f}`);
         let deckDocID = sessionStorage.getItem('deckId');
         let isClassDeck = sessionStorage.getItem('isClassDeck');
         if (isClassDeck == "false" || isClassDeck == false) {
@@ -263,6 +264,8 @@ export function addEventListeners() {
 }
 
 export async function deck_page(deckDocID, isClassDeck) {
+    Coins.get_coins();
+
     isClassDeck_global = isClassDeck; // Temp bug fix from Noah!
 
     if (localStorage.getItem("studyTimeTracked") == "false") { // user backed out of study page, so save time
@@ -292,7 +295,7 @@ export async function deck_page(deckDocID, isClassDeck) {
     let flashcards;
     try {
         if (isClassDeck == "false" || isClassDeck == false) {
-            console.log("deck_page no class check for is class deck " + isClassDeck);
+            // console.log("deck_page no class check for is class deck " + isClassDeck);
             deck = await FirebaseController.getUserDeckById(Auth.currentUser.uid, deckDocID);
             flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckDocID);
         } else {
@@ -348,7 +351,7 @@ export async function deck_page(deckDocID, isClassDeck) {
             const label = Utilities.disableButton(button);
             //passed by the button on the flashcard
             Utilities.enableButton(button, label);
-            console.log(isClassDeck);
+            // console.log(isClassDeck);
             if (isClassDeck == 'false') { //USER FLASHCARD
                 await EditFlashCard.edit_flashcard(Auth.currentUser.uid, deckDocID, e.target.docId.value);
             } else { //CLASSROOM FLASHCARD 

@@ -23,6 +23,7 @@ signal authentication_success
 func _ready():
 	if Constants.DEV:
 		user_email = Constants.TEST_EMAIL
+		user_id = Constants.TEST_UID
 	
 	# Connect the auth system signals
 	var e = OK

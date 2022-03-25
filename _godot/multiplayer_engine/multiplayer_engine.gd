@@ -40,7 +40,9 @@ func _ready():
 	# Create a docid to name dictionary for selecting the classroom
 	for classroom in classrooms:
 		var fields = classroom["doc_fields"]
+		print("Fields",fields)
 		classrooms_docid_to_name_dict[classroom["doc_name"]] = fields["name"]
+		print("ClassRoom_DIC:",classrooms_docid_to_name_dict[classroom["doc_name"]])
 
 	# This label will be disabled
 	selectClassroomsButton.add_item("Select a Classroom")

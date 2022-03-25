@@ -3,6 +3,7 @@ import * as Routes from '../controller/routes.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
+import * as Coins from '../controller/coins.js'
 import * as Utilities from './utilities.js';
 import { Pomoshop } from '../model/pomoshop.js'
 
@@ -117,6 +118,7 @@ export function addEventListeners() {
 }
 
 export async function profile_page() {
+    Coins.get_coins();
     imageFile2UploadProfile = ""; // reset
 
     // retrieve user info from Firebase

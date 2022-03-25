@@ -1435,8 +1435,10 @@ export async function updateCoins(uid, coins) {
     await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
         .update({ 'coins': coins });
 
+    //Element.coinCount.innerHTML = coins;
+    window.sessionStorage.setItem('coins',coins)
     Element.coinCount.innerHTML = coins;
-    localStorage.setItem('usercoins', coins);
+    //localStorage.setItem('usercoins', coins);
 }
 
 //============================================================================//
@@ -1661,6 +1663,23 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
 //============================================================================//
 // LEADERBOARDS
 //============================================================================//
+export async function leaderboardDefault(members) {
+    let classroomLeadersDefault = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .get();
+
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersDefault.push(cm);
+    })
+
+    return classroomLeadersDefault;
+}
 export async function leaderboardByCoins(members) {
     let classroomLeadersByCoins = [];
 
@@ -1754,7 +1773,7 @@ export async function leaderboardByFlashcards(members) {
 }                                                                             */
 //============================================================================//
 //FLASHCARD COUNT
-//===============
+//============================================================================//
 //For DECKS
 export async function updateFlashcardCount(currentUser, deckId) {
     //This grabs all flashcards within the deck, so we can get a count on them

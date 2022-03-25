@@ -18,6 +18,7 @@ export function addEventListeners() {
         const category = e.target.selectCategory.value;
         const flashcardNumber = e.target.flashcardNumber.value;
         const isClassDeck = e.target.classDocId.value;
+        const created_by = e.target.created_by.value;
 
         const keywords = cleanDataToKeywords(name, subject, category)
 
@@ -32,6 +33,7 @@ export function addEventListeners() {
             keywords,
             flashcardNumber,
             isClassDeck,
+            created_by,
         });
         d.set_docID(e.target.docId.value);
 
@@ -50,7 +52,7 @@ export function addEventListeners() {
                 d.flashcardNumber = await FirebaseController.updateFlashcardCount(Auth.currentUser.uid, d.docID);
                 await FirebaseController.updateDeck(Auth.currentUser.uid, d, d.docID)
                 //Added an additional load, as not all the updated was loading the first time.
-                await study_decks_page();
+                setTimeout(200);
 
 
             } catch (e) {
@@ -58,6 +60,7 @@ export function addEventListeners() {
                 Utilities.info('Update Deck Error', JSON.stringify(e));
             }
             Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
+            await study_decks_page();
         } else { //else is a class deck
             try {
                 //Updates count as Deck is edited
@@ -112,6 +115,7 @@ export async function edit_deck(uid, deckId) {
     Elements.formEditDeck.form.isFavorited.value = deck.isFavorited;
     Elements.formEditDeck.form.flashcardNumber.value = deck.flashcardNumber;
     Elements.formEditDeck.form.classDocId.value = deck.isClassDeck;
+    Elements.formEditDeck.form.created_by.value = deck.created_by;
 
     //Adding the Categories...THINGS
     const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
@@ -155,6 +159,7 @@ export async function edit_class_deck(classDocId, deckId) {
     Elements.formEditDeck.form.selectCategory.value = deck.category;
     Elements.formEditDeck.form.isFavorited.value = deck.isFavorited;
     Elements.formEditDeck.form.classDocId.value = deck.isClassDeck;
+    Elements.formEditDeck.form.created_by.value = deck.created_by;
 
     //Adding the Categories...THINGS
     const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];

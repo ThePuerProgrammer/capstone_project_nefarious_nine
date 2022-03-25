@@ -9,6 +9,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Utilities from './utilities.js'
 import * as EditDeck from '../controller/edit_deck.js'
 import * as Search from './search_page.js'
+import * as Coins from '../controller/coins.js'
 
 let confirmation = false;
 let noClassDeckSelected = false;
@@ -28,6 +29,7 @@ export function addEventListeners() {
         const category = e.target.selectCategory.value;
         const isClassDeck = e.target.selectClassroom.value;
         const flashcardNumber = 0;
+        const created_by = Auth.currentUser.uid
         //NOTE: If no class was chosen, isClassDeck value will be false.
         // Otherwise, the value will be the CLASSROOM DOC ID tied to the deck.
 
@@ -47,11 +49,16 @@ export function addEventListeners() {
             keywords,
             isClassDeck,
             flashcardNumber,
+            created_by,
+            
         });
 
 
         if (isClassDeck == "false" || isClassDeck == false) { //if no class is tied to this deck
             try {
+                //Passes UID Since it is a Personal Deck
+                //deck.created_by=Auth.currentUser.uid;
+
                 console.log("Creating Deck");
                 const deckId = await FirebaseController.createDeck(Auth.currentUser.uid, deck);
                 console.log("Deck Created");
@@ -69,6 +76,9 @@ export function addEventListeners() {
             }
         } else { // a class is tied to this deck, isClassDeck is now the classroom DOCID its tied to
             try {
+                //Passes Class ID, since it is a Class Deck
+                //deck.created_by=isClassDeck;
+
                 console.log("Creating Deck");
                 const deckId = await FirebaseController.createClassDeck(deck.isClassDeck, deck);
                 console.log("Deck Created");
@@ -100,6 +110,8 @@ export function addEventListeners() {
 }
 
 export async function study_decks_page() {
+    Coins.get_coins();
+
 
     let deckList = [];
     try {
@@ -152,7 +164,7 @@ export async function buildStudyDecksPage(deckList) {
 
 
 
-    Elements.root.innerHTML = "";
+    Elements.root.innerHTML = ""
     //Clears all HTML so it doesn't double
     let html = ''
     html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-decks search-btn-hover rounded-pill" type="click" style="float:right;"><i class="material-icons">search</i>Search Decks</button></h1> '
@@ -185,17 +197,16 @@ export async function buildStudyDecksPage(deckList) {
         if (deckList[i].isClassDeck == "false" || deckList[i].isClassDeck == false) {
             let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
             html += buildDeckView(deckList[i], flashcards, 'false');
+
         } else {
             let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
             let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
-
             html += buildDeckView(deckList[i], flashcards, clase);
+
         }
+
     }
-    // for (let i = 0; i < deckList.length; i++) {
-    //     let flashcards = await FirebaseController.getClassDeckFlashcards(, deckList[i].docId);
-    //     html += buildDeckView(deckList[i], flashcards);
-    // }
+   
 
     html += `</div>`
 
@@ -388,8 +399,6 @@ export async function buildStudyDecksPage(deckList) {
     // restructured create deck button to add category dropdown menu
     createDeckButton.addEventListener('click', async e => {
 
-        // const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
-
         // call Firebase func. to retrieve categories list
         let categories;
         try {
@@ -476,6 +485,7 @@ export function buildDeckView(deck, flashcards, clase) {
     <input type="hidden" name="isClassDeck" value="${deck.isClassDeck}">
     <input type="hidden" name="deckDocId" value="${deck.docId}">
     <button id="fav-btn" class="btn btn-link-secondary pomo-text-color-light" type="submit" style="border:none;box-shadow:none;" for="favorited"><i class="material-icons">favorite</i></button>
+    <label class="pomo-text-color-light" for="favorited">Favorited</label>
     </form>
     </div>
     </div>
@@ -485,6 +495,7 @@ export function buildDeckView(deck, flashcards, clase) {
     <input type="hidden" name="isClassDeck" value="${deck.isClassDeck}">
     <input type="hidden" name="deckDocId" value="${deck.docId}">
     <button id="unfav-btn" class="btn btn-link-secondary pomo-text-color-light" type="submit" style="border:none;box-shadow:none;" for="favorited"><i class="material-icons">favorite_border</i></button>
+    <label class="pomo-text-color-light" for="favorited">Not Favorited</label>
     </form>
     </div></div></div>
     `;
