@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Bunny Sprite.png-82490381aa702b65649fb3c6c558a291.stex"
+path="res://.import/rembo_sprite.png-b423e30440e31ba09bce88796aa29c56.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/pet/pet_sprites/Bunny Sprite.png"
-dest_files=[ "res://.import/Bunny Sprite.png-82490381aa702b65649fb3c6c558a291.stex" ]
+source_file="res://ChillZone/pet/pet_sprites/rembo_sprite.png"
+dest_files=[ "res://.import/rembo_sprite.png-b423e30440e31ba09bce88796aa29c56.stex" ]
 
 [params]
 

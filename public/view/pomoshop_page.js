@@ -119,23 +119,25 @@ export async function shop_page() {
     for (let i = 0; i < buyItemButtons.length; i++) {
         buyItemButtons[i].addEventListener('submit', async (e) => {
             e.preventDefault();
-            const index = e.target.docId.value
-            console.log(index);
+            const index = e.target.docId.value;
+            const cost = e.target.cost.value;
 
             user.itemsOwned.push(index);
+            user.coins -= cost;
+                 
+            // call firebase function to update user's itemsOwned and coins
+           try {
+                await FirebaseController.updateItemsOwned(Auth.currentUser.uid, user.itemsOwned);
+                await FirebaseController.updateCoins(Auth.currentUser.uid, user.coins);
+            }catch (e) {
+                console.log(e);
+            }
 
             //disable the button once bought
             document.getElementById(index).disabled = true;
             document.getElementById(index).innerHTML = "owned";
 
-            //TODO: substract and update coins
-                 
-            // call firebase function to update user's itemsOwned
-           try {
-                await FirebaseController.updateItemsOwned(Auth.currentUser.uid, user.itemsOwned);
-            }catch (e) {
-                console.log(e);
-            }
+            await shop_page();
   
         });
     }
@@ -150,12 +152,11 @@ function buildItemView(item) {
         <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
         <br>
         <form class="form-buy-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">`;
-    
-        html += `<button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>`;
-         
-        html += `</form>
-           </div>`;
+        <input type="hidden" name="docId" value="${item.docID}">
+        <input type="hidden" name="cost" value="${item.cost}">
+        <button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>
+        </form>
+        </div>`;
 
     return html;
 }

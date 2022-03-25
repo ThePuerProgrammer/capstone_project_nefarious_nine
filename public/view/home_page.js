@@ -81,6 +81,7 @@ export async function home_page() {
     //routes to godot minigames menu
     miniGamesPage.addEventListener('click', async e => {
         e.preventDefault();
+        sessionStorage.setItem("web-to-godot-destination", "minigames");
 
         history.pushState(null, null, Routes.routePathname.MINIGAMES);
         await Minigames.minigames_page();
@@ -89,8 +90,10 @@ export async function home_page() {
     //routes to chillzone page
     chillZonePage.addEventListener('click', async e => {
         e.preventDefault();
+        sessionStorage.setItem("web-to-godot-destination", "chillzone");
 
-        history.pushState(null, null, Routes.routePathname.CHILLZONE);
-        await ChillZone.chill_zone_page();
+        // history.pushState(null, null, Routes.routePathname.CHILLZONE);
+        history.pushState(null, null, Routes.routePathname.MINIGAMES);
+        await Minigames.minigames_page();
     });
 }
