@@ -1576,7 +1576,7 @@ export async function searchDecks(uid, keywordsArray) {
     snapShot.forEach(doc => {
         const t = new Deck(doc.data());
         //t.set_docID(doc.id);
-        t.docId = doc.id; //changed this to be consistend with all the other deck stuff
+        t.docId = doc.id; //changed this to be consistent with all the other deck stuff
         deckList.push(t)
     });
     return deckList;
