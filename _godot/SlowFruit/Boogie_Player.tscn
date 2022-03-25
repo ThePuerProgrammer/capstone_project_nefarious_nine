@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://SlowFruit/Boogie_Player.gd" type="Script" id=1]
+[ext_resource path="res://SlowFruit/assets/corgi-asset.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 12, 16 )
+
+[node name="Boogie__Player" type="RigidBody2D"]
+position = Vector2( -8, 0 )
+mode = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 3.5, 0 )
+scale = Vector2( 1.01136, 1 )
+texture = ExtResource( 2 )
+hframes = 9
+vframes = 8
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -2, 3 )
+rotation = 1.5708
+shape = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]

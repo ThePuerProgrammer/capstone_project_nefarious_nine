@@ -83,6 +83,7 @@ export const modalDeleteClassroom = new bootstrap.Modal(document.getElementById(
 export const modalSubmitHelpTicket = new bootstrap.Modal(document.getElementById('modal-submit-help-ticket', { backdrop: 'static' }));
 export const modalEditProfile = new bootstrap.Modal(document.getElementById('edit-profile-modal'));
 export const modalPomodoption = new bootstrap.Modal(document.getElementById('modal-pomodoption'));
+export const modalDressup = new bootstrap.Modal(document.getElementById('modal-pomo-dressup', { backdrop: 'static' }));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -205,6 +206,9 @@ export const formEditProfile = {
     username: document.getElementById('username'),
     userBio: document.getElementById('bio'),
 }
+export const addAccessoriesButton = document.getElementById('add-dressup');
+export const removeAccessoriesButton = document.getElementById('remove-dressup');
+export const submitAccessoriesButton = document.getElementById('submit-dressup');
 // Profile Picture
 export const formContainerProfilePicture = document.getElementById('form-edit-profile-picture');
 //============================================================================//
