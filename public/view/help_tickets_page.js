@@ -6,6 +6,7 @@ import * as FirebaseController from '../controller/firebase_controller.js';
 import * as Utilities from './utilities.js';
 import { HelpTicket } from '../model/help_ticket.js';
 import * as OneHelpTicket from './one_help_ticket_page.js';
+import * as Coins from '../controller/coins.js'
 
 let imageFile2UploadHelpTicket;
 
@@ -35,6 +36,9 @@ export function addEventListeners() {
 }
 
 export async function help_tickets_page() {
+    Coins.get_coins();
+
+
     Elements.root.innerHTML = "";
     let html = "";
     let helpTickets = [];

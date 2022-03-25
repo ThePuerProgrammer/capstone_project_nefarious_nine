@@ -8,7 +8,7 @@ func _ready():
 	$Player.start($StartPosition.position)
 	$MobTimer.start()
 	$GameTimer.start()
-	pass # Replace with function body.
+	#pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -34,7 +34,7 @@ func _on_MobTimer_timeout():
 	# Set the velocity (speed & direction).
 	mob.linear_velocity = Vector2(rand_range(mob.min_speed, mob.max_speed), 0)
 	mob.linear_velocity = mob.linear_velocity.rotated(direction)
-	pass # Replace with function body.
+	#pass # Replace with function body.
 
 
 
@@ -43,4 +43,4 @@ func _on_MobTimer_timeout():
 func _on_GameTimer_timeout():
 	$MobTimer.stop()
 	print('**********************************Game Timer Has Stopped')
-	pass # Replace with function body.
+	#pass # Replace with function body.
