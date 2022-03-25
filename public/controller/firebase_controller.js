@@ -1947,15 +1947,27 @@ export async function updateUserProfile(uid, username, userBio, profilePhotoName
 }
 
 // UPLOAD PROFILE PICTURE
-export async function uploadProfilePicture(profilePicturerFile, profilePictureName) {
-    //image doesn't have a name
+export async function uploadProfilePicture(profilePicturerFile, oldPfpName) {
+
+    //assign image name
+    let profilePictureName;
     if (!profilePictureName) {
         profilePictureName = Date.now() + profilePicturerFile.name + 'pfp';
     }
+    //upload new pfp to storage
     const ref = firebase.storage().ref()
         .child(Constant.storageFolderName.PROFILE_PICTURES + profilePictureName);
     const taskSnapShot = await ref.put(profilePicturerFile);
     const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
+
+    // delete old pfp from storage
+    if(oldPfpName != "defaultPfp.png") {
+        const refOld = firebase.storage().ref()
+        .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
+    
+        await refOld.delete();
+    }
+
     return { profilePictureName, profilePictureURL };
 }
 

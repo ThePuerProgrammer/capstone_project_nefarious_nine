@@ -83,8 +83,8 @@ export function addEventListeners() {
             const user_mail = email.split('@');
             const username = user_mail[0]; // get first portion of user's email as default username
 
-            const profilePhotoName = "pfp2.png";
-            const profilePhotoURL = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/profile_pictures%2Fpfp2.png?alt=media&token=84da9075-bb5c-4b2b-abd2-ca0bb0aab422";
+            const profilePhotoName = "defaultPfp.png";
+            const profilePhotoURL = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/profile_pictures%2FdefaultPfp.png?alt=media&token=7960cf4e-37b9-45eb-b6b6-ebec5e4978d6";
 
             const newUserModel = new User({
                 email,
