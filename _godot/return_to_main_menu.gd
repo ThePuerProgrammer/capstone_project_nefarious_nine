@@ -5,6 +5,7 @@ onready var method_selection_optionbutton=$"Method_Selection_Button"
 onready var deck_selection_optionbutton=$"Deck_Selection_Button"
 onready var category_selection_optionbutton=$"Category_Selection_Button"
 onready var timer_selection_optionbutton=$"Timer_Selection_Button"
+onready var game_list_label=$"Game_Selection/VSplit_Game_Container/Games_Selection_Label"
 #GAH-DOUGH-BALS
 var game_selection_array = []
 var dungeon_selected=false
@@ -102,6 +103,7 @@ func _on_dungeon_fight_Selection_Toggle_toggled(button_pressed):
 		print(game_selection_array)
 		dungeon_selected=true
 		print("Dungeon_Selected:" + (String(dungeon_selected)))
+		update_game_label(game_selection_array)
 		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
 	else:
 		#Text for Toggle Off Dungeon
@@ -111,6 +113,7 @@ func _on_dungeon_fight_Selection_Toggle_toggled(button_pressed):
 		print(game_selection_array)
 		dungeon_selected=false
 		print("Dungeon_Selected:" + (String(dungeon_selected)))
+		update_game_label(game_selection_array)
 		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
 #Pomoblast Toggler
 func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
@@ -122,6 +125,7 @@ func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
 		print(game_selection_array)
 		pomoblast_selected=true
 		print("Pomoblast_Selected:" + (String(pomoblast_selected)))
+		update_game_label(game_selection_array)
 		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
 	else:
 		#Text for Toggle Off Pomoblast
@@ -131,6 +135,7 @@ func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
 		print(game_selection_array)
 		pomoblast_selected=false
 		print("Pomoblast_Selected:"+ (String(pomoblast_selected)))
+		update_game_label(game_selection_array)
 		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
 
 #Function Shuffle Queue
@@ -249,6 +254,10 @@ func disable_deck_selection_option():
 	deck_selection_optionbutton.clear()
 	deck_selection_optionbutton.add_item("Disabled")
 	deck_selection_optionbutton.select(0)
+
+#Updates the Game(s) Label with the Selection Array	
+func update_game_label(game_selection_array):
+	game_list_label.text = ("Game(s): \n" + str(game_selection_array))
 	
 
 ####################################################################################################
