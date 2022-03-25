@@ -4,6 +4,7 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import * as Utilities from './utilities.js';
+import { Pomoshop } from '../model/pomoshop.js'
 
 //Declaration of Image
 let imageFile2UploadProfile = "";
@@ -69,7 +70,7 @@ export function addEventListeners() {
         } else {
             const itemLi = document.createElement('li');
             itemLi.setAttribute('id', addItem);
-            itemLi.setAttribute('class', 'list-group-item');
+            itemLi.setAttribute('class', 'list-group-item items-list');
             itemLi.appendChild(document.createTextNode(addItem));
             accessoriesList.appendChild(itemLi);
         }
@@ -88,9 +89,28 @@ export function addEventListeners() {
         }
     })
 
-    Elements.submitAccessoriesButton.addEventListener('submit', e => {
-        e.preventDefault();
-        // this is still TODO because I'm not really sure how we're gonna represent the items on the pomopet with the current way things are structured
+    // need a way to return pet to default skin
+    Elements.submitAccessoriesButton.addEventListener('click', async () => {
+        const user = await FirebaseController.getUser(Auth.currentUser.uid);
+        const pomopet = user.pomopet;
+        let itemsOwnedList = [];
+        for (let i = 0; i < user.itemsOwned.length; i++) {
+            const tempItem = await FirebaseController.getOwnedItem(user.itemsOwned[i]);
+            itemsOwnedList.push(tempItem);
+        }
+        const accessoriesList = document.getElementsByClassName('items-list');
+        for (let i = 0; i < accessoriesList.length; i++) {
+            for (let j = 0; j < itemsOwnedList.length; j++) {
+                if (itemsOwnedList[j].name == accessoriesList[i].id) {
+                    pomopet.petPhotoURL = itemsOwnedList[j].photoURL;
+                    pomopet.petSkin = itemsOwnedList[j].skinType;
+                    await FirebaseController.updatePomopet(Auth.currentUser.uid, pomopet);
+                    break;
+                }
+            }
+        }
+        Elements.modalDressup.hide();
+        await profile_page();
     })
 }
 
@@ -151,7 +171,7 @@ export async function profile_page() {
     //** DYNAMIC EVENT LISTENERS **//
 
     const dressupButton = document.getElementById('pomo-dressup-btn');
-    dressupButton.addEventListener('click', e => {
+    dressupButton.addEventListener('click', async e => {
         e.preventDefault();
         // opens dress up ✺◟(♥ᴥ♥)◞✺ modal
         document.getElementById('pomo-dressup-image').src = user.pomopet.petPhotoURL;
@@ -160,11 +180,16 @@ export async function profile_page() {
         for (let i = accessoriesSelect.length; i > 0; i--) {
             accessoriesSelect.remove(i);
         }
+        let itemsOwnedList = [];
+        for (let i = 0; i < user.itemsOwned.length; i++) {
+            const tempItem = await FirebaseController.getOwnedItem(user.itemsOwned[i]);
+            itemsOwnedList.push(tempItem);
+        }
         // rebuilds accessories list from owned items
-        user.itemsOwned.forEach(item => {
+        itemsOwnedList.forEach(item => {
             const opt = document.createElement('option');
-            opt.value = item;
-            opt.innerHTML = item;
+            opt.value = item.name;
+            opt.innerHTML = item.name;
             accessoriesSelect.appendChild(opt);
         })
         Elements.modalDressup.show();

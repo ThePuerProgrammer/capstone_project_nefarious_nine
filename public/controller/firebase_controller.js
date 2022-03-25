@@ -202,10 +202,10 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .get();
-    
+
     let lastSRSAccess = deckDataRef.data().lastSRSAccess;
     console.log("last studied: ", lastSRSAccess);
-    
+
     const cachedFlashcardData = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
@@ -389,7 +389,7 @@ export async function getDeckData(uid, deckDocID) {
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .get();
-    
+
     return deckDataRef.data();
 }
 //===========================================================================//
@@ -1641,18 +1641,18 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
         .get();
 
 
-    
+
     snapShot.forEach(doc => {
         for (const docId of classroomDocIds) {
             if (doc.id != docId) {
                 const t = new Classroom(doc.data());
                 t.set_docID(doc.id);
-                classroomList.push(t)                
+                classroomList.push(t)
             };
             break //moves to next snapshot doc after pushing to classroomList
         }
     });
-    
+
     return classroomList;
 }
 
@@ -2040,6 +2040,17 @@ export async function updateItemsOwned(uid, itemsOwned) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({'itemsOwned': itemsOwned});
+        .update({ 'itemsOwned': itemsOwned });
+}
+
+export async function getOwnedItem(item) {
+    const itemRef = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .doc(item)
+        .get();
+
+    const itemOwned = new Pomoshop(itemRef.data());
+    itemOwned.set_docID(itemRef.docId);
+    return itemOwned;
 }
 //============================================================================//
