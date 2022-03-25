@@ -2046,7 +2046,7 @@ export async function logTimeSpentStudying(uid, deckDocID) {
 
 
 //============================================================================//
-// GET POMOSHOP ITEMS
+// POMOSHOP 
 //============================================================================//
 export async function getPomoshopItems() {
     let items = [];
@@ -2062,6 +2062,28 @@ export async function getPomoshopItems() {
 
     return items;
 }
+
+export async function uploadItemImage(imageFile) {
+    let imagename = imageFile.name;
+
+    if (!imagename)
+        imagename = Date.now() + imageFile.name;
+
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.POMOSHOP_IMAGES + imagename);
+    const taskSnapShot = await ref.put(imageFile);
+    const imageURL = await taskSnapShot.ref.getDownloadURL();
+
+    return { imagename, imageURL };
+}
+
+export async function addItemtoShop(item) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .add(item);
+    return ref.id;
+}
+
 //============================================================================//
 
 //============================================================================//

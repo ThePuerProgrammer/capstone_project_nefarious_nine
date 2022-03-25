@@ -1,8 +1,9 @@
- export class Pomoshop {
+export class Pomoshop {
     constructor(data) {
         this.name = data.name;
         this.cost = data.cost;
         this.photoURL = data.photoURL;
+        this.photoName = data.photoName;
         this.skinType = data.skinType;
     }
 
@@ -19,6 +20,7 @@
             name: this.name,
             cost: this.cost,
             photoURL: this.photoURL,
+            photoName: this.photoName,
             skinType: this.skinType,
         };
     }
