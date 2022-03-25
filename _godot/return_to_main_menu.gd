@@ -172,6 +172,7 @@ func add_items_to_deck_selection():
 	deck_selection_optionbutton.add_item("Pick One")
 	for deck in dic_deck_name.values():
 		deck_selection_optionbutton.add_item(deck)
+	deck_selection_optionbutton.add_item("DEMO")
 	deck_selection_optionbutton.set_item_disabled(0,true)
 
 #Category Dropdown Items
@@ -192,6 +193,7 @@ func add_items_to_category_selection():
 	for category in dic_val_array[0]:
 		dic_val_categories[category] = category 
 		category_selection_optionbutton.add_item(category)
+	category_selection_optionbutton.add_item("DEMO")	
 	category_selection_optionbutton.set_item_disabled(0,true)
 #
 
@@ -201,7 +203,7 @@ func add_items_to_timer_selection():
 	timer_selection_optionbutton.add_item("30")
 	timer_selection_optionbutton.add_item("60")
 	timer_selection_optionbutton.add_item("90")
-	timer_selection_optionbutton.add_item("10")
+	timer_selection_optionbutton.add_item("DEMO")
 
 #Checks which method is selected
 func on_method_item_selected(id):

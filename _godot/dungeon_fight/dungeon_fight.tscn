@@ -243,16 +243,6 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
-"loop": true,
-"name": "dead",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 77 ), ExtResource( 78 ), ExtResource( 81 ), ExtResource( 82 ), ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
-"loop": true,
-"name": "die",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 43 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 48 ) ],
 "loop": true,
 "name": "attack",
@@ -262,23 +252,33 @@ animations = [ {
 "loop": true,
 "name": "dodge",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 77 ), ExtResource( 78 ), ExtResource( 81 ), ExtResource( 82 ), ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
+"loop": true,
+"name": "die",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
+"loop": true,
+"name": "dead",
+"speed": 5.0
 } ]
 
 [sub_resource type="SpriteFrames" id=17]
 animations = [ {
-"frames": [ ExtResource( 84 ) ],
+"frames": [ ExtResource( 66 ) ],
 "loop": true,
-"name": "dead",
+"name": "third_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"loop": true,
+"name": "idle_animation",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
 "loop": true,
 "name": "attack_animation_p1",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
-"loop": true,
-"name": "die",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
@@ -306,14 +306,14 @@ animations = [ {
 "name": "attack_animation_p2",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 66 ) ],
+"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
 "loop": true,
-"name": "third_attack_level",
+"name": "die",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"frames": [ ExtResource( 84 ) ],
 "loop": true,
-"name": "idle_animation",
+"name": "dead",
 "speed": 5.0
 } ]
 
@@ -541,6 +541,9 @@ margin_top = 42.0
 margin_right = 1055.8
 margin_bottom = 82.0
 rect_min_size = Vector2( 850, 50 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ProgressBarHbox" type="HBoxContainer" parent="TimerBar"]
 margin_right = 40.0

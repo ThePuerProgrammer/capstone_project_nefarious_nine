@@ -217,7 +217,8 @@ margin_bottom = 256.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/normal_font = ExtResource( 2 )
-text = "Games:"
+text = "Game(s):
+[]"
 
 [node name="Game_Details_Label" type="RichTextLabel" parent="Game_Selection/VSplit_Game_Container" index="1"]
 margin_top = 268.0
