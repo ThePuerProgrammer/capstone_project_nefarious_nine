@@ -9,6 +9,7 @@ import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 import { buildStudyDecksPage } from './study_decks_page.js'
+import { html } from './protected_message.js'
 
 
 export async function one_classroom_page(classroomDocID) {
@@ -450,14 +451,24 @@ function buildButtons(member, banlist) {
 }
 
 function buildLeaderBoard(e,i){
-   return `
+   let html3='' 
+   html3+=(i==1) ?`
     <tr>
-        <td class="leaderboard-td">${i}</td>
-        <td class="leaderboard-td">${e.email}</td>
-        <td class="leaderboard-td">${e.coins}</td>
-        <td class="leaderboard-td">${e.deckNumber}</td>
-        <td class="leaderboard-td">${e.flashcardNumber}</td>
-    </tr>`;
+        <td class="leaderboard-td">${i} </td>
+        <td class="leaderboard-td"><i class="material-icons">whatshot</i> ${e.email}  </td>
+        <td class="leaderboard-td">${e.coins} </td>
+        <td class="leaderboard-td">${e.deckNumber} </td>
+        <td class="leaderboard-td">${e.flashcardNumber} </td>
+    </tr>`:
+    `<tr>
+    <td class="leaderboard-td">${i} </td>
+    <td class="leaderboard-td">${e.email} </td>
+    <td class="leaderboard-td">${e.coins} </td>
+    <td class="leaderboard-td">${e.deckNumber} </td>
+    <td class="leaderboard-td">${e.flashcardNumber }</td>
+    </tr>`
+    ;
+    return html3;
 }
 //REFERENCE:https://stackoverflow.com/questions/37347690/how-to-replace-div-with-another-div-in-javascript
 
