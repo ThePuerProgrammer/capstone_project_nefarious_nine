@@ -6,6 +6,8 @@ import * as Constant from '../model/constant.js'
 
 //Declaration of Image
 let imageFile2UploadProfile = "";
+let currentPfpURL;
+let currentPfpName;
 
 export function addEventListeners() {
     Elements.menuProfile.addEventListener('click', async () => {
@@ -22,7 +24,7 @@ export function addEventListeners() {
         try {
             // if updated pfp
             if(imageFile2UploadProfile != "") {
-                const {profilePictureName, profilePictureURL} = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile);
+                const {profilePictureName, profilePictureURL} = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile, currentPfpName);
                 await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, profilePictureName, profilePictureURL);
             } else {
                 await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, null, null);
@@ -41,7 +43,7 @@ export function addEventListeners() {
         imageFile2UploadProfile = e.target.files[0];
 
         if(!imageFile2UploadProfile){
-            Elements.formEditProfile.profilePictureTag.src=''; // TODO make it display pfp ?
+            Elements.formEditProfile.profilePictureTag.src= currentPfpURL;
             return;
         }
 
@@ -58,11 +60,14 @@ export function addEventListeners() {
 }
 
 export async function profile_page() {
+    imageFile2UploadProfile = ""; // reset
 
     // retrieve user info from Firebase
     let user;
     try {
         user = await FirebaseController.getUser(Auth.currentUser.uid);
+        currentPfpName = user.profilePhotoName;
+        currentPfpURL= user.profilePhotoURL;
     }catch (e) {
         console.log(e);
     }
