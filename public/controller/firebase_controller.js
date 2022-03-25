@@ -9,6 +9,7 @@ import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
 import { HelpTicket } from '../model/help_ticket.js';
+import { Pomoshop } from '../model/pomoshop.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -2005,5 +2006,36 @@ export async function logTimeSpentStudying(uid, deckDocID) {
         .update({
             timeStudiedByDay: timeStudiedByDayMap
         });
+}
+//============================================================================//
+
+
+//============================================================================//
+// GET POMOSHOP ITEMS
+//============================================================================//
+export async function getPomoshopItems() {
+    let items = [];
+    const pomoshop = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .get();
+
+    pomoshop.forEach(doc => {
+        const item = new Pomoshop(doc.data());
+        item.set_docID(doc.id);
+        items.push(item);
+    });
+
+    return items;
+}
+//============================================================================//
+
+//============================================================================//
+// UPDATE USER ITEMS OWNED
+//============================================================================//
+export async function updateItemsOwned(uid, itemsOwned) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({'itemsOwned': itemsOwned});
 }
 //============================================================================//
