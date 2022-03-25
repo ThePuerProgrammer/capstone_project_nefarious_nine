@@ -9,6 +9,7 @@ import { Classroom } from '../model/classroom.js';
 import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
 import { HelpTicket } from '../model/help_ticket.js';
+import { Pomoshop } from '../model/pomoshop.js';
 
 //============================================================================//
 // CREATE A Deck
@@ -1436,6 +1437,8 @@ export async function updateCoins(uid, coins) {
 
     //Element.coinCount.innerHTML = coins;
     window.sessionStorage.setItem('coins',coins)
+    Element.coinCount.innerHTML = coins;
+    //localStorage.setItem('usercoins', coins);
 }
 
 //============================================================================//
@@ -1574,7 +1577,8 @@ export async function searchDecks(uid, keywordsArray) {
         .get();
     snapShot.forEach(doc => {
         const t = new Deck(doc.data());
-        t.set_docID(doc.id);
+        //t.set_docID(doc.id);
+        t.docId = doc.id; //changed this to be consistent with all the other deck stuff
         deckList.push(t)
     });
     return deckList;
@@ -1639,15 +1643,18 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
         .get();
 
 
-    for (const docId of classroomDocIds) {
-        snapShot.forEach(doc => {
+    
+    snapShot.forEach(doc => {
+        for (const docId of classroomDocIds) {
             if (doc.id != docId) {
                 const t = new Classroom(doc.data());
                 t.set_docID(doc.id);
-                classroomList.push(t)
+                classroomList.push(t)                
             };
-        });
-    }
+            break //moves to next snapshot doc after pushing to classroomList
+        }
+    });
+    
     return classroomList;
 }
 
@@ -2022,5 +2029,36 @@ export async function logTimeSpentStudying(uid, deckDocID) {
         .update({
             timeStudiedByDay: timeStudiedByDayMap
         });
+}
+//============================================================================//
+
+
+//============================================================================//
+// GET POMOSHOP ITEMS
+//============================================================================//
+export async function getPomoshopItems() {
+    let items = [];
+    const pomoshop = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .get();
+
+    pomoshop.forEach(doc => {
+        const item = new Pomoshop(doc.data());
+        item.set_docID(doc.id);
+        items.push(item);
+    });
+
+    return items;
+}
+//============================================================================//
+
+//============================================================================//
+// UPDATE USER ITEMS OWNED
+//============================================================================//
+export async function updateItemsOwned(uid, itemsOwned) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({'itemsOwned': itemsOwned});
 }
 //============================================================================//

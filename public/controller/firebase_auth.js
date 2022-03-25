@@ -5,7 +5,6 @@ import { User } from '../model/user.js'
 import * as Elements from '../view/elements.js'
 import * as Utilities from '../view/utilities.js'
 import * as Constants from '../model/constant.js'
-//import * as CreatePage from '../view/create_account_page.js'
 import * as HomePage from '../view/home_page.js'
 import { routing, routePathname } from './routes.js';
 
@@ -65,11 +64,20 @@ export function addEventListeners() {
             const deckNumber = 0;
             const flashcardNumber = 0;
             const userBio = "";
+            const itemsOwned = [];
 
             const pomopet = {
                 type: "bunny",
                 name: "bunny",
                 petPhotoURL: "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fbunny.png?alt=media&token=c7f2df72-dbe3-4ca1-bdf0-6c9d85404a7f",
+            }
+
+            let nowInMs = Date.now();
+            const pomopetData = {
+                lastWashed: nowInMs,
+                lastFed: nowInMs,
+                lastPet: nowInMs,
+                lastPoopPickUp: nowInMs,
             }
 
             const user_mail = email.split('@');
@@ -89,6 +97,8 @@ export function addEventListeners() {
                 profilePhotoURL,
                 userBio,
                 pomopet,
+                pomopetData,
+                itemsOwned,
             });
             localStorage.setItem("usercoins", newUserModel.coins);
             // Creates user Auth Account AND adds user account to users collections
@@ -191,7 +201,7 @@ function authStateChangeObserver(user) {
 
         history.pushState(null, null, routePathname.HOME);
 
-        Elements.root.innerHTML = HomePage.html;
+       //Elements.root.innerHTML = HomePage.html;
     }
 }
 
