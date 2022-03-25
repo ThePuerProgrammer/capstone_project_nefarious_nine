@@ -21,6 +21,7 @@ export async function home_page() {
 
 
     Elements.root.innerHTML = ``;
+    
     let html = '';
     html += `
     <div style="text-align: center; padding-top: 2%;">

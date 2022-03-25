@@ -68,6 +68,7 @@ export function addEventListeners() {
 
 export async function classrooms_page() {
     Coins.get_coins();
+
     Elements.root.innerHTML = '';
     let html = '';
 
@@ -397,6 +398,7 @@ export function buildAvailableClassroom(classroom) {
     `;
 
     html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
+    
     return html;
 }
 

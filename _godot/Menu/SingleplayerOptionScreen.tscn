@@ -294,8 +294,8 @@ text = "Details"
 margin_top = 368.0
 margin_right = 423.0
 margin_bottom = 408.0
-text = "           Add to Queue:"
-align = 2
+text = "            Add to Queue:"
+align = 1
 
 [node name="No_Games_Selected_Popup_Alert" type="AcceptDialog" parent="." index="14"]
 margin_left = 787.0
