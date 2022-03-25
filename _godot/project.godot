@@ -187,7 +187,7 @@ isServer=false
 [application]
 
 config/name="Pomogame"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://PomoBlast/PomoBlast.tscn"
 config/icon="res://icon.png"
 
 [autoload]
