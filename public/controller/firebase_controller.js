@@ -1575,7 +1575,8 @@ export async function searchDecks(uid, keywordsArray) {
         .get();
     snapShot.forEach(doc => {
         const t = new Deck(doc.data());
-        t.set_docID(doc.id);
+        //t.set_docID(doc.id);
+        t.docId = doc.id; //changed this to be consistent with all the other deck stuff
         deckList.push(t)
     });
     return deckList;
@@ -1640,15 +1641,18 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
         .get();
 
 
-    for (const docId of classroomDocIds) {
-        snapShot.forEach(doc => {
+    
+    snapShot.forEach(doc => {
+        for (const docId of classroomDocIds) {
             if (doc.id != docId) {
                 const t = new Classroom(doc.data());
                 t.set_docID(doc.id);
-                classroomList.push(t)
+                classroomList.push(t)                
             };
-        });
-    }
+            break //moves to next snapshot doc after pushing to classroomList
+        }
+    });
+    
     return classroomList;
 }
 

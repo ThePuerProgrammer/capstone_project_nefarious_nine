@@ -559,9 +559,10 @@ iframe {
   /*STYLES FOR SEARCH*/
 /*============================================================================*/
 .search-btn {
-    width: 100px;    
-    padding: 1px 2px 2px 1px;
+    width: 130px;    
+    padding: 2px 1px 2px 1px;
     background-color: #A7ADC6;
+    text-align: center;
     font-size: 13px;
     font-weight: 600;
     border-color: #2C1320;
@@ -577,6 +578,20 @@ iframe {
 .search-btn:hover { 
     background-color: #5F4B66;
     color: #A7ADC6 !important;
+}
+
+.search-btn-reset { 
+    padding: 2px 1px 4px 1px;
+}
+
+.search-btn-classroom { 
+    width: 170px;  
+    padding: 2px 1px 1px 1px;
+}
+
+.search-btn-decks { 
+    width: 130px;  
+    padding: 5px 1px 2px 1px;
 }
 
 .search-radio {

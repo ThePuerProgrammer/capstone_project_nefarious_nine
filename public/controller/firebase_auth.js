@@ -5,7 +5,6 @@ import { User } from '../model/user.js'
 import * as Elements from '../view/elements.js'
 import * as Utilities from '../view/utilities.js'
 import * as Constants from '../model/constant.js'
-//import * as CreatePage from '../view/create_account_page.js'
 import * as HomePage from '../view/home_page.js'
 import { routing, routePathname } from './routes.js';
 
@@ -202,7 +201,7 @@ function authStateChangeObserver(user) {
 
         history.pushState(null, null, routePathname.HOME);
 
-        Elements.root.innerHTML = HomePage.html;
+       //Elements.root.innerHTML = HomePage.html;
     }
 }
 
