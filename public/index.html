@@ -70,7 +70,7 @@
               <li class="nav-item" style="display: inline;">
                 <button type="button" class="btn" id="menu-shop">
                   <img src="./assets/images/store_black_24dp.svg" alt="Shop" width="24" height="24">
-                </button> 
+                </button>
               </li>
               <li>
                 <div id="coin-display" class="coin-display">
@@ -255,7 +255,7 @@
                 <img src="./assets/images/pet_sprites/bunny Sprite.png" width="150" height="150">
               </label>
               <label class="raise resize" style="width: 70px; left: 15%;">
-                <input type="radio" class="resize hidden-radio-button" id="dog-btn"  name="pet" value="Dog">
+                <input type="radio" class="resize hidden-radio-button" id="dog-btn" name="pet" value="Dog">
                 <img src="./assets/images/pet_sprites/Rembo Sprite.png" width="150" height="150">
               </label>
               <label class="raise resize" style="width: 70px; left: 30%;">
@@ -773,40 +773,83 @@
   <!-- END OF MODAL: SEARCH------------------------------------------------------>
 
   <!-- EDIT PROFILE MODAL----------------------------------------------------->
-   <div class="modal fade" id="edit-profile-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-   aria-labelledby="edit-profile-modal-label" aria-hidden="true">
-   <div class="modal-dialog modal-dialog-centered">
-     <div class="modal-content pomo-bg-color-md-dark">
-       <div class="modal-header pomo-text-color-light">
-         <h5 class="modal-title pomo-text-color-light" id="edit-profile-modal-label">Edit Profile</h5>
-         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-       </div>
-       <div class="modal-body">
-         <form id="form-edit-profile" method="post">
-          <div id="form-edit-profile-picture-container">
-            <img id="form-edit-profile-picture-tag"
-              style=" height: 200px; width: 200px; object-fit: cover; display: block;" class="center pfp">
+  <div class="modal fade" id="edit-profile-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="edit-profile-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-text-color-light">
+          <h5 class="modal-title pomo-text-color-light" id="edit-profile-modal-label">Edit Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-edit-profile" method="post">
+            <div id="form-edit-profile-picture-container">
+              <img id="form-edit-profile-picture-tag"
+                style=" height: 200px; width: 200px; object-fit: cover; display: block;" class="center pfp">
               <br>
-            <label class="pomo-text-color-light" for="form-edit-profile-picture-button">Update Profile Picture</label>
-            <input id="form-edit-profile-picture-button" type="file" value="upload" />
-          </div>
-           <div class="form-group">
-             <label class="pomo-text-color-light" for="username">Username</label>
-             <input class="form-control form-control-lg" type="username" name="username"
-               required minlength="2" id="username" autocomplete="off">
-             <label class="pomo-text-color-light" for="bio">Bio</label>
-             <textarea class="form-control form-control-lg" type="bio" name='bio' id="bio"
-               autocomplete="off" placeholder="Tell us a little bit about yourself..."></textarea>
-             <br>
-           </div>
-           <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="user-update-profile"
-             type="submit">Update</button>
-         </form>
-       </div>
-     </div>
-   </div>
+              <label class="pomo-text-color-light" for="form-edit-profile-picture-button">Update Profile Picture</label>
+              <input id="form-edit-profile-picture-button" type="file" value="upload" />
+            </div>
+            <div class="form-group">
+              <label class="pomo-text-color-light" for="username">Username</label>
+              <input class="form-control form-control-lg" type="username" name="username" required minlength="2"
+                id="username" autocomplete="off">
+              <label class="pomo-text-color-light" for="bio">Bio</label>
+              <textarea class="form-control form-control-lg" type="bio" name='bio' id="bio" autocomplete="off"
+                placeholder="Tell us a little bit about yourself..."></textarea>
+              <br>
+            </div>
+            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="user-update-profile"
+              type="submit">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- END UPDATE PROFILE MODAL---------------------------------------------->
+  <!-- MODAL: ADD ITEM -------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-add-item" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-add-item-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title pomo-text-color-light" id="modal-add-item-label">Add Item to PomoShop</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-add-item" method="post">
+            <div class="form-group">
+              <label class="pomo-text-color-light" for="itemname">Name</label>
+              <input class="form-control form-control-lg" type="text" name="itemname" placeholder="Item Name" required
+                minlength="2" autocomplete="off">
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="itemcost">Cost</label>
+              <input class="form-control form-control-lg" type="number" name="itemcost" placeholder="Item Price"
+                required minlength="1" autocomplete="off">
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="selectskin">Skin Type</label>
+              <br>
+              <select id="select-item-skin" name="selectSkin" class="form-select-item-skin"
+                aria-label="Default select example" style="width:300px;"></select>
+              <br>
+              <br>
+              <img id="form-add-item-image-tag" style="display: block;" />
+              <label class="pomo-text-color-light" for="form-add-item-image-button">Add Item Image</label>
+              <input id="form-add-item-image-button" type="file" value="upload" />
+            </div>
+            <br>
+            <br>
+            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-add-item"
+              type="submit">Add Item</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF MODAL: ADD ITEM  -------------------------------------------------------------------------------------------------------------------------->
+
 
   <!-- Modal: Popup Info Box -------------------------------------------------->
   <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -909,6 +952,8 @@
     </div>
   </div>
   <!-- END OF TIMER SECTION --------------------------------------------------->
+
+
 
   <!-- SCRIPTS -------------------------------------------------------------->
   <!-- update the version number as needed -->

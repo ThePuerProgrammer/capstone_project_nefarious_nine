@@ -202,10 +202,10 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .get();
-    
+
     let lastSRSAccess = deckDataRef.data().lastSRSAccess;
     console.log("last studied: ", lastSRSAccess);
-    
+
     const cachedFlashcardData = await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
@@ -389,7 +389,7 @@ export async function getDeckData(uid, deckDocID) {
         .collection(Constant.collectionName.DECK_DATA)
         .doc(deckDocID)
         .get();
-    
+
     return deckDataRef.data();
 }
 //===========================================================================//
@@ -1641,18 +1641,18 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
         .get();
 
 
-    
+
     snapShot.forEach(doc => {
         for (const docId of classroomDocIds) {
             if (doc.id != docId) {
                 const t = new Classroom(doc.data());
                 t.set_docID(doc.id);
-                classroomList.push(t)                
+                classroomList.push(t)
             };
             break //moves to next snapshot doc after pushing to classroomList
         }
     });
-    
+
     return classroomList;
 }
 
@@ -2015,7 +2015,7 @@ export async function logTimeSpentStudying(uid, deckDocID) {
 
 
 //============================================================================//
-// GET POMOSHOP ITEMS
+// POMOSHOP 
 //============================================================================//
 export async function getPomoshopItems() {
     let items = [];
@@ -2031,6 +2031,25 @@ export async function getPomoshopItems() {
 
     return items;
 }
+
+export async function uploadItemImage(imageFile, imageName) {
+    if (!imageName)
+        imageName = Date.now() + imageFile.name;
+
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.POMOSHOP_IMAGES + imageName);
+    const taskSnapShot = await ref.put(imageFile);
+    const imageURL = await taskSnapShot.ref.getDownloadURL();
+    return { imageName, imageURL };
+}
+
+export async function addItemtoShop(item) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .add(item);
+    return ref.id;
+}
+
 //============================================================================//
 
 //============================================================================//
@@ -2040,6 +2059,6 @@ export async function updateItemsOwned(uid, itemsOwned) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({'itemsOwned': itemsOwned});
+        .update({ 'itemsOwned': itemsOwned });
 }
 //============================================================================//
