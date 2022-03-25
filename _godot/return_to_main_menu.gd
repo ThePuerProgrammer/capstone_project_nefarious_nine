@@ -5,14 +5,17 @@ onready var method_selection_optionbutton=$"Method_Selection_Button"
 onready var deck_selection_optionbutton=$"Deck_Selection_Button"
 onready var category_selection_optionbutton=$"Category_Selection_Button"
 onready var timer_selection_optionbutton=$"Timer_Selection_Button"
-
+#GAH-DOUGH-BALS
 var game_selection_array = []
 var dungeon_selected=false
 var pomoblast_selected=false
-
-var categories_docid_to_name_dic : Dictionary = {}
+var desired_time
+var category_selected
+var deck_selected
 var deckList
-var deck_name : Dictionary = {}
+#Dictionaries
+var dic_val_categories : Dictionary = {}
+var dic_deck_name : Dictionary = {} #(-_-)#
 
 func _ready():
 	$FadeIn.show()
@@ -25,7 +28,10 @@ func _ready():
 	#Needed Items From The Start
 	add_items_to_selection_method()
 	add_items_to_timer_selection()
-	method_selection_optionbutton.connect("item_selected",self,"on_item_selected")
+	method_selection_optionbutton.connect("item_selected",self,"on_method_item_selected")
+	timer_selection_optionbutton.connect("item_selected",self,"on_timer_item_selected")
+	category_selection_optionbutton.connect("item_selected",self,"on_category_item_selected")
+	deck_selection_optionbutton.connect("item_selected",self,"on_deck_item_selected")
 
 func _on_FadeOut_fade_out_finished():
 	if get_tree().change_scene('res://Menu/MenuScreen.tscn') != OK:
@@ -145,14 +151,24 @@ func add_items_to_selection_method():
 	method_selection_optionbutton.add_item("Category")
 	method_selection_optionbutton.add_item("Decks")
 	method_selection_optionbutton.set_item_disabled(0,true)
+
 #Deck Dropdown Items
-#func add_items_to_deck_selection():
-#	deck_selection_optionbutton.add_item("Pick One")
-#	deck_selection_optionbutton.add_item('user_id')
-#	deck_selection_optionbutton.add_item("Test 2")
-#	deck_selection_optionbutton.add_item("Test 3")
-#	deck_selection_optionbutton.add_item("Test 4")
-#	deck_selection_optionbutton.set_item_disabled(0,true)
+func add_items_to_deck_selection():
+	#Retrieves Decks from Firestore User-Owned Decks
+	deckList = FirebaseController.get_user_decks(Constants.TEST_UID)
+	if deckList is GDScriptFunctionState:
+		deckList = yield(deckList, "completed")
+#Populates to a dictionary
+	for deck in deckList:
+		var fields = deck["doc_fields"]
+		dic_deck_name[deck["doc_name"]] = fields["name"]
+		print("DIC:",dic_deck_name[deck["doc_name"]])
+#Adds Selections
+	deck_selection_optionbutton.add_item("Pick One")
+	for deck in dic_deck_name.values():
+		deck_selection_optionbutton.add_item(deck)
+	deck_selection_optionbutton.set_item_disabled(0,true)
+
 #Category Dropdown Items
 func add_items_to_category_selection():
 	#Retrieves Categories from Firestore Backend-collection
@@ -161,15 +177,18 @@ func add_items_to_category_selection():
 		categories = yield(categories, "completed")
 	
 	#This retrieves the doc_fields values into an array, making it a double array
+	#This works trying something else
 	var dic_val_array = Array(categories["doc_fields"].values())
 	#Value Below Prints Misc to Console, [0][i] to see all categories
-	print(dic_val_array[0][0])
+	print(dic_val_array[0])
 
 	#Adding Selections
 	category_selection_optionbutton.add_item("Pick One")
 	for category in dic_val_array[0]:
+		dic_val_categories[category] = category 
 		category_selection_optionbutton.add_item(category)
 	category_selection_optionbutton.set_item_disabled(0,true)
+#
 
 #Timer Dropdown Items
 func add_items_to_timer_selection():
@@ -177,9 +196,10 @@ func add_items_to_timer_selection():
 	timer_selection_optionbutton.add_item("30")
 	timer_selection_optionbutton.add_item("60")
 	timer_selection_optionbutton.add_item("90")
+	timer_selection_optionbutton.add_item("10")
 
 #Checks which method is selected
-func on_item_selected(id):
+func on_method_item_selected(id):
 	if method_selection_optionbutton.get_item_id(id)==1:
 		print(str(method_selection_optionbutton.get_item_text(id)))
 		disable_deck_selection_option()
@@ -192,6 +212,31 @@ func on_item_selected(id):
 		deck_selection_optionbutton.disabled=false
 		deck_selection_optionbutton.clear()
 		add_items_to_deck_selection()
+
+#Checks which Time has been selected
+#and assigns to a gah-dough-bal variable desired_time
+func on_timer_item_selected(id):
+	match timer_selection_optionbutton.get_item_id(id):
+		id:
+			desired_time=timer_selection_optionbutton.get_item_text(id)
+			print("Desired Time Assignment:", desired_time)
+
+#Checks which Category has been selected
+#and assigns to a gah-dough-bal variable category_selected
+func on_category_item_selected(id):
+	match category_selection_optionbutton.get_item_id(id):
+		id:
+			category_selected=category_selection_optionbutton.get_item_text(id)
+			print("Category Selected:",category_selected)
+
+#Checks which Deck has been selected
+#and assigns to a gah-dough-bal variable deck_selected
+func on_deck_item_selected(id):
+	match deck_selection_optionbutton.get_item_id(id):
+		id:
+			deck_selected=deck_selection_optionbutton.get_item_text(id)
+			print("Deck Selected:",deck_selected)
+
 #Returns to Original State
 func disable_category_selection_option():
 	category_selection_optionbutton.disabled=true
@@ -208,41 +253,12 @@ func disable_deck_selection_option():
 
 ####################################################################################################
 
-func add_items_to_deck_selection():
-	#Retrieves Decks from Firestore User-Owned Decks
-	print("1")
-	deckList = FirebaseController.get_user_decks(Constants.TEST_UID)
-	if deckList is GDScriptFunctionState:
-		deckList = yield(deckList, "completed")
-	print("2")
 
-
-	#This retrieves the doc_fields values into an array
-	#var dic_val_array = Array(user["doc_fields"].values())
-	print("3")
-	#print(dic_val_array)
-	
-	deck_selection_optionbutton.add_item("Pick One")
-	#for i in deckList:
-		#var fields = deckList["doc_fields"]
-		#deck_name[i["doc_name"]] = fields["name"]
-		#deck_selection_optionbutton.add_item(deck_name)
-	deck_selection_optionbutton.add_item('user_id')
-	deck_selection_optionbutton.add_item("Test 2")
-	deck_selection_optionbutton.add_item("Test 3")
-	deck_selection_optionbutton.add_item("Test 4")
-	deck_selection_optionbutton.set_item_disabled(0,true)
 
 
 
 
 ###########################DDDDEEEEEEEEELLLLLLLLLLEEEEEEEEEEEEEEEETTTTTTTTTTEEEEEEEEEEEEEE##########
 ####################################################################################################
-#func add_items_to_category_selection():
-#	category_selection_optionbutton.add_item("Pick One")
-#	category_selection_optionbutton.add_item("Test 1")
-#	category_selection_optionbutton.add_item("Test 2")
-#	category_selection_optionbutton.add_item("Test 3")
-#	category_selection_optionbutton.add_item("Test 4")
-#	category_selection_optionbutton.set_item_disabled(0,true)
+
 ####################################################################################################
