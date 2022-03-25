@@ -30,42 +30,40 @@ export async function shop_page() {
 
     Elements.root.innerHTML = ``;
     let html = '';
-
+      
     // more buttons can be added for different categories
-    /*html += `<div id="pomoshop-page">
-    <div id="pomo-sidenav" class="sidenav">
-    <button id="default-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Show All</button>
+    html += `<div id="pomo-sidenav" class="sidenav">
+    <h4 class="item-name pomo-text-color-light" style="font-size: 30px;">Pomoshop</h4>
     <br>
-    <button id="skins-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Skins</button>
+    <button id="default-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Show All</button>
     <br>
-    <button id="accessories-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Accessories</button>
+    <button id="accessories-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Accessories</button>
     <br>
-    </div>
-    <div id="pomoshop">
-    <h1>Welcome to the PomoShop!</h1>
-    <div id="default-tag">
-    <h3>Showing skins and accessories</h3>
-    </div>
-    `;*/
-        
-    html += `<div class="pomoshop-category" id="accessories">`;
+    <button id="skins-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Skins</button>
+    <br>
+    </div>`;
+
+
+    html += `<div class="pomoshop">
+        <div class="pomoshop-category" id="accessories">
+        <h4 class="item-name pomo-text-color-dark" style="text-align: left; padding: 10px 0px 0px 20px; margin-bottom: -10px;">Accessories</h4>`;
     
     items.forEach(item => {
         // sort for accessories
         if(item.skinType == "") {
-            html += buildItemView(item, user);
+            html += buildItemView(item);
         }
     });
         
     html+= `</div>
         <br>
-        <br>
-        <div class="pomoshop-category" id="skins">`;
+        <div class="pomoshop-category" id="skins">
+        <h4 class="item-name pomo-text-color-dark" style="text-align: left; padding: 10px 0px 0px 20px; margin-bottom: -10px;">Skins</h4>`;
 
     items.forEach(item => {
         // sort for skins
         if(item.skinType != "") {
-            html += buildItemView(item, user);
+            html += buildItemView(item);
         }
     });
             
@@ -89,69 +87,28 @@ export async function shop_page() {
         }
     });
 
-    /*
+    
     // button listeners to show different items within the shop
     const defaultShopButton = document.getElementById('default-shop-button');
     defaultShopButton.addEventListener('click', () =>{
-        // keep it from duplicating tags
-        if(document.getElementById('default-tag')){
-            return;
-        }
-        const defaultShop = '<h3>Showing skins and accessories</h3>';
-        const defaultShopTag = document.createElement('div');
-        defaultShopTag.id = "default-tag";
-        defaultShopTag.innerHTML = defaultShop;
-        // check for existing tags and delete them
-        const accessoriesTemp = document.getElementById('accessories-tag');
-        if(accessoriesTemp){
-            accessoriesTemp.remove();
-        }
-        const skinTemp = document.getElementById('skin-tag');
-        if(skinTemp){
-            skinTemp.remove();
-        }
-        document.getElementById('pomoshop').appendChild(defaultShopTag);
-    })
 
-    const skinsShopButton = document.getElementById('skins-shop-button');
-    skinsShopButton.addEventListener('click', () =>{
-        if(document.getElementById('skin-tag')){
-            return;
-        }
-        const skinsShop = '<h3>Skins</h3>';
-        const skinShopTag = document.createElement('div');
-        skinShopTag.id = "skin-tag";
-        skinShopTag.innerHTML = skinsShop;
-        const accessoriesTemp = document.getElementById('accessories-tag');
-        if(accessoriesTemp){
-            accessoriesTemp.remove();
-        }
-        const defaultTemp = document.getElementById('default-tag');
-        if(defaultTemp){
-            defaultTemp.remove();
-        }
-        document.getElementById('pomoshop').appendChild(skinShopTag);
+        document.getElementById("accessories").style.display = "block";
+        document.getElementById("skins").style.display = "block";
     })
 
     const accessoriesShopButton = document.getElementById('accessories-shop-button');
     accessoriesShopButton.addEventListener('click', () =>{
-        if(document.getElementById('accessories-tag')){
-            return;
-        }
-        const accessoriesShop = '<h3>Accessories</h3>';
-        const accessoriesShopTag = document.createElement('div');
-        accessoriesShopTag.id = "accessories-tag";
-        accessoriesShopTag.innerHTML = accessoriesShop;
-        const skinTemp = document.getElementById('skin-tag');
-        if(skinTemp){
-            skinTemp.remove();
-        }
-        const defaultTemp = document.getElementById('default-tag');
-        if(defaultTemp){
-            defaultTemp.remove();
-        }
-        document.getElementById('pomoshop').appendChild(accessoriesShopTag);
-    })*/
+
+        document.getElementById("skins").style.display = "none";
+        document.getElementById("accessories").style.display = "block";
+    })
+
+    const skinsShopButton = document.getElementById('skins-shop-button');
+    skinsShopButton.addEventListener('click', () =>{
+
+        document.getElementById("skins").style.display = "block";
+        document.getElementById("accessories").style.display = "none";
+    })
 
     const buyItemButtons =
     document.getElementsByClassName("form-buy-item");
@@ -183,12 +140,13 @@ export async function shop_page() {
 
 }
 
-function buildItemView(item, user) {
+function buildItemView(item) {
 
-    let html = `<div id="pomoshop-item"  style="display: inline-block">
-        <img src="${item.photoURL}" style="width: 200px; height: 200px; object-fit: cover;">
+    let html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block">
+        <img src="${item.photoURL}" style="width: 180px; height: 180px; object-fit: cover;  margin-bottom: 10px;">
+        <br>
         <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
-
+        <br>
         <form class="form-buy-item" method="post">
         <input type="hidden" name="docId" value="${item.docID}">`;
     
