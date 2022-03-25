@@ -63,6 +63,7 @@ export function addEventListeners() {
         const selectAccessories = document.getElementById('select-accessories');
         const addItem = selectAccessories.options[selectAccessories.selectedIndex].value;
         const checkItem = document.getElementById(addItem);
+        // TODO: make sure you can only have one skin or one hat equipped
         if (checkItem) {
             accessoriesList.removeChild(checkItem);
         } else {
@@ -76,7 +77,6 @@ export function addEventListeners() {
 
     Elements.removeAccessoriesButton.addEventListener('click', e => {
         e.preventDefault();
-        e.preventDefault();
         const accessoriesList = document.getElementById('current-accessories-list');
         const selectAccessories = document.getElementById('select-accessories');
         const removeItem = selectAccessories.options[selectAccessories.selectedIndex].value;
@@ -86,6 +86,11 @@ export function addEventListeners() {
         } else {
             Utilities.info('Item not equipped', 'The item hasn\'t been equipped yet');
         }
+    })
+
+    Elements.submitAccessoriesButton.addEventListener('submit', e => {
+        e.preventDefault();
+        // this is still TODO because I'm not really sure how we're gonna represent the items on the pomopet with the current way things are structured
     })
 }
 
