@@ -7,11 +7,13 @@ import { Pomoshop } from '../model/pomoshop.js'
 import * as Utilities from './utilities.js'
 
 let imageFile2Upload;
+
 export function addEventListeners() {
     Elements.menuShop.addEventListener('click', async () => {
         history.pushState(null, null, Routes.routePathname.POMOSHOP);
         await shop_page();
     });
+
 }
 
 export async function shop_page() {
@@ -172,12 +174,6 @@ export async function shop_page() {
             Elements.addItemModal.show();
         })
 
-        Elements.formAddItem.form.addEventListener('submit', async e => {
-            e.preventDefault();
-            await addNewItem(e.target);
-            await shop_page();
-        })
-
         Elements.formAddItem.imageButton.addEventListener('change', e => {
             imageFile2Upload = e.target.files[0];
             if (!imageFile2Upload) {
@@ -188,6 +184,30 @@ export async function shop_page() {
             reader.onload = () => Elements.formAddItem.imageTag.src = reader.result
             reader.readAsDataURL(imageFile2Upload);
         })
+
+
+        Elements.formAddItem.form.addEventListener('submit', async e => {
+            e.preventDefault();
+            const name = e.target.itemname.value;
+            const cost = e.target.itemcost.value;
+            const skinType = e.target.selectSkin.value;
+            const pomoshop = new Pomoshop({ name, cost, skinType });
+
+            try {
+                const { imagename, imageURL } = await FirebaseController.uploadItemImage(imageFile2Upload);
+                pomoshop.photoName = imagename;
+                pomoshop.photoURL = imageURL;
+                await FirebaseController.addItemtoShop(pomoshop.serialize());
+                Utilities.info('Success!', `Item ${e.target.itemname.value} has been added`, 'modal-add-item');
+            } catch (e) {
+                if (Constant.DEV) console.log(e)
+
+            }
+
+            // addNewItem(e.target);
+            await shop_page();
+        })
+
 
     }
 
@@ -233,28 +253,4 @@ function buildItemView(item, email) {
     }
 
     return html;
-}
-
-async function addNewItem(form) {
-    // console.log("Item name test" + form.itemname);
-
-    const name = form.itemname.value;
-    const cost = form.itemcost.value;
-    const skinType = form.selectSkin.value;
-    const pomoshop = new Pomoshop({ name, cost, skinType });
-
-    try {
-        const { photoName, photoURL } = await FirebaseController.uploadItemImage(imageFile2Upload);
-        pomoshop.photoName = photoName;
-        console.log("PHOTO NAME" + pomoshop.photoName);
-        pomoshop.photoURL = photoURL;
-        console.log("PHOTO URL " + pomoshop.photoURL); //undefined?
-        await FirebaseController.addItemtoShop(pomoshop.serialize());
-        Utilities.info('Success!', `${pomoshop.name} added!`, Elements.addItemModal);
-
-    } catch (e) {
-        if (Constant.DEV) console.log(e)
-        Utilities.info('Add Product Failed', JSON.stringify(e), Elements.addItemModal);
-
-    }
 }

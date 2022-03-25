@@ -198,6 +198,7 @@ export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyCl
 //Pomoshop page
 //============================================================================//
 export const formSelectItem = document.getElementById('select-item-skin');
+export const addItemButton = document.getElementById('add-item-button');
 export const formAddItem = {
     form: document.getElementById('form-add-item'),
     skintype: document.getElementById('select-item-skin'),
