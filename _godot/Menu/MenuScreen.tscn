@@ -18,6 +18,7 @@ script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+overrideMenuToChillZone = true
 
 [node name="Lobby_Scene_BG" parent="." instance=ExtResource( 9 )]
 
