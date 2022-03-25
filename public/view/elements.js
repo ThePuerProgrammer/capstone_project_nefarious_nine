@@ -84,6 +84,7 @@ export const modalSubmitHelpTicket = new bootstrap.Modal(document.getElementById
 export const modalEditProfile = new bootstrap.Modal(document.getElementById('edit-profile-modal'));
 export const modalPomodoption = new bootstrap.Modal(document.getElementById('modal-pomodoption'));
 export const modalDressup = new bootstrap.Modal(document.getElementById('modal-pomo-dressup', { backdrop: 'static' }));
+export const addItemModal = new bootstrap.Modal(document.getElementById('modal-add-item'));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -195,7 +196,16 @@ export const formSearchBox = document.getElementById('form-searchbox');
 export const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
 export const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
 //============================================================================//
-
+//Pomoshop page
+//============================================================================//
+export const formSelectItem = document.getElementById('select-item-skin');
+export const addItemButton = document.getElementById('add-item-button');
+export const formAddItem = {
+    form: document.getElementById('form-add-item'),
+    skintype: document.getElementById('select-item-skin'),
+    imageTag: document.getElementById('form-add-item-image-tag'),
+    imageButton: document.getElementById('form-add-item-image-button'),
+}
 
 //PROFILE PAGE
 //============================================================================//

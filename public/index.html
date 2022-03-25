@@ -846,6 +846,49 @@
     </div>
   </div>
   <!-- END UPDATE PROFILE MODAL---------------------------------------------->
+  <!-- MODAL: ADD ITEM -------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-add-item" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-add-item-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title pomo-text-color-light" id="modal-add-item-label">Add Item to PomoShop</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-add-item" method="post">
+            <div class="form-group">
+              <label class="pomo-text-color-light" for="itemname">Name</label>
+              <input class="form-control form-control-lg" type="text" name="itemname" placeholder="Item Name" required
+                minlength="2" autocomplete="off">
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="itemcost">Cost</label>
+              <input class="form-control form-control-lg" type="number" name="itemcost" placeholder="Item Price"
+                required minlength="1" autocomplete="off">
+              <br>
+              <br>
+              <label class="pomo-text-color-light" for="selectskin">Skin Type</label>
+              <br>
+              <select id="select-item-skin" name="selectSkin" class="form-select-item-skin"
+                aria-label="Default select example" style="width:300px;"></select>
+              <br>
+              <br>
+              <img id="form-add-item-image-tag" style="display: block;" />
+              <label class="pomo-text-color-light" for="form-add-item-image-button">Add Item Image</label>
+              <input id="form-add-item-image-button" type="file" value="upload" />
+            </div>
+            <br>
+            <br>
+            <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="class-add-item"
+              type="submit">Add Item</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF MODAL: ADD ITEM  -------------------------------------------------------------------------------------------------------------------------->
+
 
   <!-- Modal: Popup Info Box -------------------------------------------------->
   <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -948,6 +991,8 @@
     </div>
   </div>
   <!-- END OF TIMER SECTION --------------------------------------------------->
+
+
 
   <!-- SCRIPTS -------------------------------------------------------------->
   <!-- update the version number as needed -->
