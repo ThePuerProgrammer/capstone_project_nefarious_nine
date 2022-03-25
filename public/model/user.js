@@ -11,6 +11,8 @@ export class User{
         this.profilePhotoURL = data.profilePhotoURL;
         this.userBio = data.userBio;
         this.pomopet = data.pomopet;
+        this.pomopetData = data.pomopetData;
+        this.itemsOwned = data.itemsOwned
         // TODO: SHOP STUFF
     }
 
@@ -51,23 +53,27 @@ export class User{
                 profilePhotoURL: this.profilePhotoURL,
                 userBio: this.userBio,
                 pomopet: this.pomopet,
+                pomopetData: this.pomopetData,
+                itemsOwned: this.itemsOwned,
             };
         }
 
-       static deserialize(data) {
-           const user = new User(data);
-           user.defaultTimerSetting = data.defaultTimerSetting;
-           user.email = data.email;
-           user.username = data.username;
-           user.decksStudying = data.decksStudying;
-           user.coins = data.coins;
-           user.deckNumber = data.deckNumber;
-           user.flashcardNumber = data.flashcardNumber;
-           user.profilePhotoName = data.profilePhotoName;
-           user.profilePhotoURL = data.profilePhotoURL;
-           user.userBio = data.userBio;
-           user.pomopet = data.pomopet;
-           return user;
+        static deserialize(data) {
+            const user = new User(data);
+            user.defaultTimerSetting = data.defaultTimerSetting;
+            user.email = data.email;
+            user.username = data.username;
+            user.decksStudying = data.decksStudying;
+            user.coins = data.coins;
+            user.deckNumber = data.deckNumber;
+            user.flashcardNumber = data.flashcardNumber;
+            user.profilePhotoName = data.profilePhotoName;
+            user.profilePhotoURL = data.profilePhotoURL;
+            user.userBio = data.userBio;
+            user.pomopet = data.pomopet;
+            user.pomopetData = data.pomopetData;
+            user.itemsOwned = data.itemsOwned;
+            return user;
         }
 
 /***************************************************************************

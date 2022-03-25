@@ -155,7 +155,7 @@ export async function buildStudyDecksPage(deckList) {
     Elements.root.innerHTML = "";
     //Clears all HTML so it doesn't double
     let html = ''
-    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-hover rounded-pill ms-n3" type="click" style="float:right;"><i class="material-icons">search</i>Search Decks</button></h1> '
+    html += '<h1> Study Decks <button id="search-decks-button" class="btn search-btn search-btn-decks search-btn-hover rounded-pill" type="click" style="float:right;"><i class="material-icons">search</i>Search Decks</button></h1> '
         ;
 
     //create deck button
@@ -202,9 +202,6 @@ export async function buildStudyDecksPage(deckList) {
     if (deckList.length == 0) {
         html += '<h2> No decks found! Go create some and get to studying!</h2>'
     }
-
-
-
 
 
 
