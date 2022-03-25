@@ -23,6 +23,7 @@ onready var host_to_table				= false
 onready var host_back_to_host_stand		= false
 onready var left_player_section			= false
 onready var customer_to_host_path		= false
+onready var table_exiting				= [false, 0]
 onready var customer_path_h_offset		= 200
 
 var pos_table_menu 		= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
@@ -65,6 +66,9 @@ var tables = {
 		table11 = [Vector2(1504, 624), Vector2(1600, 624), Vector2(1504, 728), Vector2(1600, 728)],
 		table12 = [Vector2(1728, 624), Vector2(1824, 624), Vector2(1728, 728), Vector2(1824, 728)],
 	},
+	time_since_being_sat = [
+		0,0,0,0,0,0,0,0,0,0,0,0
+	],
 	guests = {
 		table1 = [], table2 = [], table3 = [], table4 = [], table5 = [], table6 = [],
 		table7 = [], table8 = [], table9 = [], table10 = [], table11 = [], table12 = [],
@@ -121,6 +125,18 @@ func _ready():
 	
 
 func _process(_delta):
+	#for i in range(tables["tables_sat"].size()):
+	#	if tables["tables_sat"][i] and\
+	#	OS.get_system_time_secs() - tables["time_since_being_sat"][i] >= 180:
+	#		tables["tables_sat"][i] = false
+	#		table_exiting = [true, i]
+	#		for guest in tables["guests"]["table" + String(i)]:
+	#			guest.queue_free()
+			
+	
+	#if table_exiting[0]:
+	#	pass
+	
 	if walk_in:
 		var paths = customer_paths.get_children()
 		var all_max_units = true
@@ -689,6 +705,7 @@ func _on_DialogueTimer_timeout():
 			
 
 func _on_Restaurant_Level_seat_guests():
+	#tables["time_since_being_sat"][current_focused_table] = OS.get_system_time_secs()
 	var hp = get_node(host_path).get_children()
 	for i in range(1, hp.size()):
 		hp[i].get_child(0).queue_free()
@@ -697,6 +714,7 @@ func _on_Restaurant_Level_seat_guests():
 		var table = "table" + String(current_focused_table)
 		customer.position = tables["seat_positions"][table][i]
 		$Customers.add_child(customer)
+	#	tables["guests"]["table" + String(current_focused_table)].append(customer)
 		
 	convo_string = "Your server will be\nright with you.\nEnjoy your meal!"
 	var conversation_dialogue = convo_dialogue.instance()
@@ -713,3 +731,4 @@ func _on_Restaurant_Level_seat_guests():
 
 func _on_Restaurant_Level_return_to_host_stand():
 	host_back_to_host_stand = true
+

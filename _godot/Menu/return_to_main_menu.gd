@@ -25,3 +25,7 @@ func _on_PomoBlast_pressed():
 	get_tree().change_scene('res://PomoBlast/PomoBlast.tscn')
 	
 	pass # Replace with function body.
+
+
+func _on_PomoBITEButton_pressed():
+	get_tree().change_scene('res://pomobite/Restaurant_Level.tscn')
