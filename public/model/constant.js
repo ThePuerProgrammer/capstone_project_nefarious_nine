@@ -25,6 +25,7 @@ export const collectionName = {
     MESSAGES: 'messages',
     FLASHCARDS_DATA_SUFFIX: '_flashcard_data',
     HELPTICKETS: 'help_tickets',
+    POMOSHOP: 'pomoshop',
 }
 
 /*****************************************
@@ -40,6 +41,7 @@ export const storageFolderName = {
     HELPTICKET_IMAGES: 'helpticket_images/',
     POMOPETS: 'pomopets/',
     PROFILE_PICTURES: 'profile_pictures/',
+    POMOSHOP_IMAGES: 'pomoshop_images/',
 }
 
 /*****************************************

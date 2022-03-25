@@ -64,6 +64,7 @@ export function addEventListeners() {
             const deckNumber = 0;
             const flashcardNumber = 0;
             const userBio = "";
+            const itemsOwned = [];
 
             const pomopet = {
                 type: "bunny",
@@ -96,7 +97,8 @@ export function addEventListeners() {
                 profilePhotoURL,
                 userBio,
                 pomopet,
-                pomopetData
+                pomopetData,
+                itemsOwned,
             });
             localStorage.setItem("usercoins", newUserModel.coins);
             // Creates user Auth Account AND adds user account to users collections

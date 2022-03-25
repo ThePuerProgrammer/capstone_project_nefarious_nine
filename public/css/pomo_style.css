@@ -765,14 +765,14 @@ iframe {
 /*============================================================================*/
 .sidenav {
     height: 100%;
-    width: 160px;
-    position: fixed;
-    z-index: 1;
+    width: 200px;
+    position: absolute;
     top: 58px;
     left: 0;
     background-color: #2C1320;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding: 20px;
+    align-items: center;
 }
 
 .sidenav a{
@@ -794,7 +794,25 @@ iframe {
     margin-left: 50px;
 }
 
-#pomoshop {
-    transition: margin-left .5s;
-    padding: 20px;
+.pomoshop{
+    padding: 40px;
+    vertical-align: middle;
+}
+
+.pomoshop-category{
+    background-color: #5F4B66;
+    width: 85%;
+    height: 330px;
+    border-radius: 25px;
+    white-space: nowrap;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    float: right;
+    margin-bottom: 30px;
+}
+
+.pomoshop-item{
+    padding: 0px 15px 5px 15px;
+    vertical-align: middle;
 }
