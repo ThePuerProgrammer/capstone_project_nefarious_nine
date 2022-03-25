@@ -10,6 +10,10 @@ var game_selection_array = []
 var dungeon_selected=false
 var pomoblast_selected=false
 
+var categories_docid_to_name_dic : Dictionary = {}
+var deckList
+var deck_name : Dictionary = {}
+
 func _ready():
 	$FadeIn.show()
 	$FadeIn.fade_in()
@@ -142,21 +146,31 @@ func add_items_to_selection_method():
 	method_selection_optionbutton.add_item("Decks")
 	method_selection_optionbutton.set_item_disabled(0,true)
 #Deck Dropdown Items
-func add_items_to_deck_selection():
-	deck_selection_optionbutton.add_item("Pick One")
-	deck_selection_optionbutton.add_item("Test 1")
-	deck_selection_optionbutton.add_item("Test 2")
-	deck_selection_optionbutton.add_item("Test 3")
-	deck_selection_optionbutton.add_item("Test 4")
-	deck_selection_optionbutton.set_item_disabled(0,true)
+#func add_items_to_deck_selection():
+#	deck_selection_optionbutton.add_item("Pick One")
+#	deck_selection_optionbutton.add_item('user_id')
+#	deck_selection_optionbutton.add_item("Test 2")
+#	deck_selection_optionbutton.add_item("Test 3")
+#	deck_selection_optionbutton.add_item("Test 4")
+#	deck_selection_optionbutton.set_item_disabled(0,true)
 #Category Dropdown Items
 func add_items_to_category_selection():
+	#Retrieves Categories from Firestore Backend-collection
+	var categories = FirebaseController.get_categories()
+	if categories is GDScriptFunctionState:
+		categories = yield(categories, "completed")
+	
+	#This retrieves the doc_fields values into an array, making it a double array
+	var dic_val_array = Array(categories["doc_fields"].values())
+	#Value Below Prints Misc to Console, [0][i] to see all categories
+	print(dic_val_array[0][0])
+
+	#Adding Selections
 	category_selection_optionbutton.add_item("Pick One")
-	category_selection_optionbutton.add_item("Test 1")
-	category_selection_optionbutton.add_item("Test 2")
-	category_selection_optionbutton.add_item("Test 3")
-	category_selection_optionbutton.add_item("Test 4")
+	for category in dic_val_array[0]:
+		category_selection_optionbutton.add_item(category)
 	category_selection_optionbutton.set_item_disabled(0,true)
+
 #Timer Dropdown Items
 func add_items_to_timer_selection():
 	timer_selection_optionbutton.add_item("Select One")
@@ -193,7 +207,42 @@ func disable_deck_selection_option():
 	
 
 ####################################################################################################
+
+func add_items_to_deck_selection():
+	#Retrieves Decks from Firestore User-Owned Decks
+	print("1")
+	deckList = FirebaseController.get_user_decks(Constants.TEST_UID)
+	if deckList is GDScriptFunctionState:
+		deckList = yield(deckList, "completed")
+	print("2")
+
+
+	#This retrieves the doc_fields values into an array
+	#var dic_val_array = Array(user["doc_fields"].values())
+	print("3")
+	#print(dic_val_array)
+	
+	deck_selection_optionbutton.add_item("Pick One")
+	#for i in deckList:
+		#var fields = deckList["doc_fields"]
+		#deck_name[i["doc_name"]] = fields["name"]
+		#deck_selection_optionbutton.add_item(deck_name)
+	deck_selection_optionbutton.add_item('user_id')
+	deck_selection_optionbutton.add_item("Test 2")
+	deck_selection_optionbutton.add_item("Test 3")
+	deck_selection_optionbutton.add_item("Test 4")
+	deck_selection_optionbutton.set_item_disabled(0,true)
+
+
+
+
 ###########################DDDDEEEEEEEEELLLLLLLLLLEEEEEEEEEEEEEEEETTTTTTTTTTEEEEEEEEEEEEEE##########
 ####################################################################################################
-
+#func add_items_to_category_selection():
+#	category_selection_optionbutton.add_item("Pick One")
+#	category_selection_optionbutton.add_item("Test 1")
+#	category_selection_optionbutton.add_item("Test 2")
+#	category_selection_optionbutton.add_item("Test 3")
+#	category_selection_optionbutton.add_item("Test 4")
+#	category_selection_optionbutton.set_item_disabled(0,true)
 ####################################################################################################
