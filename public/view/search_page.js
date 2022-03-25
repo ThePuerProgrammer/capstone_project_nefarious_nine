@@ -7,7 +7,7 @@ import { currentUser } from '../controller/firebase_auth.js';
 import { buildDeckView, buildStudyDecksPage } from './study_decks_page.js';
 import * as FirebaseController from '../controller/firebase_controller.js';
 //import * as Auth from '../controller/firebase_auth.js';
-import  { buildAvailableClassroom, classrooms_page } from './classrooms_page.js';
+import  * as Classrooms from './classrooms_page.js';
 
 let searchType;
 let searchKeysInfo;
@@ -214,16 +214,18 @@ function buildClassRoomSearchPage(classroomList, searchKeysArray) {
     classroomList.forEach(ac => {
         if (!ac.banlist.includes(currentUser.email)) {
             html += `
-                <tr>${buildAvailableClassroom(ac)}</tr>`;
+                <tr>${Classrooms.buildAvailableClassroom(ac)}</tr>`;
+
         }
     })
     html += `</tbody></table></div>`;
     Elements.root.innerHTML += html;
 
+    Classrooms.buildPreviewClassroomsWithListeners();
     const searchResetbutton = document.getElementById('search-reset-button');
     searchResetbutton.addEventListener('click', async e => {
         e.preventDefault();
-        await classrooms_page();
+        await Classrooms.classrooms_page();
     });
 }
 // END OF CLASSROOMS SEARCH================================================================//

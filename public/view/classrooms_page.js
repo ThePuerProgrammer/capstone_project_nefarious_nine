@@ -6,7 +6,7 @@ import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import { Classroom } from '../model/classroom.js';
 import * as OneClassroomPage from './one_classroom_page.js';
-import { cleanDataToKeywords, setClassroomSearchOption, setSearchType } from './search_page.js';
+import * as Search from './search_page.js';
 
 export function addEventListeners() {
     Elements.menuClassrooms.addEventListener('click', async () => {
@@ -22,7 +22,7 @@ export function addEventListeners() {
         //const isFavorited = false;
         const category = e.target.selectClassCategory.value;
 
-        const keywords = cleanDataToKeywords(name, subject, category)
+        const keywords = Search.cleanDataToKeywords(name, subject, category)
 
         // add current user as a moderator
         const moderatorList = [];
@@ -191,6 +191,214 @@ export async function classrooms_page() {
     // POPUP MODAL FOR PREVIEWS
     Elements.root.innerHTML = html;
 
+    buildPreviewClassroomsWithListeners();
+  
+    // get available class tab and show it as visible
+    const availableClassroomButton = document.getElementById('available-classroom-button');
+    availableClassroomButton.addEventListener('click', e => {
+        let tabContents = document.getElementsByClassName("classroom-tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].style.display = "none";
+        }
+        document.getElementById('Available Classrooms').style.display = "block";
+        e.target.style.backgroundColor = `#A7ADC6`;
+        e.target.style.color = `#2C1320`;
+        e.target.style.borderBottom = `#A7ADC6`;
+        document.getElementById('my-classroom-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('my-classroom-button').style.color = '#A7ADC6';
+    })
+
+    // get my classroom tab and show it as visible
+    const myClassroomButton = document.getElementById('my-classroom-button');
+    myClassroomButton.addEventListener('click', e => {
+        let tabContents = document.getElementsByClassName("classroom-tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].style.display = "none";
+        }
+        document.getElementById('My Classrooms').style.display = "block";
+        e.target.style.backgroundColor = `#A7ADC6`;
+        e.target.style.color = `#2C1320`;
+        e.target.style.borderBottom = `#A7ADC6`;
+        document.getElementById('available-classroom-button').style.backgroundColor = `#2C1320`;
+        document.getElementById('available-classroom-button').style.color = '#A7ADC6';
+    })
+    // sets myclassrooms as default
+    myClassroomButton.click();
+
+
+    const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
+    // CREATE CLASSROOM open modal button listener 
+    createClassroomButton.addEventListener('click', async e => {
+
+        //const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+
+        // Firebase func. to retrieve categories list
+        let categories;
+        try {
+            categories = await FirebaseController.getCategories();
+            //console.log(cat);
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }
+
+        // clear innerHTML to prevent duplicates
+        Elements.formClassCategorySelect.innerHTML = '';
+
+        categories.forEach(category => {
+            Elements.formClassCategorySelect.innerHTML += `
+                      <option value="${category}">${category}</option>`;
+        });
+
+        // opens create Classroom modal
+        $(`#${Constant.htmlIDs.createClassroomModal}`).modal('show');
+    });
+
+    const sortClassSelect = document.getElementById("sort-classrooms");
+    sortClassSelect.addEventListener('change', async e => {
+        e.preventDefault();
+        // get value from select menu and check if available classroom tab is hiddne
+        var opt = e.target.options[e.target.selectedIndex].value;
+        var swap, rows, shouldSwap;
+        var checkHidden = document.getElementById("Available Classrooms");
+        // set which table to use
+        var table = checkHidden.style.display === "none" ? document.getElementById("my-classrooms-table") : document.getElementById("available-classrooms-table");
+        // for later use
+        var i;
+        var x = (opt == "name") ? 1 : (opt == "subject") ? 2 : 3;
+        // set swap to true
+        swap = true;
+        // if (opt == "name") {
+        // create a while loop to iterate through the table rows
+        while (swap) {
+            // base of saying we're done swapping
+            swap = false;
+            rows = table.rows;
+            // iterate through rows, first row is headers so we ignore that
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwap = false;
+                // getting classroom.docId from first row
+                var a = rows[i].getElementsByTagName("td")[x];
+                // getting classroom.docId from second row
+                var b = rows[i + 1].getElementsByTagName("td")[x];
+                // check if they should switch, if yes then break the loop
+                if (a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase()) {
+                    shouldSwap = true;
+                    break;
+                }
+            }
+            if (shouldSwap) {
+                // swap the rows
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                swap = true;
+            }
+        }
+    });
+
+    // SEARCH CLASSROOMS LISTENERS --------------------------------------------------//
+    const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
+    const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
+    const searchClassroomButton = document.getElementById('search-classroom-button');
+    searchClassroomButton.addEventListener('click', async e => {
+        const searchtype = 'classroomSearch';
+        Search.setSearchType(searchtype);     
+        if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
+            Search.setClassroomSearchOption("all rooms");
+        }
+        else if (checkBoxNotMyClassrooms.checked == true){
+            Search.setClassroomSearchOption("not my rooms");  
+        } 
+        else if (checkBoxMyClassrooms.checked == true) {
+            Search.setClassroomSearchOption("my rooms"); 
+        } 
+        else Search.setClassroomSearchOption("null"); 
+    
+        Utilities.searchBox('Search Classroom', 'input query');        
+    });
+
+    
+    checkBoxMyClassrooms.addEventListener('change', async e => {     
+         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
+            Search.setClassroomSearchOption("all rooms");
+         }
+        
+        else if (checkBoxMyClassrooms.checked == true){
+            Search.setClassroomSearchOption("my rooms"); 
+        }    else {
+            Search.setClassroomSearchOption("null"); 
+        }        
+    });
+
+    
+    checkBoxNotMyClassrooms.addEventListener('change', async e => {        
+         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
+             Search.setClassroomSearchOption("all rooms");
+         }
+         else if (checkBoxNotMyClassrooms.checked == true){
+             Search.setClassroomSearchOption("not my rooms");  
+         } else return;
+    });       
+    // END SEARCH CLASSROOMS LISTENERS------------------------------------------------//
+
+} //END CLASSROOMS_PAGE()-----------------------------------------------------------//
+
+
+function buildMyClassroom(classroom) {
+    let html = `
+    <td>
+    <form class="form-preview-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docID}"/>
+            <input type="hidden" name="name" value ="${classroom.name}"/>
+            <input type="hidden" name="subject" value ="${classroom.subject}"/>
+            <input type="hidden" name="category" value ="${classroom.category}"/>
+            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
+            <input type="hidden" name="members" value ="${classroom.members}"/>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"> <i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
+    </form></td>
+    <td>${classroom.name}</td>
+    <td>${classroom.subject}</td>
+    <td>${classroom.category}</td>
+    <td>${classroom.members.length}/9</td>
+    `;
+
+    html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
+    return html;
+}
+
+export function buildAvailableClassroom(classroom) {
+    let html = classroom.members.includes(Auth.currentUser.email) ? `
+    <td>
+    <form class="form-preview-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docID}"/>
+            <input type="hidden" name="name" value ="${classroom.name}"/>
+            <input type="hidden" name="subject" value ="${classroom.subject}"/>
+            <input type="hidden" name="category" value ="${classroom.category}"/>
+            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
+            <input type="hidden" name="members" value ="${classroom.members}"/>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"> <i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
+    </form></td>` : `
+    <td>
+    <form class="form-preview-classroom" method="post">
+            <input type="hidden" name="docId" value="${classroom.docID}"/>
+            <input type="hidden" name="name" value ="${classroom.name}"/>
+            <input type="hidden" name="subject" value ="${classroom.subject}"/>
+            <input type="hidden" name="category" value ="${classroom.category}"/>
+            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
+            <input type="hidden" name="members" value ="${classroom.members}"/>
+            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">visibility</i>Preview</button>
+    </form></td>`;
+    html += `
+    <td>${classroom.name}</td>
+    <td>${classroom.subject}</td>
+    <td>${classroom.category}</td>
+    <td>${classroom.members.length}/9</td>
+    `;
+
+    html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
+    return html;
+}
+
+export function buildPreviewClassroomsWithListeners() {
     const previewForms = document.getElementsByClassName('form-preview-classroom');
     for (let i = 0; i < previewForms.length; i++) {
         previewForms[i].addEventListener('submit', e => {
@@ -342,7 +550,7 @@ export async function classrooms_page() {
                         const ebanlist = [];
                         const emoderatorList = [];
 
-                        const keywords = cleanDataToKeywords(name, subject, category)
+                        const keywords = Search.cleanDataToKeywords(name, subject, category)
 
                         const ecr = new Classroom({
                             name,
@@ -363,215 +571,10 @@ export async function classrooms_page() {
                 });
             }
 
-
             Elements.modalPreviewClassroom.show();
             Utilities.enableButton(button, label);
         });
 
     }
 
-
-    // get available class tab and show it as visible
-    const availableClassroomButton = document.getElementById('available-classroom-button');
-    availableClassroomButton.addEventListener('click', e => {
-        let tabContents = document.getElementsByClassName("classroom-tab-content");
-        for (let i = 0; i < tabContents.length; i++) {
-            tabContents[i].style.display = "none";
-        }
-        document.getElementById('Available Classrooms').style.display = "block";
-        e.target.style.backgroundColor = `#A7ADC6`;
-        e.target.style.color = `#2C1320`;
-        e.target.style.borderBottom = `#A7ADC6`;
-        document.getElementById('my-classroom-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('my-classroom-button').style.color = '#A7ADC6';
-    })
-
-    // get my classroom tab and show it as visible
-    const myClassroomButton = document.getElementById('my-classroom-button');
-    myClassroomButton.addEventListener('click', e => {
-        let tabContents = document.getElementsByClassName("classroom-tab-content");
-        for (let i = 0; i < tabContents.length; i++) {
-            tabContents[i].style.display = "none";
-        }
-        document.getElementById('My Classrooms').style.display = "block";
-        e.target.style.backgroundColor = `#A7ADC6`;
-        e.target.style.color = `#2C1320`;
-        e.target.style.borderBottom = `#A7ADC6`;
-        document.getElementById('available-classroom-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('available-classroom-button').style.color = '#A7ADC6';
-    })
-    // sets myclassrooms as default
-    myClassroomButton.click();
-
-
-    const createClassroomButton = document.getElementById(Constant.htmlIDs.createClassroom);
-    // CREATE CLASSROOM open modal button listener 
-    createClassroomButton.addEventListener('click', async e => {
-
-        //const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
-
-        // Firebase func. to retrieve categories list
-        let categories;
-        try {
-            categories = await FirebaseController.getCategories();
-            //console.log(cat);
-        } catch (e) {
-            if (Constant.DEV)
-                console.log(e);
-        }
-
-        // clear innerHTML to prevent duplicates
-        Elements.formClassCategorySelect.innerHTML = '';
-
-        categories.forEach(category => {
-            Elements.formClassCategorySelect.innerHTML += `
-                      <option value="${category}">${category}</option>`;
-        });
-
-        // opens create Classroom modal
-        $(`#${Constant.htmlIDs.createClassroomModal}`).modal('show');
-    });
-
-    const sortClassSelect = document.getElementById("sort-classrooms");
-    sortClassSelect.addEventListener('change', async e => {
-        e.preventDefault();
-        // get value from select menu and check if available classroom tab is hiddne
-        var opt = e.target.options[e.target.selectedIndex].value;
-        var swap, rows, shouldSwap;
-        var checkHidden = document.getElementById("Available Classrooms");
-        // set which table to use
-        var table = checkHidden.style.display === "none" ? document.getElementById("my-classrooms-table") : document.getElementById("available-classrooms-table");
-        // for later use
-        var i;
-        var x = (opt == "name") ? 1 : (opt == "subject") ? 2 : 3;
-        // set swap to true
-        swap = true;
-        // if (opt == "name") {
-        // create a while loop to iterate through the table rows
-        while (swap) {
-            // base of saying we're done swapping
-            swap = false;
-            rows = table.rows;
-            // iterate through rows, first row is headers so we ignore that
-            for (i = 1; i < (rows.length - 1); i++) {
-                shouldSwap = false;
-                // getting classroom.docId from first row
-                var a = rows[i].getElementsByTagName("td")[x];
-                // getting classroom.docId from second row
-                var b = rows[i + 1].getElementsByTagName("td")[x];
-                // check if they should switch, if yes then break the loop
-                if (a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase()) {
-                    shouldSwap = true;
-                    break;
-                }
-            }
-            if (shouldSwap) {
-                // swap the rows
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                swap = true;
-            }
-        }
-    });
-
-    // SEARCH CLASSROOMS LISTENERS --------------------------------------------------//   sorry this is so dumb, I R tired -_-
-    const checkBoxMyClassrooms = document.getElementById('checkbox-myClassrooms');
-    const checkBoxNotMyClassrooms = document.getElementById('checkbox-notMyClassrooms');
-    const searchClassroomButton = document.getElementById('search-classroom-button');
-    searchClassroomButton.addEventListener('click', async e => {
-        const searchtype = 'classroomSearch';
-        setSearchType(searchtype);     
-        if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
-            setClassroomSearchOption("all rooms");
-        }
-        else if (checkBoxNotMyClassrooms.checked == true){
-            setClassroomSearchOption("not my rooms");  
-        } 
-        else if (checkBoxMyClassrooms.checked == true) {
-            setClassroomSearchOption("my rooms"); 
-        } 
-        else setClassroomSearchOption("null"); 
-    
-        Utilities.searchBox('Search Classroom', 'input query');        
-    });
-
-    
-    checkBoxMyClassrooms.addEventListener('change', async e => {     
-         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
-            setClassroomSearchOption("all rooms");
-         }
-        
-        else if (checkBoxMyClassrooms.checked == true){
-            setClassroomSearchOption("my rooms"); 
-        }    else {
-            setClassroomSearchOption("null"); 
-        }        
-    });
-
-    
-    checkBoxNotMyClassrooms.addEventListener('change', async e => {        
-         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
-             setClassroomSearchOption("all rooms");
-         }
-         else if (checkBoxNotMyClassrooms.checked == true){
-             setClassroomSearchOption("not my rooms");  
-         } else return;
-    });       
-    // END SEARCH CLASSROOMS LISTENERS------------------------------------------------//
-
-} //END CLASSROOMS_PAGE()-----------------------------------------------------------//
-
-
-function buildMyClassroom(classroom) {
-    let html = `
-    <td>
-    <form class="form-preview-classroom" method="post">
-            <input type="hidden" name="docId" value="${classroom.docID}"/>
-            <input type="hidden" name="name" value ="${classroom.name}"/>
-            <input type="hidden" name="subject" value ="${classroom.subject}"/>
-            <input type="hidden" name="category" value ="${classroom.category}"/>
-            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
-            <input type="hidden" name="members" value ="${classroom.members}"/>
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"> <i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
-    </form></td>
-    <td>${classroom.name}</td>
-    <td>${classroom.subject}</td>
-    <td>${classroom.category}</td>
-    <td>${classroom.members.length}/9</td>
-    `;
-
-    html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
-    return html;
-}
-
-export function buildAvailableClassroom(classroom) {
-    let html = classroom.members.includes(Auth.currentUser.email) ? `
-    <td>
-    <form class="form-preview-classroom" method="post">
-            <input type="hidden" name="docId" value="${classroom.docID}"/>
-            <input type="hidden" name="name" value ="${classroom.name}"/>
-            <input type="hidden" name="subject" value ="${classroom.subject}"/>
-            <input type="hidden" name="category" value ="${classroom.category}"/>
-            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
-            <input type="hidden" name="members" value ="${classroom.members}"/>
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"> <i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
-    </form></td>` : `
-    <td>
-    <form class="form-preview-classroom" method="post">
-            <input type="hidden" name="docId" value="${classroom.docID}"/>
-            <input type="hidden" name="name" value ="${classroom.name}"/>
-            <input type="hidden" name="subject" value ="${classroom.subject}"/>
-            <input type="hidden" name="category" value ="${classroom.category}"/>
-            <input type="hidden" name="mods" value ="${classroom.moderatorList}"/>
-            <input type="hidden" name="members" value ="${classroom.members}"/>
-            <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">visibility</i>Preview</button>
-    </form></td>`;
-    html += `
-    <td>${classroom.name}</td>
-    <td>${classroom.subject}</td>
-    <td>${classroom.category}</td>
-    <td>${classroom.members.length}/9</td>
-    `;
-
-    html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
-    return html;
 }

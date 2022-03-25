@@ -205,9 +205,6 @@ export async function buildStudyDecksPage(deckList) {
 
 
 
-
-
-
     Elements.root.innerHTML += html;
     // adds an event listener to each of the view buttons
     const viewDeckButtons = document.getElementsByClassName('form-view-deck');
