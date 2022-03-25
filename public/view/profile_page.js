@@ -3,6 +3,8 @@ import * as Routes from '../controller/routes.js'
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
+import * as Utilities from './utilities.js';
+import { Pomoshop } from '../model/pomoshop.js'
 
 //Declaration of Image
 let imageFile2UploadProfile = "";
@@ -20,7 +22,7 @@ export function addEventListeners() {
         e.preventDefault();
         const username = e.target.username.value;
         const bio = e.target.bio.value;
- 
+
         try {
             // if updated pfp
             if(imageFile2UploadProfile != "") {
@@ -49,14 +51,69 @@ export function addEventListeners() {
 
         //Loads the Image and displays preview
         const reader = new FileReader();
-        reader.onload = () => (Elements.formEditProfile.profilePictureTag.src= reader.result);
+        reader.onload = () => (Elements.formEditProfile.profilePictureTag.src = reader.result);
         reader.readAsDataURL(imageFile2UploadProfile);
     });
 
-     // Clears EDIT PROFILE input fields when user closes modal
+    // Clears EDIT PROFILE input fields when user closes modal
     $(`#edit-profile-modal`).on('hidden.bs.modal', function (e) {
         Elements.formEditProfile.form.reset();
     });
+
+    Elements.addAccessoriesButton.addEventListener('click', e => {
+        e.preventDefault();
+        const accessoriesList = document.getElementById('current-accessories-list');
+        const selectAccessories = document.getElementById('select-accessories');
+        const addItem = selectAccessories.options[selectAccessories.selectedIndex].value;
+        const checkItem = document.getElementById(addItem);
+        // TODO: make sure you can only have one skin or one hat equipped
+        if (checkItem) {
+            accessoriesList.removeChild(checkItem);
+        } else {
+            const itemLi = document.createElement('li');
+            itemLi.setAttribute('id', addItem);
+            itemLi.setAttribute('class', 'list-group-item items-list');
+            itemLi.appendChild(document.createTextNode(addItem));
+            accessoriesList.appendChild(itemLi);
+        }
+    })
+
+    Elements.removeAccessoriesButton.addEventListener('click', e => {
+        e.preventDefault();
+        const accessoriesList = document.getElementById('current-accessories-list');
+        const selectAccessories = document.getElementById('select-accessories');
+        const removeItem = selectAccessories.options[selectAccessories.selectedIndex].value;
+        const checkItem = document.getElementById(removeItem);
+        if (checkItem) {
+            accessoriesList.removeChild(checkItem);
+        } else {
+            Utilities.info('Item not equipped', 'The item hasn\'t been equipped yet');
+        }
+    })
+
+    // need a way to return pet to default skin
+    Elements.submitAccessoriesButton.addEventListener('click', async () => {
+        const user = await FirebaseController.getUser(Auth.currentUser.uid);
+        const pomopet = user.pomopet;
+        let itemsOwnedList = [];
+        for (let i = 0; i < user.itemsOwned.length; i++) {
+            const tempItem = await FirebaseController.getOwnedItem(user.itemsOwned[i]);
+            itemsOwnedList.push(tempItem);
+        }
+        const accessoriesList = document.getElementsByClassName('items-list');
+        for (let i = 0; i < accessoriesList.length; i++) {
+            for (let j = 0; j < itemsOwnedList.length; j++) {
+                if (itemsOwnedList[j].name == accessoriesList[i].id) {
+                    pomopet.petPhotoURL = itemsOwnedList[j].photoURL;
+                    pomopet.petSkin = itemsOwnedList[j].skinType;
+                    await FirebaseController.updatePomopet(Auth.currentUser.uid, pomopet);
+                    break;
+                }
+            }
+        }
+        Elements.modalDressup.hide();
+        await profile_page();
+    })
 }
 
 export async function profile_page() {
@@ -84,17 +141,19 @@ export async function profile_page() {
         <img src="${user.profilePhotoURL}" style="width: 200px; height: 200px; object-fit: cover;" class="center pfp">
         <br>
         <h3 class="user-username pomo-text-color-dark">${user.username}</h3>`;
-    
+
     // if user bio, display
-    if(user.userBio != "") {
+    if (user.userBio != "") {
         html += `<p>${user.userBio}</p>`;
-    } 
+    }
 
     html += `</div>`;
 
     html += `<div class="equipped-pomopet">
+
     <img src="${user.pomopet.petPhotoURL}" style="width: 200px; height: 200px; margin-bottom: -16px;" class="center">
-    <hr class="pomopet-bar">`;
+    <hr class="pomopet-bar">
+    <button type="button" id="pomo-dressup-btn" class="btn btn-secondary pomo-bg-color-md-dark" style="flex: 1;">Dress up!</button>`;
 
     html += `<div id="pomopet-edit-name-display">
         <button type="button" class="pomopet-edit-name-btn pomo-text-color-dark" id="pomopet-edit-name-btn" 
@@ -110,11 +169,36 @@ export async function profile_page() {
         </div>`;
 
     html += `</div>`;
-    
+
     Elements.root.innerHTML = html;
 
 
     //** DYNAMIC EVENT LISTENERS **//
+
+    const dressupButton = document.getElementById('pomo-dressup-btn');
+    dressupButton.addEventListener('click', async e => {
+        e.preventDefault();
+        // opens dress up ✺◟(♥ᴥ♥)◞✺ modal
+        document.getElementById('pomo-dressup-image').src = user.pomopet.petPhotoURL;
+        const accessoriesSelect = document.getElementById('select-accessories');
+        // clears out accessories list to prevent duplicates
+        for (let i = accessoriesSelect.length; i > 0; i--) {
+            accessoriesSelect.remove(i);
+        }
+        let itemsOwnedList = [];
+        for (let i = 0; i < user.itemsOwned.length; i++) {
+            const tempItem = await FirebaseController.getOwnedItem(user.itemsOwned[i]);
+            itemsOwnedList.push(tempItem);
+        }
+        // rebuilds accessories list from owned items
+        itemsOwnedList.forEach(item => {
+            const opt = document.createElement('option');
+            opt.value = item.name;
+            opt.innerHTML = item.name;
+            accessoriesSelect.appendChild(opt);
+        })
+        Elements.modalDressup.show();
+    });
 
     const editProfileButton = document.getElementById(Constant.htmlIDs.editProfile);
 
@@ -124,12 +208,12 @@ export async function profile_page() {
 
         // doesn't seem necesarry to retrieve user info from firebase again, but can be added if needed
         // retrieve user info from Firebase
-       /* let user;
-        try {
-            user = await FirebaseController.getUser(Auth.currentUser.uid);
-        }catch (e) {
-            console.log(e);
-        }*/
+        /* let user;
+         try {
+             user = await FirebaseController.getUser(Auth.currentUser.uid);
+         }catch (e) {
+             console.log(e);
+         }*/
 
         Elements.formEditProfile.profilePictureTag.src = `${user.profilePhotoURL}`;
         Elements.formEditProfile.username.value = `${user.username}`;
@@ -144,7 +228,6 @@ export async function profile_page() {
 
     pomopetEditNameButton.addEventListener('click', async e => {
         e.preventDefault();
-
         document.getElementById("pomopet-edit-name-display").style.display = "none";
         document.getElementById("pomopet-edit-name-form-display").style.display = "block";
 
