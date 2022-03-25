@@ -12,6 +12,7 @@ export class User{
         this.userBio = data.userBio;
         this.pomopet = data.pomopet;
         this.pomopetData = data.pomopetData;
+        this.itemsOwned = data.itemsOwned
         // TODO: SHOP STUFF
     }
 
@@ -53,6 +54,7 @@ export class User{
                 userBio: this.userBio,
                 pomopet: this.pomopet,
                 pomopetData: this.pomopetData,
+                itemsOwned: this.itemsOwned,
             };
         }
 
@@ -70,6 +72,7 @@ export class User{
             user.userBio = data.userBio;
             user.pomopet = data.pomopet;
             user.pomopetData = data.pomopetData;
+            user.itemsOwned = data.itemsOwned;
             return user;
         }
 

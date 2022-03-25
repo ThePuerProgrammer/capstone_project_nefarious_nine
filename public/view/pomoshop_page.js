@@ -20,10 +20,10 @@ export async function shop_page() {
         console.log(e);
     }
 
-    // retrieve user's owned & equipped info
+    // retrieve user info from Firebase
     let user;
     try {
-        //user = await FirebaseController.getUser();
+        user = await FirebaseController.getUser(Auth.currentUser.uid);
     }catch (e) {
         console.log(e);
     }
@@ -32,7 +32,8 @@ export async function shop_page() {
     let html = '';
 
     // more buttons can be added for different categories
-    html += `<div id="pomo-sidenav" class="sidenav">
+    /*html += `<div id="pomoshop-page">
+    <div id="pomo-sidenav" class="sidenav">
     <button id="default-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Show All</button>
     <br>
     <button id="skins-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">Skins</button>
@@ -45,12 +46,15 @@ export async function shop_page() {
     <div id="default-tag">
     <h3>Showing skins and accessories</h3>
     </div>
-    `;
+    `;*/
         
     html += `<div class="pomoshop-category" id="accessories">`;
     
     items.forEach(item => {
-        html += buildItemView(item);
+        // sort for accessories
+        if(item.skinType == "") {
+            html += buildItemView(item, user);
+        }
     });
         
     html+= `</div>
@@ -59,16 +63,33 @@ export async function shop_page() {
         <div class="pomoshop-category" id="skins">`;
 
     items.forEach(item => {
-        html += buildItemView(item);
+        // sort for skins
+        if(item.skinType != "") {
+            html += buildItemView(item, user);
+        }
     });
             
     html += `</div>
+    </div>
     </div>`;
 
 
 
     Elements.root.innerHTML = html;
 
+    items.forEach(item => {
+        // disable buy button if already owned
+        if (user.itemsOwned.includes(item.docID)) {
+            document.getElementById(item.docID).innerHTML = "owned";
+            document.getElementById(item.docID).disabled = true;
+        }
+        // disable buy button if not enough funds
+        else if(user.coins < item.cost) {
+            document.getElementById(item.docID).disabled = true;
+        }
+    });
+
+    /*
     // button listeners to show different items within the shop
     const defaultShopButton = document.getElementById('default-shop-button');
     defaultShopButton.addEventListener('click', () =>{
@@ -130,7 +151,7 @@ export async function shop_page() {
             defaultTemp.remove();
         }
         document.getElementById('pomoshop').appendChild(accessoriesShopTag);
-    })
+    })*/
 
     const buyItemButtons =
     document.getElementsByClassName("form-buy-item");
@@ -140,24 +161,41 @@ export async function shop_page() {
         buyItemButtons[i].addEventListener('submit', async (e) => {
             e.preventDefault();
             const index = e.target.docId.value
+            console.log(index);
 
-            // add call to firebase function to update user's itemsOwned
+            user.itemsOwned.push(index);
+
+            //disable the button once bought
+            document.getElementById(index).disabled = true;
+            document.getElementById(index).innerHTML = "owned";
+
+            //TODO: substract and update coins
+                 
+            // call firebase function to update user's itemsOwned
+           try {
+                await FirebaseController.updateItemsOwned(Auth.currentUser.uid, user.itemsOwned);
+            }catch (e) {
+                console.log(e);
+            }
   
         });
     }
 
 }
 
-function buildItemView(item) {
+function buildItemView(item, user) {
+
     let html = `<div id="pomoshop-item"  style="display: inline-block">
         <img src="${item.photoURL}" style="width: 200px; height: 200px; object-fit: cover;">
         <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
 
         <form class="form-buy-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">
-        <button class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>
-        </form>
-    </div>`;
+        <input type="hidden" name="docId" value="${item.docID}">`;
+    
+        html += `<button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>`;
+         
+        html += `</form>
+           </div>`;
 
     return html;
 }

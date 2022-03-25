@@ -2028,3 +2028,14 @@ export async function getPomoshopItems() {
     return items;
 }
 //============================================================================//
+
+//============================================================================//
+// UPDATE USER ITEMS OWNED
+//============================================================================//
+export async function updateItemsOwned(uid, itemsOwned) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({'itemsOwned': itemsOwned});
+}
+//============================================================================//
