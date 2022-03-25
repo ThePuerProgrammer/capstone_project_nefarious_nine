@@ -751,7 +751,7 @@ iframe {
 .sidenav {
     height: 100%;
     width: 200px;
-    position: fixed;
+    position: absolute;
     top: 58px;
     left: 0;
     background-color: #2C1320;
@@ -780,19 +780,21 @@ iframe {
 }
 
 .pomoshop{
-    padding: 10px;
-    float: right;
+    padding: 40px;
+    vertical-align: middle;
 }
 
 .pomoshop-category{
     background-color: #5F4B66;
-    width: 100%;
+    width: 85%;
     height: 330px;
     border-radius: 25px;
     white-space: nowrap;
     position: relative;
     overflow-x: auto;
     overflow-y: hidden;
+    float: right;
+    margin-bottom: 30px;
 }
 
 .pomoshop-item{
