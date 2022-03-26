@@ -182,8 +182,6 @@ export async function shop_page() {
                 e.preventDefault();
                 const docID = e.target.docId.value;
                 const imagename = e.target.imagename.value;
-                console.log("DELETEBUTTON DOC ID " + e.target.docId.value);
-                console.log("DELETEBUTTON PHOTO NAME " + e.target.imagename.value);
                 await FirebaseController.deleteItemFromShop(imagename, docID);
                 await shop_page();
             });
