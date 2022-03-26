@@ -137,6 +137,7 @@ export async function profile_page() {
     html += `<div class="edit-profile-btn">
         <button id="${Constant.htmlIDs.editProfile}" type="button" class="btn btn-secondary pomo-bg-color-dark" style="padding:5px 12px; float:right">
         <i class="material-icons pomo-text-color-light">edit</i>Edit Profile</button>
+        <button type="button" id="pomo-dressup-btn" class="btn btn-secondary pomo-bg-color-md-dark" style="float:right; margin-right: 10px;">Dress up!</button>
         </div>`;
 
     html += `<div class="user-profile">
@@ -154,8 +155,8 @@ export async function profile_page() {
     html += `<div class="equipped-pomopet">
 
     <img src="${user.pomopet.petPhotoURL}" style="width: 200px; height: 200px; margin-bottom: -16px;" class="center">
-    <hr class="pomopet-bar">
-    <button type="button" id="pomo-dressup-btn" class="btn btn-secondary pomo-bg-color-md-dark" style="flex: 1;">Dress up!</button>`;
+    <hr class="pomopet-bar">`;
+    
 
     html += `<div id="pomopet-edit-name-display">
         <button type="button" class="pomopet-edit-name-btn pomo-text-color-dark" id="pomopet-edit-name-btn" 
