@@ -51,8 +51,8 @@ animations = [ {
 
 [node name="Boogie__Player" type="RigidBody2D"]
 mode = 2
-mass = 2.0
-gravity_scale = 2.0
+mass = 2.64
+gravity_scale = 4.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
@@ -69,4 +69,5 @@ position = Vector2( -16, -24 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 2 )
 animation = "IdleLeft"
+frame = 4
 playing = true

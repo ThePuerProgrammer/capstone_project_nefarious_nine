@@ -27,6 +27,38 @@ scale = Vector2( 1.23281, 1 )
 texture = ExtResource( 2 )
 region_rect = Rect2( 1, 0, 0, 0 )
 
+[node name="Floor2" type="StaticBody2D" parent="CollisionObjects"]
+position = Vector2( 912, -120 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/Floor2"]
+position = Vector2( 408, 20 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="CollisionObjects/Floor2"]
+position = Vector2( 400, 16 )
+scale = Vector2( 1.23281, 1 )
+texture = ExtResource( 2 )
+region_rect = Rect2( 1, 0, 0, 0 )
+
+[node name="Floor3" type="StaticBody2D" parent="CollisionObjects"]
+position = Vector2( -1016, -112 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/Floor3"]
+position = Vector2( 408, 20 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="CollisionObjects/Floor3"]
+position = Vector2( 400, 16 )
+scale = Vector2( 1.23281, 1 )
+texture = ExtResource( 2 )
+region_rect = Rect2( 1, 0, 0, 0 )
+
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 352, -240 )
 scale = Vector2( 11.25, 12.75 )
