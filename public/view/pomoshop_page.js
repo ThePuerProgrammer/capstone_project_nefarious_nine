@@ -253,7 +253,8 @@ function buildItemView(item, email) {
         <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
         <br>
         <form class="form-buy-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">`;
+        <input type="hidden" name="docId" value="${item.docID}">
+        <input type="hidden" name="cost" value="${item.cost}">`;
 
         html += `<div><button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit"style="float:right;margin:auto;text-align: center;display: inline-block">Buy $ ${item.cost}</button>`;
 
@@ -274,7 +275,8 @@ function buildItemView(item, email) {
         <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
         <br>
         <form class="form-buy-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">`;
+        <input type="hidden" name="docId" value="${item.docID}">
+        <input type="hidden" name="cost" value="${item.cost}">`;
 
         html += `<button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>`;
 
