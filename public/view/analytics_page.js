@@ -3,6 +3,7 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import * as Utilities from './utilities.js'
+import * as Coins from '../controller/coins.js'
 
 var chartOptions = {
     title: 'Pomobyte Statistics',
@@ -45,6 +46,8 @@ let pieChartRadioButtonHTML = `
 export function addEventListeners() {}
 
 export async function analytics_page() {
+    Coins.get_coins();
+
     let userDecks = await FirebaseController.getUserDecks(Auth.currentUser.uid);
     currentSelectedChartType = "areaChart";
     currentSelectedAnalyticsType = "time-spent-studying";

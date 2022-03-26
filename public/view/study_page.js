@@ -4,6 +4,7 @@ import * as FirebaseController from "../controller/firebase_controller.js";
 import * as Constant from "../model/constant.js";
 import * as Auth from "../controller/firebase_auth.js";
 import * as DeckPage from './deck_page.js'
+import * as Coins from '../controller/coins.js'
 
 
 let smartStudyOn = false; // To keep track of Smart Study Toggle
@@ -19,6 +20,8 @@ export function addEventListeners() { }
 
 // Only on entering study page 
 export async function study_page() {
+  Coins.get_coins();
+
   // get DECK info from firebase
   let deckDocId = localStorage.getItem("deckPageDeckDocID");
 
@@ -304,6 +307,8 @@ export async function study_page() {
       document.getElementById(Constant.htmlIDs.smartStudyCheckbox).disabled = true;
       try {
         await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
+        await FirebaseController.getCoins(Auth.currentUser.uid);
+        // Coins.get_coins();
       }
       catch (e) {
         if (Constant.DEV)
@@ -311,6 +316,8 @@ export async function study_page() {
       }
       document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML = buildOverviewView(deck, deckLength);
     }
+    Coins.get_coins();
+
   });
 }
 

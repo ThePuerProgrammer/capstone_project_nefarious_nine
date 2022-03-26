@@ -3,6 +3,7 @@ import * as Routes from "../controller/routes.js";
 import * as Constant from '../model/constant.js';
 import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/firebase_auth.js'
+import * as Coins from '../controller/coins.js'
 
 var selectedPet;
 var petPhoto;
@@ -67,6 +68,8 @@ export function addEventListeners() {
 }
 
 export async function settings_page() {
+  Coins.get_coins();
+
   Elements.root.innerHTML = "";
   let html = "";
   html += "<h1> Settings </h1>";

@@ -4,6 +4,7 @@ import * as Constant from '../model/constant.js'
 import * as Minigames from './minigames_page.js'
 import * as ChillZone from './chillzone_page.js'
 import * as Analytics from './analytics_page.js'
+import * as Coins from '../controller/coins.js'
 
 export function addEventListeners() {
     Elements.menuHome.addEventListener('click', async() => {
@@ -16,11 +17,11 @@ export async function home_page() {
 
     //shows user coin count for coin display in navbar
     //currently has a bug where coins do not reset after switching user, temp fix is to refresh the page
-    if(Elements.coinCount.innerHTML == '' || Elements.coinCount.innerHTML == null) {
-        Elements.coinCount.innerHTML = localStorage.getItem('usercoins');
-    };
+    Coins.get_coins();
+
 
     Elements.root.innerHTML = ``;
+    
     let html = '';
     html += `
     <div style="text-align: center; padding-top: 2%;">
@@ -80,6 +81,7 @@ export async function home_page() {
     //routes to godot minigames menu
     miniGamesPage.addEventListener('click', async e => {
         e.preventDefault();
+        sessionStorage.setItem("web-to-godot-destination", "minigames");
 
         history.pushState(null, null, Routes.routePathname.MINIGAMES);
         await Minigames.minigames_page();
@@ -88,8 +90,10 @@ export async function home_page() {
     //routes to chillzone page
     chillZonePage.addEventListener('click', async e => {
         e.preventDefault();
+        sessionStorage.setItem("web-to-godot-destination", "chillzone");
 
-        history.pushState(null, null, Routes.routePathname.CHILLZONE);
-        await ChillZone.chill_zone_page();
+        // history.pushState(null, null, Routes.routePathname.CHILLZONE);
+        history.pushState(null, null, Routes.routePathname.MINIGAMES);
+        await Minigames.minigames_page();
     });
 }

@@ -44,6 +44,7 @@ export const storageFolderName = {
     POMOSHOP_IMAGES: 'pomoshop_images/',
 }
 
+export const SKINTYPES = ["cat", "dog", "bunny"];
 /*****************************************
  *              HTML ID'S
  *****************************************

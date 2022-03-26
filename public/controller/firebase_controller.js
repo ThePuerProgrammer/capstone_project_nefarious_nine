@@ -1435,8 +1435,10 @@ export async function updateCoins(uid, coins) {
     await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
         .update({ 'coins': coins });
 
+    //Element.coinCount.innerHTML = coins;
+    window.sessionStorage.setItem('coins',coins)
     Element.coinCount.innerHTML = coins;
-    localStorage.setItem('usercoins', coins);
+    //localStorage.setItem('usercoins', coins);
 }
 
 //============================================================================//
@@ -1661,6 +1663,23 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
 //============================================================================//
 // LEADERBOARDS
 //============================================================================//
+export async function leaderboardDefault(members) {
+    let classroomLeadersDefault = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .get();
+
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersDefault.push(cm);
+    })
+
+    return classroomLeadersDefault;
+}
 export async function leaderboardByCoins(members) {
     let classroomLeadersByCoins = [];
 
@@ -1754,7 +1773,7 @@ export async function leaderboardByFlashcards(members) {
 }                                                                             */
 //============================================================================//
 //FLASHCARD COUNT
-//===============
+//============================================================================//
 //For DECKS
 export async function updateFlashcardCount(currentUser, deckId) {
     //This grabs all flashcards within the deck, so we can get a count on them
@@ -1947,15 +1966,27 @@ export async function updateUserProfile(uid, username, userBio, profilePhotoName
 }
 
 // UPLOAD PROFILE PICTURE
-export async function uploadProfilePicture(profilePicturerFile, profilePictureName) {
-    //image doesn't have a name
+export async function uploadProfilePicture(profilePicturerFile, oldPfpName) {
+
+    //assign image name
+    let profilePictureName;
     if (!profilePictureName) {
         profilePictureName = Date.now() + profilePicturerFile.name + 'pfp';
     }
+    //upload new pfp to storage
     const ref = firebase.storage().ref()
         .child(Constant.storageFolderName.PROFILE_PICTURES + profilePictureName);
     const taskSnapShot = await ref.put(profilePicturerFile);
     const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
+
+    // delete old pfp from storage
+    if(oldPfpName != "defaultPfp.png") {
+        const refOld = firebase.storage().ref()
+        .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
+    
+        await refOld.delete();
+    }
+
     return { profilePictureName, profilePictureURL };
 }
 
@@ -2015,7 +2046,7 @@ export async function logTimeSpentStudying(uid, deckDocID) {
 
 
 //============================================================================//
-// GET POMOSHOP ITEMS
+// POMOSHOP 
 //============================================================================//
 export async function getPomoshopItems() {
     let items = [];
@@ -2031,6 +2062,28 @@ export async function getPomoshopItems() {
 
     return items;
 }
+
+export async function uploadItemImage(imageFile) {
+    let imagename = imageFile.name;
+
+    if (!imagename)
+        imagename = Date.now() + imageFile.name;
+
+    const ref = firebase.storage().ref()
+        .child(Constant.storageFolderName.POMOSHOP_IMAGES + imagename);
+    const taskSnapShot = await ref.put(imageFile);
+    const imageURL = await taskSnapShot.ref.getDownloadURL();
+
+    return { imagename, imageURL };
+}
+
+export async function addItemtoShop(item) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .add(item);
+    return ref.id;
+}
+
 //============================================================================//
 
 //============================================================================//

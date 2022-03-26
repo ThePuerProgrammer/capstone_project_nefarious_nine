@@ -1,5 +1,8 @@
 extends Control
 
+export (bool) var overrideMenuToChillZone = false
+export var chillzone_scene_path = "res://ChillZone/ChillZone.tscn"
+
 var _scene_path_to_load
 
 onready var player = get_node("/root/MenuMusic/AudioStreamPlayer")
@@ -25,6 +28,28 @@ func _ready():
 	$MusicStartTimer.start()
 
 func _on_signin():
+	# Should only execute if being run in browser
+	var window = JavaScript.get_interface('window')
+	
+	print("Sign in successful")
+	print("window", window)
+
+	# Only occurs if we are running in GoDot client 
+	if window == null and overrideMenuToChillZone:
+		if (get_tree().change_scene(chillzone_scene_path) != OK):
+			print("Failed to change scene, ", chillzone_scene_path)
+		return
+	
+	# Only occurs if we are running in Web client
+	if window != null:
+		var dest = window.sessionStorage.getItem("web-to-godot-destination")
+		print("dest: ", dest)
+		if dest == "chillzone":
+			print("changing to chillzone")
+			if (get_tree().change_scene(chillzone_scene_path) != OK):
+				print("Failed to change scene, ", chillzone_scene_path)
+			return
+	
 	# Get rid of auth modal and show buttons
 	get_node("MenuContainer").remove_child(auth)
 	get_node("MenuContainer/MenuButtons").visible = true
@@ -36,7 +61,7 @@ func _on_Button_pressed(scene_to_load):
 
 func _on_FadeOut_fade_out_finished():
 	if (get_tree().change_scene(_scene_path_to_load) != OK):
-		print("Failed to change scene")
+		print("Failed to change scene:, ", _scene_path_to_load)
 
 func _on_FadeIn_fade_in_finished():
 	$FadeIn.hide()
