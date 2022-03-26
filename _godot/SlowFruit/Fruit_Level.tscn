@@ -2,15 +2,16 @@
 
 [ext_resource path="res://SlowFruit/Fruit_Level.gd" type="Script" id=1]
 [ext_resource path="res://SlowFruit/Boogie_Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://SlowFruit/tiles.tres" type="TileSet" id=3]
+[ext_resource path="res://SlowFruit/TileMap.tscn" type="PackedScene" id=3]
 
 [node name="Fruit_Level" type="Node2D"]
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TileMap" parent="." instance=ExtResource( 3 )]
 
 [node name="Boogie__Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 91, 820 )
-
-[node name="TileMap" type="TileMap" parent="."]
-tile_set = ExtResource( 3 )
-format = 1
-tile_data = PoolIntArray( 851968, 0, 0, 851980, 0, 0, 851987, 0, 0 )
+position = Vector2( 80, 408 )
+mass = 1.0
