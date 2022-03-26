@@ -203,7 +203,6 @@ LobbyDescription="*res://singletons/Lobby_Description.tscn"
 [display]
 
 window/size/width=1920
-window/size/height=900
 window/size/height=480
 
 [editor_plugins]

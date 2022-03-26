@@ -28,15 +28,20 @@ extents = Vector2( 26.5067, 36 )
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "JumpLeft",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 9 ), ExtResource( 11 ), ExtResource( 13 ) ],
 "loop": true,
 "name": "Walk",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [ ExtResource( 16 ), ExtResource( 10 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 5 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 8 ) ],
 "loop": true,
 "name": "Jump",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [ ExtResource( 23 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ) ],
 "loop": true,
@@ -46,10 +51,11 @@ animations = [ {
 "frames": [ ExtResource( 23 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ) ],
 "loop": true,
 "name": "IdleLeft",
-"speed": 5.0
+"speed": 7.0
 } ]
 
 [node name="Boogie__Player" type="RigidBody2D"]
+z_index = 1
 mode = 2
 mass = 2.64
 gravity_scale = 4.0
@@ -68,6 +74,5 @@ shape = SubResource( 1 )
 position = Vector2( -16, -24 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 2 )
-animation = "IdleLeft"
-frame = 4
+animation = "JumpLeft"
 playing = true

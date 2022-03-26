@@ -48,20 +48,11 @@ func _process(delta):
 	
 func change_animation():
 	if jumping:
-		if right:
-			$AnimatedSprite.play("Jump")
-		if left:
-			$AnimatedSprite.play("JumpLeft")
-	elif walking:
-		if right:
-			$AnimatedSprite.play("Walk")
-		elif left:					
-			$AnimatedSprite.play("Walk")
-	elif idle:
-		if right:
-			$AnimatedSprite.play("Idle")
-		elif left:
-			$AnimatedSprite.play("IdleLeft")
+		$AnimatedSprite.play("Jump")		
+	elif walking:		
+		$AnimatedSprite.play("Walk")
+	elif idle:		
+		$AnimatedSprite.play("Idle")		
 	else:
 		$AnimatedSprite.play("Idle")
 	
@@ -80,33 +71,62 @@ func setIdle():
 	jumping = false
 	walking = false
 	
+func if_right_in_air():
+	if right:
+		if linear_velocity.x > -WALK_MAX_VELOCITY:
+			linear_velocity.x -= AIR_ACCEL
+		
+func if_left_in_air():
+	if left:
+		if linear_velocity.x < WALK_MAX_VELOCITY:
+			linear_velocity.x += AIR_ACCEL
 	
 func pull_for_input():
 	if Input.is_action_just_pressed("move_left"):
-		setWalking()
+		if !jumping:
+			setWalking()
 		$AnimatedSprite.flip_h = true			
 		move_left = true
 		left = true
 		right = false
 	if Input.is_action_just_released("move_left"):
-		setIdle()
+		if !jumping:
+			setIdle()
 		move_left = false
 		applied_force = Vector2(0, applied_force.y)
 		linear_velocity.x -= WALK_DEACCEL
 		
 	if Input.is_action_just_pressed("move_right"):
-		setWalking()
+		if !jumping:
+			setWalking()
 		$AnimatedSprite.flip_h = false
 		move_right = true
 		right = true
 		left = false
 	if Input.is_action_just_released("move_right"):
-		setIdle()
+		if !jumping:
+			setIdle()
 		move_right = false
 		applied_force = Vector2(0, applied_force.y)
 		linear_velocity.x -= WALK_DEACCEL
 	
-	jump = Input.is_action_just_pressed("jump")
+	if Input.is_action_just_pressed("jump"):
+		if linear_velocity.y <= 0:			
+			setJumping()
+			stopping_jump = false
+			if_left_in_air()
+			if_right_in_air()
+			applied_force = Vector2(applied_force.y, 0)
+			linear_velocity.y = -JUMP_VELOCITY
+		
+	if Input.is_action_just_released("jump"):
+		stopping_jump = true
+		print(linear_velocity.y)
+		print(linear_velocity.x)
+		#if is on floor set walking
+		setWalking()
+		applied_force = Vector2(applied_force.y, 0)
+		linear_velocity.y += STOP_JUMP_FORCE
 	
 func set_movement():
 	var x = 0
@@ -117,12 +137,19 @@ func set_movement():
 	elif move_right:
 		x = WALK_ACCEL
 	if jump:
-			y = JUMP_VELOCITY
+		y = -AIR_ACCEL
+		
 	applied_force += Vector2(x, y)
 	if linear_velocity.x > WALK_MAX_VELOCITY:
 		linear_velocity.x = WALK_MAX_VELOCITY
 	if linear_velocity.x < -WALK_MAX_VELOCITY:
 		linear_velocity.x = -WALK_MAX_VELOCITY
+		
+	if linear_velocity.y > JUMP_VELOCITY:
+		stopping_jump = true
+		linear_velocity.y -= JUMP_VELOCITY
+	if linear_velocity.y < -JUMP_VELOCITY:
+		linear_velocity.y = -JUMP_VELOCITY
 		
 func _integrate_forces(s):
 		
