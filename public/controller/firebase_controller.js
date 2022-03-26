@@ -1436,7 +1436,7 @@ export async function updateCoins(uid, coins) {
         .update({ 'coins': coins });
 
     //Element.coinCount.innerHTML = coins;
-    window.sessionStorage.setItem('coins',coins)
+    window.sessionStorage.setItem('coins', coins)
     Element.coinCount.innerHTML = coins;
     //localStorage.setItem('usercoins', coins);
 }
@@ -1980,10 +1980,10 @@ export async function uploadProfilePicture(profilePicturerFile, oldPfpName) {
     const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
 
     // delete old pfp from storage
-    if(oldPfpName != "defaultPfp.png") {
+    if (oldPfpName != "defaultPfp.png") {
         const refOld = firebase.storage().ref()
-        .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
-    
+            .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
+
         await refOld.delete();
     }
 
@@ -2084,6 +2084,23 @@ export async function addItemtoShop(item) {
     return ref.id;
 }
 
+export async function deleteItemFromShop(imagename, docID) {
+    console.log(docID);
+    try {
+        await firebase.firestore().collection(Constant.collectionName.POMOSHOP).doc(docID)
+            .delete();
+    } catch (e) {
+        console.log(e);
+    }
+
+    if (imagename != null && imagename != "") {
+        const refImage = firebase.storage().ref()
+            .child(Constant.storageFolderName.POMOSHOP_IMAGES + imagename);
+        await refImage.delete();
+
+    }
+}
+
 //============================================================================//
 
 //============================================================================//
@@ -2106,4 +2123,5 @@ export async function getOwnedItem(item) {
     itemOwned.set_docID(itemRef.docId);
     return itemOwned;
 }
+
 //============================================================================//
