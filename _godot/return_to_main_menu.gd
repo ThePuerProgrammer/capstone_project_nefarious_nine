@@ -10,6 +10,7 @@ onready var game_list_label=$"Game_Selection/VSplit_Game_Container/Games_Selecti
 var game_selection_array = []
 var dungeon_selected=false
 var pomoblast_selected=false
+var slowfruit_selected=false
 var desired_time
 var category_selected
 var deck_selected
@@ -52,7 +53,7 @@ func _on_Back_Button_pressed():
 	$FadeOut.fade_out()
 #Start Button
 func _on_Start_Button_pressed():
-	if dungeon_selected==false && pomoblast_selected==false:
+	if dungeon_selected==false && pomoblast_selected==false && slowfruit_selected==false:
 		get_node("No_Games_Selected_Popup_Alert").popup()
 	elif method_selection_optionbutton.get_selected_id()==0:
 		get_node("No_Selection_Method_Choosen_Popup_Alert").popup()
@@ -62,6 +63,8 @@ func _on_Start_Button_pressed():
 		get_node("No_Category_Selected_Popup_Alert").popup()
 	elif timer_selection_optionbutton.get_selected_id()==0:
 		get_node("No_Time_Selected_Popup_Alert").popup()
+	elif slowfruit_selected==true && game_selection_array[0]=="Slowfruit":
+		get_tree().change_scene('res://SlowFruit/Fruit_Level.tscn')	
 	elif pomoblast_selected==true && game_selection_array[0]=="Pomoblast":
 		get_tree().change_scene('res://PomoBlast/PomoBlast.tscn')	
 	elif dungeon_selected==true && game_selection_array[0]=="Dungeon Fight":
@@ -78,6 +81,10 @@ func _on_dungeon_fight_Details_Button_pressed():
 #Button Click for Pomoblast Details
 func _on_Pomoblast_Details_Button_pressed():
 	game_detail_label.text = pomoblastDetails()
+
+#Button Click for SlowFruit Details
+func _on_Slowfruit_Details_Button_pressed():
+	game_detail_label.text = slowfruitDetails()
 #Text for Dungeon_Fight Details
 func ondungeonDetails():
 	var text ="Title: Dungeon Fight \n\nCreated By: Noah Stinson\n\nDescription: Fight your way out of the dungeon and to success!\n\nControls: Mouse Clicks\n\nObjective: Answer as many questions correct as you can before time runs out. If you answer incorrectly or not in time you will take damage each time, eventually getting KO'ed"
@@ -86,6 +93,11 @@ func ondungeonDetails():
 #Text for PomoBlast Details
 func pomoblastDetails():
 	var text ="Title: PomoBlast \n\nCreated By: Eliss Glasper\n\nDescription: Fight your way through the pomogranates before they destroy YOU and your CREW!\n\nControls: Mouse Clicks - To Fire\nArrow Keys - To Move\n\nObjective: Destroy as many enemies as you can before!!"
+	return text
+	
+#Text for PomoBlast Details
+func slowfruitDetails():
+	var text ="Title: Slowfruit \n\nCreated By: Susan Emberton\n\nDescription: Help Boogie Dog catch the fruit and blast off! Watch out for the slowfruit!\n\nControls: Mouse Clicks - To Fire\nArrow Keys - To Move\n\nObjective: Eat the best fruit by choosing the correct answer"
 	return text
 ####################################################################################################
 
@@ -135,6 +147,29 @@ func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
 		print(game_selection_array)
 		pomoblast_selected=false
 		print("Pomoblast_Selected:"+ (String(pomoblast_selected)))
+		update_game_label(game_selection_array)
+		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+		
+#Pomoblast Toggler
+func _on_Slowfruit_Selection_Toggle_toggled(button_pressed):
+	if(button_pressed):
+		#Text for Toggle On Pomoblast
+		game_selection_array.append("Slowfruit")
+		print(game_selection_array)
+		game_selection_array=shuffle(game_selection_array)
+		print(game_selection_array)
+		pomoblast_selected=true
+		print("Slowfruit_Selected:" + (String(slowfruit_selected)))
+		update_game_label(game_selection_array)
+		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+	else:
+		#Text for Toggle Off Pomoblast
+		game_selection_array.erase("Slowfruit")
+		print(game_selection_array)
+		game_selection_array=shuffle(game_selection_array)
+		print(game_selection_array)
+		pomoblast_selected=false
+		print("Slowfruit_Selected:"+ (String(slowfruit_selected)))
 		update_game_label(game_selection_array)
 		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
 
@@ -273,3 +308,4 @@ func update_game_label(game_selection_array):
 ####################################################################################################
 
 ####################################################################################################
+
