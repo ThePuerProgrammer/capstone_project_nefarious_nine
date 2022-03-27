@@ -19,8 +19,10 @@ export function addEventListeners() {
 }
 
 export async function shop_page() {
-    Coins.get_coins();
-    // retrieve pomoshop items from Firebase
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
+        // retrieve pomoshop items from Firebase
     let items;
     try {
         items = await FirebaseController.getPomoshopItems();

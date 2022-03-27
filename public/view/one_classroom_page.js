@@ -12,7 +12,10 @@ import { buildStudyDecksPage } from './study_decks_page.js'
 
 
 export async function one_classroom_page(classroomDocID) {
-    Coins.get_coins();
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
+
     console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';
