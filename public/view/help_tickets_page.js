@@ -36,9 +36,6 @@ export function addEventListeners() {
 }
 
 export async function help_tickets_page() {
-    Coins.get_coins();
-
-
     Elements.root.innerHTML = "";
     let html = "";
     let helpTickets = [];
@@ -55,11 +52,13 @@ export async function help_tickets_page() {
         if (helpTickets.length === 0) {
             html += '<p id="temp-help">No help tickets have been submitted</p>';
         } else {
-            html += `<table id="help-tickets-table" class="table">
+            html += `<div style="overflow-x: auto;"><table id="help-tickets-table" class="table">
                 <thread>
                     <tr>
                         <th scope="col">View</th>
+                        
                         <th scope="col">Ticket</th>
+                        <th scope="col">Submitted By</th>
                         <th scope="col">Category</th>
                         <th scope="col">Feedback</th>
                         <th scope="col">Date</th>
@@ -72,7 +71,7 @@ export async function help_tickets_page() {
                 html += `<tr>${buildHelpTicket(helpticket)}</tr>`;
             })
             html += `</tbody>
-            </table>`;
+            </table></div>`;
         }
     } else {
         html += '<h1>Help tickets</h1>'
@@ -88,11 +87,12 @@ export async function help_tickets_page() {
         if (helpTickets.length === 0) {
             html += '<p id="temp-help">No help tickets have been submitted</p>';
         } else {
-            html += `<table id="help-tickets-table" class="table">
+            html += `<div style="overflow-x: auto;"><table id="help-tickets-table" class="table">
                 <thread>
                     <tr>
                         <th scope="col">View</th>
                         <th scope="col">Ticket</th>
+                        <th scope="col">Submitted By</th>
                         <th scope="col">Category</th>
                         <th scope="col">Feedback</th>
                         <th scope="col">Date</th>
@@ -105,7 +105,7 @@ export async function help_tickets_page() {
                 html += `<tr>${buildHelpTicket(helpticket)}</tr>`;
             })
             html += `</tbody>
-            </table>`;
+            </table></div>`;
 
         }
     }
@@ -182,6 +182,7 @@ function buildHelpTicket(helpticket) {
         </form>
     </td>
     <td>${helpticket.title}</td>
+    <td>${helpticket.submittedBy}</td>
     <td>${helpticket.category}</td>
     <td>${helpticket.feedback.length}</td>
     <td>${new Date(helpticket.timestamp).toString()}</td>
