@@ -24,55 +24,46 @@
 [ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle1.png" type="Texture" id=23]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 26.5067, 36 )
+extents = Vector2( 12.8889, 17.1111 )
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [  ],
+"frames": [ ExtResource( 16 ), ExtResource( 10 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 5 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 8 ) ],
 "loop": true,
-"name": "JumpLeft",
-"speed": 5.0
+"name": "Jump",
+"speed": 9.0
 }, {
 "frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 9 ), ExtResource( 11 ), ExtResource( 13 ) ],
 "loop": true,
 "name": "Walk",
 "speed": 7.0
 }, {
-"frames": [ ExtResource( 16 ), ExtResource( 10 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 5 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 8 ) ],
-"loop": true,
-"name": "Jump",
-"speed": 7.0
-}, {
 "frames": [ ExtResource( 23 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 7.0
-}, {
-"frames": [ ExtResource( 23 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ) ],
-"loop": true,
-"name": "IdleLeft",
-"speed": 7.0
 } ]
 
 [node name="Boogie__Player" type="RigidBody2D"]
+position = Vector2( -32, -24 )
+scale = Vector2( 3, 3 )
 z_index = 1
 mode = 2
-mass = 2.64
-gravity_scale = 4.0
+mass = 29.19
+contact_monitor = true
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -16.004, -24.9428 )
+position = Vector2( -17.9998, -22.6667 )
 rotation = 1.5708
-scale = Vector2( 0.941, 0.922 )
+scale = Vector2( 3, 3 )
+z_index = 2
 shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( -16, -24 )
-scale = Vector2( 2, 2 )
+scale = Vector2( 3, 3 )
 frames = SubResource( 2 )
-animation = "JumpLeft"
+animation = "Idle"
+frame = 3
 playing = true

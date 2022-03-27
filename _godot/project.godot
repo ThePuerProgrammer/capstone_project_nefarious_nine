@@ -203,7 +203,7 @@ LobbyDescription="*res://singletons/Lobby_Description.tscn"
 [display]
 
 window/size/width=1920
-window/size/height=480
+window/size/height=900
 
 [editor_plugins]
 
@@ -299,6 +299,7 @@ jump={
 [physics]
 
 common/enable_pause_aware_picking=true
+2d/physics_engine="GodotPhysics"
 
 [rendering]
 

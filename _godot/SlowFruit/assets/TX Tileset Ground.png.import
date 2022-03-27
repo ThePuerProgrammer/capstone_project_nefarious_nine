@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/floatGround.png-a3f6a752a00e3c3a47ac84e87c56be11.stex"
+path="res://.import/TX Tileset Ground.png-e66ec69a64fc1b7ce66bdbc1c245a964.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://SlowFruit/assets/floatGround.png"
-dest_files=[ "res://.import/floatGround.png-a3f6a752a00e3c3a47ac84e87c56be11.stex" ]
+source_file="res://SlowFruit/assets/TX Tileset Ground.png"
+dest_files=[ "res://.import/TX Tileset Ground.png-e66ec69a64fc1b7ce66bdbc1c245a964.stex" ]
 
 [params]
 
