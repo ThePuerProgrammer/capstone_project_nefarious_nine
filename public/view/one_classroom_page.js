@@ -17,6 +17,9 @@ export async function one_classroom_page(classroomDocID) {
     console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';
+    let coin_descend=false;
+    let deck_descend=false;
+    let fc_descend=false;
 
     let classroom;
     try {
@@ -65,15 +68,6 @@ export async function one_classroom_page(classroomDocID) {
             </button>`
             ;
     }
-    //Building Decks
-    // let deckList = [];
-    // try {
-    //     deckList = await FirebaseController.getClassDecks(classroom.docID);
-
-    // } catch (e) {
-    //     console.log(e);
-    // }
-    // buildStudyDecksPage(deckList);
 
     html += `</div>`;
     //CLASSROOM TAB END-----------------------------------------------------
@@ -129,9 +123,9 @@ export async function one_classroom_page(classroomDocID) {
             <tr>
                 <th class="leaderboard-th">Rank</th>
                 <th class="leaderboard-th">User</th>
-                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardCoins}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong>Coins</strong></span></button></th>
-                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardDecks}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Decks</strong></span></button></th>
-                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardFlashcards}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Flashcards</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardCoins}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span ><strong id="coins-button-icon">Coins</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardDecks}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong id="decks-button-icon"># of Decks</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardFlashcards}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong id="flashcards-button-icon"># of Flashcards</strong></span></button></th>
             </tr>
             </thead>
             <tbody id="leaderboard-fields">`;
@@ -244,6 +238,12 @@ export async function one_classroom_page(classroomDocID) {
     const sortByCoinsButton = document.getElementById(Constant.htmlIDs.leaderboardCoins);
     sortByCoinsButton.addEventListener('click', async e=>{
         console.log('clicked COINS');
+        //Passing Correct Values for the Method
+        coin_descend=true;
+        deck_descend=false;
+        fc_descend=false;
+        leaderBoardDescIcon(coin_descend,deck_descend,fc_descend);
+        //Building Rows of Table/Reordering
         let leaderboardCoins = [];
         leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
         document.getElementById('leaderboard-fields').innerHTML=''
@@ -269,6 +269,13 @@ export async function one_classroom_page(classroomDocID) {
     const sortByDecksButton = document.getElementById(Constant.htmlIDs.leaderboardDecks);
     sortByDecksButton.addEventListener('click', async e=>{
         console.log('clicked DECKS');
+        
+        //Passing Correct Values for the Method
+        coin_descend=false;
+        deck_descend=true;
+        fc_descend=false;
+        leaderBoardDescIcon(coin_descend,deck_descend,fc_descend);
+        
         let leaderboardDecks = [];
         leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
         document.getElementById('leaderboard-fields').innerHTML=''
@@ -290,6 +297,13 @@ export async function one_classroom_page(classroomDocID) {
     const sortByFlashcardsButton = document.getElementById(Constant.htmlIDs.leaderboardFlashcards);
     sortByFlashcardsButton.addEventListener('click', async e=>{
         console.log('clicked FLASHCARDS');
+        
+        //Passing Correct Values for the Method
+        coin_descend=false;
+        deck_descend=false;
+        fc_descend=true;
+        leaderBoardDescIcon(coin_descend,deck_descend,fc_descend);
+        
         let leaderboardFlashcards = [];
         leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
         document.getElementById('leaderboard-fields').innerHTML=''
@@ -449,20 +463,23 @@ function buildButtons(member, banlist) {
     }
 
 }
-
+//Builds the table body, by rows
 function buildLeaderBoard(e,i){
    let html3='' 
    html3+=(i==1) ?`
     <tr>
-        <td class="leaderboard-td">${i} </td>
-        <td class="leaderboard-td"><i class="material-icons">whatshot</i> ${e.email}  </td>
+        <td class="leaderboard-td"><i class="material-icons">whatshot</i> </td>`
+    :
+    `<tr>
+         <td class="leaderboard-td">${i} </td>`;
+    html3+=(e.email==Auth.currentUser.email)?`
+        <td class="leaderboard-td"><i class="material-icons">person</i> ${e.email}  </td>
         <td class="leaderboard-td">${e.coins} </td>
         <td class="leaderboard-td">${e.deckNumber} </td>
         <td class="leaderboard-td">${e.flashcardNumber} </td>
-    </tr>`:
-    `<tr>
-    <td class="leaderboard-td">${i} </td>
-    <td class="leaderboard-td">${e.email} </td>
+    </tr>`
+    :
+`    <td class="leaderboard-td">${e.email} </td>
     <td class="leaderboard-td">${e.coins} </td>
     <td class="leaderboard-td">${e.deckNumber} </td>
     <td class="leaderboard-td">${e.flashcardNumber }</td>
@@ -470,65 +487,21 @@ function buildLeaderBoard(e,i){
     ;
     return html3;
 }
-//REFERENCE:https://stackoverflow.com/questions/37347690/how-to-replace-div-with-another-div-in-javascript
-
-function swapContent (id) {
-    const main = document.getElementById('leaderboard-table').lastElementChild;
-    const div = document.getElementById(id).lastElementChild;
-    //const clone = div.cloneNode();
-    const clone = div.cloneNode(true);
-    while (main.firstChild) main.firstChild.remove();
-
-    main.appendChild(clone);
+//Adds Icons to the buttons of the table
+function leaderBoardDescIcon(coin_descend,deck_descend,fc_descend){
+    if(coin_descend){
+        document.getElementById('coins-button-icon').innerHTML =`Coins<br> <i class="material-icons">vertical_align_bottom</i>`;
+        document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+        document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+    }
+    if(deck_descend){
+        document.getElementById('coins-button-icon').innerHTML =`Coins`;
+        document.getElementById('decks-button-icon').innerHTML = `# of Decks <br> <i class="material-icons">vertical_align_bottom</i>`;
+        document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+    }
+    if(fc_descend){
+        document.getElementById('coins-button-icon').innerHTML =`Coins`;
+        document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+        document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards <br> <i class="material-icons">vertical_align_bottom</i>`;
+    }
 }
-
-// function buildDeckView(deck){
-//     window.sessionStorage;
-//     let html = `
-//     <div id="${deck.docId}" class="deck-card">
-//         <div class="deck-view-css">
-//         <div class="card-body">
-//             <h5 class="card-text">${deck.name}</h5>
-//             <h6 class="card-text" >Subject: ${deck.subject}</h6>
-//             <h6 class="card-text">Category: ${deck.category}</h6>
-//             <h7 class="card-text"># of flashcards: ${deck.flashcardNumber}</h7>
-//             <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
-//         </div>
-//         <div class="btn-group">
-//         <form class="form-view-deck" method="post">
-//             <input type="hidden" name="docId" value="${deck.docId}">
-//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
-//         </form>
-//         <form class="form-edit-deck" method="post">
-//             <input type="hidden" name="docId" value="${deck.docId}">
-//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
-//         </form>
-//         <form class="form-delete-deck" method="post">
-//             <input type="hidden" name="docId" value="${deck.docId}">
-//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
-//         </form>
-//         </div>`;
-
-//     // ternary operator to check if a deck is favorited or not
-//     html += deck.isFavorited ? `<div class="form-check">
-//         <span class="favorite-deck">
-//         <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
-//         </span>
-
-//         <label class= "form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite</i>Favorite deck</label>
-//         </div>
-//         </div>
-//         </div>
-//         ` : `<div class="form-check">
-//         <span class="unfavorite-deck">
-//         <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
-//         </span>
-//         <label class="form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite_border</i>Favorite deck</label>
-//         </div>
-//         </div>
-//         </div>`;
-//     return html;
-// }
