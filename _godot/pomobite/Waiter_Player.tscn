@@ -23,11 +23,6 @@ animations = [ {
 "name": "side",
 "speed": 8.0
 }, {
-"frames": [ ExtResource( 9 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 7 ) ],
-"loop": true,
-"name": "down",
-"speed": 8.0
-}, {
 "frames": [ ExtResource( 10 ) ],
 "loop": false,
 "name": "stationary_up",
@@ -42,6 +37,11 @@ animations = [ {
 "loop": false,
 "name": "stationary_down",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 7 ) ],
+"loop": true,
+"name": "down",
+"speed": 8.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=7]
@@ -54,6 +54,8 @@ extents = Vector2( 19, 16 )
 position = Vector2( 1200, 500 )
 z_index = 1
 z_as_relative = false
+collision_layer = 5
+collision_mask = 5
 collision/safe_margin = 0.8
 script = ExtResource( 1 )
 move_speed = 200.0

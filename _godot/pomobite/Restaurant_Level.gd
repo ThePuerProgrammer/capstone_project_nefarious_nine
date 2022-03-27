@@ -111,6 +111,7 @@ onready var table_buttons = [
 ]
 
 func _ready():
+	MenuMusic.get_child(0).stop()
 	controlled_player = 1 # This will need to be adjusted for multiplayer
 	# But I'm trying to prepare for that in the code as is
 	ticks = OS.get_system_time_msecs()
@@ -173,7 +174,6 @@ func _process(_delta):
 						pass
 			else:
 				var all_added = true
-				var reset_path = []
 				for path in right_paths.get_children():
 					if path.get_children().size() == 0:
 						continue
@@ -194,7 +194,6 @@ func _process(_delta):
 						get_node(host_path).add_child(pf2d)
 
 				if all_added:
-					print("all deleted")
 					customer_to_host_path = false
 			
 	if host_back_to_host_stand:
@@ -207,8 +206,11 @@ func _process(_delta):
 				convo_string = "Hey Right, you've\nbeen sat at " + String(current_focused_table)
 			else:
 				convo_string = "Hey Left, you've\nbeen sat at " + String(current_focused_table)
+			var cl = CanvasLayer.new()
+			cl.layer = 4
 			var conversation_dialogue = convo_dialogue.instance()
-			$Dialogues.add_child(conversation_dialogue)	
+			cl.add_child(conversation_dialogue)
+			$Dialogues.add_child(cl)	
 			if dialogue_queue == null:
 				dialogue_queue = []
 			dialogue_queue.append([conversation_dialogue, 2])
@@ -219,19 +221,24 @@ func _process(_delta):
 			conversation_dialogue.get_child(2).start()
 			get_node(host_path).get_child(0).queue_free()
 			$Host_NPC.visible = true
-	
+			$Host_NPC/CollisionShape2D.disabled = false
+			
 
 func _on_player_1_interact():
 #	show_hint = false
-	$PopupDialog.hide()
+	$PopupCanvas/PopupDialog.hide()
 	if pos_right_usable or pos_left_usable:
 		if !pos_wall.visible:
+			for cl in $Dialogues.get_children():
+				cl.layer = -1
 			pos_wall.visible = true
 			pos_zoom.visible = true
 			$Player1.visible = false
 			$Player1.movable = false
 			$Player2.visible = false
 		else:
+			for cl in $Dialogues.get_children():
+				cl.layer = 4
 			_on_BackButton_pressed()
 			pos_wall.visible = false
 			pos_zoom.visible = false
@@ -304,25 +311,25 @@ func _on_Table12Button_pressed():
 
 func _on_POS_right_area_entered(_area):
 	if show_hint:
-		$PopupDialog.rect_position = Vector2($LevelSprites/POS1.position.x - 40, $LevelSprites/POS1.position.y - 60)
-		$PopupDialog.popup()
+		$PopupCanvas/PopupDialog.rect_position = Vector2($LevelSprites/POS1.position.x - 40, $LevelSprites/POS1.position.y - 60)
+		$PopupCanvas/PopupDialog.popup()
 	pos_right_usable = true
 
 
 func _on_POS_left_area_entered(_area):
 	if show_hint:
-		$PopupDialog.rect_position = Vector2($LevelSprites/POS2.position.x - 40, $LevelSprites/POS2.position.y - 60)
-		$PopupDialog.popup()
+		$PopupCanvas/PopupDialog.rect_position = Vector2($LevelSprites/POS2.position.x - 40, $LevelSprites/POS2.position.y - 60)
+		$PopupCanvas/PopupDialog.popup()
 	pos_left_usable = true
 
 
 func _on_POS_right_area_exited(_area):
-	$PopupDialog.hide()
+	$PopupCanvas/PopupDialog.hide()
 	pos_right_usable = false
 
 
 func _on_POS_left_area_exited(_area):
-	$PopupDialog.hide()
+	$PopupCanvas/PopupDialog.hide()
 	pos_left_usable = false
 
 	
@@ -441,11 +448,11 @@ func _on_Table12_area_exited(_area):
 
 
 func set_table_popup(var table, var number):
-	$PopupDialog.rect_position = table.position
-	$PopupDialog.rect_position.x -= 42
+	$PopupCanvas/PopupDialog.rect_position = table.position
+	$PopupCanvas/PopupDialog.rect_position.x -= 42
 	if number == 5 or number == 6 or number == 11 or number == 12:
-		$PopupDialog.rect_position.x += 12
-	$PopupDialog.popup()
+		$PopupCanvas/PopupDialog.rect_position.x += 12
+	$PopupCanvas/PopupDialog.popup()
 	tables['tables_entered'][number - 1] = true
 
 	
@@ -456,7 +463,7 @@ func hide_table_popup(var number):
 		if table == true:
 			all_exited = false
 	if all_exited:		
-		$PopupDialog.hide()
+		$PopupCanvas/PopupDialog.hide()
 
 	
 ####################################################################################################
@@ -497,13 +504,13 @@ func _on_Soda4_area_exited(_area):
 	
 func show_soda_popup(var machine):
 	soda_machine_area_entered = true
-	$PopupDialog.rect_position = machine.position
-	$PopupDialog.popup()
+	$PopupCanvas/PopupDialog.rect_position = machine.position
+	$PopupCanvas/PopupDialog.popup()
 
 	
 func hide_soda_popup():
 	soda_machine_area_entered = false
-	$PopupDialog.hide()
+	$PopupCanvas/PopupDialog.hide()
 
 
 ####################################################################################################
@@ -520,7 +527,7 @@ func _on_Trash1_area_exited(_area):
 
 func _on_Trash2_area_entered(_area):
 	show_trash_popup($Area2Ds/TrashAreas/Trash2)
-
+	
 
 func _on_Trash2_area_exited(_area):
 	hide_trash_popup()
@@ -528,15 +535,15 @@ func _on_Trash2_area_exited(_area):
 	
 func show_trash_popup(var trashcan):
 	trash_area_entered = true
-	$PopupDialog.rect_position = trashcan.position
-	$PopupDialog.rect_position.x -= 20
-	$PopupDialog.rect_position.y -= 65
-	$PopupDialog.show()
+	$PopupCanvas/PopupDialog.rect_position = trashcan.position
+	$PopupCanvas/PopupDialog.rect_position.x -= 20
+	$PopupCanvas/PopupDialog.rect_position.y -= 65
+	$PopupCanvas/PopupDialog.show()
 
 	
 func hide_trash_popup():
 	trash_area_entered = false
-	$PopupDialog.hide()
+	$PopupCanvas/PopupDialog.hide()
 
 	
 ####################################################################################################
@@ -561,15 +568,15 @@ func _on_Expo2_area_exited(_area):
 
 func show_expo_popup(var expo):
 	expo_area_entered = true
-	$PopupDialog.rect_position = expo.position
-	$PopupDialog.rect_position.x += 52
-	$PopupDialog.rect_position.y -= 80
-	$PopupDialog.show()
+	$PopupCanvas/PopupDialog.rect_position = expo.position
+	$PopupCanvas/PopupDialog.rect_position.x += 52
+	$PopupCanvas/PopupDialog.rect_position.y -= 80
+	$PopupCanvas/PopupDialog.show()
 
 
 func hide_expo_popup():
 	expo_area_entered = false
-	$PopupDialog.hide()
+	$PopupCanvas/PopupDialog.hide()
 
 	
 ####################################################################################################
@@ -578,32 +585,32 @@ func hide_expo_popup():
 ####################################################################################################
 func _on_DishPit1_area_entered(_area):
 	show_dish_popup($Area2Ds/DishAreas/DishPit1, false)
-
+	$LeftDishwasher/Particles2D.visible = true
 
 func _on_DishPit1_area_exited(_area):
 	hide_dish_popup()
-
+	$LeftDishwasher/Particles2D.visible = false
 
 func _on_DishPit2_area_entered(_area):
 	show_dish_popup($Area2Ds/DishAreas/DishPit2, true)
-
+	$RightDishwasher/Particles2D.visible = true
 
 func _on_DishPit2_area_exited(_area):
 	hide_dish_popup()
-
+	$RightDishwasher/Particles2D.visible = false
 
 func show_dish_popup(var dishpit, var b):
 	dish_area_entered = true
-	$PopupDialog.rect_position = dishpit.position
+	$PopupCanvas/PopupDialog.rect_position = dishpit.position
 	if b:
-		$PopupDialog.rect_position.x -= 80
-	$PopupDialog.rect_position.y += 80
-	$PopupDialog.show()
+		$PopupCanvas/PopupDialog.rect_position.x -= 80
+	$PopupCanvas/PopupDialog.rect_position.y += 80
+	$PopupCanvas/PopupDialog.show()
 
 	
 func hide_dish_popup():
 	dish_area_entered = false
-	$PopupDialog.hide()
+	$PopupCanvas/PopupDialog.hide()
 
 	
 ####################################################################################################
@@ -620,13 +627,16 @@ func _on_CustomerWalkInTimer_timeout():
 	walk_in = true
 
 
-func _on_Restaurant_Level_ready_to_be_seated(patrons):
+func _on_Restaurant_Level_ready_to_be_seated(_patrons):
 	convo_string = "Hi!\nWelcome to PomoBITE!\nI'll take you to\nyour table!"
+	var cl = CanvasLayer.new()
+	cl.layer = 4
 	var conversation_dialogue = convo_dialogue.instance()
 	if dialogue_queue == null:
 		dialogue_queue = []
+	cl.add_child(conversation_dialogue)
 	dialogue_queue.append([conversation_dialogue, 0])
-	$Dialogues.add_child(conversation_dialogue)
+	$Dialogues.add_child(cl)
 	conversation_dialogue.rect_position = $Host_NPC.position
 	conversation_dialogue.show()
 	conversation_index = 0
@@ -648,7 +658,7 @@ func _on_DialogueTimer_timeout():
 			yield(get_tree().create_timer(1.0), "timeout")
 			label.text = ""
 			conversation_dialogue.hide()
-			$Dialogues.remove_child(conversation_dialogue)
+			$Dialogues.remove_child(conversation_dialogue.get_parent())
 			var from
 			var to
 			if left_player_section:
@@ -670,6 +680,7 @@ func _on_DialogueTimer_timeout():
 					pf2d.add_child(host_instance)
 					get_node(host_path).add_child(pf2d)
 					$Host_NPC.visible = false
+					$Host_NPC/CollisionShape2D.disabled = true
 					host_to_table = true
 					if left_player_section:
 						for path in left_paths.get_children():
@@ -699,7 +710,7 @@ func _on_DialogueTimer_timeout():
 			yield(get_tree().create_timer(1.0), "timeout")
 			label.text = ""
 			conversation_dialogue.hide()
-			$Dialogues.remove_child(conversation_dialogue)
+			$Dialogues.remove_child(conversation_dialogue.get_parent())
 			if convo_type == 1:
 				emit_signal("return_to_host_stand")
 			
@@ -717,8 +728,11 @@ func _on_Restaurant_Level_seat_guests():
 	#	tables["guests"]["table" + String(current_focused_table)].append(customer)
 		
 	convo_string = "Your server will be\nright with you.\nEnjoy your meal!"
+	var cl = CanvasLayer.new()
+	cl.layer = 4
 	var conversation_dialogue = convo_dialogue.instance()
-	$Dialogues.add_child(conversation_dialogue)	
+	cl.add_child(conversation_dialogue)
+	$Dialogues.add_child(cl)	
 	if dialogue_queue == null:
 		dialogue_queue = []
 	dialogue_queue.append([conversation_dialogue, 1])
