@@ -1547,7 +1547,7 @@ lifetime = 0.5
 collision/safe_margin = 0.001
 
 [node name="Player2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 641, 564 )
+position = Vector2( 592, 336 )
 
 [node name="LevelSprites" type="Node2D" parent="."]
 
