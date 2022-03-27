@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/gameimages/POMOBLAST.PNG" type="Texture" id=6]
 [ext_resource path="res://assets/gameimages/DungeonFight.PNG" type="Texture" id=7]
 [ext_resource path="res://assets/gameimages/SlowFruitMenu.png" type="Texture" id=8]
+[ext_resource path="res://assets/gameimages/PomoBITEGraphic.png" type="Texture" id=8]
 
 [node name="SingleplayerOptionScreen" instance=ExtResource( 1 )]
 
@@ -239,7 +240,11 @@ size_flags_vertical = 3
 
 [node name="Games_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container" index="0"]
 margin_right = 423.0
+<<<<<<< HEAD
 margin_bottom = 1146.0
+=======
+margin_bottom = 1190.0
+>>>>>>> origin/main
 size_flags_vertical = 3
 
 [node name="dungeon_fight_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="0"]
@@ -299,6 +304,7 @@ margin_bottom = 408.0
 text = "            Add to Queue:"
 align = 1
 
+<<<<<<< HEAD
 [node name="Slowfruit" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="2"]
 margin_top = 778.0
 margin_right = 423.0
@@ -323,6 +329,32 @@ text = "Details"
 margin_top = 328.0
 margin_right = 423.0
 margin_bottom = 368.0
+=======
+[node name="PomoBITE_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="2"]
+margin_top = 778.0
+margin_right = 423.0
+margin_bottom = 1190.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PomoBITE_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="0"]
+margin_right = 423.0
+margin_bottom = 344.0
+size_flags_vertical = 3
+texture = ExtResource( 8 )
+
+[node name="PomoBITE_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="1"]
+margin_top = 348.0
+margin_right = 423.0
+margin_bottom = 368.0
+size_flags_vertical = 3
+text = "Details"
+
+[node name="PomoBITE_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="2"]
+margin_top = 372.0
+margin_right = 423.0
+margin_bottom = 412.0
+>>>>>>> origin/main
 text = "            Add to Queue:"
 align = 1
 
@@ -381,5 +413,10 @@ dialog_text = "You Must Select A Desired Time To Play For!"
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container/dungeon_fight_Selection_Toggle" to="." method="_on_dungeon_fight_Selection_Toggle_toggled"]
 [connection signal="pressed" from="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container/Pomoblast_Details_Button" to="." method="_on_Pomoblast_Details_Button_pressed"]
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container/Pomoblast_Selection_Toggle" to="." method="_on_Pomoblast_Selection_Toggle_toggled"]
+<<<<<<< HEAD
 [connection signal="pressed" from="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit/Slowfruit_Details_Button" to="." method="_on_Slowfruit_Details_Button_pressed"]
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit/Slowfruit_Selection_Toggle" to="." method="_on_Slowfruit_Selection_Toggle_toggled"]
+=======
+[connection signal="pressed" from="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container/PomoBITE_Details_Button" to="." method="_on_PomoBITE_Details_Button_pressed"]
+[connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container/PomoBITE_Selection_Toggle" to="." method="_on_PomoBITE_Selection_Toggle_toggled"]
+>>>>>>> origin/main
