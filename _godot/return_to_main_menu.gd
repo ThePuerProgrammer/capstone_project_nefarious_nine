@@ -95,9 +95,9 @@ func pomoblastDetails():
 	var text ="Title: PomoBlast \n\nCreated By: Eliss Glasper\n\nDescription: Fight your way through the pomogranates before they destroy YOU and your CREW!\n\nControls: Mouse Clicks - To Fire\nArrow Keys - To Move\n\nObjective: Destroy as many enemies as you can before!!"
 	return text
 	
-#Text for PomoBlast Details
+#Text for Slowfruit Details
 func slowfruitDetails():
-	var text ="Title: Slowfruit \n\nCreated By: Susan Emberton\n\nDescription: Help Boogie Dog catch the fruit and blast off! Watch out for the slowfruit!\n\nControls: Mouse Clicks - To Fire\nArrow Keys - To Move\n\nObjective: Eat the best fruit by choosing the correct answer"
+	var text ="Title: Slowfruit \n\nCreated By: Susan Emberton\n\nDescription: Help Boogie Dog catch the fruit and blast off! Watch out for the slowfruit.\n\nControls: Space or UP to Jump\nArrow Keys - To Move\n\nObjective: Eat the best fruit by choosing the correct answer"
 	return text
 ####################################################################################################
 
@@ -150,7 +150,7 @@ func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
 		update_game_label(game_selection_array)
 		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
 		
-#Pomoblast Toggler
+#Slowfruit Toggler
 func _on_Slowfruit_Selection_Toggle_toggled(button_pressed):
 	if(button_pressed):
 		#Text for Toggle On Pomoblast
@@ -158,7 +158,7 @@ func _on_Slowfruit_Selection_Toggle_toggled(button_pressed):
 		print(game_selection_array)
 		game_selection_array=shuffle(game_selection_array)
 		print(game_selection_array)
-		pomoblast_selected=true
+		slowfruit_selected=true
 		print("Slowfruit_Selected:" + (String(slowfruit_selected)))
 		update_game_label(game_selection_array)
 		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
@@ -168,7 +168,7 @@ func _on_Slowfruit_Selection_Toggle_toggled(button_pressed):
 		print(game_selection_array)
 		game_selection_array=shuffle(game_selection_array)
 		print(game_selection_array)
-		pomoblast_selected=false
+		slowfruit_selected=false
 		print("Slowfruit_Selected:"+ (String(slowfruit_selected)))
 		update_game_label(game_selection_array)
 		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array

@@ -110,8 +110,8 @@ func pull_for_input():
 		
 		if !jumping:
 			setWalking()
-		if found_floor:
-			print("founbd floor")
+		#if found_floor:
+			#print("found floor")
 		$AnimatedSprite.flip_h = true			
 		move_left = true
 		left = true
@@ -125,10 +125,10 @@ func pull_for_input():
 		linear_velocity.x -= WALK_DEACCEL
 		
 	if Input.is_action_just_pressed("move_right"):
-		print(linear_velocity.y, "y vel")
-		print(linear_velocity.x, "x vel")
-		if found_floor:
-			print("founbd floor")
+		#print(linear_velocity.y, "y vel")
+		#print(linear_velocity.x, "x vel")
+		#if found_floor:
+		#	print("found floor")
 		if !jumping:
 			setWalking()
 		$AnimatedSprite.flip_h = false
