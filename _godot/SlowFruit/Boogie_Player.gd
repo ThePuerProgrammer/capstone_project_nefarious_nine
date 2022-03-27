@@ -31,10 +31,10 @@ var floor_h_velocity = 0.0
 
 var airborne_time = 1e20
 
-onready var sound_jump = $SoundJump
-onready var sprite = $Sprite
+#onready var sound_jump = $SoundJump
+#onready var sprite = $Sprite
 onready var animation_player = $AnimatedSprite
-onready var ground_ray = get_node("ground_ray")
+#onready var ground_ray = get_node("ground_ray")
 
 
 # Called when the node enters the scene tree for the first time.
