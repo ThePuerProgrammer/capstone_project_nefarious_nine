@@ -1669,6 +1669,8 @@ export async function leaderboardDefault(members) {
 
     return classroomLeadersDefault;
 }
+//DESCENDING ORDER
+//===========================================================================//
 export async function leaderboardByCoins(members) {
     let classroomLeadersByCoins = [];
 
@@ -1687,7 +1689,6 @@ export async function leaderboardByCoins(members) {
 
     return classroomLeadersByCoins;
 }
-//Gets the count of the decks and updates it to a new field in user
 export async function leaderboardByDecks(members) {
     let classroomLeadersByDecks = [];
 
@@ -1714,6 +1715,62 @@ export async function leaderboardByFlashcards(members) {
         .collection(Constant.collectionName.USERS)
         .where('email', 'in', members)
         .orderBy('flashcardNumber', 'desc')
+        .get()
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByFlashcards.push(cm);
+    })
+    return classroomLeadersByFlashcards;
+}
+//============================================================================//
+//ASCENDING ORDER
+//===========================================================================//
+export async function leaderboardByCoinsAscending(members) {
+    let classroomLeadersByCoins = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('coins', 'asc')
+        .get();
+
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByCoins.push(cm);
+    })
+
+    return classroomLeadersByCoins;
+}
+export async function leaderboardByDecksAscending(members) {
+    let classroomLeadersByDecks = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('deckNumber', 'asc')
+        .get();
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByDecks.push(cm);
+    })
+
+    return classroomLeadersByDecks;
+
+}
+//Gets the count of the decks and updates it to a new field in user
+export async function leaderboardByFlashcardsAscending(members) {
+    let classroomLeadersByFlashcards = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('flashcardNumber', 'asc')
         .get()
 
     ref.forEach(doc => {

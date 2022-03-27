@@ -239,31 +239,45 @@ export async function one_classroom_page(classroomDocID) {
     sortByCoinsButton.addEventListener('click', async e=>{
         console.log('clicked COINS');
         //Passing Correct Values for the Method
-        coin_descend=true;
-        deck_descend=false;
-        fc_descend=false;
-        leaderBoardDescIcon(coin_descend,deck_descend,fc_descend);
+        if(!coin_descend){
+            coin_descend=true;
+            deck_descend=false;
+            fc_descend=false;
+            leaderBoardIcon("coin_descend");
+        } else{
+            coin_descend=false;
+            deck_descend=false;
+            fc_descend=false;
+            leaderBoardIcon("coin_ascend");
+        }
+        
         //Building Rows of Table/Reordering
         let leaderboardCoins = [];
-        leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
-        document.getElementById('leaderboard-fields').innerHTML=''
-
         let html2 = ``;
-       
-        if(leaderboardCoins.length>0){           
-            let index = 1;
-            leaderboardCoins.forEach(e =>{
-                html2+= buildLeaderBoard(e, index);
-                index++;
-            });
+        if(coin_descend){//Descending
+            leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardCoins.length>0){           
+                let index = 1;
+                leaderboardCoins.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index++;
+                });
+            }
+        } else {//Ascending
+            leaderboardCoins = await FirebaseController.leaderboardByCoinsAscending(members);
+            document.getElementById('leaderboard-fields').innerHTML='';   
+            if(leaderboardCoins.length>0){           
+                let index = leaderboardCoins.length;
+                leaderboardCoins.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index--;
+                });
+            }
         }
+        
         html2+=`</tbody>`;
-        document.getElementById('leaderboard-fields').innerHTML=html2;
-
-
-        //swapContent(html2);
-        //swapContent('Const.htmlIDs.leaderboardCoins');//RETURNED ONLY THE BUTTON
-       
+        document.getElementById('leaderboard-fields').innerHTML=html2;      
     });
     //SORT BY DECKS
     const sortByDecksButton = document.getElementById(Constant.htmlIDs.leaderboardDecks);
@@ -271,24 +285,43 @@ export async function one_classroom_page(classroomDocID) {
         console.log('clicked DECKS');
         
         //Passing Correct Values for the Method
-        coin_descend=false;
-        deck_descend=true;
-        fc_descend=false;
-        leaderBoardDescIcon(coin_descend,deck_descend,fc_descend);
+        if(!deck_descend){
+            coin_descend=false;
+            deck_descend=true;
+            fc_descend=false;
+            leaderBoardIcon("deck_descend");
+        } else{
+            coin_descend=false;
+            deck_descend=false;
+            fc_descend=false;
+            leaderBoardIcon("deck_ascend");
+        }
         
         let leaderboardDecks = [];
-        leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
-        document.getElementById('leaderboard-fields').innerHTML=''
         let html2 = ``;
-       
 
-        if(leaderboardDecks.length>0){           
-            let index = 1;
-            leaderboardDecks.forEach(e =>{
-                html2+= buildLeaderBoard(e, index);
-                index++;
-            });
+        if(deck_descend){//Descending
+            leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardDecks.length>0){           
+                let index = 1;
+                leaderboardDecks.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index++;
+                });
+            }
+        } else {//Ascending
+            leaderboardDecks = await FirebaseController.leaderboardByDecksAscending(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardDecks.length>0){           
+                let index = leaderboardDecks.length;
+                leaderboardDecks.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index--;
+                });
+            }
         }
+      
         html2+=`</tbody>`;
         document.getElementById('leaderboard-fields').innerHTML=html2;
 
@@ -299,22 +332,44 @@ export async function one_classroom_page(classroomDocID) {
         console.log('clicked FLASHCARDS');
         
         //Passing Correct Values for the Method
-        coin_descend=false;
-        deck_descend=false;
-        fc_descend=true;
-        leaderBoardDescIcon(coin_descend,deck_descend,fc_descend);
+        if(!fc_descend){
+            coin_descend=false;
+            deck_descend=false;
+            fc_descend=true;
+            leaderBoardIcon("fc_descend");
+        } else{
+            coin_descend=false;
+            deck_descend=false;
+            fc_descend=false;
+            leaderBoardIcon("fc_ascend");
+        }
+
         
         let leaderboardFlashcards = [];
-        leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
-        document.getElementById('leaderboard-fields').innerHTML=''
         let html2='';
-        if(leaderboardFlashcards.length>0){           
-            let index = 1;
-            leaderboardFlashcards.forEach(e =>{
-                html2+= buildLeaderBoard(e, index);
-                index++;
-            });
+
+        if(fc_descend){//Ascending
+            leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardFlashcards.length>0){           
+                let index = 1;
+                leaderboardFlashcards.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index++;
+                });
+            }
+        } else {//Descending
+            leaderboardFlashcards = await FirebaseController.leaderboardByFlashcardsAscending(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardFlashcards.length>0){           
+                let index = leaderboardFlashcards.length;
+                leaderboardFlashcards.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index--;
+                });
+            }
         }
+      
         html2+=`</tbody>`;
         document.getElementById('leaderboard-fields').innerHTML=html2;
 
@@ -488,20 +543,37 @@ function buildLeaderBoard(e,i){
     return html3;
 }
 //Adds Icons to the buttons of the table
-function leaderBoardDescIcon(coin_descend,deck_descend,fc_descend){
-    if(coin_descend){
-        document.getElementById('coins-button-icon').innerHTML =`Coins<br> <i class="material-icons">vertical_align_bottom</i>`;
-        document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
-        document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
-    }
-    if(deck_descend){
-        document.getElementById('coins-button-icon').innerHTML =`Coins`;
-        document.getElementById('decks-button-icon').innerHTML = `# of Decks <br> <i class="material-icons">vertical_align_bottom</i>`;
-        document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
-    }
-    if(fc_descend){
-        document.getElementById('coins-button-icon').innerHTML =`Coins`;
-        document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
-        document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards <br> <i class="material-icons">vertical_align_bottom</i>`;
+function leaderBoardIcon(ordering){
+    switch(ordering){
+        case "coin_descend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins<br> <i class="material-icons">vertical_align_bottom</i>`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+            break;
+        case "deck_descend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks <br> <i class="material-icons">vertical_align_bottom</i>`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+            break;
+        case "fc_descend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards <br> <i class="material-icons">vertical_align_bottom</i>`;
+            break;
+        case "coin_ascend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins<br> <i class="material-icons">vertical_align_top</i>`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+            break;    
+        case "deck_ascend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks <br> <i class="material-icons">vertical_align_top</i>`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+            break;
+        case "fc_ascend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards <br> <i class="material-icons">vertical_align_top</i>`;
+            break;
     }
 }
