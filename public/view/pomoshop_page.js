@@ -9,6 +9,7 @@ import * as Utilities from './utilities.js'
 
 let imageFile2Upload;
 
+
 export function addEventListeners() {
     Elements.menuShop.addEventListener('click', async () => {
         history.pushState(null, null, Routes.routePathname.POMOSHOP);
@@ -99,6 +100,7 @@ export async function shop_page() {
 
     items.forEach(item => {
         // disable buy button if already owned
+
         if (user.itemsOwned.includes(item.docID)) {
             document.getElementById(item.docID).innerHTML = "owned";
             document.getElementById(item.docID).disabled = true;
@@ -172,6 +174,19 @@ export async function shop_page() {
     }
 
     if (user.email == Constant.ADMIN) { //avoids null button/listener errors when user is not admin
+
+        const deleteButtons = document.getElementsByClassName('form-del-item');
+
+        for (let i = 0; i < deleteButtons.length; i++) {
+            deleteButtons[i].addEventListener('submit', async e => {
+                e.preventDefault();
+                const docID = e.target.docId.value;
+                const imagename = e.target.imagename.value;
+                await FirebaseController.deleteItemFromShop(imagename, docID);
+                await shop_page();
+            });
+        }
+
         const addItemButton = document.getElementById('add-item-button');
         addItemButton.addEventListener('click', async e => {
             e.preventDefault();
@@ -212,14 +227,16 @@ export async function shop_page() {
                 pomoshop.photoURL = imageURL;
                 await FirebaseController.addItemtoShop(pomoshop.serialize());
                 Utilities.info('Success!', `Item ${e.target.itemname.value} has been added`, 'modal-add-item');
+                await shop_page();
             } catch (e) {
                 if (Constant.DEV) console.log(e)
 
             }
 
-            // addNewItem(e.target);
-            await shop_page();
         })
+        // Elements.formAddItem.reset();
+
+
 
 
     }
@@ -236,13 +253,15 @@ function buildItemView(item, email) {
         <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
         <br>
         <form class="form-buy-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">`;
+        <input type="hidden" name="docId" value="${item.docID}">
+        <input type="hidden" name="cost" value="${item.cost}">`;
 
         html += `<div><button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit"style="float:right;margin:auto;text-align: center;display: inline-block">Buy $ ${item.cost}</button>`;
 
         html += `</form>
         <form class="form-del-item" method="post">
         <input type="hidden" name="docId" value="${item.docID}">
+        <input type="hidden" name="imagename" value="${item.photoName}">
         <button class="btn btn-secondary pomo-bg-color-dark" type="submit" style="text-align: center;margin:auto;display: inline-block">Delete</button>
         </form>
         </div>
@@ -256,7 +275,8 @@ function buildItemView(item, email) {
         <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
         <br>
         <form class="form-buy-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">`;
+        <input type="hidden" name="docId" value="${item.docID}">
+        <input type="hidden" name="cost" value="${item.cost}">`;
 
         html += `<button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>`;
 

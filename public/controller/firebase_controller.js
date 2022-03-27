@@ -2031,10 +2031,10 @@ export async function uploadProfilePicture(profilePicturerFile, oldPfpName) {
     const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
 
     // delete old pfp from storage
-    if(oldPfpName != "defaultPfp.png") {
+    if (oldPfpName != "defaultPfp.png") {
         const refOld = firebase.storage().ref()
-        .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
-    
+            .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
+
         await refOld.delete();
     }
 
@@ -2168,6 +2168,23 @@ export async function addItemtoShop(item) {
         .collection(Constant.collectionName.POMOSHOP)
         .add(item);
     return ref.id;
+}
+
+export async function deleteItemFromShop(imagename, docID) {
+    console.log(docID);
+    try {
+        await firebase.firestore().collection(Constant.collectionName.POMOSHOP).doc(docID)
+            .delete();
+    } catch (e) {
+        console.log(e);
+    }
+
+    if (imagename != null && imagename != "") {
+        const refImage = firebase.storage().ref()
+            .child(Constant.storageFolderName.POMOSHOP_IMAGES + imagename);
+        await refImage.delete();
+
+    }
 }
 
 //============================================================================//
