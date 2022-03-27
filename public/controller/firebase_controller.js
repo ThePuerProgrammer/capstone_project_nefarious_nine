@@ -10,7 +10,8 @@ import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
 import { HelpTicket } from '../model/help_ticket.js';
 import { Pomoshop } from '../model/pomoshop.js';
-
+//DECKS
+//============================================================================//
 //============================================================================//
 // CREATE A Deck
 //============================================================================//
@@ -37,7 +38,8 @@ export async function createClassDeck(docID, deck) {
 }
 //============================================================================//
 
-
+//FLASHCARD STUFF
+//============================================================================//
 //============================================================================//
 // CREATE A Flashcard
 //============================================================================//
@@ -238,9 +240,6 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
             cachedDates: firebase.firestore.FieldValue.arrayUnion(todaysDate)
         });
 }
-
-
-
 
 //same as above but for classrooms
 
@@ -915,6 +914,54 @@ export async function getClassDeckByDocID(classDocID, deckDocID) {
     deckModel.set_docID(deckDocID);
     return deckModel;
 }
+//CLASSROOM...THinGs
+//============================================================================//
+//============================================================================//
+// Gets all available classrooms
+//============================================================================//
+export async function getAvailableClassrooms() {
+    let classroomList = [];
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .get();
+
+    ref.forEach(doc => {
+        const cr = new Classroom(doc.data());
+        cr.set_docID(doc.id);
+        classroomList.push(cr);
+    });
+
+    return classroomList;
+}
+
+//============================================================================//
+// Gets one classroom
+//============================================================================//
+export async function getOneClassroom(classroomDocID) {
+    const classroomRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classroomDocID)
+        .get();
+
+    if (!classroomRef.exists) return null;
+
+    const classroom = new Classroom(classroomRef.data());
+    classroom.set_docID(classroomDocID);
+    return classroom;
+}
+
+//============================================================================//
+// CREATE A Classroom
+//============================================================================//
+export async function createClassroom(classroom) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .add(classroom.serialize());
+
+    return ref.id;
+}
+//============================================================================//
+
 //============================================================================//
 // This function will pull in a single CLASSROOM from it's docId
 //============================================================================//
@@ -934,10 +981,92 @@ export async function getClassroomByDocID(classDocID) {
     classModel.set_docID(classDocID);
     return classModel;
 }
+//=============================================================================//
+//JOIN Classroom
+//============================================================================//
+export async function joinClassroom(classId, userEmail) {
+    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
+        .update({ members: arrayUnion(userEmail) });
+}
+//============================================================================//
+//LEAVE Classroom
+//============================================================================//
+export async function leaveClassroom(classId, userEmail) {
+    const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
+        .update({ members: arrayRemove(userEmail) });
+}
+//============================================================================//
+// DELETE CLASSROOM
+//=============================================================================//
+
+export async function deleteClassroom(classroomDocID) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classroomDocID)
+        .delete();
+}
+//============================================================================//
+//Update Classroom
+//============================================================================//
+export async function updateClassroom(classroom) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
+        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category, 'keywords': classroom.keywords });
+}
+//============================================================================//
+// Functions for class chat
+//============================================================================//
+export async function addNewMessage(classroomDocID, message) {
+    const docRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOM_CHATS)
+        .doc(classroomDocID)
+        .collection(Constant.collectionName.MESSAGES)
+        .add(message.serialize());
+    return docRef.id;
+}
+
+export async function getMessages(classroomDocID) {
+    let messages = [];
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOM_CHATS)
+        .doc(classroomDocID)
+        .collection(Constant.collectionName.MESSAGES)
+        .orderBy('timestamp')
+        .get();
+
+    ref.forEach(doc => {
+        let m = new Message(doc.data());
+        m.set_docID(doc.id);
+        messages.push(m);
+    })
+
+    return messages;
+}
+//============================================================================//
+//Ban Members
+//============================================================================//
+export async function banMember(docID, member) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
+        .update({
+            banlist: firebase.firestore.FieldValue.arrayUnion(member)
+        });
+
+}
+
+export async function unbanMember(docID, member) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
+        .update({
+            banlist: firebase.firestore.FieldValue.arrayRemove(member)
+        });
+}
+
+//============================================================================//
 
 
 
-
+//FAVORITING DECKS
+//============================================================================//
 //============================================================================//
 // Favorite a deck
 //============================================================================//
@@ -1136,19 +1265,9 @@ export async function deleteClassDeck(classDocId, docID) {
         .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
         .delete();
 }
-
-
-//============================================================================//
-// DELETE CLASSROOM
 //============================================================================//
 
-export async function deleteClassroom(classroomDocID) {
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .doc(classroomDocID)
-        .delete();
-}
-//===========================================================================//
+
 
 //===========================================================================//
 //UPDATE DECK 
@@ -1384,31 +1503,6 @@ export async function updateUserInfo(uid, updateInfo) {
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).update(updateInfo);
 }
-//============================================================================//
-//Update Classroom
-//============================================================================//
-export async function updateClassroom(classroom) {
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
-        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category, 'keywords': classroom.keywords });
-}
-//============================================================================//
-//Ban Members
-//============================================================================//
-export async function banMember(docID, member) {
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
-        .update({
-            banlist: firebase.firestore.FieldValue.arrayUnion(member)
-        });
-
-}
-
-export async function unbanMember(docID, member) {
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
-        .update({
-            banlist: firebase.firestore.FieldValue.arrayRemove(member)
-        });
-}
-
 
 export async function getUserTimerDefault(uid) {
     const ref = await firebase.firestore()
@@ -1427,54 +1521,6 @@ export async function getUserTimerDefault(uid) {
 }
 
 
-
-
-//============================================================================//
-// Gets all available classrooms
-//============================================================================//
-export async function getAvailableClassrooms() {
-    let classroomList = [];
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .get();
-
-    ref.forEach(doc => {
-        const cr = new Classroom(doc.data());
-        cr.set_docID(doc.id);
-        classroomList.push(cr);
-    });
-
-    return classroomList;
-}
-
-//============================================================================//
-// Gets one classroom
-//============================================================================//
-export async function getOneClassroom(classroomDocID) {
-    const classroomRef = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .doc(classroomDocID)
-        .get();
-
-    if (!classroomRef.exists) return null;
-
-    const classroom = new Classroom(classroomRef.data());
-    classroom.set_docID(classroomDocID);
-    return classroom;
-}
-
-//============================================================================//
-// CREATE A Classroom
-//============================================================================//
-export async function createClassroom(classroom) {
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .add(classroom.serialize());
-
-    return ref.id;
-}
-//============================================================================//
-
 //============================================================================//
 // Retrieve CATEGORIES
 //============================================================================//
@@ -1486,23 +1532,6 @@ export async function getCategories() {
 
     const backend = new Backend(ref.data());
     return backend.categories;
-}
-//============================================================================//
-//============================================================================//
-//JOIN Classroom
-//============================================================================//
-export async function joinClassroom(classId, userEmail) {
-    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
-        .update({ members: arrayUnion(userEmail) });
-}
-//============================================================================//
-//LEAVE Classroom
-//============================================================================//
-export async function leaveClassroom(classId, userEmail) {
-    const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
-        .update({ members: arrayRemove(userEmail) });
 }
 //============================================================================//
 
@@ -1520,35 +1549,7 @@ export async function getCoins(uid) {
 }
 //============================================================================//
 
-//============================================================================//
-// Functions for class chat
-//============================================================================//
-export async function addNewMessage(classroomDocID, message) {
-    const docRef = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOM_CHATS)
-        .doc(classroomDocID)
-        .collection(Constant.collectionName.MESSAGES)
-        .add(message.serialize());
-    return docRef.id;
-}
 
-export async function getMessages(classroomDocID) {
-    let messages = [];
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOM_CHATS)
-        .doc(classroomDocID)
-        .collection(Constant.collectionName.MESSAGES)
-        .orderBy('timestamp')
-        .get();
-
-    ref.forEach(doc => {
-        let m = new Message(doc.data());
-        m.set_docID(doc.id);
-        messages.push(m);
-    })
-
-    return messages;
-}
 
 //============================================================================//
 // SEARCH FUNCTIONS
@@ -1845,6 +1846,8 @@ export async function updateDeckCount(currentUser) {
 }
 //============================================================================//
 
+//HELP TICKETS
+//============================================================================//
 //============================================================================//
 // Submit a help ticket
 //============================================================================//
@@ -1923,7 +1926,10 @@ export async function getHelpTickets() {
 
     return helpTickets;
 }
+//============================================================================//
 
+//PROFILE STUFF
+//============================================================================//
 //============================================================================//
 // Get USER
 //============================================================================//
@@ -1989,6 +1995,41 @@ export async function updatePomopet(uid, pomopet) {
 }
 //============================================================================//
 
+//============================================================================//
+// UPDATE USER ITEMS OWNED
+//============================================================================//
+export async function updateItemsOwned(uid, itemsOwned) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'itemsOwned': itemsOwned });
+}
+
+export async function getOwnedItem(item) {
+    const itemRef = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .doc(item)
+        .get();
+
+    const itemOwned = new Pomoshop(itemRef.data());
+    itemOwned.set_docID(itemRef.docId);
+    return itemOwned;
+}
+//============================================================================//
+
+//============================================================================//
+// UPDATE USER COINS
+//============================================================================//
+
+export async function updateCoins(uid, coins) {
+    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
+        .update({ 'coins': coins });
+
+    //Element.coinCount.innerHTML = coins;
+    window.sessionStorage.setItem('coins',coins)
+    Element.coinCount.innerHTML = coins;
+    //localStorage.setItem('usercoins', coins);
+}
 
 //============================================================================//
 // LOG TIME SPENT STUDYING.
@@ -2074,38 +2115,3 @@ export async function addItemtoShop(item) {
 
 //============================================================================//
 
-//============================================================================//
-// UPDATE USER ITEMS OWNED
-//============================================================================//
-export async function updateItemsOwned(uid, itemsOwned) {
-    await firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .doc(uid)
-        .update({ 'itemsOwned': itemsOwned });
-}
-
-export async function getOwnedItem(item) {
-    const itemRef = await firebase.firestore()
-        .collection(Constant.collectionName.POMOSHOP)
-        .doc(item)
-        .get();
-
-    const itemOwned = new Pomoshop(itemRef.data());
-    itemOwned.set_docID(itemRef.docId);
-    return itemOwned;
-}
-//============================================================================//
-
-//============================================================================//
-// UPDATE USER COINS
-//============================================================================//
-
-export async function updateCoins(uid, coins) {
-    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
-        .update({ 'coins': coins });
-
-    //Element.coinCount.innerHTML = coins;
-    window.sessionStorage.setItem('coins',coins)
-    Element.coinCount.innerHTML = coins;
-    //localStorage.setItem('usercoins', coins);
-}
