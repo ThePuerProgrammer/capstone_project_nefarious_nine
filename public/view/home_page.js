@@ -16,11 +16,6 @@ export function addEventListeners() {
 
 export async function home_page() {
 
-    //shows user coin count for coin display in navbar
-    //currently has a bug where coins do not reset after switching user, temp fix is to refresh the page
-   
-
-
     Elements.root.innerHTML = ``;
     
     let html = '';
