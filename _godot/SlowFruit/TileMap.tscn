@@ -1,22 +1,595 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=72 format=2]
 
+[ext_resource path="res://SlowFruit/assets/nightBG.png" type="Texture" id=1]
 [ext_resource path="res://SlowFruit/assets/longGround.PNG" type="Texture" id=2]
+[ext_resource path="res://SlowFruit/assets/grass.png" type="Texture" id=3]
+[ext_resource path="res://SlowFruit/assets/grass1.png" type="Texture" id=4]
+[ext_resource path="res://SlowFruit/assets/rocks.png" type="Texture" id=5]
+[ext_resource path="res://SlowFruit/assets/treedeco.png" type="Texture" id=6]
+[ext_resource path="res://SlowFruit/assets/floatGround.png" type="Texture" id=7]
+[ext_resource path="res://SlowFruit/assets/smallplatform.png" type="Texture" id=8]
+[ext_resource path="res://SlowFruit/assets/bush.png" type="Texture" id=9]
+[ext_resource path="res://SlowFruit/assets/3636737125.png" type="Texture" id=10]
+[ext_resource path="res://SlowFruit/assets/TX Village Props.png" type="Texture" id=11]
+[ext_resource path="res://SlowFruit/assets/wheat.png" type="Texture" id=12]
+[ext_resource path="res://SlowFruit/assets/bush2.png" type="Texture" id=13]
+[ext_resource path="res://SlowFruit/assets/bush1.png" type="Texture" id=14]
+[ext_resource path="res://SlowFruit/assets/flowers.png" type="Texture" id=15]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 520, 56 )
+extents = Vector2( 528, 60 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 191.989, 27.4809 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 14.5, 16 )
+
+[sub_resource type="TileSet" id=4]
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 10 )
+region = Rect2( 0, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 10 )
+region = Rect2( 300, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 10 )
+region = Rect2( 600, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 10 )
+region = Rect2( 900, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 10 )
+region = Rect2( 1200, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 10 )
+region = Rect2( 1500, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 10 )
+region = Rect2( 1800, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 10 )
+region = Rect2( 2100, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 10 )
+region = Rect2( 2400, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 10 )
+region = Rect2( 2700, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 10 )
+region = Rect2( 3000, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 10 )
+region = Rect2( 3300, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 10 )
+region = Rect2( 3600, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 10 )
+region = Rect2( 3900, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 10 )
+region = Rect2( 4200, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 10 )
+region = Rect2( 4500, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 10 )
+region = Rect2( 4800, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 10 )
+region = Rect2( 5100, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 10 )
+region = Rect2( 5400, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 10 )
+region = Rect2( 5700, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 10 )
+region = Rect2( 6000, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 10 )
+region = Rect2( 6300, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 10 )
+region = Rect2( 6600, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 10 )
+region = Rect2( 6900, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 10 )
+region = Rect2( 7200, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 10 )
+region = Rect2( 7500, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 10 )
+region = Rect2( 7800, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 10 )
+region = Rect2( 8100, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 10 )
+region = Rect2( 8400, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 10 )
+region = Rect2( 8700, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 10 )
+region = Rect2( 9000, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 10 )
+region = Rect2( 9300, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 10 )
+region = Rect2( 9600, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 10 )
+region = Rect2( 9900, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 10 )
+region = Rect2( 10200, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 10 )
+region = Rect2( 10500, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 10 )
+region = Rect2( 10800, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=42]
+atlas = ExtResource( 10 )
+region = Rect2( 11100, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 10 )
+region = Rect2( 11400, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 10 )
+region = Rect2( 11700, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 10 )
+region = Rect2( 12000, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 10 )
+region = Rect2( 12300, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 10 )
+region = Rect2( 12600, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 10 )
+region = Rect2( 12900, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 10 )
+region = Rect2( 13200, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 10 )
+region = Rect2( 13500, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 10 )
+region = Rect2( 13800, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=52]
+atlas = ExtResource( 10 )
+region = Rect2( 14100, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=53]
+atlas = ExtResource( 10 )
+region = Rect2( 14400, 0, 300, 300 )
+
+[sub_resource type="AtlasTexture" id=54]
+atlas = ExtResource( 10 )
+region = Rect2( 14700, 0, 300, 300 )
+
+[sub_resource type="SpriteFrames" id=55]
+animations = [ {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ), SubResource( 43 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ), SubResource( 47 ), SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ), SubResource( 53 ), SubResource( 54 ) ],
+"loop": true,
+"name": "planet",
+"speed": 5.0
+} ]
+
+[sub_resource type="TileSet" id=56]
+0/name = "grassSparkProps.png 0"
+0/texture = ExtResource( 11 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 448, 96, 48 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+1/name = "grass2props.png 1"
+1/texture = ExtResource( 11 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 0, 496, 96, 16 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
+2/name = "bush1props.png"
+2/texture = ExtResource( 11 )
+2/tex_offset = Vector2( 0, 0 )
+2/modulate = Color( 1, 1, 1, 1 )
+2/region = Rect2( 0, 416, 64, 32 )
+2/tile_mode = 0
+2/occluder_offset = Vector2( 0, 0 )
+2/navigation_offset = Vector2( 0, 0 )
+2/shape_offset = Vector2( 0, 0 )
+2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+2/shape_one_way = false
+2/shape_one_way_margin = 0.0
+2/shapes = [  ]
+2/z_index = 0
+3/name = "bush2props."
+3/texture = ExtResource( 11 )
+3/tex_offset = Vector2( 0, 0 )
+3/modulate = Color( 1, 1, 1, 1 )
+3/region = Rect2( 64, 408, 88, 40 )
+3/tile_mode = 0
+3/occluder_offset = Vector2( 0, 0 )
+3/navigation_offset = Vector2( 0, 0 )
+3/shape_offset = Vector2( 0, 0 )
+3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+3/shape_one_way = false
+3/shape_one_way_margin = 0.0
+3/shapes = [  ]
+3/z_index = 0
+4/name = "bush3props."
+4/texture = ExtResource( 11 )
+4/tex_offset = Vector2( 0, 0 )
+4/modulate = Color( 1, 1, 1, 1 )
+4/region = Rect2( 156, 412, 96, 36 )
+4/tile_mode = 0
+4/occluder_offset = Vector2( 0, 0 )
+4/navigation_offset = Vector2( 0, 0 )
+4/shape_offset = Vector2( 0, 0 )
+4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+4/shape_one_way = false
+4/shape_one_way_margin = 0.0
+4/shapes = [  ]
+4/z_index = 0
+5/name = "rocksprops.png"
+5/texture = ExtResource( 11 )
+5/tex_offset = Vector2( 0, 0 )
+5/modulate = Color( 1, 1, 1, 1 )
+5/region = Rect2( 244, 485, 112, 24 )
+5/tile_mode = 0
+5/occluder_offset = Vector2( 0, 0 )
+5/navigation_offset = Vector2( 0, 0 )
+5/shape_offset = Vector2( 0, 0 )
+5/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+5/shape_one_way = false
+5/shape_one_way_margin = 0.0
+5/shapes = [  ]
+5/z_index = 0
+6/name = "tree.png"
+6/texture = ExtResource( 11 )
+6/tex_offset = Vector2( 0, 0 )
+6/modulate = Color( 1, 1, 1, 1 )
+6/region = Rect2( 356, 342, 156, 169 )
+6/tile_mode = 0
+6/occluder_offset = Vector2( 0, 0 )
+6/navigation_offset = Vector2( 0, 0 )
+6/shape_offset = Vector2( 0, 0 )
+6/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+6/shape_one_way = false
+6/shape_one_way_margin = 0.0
+6/shapes = [  ]
+6/z_index = 0
+7/name = "TX Village Props.png 7"
+7/texture = ExtResource( 11 )
+7/tex_offset = Vector2( 0, 0 )
+7/modulate = Color( 1, 1, 1, 1 )
+7/region = Rect2( 388, 160, 4, 3 )
+7/tile_mode = 0
+7/occluder_offset = Vector2( 0, 0 )
+7/navigation_offset = Vector2( 0, 0 )
+7/shape_offset = Vector2( 0, 0 )
+7/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+7/shape_one_way = false
+7/shape_one_way_margin = 0.0
+7/shapes = [  ]
+7/z_index = 0
+8/name = "TX Village Props.png 8"
+8/texture = ExtResource( 11 )
+8/tex_offset = Vector2( 0, 0 )
+8/modulate = Color( 1, 1, 1, 1 )
+8/region = Rect2( 144, 464, 16, 16 )
+8/tile_mode = 2
+8/autotile/icon_coordinate = Vector2( 0, 0 )
+8/autotile/tile_size = Vector2( 16, 16 )
+8/autotile/spacing = 0
+8/autotile/occluder_map = [  ]
+8/autotile/navpoly_map = [  ]
+8/autotile/priority_map = [  ]
+8/autotile/z_index_map = [  ]
+8/occluder_offset = Vector2( 0, 0 )
+8/navigation_offset = Vector2( 0, 0 )
+8/shape_offset = Vector2( 0, 0 )
+8/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+8/shape_one_way = false
+8/shape_one_way_margin = 0.0
+8/shapes = [  ]
+8/z_index = 0
+9/name = "TX Village Props.png 9"
+9/texture = ExtResource( 11 )
+9/tex_offset = Vector2( 0, 0 )
+9/modulate = Color( 1, 1, 1, 1 )
+9/region = Rect2( 96, 448, 144, 64 )
+9/tile_mode = 0
+9/occluder_offset = Vector2( 0, 0 )
+9/navigation_offset = Vector2( 0, 0 )
+9/shape_offset = Vector2( 0, 0 )
+9/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+9/shape_one_way = false
+9/shape_one_way_margin = 0.0
+9/shapes = [  ]
+9/z_index = 0
 
 [node name="TileMap" type="Node2D"]
+position = Vector2( 8, 448 )
 
 [node name="CollisionObjects" type="Node2D" parent="."]
 
 [node name="Floor" type="StaticBody2D" parent="CollisionObjects"]
+position = Vector2( 176, 376 )
+scale = Vector2( 1.924, 1.809 )
+z_index = 1
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/Floor"]
-position = Vector2( 416, 16 )
+position = Vector2( 408, 20 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="CollisionObjects/Floor"]
-position = Vector2( 414.395, 16 )
+position = Vector2( 400, 16 )
+scale = Vector2( 1.23281, 1 )
+z_index = 3
+texture = ExtResource( 2 )
+region_rect = Rect2( 1, 0, 0, 0 )
+
+[node name="Floor2" type="StaticBody2D" parent="CollisionObjects"]
+position = Vector2( 2032, 264 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/Floor2"]
+position = Vector2( 408, 20 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="CollisionObjects/Floor2"]
+position = Vector2( 400, 16 )
 scale = Vector2( 1.23281, 1 )
 texture = ExtResource( 2 )
 region_rect = Rect2( 1, 0, 0, 0 )
+
+[node name="Floor3" type="StaticBody2D" parent="CollisionObjects"]
+position = Vector2( -944, 232 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/Floor3"]
+position = Vector2( 408, 20 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="CollisionObjects/Floor3"]
+position = Vector2( 400, 16 )
+scale = Vector2( 1.23281, 1 )
+texture = ExtResource( 2 )
+region_rect = Rect2( 1, 0, 0, 0 )
+
+[node name="platform" type="StaticBody2D" parent="CollisionObjects"]
+position = Vector2( 350, 357.065 )
+scale = Vector2( 2.064, 2.177 )
+z_index = 1
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="FloatGround" type="Sprite" parent="CollisionObjects/platform"]
+position = Vector2( 577.607, -160.5 )
+scale = Vector2( 0.689959, 0.924528 )
+texture = ExtResource( 7 )
+flip_h = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/platform"]
+position = Vector2( 577.607, -166.111 )
+scale = Vector2( 0.575, 0.650943 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="SmallPlatform" type="StaticBody2D" parent="CollisionObjects"]
+position = Vector2( 150, 350 )
+scale = Vector2( 2.021, 1.778 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/SmallPlatform"]
+position = Vector2( 150.037, -144 )
+scale = Vector2( 1.483, 1.337 )
+z_index = 2
+shape = SubResource( 3 )
+one_way_collision = true
+
+[node name="Sprite" type="Sprite" parent="CollisionObjects/SmallPlatform"]
+position = Vector2( 153, -144 )
+scale = Vector2( 1.626, 1.524 )
+z_index = 1
+texture = ExtResource( 8 )
+
+[node name="background" type="Sprite" parent="."]
+position = Vector2( 952, -72 )
+scale = Vector2( 30, 23.625 )
+texture = ExtResource( 1 )
+
+[node name="Treedeco" type="Sprite" parent="."]
+position = Vector2( 171.688, 88.9593 )
+scale = Vector2( 7.58442, 6.4764 )
+z_index = 1
+texture = ExtResource( 6 )
+
+[node name="Treedeco" type="Sprite" parent="Treedeco"]
+position = Vector2( 18.5, 15.025 )
+scale = Vector2( 0.5, 0.553782 )
+texture = ExtResource( 6 )
+
+[node name="Rocks" type="Sprite" parent="."]
+position = Vector2( 1801.87, 279.75 )
+scale = Vector2( 2.06556, 1.75926 )
+z_index = 2
+texture = ExtResource( 5 )
+
+[node name="Grass" type="Sprite" parent="."]
+position = Vector2( 500, 254.936 )
+scale = Vector2( 3.06977, 4.11628 )
+texture = ExtResource( 3 )
+
+[node name="Grass2" type="Sprite" parent="Grass"]
+position = Vector2( 46.0215, 6.67682 )
+scale = Vector2( 0.734699, 0.717411 )
+z_index = 2
+texture = ExtResource( 4 )
+
+[node name="Grass1" type="Sprite" parent="."]
+position = Vector2( 640, 280 )
+scale = Vector2( 1.405, 2.691 )
+z_index = 3
+texture = ExtResource( 4 )
+
+[node name="Grass2" type="Sprite" parent="."]
+position = Vector2( 202.495, 282.4 )
+scale = Vector2( 1.27393, 2.40003 )
+z_index = 2
+texture = ExtResource( 4 )
+
+[node name="Bush" type="Sprite" parent="."]
+position = Vector2( 72, 272 )
+scale = Vector2( 1.42857, 2.16136 )
+texture = ExtResource( 9 )
+
+[node name="Bush2" type="Sprite" parent="."]
+position = Vector2( 650, 272 )
+scale = Vector2( 1.42857, 2.16136 )
+texture = ExtResource( 9 )
+
+[node name="Bush3" type="Sprite" parent="."]
+position = Vector2( 1200, 278.725 )
+scale = Vector2( 0.877, 1.491 )
+texture = ExtResource( 9 )
+
+[node name="Bush4" type="Sprite" parent="."]
+position = Vector2( 1144, 288 )
+scale = Vector2( 0.975, 1.637 )
+texture = ExtResource( 13 )
+flip_h = true
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource( 4 )
+format = 1
+
+[node name="planetZ" type="AnimatedSprite" parent="."]
+position = Vector2( 547, -184 )
+scale = Vector2( 1.22, 1.24667 )
+frames = SubResource( 55 )
+animation = "planet"
+frame = 1
+playing = true
+
+[node name="greens" type="TileMap" parent="."]
+format = 1
+
+[node name="villageGreens" type="TileMap" parent="greens"]
+position = Vector2( -3.838, 15 )
+scale = Vector2( 0.946, 1.003 )
+tile_set = SubResource( 56 )
+cell_size = Vector2( 31, 32 )
+show_collision = true
+format = 1
+tile_data = PoolIntArray( 458808, 9, 0 )
+
+[node name="wheat" type="Sprite" parent="."]
+position = Vector2( 1900, 275 )
+scale = Vector2( 1.277, 1.979 )
+texture = ExtResource( 12 )
+
+[node name="wheat2" type="Sprite" parent="."]
+position = Vector2( 1920, 275 )
+scale = Vector2( 2.153, 2.886 )
+texture = ExtResource( 12 )
+flip_h = true
+
+[node name="bushSmall" type="Sprite" parent="."]
+position = Vector2( 1355, 289.746 )
+texture = ExtResource( 13 )
+
+[node name="bushMedium" type="Sprite" parent="."]
+position = Vector2( 1264, 288 )
+texture = ExtResource( 14 )
+
+[node name="flowers" type="Sprite" parent="."]
+position = Vector2( 1841, 255.5 )
+scale = Vector2( 1.13725, 1.18056 )
+texture = ExtResource( 15 )
