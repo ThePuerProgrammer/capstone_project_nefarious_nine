@@ -54,11 +54,7 @@ func _on_Back_Button_pressed():
 	$FadeOut.fade_out()
 #Start Button
 func _on_Start_Button_pressed():
-<<<<<<< HEAD
-	if dungeon_selected==false && pomoblast_selected==false && slowfruit_selected==false:
-=======
-	if dungeon_selected==false && pomoblast_selected==false && !pomobite_selected:
->>>>>>> origin/main
+	if dungeon_selected==false && pomoblast_selected==false && !pomobite_selected && !slowfruit_selected:
 		get_node("No_Games_Selected_Popup_Alert").popup()
 	elif method_selection_optionbutton.get_selected_id()==0:
 		get_node("No_Selection_Method_Choosen_Popup_Alert").popup()
@@ -88,18 +84,15 @@ func _on_dungeon_fight_Details_Button_pressed():
 #Button Click for Pomoblast Details
 func _on_Pomoblast_Details_Button_pressed():
 	game_detail_label.text = pomoblastDetails()
-<<<<<<< HEAD
 
 #Button Click for SlowFruit Details
 func _on_Slowfruit_Details_Button_pressed():
 	game_detail_label.text = slowfruitDetails()
-=======
 	
 #Button Click for PomoBITE Details	
 func _on_PomoBITE_Details_Button_pressed():
 	game_detail_label.text = "Title: PomoBITE \n\nCreated By: Jesse Rankins\n\nDescription: Take care of your guests in the PomoBITE restaurant and earn Pomocoins!\n\nControls: E - To Select/Use\nArrow Keys + WASD - To Move\n\nObjective: Remember your guests orders and move quick!"
 	
->>>>>>> origin/main
 #Text for Dungeon_Fight Details
 func ondungeonDetails():
 	var text ="Title: Dungeon Fight \n\nCreated By: Noah Stinson\n\nDescription: Fight your way out of the dungeon and to success!\n\nControls: Mouse Clicks\n\nObjective: Answer as many questions correct as you can before time runs out. If you answer incorrectly or not in time you will take damage each time, eventually getting KO'ed"
@@ -346,11 +339,8 @@ func update_game_label(game_selection_array):
 
 ####################################################################################################
 
-<<<<<<< HEAD
-=======
 
 
 
 
 
->>>>>>> origin/main
