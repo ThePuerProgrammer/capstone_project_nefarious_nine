@@ -95,7 +95,7 @@ func _on_PomoBITE_Details_Button_pressed():
 	
 #Text for Dungeon_Fight Details
 func ondungeonDetails():
-	var text ="Title: Dungeon Fight \n\nCreated By: Noah Stinson\n\nDescription: Fight your way out of the dungeon and to success!\n\nControls: Mouse Clicks\n\nObjective: Answer as many questions correct as you can before time runs out. If you answer incorrectly or not in time you will take damage each time, eventually getting KO'ed"
+	var text ="Title: Dungeon Fight \n\nCreated By: Noah Stinson\n\nDescription: Fight your way out of the dungeon and to success!\n\nControls: \n - [a] Select the Dodge Action\n - [d] Select the Attack Action \n - [LMB] Selecting answers\n\nObjective: Answer as many questions correct as you can before time runs out. If you answer incorrectly or not in time you will take damage each time, eventually getting KO'ed"
 	return text
 
 #Text for PomoBlast Details
