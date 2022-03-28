@@ -13,7 +13,7 @@ func _ready():
 #	pass
 
 func _input(event):
-	if !bubblesOnCooldown and pomopet.petWashingModeOn and pomopet.mouseIsDown and event is InputEventMouseMotion:
+	if !bubblesOnCooldown and pomopet.petWashingModeOn and pomopet.mouseIsDown and pomopet.withinSpriteCollisionPolygon and event is InputEventMouseMotion:
 		var bubblesInstance = bubblesParticle.instance()
 		bubblesInstance.position = event.position # set where particle effect appears (mouse pos)
 		add_child(bubblesInstance)

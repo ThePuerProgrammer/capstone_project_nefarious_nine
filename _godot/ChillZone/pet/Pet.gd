@@ -7,6 +7,7 @@ var dogSprite = load("res://ChillZone/pet/pet_sprites/rembo_sprite.png")
 var petWashingModeOn = true #TODO: Change to false 
 
 var mouseIsDown = false
+var withinSpriteCollisionPolygon = false
 var lastMouseMovePos
 var currentMouseMovePos
 
@@ -41,8 +42,8 @@ func _process(delta):
 	elif Input.is_action_just_released("left_mouse_click"):
 		mouseIsDown = false
 	
-	if mouseIsDown and petWashingModeOn:
-		if getScrubIntensity() > 10:
+	if mouseIsDown and petWashingModeOn and withinSpriteCollisionPolygon:
+		if getScrubIntensity() > 1.5:
 			$WashMeter/WashMeterProgressBar.incrementByStep()
 			# Update the pet dirtiness (how much was already clean + how much we have cleaned so far)
 			var remainingValueRangeToClean = 1 - dirtyLevels[startDirtinessLevel]
@@ -98,3 +99,11 @@ func getScrubIntensity():
 
 func getDistanceBetweenMousePositions(pos1, pos2):
 	return pow(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2), 0.5)
+
+
+func _on_ClickDetection_mouse_entered():
+	withinSpriteCollisionPolygon = true
+
+
+func _on_ClickDetection_mouse_exited():
+	withinSpriteCollisionPolygon = false
