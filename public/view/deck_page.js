@@ -264,7 +264,9 @@ export function addEventListeners() {
 }
 
 export async function deck_page(deckDocID, isClassDeck) {
-    Coins.get_coins();
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
 
     isClassDeck_global = isClassDeck; // Temp bug fix from Noah!
 

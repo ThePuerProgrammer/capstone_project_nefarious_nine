@@ -5,6 +5,7 @@ import * as Minigames from './minigames_page.js'
 import * as ChillZone from './chillzone_page.js'
 import * as Analytics from './analytics_page.js'
 import * as Coins from '../controller/coins.js'
+import * as Auth from '../controller/firebase_auth.js'
 
 export function addEventListeners() {
     Elements.menuHome.addEventListener('click', async() => {
@@ -14,11 +15,6 @@ export function addEventListeners() {
 }
 
 export async function home_page() {
-
-    //shows user coin count for coin display in navbar
-    //currently has a bug where coins do not reset after switching user, temp fix is to refresh the page
-    Coins.get_coins();
-
 
     Elements.root.innerHTML = ``;
     
@@ -55,6 +51,10 @@ export async function home_page() {
         </div>
     </div>
     `;
+    //Retrieves coin count
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
 
     Elements.root.innerHTML = html;
 
