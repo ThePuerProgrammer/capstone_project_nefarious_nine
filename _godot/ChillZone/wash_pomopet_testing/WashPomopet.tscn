@@ -106,9 +106,11 @@ anims/fade_out = SubResource( 4 )
 
 [node name="CleanSoundEffect" type="AudioStreamPlayer" parent="EffectController"]
 stream = ExtResource( 12 )
+volume_db = -10.0
 
 [node name="BubbleSoundEffect" type="AudioStreamPlayer" parent="EffectController"]
 stream = ExtResource( 13 )
+volume_db = -12.5
 
 [connection signal="hide" from="EffectController/MouseBubblesParticle" to="EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
 [connection signal="timeout" from="EffectController/MouseBubblesCooldownTimer" to="EffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
