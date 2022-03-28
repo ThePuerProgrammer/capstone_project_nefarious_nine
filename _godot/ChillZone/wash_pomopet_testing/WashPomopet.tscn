@@ -1,22 +1,111 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ChillZone/wash_pomopet_testing/ParticleEffectController.gd" type="Script" id=2]
 [ext_resource path="res://ChillZone/wash_pomopet_testing/MouseBubblesParticle.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ChillZone/wash_pomopet_testing/CleanGlowParticle.tscn" type="PackedScene" id=4]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f3.png" type="Texture" id=5]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f7.png" type="Texture" id=6]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f5.png" type="Texture" id=7]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f2.png" type="Texture" id=8]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f6.png" type="Texture" id=9]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f4.png" type="Texture" id=10]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f1.png" type="Texture" id=11]
+[ext_resource path="res://ChillZone/wash_pomopet_testing/clean-sound-effect.wav" type="AudioStream" id=12]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 11 ), ExtResource( 8 ), ExtResource( 5 ), ExtResource( 10 ), ExtResource( 7 ), ExtResource( 9 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "sparkle",
+"speed": 8.0
+} ]
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "fade_in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "fade_out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
 
 [node name="WashPomopet" type="Node2D"]
 
 [node name="Pomopet" parent="." instance=ExtResource( 1 )]
 position = Vector2( 958.976, 394.539 )
 
-[node name="ParticleEffectController" type="Node2D" parent="."]
+[node name="EffectController" type="Node2D" parent="."]
 script = ExtResource( 2 )
 
-[node name="MouseBubblesParticle" parent="ParticleEffectController" instance=ExtResource( 3 )]
+[node name="MouseBubblesParticle" parent="EffectController" instance=ExtResource( 3 )]
 
-[node name="MouseBubblesCooldownTimer" type="Timer" parent="ParticleEffectController"]
+[node name="MouseBubblesCooldownTimer" type="Timer" parent="EffectController"]
 wait_time = 0.05
 one_shot = true
 
-[connection signal="hide" from="ParticleEffectController/MouseBubblesParticle" to="ParticleEffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
-[connection signal="timeout" from="ParticleEffectController/MouseBubblesCooldownTimer" to="ParticleEffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
+[node name="CleanGlowParticle" parent="EffectController" instance=ExtResource( 4 )]
+position = Vector2( 958.976, 422.601 )
+z_index = -1
+emitting = false
+
+[node name="CleanEffectTimer" type="Timer" parent="EffectController"]
+wait_time = 1.5
+one_shot = true
+
+[node name="CleanSparkle" type="AnimatedSprite" parent="EffectController"]
+modulate = Color( 1, 1, 1, 0 )
+scale = Vector2( 0.75, 0.75 )
+frames = SubResource( 1 )
+animation = "sparkle"
+frame = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="EffectController/CleanSparkle"]
+anims/RESET = SubResource( 3 )
+anims/fade_in = SubResource( 2 )
+anims/fade_out = SubResource( 4 )
+
+[node name="CleanSoundEffect" type="AudioStreamPlayer" parent="EffectController"]
+stream = ExtResource( 12 )
+
+[connection signal="hide" from="EffectController/MouseBubblesParticle" to="EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
+[connection signal="timeout" from="EffectController/MouseBubblesCooldownTimer" to="EffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
+[connection signal="timeout" from="EffectController/CleanEffectTimer" to="EffectController" method="_on_CleanEffectTimer_timeout"]

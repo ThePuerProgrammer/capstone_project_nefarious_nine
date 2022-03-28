@@ -1,5 +1,7 @@
 extends Node2D
 
+var effectController
+
 var bunnySprite = load("res://ChillZone/pet/pet_sprites/bunny_sprite.png")
 var catSprite = load("res://ChillZone/pet/pet_sprites/cat_sprite.png")
 var dogSprite = load("res://ChillZone/pet/pet_sprites/rembo_sprite.png")
@@ -22,14 +24,13 @@ func _ready():
 	var userDocFields = get_node("/root/CurrentUser").user_doc.doc_fields
 	var currentPet = userDocFields["pomopet"]["type"]
 	var pomopetData = userDocFields["pomopetData"]
-	print("currentPet, ", currentPet)
-	print("pomopetData, ", pomopetData)
+	
+	effectController = get_node("../EffectController")
 	
 	# TODO: Disable clean pet button if dirty level is at 0
 	
 	updatePomopetSprite(currentPet)
 	startDirtinessLevel = getDirtinessLevel(pomopetData["lastWashed"])
-	print(startDirtinessLevel)
 	startDirtinessValue = dirtyLevels[startDirtinessLevel]
 	setPetDirtinessLevel(startDirtinessLevel)
 	$WashMeter/WashMeterProgressBar.setMaxValue(progressBarMaxValue * startDirtinessLevel)
@@ -52,6 +53,8 @@ func _process(delta):
 			
 			# Check if we are done washing
 			if newDirtinessValue == 1:
+				# TODO: Place Glow Particle effect at sprite location
+				effectController.playCleanEffects()
 				petWashingModeOn = false
 
 # For tracking the distance between mouse positions
