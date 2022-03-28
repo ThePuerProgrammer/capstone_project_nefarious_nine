@@ -9,13 +9,20 @@ import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 import { buildStudyDecksPage } from './study_decks_page.js'
+import { html } from './protected_message.js'
 
 
 export async function one_classroom_page(classroomDocID) {
-    Coins.get_coins();
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
+
     console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';
+    let coin_descend=false;
+    let deck_descend=false;
+    let fc_descend=false;
 
     let classroom;
     try {
@@ -64,15 +71,6 @@ export async function one_classroom_page(classroomDocID) {
             </button>`
             ;
     }
-    //Building Decks
-    // let deckList = [];
-    // try {
-    //     deckList = await FirebaseController.getClassDecks(classroom.docID);
-
-    // } catch (e) {
-    //     console.log(e);
-    // }
-    // buildStudyDecksPage(deckList);
 
     html += `</div>`;
     //CLASSROOM TAB END-----------------------------------------------------
@@ -128,9 +126,9 @@ export async function one_classroom_page(classroomDocID) {
             <tr>
                 <th class="leaderboard-th">Rank</th>
                 <th class="leaderboard-th">User</th>
-                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardCoins}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong>Coins</strong></span></button></th>
-                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardDecks}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Decks</strong></span></button></th>
-                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardFlashcards}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong># of Flashcards</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardCoins}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span ><strong id="coins-button-icon">Coins</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardDecks}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong id="decks-button-icon"># of Decks</strong></span></button></th>
+                <th class="leaderboard-th"><button id="${Constant.htmlIDs.leaderboardFlashcards}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"><span><strong id="flashcards-button-icon"># of Flashcards</strong></span></button></th>
             </tr>
             </thead>
             <tbody id="leaderboard-fields">`;
@@ -243,44 +241,90 @@ export async function one_classroom_page(classroomDocID) {
     const sortByCoinsButton = document.getElementById(Constant.htmlIDs.leaderboardCoins);
     sortByCoinsButton.addEventListener('click', async e=>{
         console.log('clicked COINS');
-        let leaderboardCoins = [];
-        leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
-        document.getElementById('leaderboard-fields').innerHTML=''
-
-        let html2 = ``;
-       
-        if(leaderboardCoins.length>0){           
-            let index = 1;
-            leaderboardCoins.forEach(e =>{
-                html2+= buildLeaderBoard(e, index);
-                index++;
-            });
+        //Passing Correct Values for the Method
+        if(!coin_descend){
+            coin_descend=true;
+            deck_descend=false;
+            fc_descend=false;
+            leaderBoardIcon("coin_descend");
+        } else{
+            coin_descend=false;
+            deck_descend=false;
+            fc_descend=false;
+            leaderBoardIcon("coin_ascend");
         }
+        
+        //Building Rows of Table/Reordering
+        let leaderboardCoins = [];
+        let html2 = ``;
+        if(coin_descend){//Descending
+            leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardCoins.length>0){           
+                let index = 1;
+                leaderboardCoins.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index++;
+                });
+            }
+        } else {//Ascending
+            leaderboardCoins = await FirebaseController.leaderboardByCoinsAscending(members);
+            document.getElementById('leaderboard-fields').innerHTML='';   
+            if(leaderboardCoins.length>0){           
+                let index = leaderboardCoins.length;
+                leaderboardCoins.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index--;
+                });
+            }
+        }
+        
         html2+=`</tbody>`;
-        document.getElementById('leaderboard-fields').innerHTML=html2;
-
-
-        //swapContent(html2);
-        //swapContent('Const.htmlIDs.leaderboardCoins');//RETURNED ONLY THE BUTTON
-       
+        document.getElementById('leaderboard-fields').innerHTML=html2;      
     });
     //SORT BY DECKS
     const sortByDecksButton = document.getElementById(Constant.htmlIDs.leaderboardDecks);
     sortByDecksButton.addEventListener('click', async e=>{
         console.log('clicked DECKS');
-        let leaderboardDecks = [];
-        leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
-        document.getElementById('leaderboard-fields').innerHTML=''
-        let html2 = ``;
-       
-
-        if(leaderboardDecks.length>0){           
-            let index = 1;
-            leaderboardDecks.forEach(e =>{
-                html2+= buildLeaderBoard(e, index);
-                index++;
-            });
+        
+        //Passing Correct Values for the Method
+        if(!deck_descend){
+            coin_descend=false;
+            deck_descend=true;
+            fc_descend=false;
+            leaderBoardIcon("deck_descend");
+        } else{
+            coin_descend=false;
+            deck_descend=false;
+            fc_descend=false;
+            leaderBoardIcon("deck_ascend");
         }
+        
+        let leaderboardDecks = [];
+        let html2 = ``;
+
+        if(deck_descend){//Descending
+            leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardDecks.length>0){           
+                let index = 1;
+                leaderboardDecks.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index++;
+                });
+            }
+        } else {//Ascending
+            leaderboardDecks = await FirebaseController.leaderboardByDecksAscending(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardDecks.length>0){           
+                let index = leaderboardDecks.length;
+                leaderboardDecks.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index--;
+                });
+            }
+        }
+      
         html2+=`</tbody>`;
         document.getElementById('leaderboard-fields').innerHTML=html2;
 
@@ -289,17 +333,46 @@ export async function one_classroom_page(classroomDocID) {
     const sortByFlashcardsButton = document.getElementById(Constant.htmlIDs.leaderboardFlashcards);
     sortByFlashcardsButton.addEventListener('click', async e=>{
         console.log('clicked FLASHCARDS');
-        let leaderboardFlashcards = [];
-        leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
-        document.getElementById('leaderboard-fields').innerHTML=''
-        let html2='';
-        if(leaderboardFlashcards.length>0){           
-            let index = 1;
-            leaderboardFlashcards.forEach(e =>{
-                html2+= buildLeaderBoard(e, index);
-                index++;
-            });
+        
+        //Passing Correct Values for the Method
+        if(!fc_descend){
+            coin_descend=false;
+            deck_descend=false;
+            fc_descend=true;
+            leaderBoardIcon("fc_descend");
+        } else{
+            coin_descend=false;
+            deck_descend=false;
+            fc_descend=false;
+            leaderBoardIcon("fc_ascend");
         }
+
+        
+        let leaderboardFlashcards = [];
+        let html2='';
+
+        if(fc_descend){//Ascending
+            leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardFlashcards.length>0){           
+                let index = 1;
+                leaderboardFlashcards.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index++;
+                });
+            }
+        } else {//Descending
+            leaderboardFlashcards = await FirebaseController.leaderboardByFlashcardsAscending(members);
+            document.getElementById('leaderboard-fields').innerHTML=''
+            if(leaderboardFlashcards.length>0){           
+                let index = leaderboardFlashcards.length;
+                leaderboardFlashcards.forEach(e =>{
+                    html2+= buildLeaderBoard(e, index);
+                    index--;
+                });
+            }
+        }
+      
         html2+=`</tbody>`;
         document.getElementById('leaderboard-fields').innerHTML=html2;
 
@@ -448,76 +521,62 @@ function buildButtons(member, banlist) {
     }
 
 }
-
+//Builds the table body, by rows
 function buildLeaderBoard(e,i){
-   return `
+   let html3='' 
+   html3+=(i==1) ?`
     <tr>
-        <td class="leaderboard-td">${i}</td>
-        <td class="leaderboard-td">${e.email}</td>
-        <td class="leaderboard-td">${e.coins}</td>
-        <td class="leaderboard-td">${e.deckNumber}</td>
-        <td class="leaderboard-td">${e.flashcardNumber}</td>
-    </tr>`;
+        <td class="leaderboard-td"><i class="material-icons">whatshot</i> </td>`
+    :
+    `<tr>
+         <td class="leaderboard-td">${i} </td>`;
+    html3+=(e.email==Auth.currentUser.email)?`
+        <td class="leaderboard-td"><i class="material-icons">person</i> ${e.email}  </td>
+        <td class="leaderboard-td">${e.coins} </td>
+        <td class="leaderboard-td">${e.deckNumber} </td>
+        <td class="leaderboard-td">${e.flashcardNumber} </td>
+    </tr>`
+    :
+`    <td class="leaderboard-td">${e.email} </td>
+    <td class="leaderboard-td">${e.coins} </td>
+    <td class="leaderboard-td">${e.deckNumber} </td>
+    <td class="leaderboard-td">${e.flashcardNumber }</td>
+    </tr>`
+    ;
+    return html3;
 }
-//REFERENCE:https://stackoverflow.com/questions/37347690/how-to-replace-div-with-another-div-in-javascript
-
-function swapContent (id) {
-    const main = document.getElementById('leaderboard-table').lastElementChild;
-    const div = document.getElementById(id).lastElementChild;
-    //const clone = div.cloneNode();
-    const clone = div.cloneNode(true);
-    while (main.firstChild) main.firstChild.remove();
-
-    main.appendChild(clone);
+//Adds Icons to the buttons of the table
+function leaderBoardIcon(ordering){
+    switch(ordering){
+        case "coin_descend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins<br> <i class="material-icons">vertical_align_bottom</i>`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+            break;
+        case "deck_descend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks <br> <i class="material-icons">vertical_align_bottom</i>`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+            break;
+        case "fc_descend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards <br> <i class="material-icons">vertical_align_bottom</i>`;
+            break;
+        case "coin_ascend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins<br> <i class="material-icons">vertical_align_top</i>`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+            break;    
+        case "deck_ascend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks <br> <i class="material-icons">vertical_align_top</i>`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards`;
+            break;
+        case "fc_ascend":
+            document.getElementById('coins-button-icon').innerHTML =`Coins`;
+            document.getElementById('decks-button-icon').innerHTML = `# of Decks`;
+            document.getElementById('flashcards-button-icon').innerHTML = `# of Flashcards <br> <i class="material-icons">vertical_align_top</i>`;
+            break;
+    }
 }
-
-// function buildDeckView(deck){
-//     window.sessionStorage;
-//     let html = `
-//     <div id="${deck.docId}" class="deck-card">
-//         <div class="deck-view-css">
-//         <div class="card-body">
-//             <h5 class="card-text">${deck.name}</h5>
-//             <h6 class="card-text" >Subject: ${deck.subject}</h6>
-//             <h6 class="card-text">Category: ${deck.category}</h6>
-//             <h7 class="card-text"># of flashcards: ${deck.flashcardNumber}</h7>
-//             <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
-//         </div>
-//         <div class="btn-group">
-//         <form class="form-view-deck" method="post">
-//             <input type="hidden" name="docId" value="${deck.docId}">
-//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
-//         </form>
-//         <form class="form-edit-deck" method="post">
-//             <input type="hidden" name="docId" value="${deck.docId}">
-//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
-//         </form>
-//         <form class="form-delete-deck" method="post">
-//             <input type="hidden" name="docId" value="${deck.docId}">
-//             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-//             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
-//         </form>
-//         </div>`;
-
-//     // ternary operator to check if a deck is favorited or not
-//     html += deck.isFavorited ? `<div class="form-check">
-//         <span class="favorite-deck">
-//         <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited" checked>
-//         </span>
-
-//         <label class= "form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite</i>Favorite deck</label>
-//         </div>
-//         </div>
-//         </div>
-//         ` : `<div class="form-check">
-//         <span class="unfavorite-deck">
-//         <input class="favorite-checkbox form-check-input" type="checkbox" value="${deck.docId}" id="favorited">
-//         </span>
-//         <label class="form-check-label pomo-text-color-light" for="favorited"><i class="material-icons pomo-text-color-light">favorite_border</i>Favorite deck</label>
-//         </div>
-//         </div>
-//         </div>`;
-//     return html;
-// }

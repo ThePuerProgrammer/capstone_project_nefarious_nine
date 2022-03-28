@@ -118,7 +118,9 @@ export function addEventListeners() {
 }
 
 export async function profile_page() {
-    Coins.get_coins();
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}    
     imageFile2UploadProfile = ""; // reset
 
     // retrieve user info from Firebase

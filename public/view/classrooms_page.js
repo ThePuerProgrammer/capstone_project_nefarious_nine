@@ -67,8 +67,9 @@ export function addEventListeners() {
 } //END CLASSROOMS_PAGE EVENT LISTENERS
 
 export async function classrooms_page() {
-    Coins.get_coins();
-
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
     Elements.root.innerHTML = '';
     let html = '';
 

@@ -136,6 +136,7 @@ export function addEventListeners() {
             if (Constants.DEV)
                 console.log('Sign out error' + e);
         }
+        sessionStorage.clear();
     });
 
     Elements.modalMenuResetPassword.addEventListener('click', async () => {
