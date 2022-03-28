@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/textures/PomoBITE_Textures/white_square.png" type="Texture" id=1]
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0, 0.165152, 0.30303, 0.463636 )
+colors = PoolColorArray( 1, 0.679688, 0, 1, 1, 0, 0, 1, 1, 0.916269, 0, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.20937, 1 ), 2.48364, 2.48364, 0, 0, Vector2( 0.489019, 0 ), -0.396325, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=1]
+flag_disable_z = true
+direction = Vector3( 0, -1, 0 )
+spread = 11.63
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 68.38
+initial_velocity_random = 0.42
+angular_velocity = 187.08
+angular_velocity_random = 0.72
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+tangential_accel_random = 1.0
+angle = 356.9
+angle_random = 1.0
+scale_curve = SubResource( 3 )
+color_ramp = SubResource( 5 )
+
+[node name="Particles2D" type="Particles2D"]
+amount = 100
+lifetime = 0.8
+visibility_rect = Rect2( -10, -28, 20, 30 )
+draw_order = 1
+process_material = SubResource( 1 )
+texture = ExtResource( 1 )

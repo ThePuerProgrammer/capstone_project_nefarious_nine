@@ -33,6 +33,7 @@ export async function one_help_ticket_page(helpTicketDocId) {
         <div class="border" style="border-color: #2C1320; width: 40%; margin: auto; text-align: center;">
             <div style="background-color: #2C1320; color: #A7ADC6;">
                 <h4>${helpTicket.title}</h4>
+                Submitted by: ${helpTicket.submittedBy}<br>
                 Description: ${helpTicket.description}
                 <p>Category: ${helpTicket.category}</p>
                 <p>Date: ${new Date(helpTicket.timestamp).toString()}</p>`
