@@ -5,11 +5,14 @@ var effectController
 var bunnySprite = load("res://ChillZone/pet/pet_sprites/bunny_sprite.png")
 var catSprite = load("res://ChillZone/pet/pet_sprites/cat_sprite.png")
 var dogSprite = load("res://ChillZone/pet/pet_sprites/rembo_sprite.png")
+var currentPet
 
 var petWashingModeOn = true #TODO: Change to false 
 
 var mouseIsDown = false
-var withinSpriteCollisionPolygon = false
+var withinDogCollisionPolygon = false
+var withinCatCollisionPolygon = false
+var withinBunnyCollisionPolygon = false
 var lastMouseMovePos
 var currentMouseMovePos
 
@@ -22,7 +25,7 @@ var progressBarMaxValue = 20
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var userDocFields = get_node("/root/CurrentUser").user_doc.doc_fields
-	var currentPet = userDocFields["pomopet"]["type"]
+	currentPet = userDocFields["pomopet"]["type"]
 	var pomopetData = userDocFields["pomopetData"]
 	
 	effectController = get_node("../EffectController")
@@ -43,7 +46,7 @@ func _process(delta):
 	elif Input.is_action_just_released("left_mouse_click"):
 		mouseIsDown = false
 	
-	if mouseIsDown and petWashingModeOn and withinSpriteCollisionPolygon:
+	if mouseIsDown and petWashingModeOn and isWithinPetTypeCollisionPolygon():
 		if getScrubIntensity() > 1.5:
 			$WashMeter/WashMeterProgressBar.incrementByStep()
 			# Update the pet dirtiness (how much was already clean + how much we have cleaned so far)
@@ -53,8 +56,8 @@ func _process(delta):
 			
 			# Check if we are done washing
 			if newDirtinessValue == 1:
-				# TODO: Place Glow Particle effect at sprite location
 				effectController.playCleanEffects()
+				hideCleaningProgressBar()
 				petWashingModeOn = false
 
 # For tracking the distance between mouse positions
@@ -103,10 +106,34 @@ func getScrubIntensity():
 func getDistanceBetweenMousePositions(pos1, pos2):
 	return pow(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2), 0.5)
 
+func showCleaningProgressBar():
+	$WashMeter/WashMeterProgressBar/AnimationPlayer.play("fade_in")
 
-func _on_ClickDetection_mouse_entered():
-	withinSpriteCollisionPolygon = true
+func hideCleaningProgressBar():
+	$WashMeter/WashMeterProgressBar/AnimationPlayer.play("fade_out")
 
+func isWithinPetTypeCollisionPolygon():
+	if currentPet == "bunny":
+		return withinBunnyCollisionPolygon
+	elif currentPet == "dog":
+		return withinDogCollisionPolygon
+	elif currentPet == "cat":
+		return withinCatCollisionPolygon
 
-func _on_ClickDetection_mouse_exited():
-	withinSpriteCollisionPolygon = false
+func _on_BunnyClickDetection_mouse_entered():
+	withinBunnyCollisionPolygon = true
+
+func _on_BunnyClickDetection_mouse_exited():
+	withinBunnyCollisionPolygon = false
+
+func _on_CatClickDetection_mouse_entered():
+	withinCatCollisionPolygon = true
+
+func _on_CatClickDetection_mouse_exited():
+	withinCatCollisionPolygon = false
+
+func _on_DogClickDetection_mouse_entered():
+	withinDogCollisionPolygon = true
+
+func _on_DogClickDetection_mouse_exited():
+	withinDogCollisionPolygon = false

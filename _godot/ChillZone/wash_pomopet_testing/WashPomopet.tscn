@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ChillZone/wash_pomopet_testing/ParticleEffectController.gd" type="Script" id=2]
@@ -11,7 +11,8 @@
 [ext_resource path="res://dungeon_fight/art/sparkle_animation/f6.png" type="Texture" id=9]
 [ext_resource path="res://dungeon_fight/art/sparkle_animation/f4.png" type="Texture" id=10]
 [ext_resource path="res://dungeon_fight/art/sparkle_animation/f1.png" type="Texture" id=11]
-[ext_resource path="res://ChillZone/wash_pomopet_testing/clean-sound-effect.wav" type="AudioStream" id=12]
+[ext_resource path="res://ChillZone/wash_pomopet_testing/SoundEffects/clean-sound-effect.wav" type="AudioStream" id=12]
+[ext_resource path="res://ChillZone/wash_pomopet_testing/SoundEffects/mixkit-liquid-bubble-3000-shorter.wav" type="AudioStream" id=13]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -105,6 +106,9 @@ anims/fade_out = SubResource( 4 )
 
 [node name="CleanSoundEffect" type="AudioStreamPlayer" parent="EffectController"]
 stream = ExtResource( 12 )
+
+[node name="BubbleSoundEffect" type="AudioStreamPlayer" parent="EffectController"]
+stream = ExtResource( 13 )
 
 [connection signal="hide" from="EffectController/MouseBubblesParticle" to="EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
 [connection signal="timeout" from="EffectController/MouseBubblesCooldownTimer" to="EffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
