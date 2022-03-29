@@ -240,7 +240,7 @@ size_flags_vertical = 3
 
 [node name="Games_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container" index="0"]
 margin_right = 423.0
-margin_bottom = 1562.0
+margin_bottom = 1563.0
 size_flags_vertical = 3
 
 [node name="dungeon_fight_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="0"]
@@ -330,27 +330,27 @@ align = 1
 [node name="Slowfruit" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="3"]
 margin_top = 1194.0
 margin_right = 423.0
-margin_bottom = 1562.0
+margin_bottom = 1563.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Slowfruit_graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="0"]
 margin_right = 423.0
-margin_bottom = 300.0
+margin_bottom = 301.0
 size_flags_vertical = 3
 texture = ExtResource( 9 )
 
 [node name="Slowfruit_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="1"]
-margin_top = 304.0
+margin_top = 305.0
 margin_right = 423.0
-margin_bottom = 324.0
+margin_bottom = 325.0
 size_flags_vertical = 3
 text = "Details"
 
 [node name="Slowfruit_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="2"]
-margin_top = 328.0
+margin_top = 329.0
 margin_right = 423.0
-margin_bottom = 368.0
+margin_bottom = 369.0
 
 [node name="No_Games_Selected_Popup_Alert" type="AcceptDialog" parent="." index="14"]
 margin_left = 787.0
