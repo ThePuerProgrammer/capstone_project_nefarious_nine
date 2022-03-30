@@ -2072,14 +2072,7 @@ export async function updatePomopet(uid, pomopet) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({ 'pomopet': pomopet });
-    
-    // clear equippedSkin info
-    await firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .doc(uid)
-        .update({ 'equippedSkin': "" });
-
+        .update({'pomopet': pomopet,  'equippedSkin': ""});
 }
 //============================================================================//
 
