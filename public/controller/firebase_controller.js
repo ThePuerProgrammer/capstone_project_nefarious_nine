@@ -2075,6 +2075,23 @@ export async function getOwnedItem(item) {
 //============================================================================//
 
 //============================================================================//
+// UPDATE USER EQUIPPED ACC / SKIN
+//============================================================================//
+export async function updateEquippedAcc(uid, acc) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'equippedAcc': acc });
+}
+export async function updateEquippedSkin(uid, skin) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'equippedSkin': skin });
+}
+//============================================================================//
+
+//============================================================================//
 // UPDATE USER COINS
 //============================================================================//
 

@@ -22,7 +22,8 @@ export async function shop_page() {
     try{
         await Coins.get_coins(Auth.currentUser.uid);
     } catch(e) {if(Constant.DEV)console.log(e);}
-        // retrieve pomoshop items from Firebase
+
+    // retrieve pomoshop items from Firebase
     let items;
     try {
         items = await FirebaseController.getPomoshopItems();
@@ -71,7 +72,7 @@ export async function shop_page() {
 
     html += `<div class="pomoshop">
         <div class="pomoshop-category" id="accessories">
-        <h4 class="item-name pomo-text-color-dark" style="text-align: left; padding: 10px 0px 0px 20px; margin-bottom: -10px;">Accessories</h4>`;
+        <h4 class="item-name pomo-text-color-light" style="text-align: left; padding: 10px 0px 0px 20px; margin-bottom: -10px;">Accessories</h4>`;
 
     items.forEach(item => {
         // sort for accessories
@@ -83,7 +84,7 @@ export async function shop_page() {
     html += `</div>
         <br>
         <div class="pomoshop-category" id="skins">
-        <h4 class="item-name pomo-text-color-dark" style="text-align: left; padding: 10px 0px 0px 20px; margin-bottom: -10px;">Skins</h4>`;
+        <h4 class="item-name pomo-text-color-light" style="text-align: left; padding: 10px 0px 0px 20px; margin-bottom: -10px;">Skins</h4>`;
 
     items.forEach(item => {
         // sort for skins
@@ -96,16 +97,21 @@ export async function shop_page() {
     </div>
     </div>`;
 
-
-
     Elements.root.innerHTML = html;
 
     items.forEach(item => {
-        // disable buy button if already owned
-
+        let equip = item.docID + "_equip"; //create unique id for each item for equip button
+        
         if (user.itemsOwned.includes(item.docID)) {
-            document.getElementById(item.docID).innerHTML = "owned";
-            document.getElementById(item.docID).disabled = true;
+            // if item is currently equipped, show unequip
+            if((user.equippedAcc == item.docID) || (user.equippedSkin == item.docID)) {
+                document.getElementById(equip).innerHTML = "Unequip";
+            }
+
+            // hide buy button, show equip button if already owned
+            document.getElementById(item.docID).style.display = "none";
+            document.getElementById(equip).style.display = "block";
+            
         }
         // disable buy button if not enough funds
         else if (user.coins < item.cost) {
@@ -139,7 +145,7 @@ export async function shop_page() {
     const buyItemButtons =
         document.getElementsByClassName("form-buy-item");
 
-    // Add event listener for BUY buttons on each item
+    // Add event listeners for BUY buttons on each item
     for (let i = 0; i < buyItemButtons.length; i++) {
         buyItemButtons[i].addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -157,21 +163,40 @@ export async function shop_page() {
                 console.log(e);
             }
 
-            //disable the button once bought
-            document.getElementById(index).disabled = true;
-            document.getElementById(index).innerHTML = "owned";
-
             await shop_page();
+        });
+    }
 
-            //TODO: substract and update coins
+    const equipItemButtons =
+        document.getElementsByClassName("form-equip-item");
 
-            // call firebase function to update user's itemsOwned
+    // Add event listeners for EQUIP buttons on each item
+    for (let i = 0; i < equipItemButtons.length; i++) {
+        equipItemButtons[i].addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let index = e.target.docId.value;
+            let skinType = e.target.skin.value;
+
+            // call firebase function to update user's equippedAcc / equippedSkin
             try {
-                await FirebaseController.updateItemsOwned(Auth.currentUser.uid, user.itemsOwned);
+                if(skinType == "") {
+                    // if press unequip, clear equippedAcc
+                    if(user.equippedAcc == index) {
+                        index = "";
+                    }
+                    await FirebaseController.updateEquippedAcc(Auth.currentUser.uid, index);
+                } else {
+                    // if press unequip, clear equippedSkin
+                    if(user.equippedSkin == index) {
+                        index = "";
+                    }
+                    await FirebaseController.updateEquippedSkin(Auth.currentUser.uid, index);
+                }
             } catch (e) {
                 console.log(e);
             }
 
+            await shop_page();
         });
     }
 
@@ -238,9 +263,6 @@ export async function shop_page() {
         })
         // Elements.formAddItem.reset();
 
-
-
-
     }
 
 
@@ -274,17 +296,23 @@ function buildItemView(item, email) {
         html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block">
         <img src="${item.photoURL}" style="width: 180px; height: 180px; object-fit: cover;  margin-bottom: 10px;">
         <br>
-        <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
+        <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px; margin-bottom: -10px;">${item.name}</h3>
         <br>
         <form class="form-buy-item" method="post">
         <input type="hidden" name="docId" value="${item.docID}">
-        <input type="hidden" name="cost" value="${item.cost}">`;
+        <input type="hidden" name="cost" value="${item.cost}">
+        <button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>
+        </form>`;
 
-        html += `<button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>`;
+        let equip = item.docID + "_equip";  //create unique id for each item for equip button 
 
-        html += `</form>
-           </div>`;
+        html += `<form class="form-equip-item" method="post">
+            <input type="hidden" name="docId" value="${item.docID}">
+            <input type="hidden" name="skin" value="${item.skinType}">
+            <button id="${equip}" class="btn btn-secondary pomo-bg-color-md" style="display: none;" type="submit">Equip</button>
+        </form>`;
 
+        html += `</div>`;
     }
 
     return html;
