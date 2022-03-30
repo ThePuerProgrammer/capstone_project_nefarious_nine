@@ -2002,6 +2002,30 @@ export async function getUser(uid) {
 //============================================================================//
 
 //============================================================================//
+// Get USER EQUIPPED ACC / SKIN
+//============================================================================//
+export async function getEquippedSkinURL(equippedSkin) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .doc(equippedSkin)
+        .get();
+
+    const item = new Pomoshop(ref.data());
+    return item.photoURL;
+}
+
+export async function getEquippedAccURL(equippedAcc) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .doc(equippedAcc)
+        .get();
+
+    const item = new Pomoshop(ref.data());
+    return item.photoURL;
+}
+//============================================================================//
+
+//============================================================================//
 //UPDATE USER PROFILE
 //============================================================================//
 export async function updateUserProfile(uid, username, userBio, profilePhotoName, profilePhotoURL) {
@@ -2048,7 +2072,7 @@ export async function updatePomopet(uid, pomopet) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({ 'pomopet': pomopet });
+        .update({'pomopet': pomopet,  'equippedSkin': ""});
 }
 //============================================================================//
 

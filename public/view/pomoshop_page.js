@@ -108,9 +108,16 @@ export async function shop_page() {
                 document.getElementById(equip).innerHTML = "Unequip";
             }
 
-            // hide buy button, show equip button if already owned
-            document.getElementById(item.docID).style.display = "none";
-            document.getElementById(equip).style.display = "block";
+            // for skins, only show equip for equipped pomopet 
+            //(e.g. only show equip dog skins if pomopet is dog)
+            if((item.skinType != "") && (user.pomopet.type != item.skinType)) {
+                document.getElementById(item.docID).innerHTML = "owned";
+                document.getElementById(item.docID).disabled = true;
+            } else {
+                // hide buy button, show equip button if already owned
+                document.getElementById(item.docID).style.display = "none";
+                document.getElementById(equip).style.display = "block";
+            }
             
         }
         // disable buy button if not enough funds
@@ -293,9 +300,16 @@ function buildItemView(item, email) {
         </div>`;
 
     } else {
-        html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block">
-        <img src="${item.photoURL}" style="width: 180px; height: 180px; object-fit: cover;  margin-bottom: 10px;">
-        <br>
+        html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block">`;
+        
+        if(item.skinType == "") {
+            html += `<img src="${item.photoURL}" style="height: 180px; width: 210px; object-fit: cover;  margin-bottom: 10px;">`;
+        }
+        else {
+            html += `<img src="${item.photoURL}" style="height: 180px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
+        }
+        
+        html += `<br>
         <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px; margin-bottom: -10px;">${item.name}</h3>
         <br>
         <form class="form-buy-item" method="post">
