@@ -72,11 +72,11 @@ func _input(event):
 
 # Set the dirtiness based off of preset dirty levels
 func setPetDirtinessLevel(dirtinessLevel):
-	$Sprite.material.set_shader_param("dissolve_amount", dirtyLevels[dirtinessLevel])
+	_getCurrentPetSprite().material.set_shader_param("dissolve_amount", dirtyLevels[dirtinessLevel])
 	
 # Set the exact dirtiness level (Fully Dirty [0f] - Fully Clean [1f])
 func setPetDirtiness(dirtinessValue):
-	$Sprite.material.set_shader_param("dissolve_amount", dirtinessValue)
+	_getCurrentPetSprite().material.set_shader_param("dissolve_amount", dirtinessValue)
 
 func getDirtinessLevel(lastTimeWashedMs):
 	var timeSinceLastWashMs = OS.get_system_time_msecs() - lastTimeWashedMs # currentTime - lastTimeWashed
@@ -89,11 +89,14 @@ func getDirtinessLevel(lastTimeWashedMs):
 
 func updatePomopetSprite(petType):
 	if petType == "bunny":
-		$Sprite.texture = bunnySprite
+		$DogKinematicBody.hide()
+		$CatKinematicBody/CatSprite.hide()
 	elif petType == "dog":
-		$Sprite.texture = dogSprite
+		$CatKinematicBody.hide()
+		$BunnyKinematicBody.hide()
 	elif petType == "cat":
-		$Sprite.texture = catSprite
+		$DogKinematicBody.hide()
+		$BunnyKinematicBody.hide()
 
 func getScrubIntensity():
 	#if lastMouseMovePos == null or currentMouseMovePos == null:
@@ -119,6 +122,30 @@ func isWithinPetTypeCollisionPolygon():
 		return withinDogCollisionPolygon
 	elif currentPet == "cat":
 		return withinCatCollisionPolygon
+		
+func move():
+	if currentPet == "bunny":
+		return $Sprite/BunnyClickDetection.move_and_slide()
+	elif currentPet == "dog":
+		return $Sprite/DogClickDetection.move_and_slide()
+	elif currentPet == "cat":
+		return $Sprite/BunnyClickDetection.move_and_slide()
+
+func _getCurrentPetSprite():
+	if currentPet == "bunny":
+		return $BunnyKinematicBody/BunnySprite
+	elif currentPet == "dog":
+		return $DogKinematicBody/DogSprite
+	elif currentPet == "cat":
+		return $CatKinematicBody/CatSprite
+
+func _getCurrentKinematicBody():
+	if currentPet == "bunny":
+		return $BunnyKinematicBody
+	elif currentPet == "dog":
+		return $DogKinematicBody
+	elif currentPet == "cat":
+		return $CatKinematicBody
 
 func _on_BunnyClickDetection_mouse_entered():
 	withinBunnyCollisionPolygon = true
