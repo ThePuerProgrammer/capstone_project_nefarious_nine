@@ -12,8 +12,9 @@ export class User{
         this.userBio = data.userBio;
         this.pomopet = data.pomopet;
         this.pomopetData = data.pomopetData;
-        this.itemsOwned = data.itemsOwned
-        // TODO: SHOP STUFF
+        this.itemsOwned = data.itemsOwned;
+        this.equippedAcc = data.equippedAcc;
+        this.equippedSkin = data.equippedSkin;
     }
 
 
@@ -55,6 +56,8 @@ export class User{
                 pomopet: this.pomopet,
                 pomopetData: this.pomopetData,
                 itemsOwned: this.itemsOwned,
+                equippedAcc: this.equippedAcc,
+                equippedSkin: this.equippedSkin,
             };
         }
 
@@ -73,6 +76,8 @@ export class User{
             user.pomopet = data.pomopet;
             user.pomopetData = data.pomopetData;
             user.itemsOwned = data.itemsOwned;
+            user.equippedAcc = data.equippedAcc;
+            user.equippedSkin = data.equippedSkin;
             return user;
         }
 
