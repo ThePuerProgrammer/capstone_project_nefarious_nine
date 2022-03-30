@@ -98,6 +98,7 @@ shader_param/dissolve_texture = ExtResource( 1 )
 shader_param/to_dissolve_texture = ExtResource( 2 )
 
 [node name="Pet" type="Node2D"]
+scale = Vector2( 0.8, 0.8 )
 script = ExtResource( 5 )
 
 [node name="WashMeter" type="Control" parent="."]

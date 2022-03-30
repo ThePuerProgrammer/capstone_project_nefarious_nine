@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mud-splatter.png-4615090af08cc2e7e2235096bcb4737b.stex"
+path="res://.import/mud-splatter.png-d1c6ac81a2685c8e3c54b4e7c7121f90.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/pet/dirty_over_time/mud-splatter.png"
-dest_files=[ "res://.import/mud-splatter.png-4615090af08cc2e7e2235096bcb4737b.stex" ]
+source_file="res://ChillZone/Pet/dirty_over_time/mud-splatter.png"
+dest_files=[ "res://.import/mud-splatter.png-d1c6ac81a2685c8e3c54b4e7c7121f90.stex" ]
 
 [params]
 
