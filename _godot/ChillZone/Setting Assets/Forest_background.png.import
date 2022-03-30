@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bunny_sprite.png-023971c1fb14a34ad65ddf06a6e66937.stex"
+path="res://.import/Forest_background.png-d4c4b3e3c3eeda70af41f224a849017f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/Pet/pet_sprites/bunny_sprite.png"
-dest_files=[ "res://.import/bunny_sprite.png-023971c1fb14a34ad65ddf06a6e66937.stex" ]
+source_file="res://ChillZone/Setting Assets/Forest_background.png"
+dest_files=[ "res://.import/Forest_background.png-d4c4b3e3c3eeda70af41f224a849017f.stex" ]
 
 [params]
 
