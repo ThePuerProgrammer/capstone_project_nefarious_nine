@@ -43,32 +43,21 @@ export async function shop_page() {
     Elements.root.innerHTML = ``;
     let html = '';
 
-    // more buttons can be added for different categories
-    if (user.email == adminUser) {
-        html += `<div id="pomo-sidenav" class="sidenav">
+    html += `<div id="pomo-sidenav" class="sidenav">
         <h4 class="item-name pomo-text-color-light" style="font-size: 30px;">Pomoshop</h4>
         <br>
         <button id="default-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Show All</button>
         <br>
         <button id="accessories-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Accessories</button>
         <br>
-        <button id="skins-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Skins</button>
-        <br>
-        <button id="add-item-button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" type="button">Add Item</button>
-        </div>`;
-    } else {
-        html += `<div id="pomo-sidenav" class="sidenav">
-        <h4 class="item-name pomo-text-color-light" style="font-size: 30px;">Pomoshop</h4>
-        <br>
-        <button id="default-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Show All</button>
-        <br>
-        <button id="accessories-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Accessories</button>
-        <br>
-        <button id="skins-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Skins</button>
-        <br>
-        </div>`;
+        <button id="skins-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Skins</button>`;
+    
+    if(user.email == adminUser) {
+        html += `<br>
+            <button id="add-item-button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" type="button">Add Item</button>`;
     }
 
+    html += `</div>`;
 
     html += `<div class="pomoshop">
         <div class="pomoshop-category" id="accessories">
@@ -94,8 +83,8 @@ export async function shop_page() {
     });
 
     html += `</div>
-    </div>
-    </div>`;
+        </div>
+        </div>`;
 
     Elements.root.innerHTML = html;
 
@@ -117,15 +106,13 @@ export async function shop_page() {
                 // hide buy button, show equip button if already owned
                 document.getElementById(item.docID).style.display = "none";
                 document.getElementById(equip).style.display = "block";
-            }
-            
+            }  
         }
         // disable buy button if not enough funds
         else if (user.coins < item.cost) {
             document.getElementById(item.docID).disabled = true;
         }
     });
-
 
     // button listeners to show different items within the shop
     const defaultShopButton = document.getElementById('default-shop-button');
@@ -247,13 +234,13 @@ export async function shop_page() {
             reader.readAsDataURL(imageFile2Upload);
         })
 
-
         Elements.formAddItem.form.addEventListener('submit', async e => {
             e.preventDefault();
             const name = e.target.itemname.value;
             const cost = e.target.itemcost.value;
             const skinType = e.target.selectSkin.value;
-            const pomoshop = new Pomoshop({ name, cost, skinType });
+            const rarity = 1; // default, to be updated @ Blake
+            const pomoshop = new Pomoshop({ name, cost, skinType, rarity });
 
             try {
                 const { imagename, imageURL } = await FirebaseController.uploadItemImage(imageFile2Upload);
@@ -269,64 +256,154 @@ export async function shop_page() {
 
         })
         // Elements.formAddItem.reset();
-
     }
-
-
 }
 
 function buildItemView(item, email) {
     let html;
+    
+    // display DELETE button if user is ADMIN
     if (email == Constant.ADMIN) {
-        html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block">
-        <img src="${item.photoURL}" style="width: 180px; height: 180px; object-fit: cover;  margin-bottom: 10px;">
-        <br>
-        <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px;">${item.name}</h3>
-        <br>
-        <form class="form-buy-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">
-        <input type="hidden" name="cost" value="${item.cost}">`;
 
-        html += `<div><button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit"style="float:right;margin:auto;text-align: center;display: inline-block">Buy $ ${item.cost}</button>`;
-
-        html += `</form>
-        <form class="form-del-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">
-        <input type="hidden" name="imagename" value="${item.photoName}">
-        <button class="btn btn-secondary pomo-bg-color-dark" type="submit" style="text-align: center;margin:auto;display: inline-block">Delete</button>
-        </form>
-        </div>
-
-        </div>`;
-
-    } else {
-        html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block">`;
+        html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block;">`;
         
+        // change sizing for acc pics
         if(item.skinType == "") {
-            html += `<img src="${item.photoURL}" style="height: 180px; width: 210px; object-fit: cover;  margin-bottom: 10px;">`;
+            html += `<img src="${item.photoURL}" style="height: 150px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
         }
         else {
             html += `<img src="${item.photoURL}" style="height: 180px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
         }
         
         html += `<br>
-        <h3 class="item-name pomo-text-color-dark" style="text-align: center; font-size: 20px; margin-bottom: -10px;">${item.name}</h3>
-        <br>
-        <form class="form-buy-item" method="post">
-        <input type="hidden" name="docId" value="${item.docID}">
-        <input type="hidden" name="cost" value="${item.cost}">
-        <button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>
+            <h3 class="item-name pomo-text-color-dark" style="font-size: 20px; text-align: center; margin-bottom: -10px;">${item.name}</h3>`;
+
+        //display item rarity stars
+        if(item.rarity == 1) {
+            html += `<h4 style="margin-top: 10px; text-align: center;">
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star_border</i>
+                <i class="material-icons pomo-text-color-light">star_border</i>
+            </h4>`;
+        }
+        else if(item.rarity == 2) {
+            html += `<h4 style="margin-top: 10px; text-align: center;">
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star_border</i>
+            </h4>`;
+
+            //cost multiplier
+            item.cost *= 2;
+        }
+        else if(item.rarity == 3) {
+            html += `<h4 style="margin-top: 10px; text-align: center;">
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star</i>
+            </h4>`;
+
+            //cost multiplier
+            item.cost *= 3;
+        }
+
+        // BUTTONS div
+        html += `<div  style="display: inline-block;">`;
+
+        // BUY button hidden for admin
+        html += `
+            <form class="form-buy-item" method="post">
+            <input type="hidden" name="docId" value="${item.docID}">
+            <input type="hidden" name="cost" value="${item.cost}">
+            <button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" style="display: none;" type="submit">Buy $ ${item.cost}</button>
         </form>`;
 
         let equip = item.docID + "_equip";  //create unique id for each item for equip button 
 
+        // EQUIP button hidden for admin
         html += `<form class="form-equip-item" method="post">
             <input type="hidden" name="docId" value="${item.docID}">
             <input type="hidden" name="skin" value="${item.skinType}">
             <button id="${equip}" class="btn btn-secondary pomo-bg-color-md" style="display: none;" type="submit">Equip</button>
         </form>`;
 
-        html += `</div>`;
+        // display DELETE button if user is ADMIN
+        html += `</form>
+                <form class="form-del-item" method="post">
+                <input type="hidden" name="docId" value="${item.docID}">
+                <input type="hidden" name="imagename" value="${item.photoName}">
+                <button class="btn btn-secondary pomo-bg-color-dark" type="submit">Delete</button>
+            </form>`;
+
+        html += `</div>
+            </div>`;
+
+    } else {
+
+        html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block;">`;
+        
+        // change sizing for acc pics
+        if(item.skinType == "") {
+            html += `<img src="${item.photoURL}" style="height: 150px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
+        }
+        else {
+            html += `<img src="${item.photoURL}" style="height: 180px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
+        }
+        
+        html += `<br>
+            <h3 class="item-name pomo-text-color-dark" style="font-size: 20px; text-align: center; margin-bottom: -10px;">${item.name}</h3>`;
+
+        //display item rarity stars
+        if(item.rarity == 1) {
+            html += `<h4 style="margin-top: 10px; text-align: center;">
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star_border</i>
+                <i class="material-icons pomo-text-color-light">star_border</i>
+            </h4>`;
+        }
+        else if(item.rarity == 2) {
+            html += `<h4 style="margin-top: 10px; text-align: center;">
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star_border</i>
+            </h4>`;
+
+            //cost multiplier
+            item.cost *= 2;
+        }
+        else if(item.rarity == 3) {
+            html += `<h4 style="margin-top: 10px; text-align: center;">
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star</i>
+                <i class="material-icons pomo-text-color-light">star</i>
+            </h4>`;
+
+            //cost multiplier
+            item.cost *= 3;
+        }
+
+        // BUTTONS div
+        html += `<div  style="display: inline-block;">`;
+
+        // BUY button
+        html += `
+            <form class="form-buy-item" method="post">
+            <input type="hidden" name="docId" value="${item.docID}">
+            <input type="hidden" name="cost" value="${item.cost}">
+            <button id="${item.docID}" class="btn btn-secondary pomo-bg-color-dark" type="submit">Buy $ ${item.cost}</button>
+        </form>`;
+
+        let equip = item.docID + "_equip";  //create unique id for each item for equip button 
+
+        // EQUIP button
+        html += `<form class="form-equip-item" method="post">
+            <input type="hidden" name="docId" value="${item.docID}">
+            <input type="hidden" name="skin" value="${item.skinType}">
+            <button id="${equip}" class="btn btn-secondary pomo-bg-color-md" style="display: none;" type="submit">Equip</button>
+        </form>`;
+        
+        html += `</div>
+            </div>`;
     }
 
     return html;
