@@ -729,6 +729,18 @@ iframe {
     border-radius: 50%;
   }
 
+.pomopet-display {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.acc-display {
+    position: absolute;
+    top: 48px;
+    right: 48px;
+}
+
 /*==========================================================================*/
 
 /* ANALYTICS PAGE */

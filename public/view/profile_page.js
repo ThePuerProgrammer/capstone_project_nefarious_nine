@@ -177,16 +177,16 @@ export async function profile_page() {
 
     html += `<div class="equipped-pomopet">`;
 
-    // if equipped acc
-    if(user.equippedAcc != "") {
-        html += `<img src="${equippedAccURL}" style="height: 80px; width: 100px; margin-bottom: -16px;  object-fit: cover;" class="center">`;
-    }
-
     // if no equipped skin
     if(user.equippedSkin == "") {
-        html += `<img src="${user.pomopet.petPhotoURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="center">`;
+        html += `<img src="${user.pomopet.petPhotoURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="pomopet-display center">`;
     } else {
-        html += `<img src="${equippedSkinURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="center">`;
+        html += `<img src="${equippedSkinURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="pomopet-display center">`;
+    }
+
+    // if equipped acc
+    if(user.equippedAcc != "") {
+        html += `<img src="${equippedAccURL}" style="height: 80px; width: 100px; margin-bottom: -50px;  object-fit: cover;" class="acc-display center">`;
     }
 
     html += `<hr class="pomopet-bar">`;
