@@ -133,6 +133,27 @@ export async function profile_page() {
         console.log(e);
     }
 
+
+    let equippedAccURL;
+    // if user has equippedAcc retrieve photoURL 
+    if(user.equippedAcc != "") {
+        try {
+            equippedAccURL = await FirebaseController.getEquippedAccURL(user.equippedAcc);
+        }catch (e) {
+            console.log(e);
+        }
+    }
+    
+    let equippedSkinURL;
+    // if user has equippedSkin retrieve photoURL 
+    if (user.equippedSkin != "") {
+        try {
+            equippedSkinURL = await FirebaseController.getEquippedSkinURL(user.equippedSkin);
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
     let html = '';
 
     // EDIT PROFILE button    
@@ -154,10 +175,21 @@ export async function profile_page() {
 
     html += `</div>`;
 
-    html += `<div class="equipped-pomopet">
+    html += `<div class="equipped-pomopet">`;
 
-    <img src="${user.pomopet.petPhotoURL}" style="width: 200px; height: 200px; margin-bottom: -16px;" class="center">
-    <hr class="pomopet-bar">`;
+    // if equipped acc
+    if(user.equippedAcc != "") {
+        html += `<img src="${equippedAccURL}" style="height: 80px; width: 100px; margin-bottom: -16px;  object-fit: cover;" class="center">`;
+    }
+
+    // if no equipped skin
+    if(user.equippedSkin == "") {
+        html += `<img src="${user.pomopet.petPhotoURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="center">`;
+    } else {
+        html += `<img src="${equippedSkinURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="center">`;
+    }
+
+    html += `<hr class="pomopet-bar">`;
     
 
     html += `<div id="pomopet-edit-name-display">
