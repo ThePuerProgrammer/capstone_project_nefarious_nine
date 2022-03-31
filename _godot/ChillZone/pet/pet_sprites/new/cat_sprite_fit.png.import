@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cat_sprite_fit.png-17396095cbb8086a891533a29008453a.stex"
+path="res://.import/cat_sprite_fit.png-69c64199616e878fdd7dfa030be46d3f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/pet/pet_sprites/new/cat_sprite_fit.png"
-dest_files=[ "res://.import/cat_sprite_fit.png-17396095cbb8086a891533a29008453a.stex" ]
+source_file="res://ChillZone/Pet/pet_sprites/new/cat_sprite_fit.png"
+dest_files=[ "res://.import/cat_sprite_fit.png-69c64199616e878fdd7dfa030be46d3f.stex" ]
 
 [params]
 

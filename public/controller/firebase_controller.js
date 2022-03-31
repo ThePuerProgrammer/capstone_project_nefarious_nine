@@ -2179,6 +2179,7 @@ export async function getPomoshopItems() {
     let items = [];
     const pomoshop = await firebase.firestore()
         .collection(Constant.collectionName.POMOSHOP)
+        .orderBy('rarity', 'asc')
         .get();
 
     pomoshop.forEach(doc => {
