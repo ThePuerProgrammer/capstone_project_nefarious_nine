@@ -19,9 +19,9 @@ export function addEventListeners() {
 }
 
 export async function shop_page() {
-    try{
+    try {
         await Coins.get_coins(Auth.currentUser.uid);
-    } catch(e) {if(Constant.DEV)console.log(e);}
+    } catch (e) { if (Constant.DEV) console.log(e); }
 
     // retrieve pomoshop items from Firebase
     let items;
@@ -51,8 +51,8 @@ export async function shop_page() {
         <button id="accessories-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Accessories</button>
         <br>
         <button id="skins-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Skins</button>`;
-    
-    if(user.email == adminUser) {
+
+    if (user.email == adminUser) {
         html += `<br>
             <button id="add-item-button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" type="button">Add Item</button>`;
     }
@@ -90,23 +90,23 @@ export async function shop_page() {
 
     items.forEach(item => {
         let equip = item.docID + "_equip"; //create unique id for each item for equip button
-        
+
         if (user.itemsOwned.includes(item.docID)) {
             // if item is currently equipped, show unequip
-            if((user.equippedAcc == item.docID) || (user.equippedSkin == item.docID)) {
+            if ((user.equippedAcc == item.docID) || (user.equippedSkin == item.docID)) {
                 document.getElementById(equip).innerHTML = "Unequip";
             }
 
             // for skins, only show equip for equipped pomopet 
             //(e.g. only show equip dog skins if pomopet is dog)
-            if((item.skinType != "") && (user.pomopet.type != item.skinType)) {
+            if ((item.skinType != "") && (user.pomopet.type != item.skinType)) {
                 document.getElementById(item.docID).innerHTML = "owned";
                 document.getElementById(item.docID).disabled = true;
             } else {
                 // hide buy button, show equip button if already owned
                 document.getElementById(item.docID).style.display = "none";
                 document.getElementById(equip).style.display = "block";
-            }  
+            }
         }
         // disable buy button if not enough funds
         else if (user.coins < item.cost) {
@@ -173,15 +173,15 @@ export async function shop_page() {
 
             // call firebase function to update user's equippedAcc / equippedSkin
             try {
-                if(skinType == "") {
+                if (skinType == "") {
                     // if press unequip, clear equippedAcc
-                    if(user.equippedAcc == index) {
+                    if (user.equippedAcc == index) {
                         index = "";
                     }
                     await FirebaseController.updateEquippedAcc(Auth.currentUser.uid, index);
                 } else {
                     // if press unequip, clear equippedSkin
-                    if(user.equippedSkin == index) {
+                    if (user.equippedSkin == index) {
                         index = "";
                     }
                     await FirebaseController.updateEquippedSkin(Auth.currentUser.uid, index);
@@ -215,10 +215,14 @@ export async function shop_page() {
             // items = await FirebaseController.getPomoshopItems();
             Elements.formAddItem.skintype.innerHTML = '';
 
+            Elements.formAddItem.skintype.innerHTML += `
+            <option value="">accessory</option>`;
+
             Constant.SKINTYPES.forEach(type => {
                 Elements.formAddItem.skintype.innerHTML += `
                     <option value="${type}">${type}</option>`;
             });
+
 
             Elements.addItemModal.show();
         })
@@ -261,32 +265,32 @@ export async function shop_page() {
 
 function buildItemView(item, email) {
     let html;
-    
+
     // display DELETE button if user is ADMIN
     if (email == Constant.ADMIN) {
 
         html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block;">`;
-        
+
         // change sizing for acc pics
-        if(item.skinType == "") {
+        if (item.skinType == "") {
             html += `<img src="${item.photoURL}" style="height: 150px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
         }
         else {
             html += `<img src="${item.photoURL}" style="height: 180px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
         }
-        
+
         html += `<br>
             <h3 class="item-name pomo-text-color-dark" style="font-size: 20px; text-align: center; margin-bottom: -10px;">${item.name}</h3>`;
 
         //display item rarity stars
-        if(item.rarity == 1) {
+        if (item.rarity == 1) {
             html += `<h4 style="margin-top: 10px; text-align: center;">
                 <i class="material-icons pomo-text-color-light">star</i>
                 <i class="material-icons pomo-text-color-light">star_border</i>
                 <i class="material-icons pomo-text-color-light">star_border</i>
             </h4>`;
         }
-        else if(item.rarity == 2) {
+        else if (item.rarity == 2) {
             html += `<h4 style="margin-top: 10px; text-align: center;">
                 <i class="material-icons pomo-text-color-light">star</i>
                 <i class="material-icons pomo-text-color-light">star</i>
@@ -296,7 +300,7 @@ function buildItemView(item, email) {
             //cost multiplier
             item.cost *= 2;
         }
-        else if(item.rarity == 3) {
+        else if (item.rarity == 3) {
             html += `<h4 style="margin-top: 10px; text-align: center;">
                 <i class="material-icons pomo-text-color-light">star</i>
                 <i class="material-icons pomo-text-color-light">star</i>
@@ -341,27 +345,27 @@ function buildItemView(item, email) {
     } else {
 
         html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block;">`;
-        
+
         // change sizing for acc pics
-        if(item.skinType == "") {
+        if (item.skinType == "") {
             html += `<img src="${item.photoURL}" style="height: 150px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
         }
         else {
             html += `<img src="${item.photoURL}" style="height: 180px; width: 180px; object-fit: cover;  margin-bottom: 10px;">`;
         }
-        
+
         html += `<br>
             <h3 class="item-name pomo-text-color-dark" style="font-size: 20px; text-align: center; margin-bottom: -10px;">${item.name}</h3>`;
 
         //display item rarity stars
-        if(item.rarity == 1) {
+        if (item.rarity == 1) {
             html += `<h4 style="margin-top: 10px; text-align: center;">
                 <i class="material-icons pomo-text-color-light">star</i>
                 <i class="material-icons pomo-text-color-light">star_border</i>
                 <i class="material-icons pomo-text-color-light">star_border</i>
             </h4>`;
         }
-        else if(item.rarity == 2) {
+        else if (item.rarity == 2) {
             html += `<h4 style="margin-top: 10px; text-align: center;">
                 <i class="material-icons pomo-text-color-light">star</i>
                 <i class="material-icons pomo-text-color-light">star</i>
@@ -371,7 +375,7 @@ function buildItemView(item, email) {
             //cost multiplier
             item.cost *= 2;
         }
-        else if(item.rarity == 3) {
+        else if (item.rarity == 3) {
             html += `<h4 style="margin-top: 10px; text-align: center;">
                 <i class="material-icons pomo-text-color-light">star</i>
                 <i class="material-icons pomo-text-color-light">star</i>
@@ -401,7 +405,7 @@ function buildItemView(item, email) {
             <input type="hidden" name="skin" value="${item.skinType}">
             <button id="${equip}" class="btn btn-secondary pomo-bg-color-md" style="display: none;" type="submit">Equip</button>
         </form>`;
-        
+
         html += `</div>
             </div>`;
     }
