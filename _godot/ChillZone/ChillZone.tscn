@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_out.tres" type="Animation" id=1]
 [ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://ChillZone/wash_pomopet/sparkle_animation/f4.png" type="Texture" id=18]
 [ext_resource path="res://ChillZone/wash_pomopet/sparkle_animation/f6.png" type="Texture" id=19]
 [ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_in.tres" type="Animation" id=20]
+[ext_resource path="res://ChillZone/PoopController.gd" type="Script" id=21]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 128, 0, 128, 128, 0, 128 )
@@ -344,9 +345,6 @@ margin_right = 1900.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 100 )
 script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ActionBar"]
 anchor_right = 1.0
@@ -407,7 +405,7 @@ modulate = Color( 1, 1, 1, 0 )
 scale = Vector2( 0.75, 0.75 )
 frames = SubResource( 11 )
 animation = "sparkle"
-frame = 1
+frame = 6
 playing = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ActionBarController/WashPomopetController/EffectController/CleanSparkle"]
@@ -421,6 +419,16 @@ volume_db = -10.0
 [node name="BubbleSoundEffect" type="AudioStreamPlayer" parent="ActionBarController/WashPomopetController/EffectController"]
 stream = ExtResource( 9 )
 volume_db = -12.5
+
+[node name="PoopController" type="Node" parent="ActionBarController"]
+script = ExtResource( 21 )
+
+[node name="PoopRegion" type="ReferenceRect" parent="ActionBarController/PoopController"]
+margin_left = -1.02399
+margin_top = 638.436
+margin_right = 1918.98
+margin_bottom = 688.436
+border_color = Color( 1, 0, 0, 0 )
 
 [node name="Pet" parent="." instance=ExtResource( 2 )]
 position = Vector2( 417.556, 558.986 )
