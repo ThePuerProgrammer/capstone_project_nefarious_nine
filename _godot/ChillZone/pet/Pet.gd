@@ -18,6 +18,7 @@ var currentMouseMovePos
 
 var startDirtinessLevel
 var startDirtinessValue
+var petDirtinessLevel
 
 var dirtyLevels = [1.0, 0.8, 0.6, 0.4, 0.2, 0] # , 0 == Fully Dirty, 1 == Fully Clean
 var progressBarMaxValue = 20
@@ -70,8 +71,13 @@ func _input(event):
 	if mouseIsDown and event is InputEventMouseMotion:
 		currentMouseMovePos = event.position
 
+func startPetCleanAction():
+	petWashingModeOn = true
+	showCleaningProgressBar()
+
 # Set the dirtiness based off of preset dirty levels
 func setPetDirtinessLevel(dirtinessLevel):
+	petDirtinessLevel = dirtinessLevel
 	_getCurrentPetSprite().material.set_shader_param("dissolve_amount", dirtyLevels[dirtinessLevel])
 	
 # Set the exact dirtiness level (Fully Dirty [0f] - Fully Clean [1f])

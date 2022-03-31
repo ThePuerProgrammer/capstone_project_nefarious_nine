@@ -7,7 +7,7 @@ var bubblesOnCooldown = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pomopet = get_node("../Pomopet")
+	pomopet = get_node("../../../Pet")
 	$CleanSparkle.modulate.a = 0
 	$CleanSparkle.play("sparkle")
 
