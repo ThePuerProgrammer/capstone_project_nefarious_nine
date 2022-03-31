@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/mixkit-liquid-bubble-3000-shorter.wav-268f3ac09cec1d294a972f5176a60f95.sample"
+
+[deps]
+
+source_file="res://ChillZone/wash_pomopet/SoundEffects/mixkit-liquid-bubble-3000-shorter.wav"
+dest_files=[ "res://.import/mixkit-liquid-bubble-3000-shorter.wav-268f3ac09cec1d294a972f5176a60f95.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

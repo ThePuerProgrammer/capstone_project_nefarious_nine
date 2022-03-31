@@ -2,7 +2,6 @@ extends Control
 
 export (bool) var overrideMenuToChillZone = false
 export var chillzone_scene_path = "res://ChillZone/ChillZone.tscn"
-var testing_pomopet_washing_scene_path = "res://ChillZone/wash_pomopet_testing/WashPomopet.tscn"
 
 var _scene_path_to_load
 
