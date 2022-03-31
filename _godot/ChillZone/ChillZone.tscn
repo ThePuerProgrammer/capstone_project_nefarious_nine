@@ -406,7 +406,6 @@ scale = Vector2( 0.75, 0.75 )
 frames = SubResource( 11 )
 animation = "sparkle"
 frame = 6
-playing = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ActionBarController/WashPomopetController/EffectController/CleanSparkle"]
 anims/sparkle_fade_in = ExtResource( 20 )
