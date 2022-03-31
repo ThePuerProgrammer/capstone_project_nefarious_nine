@@ -3,7 +3,6 @@
 [ext_resource path="res://ChillZone/wash_pomopet/art/pixel-bubbles-sprite-sheet-small-only.png" type="Texture" id=1]
 [ext_resource path="res://ChillZone/wash_pomopet/MouseBubbles.gd" type="Script" id=2]
 
-
 [sub_resource type="CanvasItemMaterial" id=5]
 resource_local_to_scene = true
 particles_animation = true

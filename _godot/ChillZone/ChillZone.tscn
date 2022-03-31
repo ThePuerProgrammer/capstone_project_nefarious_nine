@@ -397,7 +397,6 @@ one_shot = true
 [node name="CleanGlowParticle" parent="ActionBarController/WashPomopetController/EffectController" instance=ExtResource( 15 )]
 position = Vector2( 958.976, 422.601 )
 z_index = -1
-emitting = false
 
 [node name="CleanEffectTimer" type="Timer" parent="ActionBarController/WashPomopetController/EffectController"]
 wait_time = 1.5
@@ -408,7 +407,7 @@ modulate = Color( 1, 1, 1, 0 )
 scale = Vector2( 0.75, 0.75 )
 frames = SubResource( 11 )
 animation = "sparkle"
-frame = 6
+frame = 1
 playing = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ActionBarController/WashPomopetController/EffectController/CleanSparkle"]
