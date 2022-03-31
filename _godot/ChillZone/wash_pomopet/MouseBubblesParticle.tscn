@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=2]
+
+[sub_resource type="CanvasItemMaterial" id=2]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.181818, 0.497727 ), 0.0, 0.0, 0, 0, Vector2( 0.495455, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.625 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=1]
+emission_shape = 1
+emission_sphere_radius = 15.0
+flag_disable_z = true
+gravity = Vector3( 0, -100, 0 )
+angular_velocity = 30.0
+angular_velocity_random = 0.5
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+radial_accel = 50.0
+radial_accel_random = 0.92
+tangential_accel = 100.0
+tangential_accel_random = 0.5
+angle = 720.0
+angle_random = 1.0
+scale = 4.0
+scale_random = 0.25
+scale_curve = SubResource( 4 )
+anim_speed = 1.0
+
+[sub_resource type="StreamTexture" id=5]
+load_path = "res://.import/pixel-bubbles-sprite-sheet.png-4b5200659d31c379be407667923ed9cb.stex"
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Particles2D
+
+func _on_MouseBubblesParticle_hide():
+	print(\"removing bubble from scene\")
+	queue_free() # remove from scene when finished playing
+"
+
+[node name="MouseBubbles" type="Particles2D"]
+material = SubResource( 2 )
+emitting = false
+amount = 2
+one_shot = true
+process_material = SubResource( 1 )
+texture = SubResource( 5 )
+script = SubResource( 6 )

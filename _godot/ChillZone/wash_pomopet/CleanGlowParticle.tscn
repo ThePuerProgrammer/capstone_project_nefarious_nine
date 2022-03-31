@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=2]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.517766, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 1, 0.87451, 0.309804, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0.927273 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 360.0
+angle_random = 1.0
+scale = 0.25
+scale_random = 0.25
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 3 )
+hue_variation = 0.05
+hue_variation_random = 1.0
+anim_offset = 1.0
+anim_offset_random = 1.0
+
+[sub_resource type="StreamTexture" id=7]
+flags = 4
+load_path = "res://.import/sprite_sheet.png-330001e62d881fe298b32100a0fac122.stex"
+
+[node name="CleanGlowParticle" type="Particles2D"]
+material = SubResource( 1 )
+process_material = SubResource( 4 )
+texture = SubResource( 7 )

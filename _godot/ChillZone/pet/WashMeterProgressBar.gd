@@ -1,6 +1,6 @@
 extends ProgressBar
 
-var bubblesParticle = preload("res://ChillZone/wash_pomopet_testing/MouseBubblesSmallOnlyParticle.tscn")
+var bubblesParticle = preload("res://ChillZone/wash_pomopet/MouseBubblesSmallOnlyParticle.tscn")
 var lastWholeValue = 0
 
 func _ready():
