@@ -1,13 +1,15 @@
 extends Node2D
 
 var effectController
+var firebaseController
+var actionBar
 
 var bunnySprite = load("res://ChillZone/pet/pet_sprites/bunny_sprite.png")
 var catSprite = load("res://ChillZone/pet/pet_sprites/cat_sprite.png")
 var dogSprite = load("res://ChillZone/pet/pet_sprites/rembo_sprite.png")
 var currentPet
 
-var petWashingModeOn = true #TODO: Change to false 
+var petWashingModeOn = false 
 
 var mouseIsDown = false
 var withinDogCollisionPolygon = false
@@ -18,24 +20,32 @@ var currentMouseMovePos
 
 var startDirtinessLevel
 var startDirtinessValue
+var petDirtinessLevel = 0
 
 var dirtyLevels = [1.0, 0.8, 0.6, 0.4, 0.2, 0] # , 0 == Fully Dirty, 1 == Fully Clean
 var progressBarMaxValue = 20
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	firebaseController = get_node("/root/FirebaseController")
+	actionBar = get_node("../ActionBar")
+	
 	var userDocFields = get_node("/root/CurrentUser").user_doc.doc_fields
 	currentPet = userDocFields["pomopet"]["type"]
 	var pomopetData = userDocFields["pomopetData"]
 	
-	effectController = get_node("../EffectController")
 	
-	# TODO: Disable clean pet button if dirty level is at 0
+	effectController = get_node("../ActionBarController/WashPomopetController/EffectController")
 	
 	updatePomopetSprite(currentPet)
 	startDirtinessLevel = getDirtinessLevel(pomopetData["lastWashed"])
 	startDirtinessValue = dirtyLevels[startDirtinessLevel]
+	print("start dirty: ", startDirtinessLevel)
 	setPetDirtinessLevel(startDirtinessLevel)
+	
+	if startDirtinessLevel == 0:
+		actionBar.setCleanButtonEnabled(false)
+	
 	$WashMeter/WashMeterProgressBar.setMaxValue(progressBarMaxValue * startDirtinessLevel)
 	$WashMeter/WashMeterProgressBar.reset()
 
@@ -57,6 +67,7 @@ func _process(delta):
 			# Check if we are done washing
 			if newDirtinessValue == 1:
 				effectController.playCleanEffects()
+				firebaseController.updateCurrentUserLastWashed()
 				hideCleaningProgressBar()
 				petWashingModeOn = false
 
@@ -70,8 +81,13 @@ func _input(event):
 	if mouseIsDown and event is InputEventMouseMotion:
 		currentMouseMovePos = event.position
 
+func startCleanAction():
+	petWashingModeOn = true
+	showCleaningProgressBar()
+
 # Set the dirtiness based off of preset dirty levels
 func setPetDirtinessLevel(dirtinessLevel):
+	petDirtinessLevel = dirtinessLevel
 	_getCurrentPetSprite().material.set_shader_param("dissolve_amount", dirtyLevels[dirtinessLevel])
 	
 # Set the exact dirtiness level (Fully Dirty [0f] - Fully Clean [1f])
@@ -90,7 +106,7 @@ func getDirtinessLevel(lastTimeWashedMs):
 func updatePomopetSprite(petType):
 	if petType == "bunny":
 		$DogKinematicBody.hide()
-		$CatKinematicBody/CatSprite.hide()
+		$CatKinematicBody.hide()
 	elif petType == "dog":
 		$CatKinematicBody.hide()
 		$BunnyKinematicBody.hide()
@@ -147,20 +163,25 @@ func _getCurrentKinematicBody():
 	elif currentPet == "cat":
 		return $CatKinematicBody
 
-func _on_BunnyClickDetection_mouse_entered():
+func _on_BunnyKinematicBody_mouse_entered():
 	withinBunnyCollisionPolygon = true
 
-func _on_BunnyClickDetection_mouse_exited():
+
+func _on_BunnyKinematicBody_mouse_exited():
 	withinBunnyCollisionPolygon = false
 
-func _on_CatClickDetection_mouse_entered():
+
+func _on_CatKinematicBody_mouse_entered():
 	withinCatCollisionPolygon = true
 
-func _on_CatClickDetection_mouse_exited():
+
+func _on_CatKinematicBody_mouse_exited():
 	withinCatCollisionPolygon = false
 
-func _on_DogClickDetection_mouse_entered():
+
+func _on_DogKinematicBody_mouse_entered():
 	withinDogCollisionPolygon = true
 
-func _on_DogClickDetection_mouse_exited():
+
+func _on_DogKinematicBody_mouse_exited():
 	withinDogCollisionPolygon = false

@@ -1,0 +1,87 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://ChillZone/wash_pomopet/ParticleEffectController.gd" type="Script" id=1]
+[ext_resource path="res://ChillZone/wash_pomopet/SoundEffects/mixkit-liquid-bubble-3000-shorter.wav" type="AudioStream" id=2]
+[ext_resource path="res://ChillZone/wash_pomopet/SoundEffects/clean-sound-effect.wav" type="AudioStream" id=3]
+[ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ChillZone/wash_pomopet/CleanGlowParticle.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ChillZone/wash_pomopet/MouseBubblesParticle.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_out.tres" type="Animation" id=7]
+[ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_in.tres" type="Animation" id=8]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f1.png" type="Texture" id=9]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f3.png" type="Texture" id=10]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f6.png" type="Texture" id=11]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f7.png" type="Texture" id=12]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f4.png" type="Texture" id=13]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f5.png" type="Texture" id=14]
+[ext_resource path="res://dungeon_fight/art/sparkle_animation/f2.png" type="Texture" id=15]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 15 ), ExtResource( 10 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 11 ), ExtResource( 12 ) ],
+"loop": true,
+"name": "sparkle",
+"speed": 8.0
+} ]
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[node name="WashPomopet" type="Node2D"]
+
+[node name="Pomopet" parent="." instance=ExtResource( 4 )]
+position = Vector2( 958.976, 394.539 )
+
+[node name="EffectController" type="Node2D" parent="."]
+script = ExtResource( 1 )
+
+[node name="MouseBubblesParticle" parent="EffectController" instance=ExtResource( 6 )]
+
+[node name="MouseBubblesCooldownTimer" type="Timer" parent="EffectController"]
+wait_time = 0.05
+one_shot = true
+
+[node name="CleanGlowParticle" parent="EffectController" instance=ExtResource( 5 )]
+position = Vector2( 958.976, 422.601 )
+z_index = -1
+emitting = false
+
+[node name="CleanEffectTimer" type="Timer" parent="EffectController"]
+wait_time = 1.5
+one_shot = true
+
+[node name="CleanSparkle" type="AnimatedSprite" parent="EffectController"]
+modulate = Color( 1, 1, 1, 0 )
+scale = Vector2( 0.75, 0.75 )
+frames = SubResource( 1 )
+animation = "sparkle"
+frame = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="EffectController/CleanSparkle"]
+anims/RESET = SubResource( 3 )
+anims/fade_in = ExtResource( 8 )
+anims/fade_out = ExtResource( 7 )
+
+[node name="CleanSoundEffect" type="AudioStreamPlayer" parent="EffectController"]
+stream = ExtResource( 3 )
+volume_db = -10.0
+
+[node name="BubbleSoundEffect" type="AudioStreamPlayer" parent="EffectController"]
+stream = ExtResource( 2 )
+volume_db = -12.5
+
+[connection signal="hide" from="EffectController/MouseBubblesParticle" to="EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
+[connection signal="timeout" from="EffectController/MouseBubblesCooldownTimer" to="EffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
+[connection signal="timeout" from="EffectController/CleanEffectTimer" to="EffectController" method="_on_CleanEffectTimer_timeout"]

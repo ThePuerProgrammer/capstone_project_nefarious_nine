@@ -1,11 +1,10 @@
 extends ProgressBar
 
-var bubblesParticle = preload("res://ChillZone/wash_pomopet_testing/MouseBubblesSmallOnlyParticle.tscn")
+var bubblesParticle = preload("res://ChillZone/wash_pomopet/MouseBubblesSmallOnlyParticle.tscn")
 var lastWholeValue = 0
 
 func _ready():
-	modulate.a = 1 	# TODO: REMOVE THIS LINE
-#	modulate.a = 0 	# TODO: Uncomment this line when joining with actual chill zone
+	modulate.a = 0
 
 func incrementByStep():
 	# increment value
