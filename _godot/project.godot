@@ -212,6 +212,7 @@ enabled=PoolStringArray( "res://addons/godot-firebase/plugin.cfg", "res://addons
 [global]
 
 firebase=false
+layer=false
 
 [input]
 
@@ -330,6 +331,12 @@ jump={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[layer_names]
+
+2d_render/layer_3="TriggerLayer"
+2d_physics/layer_1="PoopLayer"
+2d_physics/layer_2="Floor"
 
 [physics]
 
