@@ -93,3 +93,26 @@ func get_user_decks(uid):
 	print("DECKS:",res)
 	return res
 ####################################################################################################
+
+####################################################################################################
+#CHILLZONE
+####################################################################################################
+func updateCurrentUserLastWashed():
+	var currentUser = get_node("/root/CurrentUser").user_doc
+	var currentUserUID = currentUser["doc_name"]
+	# Set the last washed to now
+	currentUser["doc_fields"]["pomopetData"]["lastWashed"] = OS.get_system_time_msecs()
+	var userDocRef : FirestoreTask = Firebase.Firestore.collection(Constants.COLLECTIONS.USERS).update(currentUserUID, currentUser["doc_fields"])
+	var document : FirestoreTask = yield(userDocRef, "task_finished")
+	return document.data
+	
+#GET CATEGORIES FROM FIRESTORE
+func updateCurrentUserLastPoopPickUp():
+	var currentUser = get_node("/root/CurrentUser").user_doc
+	var currentUserUID = currentUser["doc_name"]
+	# Set the last washed to now
+	currentUser["doc_fields"]["pomopetData"]["lastPoopPickUp"] = OS.get_system_time_msecs()
+	var userDocRef : FirestoreTask = Firebase.Firestore.collection(Constants.COLLECTIONS.USERS).update(currentUserUID, currentUser["doc_fields"])
+	var document : FirestoreTask = yield(userDocRef, "task_finished")
+	return document.data
+####################################################################################################

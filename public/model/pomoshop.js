@@ -5,6 +5,7 @@ export class Pomoshop {
         this.photoURL = data.photoURL;
         this.photoName = data.photoName;
         this.skinType = data.skinType;
+        this.rarity = data.rarity;
     }
 
     /**************************************************
@@ -22,6 +23,7 @@ export class Pomoshop {
             photoURL: this.photoURL,
             photoName: this.photoName,
             skinType: this.skinType,
+            rarity: this.rarity,
         };
     }
 }
