@@ -1,0 +1,78 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_26pt.tres" type="DynamicFont" id=1]
+[ext_resource path="res://assets/gameimages/DungeonFight.PNG" type="Texture" id=2]
+[ext_resource path="res://transitions/dungeonfight_transition.gd" type="Script" id=3]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="VSplitContainer" type="VSplitContainer" parent="."]
+margin_left = 500.0
+margin_right = 1420.0
+margin_bottom = 900.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+dragger_visibility = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Game_Image" type="TextureRect" parent="VSplitContainer"]
+margin_right = 920.0
+margin_bottom = 444.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 2 )
+stretch_mode = 6
+
+[node name="Game_Details" type="RichTextLabel" parent="VSplitContainer"]
+margin_top = 456.0
+margin_right = 920.0
+margin_bottom = 900.0
+rect_clip_content = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 1 )
+text = "			Dungeon Fight
+			
+Controls: 
+
+Use Mouse to Select Answer
+
+Objective: 
+
+Answer as many questions correct as you can before time runs out or geting KO'ed."
+
+[node name="Dungeonfight_Transition_Timer" type="Timer" parent="."]
+process_mode = 0
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Time_Label" type="RichTextLabel" parent="."]
+margin_left = 1525.0
+margin_top = 100.0
+margin_right = 1669.0
+margin_bottom = 185.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 1 )
+text = "Time Left:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time_Till_Queue" type="RichTextLabel" parent="."]
+margin_left = 1681.0
+margin_top = 120.0
+margin_right = 1725.0
+margin_bottom = 165.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="timeout" from="Dungeonfight_Transition_Timer" to="." method="_on_Dungeonfight_Transition_Timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

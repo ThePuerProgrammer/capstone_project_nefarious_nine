@@ -102,9 +102,7 @@ export function addEventListeners() {
     $(`#create-deck-modal`).on('hidden.bs.modal', function (e) {
         Elements.formCreateDeck.reset();
     });
-    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e => {
-        const yes = e.target.yes.value;
-    });
+
 
 
 }

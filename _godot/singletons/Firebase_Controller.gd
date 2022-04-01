@@ -72,6 +72,7 @@ func get_categories():
 	var document : FirestoreDocument = yield(document_task, "get_document")
 	print("Categories Document:", document)
 	return document
+	
 #GET USER DECKS FROM FIRESTORE
 func get_user_doc_for_nested(uid):
 	assert(uid != null)

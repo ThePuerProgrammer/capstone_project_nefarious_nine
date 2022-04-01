@@ -1,11 +1,13 @@
 extends Control
 
+#Buttons and Labels
 onready var game_detail_label=$"Game_Selection/VSplit_Game_Container/Game_Details_Label"
 onready var method_selection_optionbutton=$"Method_Selection_Button"
 onready var deck_selection_optionbutton=$"Deck_Selection_Button"
 onready var category_selection_optionbutton=$"Category_Selection_Button"
 onready var timer_selection_optionbutton=$"Timer_Selection_Button"
 onready var game_list_label=$"Game_Selection/VSplit_Game_Container/Games_Selection_Label"
+
 #GAH-DOUGH-BALS
 var game_selection_array = []
 var dungeon_selected=false
@@ -16,6 +18,15 @@ var desired_time
 var category_selected
 var deck_selected
 var deckList
+
+
+#Game Scenes
+var pomobite_scene= preload("res://pomobite/Restaurant_Level.tscn")
+var slowfruit_scene= preload("res://SlowFruit/Fruit_Level.tscn")
+var pomoblast_scene= preload("res://PomoBlast/PomoBlast.tscn")
+var dungeonfight_scene= preload("res://dungeon_fight/dungeon_fight.tscn")
+
+
 #Dictionaries
 var dic_val_categories : Dictionary = {}
 var dic_deck_name : Dictionary = {} #(-_-)#
@@ -23,18 +34,21 @@ var dic_deck_name : Dictionary = {} #(-_-)#
 func _ready():
 	$FadeIn.show()
 	$FadeIn.fade_in()
-	
-	#Button Disabled
-	disable_category_selection_option()
-	disable_deck_selection_option()
+	if game_selection_array.empty()==true: 
+		#Button Disabled
+		disable_category_selection_option()
+		disable_deck_selection_option()
 
-	#Needed Items From The Start
-	add_items_to_selection_method()
-	add_items_to_timer_selection()
-	method_selection_optionbutton.connect("item_selected",self,"on_method_item_selected")
-	timer_selection_optionbutton.connect("item_selected",self,"on_timer_item_selected")
-	category_selection_optionbutton.connect("item_selected",self,"on_category_item_selected")
-	deck_selection_optionbutton.connect("item_selected",self,"on_deck_item_selected")
+		#Needed Items From The Start
+		add_items_to_selection_method()
+		add_items_to_timer_selection()
+		method_selection_optionbutton.connect("item_selected",self,"on_method_item_selected")
+		timer_selection_optionbutton.connect("item_selected",self,"on_timer_item_selected")
+		category_selection_optionbutton.connect("item_selected",self,"on_category_item_selected")
+		deck_selection_optionbutton.connect("item_selected",self,"on_deck_item_selected")
+	else:
+		game_selection_array.remove(0)
+		_on_Start_Button_pressed()
 
 func _on_FadeOut_fade_out_finished():
 	if get_tree().change_scene('res://Menu/MenuScreen.tscn') != OK:
@@ -54,25 +68,38 @@ func _on_Back_Button_pressed():
 	$FadeOut.fade_out()
 #Start Button
 func _on_Start_Button_pressed():
-	if dungeon_selected==false && pomoblast_selected==false && !pomobite_selected && !slowfruit_selected:
+	if !dungeon_selected and !pomoblast_selected and !pomobite_selected and !slowfruit_selected:
 		get_node("No_Games_Selected_Popup_Alert").popup()
 	elif method_selection_optionbutton.get_selected_id()==0:
 		get_node("No_Selection_Method_Choosen_Popup_Alert").popup()
-	elif deck_selection_optionbutton.get_selected_id()==0 && deck_selection_optionbutton.disabled == false:
+	elif deck_selection_optionbutton.get_selected_id()==0 and deck_selection_optionbutton.disabled == false:
 		get_node("No_Deck_Selected_Popup_Alert").popup()
-	elif category_selection_optionbutton.get_selected_id()==0 && category_selection_optionbutton.disabled == false:
+	elif category_selection_optionbutton.get_selected_id()==0 and category_selection_optionbutton.disabled == false:
 		get_node("No_Category_Selected_Popup_Alert").popup()
 	elif timer_selection_optionbutton.get_selected_id()==0:
 		get_node("No_Time_Selected_Popup_Alert").popup()
-	elif slowfruit_selected==true && game_selection_array[0]=="Slowfruit":
-		get_tree().change_scene('res://SlowFruit/Fruit_Level.tscn')	
-	elif pomoblast_selected==true && game_selection_array[0]=="Pomoblast":
-		get_tree().change_scene('res://PomoBlast/PomoBlast.tscn')	
-	elif dungeon_selected==true && game_selection_array[0]=="Dungeon Fight":
-		get_tree().change_scene('res://dungeon_fight/dungeon_fight.tscn')
+	elif slowfruit_selected==true and game_selection_array[0]=="Slowfruit":
+		#get_tree().change_scene_to(slowfruit_scene)	
+		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
+	elif pomoblast_selected==true and game_selection_array[0]=="Pomoblast":
+		#get_tree().change_scene_to(pomoblast_scene)	
+		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
+	elif dungeon_selected==true and game_selection_array[0]=="Dungeon Fight":
+		#get_tree().change_scene_to(dungeonfight_scene)
+		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
 	elif pomobite_selected == true and game_selection_array[0] == "PomoBITE":
-		get_tree().change_scene("res://pomobite/Restaurant_Level.tscn")
+		#get_tree().change_scene_to(pomobite_scene)
+		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
+	elif game_selection_array.empty():
+		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
 ####################################################################################################
+
+func deck_or_cate():
+	if deck_selected != null:
+		return deck_selected
+	elif category_selected != null:
+		return category_selected
+
 
 ####################################################################################################
 #DETAILS BUTTONS
@@ -91,7 +118,7 @@ func _on_Slowfruit_Details_Button_pressed():
 	
 #Button Click for PomoBITE Details	
 func _on_PomoBITE_Details_Button_pressed():
-	game_detail_label.text = "Title: PomoBITE \n\nCreated By: Jesse Rankins\n\nDescription: Take care of your guests in the PomoBITE restaurant and earn Pomocoins!\n\nControls: E - To Select/Use\nArrow Keys + WASD - To Move\n\nObjective: Remember your guests orders and move quick!"
+	game_detail_label.text = pomoBITEDetails()
 	
 #Text for Dungeon_Fight Details
 func ondungeonDetails():
@@ -107,6 +134,11 @@ func pomoblastDetails():
 func slowfruitDetails():
 	var text ="Title: Slowfruit \n\nCreated By: Susan Emberton\n\nDescription: Help Boogie Dog catch the fruit and blast off! Watch out for the slowfruit.\n\nControls: Space or UP to Jump\nArrow Keys - To Move\n\nObjective: Eat the best fruit by choosing the correct answer"
 	return text
+	
+func pomoBITEDetails():
+	var text ="Title: PomoBITE \n\nCreated By: Jesse Rankins\n\nDescription: Take care of your guests in the PomoBITE restaurant and earn Pomocoins!\n\nControls: E - To Select/Use\nArrow Keys + WASD - To Move\n\nObjective: Remember your guests orders and move quick!"
+	return text
+
 ####################################################################################################
 
 ####################################################################################################
@@ -124,7 +156,7 @@ func _on_dungeon_fight_Selection_Toggle_toggled(button_pressed):
 		dungeon_selected=true
 		print("Dungeon_Selected:" + (String(dungeon_selected)))
 		update_game_label(game_selection_array)
-		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+
 	else:
 		#Text for Toggle Off Dungeon
 		game_selection_array.erase("Dungeon Fight")
@@ -134,7 +166,7 @@ func _on_dungeon_fight_Selection_Toggle_toggled(button_pressed):
 		dungeon_selected=false
 		print("Dungeon_Selected:" + (String(dungeon_selected)))
 		update_game_label(game_selection_array)
-		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+
 #Pomoblast Toggler
 func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
 	if(button_pressed):
@@ -146,7 +178,7 @@ func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
 		pomoblast_selected=true
 		print("Pomoblast_Selected:" + (String(pomoblast_selected)))
 		update_game_label(game_selection_array)
-		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+
 	else:
 		#Text for Toggle Off Pomoblast
 		game_selection_array.erase("Pomoblast")
@@ -156,7 +188,7 @@ func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
 		pomoblast_selected=false
 		print("Pomoblast_Selected:"+ (String(pomoblast_selected)))
 		update_game_label(game_selection_array)
-		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+
 		
 #Slowfruit Toggler
 func _on_Slowfruit_Selection_Toggle_toggled(button_pressed):
@@ -169,7 +201,7 @@ func _on_Slowfruit_Selection_Toggle_toggled(button_pressed):
 		slowfruit_selected=true
 		print("Slowfruit_Selected:" + (String(slowfruit_selected)))
 		update_game_label(game_selection_array)
-		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+
 	else:
 		#Text for Toggle Off Pomoblast
 		game_selection_array.erase("Slowfruit")
@@ -179,7 +211,7 @@ func _on_Slowfruit_Selection_Toggle_toggled(button_pressed):
 		slowfruit_selected=false
 		print("Slowfruit_Selected:"+ (String(slowfruit_selected)))
 		update_game_label(game_selection_array)
-		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+
 
 func _on_PomoBITE_Selection_Toggle_toggled(button_pressed):
 	if(button_pressed):
@@ -189,9 +221,9 @@ func _on_PomoBITE_Selection_Toggle_toggled(button_pressed):
 		game_selection_array=shuffle(game_selection_array)
 		print(game_selection_array)
 		pomobite_selected = true
-		print("Pomoblast_Selected:" + (String(pomoblast_selected)))
+		print("Pomobite_Selected:" + (String(pomobite_selected)))
 		update_game_label(game_selection_array)
-		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+
 	else:
 		#Text for Toggle Off Pomoblast
 		game_selection_array.erase("PomoBITE")
@@ -199,9 +231,9 @@ func _on_PomoBITE_Selection_Toggle_toggled(button_pressed):
 		game_selection_array=shuffle(game_selection_array)
 		print(game_selection_array)
 		pomobite_selected=false
-		print("Pomoblast_Selected:"+ (String(pomobite_selected)))
+		print("Pomobite_Selected:"+ (String(pomobite_selected)))
 		update_game_label(game_selection_array)
-		#$Game_Selection/VSplit_Game_Container/Games_Selection_Label.text=game_selection_array
+
 
 #Function Shuffle Queue
 #Reference:https://godotengine.org/qa/2547/how-to-randomize-a-list-array 
@@ -225,7 +257,7 @@ func add_items_to_selection_method():
 #Deck Dropdown Items
 func add_items_to_deck_selection():
 	#Retrieves Decks from Firestore User-Owned Decks
-	deckList = FirebaseController.get_user_decks(Constants.TEST_UID)
+	deckList = FirebaseController.get_user_decks(CurrentUser.user_id)
 	if deckList is GDScriptFunctionState:
 		deckList = yield(deckList, "completed")
 #Populates to a dictionary
@@ -233,6 +265,9 @@ func add_items_to_deck_selection():
 		var fields = deck["doc_fields"]
 		dic_deck_name[deck["doc_name"]] = fields["name"]
 		print("DIC:",dic_deck_name[deck["doc_name"]])
+	
+	print("\nDECK DIC:",dic_deck_name,"\n")
+	
 #Adds Selections
 	deck_selection_optionbutton.add_item("Pick One")
 	for deck in dic_deck_name.values():
@@ -291,6 +326,7 @@ func on_timer_item_selected(id):
 	match timer_selection_optionbutton.get_item_id(id):
 		id:
 			desired_time=timer_selection_optionbutton.get_item_text(id)
+
 			print("Desired Time Assignment:", desired_time)
 
 #Checks which Category has been selected
@@ -326,21 +362,4 @@ func disable_deck_selection_option():
 func update_game_label(game_selection_array):
 	game_list_label.text = ("Game(s): \n" + str(game_selection_array))
 	
-
 ####################################################################################################
-
-
-
-
-
-
-###########################DDDDEEEEEEEEELLLLLLLLLLEEEEEEEEEEEEEEEETTTTTTTTTTEEEEEEEEEEEEEE##########
-####################################################################################################
-
-####################################################################################################
-
-
-
-
-
-

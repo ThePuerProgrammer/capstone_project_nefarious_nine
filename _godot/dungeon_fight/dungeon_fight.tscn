@@ -266,34 +266,29 @@ animations = [ {
 
 [sub_resource type="SpriteFrames" id=17]
 animations = [ {
+"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
+"loop": true,
+"name": "die",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 84 ) ],
+"loop": true,
+"name": "dead",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 66 ) ],
 "loop": true,
 "name": "third_attack_level",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"frames": [ ExtResource( 58 ) ],
 "loop": true,
-"name": "idle_animation",
+"name": "first_attack_level",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
 "loop": true,
 "name": "attack_animation_p1",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
-"loop": true,
-"name": "hit_effect",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "attack_lingering",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 58 ) ],
-"loop": true,
-"name": "first_attack_level",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 63 ) ],
@@ -306,14 +301,19 @@ animations = [ {
 "name": "attack_animation_p2",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
+"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
 "loop": true,
-"name": "die",
+"name": "hit_effect",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 84 ) ],
+"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
 "loop": true,
-"name": "dead",
+"name": "idle_animation",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "attack_lingering",
 "speed": 5.0
 } ]
 
@@ -791,6 +791,9 @@ value = 40.0
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 76 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TimeLeftSprite" type="Sprite" parent="TimeLeft"]
 position = Vector2( 1667.22, 820.523 )
@@ -809,6 +812,9 @@ custom_fonts/font = ExtResource( 28 )
 text = "45"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ResultsUI" type="Control" parent="."]
 margin_right = 1920.0
@@ -833,10 +839,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -611.5
-margin_top = -1050.0
-margin_right = 611.5
-margin_bottom = -476.0
+margin_left = 348.5
+margin_top = -600.0
+margin_right = 1571.5
+margin_bottom = -26.0
 rect_min_size = Vector2( 0, 300 )
 custom_styles/panel = ExtResource( 8 )
 

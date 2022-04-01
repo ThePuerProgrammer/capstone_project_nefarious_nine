@@ -79,12 +79,6 @@ export function addEventListeners() {
         }
     });
 
-    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e => {
-        e.preventDefault();
-        const yes = e.target.yes.value;
-        console.log(`${yes}`);
-    })
-
 
 }
 
