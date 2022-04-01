@@ -52,12 +52,14 @@ func _on_login_failed(code, msg):
 func _on_login_succeeded(_auth_info):
 	user_is_authenticated = true
 	
-	if window != null: 
-		user_doc = FirebaseController.get_user_document(user_id)
-		if user_doc is GDScriptFunctionState:
-			user_doc = yield(user_doc, "completed")
-			print("user doc received!")
-			print(user_doc)
+	#CHANGED FOR TESTING
+	user_id = "vEcdq4xFRwODKEzZIEuE57AeQXZ2"
+	#if window != null: 
+	user_doc = FirebaseController.get_user_document(user_id)
+	if user_doc is GDScriptFunctionState:
+		user_doc = yield(user_doc, "completed")
+		print("user doc received!")
+		print(user_doc)
 
 	emit_signal("authentication_success")
 
