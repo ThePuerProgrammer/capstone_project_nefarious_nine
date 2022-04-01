@@ -459,6 +459,10 @@ volume_db = -20.0
 stream = ExtResource( 28 )
 volume_db = -20.0
 
+[node name="FoodController" type="Node" parent="ActionBarController"]
+
+[node name="Sprite" type="Sprite" parent="ActionBarController/FoodController"]
+
 [node name="Pet" parent="." instance=ExtResource( 2 )]
 position = Vector2( 417.556, 558.986 )
 scale = Vector2( 0.7, 0.7 )
