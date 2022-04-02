@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_out.tres" type="Animation" id=1]
 [ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=2]
@@ -28,9 +28,11 @@
 [ext_resource path="res://ChillZone/poop_pomopet/CloudPuffParticle.tscn" type="PackedScene" id=26]
 [ext_resource path="res://ChillZone/poop_pomopet/SoundEffects/TrashcanLidClose.mp3" type="AudioStream" id=27]
 [ext_resource path="res://ChillZone/poop_pomopet/SoundEffects/TrashcanLidOpen.mp3" type="AudioStream" id=28]
-[ext_resource path="res://ChillZone/food_pomopet/art/food_bowl.png" type="Texture" id=29]
+[ext_resource path="res://ChillZone/food_pomopet/art/FoodBowls/food_bowl_0.png" type="Texture" id=29]
 [ext_resource path="res://ChillZone/food_pomopet/art/dog_food_bag.png" type="Texture" id=30]
 [ext_resource path="res://ChillZone/food_pomopet/art/dog_food_chips.png" type="Texture" id=31]
+[ext_resource path="res://ChillZone/FoodController.gd" type="Script" id=32]
+[ext_resource path="res://ChillZone/FoodBag.gd" type="Script" id=33]
 
 [sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( 0, 0, 128, 0, 128, 128, 0, 128 )
@@ -257,21 +259,6 @@ animations = [ {
 [sub_resource type="CircleShape2D" id=14]
 radius = 31.5139
 
-[sub_resource type="GDScript" id=15]
-script/source = "extends Node
-
-var foodBowlLevels = [1.0, 0.8, 0.6, 0.4, 0.2, 0] # , 0 == Fully Dirty, 1 == Fully Clean
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-"
-
 [sub_resource type="CanvasItemMaterial" id=16]
 
 [sub_resource type="CanvasItemMaterial" id=17]
@@ -418,10 +405,10 @@ volume_db = -12.5
 script = ExtResource( 21 )
 
 [node name="PoopRegion" type="ReferenceRect" parent="ActionBarController/PoopController"]
-margin_left = -1.02399
-margin_top = 668.506
-margin_right = 1816.98
-margin_bottom = 669.506
+margin_left = 309.759
+margin_top = 665.789
+margin_right = 1909.76
+margin_bottom = 666.789
 border_color = Color( 1, 0, 0, 0 )
 
 [node name="Trashcan" type="Node2D" parent="ActionBarController/PoopController"]
@@ -485,15 +472,16 @@ volume_db = -20.0
 stream = ExtResource( 28 )
 volume_db = -20.0
 
-[node name="FoodController" type="Node" parent="ActionBarController"]
-script = SubResource( 15 )
+[node name="FoodController" type="Node2D" parent="ActionBarController"]
+script = ExtResource( 32 )
 
 [node name="BowlSprite" type="Sprite" parent="ActionBarController/FoodController"]
-position = Vector2( 145.817, 610.87 )
-scale = Vector2( 6, 6 )
+position = Vector2( 154.836, 620.508 )
+scale = Vector2( 3, 3 )
 texture = ExtResource( 29 )
 
 [node name="FoodBag" type="Node2D" parent="ActionBarController/FoodController"]
+script = ExtResource( 33 )
 
 [node name="BagIdle" type="Sprite" parent="ActionBarController/FoodController/FoodBag"]
 visible = false
@@ -507,12 +495,12 @@ rotation = -2.35619
 scale = Vector2( 3, 3 )
 texture = ExtResource( 30 )
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="ActionBarController/FoodController/FoodBag"]
+[node name="DogFoodParticles" type="CPUParticles2D" parent="ActionBarController/FoodController/FoodBag"]
 material = SubResource( 17 )
 emitting = false
 amount = 100
 lifetime = 4.0
-explosiveness = 0.5
+local_coords = false
 texture = ExtResource( 31 )
 emission_shape = 3
 emission_points = PoolVector2Array( -33, 40, -20, 46, -12, 55, -45, 38, -55, 30 )
@@ -532,6 +520,7 @@ position = Vector2( 417.556, 558.986 )
 scale = Vector2( 0.7, 0.7 )
 
 [connection signal="pressed" from="ActionBar/HBoxContainer/CleanButton" to="ActionBar" method="_on_CleanButton_pressed"]
+[connection signal="pressed" from="ActionBar/HBoxContainer/FeedButton" to="ActionBar" method="_on_FeedButton_pressed"]
 [connection signal="pressed" from="ActionBar/HBoxContainer/PoopPickupButton" to="ActionBar" method="_on_PoopPickupButton_pressed"]
 [connection signal="hide" from="ActionBarController/WashPomopetController/EffectController/MouseBubblesParticle" to="ActionBarController/WashPomopetController/EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
 [connection signal="timeout" from="ActionBarController/WashPomopetController/EffectController/MouseBubblesCooldownTimer" to="ActionBarController/WashPomopetController/EffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
