@@ -998,7 +998,7 @@ export async function leaveClassroom(classId, userEmail) {
         .update({ members: arrayRemove(userEmail) });
 }
 //============================================================================//
-// DELETE CLASSROOM
+// DELETE CLASSROOM (needs to be revisted by --blake)
 //=============================================================================//
 
 export async function deleteClassroom(classroomDocID) {
@@ -1106,6 +1106,7 @@ export async function getFlashcards(uid, docId) {
 }
 //CLASSROOMS
 export async function getClassroomFlashcards(isClassDeck, docId) {
+    console.log("IS IT WORKING " + isClassDeck, docId)
     let flashcards = [];
     const snapshot = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS).doc(isClassDeck)
@@ -2065,6 +2066,113 @@ export async function uploadProfilePicture(profilePicturerFile, oldPfpName) {
     return { profilePictureName, profilePictureURL };
 }
 
+
+
+export async function deleteAccount(userEmail) {
+    let emails = [];
+    emails[0] = userEmail;
+    let classDocIds = [];
+    let classDecksIds = [];
+
+    let twoDarray = [];
+    let array1 = [];
+    // GET CLASSROOMS AND CLASS DOC IDS
+    try {
+        var ref = await firebase.firestore()
+            .collection(Constant.collectionName.CLASSROOMS)
+            .where("moderatorList", "array-contains-any", emails)
+            .get()
+
+        ref.forEach(doc => {
+            classDocIds.push(doc.id);
+            // testArray.push(doc.id);
+
+        });
+
+    } catch (e) {
+        console.log(e);
+    }
+
+    //GET ASSOCIATED OWNED_DECKS
+    try {
+        for (let i = 0; i < classDocIds.length; i++) {
+
+            classDecksIds = [];//clear array
+            var ref2 = await firebase.firestore()
+                .collection(Constant.collectionName.CLASSROOMS)
+                .doc(classDocIds[i])
+                .collection(Constant.collectionName.OWNED_DECKS)
+                .get();
+
+            ref2.forEach(doc => {
+                classDecksIds.push(doc.id);
+                array1 = [] //clear array
+                array1 = [classDocIds[i], doc.id]
+                twoDarray.push(array1); //populates twoDaraay with a key value pair of classdocid and deckdocid
+            })
+        }
+        //DELETE DECK DATA 
+        for (let i = 0; i < twoDarray.length; i++) {
+            let arr;
+            arr = twoDarray[i]; //arr is now [classdocid, deckdocid]
+            console.log("CLASS " + arr[0]);
+            console.log("DECK " + arr[1]);
+            var flashcards = await getClassroomFlashcards(arr[0], arr[1]);
+
+            flashcards.forEach(doc => {
+                console.log("FLASH ID " + doc.docID);
+                let flashdocid = doc.docID;
+                deleteClassDeckData(arr[0], arr[1], flashdocid);
+            })
+        }
+
+        //DELETE OWNED_DECKS, ALSO DELETES FLASHCARDS
+        for (let i = 0; i < twoDarray.length; i++) {
+            let arr;
+            arr = twoDarray[i];
+            await deleteClassDeck(arr[0], arr[1]);
+        }
+
+
+
+
+
+    } catch (e) {
+        console.log(e);
+    }
+
+
+
+
+
+
+}
+//============================================================================//
+//DELETE DECK DATA HELPER FUNCTION
+//============================================================================//
+
+export async function deleteClassDeckData(classDocID, deckDocID, flascardDocID) {
+    try {
+        await firebase.firestore()
+            .collection(Constant.collectionName.CLASSROOMS)
+            .doc(classDocID)
+            .collection(Constant.collectionName.DECK_DATA)
+            .doc(deckDocID)
+            .collection(Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+            .doc(flascardDocID)
+            .delete();
+        await firebase.firestore()
+            .collection(Constant.collectionName.CLASSROOMS)
+            .doc(classDocID)
+            .collection(Constant.collectionName.DECK_DATA)
+            .doc(deckDocID)
+            .delete();
+
+    } catch (e) {
+        console.log(e);
+    }
+
+}
 //============================================================================//
 // UPDATE POMOPET
 //============================================================================//
@@ -2072,7 +2180,7 @@ export async function updatePomopet(uid, pomopet) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({'pomopet': pomopet,  'equippedSkin': ""});
+        .update({ 'pomopet': pomopet, 'equippedSkin': "" });
 }
 //============================================================================//
 
@@ -2124,7 +2232,7 @@ export async function updateCoins(uid, coins) {
         .update({ 'coins': coins });
 
     //Element.coinCount.innerHTML = coins;
-    window.sessionStorage.setItem('coins',coins)
+    window.sessionStorage.setItem('coins', coins)
     Element.coinCount.innerHTML = coins;
     //localStorage.setItem('usercoins', coins);
 }

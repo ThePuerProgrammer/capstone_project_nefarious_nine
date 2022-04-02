@@ -271,16 +271,19 @@ export async function profile_page() {
     });
 
     const deleteAccountForm = document.getElementsByClassName('form-delete-account');
-    deleteAccountForm.addEventListener('submit', async e => {
-        e.preventDefault();
-        let userEmail = e.target.userEmail.value;
-        console.log("EMAIL: " + userEmail);
-        Elements.modalDeleteAccountConfirmation.show();
-        const yesbutton = document.getElementById('modal-confirmation-delete-account-yes');
-        yesbutton.addEventListener("click", async e => {
-            console.log(userEmail);
+    for (let i = 0; i < deleteAccountForm.length; i++) {
+        deleteAccountForm[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            let userEmail = e.target.userEmail.value;
+
+            console.log("EMAIL: " + userEmail);
+            Elements.modalDeleteAccountConfirmation.show();
+            const yesbutton = document.getElementById('modal-confirmation-delete-account-yes');
+            yesbutton.addEventListener("click", async e => {
+                await FirebaseController.deleteAccount(userEmail);
+            });
         });
-    });
+    }
     // POMOPET NAME button listener
     const pomopetEditNameButton = document.getElementById('pomopet-edit-name-btn');
 
