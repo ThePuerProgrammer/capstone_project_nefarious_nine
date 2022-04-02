@@ -83,6 +83,7 @@ func get_user_doc_for_nested(uid):
 	return document
 	
 func get_user_decks(uid):
+	print("UID:",uid)
 	var query : FirestoreQuery = FirestoreQuery.new()\
 		.from(Constants.COLLECTIONS.USERS)\
 		.from(Constants.COLLECTIONS.DECKS)\
