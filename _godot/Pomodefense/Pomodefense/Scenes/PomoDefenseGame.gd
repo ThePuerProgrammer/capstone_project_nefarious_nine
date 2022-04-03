@@ -43,6 +43,7 @@ func start_next_wave():
 
 func retrieve_wave_data():
 	current_wave += 1
+	print(current_wave)
 	if current_wave <= 5:
 		wave_data = [["Fish", 1.0, "HighPath"], ["Fish", 1.0, "HighPath"], ["Fish", 1.0, "HighPath"]]
 	elif current_wave >= 5 and current_wave <= 10:
@@ -74,7 +75,6 @@ func spawn_enemies(wave_data):
 		var new_enemy = load("res://Scenes/" + i[0] + ".tscn").instance()
 		new_enemy.creep_type = i[0]
 		new_enemy.connect("base_damage", self, 'on_base_damage')
-		new_enemy.connect("enemy_destroyed", self, 'on_enemy_destroyed')
 		map_node.get_node(i[2]).add_child(new_enemy, true)
 		yield(get_tree().create_timer(i[1]), "timeout")
 		
@@ -118,15 +118,14 @@ func verify_and_build():
 		
 func on_base_damage(damage):
 	base_health -= damage
-	enemies_in_wave -= 1
+	print(base_health)
+	print(base_health)
 	if base_health <= 0:
 		emit_signal("game_finished", false)
 	else:
 		get_node("UI").update_health_bar(base_health)
+		enemies_in_wave -= 1
+		print(enemies_in_wave)
 		if enemies_in_wave == 0:
+			wave_data.clear()
 			start_next_wave()
-			
-func on_enemy_destroyed():
-	enemies_in_wave -= 1
-	if enemies_in_wave == 0:
-		start_next_wave()

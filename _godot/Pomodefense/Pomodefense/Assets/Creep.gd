@@ -1,7 +1,6 @@
 extends PathFollow2D
 
 signal base_damage(damage)
-signal enemy_destroyed()
 
 var speed
 var health
@@ -35,7 +34,6 @@ func on_hit(damage):
 	health -= damage
 	hp_bar.value = health
 	if health <= 0:
-		emit_signal("enemy_destroyed")
 		on_destroy()
 		
 func impact():
@@ -52,5 +50,4 @@ func impact():
 func on_destroy():
 	get_node("KinematicBody2D").queue_free()
 	yield(get_tree().create_timer(0.2), "timeout")
-	queue_free()
-	
+	self.queue_free()
