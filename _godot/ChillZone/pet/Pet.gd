@@ -1,8 +1,15 @@
 extends Node2D
 
+signal cleanButtonPressed
+signal feedButtonPressed
+signal petButtonPressed
+signal poopPickupButtonPressed
+
 var effectController
 var firebaseController
-var actionBar
+var poopController
+var foodController
+var actionBarVisible = false
 
 var bunnySprite = load("res://ChillZone/pet/pet_sprites/bunny_sprite.png")
 var catSprite = load("res://ChillZone/pet/pet_sprites/cat_sprite.png")
@@ -28,14 +35,14 @@ var progressBarMaxValue = 20
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	firebaseController = get_node("/root/FirebaseController")
-	actionBar = get_node("../ActionBar")
 	
 	var userDocFields = get_node("/root/CurrentUser").user_doc.doc_fields
 	currentPet = userDocFields["pomopet"]["type"]
 	var pomopetData = userDocFields["pomopetData"]
 	
-	
-	effectController = get_node("../ActionBarController/WashPomopetController/EffectController")
+	effectController = get_node("../ActionController/WashPomopetController/EffectController")
+	poopController = get_node("../ActionController/PoopController")
+	foodController = get_node("../ActionController/FoodController")
 	
 	updatePomopetSprite(currentPet)
 	startDirtinessLevel = getDirtinessLevel(pomopetData["lastWashed"])
@@ -43,8 +50,10 @@ func _ready():
 	print("start dirty: ", startDirtinessLevel)
 	setPetDirtinessLevel(startDirtinessLevel)
 	
+	_getCurrentKinematicBody().connect("input_event", self, "_on_currentKinematicBodyInput")
+	
 	if startDirtinessLevel == 0:
-		actionBar.setCleanButtonEnabled(false)
+		setCleanButtonEnabled(false)
 	
 	$WashMeter/WashMeterProgressBar.setMaxValue(progressBarMaxValue * startDirtinessLevel)
 	$WashMeter/WashMeterProgressBar.reset()
@@ -53,6 +62,9 @@ func _ready():
 func _process(delta):
 	if Input.is_action_just_pressed("left_mouse_click"):
 		mouseIsDown = true
+		if actionBarVisible and !isWithinPetTypeCollisionPolygon():
+			actionBarVisible = false
+			hideActionBar()
 	elif Input.is_action_just_released("left_mouse_click"):
 		mouseIsDown = false
 	
@@ -185,3 +197,50 @@ func _on_DogKinematicBody_mouse_entered():
 
 func _on_DogKinematicBody_mouse_exited():
 	withinDogCollisionPolygon = false
+
+
+func _on_CleanButton_pressed():
+	emit_signal("cleanButtonPressed")
+
+
+func _on_FeedButton_pressed():
+	emit_signal("feedButtonPressed")
+
+
+func _on_PetButton_pressed():
+	emit_signal("petButtonPressed")
+
+
+func _on_PoopPickupButton_pressed():
+	emit_signal("poopPickupButtonPressed")
+
+
+func showActionBar():
+	$ActionBar/AnimationPlayer.play("show_buttons")
+
+func hideActionBar():
+	$ActionBar/AnimationPlayer.play("hide_buttons")
+
+func setCleanButtonEnabled(isEnabled):
+	$ActionBar/CleanButton.disabled = !isEnabled
+
+func setPetButtonEnabled(isEnabled):
+	$ActionBar/PetButton.disabled = !isEnabled
+	
+func setFeedButtonEnabled(isEnabled):
+	$ActionBar/FeedButton.disabled = !isEnabled
+
+func setPickUpPoopButtonEnabled(isEnabled):
+	$ActionBar/PoopPickupButton.disabled = !isEnabled
+
+func canOpenActionBar():
+	return !petWashingModeOn and !poopController.poopPickupModeOn and !foodController.feedingModeOn # or petting mode on
+
+func _on_currentKinematicBodyInput(viewport, event, shape_idx):
+	if event is InputEventMouseButton and event.pressed and !actionBarVisible and canOpenActionBar(): # TODO: and canOpenActionBar
+		showActionBar()
+		actionBarVisible = true
+
+
+func _on_Pet_cleanButtonPressed():
+	startCleanAction()
