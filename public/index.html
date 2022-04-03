@@ -738,6 +738,34 @@
   </div>
   <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
 
+
+  <!-- MODAL: CONFIRMATION DELETE ACCOUNT -------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-confirmation-delete-account" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="modal-confirmation-delete-account-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-confirmation-delete-account-title">Confirmation</h5>
+        </div>
+        <div class="modal-body pomo-bg-color-light pomo-text-color-dark" id="modal-confirmation-delete-account-body">
+          <h6>Are you sure you wish to delete this account?</h6>
+          <h6>If you delete this account, it will be permanently
+            removed</h6>
+        </div>
+        <div class="modal-footer">
+          <form id="form-delete-account-confirmation" method="post">
+            <input type="hidden" name="yes" />
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              id="modal-confirmation-delete-account-yes" type="submit" data-bs-dismiss="modal">Yes</button>
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              data-bs-dismiss="modal">No</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
+
   <!-- MODAL: Submit a help ticket ---------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-submit-help-ticket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">

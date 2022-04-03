@@ -6,6 +6,7 @@ import * as Constant from '../model/constant.js'
 import * as Coins from '../controller/coins.js'
 import * as Utilities from './utilities.js';
 import { Pomoshop } from '../model/pomoshop.js'
+import { home_page } from './home_page.js'
 
 //Declaration of Image
 let imageFile2UploadProfile = "";
@@ -26,8 +27,8 @@ export function addEventListeners() {
 
         try {
             // if updated pfp
-            if(imageFile2UploadProfile != "") {
-                const {profilePictureName, profilePictureURL} = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile, currentPfpName);
+            if (imageFile2UploadProfile != "") {
+                const { profilePictureName, profilePictureURL } = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile, currentPfpName);
                 await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, profilePictureName, profilePictureURL);
             } else {
                 await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, null, null);
@@ -45,8 +46,8 @@ export function addEventListeners() {
         e.preventDefault();
         imageFile2UploadProfile = e.target.files[0];
 
-        if(!imageFile2UploadProfile){
-            Elements.formEditProfile.profilePictureTag.src= currentPfpURL;
+        if (!imageFile2UploadProfile) {
+            Elements.formEditProfile.profilePictureTag.src = currentPfpURL;
             return;
         }
 
@@ -60,6 +61,9 @@ export function addEventListeners() {
     $(`#edit-profile-modal`).on('hidden.bs.modal', function (e) {
         Elements.formEditProfile.form.reset();
     });
+
+
+
 
     Elements.addAccessoriesButton.addEventListener('click', e => {
         e.preventDefault();
@@ -92,6 +96,7 @@ export function addEventListeners() {
         }
     })
 
+
     // need a way to return pet to default skin
     Elements.submitAccessoriesButton.addEventListener('click', async () => {
         const user = await FirebaseController.getUser(Auth.currentUser.uid);
@@ -118,9 +123,9 @@ export function addEventListeners() {
 }
 
 export async function profile_page() {
-    try{
+    try {
         await Coins.get_coins(Auth.currentUser.uid);
-    } catch(e) {if(Constant.DEV)console.log(e);}    
+    } catch (e) { if (Constant.DEV) console.log(e); }
     imageFile2UploadProfile = ""; // reset
 
     // retrieve user info from Firebase
@@ -128,28 +133,28 @@ export async function profile_page() {
     try {
         user = await FirebaseController.getUser(Auth.currentUser.uid);
         currentPfpName = user.profilePhotoName;
-        currentPfpURL= user.profilePhotoURL;
-    }catch (e) {
+        currentPfpURL = user.profilePhotoURL;
+    } catch (e) {
         console.log(e);
     }
 
 
     let equippedAccURL;
     // if user has equippedAcc retrieve photoURL 
-    if(user.equippedAcc != "") {
+    if (user.equippedAcc != "") {
         try {
             equippedAccURL = await FirebaseController.getEquippedAccURL(user.equippedAcc);
-        }catch (e) {
+        } catch (e) {
             console.log(e);
         }
     }
-    
+
     let equippedSkinURL;
     // if user has equippedSkin retrieve photoURL 
     if (user.equippedSkin != "") {
         try {
             equippedSkinURL = await FirebaseController.getEquippedSkinURL(user.equippedSkin);
-        }catch (e) {
+        } catch (e) {
             console.log(e);
         }
     }
@@ -161,6 +166,11 @@ export async function profile_page() {
         <button id="${Constant.htmlIDs.editProfile}" type="button" class="btn btn-secondary pomo-bg-color-dark" style="padding:5px 12px; float:right">
         <i class="material-icons pomo-text-color-light">edit</i>Edit Profile</button>
         <button type="button" id="pomo-dressup-btn" class="btn btn-secondary pomo-bg-color-md-dark" style="float:right; margin-right: 10px;">Dress up!</button>
+        <form class="form-delete-account" method="post">
+        <input type="hidden" name="userEmail" value="${user.email}">
+        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
+        </form>
+
         </div>`;
 
     html += `<div class="user-profile">
@@ -178,19 +188,19 @@ export async function profile_page() {
     html += `<div class="equipped-pomopet">`;
 
     // if no equipped skin
-    if(user.equippedSkin == "") {
+    if (user.equippedSkin == "") {
         html += `<img src="${user.pomopet.petPhotoURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="pomopet-display center">`;
     } else {
         html += `<img src="${equippedSkinURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="pomopet-display center">`;
     }
 
     // if equipped acc
-    if(user.equippedAcc != "") {
+    if (user.equippedAcc != "") {
         html += `<img src="${equippedAccURL}" style="height: 80px; width: 100px; margin-bottom: -50px;  object-fit: cover;" class="acc-display center">`;
     }
 
     html += `<hr class="pomopet-bar">`;
-    
+
 
     html += `<div id="pomopet-edit-name-display">
         <button type="button" class="pomopet-edit-name-btn pomo-text-color-dark" id="pomopet-edit-name-btn" 
@@ -211,6 +221,7 @@ export async function profile_page() {
 
 
     //** DYNAMIC EVENT LISTENERS **//
+
 
     const dressupButton = document.getElementById('pomo-dressup-btn');
     dressupButton.addEventListener('click', async e => {
@@ -260,6 +271,23 @@ export async function profile_page() {
         $(`#${Constant.htmlIDs.editProfileModal}`).modal('show');
     });
 
+    const deleteAccountForm = document.getElementsByClassName('form-delete-account');
+    for (let i = 0; i < deleteAccountForm.length; i++) {
+        deleteAccountForm[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            let userEmail = e.target.userEmail.value;
+
+            console.log("EMAIL: " + userEmail);
+            Elements.modalDeleteAccountConfirmation.show();
+            const yesbutton = document.getElementById('modal-confirmation-delete-account-yes');
+
+            yesbutton.addEventListener("click", async e => {
+                await home_page();
+                await FirebaseController.deleteAccount(userEmail);
+            });
+        });
+
+    }
     // POMOPET NAME button listener
     const pomopetEditNameButton = document.getElementById('pomopet-edit-name-btn');
 

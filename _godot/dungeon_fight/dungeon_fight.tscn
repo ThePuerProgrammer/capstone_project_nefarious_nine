@@ -280,6 +280,11 @@ animations = [ {
 "name": "attack_lingering",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
+"loop": true,
+"name": "die",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 66 ) ],
 "loop": true,
 "name": "third_attack_level",
