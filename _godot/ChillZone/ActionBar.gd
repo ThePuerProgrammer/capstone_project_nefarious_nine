@@ -32,3 +32,4 @@ func _on_PoopPickupButton_pressed():
 
 func _on_FeedButton_pressed():
 	feedController.startFeedAction()
+	setFeedButtonEnabled(false)
