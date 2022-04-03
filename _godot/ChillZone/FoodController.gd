@@ -47,23 +47,11 @@ func _process(delta):
 	if feedingModeOn:
 		$FoodBag.global_transform.origin = get_global_mouse_position()
 		
+		setFoodBowlSprite(floor(getFoodLevel() + ((5 - getFoodLevel()) * $FeedMeter/FeedMeterProgressBar.getPercentageComplete())))
+		
 		# Mouse being shaken and is down
 		if isPouringFood() and mouseIsDown:
-			$FoodBag/DogFoodParticles.emitting = true
-			
-			# within bounds of food bowl and above the food bowl
-			if currentMouseMovePos.x >= $FoodFillZone.get_rect().position.x and currentMouseMovePos.x <= $FoodFillZone.get_rect().position.x + $FoodFillZone.get_rect().size.x and currentMouseMovePos.y <= $FoodFillZone.get_rect().position.y:
-				$FeedMeter/FeedMeterProgressBar.incrementByStep()
-				
-#				print(getFoodLevel())
-#				print((5 - getFoodLevel()) * $FeedMeter/FeedMeterProgressBar.getPercentageComplete())
-				# set our current food level to reflect changes of progress made 
-					# starting food level + (how many levels to get to full * percent complete)
-				setFoodBowlSprite(floor(getFoodLevel() + ((5 - getFoodLevel()) * $FeedMeter/FeedMeterProgressBar.getPercentageComplete())))
-		else:
-			$FoodBag/DogFoodParticles.emitting = false
-		
-#		if 
+			$FoodBag.spawnFoodAtRandomPoint()
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -125,9 +113,11 @@ func startFeedAction():
 
 func isPouringFood():
 	var lastMouseDistance = getDistanceBetweenMousePositions(lastMouseMovePos, currentMouseMovePos)
+	var mouseMoveDirection = currentMouseMovePos - lastMouseMovePos
+	print(mouseMoveDirection)
 	lastMouseMovePos = currentMouseMovePos
 	
-	return lastMouseDistance > 1.5
+	return lastMouseDistance > 1.5 and mouseMoveDirection.y < 0 and mouseMoveDirection.x > 0
 
 
 func _on_FoodParticleBowlKillbox_body_entered(body):
@@ -136,3 +126,13 @@ func _on_FoodParticleBowlKillbox_body_entered(body):
 
 func _on_DogFoodParticles_hide():
 	print(self, "died")
+
+
+func _on_FoodPieceKillBox_body_entered(body):
+	if feedingModeOn:
+		body.queue_free()
+		$FeedMeter/FeedMeterProgressBar.incrementByStep()
+
+func _on_FoodPieceDespawnZone_body_entered(body):
+	if feedingModeOn and body.get_collision_layer() == 16:
+		body.destroyFoodPiece()

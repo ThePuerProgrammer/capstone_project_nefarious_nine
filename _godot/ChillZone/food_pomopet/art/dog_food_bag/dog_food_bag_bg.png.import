@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/dog_food_chips.png-6681512847917d50001ee5bbec23df32.stex"
+path="res://.import/dog_food_bag_bg.png-0d3d4d87d070da02ef4881a27cb2eee5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/food_pomopet/art/dog_food_chips.png"
-dest_files=[ "res://.import/dog_food_chips.png-6681512847917d50001ee5bbec23df32.stex" ]
+source_file="res://ChillZone/food_pomopet/art/dog_food_bag/dog_food_bag_bg.png"
+dest_files=[ "res://.import/dog_food_bag_bg.png-0d3d4d87d070da02ef4881a27cb2eee5.stex" ]
 
 [params]
 
