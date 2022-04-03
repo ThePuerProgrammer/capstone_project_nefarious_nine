@@ -1,0 +1,78 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Assets/dog.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Bone.png" type="Texture" id=2]
+[ext_resource path="res://Resources/Kenney Rocket Square.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Assets/main_menu_bg.png" type="Texture" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 60
+font_data = ExtResource( 3 )
+
+[node name="GameOver" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_right = 5.0
+texture = ExtResource( 4 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -329.0
+margin_top = -107.0
+margin_right = 328.0
+margin_bottom = 38.0
+custom_fonts/font = SubResource( 1 )
+text = "You lose :("
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 384, 519 )
+scale = Vector2( 4.16797, 5.89062 )
+texture = ExtResource( 2 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+position = Vector2( 498, 535 )
+scale = Vector2( 3.4375, 4.57813 )
+texture = ExtResource( 2 )
+
+[node name="Sprite4" type="Sprite" parent="."]
+position = Vector2( 737, 500.313 )
+scale = Vector2( 3.69531, 5.54102 )
+texture = ExtResource( 2 )
+flip_h = true
+
+[node name="Sprite7" type="Sprite" parent="."]
+position = Vector2( 604, 533 )
+scale = Vector2( 3.20312, 4.01563 )
+texture = ExtResource( 2 )
+flip_h = true
+
+[node name="Sprite8" type="Sprite" parent="."]
+position = Vector2( 250, 564 )
+scale = Vector2( 3.875, 4.35938 )
+texture = ExtResource( 2 )
+
+[node name="Sprite6" type="Sprite" parent="."]
+position = Vector2( 481, 580 )
+scale = Vector2( 0.664063, 0.583333 )
+texture = ExtResource( 1 )
