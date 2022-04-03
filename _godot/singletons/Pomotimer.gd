@@ -8,6 +8,7 @@ var _game_queue
 var _deck
 var _time_limit
 var _testing_count
+var _flashcards = []
 ################################################################################
 
 #Creation of Timer/Adding to Tree/Connecting Signal

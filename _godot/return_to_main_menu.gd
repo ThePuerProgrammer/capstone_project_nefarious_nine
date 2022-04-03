@@ -9,24 +9,28 @@ onready var timer_selection_optionbutton=$"Timer_Selection_Button"
 onready var game_list_label=$"Game_Selection/VSplit_Game_Container/Games_Selection_Label"
 
 #GAH-DOUGH-BALS
-var game_selection_array = []
-var dungeon_selected=false
-var pomoblast_selected=false
-var slowfruit_selected=false
+var _game_selection_array = []
+var dungeon_selected = false
+var pomoblast_selected = false
+var slowfruit_selected = false
 var pomobite_selected
 var desired_time
 var category_selected
 var deck_selected
 var deckList
+var flashcardList
+
+
 
 #Dictionaries
-var dic_val_categories : Dictionary = {}
-var dic_deck_name : Dictionary = {} #(-_-)#
+var dict_val_categories : Dictionary = {}
+var deck_dict_name : Dictionary = {} #(-_-)#
+var flash_dict_name: Dictionary = {}
 
 func _ready():
 	$FadeIn.show()
 	$FadeIn.fade_in()
-	if game_selection_array.empty()==true: 
+	if _game_selection_array.empty()==true: 
 		#Button Disabled
 		disable_category_selection_option()
 		disable_deck_selection_option()
@@ -39,7 +43,7 @@ func _ready():
 		category_selection_optionbutton.connect("item_selected",self,"on_category_item_selected")
 		deck_selection_optionbutton.connect("item_selected",self,"on_deck_item_selected")
 	else:
-		game_selection_array.remove(0)
+		_game_selection_array.remove(0)
 		_on_Start_Button_pressed()
 
 func _on_FadeOut_fade_out_finished():
@@ -70,16 +74,16 @@ func _on_Start_Button_pressed():
 		get_node("No_Category_Selected_Popup_Alert").popup()
 	elif timer_selection_optionbutton.get_selected_id()==0:
 		get_node("No_Time_Selected_Popup_Alert").popup()
-	elif slowfruit_selected==true and game_selection_array[0]=="Slowfruit":
-		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
-	elif pomoblast_selected==true and game_selection_array[0]=="Pomoblast":
-		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
-	elif dungeon_selected==true and game_selection_array[0]=="Dungeon Fight":
-		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
-	elif pomobite_selected == true and game_selection_array[0] == "PomoBITE":
-		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
-	elif game_selection_array.empty():
-		Pomotimer.start_game(int(desired_time),game_selection_array,deck_or_cate())
+	elif slowfruit_selected==true and _game_selection_array[0]=="Slowfruit":
+		Pomotimer.start_game(int(desired_time),_game_selection_array,deck_or_cate())
+	elif pomoblast_selected==true and _game_selection_array[0]=="Pomoblast":
+		Pomotimer.start_game(int(desired_time),_game_selection_array,deck_or_cate())
+	elif dungeon_selected==true and _game_selection_array[0]=="Dungeon Fight":
+		Pomotimer.start_game(int(desired_time),_game_selection_array,deck_or_cate())
+	elif pomobite_selected == true and _game_selection_array[0] == "PomoBITE":
+		Pomotimer.start_game(int(desired_time),_game_selection_array,deck_or_cate())
+	elif _game_selection_array.empty():
+		Pomotimer.start_game(int(desired_time),_game_selection_array,deck_or_cate())
 ####################################################################################################
 
 ####################################################################################################
@@ -130,65 +134,65 @@ func _on_dungeon_fight_Selection_Toggle_toggled(button_pressed):
 	#Dungeon Selector Clicked
 	if(button_pressed):
 		#Text for Toggle On Dungeon
-		game_selection_array.append("Dungeon Fight")
-		game_selection_array=shuffle(game_selection_array)
+		_game_selection_array.append("Dungeon Fight")
+		_game_selection_array=shuffle(_game_selection_array)
 		dungeon_selected=true
-		update_game_label(game_selection_array)
+		update_game_label(_game_selection_array)
 
 	else:
 		#Text for Toggle Off Dungeon
-		game_selection_array.erase("Dungeon Fight")
-		game_selection_array=shuffle(game_selection_array)
+		_game_selection_array.erase("Dungeon Fight")
+		_game_selection_array=shuffle(_game_selection_array)
 		dungeon_selected=false
-		update_game_label(game_selection_array)
+		update_game_label(_game_selection_array)
 
 #Pomoblast Toggler
 func _on_Pomoblast_Selection_Toggle_toggled(button_pressed):
 	if(button_pressed):
 		#Text for Toggle On Pomoblast
-		game_selection_array.append("Pomoblast")
-		game_selection_array=shuffle(game_selection_array)
+		_game_selection_array.append("Pomoblast")
+		_game_selection_array=shuffle(_game_selection_array)
 		pomoblast_selected=true
-		update_game_label(game_selection_array)
+		update_game_label(_game_selection_array)
 
 	else:
 		#Text for Toggle Off Pomoblast
-		game_selection_array.erase("Pomoblast")
-		game_selection_array=shuffle(game_selection_array)
+		_game_selection_array.erase("Pomoblast")
+		_game_selection_array=shuffle(_game_selection_array)
 		pomoblast_selected=false
-		update_game_label(game_selection_array)
+		update_game_label(_game_selection_array)
 
 #Slowfruit Toggler
 func _on_Slowfruit_Selection_Toggle_toggled(button_pressed):
 	if(button_pressed):
 		#Text for Toggle On Pomoblast
-		game_selection_array.append("Slowfruit")
-		game_selection_array=shuffle(game_selection_array)
+		_game_selection_array.append("Slowfruit")
+		_game_selection_array=shuffle(_game_selection_array)
 		slowfruit_selected=true
-		update_game_label(game_selection_array)
+		update_game_label(_game_selection_array)
 
 	else:
 		#Text for Toggle Off Pomoblast
-		game_selection_array.erase("Slowfruit")
-		game_selection_array=shuffle(game_selection_array)
+		_game_selection_array.erase("Slowfruit")
+		_game_selection_array=shuffle(_game_selection_array)
 		slowfruit_selected=false
-		update_game_label(game_selection_array)
+		update_game_label(_game_selection_array)
 
 #PomoBITE Toggler
 func _on_PomoBITE_Selection_Toggle_toggled(button_pressed):
 	if(button_pressed):
 		#Text for Toggle On Pomoblast
-		game_selection_array.append("PomoBITE")
-		game_selection_array=shuffle(game_selection_array)
+		_game_selection_array.append("PomoBITE")
+		_game_selection_array=shuffle(_game_selection_array)
 		pomobite_selected = true
-		update_game_label(game_selection_array)
+		update_game_label(_game_selection_array)
 
 	else:
 		#Text for Toggle Off Pomoblast
-		game_selection_array.erase("PomoBITE")
-		game_selection_array=shuffle(game_selection_array)
+		_game_selection_array.erase("PomoBITE")
+		_game_selection_array=shuffle(_game_selection_array)
 		pomobite_selected=false
-		update_game_label(game_selection_array)
+		update_game_label(_game_selection_array)
 ####################################################################################################
 
 ####################################################################################################
@@ -212,17 +216,17 @@ func add_items_to_deck_selection():
 #Populates to a dictionary
 	for deck in deckList:
 		var fields = deck["doc_fields"]
-		dic_deck_name[deck["doc_name"]] = fields["name"]
-		print("DIC:",dic_deck_name[deck["doc_name"]])
-	
-	print("\nDECK DIC:",dic_deck_name,"\n")
-	
+		deck_dict_name[deck["doc_name"]] = fields["name"]
+		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
+
 #Adds Selections
 	deck_selection_optionbutton.add_item("Pick One")
-	for deck in dic_deck_name.values():
+	for deck in deck_dict_name.values():
+		#deck_selection_optionbutton.add_item(deck[0])
 		deck_selection_optionbutton.add_item(deck)
 	deck_selection_optionbutton.add_item("DEMO")
 	deck_selection_optionbutton.set_item_disabled(0,true)
+
 
 #Category Dropdown Items
 func add_items_to_category_selection():
@@ -231,16 +235,16 @@ func add_items_to_category_selection():
 	if categories is GDScriptFunctionState:
 		categories = yield(categories, "completed")
 	
-	#This retrieves the doc_fields values into an array, making it a double array
-	#This works trying something else
-	var dic_val_array = Array(categories["doc_fields"].values())
-	#Value Below Prints Misc to Console, [0][i] to see all categories
-	print(dic_val_array[0])
+	##This retrieves the doc_fields values into an array, making it a double array
+	##This works trying something else
+	var dict_val_array = Array(categories["doc_fields"].values())
+	##Value Below Prints Misc to Console, [0][i] to see all categories
+	#print(dict_val_array[0])
 
 	#Adding Selections
 	category_selection_optionbutton.add_item("Pick One")
-	for category in dic_val_array[0]:
-		dic_val_categories[category] = category 
+	for category in dict_val_array[0]:
+		dict_val_categories[category] = category 
 		category_selection_optionbutton.add_item(category)
 	category_selection_optionbutton.add_item("DEMO")	
 	category_selection_optionbutton.set_item_disabled(0,true)
@@ -290,8 +294,27 @@ func on_category_item_selected(id):
 func on_deck_item_selected(id):
 	match deck_selection_optionbutton.get_item_id(id):
 		id:
-			deck_selected=deck_selection_optionbutton.get_item_text(id)
-			print("Deck Selected:",deck_selected)
+			#deck_selected=deck_selection_optionbutton.get_item_text(id)
+			#This is how I will pass the Deck Doc Id to the Flashcard Function
+			var keys = deck_dict_name.keys()
+			deck_selected = keys[id-1]
+			flashcardList = FirebaseController.get_user_flashcards(deck_selected)
+			if flashcardList is GDScriptFunctionState:
+					flashcardList = yield(flashcardList,"completed")
+			
+			print("FCLIST:",flashcardList[0])
+			for flashcard in flashcardList:
+				var fc_fields = flashcard["doc_fields"]
+				var flashcardInfo = []
+				flashcardInfo.push_back(fc_fields['question'])
+				flashcardInfo.push_back(fc_fields['answer'])
+				flashcardInfo.push_back(fc_fields['isMultipleChoice'])
+				flashcardInfo.push_back(fc_fields['incorrectAnswers'])
+				Pomotimer._flashcards.push_back(flashcardInfo)
+				print("FC_INFO:",flashcardInfo)
+				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
+				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
+			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
 ##########################
 #Disables Selection Options
 ##########################

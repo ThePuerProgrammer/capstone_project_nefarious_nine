@@ -1,6 +1,7 @@
 import * as Constant from '../model/constant.js'
 import * as Utilites from '../view/utilities.js'
 import * as Element from '../view/elements.js'
+import * as Auth from './firebase_auth.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
@@ -1256,7 +1257,7 @@ export async function deleteClassDeck(classDocId, docID) {
     ref.forEach(doc => {
         const f = new Flashcard(doc.data());
         f.set_docID(doc.id);
-        deleteFlashcard(uid, docID, f.docID);
+        deleteClassFlashcard(classDocId, docID, f.docID);
     });
 
     //Delete Deck
@@ -1395,6 +1396,7 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
             if (doc.exists) {
                 flashcard.question = data.question;
                 flashcard.answer = data.answer;
+                flashcard.deckId = data.deckId;
                 //flashcard.isMultipleChoice = data.isMultipleChoice;
                 flashcard.incorrectAnswers = data.incorrectAnswers;
                 flashcard.questionImageName = data.questionImageName;
