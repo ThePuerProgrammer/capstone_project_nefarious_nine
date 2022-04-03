@@ -62,6 +62,8 @@ func _on_FadeIn_fade_in_finished():
 ####################################################################################################
 #Back Button
 func _on_Back_Button_pressed():
+	_game_selection_array.clear()
+	
 	$FadeOut.show()
 	$FadeOut.fade_out()
 #Start Button
@@ -337,7 +339,6 @@ func on_deck_item_selected(id):
 			if flashcardList is GDScriptFunctionState:
 					flashcardList = yield(flashcardList,"completed")
 			
-			print("FCLIST:",flashcardList[0])
 			for flashcard in flashcardList:
 				var fc_fields = flashcard["doc_fields"]
 				var flashcardInfo = []

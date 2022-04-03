@@ -242,11 +242,6 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 43 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 48 ) ],
-"loop": true,
-"name": "attack",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 54 ), ExtResource( 46 ), ExtResource( 44 ) ],
 "loop": true,
 "name": "dodge",
@@ -261,23 +256,23 @@ animations = [ {
 "loop": true,
 "name": "die",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 43 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 48 ) ],
+"loop": true,
+"name": "attack",
+"speed": 5.0
 } ]
 
 [sub_resource type="SpriteFrames" id=17]
 animations = [ {
 "frames": [ ExtResource( 84 ) ],
 "loop": true,
-"name": "dead",
+"name": "attack_lingering",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
 "loop": true,
 "name": "die",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "attack_lingering",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
@@ -290,14 +285,19 @@ animations = [ {
 "name": "third_attack_level",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 58 ) ],
+"loop": true,
+"name": "first_attack_level",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
 "loop": true,
 "name": "hit_effect",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
+"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
 "loop": true,
-"name": "attack_animation_p1",
+"name": "idle_animation",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 18 ), ExtResource( 70 ), ExtResource( 19 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 1 ) ],
@@ -313,6 +313,16 @@ animations = [ {
 "frames": [ ExtResource( 63 ) ],
 "loop": true,
 "name": "second_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "attack_lingering",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
+"loop": true,
+"name": "attack_animation_p1",
 "speed": 5.0
 } ]
 
