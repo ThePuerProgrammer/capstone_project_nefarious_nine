@@ -59,7 +59,7 @@ func startPoopPickupAction():
 	emit_signal("poopPickUpStart")
 
 func endPoopPickupAction():
-	#FirebaseController.updateCurrentUserLastPoopPickUp() # update last poop pickup time to now
+	FirebaseController.updateCurrentUserLastPoopPickUp() # update last poop pickup time to now
 	poopPickupModeOn = false
 	$Trashcan.hideTrashcan()
 	emit_signal("poopPickUpEnd") 
