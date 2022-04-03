@@ -85,6 +85,7 @@ export const modalEditProfile = new bootstrap.Modal(document.getElementById('edi
 export const modalPomodoption = new bootstrap.Modal(document.getElementById('modal-pomodoption'));
 export const modalDressup = new bootstrap.Modal(document.getElementById('modal-pomo-dressup', { backdrop: 'static' }));
 export const addItemModal = new bootstrap.Modal(document.getElementById('modal-add-item'));
+export const modalDeleteAccountConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-delete-account', { backdrop: 'static' }));
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
