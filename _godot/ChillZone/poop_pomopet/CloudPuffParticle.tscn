@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ChillZone/poop_pomopet/art/cloud-puff.png" type="Texture" id=1]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0.827273 ), 0.0, 0.0, 0, 0, Vector2( 0.112676, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.367045 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.00383142, 0.168582, 0.789272, 0.996169, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 0.505747, 0.505747, 0.505747, 0.505747, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0 )
+
+[node name="CloudPuffParticle" type="CPUParticles2D"]
+amount = 20
+lifetime = 1.5
+explosiveness = 0.77
+texture = ExtResource( 1 )
+emission_shape = 1
+emission_sphere_radius = 35.0
+gravity = Vector2( 0, 0 )
+angular_velocity = 90.0
+angular_velocity_random = 0.9
+radial_accel = 50.0
+angle = 360.0
+angle_random = 1.0
+scale_amount_random = 1.0
+scale_amount_curve = SubResource( 1 )
+color_ramp = SubResource( 2 )

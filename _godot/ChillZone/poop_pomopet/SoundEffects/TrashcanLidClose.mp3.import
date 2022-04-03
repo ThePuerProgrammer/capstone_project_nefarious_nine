@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/TrashcanLidClose.mp3-1f3b7fa5e8033498d1cda9e3809ab623.mp3str"
+
+[deps]
+
+source_file="res://ChillZone/poop_pomopet/SoundEffects/TrashcanLidClose.mp3"
+dest_files=[ "res://.import/TrashcanLidClose.mp3-1f3b7fa5e8033498d1cda9e3809ab623.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
