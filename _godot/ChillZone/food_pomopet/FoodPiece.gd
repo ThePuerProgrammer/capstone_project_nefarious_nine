@@ -13,7 +13,6 @@ func _ready():
 	var randAngularVelocity = floor(rand_range(-35, 35))
 	var initVelocityIntensity = 150
 	var randLinearVelocity = Vector2( floor(rand_range(-initVelocityIntensity, -(initVelocityIntensity * 3 / 4))) , initVelocityIntensity / 2 )
-	print(randLinearVelocity)
 	
 	if randTexturePicker == 0:
 		$FoodPieceSprite.texture = foodPiece1

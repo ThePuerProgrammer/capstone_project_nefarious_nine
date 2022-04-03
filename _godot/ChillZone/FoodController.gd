@@ -22,14 +22,19 @@ var currentMouseMovePos
 var lastMouseMovePos
 var mouseIsDown = false
 
+var actionBar
+
 var progressBarMaxValue = 20
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	actionBar = get_node("../../ActionBar")
 	var userDocFields = get_node("/root/CurrentUser").user_doc.doc_fields
 	lastFedMs = userDocFields["pomopetData"]["lastFed"]
 	setFoodLevelByLastFed()
-	hideFoodBag()
+	
+	if getFoodLevel() == 5:
+		actionBar.setFeedButtonEnabled(false)
 	
 	# Initialize progress bar
 	# 	20 points of progress to feed for every level of food missing
@@ -43,15 +48,21 @@ func _process(delta):
 		mouseIsDown = true
 	elif Input.is_action_just_released("left_mouse_click"):
 		mouseIsDown = false
+		
 	
 	if feedingModeOn:
-		$FoodBag.global_transform.origin = get_global_mouse_position()
+		
+		$FoodBag.global_position = get_global_mouse_position()
 		
 		setFoodBowlSprite(floor(getFoodLevel() + ((5 - getFoodLevel()) * $FeedMeter/FeedMeterProgressBar.getPercentageComplete())))
 		
 		# Mouse being shaken and is down
 		if isPouringFood() and mouseIsDown:
 			$FoodBag.spawnFoodAtRandomPoint()
+		
+		if $FeedMeter/FeedMeterProgressBar.getPercentageComplete() == 1:
+			endFeedAction()
+			
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -100,32 +111,23 @@ func setFoodBowlSprite(foodLevel):
 		$FoodBowl/FoodBowlBg.texture = foodLevel5BGTexture
 		$FoodBowl/FoodBowlFg.texture = foodLevel5FGTexture
 
-func hideFoodBag():
-	$FoodBag.hide()
-
-func showFoodBag():
-	$FoodBag.show()
-
 func startFeedAction():
 	feedingModeOn = true
 	$FeedMeter/FeedMeterProgressBar/AnimationPlayer.play("fade_in")
-	showFoodBag()
+	$FoodBag.showFoodBag()
+
+func endFeedAction():
+	get_node("/root/FirebaseController").updateCurrentUserlastFed()
+	feedingModeOn = false
+	$FeedMeter/FeedMeterProgressBar/AnimationPlayer.play("fade_out")
+	$FoodBag.hideFoodBag()
 
 func isPouringFood():
 	var lastMouseDistance = getDistanceBetweenMousePositions(lastMouseMovePos, currentMouseMovePos)
 	var mouseMoveDirection = currentMouseMovePos - lastMouseMovePos
-	print(mouseMoveDirection)
 	lastMouseMovePos = currentMouseMovePos
 	
 	return lastMouseDistance > 1.5 and mouseMoveDirection.y < 0 and mouseMoveDirection.x > 0
-
-
-func _on_FoodParticleBowlKillbox_body_entered(body):
-	print("hit")
-
-
-func _on_DogFoodParticles_hide():
-	print(self, "died")
 
 
 func _on_FoodPieceKillBox_body_entered(body):
