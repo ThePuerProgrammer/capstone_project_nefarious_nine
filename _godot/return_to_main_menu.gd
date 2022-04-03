@@ -22,10 +22,12 @@ var flashcardList
 
 
 
+
 #Dictionaries
 var dict_val_categories : Dictionary = {}
 var deck_dict_name : Dictionary = {} #(-_-)#
 var flash_dict_name: Dictionary = {}
+var category_deck_dict : Dictionary = {}
 
 func _ready():
 	$FadeIn.show()
@@ -234,18 +236,33 @@ func add_items_to_category_selection():
 	var categories = FirebaseController.get_categories()
 	if categories is GDScriptFunctionState:
 		categories = yield(categories, "completed")
-	
 	##This retrieves the doc_fields values into an array, making it a double array
 	##This works trying something else
 	var dict_val_array = Array(categories["doc_fields"].values())
+
 	##Value Below Prints Misc to Console, [0][i] to see all categories
 	#print(dict_val_array[0])
+	deckList = FirebaseController.get_user_decks(CurrentUser.user_id)
+	if deckList is GDScriptFunctionState:
+		deckList = yield(deckList, "completed")
+	#Populates to a dictionary
+	
 
 	#Adding Selections
 	category_selection_optionbutton.add_item("Pick One")
-	for category in dict_val_array[0]:
-		dict_val_categories[category] = category 
-		category_selection_optionbutton.add_item(category)
+	var deck_for_category=[]
+	
+	for deck in deckList:
+		var fields = deck["doc_fields"]
+		deck_dict_name[deck["doc_name"]] = fields["category"]
+		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
+		#This iterates through the categories from the backend
+		for category in dict_val_array[0]:
+			dict_val_categories[category] = category 
+		#This iterates through the decks owned by user
+			#We are comparing if we own a deck with said category and add it to the list.
+			if dict_val_categories[category]==deck_dict_name[deck["doc_name"]]:
+				category_selection_optionbutton.add_item(category)
 	category_selection_optionbutton.add_item("DEMO")	
 	category_selection_optionbutton.set_item_disabled(0,true)
 
@@ -280,14 +297,32 @@ func on_timer_item_selected(id):
 	match timer_selection_optionbutton.get_item_id(id):
 		id:
 			desired_time=timer_selection_optionbutton.get_item_text(id)
-
 #Checks which Category has been selected
 #and assigns to a gah-dough-bal variable category_selected
 func on_category_item_selected(id):
 	match category_selection_optionbutton.get_item_id(id):
 		id:
 			category_selected=category_selection_optionbutton.get_item_text(id)
+			print("ID:",id-1)
 			print("Category Selected:",category_selected)
+			var keys = deck_dict_name.keys()
+			deck_selected = keys[id-1]
+			flashcardList = FirebaseController.get_user_flashcards(deck_selected)
+			if flashcardList is GDScriptFunctionState:
+					flashcardList = yield(flashcardList,"completed")
+			
+			for flashcard in flashcardList:
+				var fc_fields = flashcard["doc_fields"]
+				var flashcardInfo = []
+				flashcardInfo.push_back(fc_fields['question'])
+				flashcardInfo.push_back(fc_fields['answer'])
+				flashcardInfo.push_back(fc_fields['isMultipleChoice'])
+				flashcardInfo.push_back(fc_fields['incorrectAnswers'])
+				Pomotimer._flashcards.push_back(flashcardInfo)
+				print("FC_INFO:",flashcardInfo)
+				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
+				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
+			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
 
 #Checks which Deck has been selected
 #and assigns to a gah-dough-bal variable deck_selected
