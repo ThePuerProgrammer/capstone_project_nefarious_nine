@@ -6,6 +6,7 @@ import * as Constant from '../model/constant.js'
 import * as Coins from '../controller/coins.js'
 import * as Utilities from './utilities.js';
 import { Pomoshop } from '../model/pomoshop.js'
+import { home_page } from './home_page.js'
 
 //Declaration of Image
 let imageFile2UploadProfile = "";
@@ -279,10 +280,13 @@ export async function profile_page() {
             console.log("EMAIL: " + userEmail);
             Elements.modalDeleteAccountConfirmation.show();
             const yesbutton = document.getElementById('modal-confirmation-delete-account-yes');
+
             yesbutton.addEventListener("click", async e => {
+                await home_page();
                 await FirebaseController.deleteAccount(userEmail);
             });
         });
+
     }
     // POMOPET NAME button listener
     const pomopetEditNameButton = document.getElementById('pomopet-edit-name-btn');
