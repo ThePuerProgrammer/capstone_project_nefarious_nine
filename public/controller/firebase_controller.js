@@ -1392,6 +1392,7 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
             if (doc.exists) {
                 flashcard.question = data.question;
                 flashcard.answer = data.answer;
+                flashcard.deckId = data.deckId;
                 //flashcard.isMultipleChoice = data.isMultipleChoice;
                 flashcard.incorrectAnswers = data.incorrectAnswers;
                 flashcard.questionImageName = data.questionImageName;

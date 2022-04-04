@@ -1,0 +1,125 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_26pt.tres" type="DynamicFont" id=1]
+[ext_resource path="res://assets/gameimages/SlowFruitMenu.png" type="Texture" id=2]
+[ext_resource path="res://transitions/slowfruit_transition.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "FADE_IN"
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "FADE_OUT"
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
+}
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="VSplitContainer" type="VSplitContainer" parent="."]
+margin_left = 500.0
+margin_right = 1420.0
+margin_bottom = 900.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+dragger_visibility = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="VSplitContainer"]
+margin_right = 920.0
+margin_bottom = 444.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 2 )
+stretch_mode = 6
+
+[node name="Game_Details" type="RichTextLabel" parent="VSplitContainer"]
+margin_top = 456.0
+margin_right = 920.0
+margin_bottom = 900.0
+rect_clip_content = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 1 )
+text = "			Slowfruit
+Controls: 
+
+Use Space or Up Arrow - to Jump
+Arrow Keys - To Move
+
+Objective: 
+
+Eat the best fruit by choosing the correct answer
+"
+
+[node name="Slowfruit_Transition_Timer" type="Timer" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Time_Label" type="RichTextLabel" parent="."]
+margin_left = 1525.0
+margin_top = 100.0
+margin_right = 1669.0
+margin_bottom = 185.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 1 )
+text = "Time Left:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time_Till_Queue" type="RichTextLabel" parent="."]
+margin_left = 1681.0
+margin_top = 120.0
+margin_right = 1725.0
+margin_bottom = 165.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1920.0
+margin_bottom = 900.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slowfruit_Animator" type="AnimationPlayer" parent="."]
+playback_speed = 0.65
+anims/FADE_IN = SubResource( 1 )
+anims/FADE_OUT = SubResource( 2 )
+
+[connection signal="timeout" from="Slowfruit_Transition_Timer" to="." method="_on_Slowfruit_Transition_Timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="animation_finished" from="Slowfruit_Animator" to="." method="_on_Slowfruit_Animator_animation_finished"]
