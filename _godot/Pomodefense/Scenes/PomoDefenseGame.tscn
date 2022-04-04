@@ -123,39 +123,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GameControls" type="HBoxContainer" parent="UI/HUD"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -144.0
-margin_top = -70.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PausePlay" type="TextureButton" parent="UI/HUD/GameControls"]
-pause_mode = 2
-margin_right = 70.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 70, 70 )
-size_flags_horizontal = 4
-size_flags_vertical = 4
-toggle_mode = true
-texture_normal = ExtResource( 12 )
-texture_pressed = ExtResource( 14 )
-expand = true
-
-[node name="SpeedUp" type="TextureButton" parent="UI/HUD/GameControls"]
-margin_left = 74.0
-margin_right = 144.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 70, 70 )
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture_normal = ExtResource( 13 )
-expand = true
-
 [node name="InfoBar" type="ColorRect" parent="UI/HUD"]
 self_modulate = Color( 0.0235294, 0.0235294, 0.0235294, 0.470588 )
 anchor_right = 1.0
@@ -235,5 +202,60 @@ margin_right = 1004.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 35, 0 )
 
-[connection signal="pressed" from="UI/HUD/GameControls/PausePlay" to="UI" method="_on_PausePlay_pressed"]
-[connection signal="pressed" from="UI/HUD/GameControls/SpeedUp" to="UI" method="_on_SpeedUp_pressed"]
+[node name="GameControls" type="HBoxContainer" parent="UI/HUD/InfoBar"]
+margin_left = 128.0
+margin_top = 5.0
+margin_right = 272.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 25 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PausePlay" type="TextureButton" parent="UI/HUD/InfoBar/GameControls"]
+pause_mode = 2
+margin_right = 25.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+toggle_mode = true
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 14 )
+expand = true
+
+[node name="SpeedUp" type="TextureButton" parent="UI/HUD/InfoBar/GameControls"]
+margin_left = 29.0
+margin_right = 54.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 13 )
+expand = true
+
+[node name="NextWave" type="Button" parent="UI/HUD/InfoBar/GameControls"]
+margin_left = 58.0
+margin_right = 139.0
+margin_bottom = 25.0
+text = "Next Wave"
+
+[node name="WaveCount" type="Label" parent="UI/HUD/InfoBar/GameControls"]
+margin_left = 143.0
+margin_top = 5.0
+margin_right = 194.0
+margin_bottom = 19.0
+text = "Wave: 0"
+
+[node name="EnemyCount" type="Label" parent="UI/HUD/InfoBar/GameControls"]
+margin_left = 198.0
+margin_top = 5.0
+margin_right = 269.0
+margin_bottom = 19.0
+text = "Enemies: 0"
+
+[connection signal="pressed" from="UI/HUD/InfoBar/GameControls/PausePlay" to="UI" method="_on_PausePlay_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/GameControls/SpeedUp" to="UI" method="_on_SpeedUp_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/GameControls/NextWave" to="." method="_on_NextWave_pressed"]
