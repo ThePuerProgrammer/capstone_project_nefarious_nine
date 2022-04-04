@@ -102,9 +102,7 @@ export function addEventListeners() {
     $(`#create-deck-modal`).on('hidden.bs.modal', function (e) {
         Elements.formCreateDeck.reset();
     });
-    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e => {
-        const yes = e.target.yes.value;
-    });
+
 
 
 }
@@ -244,7 +242,7 @@ export async function buildStudyDecksPage(deckList) {
             if (e.target.classdocId.value == "false") { //if not a class deck
                 await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
             } else {//else is a class deck
-                let classDocID = e.target.classdocId.value
+                let classDocID = e.target.classdocId.value;
                 await EditDeck.edit_class_deck(classDocID, e.target.docId.value);
             }
             setTimeout(await study_decks_page(), 2000);
@@ -267,7 +265,7 @@ export async function buildStudyDecksPage(deckList) {
                     await EditDeck.delete_deck(deckId, confirmation);
                 } else {
                     confirmation = true;
-                    await EditDeck.delete_class_deck(deckId, confirmation, classDocID, firebase.auth().currentUser.uid);
+                    await EditDeck.delete_class_deck(deckId, confirmation, classDocID, Auth.currentUser.uid);
                 }
             });
             Utilities.enableButton(button, label);

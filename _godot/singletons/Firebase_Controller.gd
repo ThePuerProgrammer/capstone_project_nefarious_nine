@@ -72,6 +72,7 @@ func get_categories():
 	var document : FirestoreDocument = yield(document_task, "get_document")
 	print("Categories Document:", document)
 	return document
+	
 #GET USER DECKS FROM FIRESTORE
 func get_user_doc_for_nested(uid):
 	assert(uid != null)
@@ -80,8 +81,27 @@ func get_user_doc_for_nested(uid):
 	var document : FirestoreDocument = yield(document_task, "get_document")
 	print("UID Document:", document)
 	return document
-	
+
+func get_user_flashcards(deckid):
+	print("DOC:",deckid)
+	#var collection : FirestoreCollection=Firebase.Firestore.collection(Constants.COLLECTIONS.DECKS)
+	#var document_task: FirestoreTask = collection.get(deckid)
+	#var document: FirestoreDocument = yield(document_task, "get_document")
+	#print("DEC_ID DOC:",document)
+	#return document
+	var query : FirestoreQuery = FirestoreQuery.new()\
+		.from(Constants.COLLECTIONS.USERS)\
+		.from(Constants.COLLECTIONS.DECKS)\
+		.from(Constants.COLLECTIONS.FLASHCARDS)\
+		.where("deckId", FirestoreQuery.OPERATOR.EQUAL,deckid)\
+		.order_by("question", FirestoreQuery.DIRECTION.DESCENDING)
+	var query_task : FirestoreTask = Firebase.Firestore.query(query)
+	var res : Array = yield(query_task, "task_finished").data
+	print("FLASHCARDS FS:",res)
+	return res
+
 func get_user_decks(uid):
+	print("UID:",uid)
 	var query : FirestoreQuery = FirestoreQuery.new()\
 		.from(Constants.COLLECTIONS.USERS)\
 		.from(Constants.COLLECTIONS.DECKS)\
@@ -105,12 +125,20 @@ func updateCurrentUserLastWashed():
 	var document : FirestoreTask = yield(userDocRef, "task_finished")
 	return document.data
 	
-#GET CATEGORIES FROM FIRESTORE
 func updateCurrentUserLastPoopPickUp():
 	var currentUser = get_node("/root/CurrentUser").user_doc
 	var currentUserUID = currentUser["doc_name"]
 	# Set the last washed to now
 	currentUser["doc_fields"]["pomopetData"]["lastPoopPickUp"] = OS.get_system_time_msecs()
+	var userDocRef : FirestoreTask = Firebase.Firestore.collection(Constants.COLLECTIONS.USERS).update(currentUserUID, currentUser["doc_fields"])
+	var document : FirestoreTask = yield(userDocRef, "task_finished")
+	return document.data
+
+func updateCurrentUserlastFed():
+	var currentUser = get_node("/root/CurrentUser").user_doc
+	var currentUserUID = currentUser["doc_name"]
+	# Set the last washed to now
+	currentUser["doc_fields"]["pomopetData"]["lastFed"] = OS.get_system_time_msecs()
 	var userDocRef : FirestoreTask = Firebase.Firestore.collection(Constants.COLLECTIONS.USERS).update(currentUserUID, currentUser["doc_fields"])
 	var document : FirestoreTask = yield(userDocRef, "task_finished")
 	return document.data

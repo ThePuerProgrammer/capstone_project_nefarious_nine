@@ -49,6 +49,11 @@ var _coins = 0
 var _popupMessage
 #########################################################################
 
+# Added Game Queue ######################################################
+onready var _game_queue = Pomotimer._game_queue
+onready var _timer = Pomotimer._time_limit
+onready var _deck = Pomotimer._deck
+#########################################################################
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -311,4 +316,5 @@ func _on_PlayerAnimatedSprite_animation_finished():
 
 func _on_overallMinigameGameTimer_timeout():
 	$overallMinigameGameTimer.stop()
-	get_tree().change_scene('res://Menu/SingleplayerOptionScreen.tscn')
+	Pomotimer.start_game(_timer,_game_queue,_deck)
+

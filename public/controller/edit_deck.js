@@ -79,12 +79,6 @@ export function addEventListeners() {
         }
     });
 
-    Elements.formDeleteDeckConfirmation.addEventListener('submit', async e => {
-        e.preventDefault();
-        const yes = e.target.yes.value;
-        console.log(`${yes}`);
-    })
-
 
 }
 
@@ -191,11 +185,12 @@ export async function delete_deck(docId, confirmation) {
     }
 }
 
-export async function delete_class_deck(docId, confirmation, classDocId, uid) {
+export async function delete_class_deck(docId, confirmation, classDocId) {
     if (confirmation) {
         try {
-            await FirebaseController.updateClassFlashcardCount(classDocId, docId);
             await FirebaseController.deleteClassDeck(classDocId, docId);
+            //await FirebaseController.updateClassFlashcardCount(classDocId, docId);
+            //await FirebaseController.updateDeckCount(Auth.currentUser.uid);
             Utilities.info(`Success`, `The desired deck as successfully deleted.`,);
 
         } catch (e) {
@@ -203,7 +198,6 @@ export async function delete_class_deck(docId, confirmation, classDocId, uid) {
             Utilities.info(`Delete Deck Error`, JSON.stringify(e));
         }
         //This is called twice before page load, due to it not registering the change
-        await FirebaseController.updateDeckCount(uid);
         //auth.currentuser.uid is not passing
         await study_decks_page();
     }

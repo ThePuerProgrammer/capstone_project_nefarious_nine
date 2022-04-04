@@ -186,7 +186,7 @@ isServer=false
 
 [application]
 
-config/name="Pomogame"
+config/name="Pomogame_ORIGINAL"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 

@@ -105,9 +105,6 @@ margin_left = -166.0
 margin_top = -231.244
 margin_right = 134.0
 margin_bottom = -181.244
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="WashMeterProgressBar" type="ProgressBar" parent="WashMeter"]
 modulate = Color( 1, 1, 1, 0 )

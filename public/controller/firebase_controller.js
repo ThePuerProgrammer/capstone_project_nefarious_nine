@@ -1392,6 +1392,7 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
             if (doc.exists) {
                 flashcard.question = data.question;
                 flashcard.answer = data.answer;
+                flashcard.deckId = data.deckId;
                 //flashcard.isMultipleChoice = data.isMultipleChoice;
                 flashcard.incorrectAnswers = data.incorrectAnswers;
                 flashcard.questionImageName = data.questionImageName;
@@ -1642,6 +1643,39 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
     });
 
     return classroomList;
+}
+//============================================================================//
+
+//============================================================================//
+// CLASSROOM MEMBERS TAB
+//============================================================================//
+
+export async function getMemberInfo(members) {
+    let memberInfo = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .get();
+
+    ref.forEach(doc => {
+        let user = new User(doc.data());
+
+        const mem = {
+            email: "",
+            username: "",
+            profilePhotoURL: "",
+            userBio: "",
+            // pettype, petname, equippedSkin, equippedAcc
+        }
+   
+        mem.username = user.username;
+        mem.profilePhotoURL = user.profilePhotoURL
+
+        memberInfo.push(mem);
+    })
+
+    return memberInfo;
 }
 
 //============================================================================//
@@ -2612,4 +2646,3 @@ export async function deleteItemFromShop(imagename, docID) {
 }
 
 //============================================================================//
-
