@@ -7,10 +7,11 @@ var speed
 var health
 var base_damage
 var creep_type
+var GameData = "res://Pomodefense/Singleton/GameData.gd"
 
 onready var hp_bar = get_node("HPBar")
 onready var impact_area = get_node("Impact")
-var projectile_impact = preload("res://Scenes/TurretImpact.tscn")
+var projectile_impact = preload("res://Pomodefense/Scenes/TurretImpact.tscn")
 
 func _ready():
 	speed = GameData.creep_data[creep_type]["speed"]

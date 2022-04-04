@@ -4,6 +4,8 @@ onready var hp_bar = get_node("HUD/InfoBar/H/Health")
 onready var hp_bar_tween = get_node("HUD/InfoBar/H/Health/Tween")
 onready var hp_bar_num = get_node("HUD/InfoBar/H/HP")
 
+var GameData = "res://Pomodefense/Singleton/GameData.gd"
+
 func set_tower_preview(tower_type, mouse_position):
 	var drag_tower = load("res://Scenes/" + tower_type + ".tscn").instance() ## ugh
 	drag_tower.set_name("DragTower")
