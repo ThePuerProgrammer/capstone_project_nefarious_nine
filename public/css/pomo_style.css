@@ -777,33 +777,15 @@ iframe {
 /*============================================================================*/
 .sidenav {
     height: 100%;
-    width: 200px;
+    width: 285px;
     position: absolute;
-    top: 58px;
-    left: 0;
     background-color: #2C1320;
     overflow-x: hidden;
-    padding: 20px;
     align-items: center;
 }
 
-.sidenav a{
-    padding: 6px 8px 6px 16px;
-    font-size: 25px;
-    color: #5F4B66;
-    display: block;
-}
-
-.sidenav a:hover{
-    color: #56667A;
-}
-
-.sidenav .close-button{
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+.pomoshop-sidenav-buttons {
+    padding-left: 30px;
 }
 
 .pomoshop{
@@ -813,7 +795,7 @@ iframe {
 
 .pomoshop-category{
     background-color: #5F4B66;
-    width: 85%;
+    width: 80%;
     height: 330px;
     border-radius: 25px;
     white-space: nowrap;
@@ -827,4 +809,19 @@ iframe {
 .pomoshop-item{
     padding: 0px 15px 5px 15px;
     vertical-align: middle;
+}
+
+.equipped-shop-pomopet {
+    padding: 10px 20px;
+    bottom: 45px;
+    position: absolute;
+  
+}
+
+.pomopet-shop-bar {
+    border: none;
+    height: 5px !important;
+    width: 100%;
+    background-color:#5F4B66;
+    color: #5F4B66;
 }
