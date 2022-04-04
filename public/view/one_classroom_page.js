@@ -76,34 +76,77 @@ export async function one_classroom_page(classroomDocID) {
     //CLASSROOM TAB END-----------------------------------------------------
 
     // MEMBERS tab contents
-    html += `<div id="Members" class="one-classroom-tab-content">
-        <div class="row">
-        <div class="column">
+
+    let memberInfo = [];
+    memberInfo = await FirebaseController.getMemberInfo(members);
+
+    html += `<div id="Members" class="one-classroom-tab-content pomo-text-color-dark">
+        <div class="row-classroom">
+        <div class="column-classroom" style="display: inline-block;">
         <h2>Members</h2>`;
 
     // If mod, show members w BAN option
     if (mod == true && members != null) {
-        members.forEach(member => {
-            html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
+        html += `<div class="row-memberInfo">
+            <div class="column-memberInfo" style="flex: 50%;">`;
+
+        memberInfo.forEach(mem => {
+            html += `<div class="classroom-members-info">
+                <br>
+                <div  style="display: inline-block;">
+                <img src="${mem.profilePhotoURL}" class="pfp" style="width: 65px; height: 65px; object-fit: cover; margin-right: 10px;">
+                </div>
+                <div  style="display: inline-block;"> 
+                <h4 style="">${mem.username}</h4>
+                </div>
+                <br>
+            </div>`;
         })
+
+        html += `</div>
+            <div class="column-memberInfo" style="flex: 50%;">`;
+
+        members.forEach(member => {
+            html += `<br>
+                <tr>${buildButtons(member, classroom.banlist)}</tr>
+                <br>`; 
+        })
+
+        html += `</div>
+        </div>`;
     } else {
         if (members != null) {
-            members.forEach(member => {
-                html += `<p>${member}</p>`;
+            memberInfo.forEach(mem => {
+                html += `<div class="classroom-members-info">
+                    <br>
+                    <div  style="display: inline-block;">
+                    <img src="${mem.profilePhotoURL}" class="pfp" style="width: 65px; height: 65px; object-fit: cover; margin-right: 10px;">
+                    </div>
+                    <div  style="display: inline-block;"> 
+                    <h4 style="">${mem.username}</h4>
+                    </div>
+                    <br>
+                </div>`;
             })
         }
     }
 
     html += `</div>
-        <div class="column">
+        <div class="column-classroom style="display: inline-block;">
         <h2>Mods</h2>`;
 
     // display mods list
     let mods = classroom.moderatorList
     mods.forEach(mod => {
-        html += `<p>${mod}</p>`;
+        html += `<br>
+            <div  style="display: inline-block;"> 
+            <h4 style=""><i class="small material-icons pomo-text-color-dark">shield</i>${mod}</h4>
+            </div>`;
     })
-    //MEMEMBERS TAB END------------------------------------------------------
+
+    html += `</div>`;
+
+    //MEMBERS TAB END------------------------------------------------------
 
     
     //Fetchs Default Leaderboard
