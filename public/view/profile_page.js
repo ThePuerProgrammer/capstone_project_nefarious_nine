@@ -308,7 +308,7 @@ export async function profile_page() {
         user.pomopet.name = pomopetName;
 
         try {
-            await FirebaseController.updatePomopet(Auth.currentUser.uid, user.pomopet);
+            await FirebaseController.updatePomopetName(Auth.currentUser.uid, user.pomopet);
             await profile_page();
         } catch (e) {
             if (Constant.DEV)

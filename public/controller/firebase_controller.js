@@ -2490,6 +2490,13 @@ export async function updatePomopet(uid, pomopet) {
         .doc(uid)
         .update({ 'pomopet': pomopet, 'equippedSkin': "" });
 }
+
+export async function updatePomopetName(uid, pomopet) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'pomopet': pomopet});
+}
 //============================================================================//
 
 //============================================================================//

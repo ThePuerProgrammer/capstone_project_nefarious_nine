@@ -547,6 +547,11 @@ input {
     display: inline-block;
 }
 
+.equipped-member-pomopet {
+    padding: 10px 20px;
+    position: relative;
+}
+
 /*============================================================================*/
 
 iframe {
@@ -832,7 +837,6 @@ iframe {
     padding: 10px 20px;
     bottom: 45px;
     position: absolute;
-  
 }
 
 .pomopet-shop-bar {
