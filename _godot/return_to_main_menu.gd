@@ -250,21 +250,33 @@ func add_items_to_category_selection():
 	#Populates to a dictionary
 	
 
-	#Adding Selections
 	category_selection_optionbutton.add_item("Pick One")
-	var deck_for_category=[]
+	var deck_for_category:Dictionary={}
 	
 	for deck in deckList:
 		var fields = deck["doc_fields"]
 		deck_dict_name[deck["doc_name"]] = fields["category"]
 		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
+		
 		#This iterates through the categories from the backend
 		for category in dict_val_array[0]:
 			dict_val_categories[category] = category 
 		#This iterates through the decks owned by user
 			#We are comparing if we own a deck with said category and add it to the list.
 			if dict_val_categories[category]==deck_dict_name[deck["doc_name"]]:
+				
+				#print("THIS HERE 1:",deck_selected)
 				category_selection_optionbutton.add_item(category)
+				
+				deck_for_category[deck["doc_name"]]=deck_dict_name[deck["doc_name"]]
+				var keys = deck_for_category.keys()
+				print("KEYS:",keys)
+				category_selected = keys[category]
+				print("CATEGORY_SELECTED:",category_selected)
+				print("PRINT1:",deck_for_category[deck["doc_name"]])
+				print("PRINT2:",deck_dict_name[deck["doc_name"]])
+				
+	print("DECK_FOR_CATE:",deck_for_category)
 	category_selection_optionbutton.add_item("DEMO")	
 	category_selection_optionbutton.set_item_disabled(0,true)
 
