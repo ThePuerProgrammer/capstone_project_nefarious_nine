@@ -121,6 +121,7 @@ func endFeedAction():
 	feedingModeOn = false
 	$FeedMeter/FeedMeterProgressBar/AnimationPlayer.play("fade_out")
 	$FoodBag.hideFoodBag()
+	pomopet.setFeedButtonEnabled(false)
 
 func isPouringFood():
 	var lastMouseDistance = getDistanceBetweenMousePositions(lastMouseMovePos, currentMouseMovePos)

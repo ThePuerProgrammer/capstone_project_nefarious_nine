@@ -82,6 +82,7 @@ func _process(delta):
 				firebaseController.updateCurrentUserLastWashed()
 				hideCleaningProgressBar()
 				petWashingModeOn = false
+				setCleanButtonEnabled(false)
 
 # For tracking the distance between mouse positions
 #	to determine "scrub intensity" (i.e. greater distance between mouse polls
