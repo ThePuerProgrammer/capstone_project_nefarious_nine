@@ -539,6 +539,19 @@ input {
     display: flex;
 }
 
+.classroom-members-profile-btn {
+    border: none;
+    background-color: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.equipped-member-pomopet {
+    padding: 10px 20px;
+    position: relative;
+}
+
 /*============================================================================*/
 
 iframe {
@@ -824,7 +837,6 @@ iframe {
     padding: 10px 20px;
     bottom: 45px;
     position: absolute;
-  
 }
 
 .pomopet-shop-bar {

@@ -1,0 +1,35 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/pet_normal.png-14908f8fdde7eee84d889f511e2718d3.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://ChillZone/action_wheel/button_textures/pet_textures/pet_normal.png"
+dest_files=[ "res://.import/pet_normal.png-14908f8fdde7eee84d889f511e2718d3.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+process/normal_map_invert_y=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0
