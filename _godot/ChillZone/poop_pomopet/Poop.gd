@@ -5,6 +5,7 @@ var trashcanController
 var poopController
 
 var canHold = false
+var currMousePosition = Vector2(50, 50)
 
 func _ready():
 	trashcanController = get_node("../Trashcan")
@@ -15,6 +16,14 @@ func _ready():
 func _process(delta):
 	if Input.is_action_just_released("left_mouse_click"):
 		dropPoop(Input.get_last_mouse_speed())
+	
+	if currMousePosition.y > 675 or currMousePosition.y < 5 or currMousePosition.x < 5 or currMousePosition.x > 1910: #Last region 
+		dropPoop(Input.get_last_mouse_speed())
+	print (currMousePosition.y)
+
+func _input(event):
+	if event is InputEventMouseMotion:
+		currMousePosition = event.position
 
 func pickupPoop():
 	if held and poopController.poopCurrentlyHeld != self and canHold and trashcanController.trashcanReady():
