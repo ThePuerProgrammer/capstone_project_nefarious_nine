@@ -1662,15 +1662,15 @@ export async function getMemberInfo(members) {
         let user = new User(doc.data());
 
         const mem = {
-            email: "",
-            username: "",
-            profilePhotoURL: "",
-            userBio: "",
-            // pettype, petname, equippedSkin, equippedAcc
+            email: user.email,
+            username: user.username,
+            profilePhotoURL: user.profilePhotoURL,
+            userBio: user.userBio,
+            petPhotoURL: user.pomopet.petPhotoURL, 
+            petName: user.pomopet.name, 
+            equippedSkin: user.equippedSkin, 
+            equippedAcc: user.equippedAcc,
         }
-   
-        mem.username = user.username;
-        mem.profilePhotoURL = user.profilePhotoURL
 
         memberInfo.push(mem);
     })

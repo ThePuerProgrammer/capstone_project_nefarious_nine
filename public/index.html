@@ -875,7 +875,38 @@
       </div>
     </div>
   </div>
-  <!-- END UPDATE PROFILE MODAL---------------------------------------------->
+  <!-- END EDIT PROFILE MODAL---------------------------------------------->
+
+  <!-- VIEW MEMBER PROFILE MODAL----------------------------------------------------->
+  <div class="modal fade" id="member-profile-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="member-profile-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-body">
+            <button type="button" style="float:right" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <br>
+            <div id="member-profile-picture-container">
+              <img id="member-profile-picture-tag"
+                style=" height: 200px; width: 200px; object-fit: cover; display: block;" class="center pfp">
+              <br>
+            </div>
+            <div class="member-profile" style="text-align: center;">
+                <h3 class="member-username pomo-text-color-dark" id="member-username"></h3>
+                <p class="pomo-text-color-light" id="member-userbio"></p>
+            </div>
+            <div class="member-pomopet-display">
+              <img id="member-pomopet"
+                style="width: 250px; height: 250px;" class="pomopet-display center">
+              <img id="member-pomopet-acc"
+                style="height: 80px; width: 100px; margin-bottom: -50px;  object-fit: cover;" class="acc-display center">
+              <h4 class="pomo-text-color-light" style="text-align: center;" id="member-pomopet-name"></h4>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- VIEW MEMBER PROFILE MODAL---------------------------------------------->
+
   <!-- MODAL: ADD ITEM -------------------------------------------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-add-item" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="modal-add-item-label" aria-hidden="true">
