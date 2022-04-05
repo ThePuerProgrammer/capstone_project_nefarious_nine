@@ -121,6 +121,10 @@ func endFeedAction():
 	feedingModeOn = false
 	$FeedMeter/FeedMeterProgressBar/AnimationPlayer.play("fade_out")
 	$FoodBag.hideFoodBag()
+	# Clear all food pellets left over
+	var foodPellets = get_tree().get_nodes_in_group("food_pellets")
+	for f in foodPellets:
+		f.destroyFoodPiece()
 	pomopet.setFeedButtonEnabled(false)
 
 func isPouringFood():

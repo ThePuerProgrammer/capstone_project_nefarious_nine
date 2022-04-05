@@ -471,7 +471,7 @@ texture = ExtResource( 23 )
 visible = false
 
 [node name="TrashcanOpenForeground" type="Sprite" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
-z_index = 2
+z_index = 6
 texture = ExtResource( 24 )
 
 [node name="TrashcanOpenBackground" type="Sprite" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
@@ -486,7 +486,7 @@ collision_layer = 2
 mode = 1
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ActionController/PoopController/Trashcan/TrashcanOpen/TrashcanBucket"]
-polygon = PoolVector2Array( -19.3906, -11.4723, -19.3906, -8.79653, -18.4987, -8.79653, -18.2014, -5.72442, -17.3095, -5.72442, -17.2104, -4.73341, -16.4176, -4.73341, -16.2194, 0.221619, -15.4266, 0.320717, -15.3275, 2.30273, -14.4356, 2.30273, -14.4356, 4.28474, -13.4446, 4.28474, -13.3455, 8.44697, -12.2554, 8.44697, -12.2554, 10.5281, -11.3635, 10.429, -11.3635, 16.2759, -10.2734, 16.2759, -10.3725, 17.366, -9.48056, 17.2669, -9.38147, 18.4561, -8.39046, 18.4561, -8.39046, 19.4471, -7.49855, 19.5462, -7.39944, 20.5372, -0.363281, 20.4381, -0.462402, 19.4471, 5.48364, 19.4471, 5.48364, 18.357, 8.35754, 18.357, 8.55576, 17.366, 9.54675, 17.366, 9.44766, 16.4741, 10.736, 16.4741, 10.6369, 15.4831, 13.4117, 15.2849, 13.6099, 16.4741, 16.3847, 16.375, 16.4838, 15.2849, 17.2766, 15.2849, 17.1775, 13.5011, 18.3667, 13.5011, 18.3667, 11.2218, 19.2586, 11.3209, 19.2586, 0.419823, 18.3667, 0.419823, 18.3667, -4.73341, 17.4748, -4.73341, 17.2766, -6.41812, 16.2856, -6.51722, 16.2856, -9.39114, 15.3937, -9.39114, 15.3937, -11.3731, 14.4027, -11.274, 14.6009, -12.3642, 13.8081, -12.3642, 13.6099, -13.3552, 11.6279, -13.4543, 11.5287, -15.6345, 6.67285, -15.6345, 5.48364, -15.6345, 5.48364, -14.4453, 8.25845, -11.274, 12.718, 5.47395, -9.48056, 10.429, -15.5257, -7.01273, -18.4987, -10.4812, -18.5978, -11.4723 )
+polygon = PoolVector2Array( -19.3906, -11.4723, -19.3906, -8.79653, -18.4987, -8.79653, -18.2014, -5.72442, -17.3095, -5.72442, -17.2104, -4.73341, -16.4176, -4.73341, -16.2194, 0.221619, -15.4266, 0.320717, -15.3275, 2.30273, -14.4356, 2.30273, -14.4356, 4.28474, -13.4446, 4.28474, -13.3455, 8.44697, -12.2554, 8.44697, -12.2554, 10.5281, -11.3635, 10.429, -11.3635, 16.2759, -10.2734, 16.2759, -10.3725, 17.366, -9.48056, 17.2669, -9.38147, 18.4561, -8.39046, 18.4561, -8.39046, 19.4471, -7.49855, 19.5462, -7.39944, 20.5372, -0.363281, 20.4381, -0.462402, 19.4471, 5.48364, 19.4471, 5.48364, 18.357, 8.35754, 18.357, 8.55576, 17.366, 9.54675, 17.366, 9.44766, 16.4741, 10.736, 16.4741, 10.6369, 15.4831, 13.4117, 15.2849, 13.6099, 16.4741, 16.3847, 16.375, 16.4838, 15.2849, 17.2766, 15.2849, 17.1775, 13.5011, 18.3667, 13.5011, 18.3667, 11.2218, 19.2586, 11.3209, 19.2586, 0.419823, 18.3667, 0.419823, 18.3667, -4.73341, 17.4748, -4.73341, 17.2766, -6.41812, 16.2856, -6.51722, 16.2856, -9.39114, 15.3937, -9.39114, 15.4403, -11.3775, 14.5484, -11.5261, 14.3502, -12.1703, 13.7061, -12.2694, 13.161, -12.864, 11.6279, -13.4543, 9.74203, -14.6478, 7.01678, -15.6884, 5.92667, -16.4316, 5.48364, -14.4453, 8.25845, -11.274, 12.718, 5.47395, -9.48056, 10.429, -15.5257, -7.01273, -18.4987, -10.4812, -18.5978, -11.4723 )
 
 [node name="OpenTrashcanArea" type="Area2D" parent="ActionController/PoopController/Trashcan"]
 position = Vector2( -6.4226, -17.0295 )
@@ -504,7 +504,7 @@ polygon = PoolVector2Array( -14.9468, -6.44952, -9.31252, 10.1534, 12.4899, 5.28
 [node name="CloudPuffParticle" parent="ActionController/PoopController/Trashcan" instance=ExtResource( 26 )]
 position = Vector2( -2.20239, -2.83163 )
 scale = Vector2( 0.5, 0.5 )
-z_index = 3
+z_index = 10
 emitting = false
 one_shot = true
 emission_shape = 2
@@ -525,6 +525,7 @@ script = ExtResource( 32 )
 foodBowlDecrementByHours = 6
 
 [node name="FoodBowl" type="Node2D" parent="ActionController/FoodController"]
+position = Vector2( 0, -18.6224 )
 
 [node name="FoodBowlRigidBody" type="RigidBody2D" parent="ActionController/FoodController/FoodBowl"]
 collision_layer = 32
@@ -562,7 +563,7 @@ z_index = 3
 shape = SubResource( 25 )
 
 [node name="FoodPieceDespawnZone" type="Area2D" parent="ActionController/FoodController/FoodBowl"]
-position = Vector2( 13.8831, 654.352 )
+position = Vector2( 13.6853, 667.047 )
 collision_layer = 32
 collision_mask = 16
 
@@ -637,12 +638,6 @@ scale_amount = 2.0
 scale_amount_random = 0.5
 scale_amount_curve = SubResource( 1 )
 color_ramp = SubResource( 2 )
-
-[node name="FoodFillZone" type="ReferenceRect" parent="ActionController/FoodController"]
-margin_left = 59.0
-margin_top = 553.0
-margin_right = 251.0
-margin_bottom = 673.0
 
 [node name="FeedMeter" type="Control" parent="ActionController/FoodController"]
 margin_left = -166.0
