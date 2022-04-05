@@ -19,7 +19,6 @@ func _process(delta):
 	
 	if currMousePosition.y > 675 or currMousePosition.y < 5 or currMousePosition.x < 5 or currMousePosition.x > 1910: #Last region 
 		dropPoop(Input.get_last_mouse_speed())
-	print (currMousePosition.y)
 
 func _input(event):
 	if event is InputEventMouseMotion:
