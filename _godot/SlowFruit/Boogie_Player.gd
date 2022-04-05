@@ -8,7 +8,7 @@ const WALK_MAX_VELOCITY = 140.0
 const AIR_ACCEL = 900.0
 const AIR_DEACCEL = 1100.0
 const JUMP_VELOCITY = 680
-const STOP_JUMP_FORCE = 650.0
+const STOP_JUMP_FORCE = 750.0
 const MAX_FLOOR_AIRBORNE_TIME = 0.15
 
 
@@ -80,7 +80,7 @@ func setIdle():
 func if_right_in_air():
 	if right:
 		if linear_velocity.x > -WALK_MAX_VELOCITY:
-			linear_velocity.x -= AIR_ACCEL
+			linear_velocity.x -= -AIR_ACCEL
 		
 func if_left_in_air():
 	if left:
@@ -122,13 +122,9 @@ func pull_for_input():
 			setIdle()
 		move_left = false
 		applied_force = Vector2(0, applied_force.y)
-		linear_velocity.x -= WALK_DEACCEL
+		linear_velocity.x = -WALK_DEACCEL
 		
-	if Input.is_action_just_pressed("move_right"):
-		#print(linear_velocity.y, "y vel")
-		#print(linear_velocity.x, "x vel")
-		#if found_floor:
-		#	print("found floor")
+	if Input.is_action_just_pressed("move_right"):		
 		if !jumping:
 			setWalking()
 		$AnimatedSprite.flip_h = false
@@ -140,7 +136,7 @@ func pull_for_input():
 			setIdle()
 		move_right = false
 		applied_force = Vector2(0, applied_force.y)
-		linear_velocity.x -= WALK_DEACCEL
+		linear_velocity.x = -WALK_DEACCEL
 	
 	if Input.is_action_just_pressed("jump"):
 		if linear_velocity.y <= 0:	
@@ -153,7 +149,7 @@ func pull_for_input():
 	if Input.is_action_just_released("jump"):
 		stopping_jump = true
 		if found_floor:
-			setWalking()
+			setIdle()
 		applied_force = Vector2(applied_force.y, 0)
 		linear_velocity.y += STOP_JUMP_FORCE
 	
@@ -166,7 +162,7 @@ func set_movement():
 	elif move_right:
 		x = WALK_ACCEL
 	if jump:
-		y = -AIR_ACCEL
+		y -= AIR_ACCEL
 		
 	applied_force += Vector2(x, y)
 	if linear_velocity.x > WALK_MAX_VELOCITY:
@@ -176,7 +172,7 @@ func set_movement():
 		
 	if linear_velocity.y > JUMP_VELOCITY:
 		stopping_jump = true
-		linear_velocity.y = JUMP_VELOCITY
+		linear_velocity.y -= STOP_JUMP_FORCE
 	if linear_velocity.y < -JUMP_VELOCITY:
 		linear_velocity.y = -JUMP_VELOCITY		
 	

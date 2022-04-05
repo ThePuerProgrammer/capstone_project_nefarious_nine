@@ -23,8 +23,11 @@ z_index = 2
 mass = 1.0
 gravity_scale = 6.0
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="TileMap" parent="." instance=ExtResource( 3 )]
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource( 4 )
+attenuation_model = 3
 autoplay = true
 
-[node name="TileMap" parent="." instance=ExtResource( 3 )]
+[node name="Area2D" type="Area2D" parent="."]

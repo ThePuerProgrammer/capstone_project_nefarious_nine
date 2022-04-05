@@ -50,6 +50,7 @@ scale = Vector2( 3, 3 )
 z_index = 1
 mode = 2
 mass = 29.19
+gravity_scale = 4.0
 contact_monitor = true
 script = ExtResource( 1 )
 
