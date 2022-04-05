@@ -271,10 +271,10 @@ func add_items_to_category_selection():
 #Timer Dropdown Items
 func add_items_to_timer_selection():
 	timer_selection_optionbutton.add_item("Select One")
-	timer_selection_optionbutton.add_item("30")
-	timer_selection_optionbutton.add_item("60")
-	timer_selection_optionbutton.add_item("90")
-	timer_selection_optionbutton.add_item("10")
+	timer_selection_optionbutton.add_item("1")
+	timer_selection_optionbutton.add_item("3")
+	timer_selection_optionbutton.add_item("5")
+	timer_selection_optionbutton.add_item("DEMO")
 ##########################
 #On Selection
 ##########################
@@ -299,6 +299,10 @@ func on_timer_item_selected(id):
 	match timer_selection_optionbutton.get_item_id(id):
 		id:
 			desired_time=timer_selection_optionbutton.get_item_text(id)
+			if desired_time =="DEMO":
+				desired_time=10
+			else:
+				desired_time=int(desired_time)*60
 #Checks which Category has been selected
 #and assigns to a gah-dough-bal variable category_selected
 func on_category_item_selected(id):
@@ -309,28 +313,32 @@ func on_category_item_selected(id):
 			print("Category Selected:",category_selected)
 			var keys = deck_dict_name.keys()
 			deck_selected = keys[id-1]
-			flashcardList = FirebaseController.get_user_flashcards(deck_selected)
-			if flashcardList is GDScriptFunctionState:
-					flashcardList = yield(flashcardList,"completed")
 			
-			for flashcard in flashcardList:
-				var fc_fields = flashcard["doc_fields"]
-				var flashcardInfo = []
-				flashcardInfo.push_back(fc_fields['question'])
-				flashcardInfo.push_back(fc_fields['answer'])
-				flashcardInfo.push_back(fc_fields['isMultipleChoice'])
-				flashcardInfo.push_back(fc_fields['incorrectAnswers'])
-				Pomotimer._flashcards.push_back(flashcardInfo)
-				print("FC_INFO:",flashcardInfo)
-				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
-				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
-			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
+			##IN PROGRESS##
+			#flashcardList = FirebaseController.get_user_flashcards(deck_selected)
+			#if flashcardList is GDScriptFunctionState:
+			#		flashcardList = yield(flashcardList,"completed")
+			
+			#for flashcard in flashcardList:
+			#	var fc_fields = flashcard["doc_fields"]
+			#	var flashcardInfo = []
+			#	flashcardInfo.push_back(fc_fields['question'])
+			#	flashcardInfo.push_back(fc_fields['answer'])
+			#	flashcardInfo.push_back(fc_fields['isMultipleChoice'])
+			#	flashcardInfo.push_back(fc_fields['incorrectAnswers'])
+			#	Pomotimer._flashcards.push_back(flashcardInfo)
+			#	print("FC_INFO:",flashcardInfo)
+			#	flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
+			#	print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
+			#print("POMOTIMER_FLASH:",Pomotimer._flashcards)
 
 #Checks which Deck has been selected
 #and assigns to a gah-dough-bal variable deck_selected
 func on_deck_item_selected(id):
 	match deck_selection_optionbutton.get_item_id(id):
 		id:
+			#Clearing Flashcards when a new one is selected
+			Pomotimer._flashcards.clear()
 			#deck_selected=deck_selection_optionbutton.get_item_text(id)
 			#This is how I will pass the Deck Doc Id to the Flashcard Function
 			var keys = deck_dict_name.keys()
