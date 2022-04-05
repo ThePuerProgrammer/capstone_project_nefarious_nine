@@ -41,7 +41,6 @@ export function addEventListeners() {
             (acc, input) => ({ ...acc, [input.name]: input.value }),
             {}
         );
-
         // Getting contents of flashcard
         const question = formData.question;
         const answer = formData.answer;
@@ -66,18 +65,18 @@ export function addEventListeners() {
 
         let deckDocID = sessionStorage.getItem("deckId");
         let isClassDeck = sessionStorage.getItem('isClassDeck');
-        // console.log(`Testing Here:${deckDocID}`);
-        // console.log(deckDocID);
+        const deckId= deckDocID;
+        isClassDeck_global = isClassDeck; //Placed here due hotfix
 
 
         const flashcard = new Flashcard({
+            deckId,
             question,
             isMultipleChoice,
             answer,
             incorrectAnswers,
         });
-
-        // console.log(flashcard);
+         console.log(`Flashcard:${flashcard}`);
 
         try {
             //Question Image

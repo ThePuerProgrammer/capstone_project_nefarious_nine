@@ -75,35 +75,79 @@ export async function one_classroom_page(classroomDocID) {
     html += `</div>`;
     //CLASSROOM TAB END-----------------------------------------------------
 
-    // MEMBERS tab contents
-    html += `<div id="Members" class="one-classroom-tab-content">
-        <div class="row">
-        <div class="column">
+    // MEMBERS tab contents -----------------------------------------------------
+
+    let memberInfo = [];
+    memberInfo = await FirebaseController.getMemberInfo(members);
+
+    html += `<div id="Members" class="one-classroom-tab-content pomo-text-color-dark">
+        <div class="row-classroom">
+        <div class="column-classroom" style="display: inline-block;">
         <h2>Members</h2>`;
 
     // If mod, show members w BAN option
     if (mod == true && members != null) {
-        members.forEach(member => {
-            html += `<tr>${buildButtons(member, classroom.banlist)}</tr>`;
+        html += `<div class="row-memberInfo">
+            <div class="column-memberInfo" style="flex: 50%;">`;
+    }
+
+    if (members != null) {
+        memberInfo.forEach(mem => {
+            let memProfile = "profile_" + mem.username;
+            html += `<div class="classroom-members-info">
+            <br>
+            <div  style="display: inline-block;">
+            <img src="${mem.profilePhotoURL}" class="pfp" style="width: 65px; height: 65px; object-fit: cover; margin-right: 10px;">
+            </div>
+            <div  style="display: inline-block;">
+            <form class="form-member-profile" method="post">
+            <input type="hidden" name="pfpURL" value="${mem.profilePhotoURL}">
+            <input type="hidden" name="username" value="${mem.username}">
+            <input type="hidden" name="userBio" value="${mem.userBio}">
+            <input type="hidden" name="petName" value="${mem.petName}">
+            <input type="hidden" name="petPhotoURL" value="${mem.petPhotoURL}">
+            <input type="hidden" name="equippedSkin" value="${mem.equippedSkin}">
+            <input type="hidden" name="equippedAcc" value="${mem.equippedAcc}">
+            <button type="submit" class="classroom-members-profile-btn pomo-text-color-dark" id="${memProfile}" 
+            style="font-size: 25px; font-weight: bold;">${mem.username}</button>
+            </form>
+            </div>
+            <br>
+            </div>`;
         })
-    } else {
-        if (members != null) {
-            members.forEach(member => {
-                html += `<p>${member}</p>`;
-            })
-        }
+    }
+
+    // If mod, show members w BAN option
+    if (mod == true && members != null) {
+        html += `</div>
+            <div class="column-memberInfo" style="flex: 50%;">`;
+
+        memberInfo.forEach(mem => {
+            html += `<br>
+                <tr>${buildButtons(mem.email, classroom.banlist)}</tr>
+                <br>`; 
+        })
+
+        html += `</div>
+        </div>`;
     }
 
     html += `</div>
-        <div class="column">
+        <div class="column-classroom style="display: inline-block;">
         <h2>Mods</h2>`;
 
     // display mods list
     let mods = classroom.moderatorList
     mods.forEach(mod => {
-        html += `<p>${mod}</p>`;
+        html += `<br>
+            <div  style="display: inline-block;"> 
+            <h4 style=""><i class="small material-icons pomo-text-color-dark">shield</i>${mod}</h4>
+            </div>`;
     })
-    //MEMEMBERS TAB END------------------------------------------------------
+
+    html += `</div>`;
+
+    //MEMBERS TAB END------------------------------------------------------
 
     
     //Fetchs Default Leaderboard
@@ -471,6 +515,60 @@ export async function one_classroom_page(classroomDocID) {
             await one_classroom_page(classroomDocID);
         })
     }
+
+    const memberProfileButtons =
+    document.getElementsByClassName("form-member-profile");
+
+    // Add event listeners for each MEMBER button
+    for (let i = 0; i < memberProfileButtons.length; i++) {
+        memberProfileButtons[i].addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const profilePhotoURL = e.target.pfpURL.value;
+            const username = e.target.username.value;
+            const userBio = e.target.userBio.value;
+            const petName = e.target.petName.value;
+            const petPhotoURL = e.target.petPhotoURL.value;
+            const equippedSkin = e.target.equippedSkin.value;
+            const equippedAcc = e.target.equippedAcc.value;
+
+
+            Elements.displayMemberProfile.profilePictureTag.src = `${profilePhotoURL}`;
+            Elements.displayMemberProfile.username.innerHTML = `${username}`;
+            Elements.displayMemberProfile.userBio.innerHTML = `${userBio}`;
+
+            // if no equipped skin
+            if (equippedSkin == "") {
+                Elements.displayMemberProfile.pomopet.src = `${petPhotoURL}`;
+            } else {
+                let equippedSkinURL;
+                try {
+                    equippedSkinURL = await FirebaseController.getEquippedSkinURL(equippedSkin);
+                } catch (e) {
+                    console.log(e);
+                }
+                Elements.displayMemberProfile.pomopet.src = `${equippedSkinURL}`;
+            }
+
+            // if equipped acc
+            if (equippedAcc != "") {
+                let equippedAccURL;
+                try {
+                    equippedAccURL = await FirebaseController.getEquippedAccURL(equippedAcc);
+                } catch (e) {
+                    console.log(e);
+                }
+                Elements.displayMemberProfile.pomopetAcc.style.display = "block";
+                Elements.displayMemberProfile.pomopetAcc.src = `${equippedAccURL}`;
+            } else {
+                Elements.displayMemberProfile.pomopetAcc.style.display = "none";
+            }
+
+            Elements.displayMemberProfile.pomopetName.innerHTML = `${petName}`;
+    
+            // opens member Profile modal
+            $(`#${Constant.htmlIDs.memberProfileModal}`).modal('show');
+    });
+}
 }
 
 

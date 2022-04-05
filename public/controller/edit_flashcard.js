@@ -81,9 +81,9 @@ export function addEventListeners() {
         e.preventDefault();
 
         const fc = new Flashcard({
+            deckId: e.target.deckId.value,
             question: e.target.question.value,
             answer: e.target.answer.value,
-            //ROAD BLOCK
             isMultipleChoice: e.target.isMultipleChoice.value,
             incorrectAnswers: e.target.incorrectAnswers.value,
 
@@ -233,6 +233,7 @@ export async function edit_flashcard(uid, deckId, docId) {
 
     //Getting Elements from Firebase to Edit
     Elements.formEditFlashcard.form.docId.value = flashcard.docID;
+    Elements.formEditFlashcard.form.deckId.value = flashcard.deckId;
     Elements.formEditFlashcard.form.questionImageName.value = flashcard.questionImageName;
     Elements.formEditFlashcard.form.answerImageName.value = flashcard.answerImageName;
     Elements.formEditFlashcard.form.question.value = flashcard.question;
@@ -299,6 +300,7 @@ export async function edit_classroomflashcard(isClassDeck, deckId, docId) {
 
     //Getting Elements from Firebase to Edit
     Elements.formEditFlashcard.form.docId.value = flashcard.docID;
+    Elements.formEditFlashcard.form.deckId.value = flashcard.deckId
     Elements.formEditFlashcard.form.questionImageName.value = flashcard.questionImageName;
     Elements.formEditFlashcard.form.answerImageName.value = flashcard.answerImageName;
     Elements.formEditFlashcard.form.question.value = flashcard.question;

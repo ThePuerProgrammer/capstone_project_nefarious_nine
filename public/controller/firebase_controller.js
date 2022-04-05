@@ -1392,6 +1392,7 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
             if (doc.exists) {
                 flashcard.question = data.question;
                 flashcard.answer = data.answer;
+                flashcard.deckId = data.deckId;
                 //flashcard.isMultipleChoice = data.isMultipleChoice;
                 flashcard.incorrectAnswers = data.incorrectAnswers;
                 flashcard.questionImageName = data.questionImageName;
@@ -1642,6 +1643,39 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
     });
 
     return classroomList;
+}
+//============================================================================//
+
+//============================================================================//
+// CLASSROOM MEMBERS TAB
+//============================================================================//
+
+export async function getMemberInfo(members) {
+    let memberInfo = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .get();
+
+    ref.forEach(doc => {
+        let user = new User(doc.data());
+
+        const mem = {
+            email: user.email,
+            username: user.username,
+            profilePhotoURL: user.profilePhotoURL,
+            userBio: user.userBio,
+            petPhotoURL: user.pomopet.petPhotoURL, 
+            petName: user.pomopet.name, 
+            equippedSkin: user.equippedSkin, 
+            equippedAcc: user.equippedAcc,
+        }
+
+        memberInfo.push(mem);
+    })
+
+    return memberInfo;
 }
 
 //============================================================================//
@@ -2456,6 +2490,13 @@ export async function updatePomopet(uid, pomopet) {
         .doc(uid)
         .update({ 'pomopet': pomopet, 'equippedSkin': "" });
 }
+
+export async function updatePomopetName(uid, pomopet) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'pomopet': pomopet});
+}
 //============================================================================//
 
 //============================================================================//
@@ -2612,4 +2653,3 @@ export async function deleteItemFromShop(imagename, docID) {
 }
 
 //============================================================================//
-
