@@ -1,12 +1,10 @@
-[gd_scene load_steps=57 format=2]
+[gd_scene load_steps=67 format=2]
 
 [ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_out.tres" type="Animation" id=1]
 [ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ChillZone/ChillZone.gd" type="Script" id=3]
-[ext_resource path="res://ChillZone/ActionBar.gd" type="Script" id=4]
 [ext_resource path="res://ChillZone/Setting Assets/Chillzone-floor.png" type="Texture" id=5]
 [ext_resource path="res://ChillZone/wash_pomopet/ParticleEffectController.gd" type="Script" id=6]
-[ext_resource path="res://assets/fonts/PressStart2P-vaV7_26pt.tres" type="DynamicFont" id=7]
 [ext_resource path="res://ChillZone/Setting Assets/Forest_background.png" type="Texture" id=8]
 [ext_resource path="res://ChillZone/wash_pomopet/SoundEffects/mixkit-liquid-bubble-3000-shorter.wav" type="AudioStream" id=9]
 [ext_resource path="res://ChillZone/wash_pomopet/sparkle_animation/f7.png" type="Texture" id=10]
@@ -39,6 +37,16 @@
 [ext_resource path="res://ChillZone/food_pomopet/art/FoodBowls/food_bowl_0_bg.png" type="Texture" id=37]
 [ext_resource path="res://ChillZone/food_pomopet/art/dog_food_bag/dog_food_bag_bg.png" type="Texture" id=38]
 [ext_resource path="res://ChillZone/poop_pomopet/art/cloud-puff.png" type="Texture" id=39]
+[ext_resource path="res://ChillZone/progressBars/Assets/clean_progress_bg.png" type="Texture" id=40]
+[ext_resource path="res://ChillZone/ProgressBars.gd" type="Script" id=41]
+[ext_resource path="res://ChillZone/progressBars/Assets/heart_icon.png" type="Texture" id=42]
+[ext_resource path="res://ChillZone/progressBars/Assets/food_icon.png" type="Texture" id=43]
+[ext_resource path="res://ChillZone/progressBars/Assets/bubble_icon.png" type="Texture" id=44]
+[ext_resource path="res://ChillZone/progressBars/Assets/gradiant_clean_progress_fg.png" type="Texture" id=45]
+[ext_resource path="res://ChillZone/progressBars/Assets/hunger_progress_bg.png" type="Texture" id=46]
+[ext_resource path="res://ChillZone/progressBars/Assets/ghappiness_progress_bg.png" type="Texture" id=47]
+[ext_resource path="res://ChillZone/progressBars/Assets/gradiant_hunger_progress_fg.png" type="Texture" id=48]
+[ext_resource path="res://ChillZone/progressBars/Assets/gradiant_happiness_progress_fg.png" type="Texture" id=49]
 
 [sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( 0, 0, 128, 0, 128, 128, 0, 128 )
@@ -362,6 +370,9 @@ script = ExtResource( 3 )
 [node name="Background" type="Control" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Sprite" type="Sprite" parent="Background"]
 position = Vector2( 958.976, 332.627 )
@@ -407,146 +418,103 @@ position = Vector2( 958.976, -85.0622 )
 scale = Vector2( 0.461791, -0.696972 )
 shape = SubResource( 12 )
 
-[node name="ActionBar" type="Control" parent="."]
-margin_right = 1900.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 0, 100 )
-script = ExtResource( 4 )
+[node name="ActionController" type="Node" parent="."]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ActionBar"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="WashPomopetController" type="Node" parent="ActionController"]
 
-[node name="CleanButton" type="Button" parent="ActionBar/HBoxContainer"]
-margin_right = 506.0
-margin_bottom = 100.0
-size_flags_horizontal = 3
-custom_fonts/font = ExtResource( 7 )
-text = "[Temp] Clean Button"
-
-[node name="FeedButton" type="Button" parent="ActionBar/HBoxContainer"]
-margin_left = 510.0
-margin_right = 990.0
-margin_bottom = 100.0
-size_flags_horizontal = 3
-custom_fonts/font = ExtResource( 7 )
-text = "[Temp] Feed Button"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PetButton" type="Button" parent="ActionBar/HBoxContainer"]
-margin_left = 994.0
-margin_right = 1448.0
-margin_bottom = 100.0
-size_flags_horizontal = 3
-custom_fonts/font = ExtResource( 7 )
-text = "[Temp] Pet Button"
-
-[node name="PoopPickupButton" type="Button" parent="ActionBar/HBoxContainer"]
-margin_left = 1452.0
-margin_right = 1932.0
-margin_bottom = 100.0
-size_flags_horizontal = 3
-custom_fonts/font = ExtResource( 7 )
-text = "[Temp] Pickup Poop"
-
-[node name="ActionBarController" type="Node" parent="."]
-
-[node name="WashPomopetController" type="Node" parent="ActionBarController"]
-
-[node name="EffectController" type="Node2D" parent="ActionBarController/WashPomopetController"]
+[node name="EffectController" type="Node2D" parent="ActionController/WashPomopetController"]
 script = ExtResource( 6 )
 
-[node name="MouseBubblesParticle" parent="ActionBarController/WashPomopetController/EffectController" instance=ExtResource( 16 )]
+[node name="MouseBubblesParticle" parent="ActionController/WashPomopetController/EffectController" instance=ExtResource( 16 )]
 
-[node name="MouseBubblesCooldownTimer" type="Timer" parent="ActionBarController/WashPomopetController/EffectController"]
+[node name="MouseBubblesCooldownTimer" type="Timer" parent="ActionController/WashPomopetController/EffectController"]
 wait_time = 0.05
 one_shot = true
 
-[node name="CleanGlowParticle" parent="ActionBarController/WashPomopetController/EffectController" instance=ExtResource( 15 )]
+[node name="CleanGlowParticle" parent="ActionController/WashPomopetController/EffectController" instance=ExtResource( 15 )]
 position = Vector2( 958.976, 422.601 )
 z_index = -1
 
-[node name="CleanEffectTimer" type="Timer" parent="ActionBarController/WashPomopetController/EffectController"]
+[node name="CleanEffectTimer" type="Timer" parent="ActionController/WashPomopetController/EffectController"]
 wait_time = 1.5
 one_shot = true
 
-[node name="CleanSparkle" type="AnimatedSprite" parent="ActionBarController/WashPomopetController/EffectController"]
+[node name="CleanSparkle" type="AnimatedSprite" parent="ActionController/WashPomopetController/EffectController"]
 modulate = Color( 1, 1, 1, 0 )
 scale = Vector2( 0.75, 0.75 )
 frames = SubResource( 11 )
 animation = "sparkle"
 frame = 6
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ActionBarController/WashPomopetController/EffectController/CleanSparkle"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ActionController/WashPomopetController/EffectController/CleanSparkle"]
 anims/sparkle_fade_in = ExtResource( 20 )
 anims/sparkle_fade_out = ExtResource( 1 )
 
-[node name="CleanSoundEffect" type="AudioStreamPlayer" parent="ActionBarController/WashPomopetController/EffectController"]
+[node name="CleanSoundEffect" type="AudioStreamPlayer" parent="ActionController/WashPomopetController/EffectController"]
 stream = ExtResource( 12 )
 volume_db = -10.0
 
-[node name="BubbleSoundEffect" type="AudioStreamPlayer" parent="ActionBarController/WashPomopetController/EffectController"]
+[node name="BubbleSoundEffect" type="AudioStreamPlayer" parent="ActionController/WashPomopetController/EffectController"]
 stream = ExtResource( 9 )
 volume_db = -12.5
 
-[node name="PoopController" type="Node" parent="ActionBarController"]
+[node name="PoopController" type="Node" parent="ActionController"]
 script = ExtResource( 21 )
 
-[node name="PoopRegion" type="ReferenceRect" parent="ActionBarController/PoopController"]
+[node name="PoopRegion" type="ReferenceRect" parent="ActionController/PoopController"]
 margin_left = 309.759
 margin_top = 665.789
 margin_right = 1909.76
 margin_bottom = 666.789
 border_color = Color( 1, 0, 0, 0 )
 
-[node name="Trashcan" type="Node2D" parent="ActionBarController/PoopController"]
+[node name="Trashcan" type="Node2D" parent="ActionController/PoopController"]
 position = Vector2( 1556.44, 534.292 )
 scale = Vector2( 6, 6 )
 script = ExtResource( 22 )
 
-[node name="TrashcanClosed" type="Sprite" parent="ActionBarController/PoopController/Trashcan"]
+[node name="TrashcanClosed" type="Sprite" parent="ActionController/PoopController/Trashcan"]
 visible = false
 texture = ExtResource( 23 )
 
-[node name="TrashcanOpen" type="Node2D" parent="ActionBarController/PoopController/Trashcan"]
+[node name="TrashcanOpen" type="Node2D" parent="ActionController/PoopController/Trashcan"]
 visible = false
 
-[node name="TrashcanOpenForeground" type="Sprite" parent="ActionBarController/PoopController/Trashcan/TrashcanOpen"]
-z_index = 2
+[node name="TrashcanOpenForeground" type="Sprite" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
+z_index = 6
 texture = ExtResource( 24 )
 
-[node name="TrashcanOpenBackground" type="Sprite" parent="ActionBarController/PoopController/Trashcan/TrashcanOpen"]
+[node name="TrashcanOpenBackground" type="Sprite" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
 z_index = -2
 texture = ExtResource( 25 )
 
-[node name="CloseWaitOut" type="Timer" parent="ActionBarController/PoopController/Trashcan/TrashcanOpen"]
+[node name="CloseWaitOut" type="Timer" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
 wait_time = 0.3
 
-[node name="TrashcanBucket" type="RigidBody2D" parent="ActionBarController/PoopController/Trashcan/TrashcanOpen"]
+[node name="TrashcanBucket" type="RigidBody2D" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
 collision_layer = 2
 mode = 1
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ActionBarController/PoopController/Trashcan/TrashcanOpen/TrashcanBucket"]
-polygon = PoolVector2Array( -19.3906, -11.4723, -19.3906, -8.79653, -18.4987, -8.79653, -18.2014, -5.72442, -17.3095, -5.72442, -17.2104, -4.73341, -16.4176, -4.73341, -16.2194, 0.221619, -15.4266, 0.320717, -15.3275, 2.30273, -14.4356, 2.30273, -14.4356, 4.28474, -13.4446, 4.28474, -13.3455, 8.44697, -12.2554, 8.44697, -12.2554, 10.5281, -11.3635, 10.429, -11.3635, 16.2759, -10.2734, 16.2759, -10.3725, 17.366, -9.48056, 17.2669, -9.38147, 18.4561, -8.39046, 18.4561, -8.39046, 19.4471, -7.49855, 19.5462, -7.39944, 20.5372, -0.363281, 20.4381, -0.462402, 19.4471, 5.48364, 19.4471, 5.48364, 18.357, 8.35754, 18.357, 8.55576, 17.366, 9.54675, 17.366, 9.44766, 16.4741, 10.736, 16.4741, 10.6369, 15.4831, 13.4117, 15.2849, 13.6099, 16.4741, 16.3847, 16.375, 16.4838, 15.2849, 17.2766, 15.2849, 17.1775, 13.5011, 18.3667, 13.5011, 18.3667, 11.2218, 19.2586, 11.3209, 19.2586, 0.419823, 18.3667, 0.419823, 18.3667, -4.73341, 17.4748, -4.73341, 17.2766, -6.41812, 16.2856, -6.51722, 16.2856, -9.39114, 15.3937, -9.39114, 15.3937, -11.3731, 14.4027, -11.274, 14.6009, -12.3642, 13.8081, -12.3642, 13.6099, -13.3552, 11.6279, -13.4543, 11.5287, -15.6345, 6.67285, -15.6345, 5.48364, -15.6345, 5.48364, -14.4453, 8.25845, -11.274, 12.718, 5.47395, -9.48056, 10.429, -15.5257, -7.01273, -18.4987, -10.4812, -18.5978, -11.4723 )
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ActionController/PoopController/Trashcan/TrashcanOpen/TrashcanBucket"]
+polygon = PoolVector2Array( -19.3906, -11.4723, -19.3906, -8.79653, -18.4987, -8.79653, -18.2014, -5.72442, -17.3095, -5.72442, -17.2104, -4.73341, -16.4176, -4.73341, -16.2194, 0.221619, -15.4266, 0.320717, -15.3275, 2.30273, -14.4356, 2.30273, -14.4356, 4.28474, -13.4446, 4.28474, -13.3455, 8.44697, -12.2554, 8.44697, -12.2554, 10.5281, -11.3635, 10.429, -11.3635, 16.2759, -10.2734, 16.2759, -10.3725, 17.366, -9.48056, 17.2669, -9.38147, 18.4561, -8.39046, 18.4561, -8.39046, 19.4471, -7.49855, 19.5462, -7.39944, 20.5372, -0.363281, 20.4381, -0.462402, 19.4471, 5.48364, 19.4471, 5.48364, 18.357, 8.35754, 18.357, 8.55576, 17.366, 9.54675, 17.366, 9.44766, 16.4741, 10.736, 16.4741, 10.6369, 15.4831, 13.4117, 15.2849, 13.6099, 16.4741, 16.3847, 16.375, 16.4838, 15.2849, 17.2766, 15.2849, 17.1775, 13.5011, 18.3667, 13.5011, 18.3667, 11.2218, 19.2586, 11.3209, 19.2586, 0.419823, 18.3667, 0.419823, 18.3667, -4.73341, 17.4748, -4.73341, 17.2766, -6.41812, 16.2856, -6.51722, 16.2856, -9.39114, 15.3937, -9.39114, 15.4403, -11.3775, 14.5484, -11.5261, 14.3502, -12.1703, 13.7061, -12.2694, 13.161, -12.864, 11.6279, -13.4543, 9.74203, -14.6478, 7.01678, -15.6884, 5.92667, -16.4316, 5.48364, -14.4453, 8.25845, -11.274, 12.718, 5.47395, -9.48056, 10.429, -15.5257, -7.01273, -18.4987, -10.4812, -18.5978, -11.4723 )
 
-[node name="OpenTrashcanArea" type="Area2D" parent="ActionBarController/PoopController/Trashcan"]
+[node name="OpenTrashcanArea" type="Area2D" parent="ActionController/PoopController/Trashcan"]
 position = Vector2( -6.4226, -17.0295 )
 collision_layer = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ActionBarController/PoopController/Trashcan/OpenTrashcanArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ActionController/PoopController/Trashcan/OpenTrashcanArea"]
 position = Vector2( 2.80301, 1.83679 )
 shape = SubResource( 14 )
 
-[node name="PoopKillBox" type="Area2D" parent="ActionBarController/PoopController/Trashcan"]
+[node name="PoopKillBox" type="Area2D" parent="ActionController/PoopController/Trashcan"]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ActionBarController/PoopController/Trashcan/PoopKillBox"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ActionController/PoopController/Trashcan/PoopKillBox"]
 polygon = PoolVector2Array( -14.9468, -6.44952, -9.31252, 10.1534, 12.4899, 5.28675, 8.13174, -10.9801 )
 
-[node name="CloudPuffParticle" parent="ActionBarController/PoopController/Trashcan" instance=ExtResource( 26 )]
+[node name="CloudPuffParticle" parent="ActionController/PoopController/Trashcan" instance=ExtResource( 26 )]
 position = Vector2( -2.20239, -2.83163 )
 scale = Vector2( 0.5, 0.5 )
+z_index = 10
 emitting = false
 one_shot = true
 emission_shape = 2
@@ -554,111 +522,112 @@ emission_rect_extents = Vector2( 30, 35 )
 angular_velocity = 110.0
 angular_velocity_random = 0.25
 
-[node name="TrashcanCloseSound" type="AudioStreamPlayer2D" parent="ActionBarController/PoopController/Trashcan"]
+[node name="TrashcanCloseSound" type="AudioStreamPlayer2D" parent="ActionController/PoopController/Trashcan"]
 stream = ExtResource( 27 )
 volume_db = -20.0
 
-[node name="TrashcanOpenSound" type="AudioStreamPlayer2D" parent="ActionBarController/PoopController/Trashcan"]
+[node name="TrashcanOpenSound" type="AudioStreamPlayer2D" parent="ActionController/PoopController/Trashcan"]
 stream = ExtResource( 28 )
 volume_db = -20.0
 
-[node name="FoodController" type="Node2D" parent="ActionBarController"]
+[node name="FoodController" type="Node2D" parent="ActionController"]
 script = ExtResource( 32 )
 foodBowlDecrementByHours = 6
 
-[node name="FoodBowl" type="Node2D" parent="ActionBarController/FoodController"]
+[node name="FoodBowl" type="Node2D" parent="ActionController/FoodController"]
+position = Vector2( 0, -18.6224 )
 
-[node name="FoodBowlRigidBody" type="RigidBody2D" parent="ActionBarController/FoodController/FoodBowl"]
+[node name="FoodBowlRigidBody" type="RigidBody2D" parent="ActionController/FoodController/FoodBowl"]
 collision_layer = 32
 collision_mask = 16
 mode = 1
 
-[node name="FoodBowlLeftWall" type="CollisionPolygon2D" parent="ActionBarController/FoodController/FoodBowl/FoodBowlRigidBody"]
+[node name="FoodBowlLeftWall" type="CollisionPolygon2D" parent="ActionController/FoodController/FoodBowl/FoodBowlRigidBody"]
 z_index = 3
 polygon = PoolVector2Array( 76.8658, 611.259, 73.7807, 605.533, 69.9943, 610.879, 64.983, 613.997, 65.162, 641.473, 58.9517, 643.63, 59.0269, 659.171, 64.6901, 659.171, 64.9261, 665.07, 70.8253, 665.306, 70.8253, 671.205, 76.2526, 671.205 )
 
-[node name="FoodBowlRightWall" type="CollisionPolygon2D" parent="ActionBarController/FoodController/FoodBowl/FoodBowlRigidBody"]
+[node name="FoodBowlRightWall" type="CollisionPolygon2D" parent="ActionController/FoodController/FoodBowl/FoodBowlRigidBody"]
 z_index = 3
 polygon = PoolVector2Array( 233.013, 611.2, 233.644, 671.205, 238.599, 671.205, 238.599, 665.07, 244.498, 665.07, 244.498, 659.407, 250.633, 659.407, 250.81, 643.317, 244.734, 641.473, 244.662, 613.041, 240.109, 610.339, 236.009, 605.394 )
 
-[node name="FoodBowlBg" type="Sprite" parent="ActionBarController/FoodController/FoodBowl"]
+[node name="FoodBowlBg" type="Sprite" parent="ActionController/FoodController/FoodBowl"]
 position = Vector2( 154.836, 620.508 )
 scale = Vector2( 3, 3 )
 z_index = -1
 texture = ExtResource( 37 )
 
-[node name="FoodBowlFg" type="Sprite" parent="ActionBarController/FoodController/FoodBowl"]
+[node name="FoodBowlFg" type="Sprite" parent="ActionController/FoodController/FoodBowl"]
 position = Vector2( 154.836, 620.508 )
 scale = Vector2( 3, 3 )
 z_index = 2
 texture = ExtResource( 29 )
 
-[node name="FoodPieceKillBox" type="Area2D" parent="ActionBarController/FoodController/FoodBowl"]
+[node name="FoodPieceKillBox" type="Area2D" parent="ActionController/FoodController/FoodBowl"]
 position = Vector2( 90.3459, 643.81 )
 collision_layer = 32
 collision_mask = 16
 
-[node name="KillBox" type="CollisionShape2D" parent="ActionBarController/FoodController/FoodBowl/FoodPieceKillBox"]
+[node name="KillBox" type="CollisionShape2D" parent="ActionController/FoodController/FoodBowl/FoodPieceKillBox"]
 position = Vector2( 67.4588, 10.5421 )
 z_index = 3
 shape = SubResource( 25 )
 
-[node name="FoodPieceDespawnZone" type="Area2D" parent="ActionBarController/FoodController/FoodBowl"]
-position = Vector2( 13.8831, 654.352 )
+[node name="FoodPieceDespawnZone" type="Area2D" parent="ActionController/FoodController/FoodBowl"]
+position = Vector2( 13.6853, 667.047 )
 collision_layer = 32
 collision_mask = 16
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ActionBarController/FoodController/FoodBowl/FoodPieceDespawnZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ActionController/FoodController/FoodBowl/FoodPieceDespawnZone"]
 position = Vector2( 947.328, 18.6481 )
 z_index = 2
 shape = SubResource( 26 )
 
-[node name="FoodPieces" type="Node2D" parent="ActionBarController/FoodController"]
+[node name="FoodPieces" type="Node2D" parent="ActionController/FoodController"]
 
-[node name="FoodBag" type="Node2D" parent="ActionBarController/FoodController"]
+[node name="FoodBag" type="Node2D" parent="ActionController/FoodController"]
 position = Vector2( -395.113, -246.721 )
 script = ExtResource( 33 )
 
-[node name="BagIdle" type="Sprite" parent="ActionBarController/FoodController/FoodBag"]
+[node name="BagIdle" type="Sprite" parent="ActionController/FoodController/FoodBag"]
 material = SubResource( 16 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 30 )
 
-[node name="BagActive" type="Node2D" parent="ActionBarController/FoodController/FoodBag"]
+[node name="BagActive" type="Node2D" parent="ActionController/FoodController/FoodBag"]
 visible = false
 rotation = -2.35619
 scale = Vector2( 3, 3 )
 
-[node name="FoodBagBg" type="Sprite" parent="ActionBarController/FoodController/FoodBag/BagActive"]
+[node name="FoodBagBg" type="Sprite" parent="ActionController/FoodController/FoodBag/BagActive"]
 z_index = -1
 texture = ExtResource( 38 )
 
-[node name="FoodBagFg" type="Sprite" parent="ActionBarController/FoodController/FoodBag/BagActive"]
+[node name="FoodBagFg" type="Sprite" parent="ActionController/FoodController/FoodBag/BagActive"]
 z_index = 2
 texture = ExtResource( 31 )
 
-[node name="FoodSpawnPositions" type="Node2D" parent="ActionBarController/FoodController/FoodBag"]
+[node name="FoodSpawnPositions" type="Node2D" parent="ActionController/FoodController/FoodBag"]
 
-[node name="FoodSpawnPos0" type="Position2D" parent="ActionBarController/FoodController/FoodBag/FoodSpawnPositions"]
+[node name="FoodSpawnPos0" type="Position2D" parent="ActionController/FoodController/FoodBag/FoodSpawnPositions"]
 position = Vector2( -50.292, 24.6344 )
 
-[node name="FoodSpawnPos1" type="Position2D" parent="ActionBarController/FoodController/FoodBag/FoodSpawnPositions"]
+[node name="FoodSpawnPos1" type="Position2D" parent="ActionController/FoodController/FoodBag/FoodSpawnPositions"]
 position = Vector2( -42.0149, 27.2126 )
 
-[node name="FoodSpawnPos2" type="Position2D" parent="ActionBarController/FoodController/FoodBag/FoodSpawnPositions"]
+[node name="FoodSpawnPos2" type="Position2D" parent="ActionController/FoodController/FoodBag/FoodSpawnPositions"]
 position = Vector2( -32.491, 30.3965 )
 
-[node name="FoodSpawnPos3" type="Position2D" parent="ActionBarController/FoodController/FoodBag/FoodSpawnPositions"]
+[node name="FoodSpawnPos3" type="Position2D" parent="ActionController/FoodController/FoodBag/FoodSpawnPositions"]
 position = Vector2( -22.4526, 33.976 )
 
-[node name="FoodSpawnPos4" type="Position2D" parent="ActionBarController/FoodController/FoodBag/FoodSpawnPositions"]
+[node name="FoodSpawnPos4" type="Position2D" parent="ActionController/FoodController/FoodBag/FoodSpawnPositions"]
 position = Vector2( -14.7277, 37.5653 )
 
-[node name="FoodPieceSpawnCooldown" type="Timer" parent="ActionBarController/FoodController/FoodBag"]
+[node name="FoodPieceSpawnCooldown" type="Timer" parent="ActionController/FoodController/FoodBag"]
 wait_time = 0.05
 one_shot = true
 
-[node name="CloudPuffParticle" type="CPUParticles2D" parent="ActionBarController/FoodController/FoodBag"]
+[node name="CloudPuffParticle" type="CPUParticles2D" parent="ActionController/FoodController/FoodBag"]
 z_index = 5
 emitting = false
 amount = 40
@@ -680,19 +649,13 @@ scale_amount_random = 0.5
 scale_amount_curve = SubResource( 1 )
 color_ramp = SubResource( 2 )
 
-[node name="FoodFillZone" type="ReferenceRect" parent="ActionBarController/FoodController"]
-margin_left = 59.0
-margin_top = 553.0
-margin_right = 251.0
-margin_bottom = 673.0
-
-[node name="FeedMeter" type="Control" parent="ActionBarController/FoodController"]
+[node name="FeedMeter" type="Control" parent="ActionController/FoodController"]
 margin_left = -166.0
 margin_top = -246.721
 margin_right = 134.0
 margin_bottom = -196.721
 
-[node name="FeedMeterProgressBar" type="ProgressBar" parent="ActionBarController/FoodController/FeedMeter"]
+[node name="FeedMeterProgressBar" type="ProgressBar" parent="ActionController/FoodController/FeedMeter"]
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -706,38 +669,119 @@ custom_styles/bg = SubResource( 20 )
 step = 1.0
 value = 50.0
 script = ExtResource( 34 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ActionBarController/FoodController/FeedMeter/FeedMeterProgressBar"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ActionController/FoodController/FeedMeter/FeedMeterProgressBar"]
 anims/RESET = SubResource( 21 )
 anims/fade_in = SubResource( 22 )
 anims/fade_out = SubResource( 23 )
 anims/sparkle_fade_in = ExtResource( 20 )
 
-[node name="DogFoodParticles" parent="ActionBarController/FoodController/FeedMeter" instance=ExtResource( 36 )]
+[node name="DogFoodParticles" parent="ActionController/FoodController/FeedMeter" instance=ExtResource( 36 )]
 material = SubResource( 24 )
+
+[node name="ProgressBars" type="Control" parent="."]
+script = ExtResource( 41 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CleanlinessProgressBar" type="TextureProgress" parent="ProgressBars"]
+margin_left = 191.0
+margin_top = 738.0
+margin_right = 645.0
+margin_bottom = 801.0
+value = 90.0
+texture_under = ExtResource( 40 )
+texture_progress = ExtResource( 45 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CleanlinessBarIcon" type="TextureRect" parent="ProgressBars"]
+margin_left = 100.0
+margin_top = 724.0
+margin_right = 184.0
+margin_bottom = 808.0
+texture = ExtResource( 44 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HungerProgressBar" type="TextureProgress" parent="ProgressBars"]
+margin_left = 787.0
+margin_top = 737.0
+margin_right = 1238.0
+margin_bottom = 798.0
+value = 100.0
+texture_under = ExtResource( 46 )
+texture_progress = ExtResource( 48 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HungerBarIcon" type="TextureRect" parent="ProgressBars"]
+margin_left = 690.0
+margin_top = 724.0
+margin_right = 774.0
+margin_bottom = 808.0
+texture = ExtResource( 43 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HappinessProgressBar" type="TextureProgress" parent="ProgressBars"]
+margin_left = 1376.0
+margin_top = 734.0
+margin_right = 1828.0
+margin_bottom = 796.0
+value = 90.0
+texture_under = ExtResource( 47 )
+texture_progress = ExtResource( 49 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HappinessBarIcon" type="TextureRect" parent="ProgressBars"]
+margin_left = 1279.0
+margin_top = 721.0
+margin_right = 1364.0
+margin_bottom = 806.0
+texture = ExtResource( 42 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Pet" parent="." instance=ExtResource( 2 )]
 position = Vector2( 417.556, 558.986 )
 scale = Vector2( 0.7, 0.7 )
 
-[connection signal="body_entered" from="Background/Floor" to="ActionBarController/FoodController" method="_on_Floor_body_entered"]
-[connection signal="pressed" from="ActionBar/HBoxContainer/CleanButton" to="ActionBar" method="_on_CleanButton_pressed"]
-[connection signal="pressed" from="ActionBar/HBoxContainer/FeedButton" to="ActionBar" method="_on_FeedButton_pressed"]
-[connection signal="pressed" from="ActionBar/HBoxContainer/PoopPickupButton" to="ActionBar" method="_on_PoopPickupButton_pressed"]
-[connection signal="hide" from="ActionBarController/WashPomopetController/EffectController/MouseBubblesParticle" to="ActionBarController/WashPomopetController/EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
-[connection signal="timeout" from="ActionBarController/WashPomopetController/EffectController/MouseBubblesCooldownTimer" to="ActionBarController/WashPomopetController/EffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
-[connection signal="timeout" from="ActionBarController/WashPomopetController/EffectController/CleanEffectTimer" to="ActionBarController/WashPomopetController/EffectController" method="_on_CleanEffectTimer_timeout"]
-[connection signal="poopPickUpEnd" from="ActionBarController/PoopController" to="ActionBarController/PoopController/Trashcan" method="_on_PoopController_poopPickUpEnd"]
-[connection signal="poopPickUpStart" from="ActionBarController/PoopController" to="ActionBarController/PoopController/Trashcan" method="_on_PoopController_poopPickUpStart"]
-[connection signal="timeout" from="ActionBarController/PoopController/Trashcan/TrashcanOpen/CloseWaitOut" to="ActionBarController/PoopController/Trashcan" method="_on_CloseWaitOut_timeout"]
-[connection signal="body_entered" from="ActionBarController/PoopController/Trashcan/OpenTrashcanArea" to="ActionBarController/PoopController/Trashcan" method="_on_Area2D_body_entered"]
-[connection signal="body_exited" from="ActionBarController/PoopController/Trashcan/OpenTrashcanArea" to="ActionBarController/PoopController/Trashcan" method="_on_Area2D_body_exited"]
-[connection signal="mouse_entered" from="ActionBarController/PoopController/Trashcan/OpenTrashcanArea" to="ActionBarController/PoopController/Trashcan" method="_on_OpenTrashcanArea_mouse_entered"]
-[connection signal="mouse_exited" from="ActionBarController/PoopController/Trashcan/OpenTrashcanArea" to="ActionBarController/PoopController/Trashcan" method="_on_OpenTrashcanArea_mouse_exited"]
-[connection signal="body_entered" from="ActionBarController/PoopController/Trashcan/PoopKillBox" to="ActionBarController/PoopController" method="_on_Area2D_body_entered"]
-[connection signal="hide" from="ActionBarController/PoopController/Trashcan/CloudPuffParticle" to="ActionBarController/PoopController/Trashcan" method="_on_CloudPuffParticle_hide"]
-[connection signal="finished" from="ActionBarController/PoopController/Trashcan/TrashcanCloseSound" to="ActionBarController/PoopController/Trashcan" method="_on_TrashcanCloseSound_finished"]
-[connection signal="finished" from="ActionBarController/PoopController/Trashcan/TrashcanOpenSound" to="ActionBarController/PoopController/Trashcan" method="_on_TrashcanOpenSound_finished"]
-[connection signal="body_entered" from="ActionBarController/FoodController/FoodBowl/FoodPieceKillBox" to="ActionBarController/FoodController" method="_on_FoodPieceKillBox_body_entered"]
-[connection signal="body_entered" from="ActionBarController/FoodController/FoodBowl/FoodPieceDespawnZone" to="ActionBarController/FoodController" method="_on_FoodPieceDespawnZone_body_entered"]
-[connection signal="timeout" from="ActionBarController/FoodController/FoodBag/FoodPieceSpawnCooldown" to="ActionBarController/FoodController/FoodBag" method="_on_FoodPieceSpawnCooldown_timeout"]
+[connection signal="body_entered" from="Background/Floor" to="ActionController/FoodController" method="_on_Floor_body_entered"]
+[connection signal="hide" from="ActionController/WashPomopetController/EffectController/MouseBubblesParticle" to="ActionController/WashPomopetController/EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
+[connection signal="timeout" from="ActionController/WashPomopetController/EffectController/MouseBubblesCooldownTimer" to="ActionController/WashPomopetController/EffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
+[connection signal="timeout" from="ActionController/WashPomopetController/EffectController/CleanEffectTimer" to="ActionController/WashPomopetController/EffectController" method="_on_CleanEffectTimer_timeout"]
+[connection signal="poopPickUpEnd" from="ActionController/PoopController" to="ActionController/PoopController/Trashcan" method="_on_PoopController_poopPickUpEnd"]
+[connection signal="poopPickUpStart" from="ActionController/PoopController" to="ActionController/PoopController/Trashcan" method="_on_PoopController_poopPickUpStart"]
+[connection signal="timeout" from="ActionController/PoopController/Trashcan/TrashcanOpen/CloseWaitOut" to="ActionController/PoopController/Trashcan" method="_on_CloseWaitOut_timeout"]
+[connection signal="body_entered" from="ActionController/PoopController/Trashcan/OpenTrashcanArea" to="ActionController/PoopController/Trashcan" method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="ActionController/PoopController/Trashcan/OpenTrashcanArea" to="ActionController/PoopController/Trashcan" method="_on_Area2D_body_exited"]
+[connection signal="mouse_entered" from="ActionController/PoopController/Trashcan/OpenTrashcanArea" to="ActionController/PoopController/Trashcan" method="_on_OpenTrashcanArea_mouse_entered"]
+[connection signal="mouse_exited" from="ActionController/PoopController/Trashcan/OpenTrashcanArea" to="ActionController/PoopController/Trashcan" method="_on_OpenTrashcanArea_mouse_exited"]
+[connection signal="body_entered" from="ActionController/PoopController/Trashcan/PoopKillBox" to="ActionController/PoopController" method="_on_Area2D_body_entered"]
+[connection signal="hide" from="ActionController/PoopController/Trashcan/CloudPuffParticle" to="ActionController/PoopController/Trashcan" method="_on_CloudPuffParticle_hide"]
+[connection signal="finished" from="ActionController/PoopController/Trashcan/TrashcanCloseSound" to="ActionController/PoopController/Trashcan" method="_on_TrashcanCloseSound_finished"]
+[connection signal="finished" from="ActionController/PoopController/Trashcan/TrashcanOpenSound" to="ActionController/PoopController/Trashcan" method="_on_TrashcanOpenSound_finished"]
+[connection signal="body_entered" from="ActionController/FoodController/FoodBowl/FoodPieceKillBox" to="ActionController/FoodController" method="_on_FoodPieceKillBox_body_entered"]
+[connection signal="body_entered" from="ActionController/FoodController/FoodBowl/FoodPieceDespawnZone" to="ActionController/FoodController" method="_on_FoodPieceDespawnZone_body_entered"]
+[connection signal="timeout" from="ActionController/FoodController/FoodBag/FoodPieceSpawnCooldown" to="ActionController/FoodController/FoodBag" method="_on_FoodPieceSpawnCooldown_timeout"]
+[connection signal="cleanButtonPressed" from="Pet" to="Pet" method="_on_Pet_cleanButtonPressed"]
+[connection signal="feedButtonPressed" from="Pet" to="ActionController/FoodController" method="_on_Pet_feedButtonPressed"]
+[connection signal="poopPickupButtonPressed" from="Pet" to="ActionController/PoopController" method="_on_Pet_poopPickupButtonPressed"]

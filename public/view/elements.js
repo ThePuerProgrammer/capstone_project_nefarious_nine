@@ -178,6 +178,19 @@ export const formEditClassCategorySelect = document.getElementById('edit-class-c
 export const formDeleteClassroom = document.getElementById('form-delete-classroom');
 //============================================================================//
 
+//============================================================================//
+//  SINGLE CLASSROOM PAGE
+//============================================================================//
+export const displayMemberProfile = {
+    profilePictureTag: document.getElementById('member-profile-picture-tag'),
+    username: document.getElementById('member-username'),
+    userBio: document.getElementById('member-userbio'),
+    pomopet: document.getElementById('member-pomopet'),
+    pomopetAcc: document.getElementById('member-pomopet-acc'),
+    pomopetName: document.getElementById('member-pomopet-name'),
+    
+}
+//============================================================================//
 //PREVIEW CLASSROOMS 
 //============================================================================//
 // export const formJoinClassroom = document.getElementById('form-join-classroom');

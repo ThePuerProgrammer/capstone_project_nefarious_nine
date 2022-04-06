@@ -8,7 +8,26 @@ var _game_queue
 var _deck
 var _time_limit
 var _testing_count
+
+# structure of an element in _flashcards
+#	_flashcards[DESIRED_INDEX]['question']
+#	_flashcards[DESIRED_INDEX]['answer']
+#	_flashcards[DESIRED_INDEX]['isMultipleChoice']
+#	_flashcards[DESIRED_INDEX]['incorrectAnswers']
 var _flashcards = []
+var _possibleAnswerPool = []
+var _fakeAnswerPool = [
+	"poison", "rot", "smooth", "garrulous", "sparkling",
+	"anxious", "perpetual", "intend", "railway", "thrill",
+	"powerful", "hysterical", "store", "haunt", "used",
+	"statuesque", "strap", "overt", "sour", "sign",
+	"pickle", "well-made", "rice", "cowardly", "jump",
+	"glow", "cultured", "voracious", "swing", "grease",
+	"flood", "glue", "thoughtful", "flight", "bike",
+	"drop", "hospitable", "therapeutic", "ill", "table",
+	"pretend", "sea", "drip", "plain", "breath",
+	"different", "thumb", "addition", "cuddly", "sin"
+]
 ################################################################################
 
 #Creation of Timer/Adding to Tree/Connecting Signal
@@ -69,3 +88,79 @@ func timer_start(time_limit):
 		timer.set_wait_time(time_limit)
 		timer.start()
 ################################################################################
+
+
+################################################################################
+# Gets a flashcard from the pool of selected flashcards
+#	If the flashcard does not have 4 answers available, it pulls from the pool of
+#	answers from other flashcards.
+#   If there are still not enough flashcards, then it pulls from the pool of fake
+#	answers 
+#
+# The returned flashcard is an array format: [question: string, correctAnswer: string, incorrectAnswers: Array]
+# 	** incorrectAnswers is guaranteed to be of length 3.
+#
+# pickedRandomFlashcard[0] refers to the QUESTION STRING of the flashcard
+# pickedRandomFlashcard[1] refers to the ANSWER STRING of the flashcard
+# pickedRandomFlashcard[2] refers to the IS MULTIPLE CHOICE BOOLEAN of the flashcard
+# pickedRandomFlashcard[3] refers to the INCORRECT ANSWERS ARRAY of the flashcard
+################################################################################
+
+func getRandomFlashcard():
+	# Grab a random flashcard
+	print(_possibleAnswerPool);
+	randomize()
+	var pickedRandomFlashcardIndex = randi() % _flashcards.size()
+	var pickedRandomFlashcard = _flashcards[pickedRandomFlashcardIndex]
+	print(pickedRandomFlashcard)
+
+	# If the flashcard already has 3 incorrect answers, we can return the flashcard
+	print("picked random flashcard incorrect answer count: ", pickedRandomFlashcard[3].size())
+	if pickedRandomFlashcard[3].size() == 3:
+		return [ pickedRandomFlashcard[0], pickedRandomFlashcard[1], pickedRandomFlashcard[3] ]
+
+	# If we have less than 3 incorrect answers, pull number of needed answers until we
+	#	we have 3 incorrect answers
+	var retrievedIncorrectAnswers = pickedRandomFlashcard[3]
+	var counter = 1
+	while retrievedIncorrectAnswers.size() != 3:
+		
+		# If we have run out of answers to use in the answer pool, fill with random fake answers
+		if counter == _possibleAnswerPool.size():
+			retrievedIncorrectAnswers.push_back(_fakeAnswerPool[randi() % _fakeAnswerPool.size()])
+			continue
+		
+		var randomDummyAnswer = _possibleAnswerPool[randi() % _possibleAnswerPool.size()]
+		counter = counter + 1
+		
+		if retrievedIncorrectAnswers.find(randomDummyAnswer) == -1 and randomDummyAnswer != pickedRandomFlashcard[1]:
+			retrievedIncorrectAnswers.push_back(randomDummyAnswer)
+
+	return [ pickedRandomFlashcard[0], pickedRandomFlashcard[1], retrievedIncorrectAnswers ]
+
+func generatePossibleAnswersPool():
+	_possibleAnswerPool.clear()
+	for flashcard in _flashcards:
+		_possibleAnswerPool.push_back(flashcard[1]) # add the correct answer to the flashcard
+		for incorrectAnswer in flashcard[3]:
+			_possibleAnswerPool.push_back(incorrectAnswer)
+
+
+
+#	while retrievedIncorrectAnswers.size() != 3:
+#		# Grab a random flashcard that is not the current flashcard
+#		var randomFlashcardIndex = randi() % _flashcards.size()
+#		if randomFlashcardIndex == pickedRandomFlashcardIndex:
+#			continue
+#
+#		var randomFlashcardForDummyAnswers = _flashcards[randomFlashcardIndex]
+#		# possibleDummyAnswers results in an array of the incorrect answers & the correct answer
+#		var possibleDummyAnswers = [ randomFlashcardForDummyAnswers[1] ]
+#		possibleDummyAnswers.append_array(randomFlashcardForDummyAnswers[3])
+#
+#		# Get the randomly selected dummy flashcard answer. If the answer already exists in the list
+#		#  of retrievedIncorrectAnswers AND the answer matches the correct answer for the picked flashcard,
+#		#  then repeat the loop.
+#		var randomFlashcardDummyAnswer = possibleDummyAnswers[randi() % possibleDummyAnswers.size()]
+#		if retrievedIncorrectAnswers.find(randomFlashcardDummyAnswer) != -1 and randomFlashcardDummyAnswer != pickedRandomFlashcard[1]:
+#			retrievedIncorrectAnswers.push_back(randomFlashcardDummyAnswer)

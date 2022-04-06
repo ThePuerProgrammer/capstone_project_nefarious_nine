@@ -5,7 +5,7 @@ signal poopPickUpEnd
 
 var poopScene = preload("res://ChillZone/poop_pomopet/Poop.tscn")
 var _maxPoopCount = 15
-var actionBar
+var pomopet
 var _currentPoopCount
 var _startNumberOfPoops
 
@@ -15,12 +15,12 @@ var poopCurrentlyHeld
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	actionBar = get_node("../../ActionBar")
+	pomopet = get_node("../../Pet")
 	_currentPoopCount = getCurrentPoopCount()
 	_startNumberOfPoops = _currentPoopCount
 	
 	if _currentPoopCount == 0:
-		actionBar.setPickUpPoopButtonEnabled(false)
+		pomopet.setPickUpPoopButtonEnabled(false)
 		
 	for n in _currentPoopCount:
 		spawnPoop()
@@ -51,7 +51,6 @@ func spawnPoop():
 	else:
 		poopInstance.z_index = -1 
 	add_child(poopInstance)
-	print("poop added")
 
 func startPoopPickupAction():
 	poopPickupModeOn = true
@@ -62,7 +61,8 @@ func endPoopPickupAction():
 	FirebaseController.updateCurrentUserLastPoopPickUp() # update last poop pickup time to now
 	poopPickupModeOn = false
 	$Trashcan.hideTrashcan()
-	emit_signal("poopPickUpEnd") 
+	emit_signal("poopPickUpEnd")
+	pomopet.setPickUpPoopButtonEnabled(false)
 
 func _on_Area2D_body_entered(body):
 	body.queue_free()
@@ -71,7 +71,6 @@ func _on_Area2D_body_entered(body):
 	
 	var poopInOpenRegion = 0
 	for p in activePoops:
-		print("poopfound")
 		if $Trashcan/OpenTrashcanArea.overlaps_body(p.getRigidBody()):
 			poopInOpenRegion = poopInOpenRegion + 1
 	
@@ -81,3 +80,7 @@ func _on_Area2D_body_entered(body):
 	_currentPoopCount = _currentPoopCount - 1
 	if _currentPoopCount == 0:
 		endPoopPickupAction()
+
+
+func _on_Pet_poopPickupButtonPressed():
+	startPoopPickupAction()

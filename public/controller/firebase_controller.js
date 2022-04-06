@@ -1662,15 +1662,15 @@ export async function getMemberInfo(members) {
         let user = new User(doc.data());
 
         const mem = {
-            email: "",
-            username: "",
-            profilePhotoURL: "",
-            userBio: "",
-            // pettype, petname, equippedSkin, equippedAcc
+            email: user.email,
+            username: user.username,
+            profilePhotoURL: user.profilePhotoURL,
+            userBio: user.userBio,
+            petPhotoURL: user.pomopet.petPhotoURL, 
+            petName: user.pomopet.name, 
+            equippedSkin: user.equippedSkin, 
+            equippedAcc: user.equippedAcc,
         }
-   
-        mem.username = user.username;
-        mem.profilePhotoURL = user.profilePhotoURL
 
         memberInfo.push(mem);
     })
@@ -2489,6 +2489,13 @@ export async function updatePomopet(uid, pomopet) {
         .collection(Constant.collectionName.USERS)
         .doc(uid)
         .update({ 'pomopet': pomopet, 'equippedSkin': "" });
+}
+
+export async function updatePomopetName(uid, pomopet) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'pomopet': pomopet});
 }
 //============================================================================//
 

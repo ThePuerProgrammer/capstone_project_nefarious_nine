@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://ChillZone/pet/dirty_over_time/noisy-texture-16x16-o38-d10-c-ffffff-t1.png" type="Texture" id=1]
 [ext_resource path="res://ChillZone/pet/dirty_over_time/mud-splatter.png" type="Texture" id=2]
@@ -10,6 +10,22 @@
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_48pt.tres" type="DynamicFont" id=8]
 [ext_resource path="res://ChillZone/pet/pet_sprites/cat_sprite.png" type="Texture" id=9]
 [ext_resource path="res://ChillZone/pet/pet_sprites/rembo_sprite.png" type="Texture" id=10]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/pet_textures/pet_disabled.png" type="Texture" id=11]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/pet_textures/pet_pressed.png" type="Texture" id=12]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/pet_textures/pet_hover.png" type="Texture" id=13]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/pet_textures/pet_normal.png" type="Texture" id=14]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/feed_textures/feed_hover.png" type="Texture" id=15]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/poop_pickup_textures/poop_pickup_normal.png" type="Texture" id=16]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/poop_pickup_textures/poop_pickup_disabled.png" type="Texture" id=17]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/poop_pickup_textures/poop_pickup_hover.png" type="Texture" id=18]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/poop_pickup_textures/poop_pickup_pressed.png" type="Texture" id=19]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/feed_textures/feed_disabled.png" type="Texture" id=20]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/feed_textures/feed_normal.png" type="Texture" id=21]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/feed_textures/feed_pressed.png" type="Texture" id=22]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/clean_textures/clean_disabled.png" type="Texture" id=23]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/clean_textures/clean_pressed.png" type="Texture" id=24]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/clean_textures/clean_hover.png" type="Texture" id=25]
+[ext_resource path="res://ChillZone/action_wheel/button_textures/clean_textures/clean_normal.png" type="Texture" id=26]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.486275, 0.819608, 0.921569, 1 )
@@ -97,6 +113,327 @@ shader_param/emission_amount = 0.0
 shader_param/dissolve_texture = ExtResource( 1 )
 shader_param/to_dissolve_texture = ExtResource( 2 )
 
+[sub_resource type="Animation" id=9]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("CleanButton:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -296, -256 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("CleanButton:rect_size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 150, 150 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("CleanButton:rect_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("FeedButton:rect_scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("PetButton:rect_scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("PoopPickupButton:rect_scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/6/type = "bezier"
+tracks/6/path = NodePath("CleanButton:rect_scale:x")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"points": PoolRealArray( 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/7/type = "bezier"
+tracks/7/path = NodePath("CleanButton:rect_scale:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"points": PoolRealArray( 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/8/type = "bezier"
+tracks/8/path = NodePath("FeedButton:rect_scale:x")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"points": PoolRealArray( 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/9/type = "bezier"
+tracks/9/path = NodePath("FeedButton:rect_scale:y")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"points": PoolRealArray( 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/10/type = "bezier"
+tracks/10/path = NodePath("PetButton:rect_scale:x")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"points": PoolRealArray( 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/11/type = "bezier"
+tracks/11/path = NodePath("PetButton:rect_scale:y")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"points": PoolRealArray( 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/12/type = "bezier"
+tracks/12/path = NodePath("PoopPickupButton:rect_scale:x")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"points": PoolRealArray( 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/13/type = "bezier"
+tracks/13/path = NodePath("PoopPickupButton:rect_scale:y")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"points": PoolRealArray( 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "hide_buttons"
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("CleanButton:rect_scale:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, -1.55519e-06, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 1 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("CleanButton:rect_scale:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 1 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("FeedButton:rect_scale:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 1 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath("FeedButton:rect_scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 1 )
+}
+tracks/4/type = "bezier"
+tracks/4/path = NodePath("PetButton:rect_scale:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 1 )
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath("PetButton:rect_scale:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 1 )
+}
+tracks/6/type = "bezier"
+tracks/6/path = NodePath("PoopPickupButton:rect_scale:x")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 1 )
+}
+tracks/7/type = "bezier"
+tracks/7/path = NodePath("PoopPickupButton:rect_scale:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1e-05, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.6, 1 )
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "show_buttons"
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("CleanButton:rect_scale:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.4, 1 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("CleanButton:rect_scale:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.4, 1 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("FeedButton:rect_scale:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.4, 1 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath("FeedButton:rect_scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.4, 1 )
+}
+tracks/4/type = "bezier"
+tracks/4/path = NodePath("PetButton:rect_scale:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.4, 1 )
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath("PetButton:rect_scale:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.4, 1 )
+}
+tracks/6/type = "bezier"
+tracks/6/path = NodePath("PoopPickupButton:rect_scale:x")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.4, 1 )
+}
+tracks/7/type = "bezier"
+tracks/7/path = NodePath("PoopPickupButton:rect_scale:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.4, 1 )
+}
+
 [node name="Pet" type="Node2D"]
 script = ExtResource( 5 )
 
@@ -105,6 +442,9 @@ margin_left = -166.0
 margin_top = -231.244
 margin_right = 134.0
 margin_bottom = -181.244
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="WashMeterProgressBar" type="ProgressBar" parent="WashMeter"]
 modulate = Color( 1, 1, 1, 0 )
@@ -164,9 +504,99 @@ texture = ExtResource( 3 )
 z_index = 1
 polygon = PoolVector2Array( 58.5, -149.9, 59.9, -146.5, 63.3, -146.5, 66.5, -143.3, 66.5, -138.5, 67.1, -138.5, 70.5, -139.9, 70.5, -143.3, 73.7, -146.5, 76.5, -146.5, 76.5, -149.3, 79.7, -152.5, 111.9, -152.5, 113.9, -146.5, 117.3, -146.5, 120.5, -143.3, 120.5, -105.1, 114.5, -103.1, 114.5, -86.5, 112, -86.5, 108.5, -85.1, 108.5, -68.5, 106, -68.5, 102.5, -67.1, 102.5, -44.5, 105.9, -44.5, 107.9, -38.5, 111.3, -38.5, 114.5, -35.3, 114.5, -32.5, 117.3, -32.5, 120.5, -29.3, 120.5, -26.5, 123.3, -26.5, 126.5, -23.3, 126.5, -14.5, 129.3, -14.5, 132.5, -11.3, 132.5, 33.5, 130, 33.5, 126.5, 34.9, 126.5, 44.9, 120.5, 46.9, 120.5, 50.3, 117.3, 53.5, 107.9, 53.5, 105.9, 59.5, 102.5, 59.5, 102.5, 118.1, 108.5, 120.1, 108.5, 140.3, 105.3, 143.5, 78.8, 143.5, 76.8, 131.5, 73.7, 131.5, 72.5, 130.3, 72.5, 146.3, 69.3, 149.5, 43.1, 149.5, 41.1, 143.5, 37.7, 143.5, 34.5, 140.3, 34.5, 137.5, 6.2, 137.5, 4.2, 149.5, -70.9, 149.5, -72.9, 143.5, -83.5, 143.5, -83.5, 141, -84.9, 137.5, -88.3, 137.5, -91.5, 134.3, -91.5, 131.5, -94.3, 131.5, -97.5, 128.3, -97.5, 118.9, -103.5, 116.9, -103.5, 107.5, -106.3, 107.5, -109.5, 104.3, -109.5, 77.5, -118.9, 77.5, -120.9, 71.5, -124.3, 71.5, -127.5, 68.3, -127.5, 65.5, -130.3, 65.5, -133.5, 62.3, -133.5, 53.5, -136.3, 53.5, -139.5, 50.3, -139.5, 5.5, -136.9, 5.5, -133.5, 4.10001, -133.5, -12.5, -130.9, -12.5, -127.5, -13.9, -127.5, -17.3, -124.3, -20.5, -80.1, -20.5, -78.1, -14.5, -74.1, -14.5, -72.1, -8.5, -68.4, -8.5, -66.8, -6.10001, -61.5, -7.89999, -61.5, -11.3, -58.3, -14.5, -31.5, -14.5, -31.5, -17.3, -28.3, -20.5, 10.5, -20.5, 10.5, -29.9, 16.5, -31.9, 16.5, -36.5, 12.6, -36.5, 10.4, -102.5, 13.1, -102.5, 16.5, -103.9, 16.5, -138.5, 19.1, -138.5, 22.5, -139.9, 22.5, -149.7, 24.5, -150.7, 24.5, -152.5, 58.5, -152.5 )
 
+[node name="ActionBar" type="Control" parent="."]
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 100 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CleanButton" type="TextureButton" parent="ActionBar"]
+margin_left = -296.0
+margin_top = -256.0
+margin_right = -146.0
+margin_bottom = -106.0
+rect_rotation = -45.0
+rect_scale = Vector2( 1e-05, 1e-05 )
+rect_pivot_offset = Vector2( 75, 75 )
+focus_mode = 0
+size_flags_horizontal = 3
+enabled_focus_mode = 0
+texture_normal = ExtResource( 26 )
+texture_pressed = ExtResource( 24 )
+texture_hover = ExtResource( 25 )
+texture_disabled = ExtResource( 23 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FeedButton" type="TextureButton" parent="ActionBar"]
+margin_left = -160.0
+margin_top = -376.0
+margin_right = -9.99997
+margin_bottom = -226.0
+rect_rotation = -15.0
+rect_scale = Vector2( 1e-05, 1e-05 )
+rect_pivot_offset = Vector2( 75, 75 )
+focus_mode = 0
+size_flags_horizontal = 3
+enabled_focus_mode = 0
+texture_normal = ExtResource( 21 )
+texture_pressed = ExtResource( 22 )
+texture_hover = ExtResource( 15 )
+texture_disabled = ExtResource( 20 )
+expand = true
+
+[node name="PetButton" type="TextureButton" parent="ActionBar"]
+margin_left = 32.0
+margin_top = -376.0
+margin_right = 182.0
+margin_bottom = -226.0
+rect_rotation = 15.0
+rect_scale = Vector2( 1e-05, 1e-05 )
+rect_pivot_offset = Vector2( 75, 75 )
+focus_mode = 0
+size_flags_horizontal = 3
+enabled_focus_mode = 0
+texture_normal = ExtResource( 14 )
+texture_pressed = ExtResource( 12 )
+texture_hover = ExtResource( 13 )
+texture_disabled = ExtResource( 11 )
+expand = true
+
+[node name="PoopPickupButton" type="TextureButton" parent="ActionBar"]
+margin_left = 176.0
+margin_top = -256.0
+margin_right = 326.0
+margin_bottom = -106.0
+rect_rotation = 45.0
+rect_scale = Vector2( 1e-05, 1e-05 )
+rect_pivot_offset = Vector2( 75, 75 )
+focus_mode = 0
+size_flags_horizontal = 3
+enabled_focus_mode = 0
+texture_normal = ExtResource( 16 )
+texture_pressed = ExtResource( 19 )
+texture_hover = ExtResource( 18 )
+texture_disabled = ExtResource( 17 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ActionBar"]
+anims/RESET = SubResource( 9 )
+anims/hide_buttons = SubResource( 10 )
+anims/show_buttons = SubResource( 11 )
+
 [connection signal="mouse_entered" from="DogKinematicBody" to="." method="_on_DogKinematicBody_mouse_entered"]
 [connection signal="mouse_exited" from="DogKinematicBody" to="." method="_on_DogKinematicBody_mouse_exited"]
 [connection signal="mouse_entered" from="CatKinematicBody" to="." method="_on_CatKinematicBody_mouse_entered"]
 [connection signal="mouse_exited" from="CatKinematicBody" to="." method="_on_CatKinematicBody_mouse_exited"]
 [connection signal="mouse_entered" from="BunnyKinematicBody" to="." method="_on_BunnyKinematicBody_mouse_entered"]
 [connection signal="mouse_exited" from="BunnyKinematicBody" to="." method="_on_BunnyKinematicBody_mouse_exited"]
+[connection signal="pressed" from="ActionBar/CleanButton" to="." method="_on_CleanButton_pressed"]
+[connection signal="pressed" from="ActionBar/FeedButton" to="." method="_on_FeedButton_pressed"]
+[connection signal="pressed" from="ActionBar/PetButton" to="." method="_on_PetButton_pressed"]
+[connection signal="pressed" from="ActionBar/PoopPickupButton" to="." method="_on_PoopPickupButton_pressed"]
