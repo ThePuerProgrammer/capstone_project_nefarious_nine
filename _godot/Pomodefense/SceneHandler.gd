@@ -11,8 +11,9 @@ onready var money = get_node("PomoDefenseGame/UI/HUD/InfoBar/H/Money")
 #question stuff
 onready var questionPanelLabel = get_node("Flashcards/FlashcardHolder/QuestionText/QuestionScroll/QuestionTextLabel")
 onready var rightwrong = get_node("Results/RightWrong")
-var answers = []
 var correctAnswer
+var answers = []
+var answerButtons = []
 var rightAnswerCheck
 var wrongAnswers = []
 var reward = 20
@@ -23,8 +24,8 @@ func _ready():
 	game_scene.connect("round_finished", self, 'resetRound')
 	for i in get_tree().get_nodes_in_group("answer_buttons"):
 		i.connect("pressed", self, "answer_chosen", [i.get_name()])
-		print(i)
-		answers.append(i)
+		answers.append(i.get_name())
+		answerButtons.append(i)
 	getNextFlashcard()
 		
 func resetRound():
@@ -41,11 +42,11 @@ func getNextFlashcard():
 	var selectedAnswer = randi() % 3 + 0
 	for i in 4:
 		if i == selectedAnswer:
-			answers[i].text = correctAnswer
+			answerButtons[i].text = correctAnswer
 			rightAnswerCheck = answers[i]
-			continue
-		answers[i].text = wrongAnswers[wrongCount]
-		wrongCount += 1
+		else:
+			answerButtons[i].text = wrongAnswers[wrongCount]
+			wrongCount += 1
 
 		
 func answer_chosen(answer):
