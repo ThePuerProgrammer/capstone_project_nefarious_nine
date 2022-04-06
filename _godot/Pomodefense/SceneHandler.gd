@@ -10,9 +10,10 @@ onready var money = get_node("PomoDefenseGame/UI/HUD/InfoBar/H/Money")
 
 #question stuff
 onready var questionPanelLabel = get_node("Flashcards/FlashcardHolder/QuestionText/QuestionScroll/QuestionTextLabel")
-onready var result = get_node("Results/RightWrong")
+onready var rightwrong = get_node("Results/RightWrong")
 var answers = []
 var correctAnswer
+var rightAnswerCheck
 var wrongAnswers = []
 var reward = 20
 
@@ -29,7 +30,7 @@ func _ready():
 func resetRound():
 	$Flashcards.visible = true
 	getNextFlashcard()
-		
+
 func getNextFlashcard():
 	var randomCard = pomotimerController.getRandomFlashcard()
 	questionPanelLabel.text = randomCard[0]
@@ -39,31 +40,33 @@ func getNextFlashcard():
 	randomize()
 	var selectedAnswer = randi() % 3 + 0
 	for i in 4:
-		if i - 1 == selectedAnswer:
+		if i == selectedAnswer:
 			answers[i].text = correctAnswer
+			rightAnswerCheck = answers[i]
 			continue
 		answers[i].text = wrongAnswers[wrongCount]
 		wrongCount += 1
-	
+
 		
 func answer_chosen(answer):
 	$Flashcards.visible = false
 	var cash = money.text as int
-	if answer.text == correctAnswer:
-		result.text = "Correct!"
-		result.visible = true
+	if answer == rightAnswerCheck:
+		rightwrong.text = "Correct!"
+		rightwrong.visible = true
 		cash += reward
 		reward += 5
 		money.text = String(cash)
 	else:
-		result.text = "Wrong!"
-		result.visible = true
+		rightwrong.text = "Wrong!"
+		rightwrong.visible = true
 		reward = 20
 	yield(get_tree().create_timer(2), "timeout")
-	result.visible = false
+	rightwrong.visible = false
 	
 func unload_game(result):
 	get_node("PomoDefenseGame").queue_free()
 	var game_over = load("res://Pomodefense/Scenes/GameOver.tscn").instance()
 	add_child(game_over)
+	
 
