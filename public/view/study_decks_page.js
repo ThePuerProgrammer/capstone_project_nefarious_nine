@@ -225,11 +225,7 @@ export async function buildStudyDecksPage(deckList) {
 
             }
             html += buildDeckView(deckList[i], flashcards, 'false', isMastered);
-
-        } else {
-            let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
-            clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
-            html += buildDeckView(deckList[i], flashcards, clase, isMastered);
+ 
 
         }
 
@@ -490,8 +486,7 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                 <h6 class="card-text">Category: ${deck.category}</h6>
                 <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
                 <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>`
-        html += (deck.isClassDeck != "false" && deck.isClassDeck != false) ?
-            `<p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">school</i>${clase.name}</p></div>` : `<p></p></div>`;
+
         html += `
             <div class="btn-group">
             <form class="form-view-deck" method="post">
@@ -499,7 +494,7 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
                 <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
             </form>`
-            html+=(deck.created_by == Auth.currentUser.uid || clase.moderatorList.includes(Auth.currentUser.email)) ?`
+           html+=`
             <form class="form-edit-deck" method="post">
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
@@ -511,7 +506,6 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                 <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
             </form>
             </div>`
-            :`</div>`;
 
     } else {
         html = `
@@ -524,8 +518,6 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                     <h6 class="card-text">Category: ${deck.category}</h6>
                     <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
                     <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>`
-        html += (deck.isClassDeck != "false" && deck.isClassDeck != false) ?
-            `<p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">school</i>${clase.name}</p></div>` : `<p></p></div>`;
         html += `
                 <div class="btn-group">
                 <form class="form-view-deck" method="post">
@@ -533,7 +525,7 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                     <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
                     <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
                 </form>`
-                html+=(deck.created_by == Auth.currentUser.uid || clase.moderatorList.includes(Auth.currentUser.email)) ?`
+               html+=`
                 <form class="form-edit-deck" method="post">
                     <input type="hidden" name="docId" value="${deck.docId}">
                     <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
@@ -545,7 +537,6 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                     <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
                 </form>
                 </div>`
-                : `</div>`;
 
     }
     // ternary operator to check if a deck is favorited or not // my changes messed up horizontal view, idk why tho --blake

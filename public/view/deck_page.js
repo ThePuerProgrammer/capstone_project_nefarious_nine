@@ -492,7 +492,9 @@ function buildFlashcardView(flashcard) {
             html += `<p class="answer-text">1. ${flashcardAnswers[0]} &ensp; 2. ${flashcardAnswers[1]}</p>`
         }
     }
-
+    //With Image != NA
+    //Without Image ==NA
+    //Edit Flashcard if deck.createdby==Auth.currentUser || 
     html += flashcard.answerImageURL != "N/A" ? `</div><div class="flip-card-back">
     <h6>${flashcard.answer}</h6>
     <br>
