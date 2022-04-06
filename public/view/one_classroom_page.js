@@ -8,15 +8,16 @@ import * as Coins from '../controller/coins.js'
 import * as DeckPage from './deck_page.js'
 import * as EditDeck from '../controller/edit_deck.js'
 import * as Search from './search_page.js'
+import { Deck } from '../model/Deck.js'
 import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 import { html } from './protected_message.js'
 
-
+//Same code as study_decks page with a few minor tweeks to be specific for classes
 export function addEventListeners(){
         // CREATE A DECK Submit button event listener
-        Elements.formCreateDeck.addEventListener('submit', async e => {
+        Elements.formCreateClassroomDeck.addEventListener('submit', async e => {
             e.preventDefault();
             const name = e.target.name.value;
             const subject = e.target.subject.value;
@@ -50,30 +51,30 @@ export function addEventListeners(){
     
             });
                 // a class is tied to this deck, isClassDeck is now the classroom DOCID its tied to
-                try {
-                    //Passes Class ID, since it is a Class Deck
-                    //deck.created_by=isClassDeck;
+            try {
+                //Passes Class ID, since it is a Class Deck
+                //deck.created_by=isClassDeck;
+
+                console.log("Creating Deck");
+                const deckId = await FirebaseController.createClassDeck(deck.isClassDeck, deck);
+                console.log("Deck Created");
+                deck.docId = deckId;
+                localStorage.setItem("deckPageDeckDocID", deck.docId);
+                sessionStorage.setItem('deckId', deckId);
+                history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+                Elements.modalCreateClassroomDeck.hide();
+                //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
+                await DeckPage.deck_page(deckId, deck.isClassDeck);
+            } catch (e) {
+                if (Constant.DEV)
+                    console.log(e);
+            }
     
-                    console.log("Creating Deck");
-                    const deckId = await FirebaseController.createClassDeck(deck.isClassDeck, deck);
-                    console.log("Deck Created");
-                    deck.docId = deckId;
-                    localStorage.setItem("deckPageDeckDocID", deck.docId);
-                    sessionStorage.setItem('deckId', deckId);
-                    history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
-                    Elements.modalCreateDeck.hide();
-                    //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
-                    await one_classroom_page(classDocID);
-                } catch (e) {
-                    if (Constant.DEV)
-                        console.log(e);
-                }
-        
         });
     
         // Clears CREATE DECK input fields when user closes modal
         $(`#create-deck-modal`).on('hidden.bs.modal', function (e) {
-            Elements.formCreateDeck.reset();
+            Elements.formCreateClassroomDeck.reset();
         });
     
 }
@@ -127,7 +128,7 @@ export async function one_classroom_page(classroomDocID) {
         <h4>${classroom.subject}, ${classroom.category}</h4>
         <br>`;
 
-    html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">
+    html += `<button id="${Constant.htmlIDs.createClassroomDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">
         <i class="material-icons pomo-text-color-light">add</i> Create A Deck</button>
      `;
     //if current user is a mod, populate delete button
@@ -137,15 +138,13 @@ export async function one_classroom_page(classroomDocID) {
         html += `
             <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
             <i class="material-icons">delete</i>Delete Classroom
-            </button>
-            </br>`
+            </button>`
             ;
     }
-
+    html+=`</br>`
     //Adding Class Decks Here
     let classDecks = [];
     classDecks = await FirebaseController.getClassDecks(classroomDocID);
-    buildDeckView
     for (let i = 0; i < classDecks.length; i++) {
             let flashcards = await FirebaseController.getClassroomFlashcards(classroomDocID, classDecks[i].docId);
             html += buildDeckView(classDecks[i], flashcards, classroom.name);
@@ -370,9 +369,9 @@ export async function one_classroom_page(classroomDocID) {
             Utilities.enableButton(button, label);
         });
     }
-    const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
+    const createDeckButton = document.getElementById(Constant.htmlIDs.createClassroomDeck);
     createDeckButton.addEventListener('click', async e => {
-
+        Elements.formCreateClassroomDeck.reset();
         // call Firebase func. to retrieve categories list
         let categories;
         try {
@@ -384,22 +383,22 @@ export async function one_classroom_page(classroomDocID) {
         }
 
         // clear innerHTML to prevent duplicates
-        Elements.formDeckCategorySelect.innerHTML = '';
+        Elements.formClassroomDeckCategorySelect.innerHTML = '';
 
         categories.forEach(category => {
-            Elements.formDeckCategorySelect.innerHTML += `
+            Elements.formClassroomDeckCategorySelect.innerHTML += `
                       <option value="${category}">${category}</option>
                   `;
         });
 
-        Elements.formClassSelect.innerHTML = '';
+        Elements.formClassroomClassSelect.innerHTML = '';
         //logic for if the dropdown box selection on create deck is NONE or is a CLASSROOM
-        Elements.formClassSelect.innerHTML += `
+        Elements.formClassroomClassSelect.innerHTML += `
                     <option value="${classroomDocID}">${classroom.name}</option>
                   `;
 
         // opens create Deck modal
-        $(`#${Constant.htmlIDs.createDeckModal}`).modal('show');
+        $(`#${Constant.htmlIDs.createClassroomDeckModal}`).modal('show');
     })
 
     // get MEMBERS tab and show it as visible

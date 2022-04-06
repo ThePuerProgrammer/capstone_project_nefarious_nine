@@ -131,6 +131,8 @@ export async function study_decks_page() {
 export async function buildStudyDecksPage(deckList) {
     let availableClassroomList = [];
     let classDecks = [];
+    let clase;
+
     try {
         availableClassroomList = await FirebaseController.getAvailableClassrooms();
     } catch (e) {
@@ -226,7 +228,7 @@ export async function buildStudyDecksPage(deckList) {
 
         } else {
             let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
-            let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
+            clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
             html += buildDeckView(deckList[i], flashcards, clase, isMastered);
 
         }
@@ -496,7 +498,8 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
                 <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
-            </form>
+            </form>`
+            html+=(deck.created_by == Auth.currentUser.uid || clase.moderatorList.includes(Auth.currentUser.email)) ?`
             <form class="form-edit-deck" method="post">
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
@@ -507,7 +510,8 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
                 <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
             </form>
-            </div>`;
+            </div>`
+            :`</div>`;
 
     } else {
         html = `
@@ -528,7 +532,8 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                     <input type="hidden" name="docId" value="${deck.docId}">
                     <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
                     <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
-                </form>
+                </form>`
+                html+=(deck.created_by == Auth.currentUser.uid || clase.moderatorList.includes(Auth.currentUser.email)) ?`
                 <form class="form-edit-deck" method="post">
                     <input type="hidden" name="docId" value="${deck.docId}">
                     <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
@@ -539,7 +544,8 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                     <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
                     <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
                 </form>
-                </div>`;
+                </div>`
+                : `</div>`;
 
     }
     // ternary operator to check if a deck is favorited or not // my changes messed up horizontal view, idk why tho --blake
