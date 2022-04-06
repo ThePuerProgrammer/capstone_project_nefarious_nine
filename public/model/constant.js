@@ -8,6 +8,7 @@ export const DEV = true
  * working better
  *****************************************/
 export const ADMIN = 'admin@test.com'
+export const ADMIN2 = 'admin2@test.com'
 /*****************************************
  *          COLLECTION NAMES
  ***************************************** 
@@ -67,6 +68,8 @@ export const htmlIDs = {
     smartStudyIndicator: 'smart-study-indicator',
     createDeck: 'button-create-deck-modal',
     createDeckModal: 'create-deck-modal',
+    createClassroomDeck: 'button-create-classroom-deck',
+    createClassroomDeckModal: 'create-deck-from-class-modal',
     createClassroom: 'button-create-classroom-modal',
     createClassroomModal: 'create-classroom-modal',
     buttonEditClassroom: 'button-edit-class',

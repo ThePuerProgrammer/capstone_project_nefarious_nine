@@ -294,6 +294,7 @@ export async function deck_page(deckDocID, isClassDeck) {
 
     let deck;
     let flashcards;
+    let classroom;
     try {
         if (isClassDeck == "false" || isClassDeck == false) {
             // console.log("deck_page no class check for is class deck " + isClassDeck);
@@ -304,14 +305,40 @@ export async function deck_page(deckDocID, isClassDeck) {
             //note: class selected is either the doc id of a selected classroom or false
             deck = await FirebaseController.getClassDeckByDocID(isClassDeck, deckDocID);
             flashcards = await FirebaseController.getClassDeckFlashcards(isClassDeck, deckDocID);
+            classroom = await FirebaseController.getClassroomByDocID(isClassDeck);
         }
-        if (flashcards.length != 0) {
-            // study deck button
+        //Personal Deck with Flashcards
+        if (flashcards.length != 0 && isClassDeck == "false") {
+            console.log(`Personal Deck with Flashcards`);
             html += `
                 <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark"><i class="material-icons text-white">local_library</i>Study</button>
                 <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">delete</i>Delete Flashcard</button>`;
-        } else {
+        }//Personal Deck without Flashcards
+        else if(flashcards.length == 0 && isClassDeck == "false") {
+            console.log(`Personal Deck without Flashcards`);
             html += `
+                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled><i class="material-icons text-white">local_library</i>Study</button>
+                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> <i class="material-icons text-white">delete</i>Delete Flashcard</button>
+                `;
+        }//Class Deck When Creator of Deck or Classroom Mod with Flashcards
+         else if(flashcards.length !=0 && (classroom.moderatorList.includes(Auth.currentUser.email) || deck.created_by==Auth.currentUser.uid)){
+            console.log(`Class Deck with Flashcards & Mod/Creator`);
+            html +=` 
+                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark"><i class="material-icons text-white">local_library</i>Study</button>
+                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">delete</i>Delete Flashcard</button>`;
+         }//Class Deck with Flashcards for Members
+         else if(flashcards.length !=0 && classroom.members.includes(Auth.currentUser.email)){
+            console.log(`Class Deck with Flashcards`);
+
+            html +=`
+            <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark"><i class="material-icons text-white">local_library</i>Study</button>
+            <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> <i class="material-icons text-white">delete</i>Delete Flashcard</button>
+            `;
+         }//Class Deck without flashcards
+         else if(flashcards.length==0 && isClassDeck != "false"){
+            console.log(`Class Deck without Flashcards`);
+
+                html += `
                 <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled><i class="material-icons text-white">local_library</i>Study</button>
                 <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> <i class="material-icons text-white">delete</i>Delete Flashcard</button>
                 `;
