@@ -20,6 +20,7 @@ export function addEventListeners() {
         const flashcardNumber = e.target.flashcardNumber.value;
         const isClassDeck = e.target.classDocId.value;
         const created_by = e.target.created_by.value;
+        const isMastered = e.target.isMastered.value;
 
         const keywords = cleanDataToKeywords(name, subject, category)
 
@@ -35,6 +36,7 @@ export function addEventListeners() {
             flashcardNumber,
             isClassDeck,
             created_by,
+            isMastered,
         });
         d.set_docID(e.target.docId.value);
 
@@ -155,6 +157,7 @@ export async function edit_class_deck(classDocId, deckId) {
     Elements.formEditDeck.form.isFavorited.value = deck.isFavorited;
     Elements.formEditDeck.form.classDocId.value = deck.isClassDeck;
     Elements.formEditDeck.form.created_by.value = deck.created_by;
+    Elements.formEditDeck.form.isMastered = deck.isMastered;
 
     //Adding the Categories...THINGS
     const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];

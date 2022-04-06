@@ -9,10 +9,14 @@ var build_valid = false
 var build_location
 var build_type
 var build_tile
-var current_wave = 0
+var current_wave = 14
 var enemies_in_wave = 0
 var base_health = 100
 var wave_data = []
+var path_choice = ["Path", "HighPath", "LowPath"]
+var enemy_choice = ["Fish", "Carrot", "Bone"]
+onready var wave_count = get_node("UI/HUD/InfoBar/GameControls/WaveCount")
+onready var enemy_count = get_node("UI/HUD/InfoBar/GameControls/EnemyCount")
 
 func _ready():
 	map_node = get_node("Map1") ## can be updated with additional maps IF THERE WAS TIME c:
@@ -40,33 +44,27 @@ func start_next_wave():
 	wave_data = retrieve_wave_data()
 	yield(get_tree().create_timer(0.2), "timeout")
 	spawn_enemies(wave_data)
+	
+func create_enemy():
+	randomize()
+	var path = path_choice[randi()% 3 + 0]
+	var enemy = enemy_choice[randi()% 3 + 0]
+	return [enemy, 1.2, path]
 
 func retrieve_wave_data():
 	current_wave += 1
+	wave_count.text = "Wave: " + String(current_wave)
 	if current_wave <= 5:
-		wave_data = [["Fish", 1.0, "HighPath"], ["Fish", 1.0, "HighPath"], ["Fish", 1.0, "HighPath"]]
+		wave_data = [["Fish", 1.2, "HighPath"], ["Fish", 1.2, "HighPath"], ["Fish", 1.2, "HighPath"]]
 	elif current_wave >= 5 and current_wave <= 10:
-		wave_data = [["Fish", 1.0, "Path"], ["Fish", 1.0, "Path"], ["Fish", 1.0, "HighPath"], ["Carrot", 1.25, "Path"], ["Carrot", 1.25, "Path"]]
+		wave_data = [["Fish", 1.2, "Path"], ["Fish", 1.2, "Path"], ["Fish", 1.2, "Path"], ["Carrot", 1.25, "Path"], ["Carrot", 1.25, "Path"]]
+	elif current_wave >= 10 and current_wave <= 15:
+		wave_data = [["Fish", 1.2, "LowPath"], ["Fish", 1.2, "LowPath"], ["Fish", 1.2, "LowPath"], ["Carrot", 1.25, "LowPath"], ["Carrot", 1.25, "LowPath"], ["Carrot", 1.25, "LowPath"], ["Bone", 1.25, "LowPath"], ["Bone", 1.25, "LowPath"]]
 	else:
-		randomize()
-		var path
-		var path_choice = randi() % 4 + 1
-		if path_choice == 1:
-			path = "HighPath"
-		elif path_choice == 2:
-			path = "LowPath"
-		else:
-			path = "Path"
-		var fish_wave = current_wave % 3 + 2
-		var carrot_wave = current_wave % 3 + 1
-		var bone_wave = current_wave % 3
-		for i in range(fish_wave):
-			wave_data.append(["Fish", 1.0, path])
-		for i in range(carrot_wave):
-			wave_data.append(["Carrot", 1.25, path])
-		for i in range(bone_wave):
-			wave_data.append(["Bone", 1.5, path])
+		for i in range(1, current_wave):
+			wave_data.append(create_enemy())
 	enemies_in_wave = wave_data.size()
+	enemy_count.text = "Enemies: " + String(enemies_in_wave)
 	return wave_data
 	
 func spawn_enemies(wave_data):
@@ -119,14 +117,16 @@ func verify_and_build():
 func on_base_damage(damage):
 	base_health -= damage
 	enemies_in_wave -= 1
+	enemy_count.text = "Enemies: " + String(enemies_in_wave)
 	if base_health <= 0:
 		emit_signal("game_finished", false)
 	else:
 		get_node("UI").update_health_bar(base_health)
-		if enemies_in_wave == 0:
-			start_next_wave()
 			
 func on_enemy_destroyed():
 	enemies_in_wave -= 1
-	if enemies_in_wave == 0:
+	enemy_count.text = "Enemies: " + String(enemies_in_wave)
+
+func _on_NextWave_pressed():
+	if enemies_in_wave <= 0:
 		start_next_wave()

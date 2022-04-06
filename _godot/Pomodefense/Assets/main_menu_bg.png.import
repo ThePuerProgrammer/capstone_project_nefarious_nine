@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/main_menu_bg.png-b5430bd8012dc198d1dbfc532ef89fbe.stex"
+path="res://.import/main_menu_bg.png-c2b9dca34847e0d8d4b1ee1e77e1008d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/main_menu_bg.png"
-dest_files=[ "res://.import/main_menu_bg.png-b5430bd8012dc198d1dbfc532ef89fbe.stex" ]
+source_file="res://Pomodefense/Assets/main_menu_bg.png"
+dest_files=[ "res://.import/main_menu_bg.png-c2b9dca34847e0d8d4b1ee1e77e1008d.stex" ]
 
 [params]
 

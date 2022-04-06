@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Carrot.png-b3763d99ba1c59a451f95943ebb08c56.stex"
+path="res://.import/Carrot.png-4731eadf37ddb63c8191ac0628b8771b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Carrot.png"
-dest_files=[ "res://.import/Carrot.png-b3763d99ba1c59a451f95943ebb08c56.stex" ]
+source_file="res://Pomodefense/Assets/Carrot.png"
+dest_files=[ "res://.import/Carrot.png-4731eadf37ddb63c8191ac0628b8771b.stex" ]
 
 [params]
 

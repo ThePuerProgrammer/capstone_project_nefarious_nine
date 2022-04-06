@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Bone.png-b4278499ed053c880f66893a0329b102.stex"
+path="res://.import/Bone.png-145631160753508475d97698b8100484.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Bone.png"
-dest_files=[ "res://.import/Bone.png-b4278499ed053c880f66893a0329b102.stex" ]
+source_file="res://Pomodefense/Assets/Bone.png"
+dest_files=[ "res://.import/Bone.png-145631160753508475d97698b8100484.stex" ]
 
 [params]
 

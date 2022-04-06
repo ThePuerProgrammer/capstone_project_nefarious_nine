@@ -51,7 +51,6 @@ func spawnPoop():
 	else:
 		poopInstance.z_index = -1 
 	add_child(poopInstance)
-	print("poop added")
 
 func startPoopPickupAction():
 	poopPickupModeOn = true
@@ -72,7 +71,6 @@ func _on_Area2D_body_entered(body):
 	
 	var poopInOpenRegion = 0
 	for p in activePoops:
-		print("poopfound")
 		if $Trashcan/OpenTrashcanArea.overlaps_body(p.getRigidBody()):
 			poopInOpenRegion = poopInOpenRegion + 1
 	
@@ -85,5 +83,4 @@ func _on_Area2D_body_entered(body):
 
 
 func _on_Pet_poopPickupButtonPressed():
-	print("poop pickup")
 	startPoopPickupAction()

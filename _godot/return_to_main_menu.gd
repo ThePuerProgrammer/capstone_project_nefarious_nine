@@ -14,6 +14,7 @@ var dungeon_selected = false
 var pomoblast_selected = false
 var slowfruit_selected = false
 var pomobite_selected
+var pomodefense_selected = false
 var desired_time
 var category_selected
 var deck_selected
@@ -69,7 +70,7 @@ func _on_Back_Button_pressed():
 	$FadeOut.fade_out()
 #Start Button
 func _on_Start_Button_pressed():
-	if !dungeon_selected and !pomoblast_selected and !pomobite_selected and !slowfruit_selected:
+	if !dungeon_selected and !pomoblast_selected and !pomobite_selected and !slowfruit_selected and !pomodefense_selected:
 		get_node("No_Games_Selected_Popup_Alert").popup()
 	elif method_selection_optionbutton.get_selected_id()==0:
 		get_node("No_Selection_Method_Choosen_Popup_Alert").popup()
@@ -87,6 +88,8 @@ func _on_Start_Button_pressed():
 		Pomotimer.start_game(int(desired_time),_game_selection_array,deck_or_cate())
 	elif pomobite_selected == true and _game_selection_array[0] == "PomoBITE":
 		Pomotimer.start_game(int(desired_time),_game_selection_array,deck_or_cate())
+	elif pomodefense_selected == true and _game_selection_array[0] == "PomoDefense":
+		Pomotimer.start_game(int(desired_time), _game_selection_array, deck_or_cate())
 	elif _game_selection_array.empty():
 		Pomotimer.start_game(int(desired_time),_game_selection_array,deck_or_cate())
 ####################################################################################################
@@ -110,6 +113,9 @@ func _on_Slowfruit_Details_Button_pressed():
 func _on_PomoBITE_Details_Button_pressed():
 	game_detail_label.text = pomoBITEDetails()
 	
+func _on_PomoDefense_Details_Button_pressed():
+	game_detail_label.text = pomodefenseDetails()
+	
 #Text for Dungeon_Fight Details
 func ondungeonDetails():
 	var text ="Title: Dungeon Fight \n\nCreated By: Noah Stinson\n\nDescription: Fight your way out of the dungeon and to success!\n\nControls: \n - [a] Select the Dodge Action\n - [d] Select the Attack Action \n - [LMB] Selecting answers\n\nObjective: Answer as many questions correct as you can before time runs out. If you answer incorrectly or not in time you will take damage each time, eventually getting KO'ed"
@@ -127,6 +133,10 @@ func slowfruitDetails():
 	
 func pomoBITEDetails():
 	var text ="Title: PomoBITE \n\nCreated By: Jesse Rankins\n\nDescription: Take care of your guests in the PomoBITE restaurant and earn Pomocoins!\n\nControls: E - To Select/Use\nArrow Keys + WASD - To Move\n\nObjective: Remember your guests orders and move quick!"
+	return text
+
+func pomodefenseDetails():
+	var text="Title: PomoDefense \n\nCreated By: Cody Colburn\n\nDescription: Build towers and defeat creeps from entering your base!\n\nControls: Click a tower button and drag it anywhere on the map to build it. Next wave sends in more enemies!\n\nObjective: Defeat as many enemies as you can and earn coins by answering questions correctly!"
 	return text
 
 ####################################################################################################
@@ -198,6 +208,22 @@ func _on_PomoBITE_Selection_Toggle_toggled(button_pressed):
 		_game_selection_array=shuffle(_game_selection_array)
 		pomobite_selected=false
 		update_game_label(_game_selection_array)
+		
+func _on_PomoDefense_Selection_Toggle_toggled(button_pressed):
+	if(button_pressed):
+		#Text for Toggle On PomoDefense
+		_game_selection_array.append("PomoDefense")
+		_game_selection_array=shuffle(_game_selection_array)
+		pomodefense_selected = true
+		update_game_label(_game_selection_array)
+
+	else:
+		#Text for Toggle Off PomoDefense
+		_game_selection_array.erase("PomoDefense")
+		_game_selection_array=shuffle(_game_selection_array)
+		pomodefense_selected=false
+		update_game_label(_game_selection_array)
+
 ####################################################################################################
 
 ####################################################################################################
@@ -222,7 +248,7 @@ func add_items_to_deck_selection():
 	for deck in deckList:
 		var fields = deck["doc_fields"]
 		deck_dict_name[deck["doc_name"]] = fields["name"]
-		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
+#		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
 
 #Adds Selections
 	deck_selection_optionbutton.add_item("Pick One")
@@ -289,13 +315,13 @@ func add_items_to_timer_selection():
 #Checks which method is selected
 func on_method_item_selected(id):
 	if method_selection_optionbutton.get_item_id(id)==1:
-		print(str(method_selection_optionbutton.get_item_text(id)))
+#		print(str(method_selection_optionbutton.get_item_text(id)))
 		disable_deck_selection_option()
 		category_selection_optionbutton.disabled=false
 		category_selection_optionbutton.clear()
 		add_items_to_category_selection()
 	elif method_selection_optionbutton.get_item_id(id)==2:
-		print(str(method_selection_optionbutton.get_item_text(id)))
+#		print(str(method_selection_optionbutton.get_item_text(id)))
 		disable_category_selection_option()
 		deck_selection_optionbutton.disabled=false
 		deck_selection_optionbutton.clear()
@@ -354,7 +380,7 @@ func on_deck_item_selected(id):
 			deck_selected = keys[id-1]
 			flashcardList = FirebaseController.get_user_flashcards(deck_selected)
 			if flashcardList is GDScriptFunctionState:
-					flashcardList = yield(flashcardList,"completed")
+				flashcardList = yield(flashcardList,"completed")
 			
 			for flashcard in flashcardList:
 				var fc_fields = flashcard["doc_fields"]
@@ -364,7 +390,8 @@ func on_deck_item_selected(id):
 				flashcardInfo.push_back(fc_fields['isMultipleChoice'])
 				flashcardInfo.push_back(fc_fields['incorrectAnswers'])
 				Pomotimer._flashcards.push_back(flashcardInfo)
-				print("FC_INFO:",flashcardInfo)
+				Pomotimer.generatePossibleAnswersPool()
+#				print("FC_INFO:",flashcardInfo)
 				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
 				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
 			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
