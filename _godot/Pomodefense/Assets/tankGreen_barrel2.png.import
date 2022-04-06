@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tankGreen_barrel2.png-b86b6ab752bfe7726a12120b9980b288.stex"
+path="res://.import/tankGreen_barrel2.png-5753b62d9da42e3bed5ccfa946488f48.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/tankGreen_barrel2.png"
-dest_files=[ "res://.import/tankGreen_barrel2.png-b86b6ab752bfe7726a12120b9980b288.stex" ]
+source_file="res://Pomodefense/Assets/tankGreen_barrel2.png"
+dest_files=[ "res://.import/tankGreen_barrel2.png-5753b62d9da42e3bed5ccfa946488f48.stex" ]
 
 [params]
 

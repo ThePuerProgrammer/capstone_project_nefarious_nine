@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/red_button09.png-42e1b5587b49a11733eddd836b95f97a.stex"
+path="res://.import/red_button09.png-21bb3e5e4044d4705099de59f874cf59.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/red_button09.png"
-dest_files=[ "res://.import/red_button09.png-42e1b5587b49a11733eddd836b95f97a.stex" ]
+source_file="res://Pomodefense/Assets/red_button09.png"
+dest_files=[ "res://.import/red_button09.png-21bb3e5e4044d4705099de59f874cf59.stex" ]
 
 [params]
 

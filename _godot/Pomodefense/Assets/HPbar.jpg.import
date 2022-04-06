@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/HPbar.jpg-870b847ca6d63529957bd1b8215d54f2.stex"
+path="res://.import/HPbar.jpg-6401a01e330aa53eb5d6e28a3e2465c9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/HPbar.jpg"
-dest_files=[ "res://.import/HPbar.jpg-870b847ca6d63529957bd1b8215d54f2.stex" ]
+source_file="res://Pomodefense/Assets/HPbar.jpg"
+dest_files=[ "res://.import/HPbar.jpg-6401a01e330aa53eb5d6e28a3e2465c9.stex" ]
 
 [params]
 

@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Assets/bunny.png" type="Texture" id=1]
-[ext_resource path="res://Assets/tankGreen_barrel2.png" type="Texture" id=2]
-[ext_resource path="res://Scenes/PomopetT2.gd" type="Script" id=3]
-[ext_resource path="res://Assets/shotLarge.png" type="Texture" id=4]
+[ext_resource path="res://Pomodefense/Assets/bunny.png" type="Texture" id=1]
+[ext_resource path="res://Pomodefense/Assets/tankGreen_barrel2.png" type="Texture" id=2]
+[ext_resource path="res://Pomodefense/Scenes/PomopetT2.gd" type="Script" id=3]
+[ext_resource path="res://Pomodefense/Assets/shotLarge.png" type="Texture" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 20.0

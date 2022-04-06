@@ -6,5 +6,5 @@ func _ready():
 	
 func unload_game(result):
 	get_node("PomoDefenseGame").queue_free()
-	var game_over = load("res://Scenes/GameOver.tscn").instance()
+	var game_over = load("res://Pomodefense/Scenes/GameOver.tscn").instance()
 	add_child(game_over)

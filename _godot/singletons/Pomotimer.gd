@@ -71,6 +71,8 @@ func check_currentGame_Scene(currentGame):
 			return ("res://transitions/pomobite_transition.tscn")
 		"Slowfruit":
 			return ("res://transitions/slowfruit_transition.tscn")
+		"PomoDefense":
+			return ("res://transitions/pomodefense_transition.tscn")
 #Reassigns the game queue
 func new_game_queue(game_queue):
 	Pomotimer._game_queue = game_queue
