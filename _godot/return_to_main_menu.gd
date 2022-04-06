@@ -28,6 +28,7 @@ var dict_val_categories : Dictionary = {}
 var deck_dict_name : Dictionary = {} #(-_-)#
 var flash_dict_name: Dictionary = {}
 var category_deck_dict : Dictionary = {}
+var deck_for_category:Dictionary={}
 
 func _ready():
 	$FadeIn.show()
@@ -251,33 +252,28 @@ func add_items_to_category_selection():
 	
 
 	category_selection_optionbutton.add_item("Pick One")
-	var deck_for_category:Dictionary={}
 	
-	for deck in deckList:
-		var fields = deck["doc_fields"]
-		deck_dict_name[deck["doc_name"]] = fields["category"]
-		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
-		
-		#This iterates through the categories from the backend
-		for category in dict_val_array[0]:
-			dict_val_categories[category] = category 
-		#This iterates through the decks owned by user
-			#We are comparing if we own a deck with said category and add it to the list.
-			if dict_val_categories[category]==deck_dict_name[deck["doc_name"]]:
-				
-				#print("THIS HERE 1:",deck_selected)
-				category_selection_optionbutton.add_item(category)
-				
-				deck_for_category[deck["doc_name"]]=deck_dict_name[deck["doc_name"]]
-				var keys = deck_for_category.keys()
-				print("KEYS:",keys)
-				category_selected = keys[category]
-				print("CATEGORY_SELECTED:",category_selected)
-				print("PRINT1:",deck_for_category[deck["doc_name"]])
-				print("PRINT2:",deck_dict_name[deck["doc_name"]])
-				
-	print("DECK_FOR_CATE:",deck_for_category)
-	category_selection_optionbutton.add_item("DEMO")	
+	var pt
+	var _category_deck_array = []
+	#This iterates through the categories from the backend
+	for category in dict_val_array[0]:
+		#print("CATE IN:",category)
+
+		_category_deck_array.clear()
+		for deck in deckList:
+			var fields = deck["doc_fields"]
+			deck_dict_name[deck["doc_name"]] = fields["category"]
+			print("DIC_NAME:",[deck["doc_name"]])
+			pt = fields["category"]
+			if pt == category:
+				_category_deck_array.push_front(deck["doc_name"])
+		#Add Category if 
+		if _category_deck_array.size() != 0:
+			deck_for_category[category]=_category_deck_array
+			category_selection_optionbutton.add_item(category)
+		print("DECK_CATE_IT:",_category_deck_array)
+		print("LLLLL:", deck_for_category)
+	category_selection_optionbutton.add_item("DEMO")
 	category_selection_optionbutton.set_item_disabled(0,true)
 
 #Timer Dropdown Items
@@ -323,10 +319,11 @@ func on_category_item_selected(id):
 			category_selected=category_selection_optionbutton.get_item_text(id)
 			print("ID:",id-1)
 			print("Category Selected:",category_selected)
-			var keys = deck_dict_name.keys()
-			deck_selected = keys[id-1]
-			
+			#var keys = deck_dict_name.keys()
+			#deck_selected = keys[id-1]
+			#TRY LOGIC HERE WIth a selection within a specific selection
 			##IN PROGRESS##
+			#WITHIN A LOOP
 			#flashcardList = FirebaseController.get_user_flashcards(deck_selected)
 			#if flashcardList is GDScriptFunctionState:
 			#		flashcardList = yield(flashcardList,"completed")
@@ -371,6 +368,8 @@ func on_deck_item_selected(id):
 				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
 				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
 			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
+			for x in range (0,len(Pomotimer._flashcards)):
+				print("Question:", Pomotimer._flashcards[x][0])
 ##########################
 #Disables Selection Options
 ##########################

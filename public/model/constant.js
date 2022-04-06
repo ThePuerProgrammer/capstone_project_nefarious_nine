@@ -8,6 +8,7 @@ export const DEV = true
  * working better
  *****************************************/
 export const ADMIN = 'admin@test.com'
+export const ADMIN2 = 'admin2@test.com'
 /*****************************************
  *          COLLECTION NAMES
  ***************************************** 

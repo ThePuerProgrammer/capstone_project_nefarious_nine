@@ -40,6 +40,7 @@ export async function shop_page() {
     }
 
     let adminUser = Constant.ADMIN;
+    let adminUser2 = Constant.ADMIN2;
 
     Elements.root.innerHTML = ``;
     let html = '';
@@ -54,7 +55,7 @@ export async function shop_page() {
         <br>
         <button id="skins-shop-button" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="margin-bottom: 10px">Skins</button>`;
     
-    if(user.email == adminUser) {
+    if(user.email == adminUser || user.email== adminUser2) {
         html += `<br>
             <button id="add-item-button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" type="button">Add Item</button>`;
     }
@@ -216,7 +217,7 @@ export async function shop_page() {
         });
     }
 
-    if (user.email == Constant.ADMIN) { //avoids null button/listener errors when user is not admin
+    if (user.email == Constant.ADMIN || user.email==Constant.ADMIN2) { //avoids null button/listener errors when user is not admin
 
         const deleteButtons = document.getElementsByClassName('form-del-item');
 
@@ -288,7 +289,7 @@ function buildItemView(item, email) {
     let html;
     
     // display DELETE button if user is ADMIN
-    if (email == Constant.ADMIN) {
+    if (email == Constant.ADMIN || email == Constant.ADMIN2) {
 
         html = `<div class="pomoshop-item" id="pomoshop-item"  style="display: inline-block;">`;
         
