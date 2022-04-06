@@ -15,6 +15,7 @@ export class Deck {
         this.flashcardNumber = data.flashcardNumber;
         this.isClassDeck = data.isClassDeck;
         this.created_by = data.created_by;
+        this.isMastered = data.isMastered;
         // FOR FUTURE USE AND EXPANSION
         //this.isPublic = data.isPublic
     }
@@ -56,6 +57,7 @@ export class Deck {
             flashcardNumber: this.flashcardNumber,
             isClassDeck: this.isClassDeck,
             created_by: this.created_by,
+            isMastered: this.isMastered,
             // FOR FUTURE USE AND EXPANSION
             //isPublic: this.isPublic,
 
@@ -76,7 +78,7 @@ export class Deck {
         if (!obj.dateCreated || typeof obj.dateCreated != 'number') return false;
         if (!obj.isFavorited || typeof obj.isFavorited != 'boolean') return false;
         if (!obj.keywords || typeof obj.keywords != 'array') return false;
-        if(!obj.created_by || typeof obj.created_by != 'string') return false;
+        if (!obj.created_by || typeof obj.created_by != 'string') return false;
     }
 
     /***************************************************************************
@@ -96,6 +98,7 @@ export class Deck {
         if (this.flashcardNumber) d.flashcardNumber = this.flashcardNumber;
         if (this.isClassDeck) d.isClassDeck = this.isClassDeck;
         if (this.created_by) d.created_by = this.created_by;
+        if (this.isMastered) d.isMastered = this.isMastered;
 
         return d;
     }
