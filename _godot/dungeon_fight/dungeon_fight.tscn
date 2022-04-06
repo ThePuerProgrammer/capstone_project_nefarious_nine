@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=2]
+[gd_scene load_steps=118 format=2]
 
 [ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_19.png" type="Texture" id=1]
 [ext_resource path="res://dungeon_fight/art/other/Timer.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://dungeon_fight/Buttons/AnswerButton.tscn" type="PackedScene" id=10]
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_foreground.tres" type="StyleBox" id=11]
 [ext_resource path="res://dungeon_fight/PopupMessage.gd" type="Script" id=12]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/firstAttackLvl.png" type="Texture" id=13]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=14]
 [ext_resource path="res://dungeon_fight/PopupLabel.gd" type="Script" id=15]
 [ext_resource path="res://dungeon_fight/overallMinigameGameTimer.gd" type="Script" id=16]
@@ -279,7 +280,7 @@ animations = [ {
 "name": "hit_effect",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"frames": [ ExtResource( 13 ) ],
 "loop": true,
 "name": "first_attack_level",
 "speed": 5.0
@@ -526,6 +527,7 @@ shape = SubResource( 1 )
 position = Vector2( 1435.29, 503 )
 scale = Vector2( 6, 6 )
 frames = SubResource( 17 )
+animation = "first_attack_level"
 
 [node name="TimerBar" type="Control" parent="."]
 margin_left = 1015.8
