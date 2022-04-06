@@ -1,1 +1,1 @@
-extends "res://Assets/Creep.gd"
+extends "res://Pomodefense/Assets/Creep.gd"

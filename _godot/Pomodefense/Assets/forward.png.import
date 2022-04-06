@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/forward.png-bc5737b6f286d1957b7f169ccf76ab20.stex"
+path="res://.import/forward.png-7d1dc79334988e164e0092894dd7e4b9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/forward.png"
-dest_files=[ "res://.import/forward.png-bc5737b6f286d1957b7f169ccf76ab20.stex" ]
+source_file="res://Pomodefense/Assets/forward.png"
+dest_files=[ "res://.import/forward.png-7d1dc79334988e164e0092894dd7e4b9.stex" ]
 
 [params]
 

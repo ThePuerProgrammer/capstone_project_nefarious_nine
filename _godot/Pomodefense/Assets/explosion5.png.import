@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/explosion5.png-40a63197188bd99d9f3e28e15a4ac843.stex"
+path="res://.import/explosion5.png-a2ffd065b7fa2277f5d42d8e017f9f1d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/explosion5.png"
-dest_files=[ "res://.import/explosion5.png-40a63197188bd99d9f3e28e15a4ac843.stex" ]
+source_file="res://Pomodefense/Assets/explosion5.png"
+dest_files=[ "res://.import/explosion5.png-a2ffd065b7fa2277f5d42d8e017f9f1d.stex" ]
 
 [params]
 

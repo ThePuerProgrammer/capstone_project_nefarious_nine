@@ -4,17 +4,35 @@ onready var hp_bar = get_node("HUD/InfoBar/H/Health")
 onready var hp_bar_tween = get_node("HUD/InfoBar/H/Health/Tween")
 onready var hp_bar_num = get_node("HUD/InfoBar/H/HP")
 
+var tower_data = {
+	"PomopetT1": {
+		"damage": 20,
+		"rate": 1,
+		"range": 350,
+	},
+	"PomopetT2": {
+		"damage": 50,
+		"rate": 1.5,
+		"range": 400,
+	},
+	"PomopetT3": {
+		"damage": 100,
+		"rate": 2,
+		"range": 500,
+	}
+}
+
 func set_tower_preview(tower_type, mouse_position):
-	var drag_tower = load("res://Scenes/" + tower_type + ".tscn").instance() ## ugh
+	var drag_tower = load("res://Pomodefense/Scenes/" + tower_type + ".tscn").instance() ## ugh
 	drag_tower.set_name("DragTower")
 	drag_tower.modulate = Color("ad54ff3c") ## set the color of the tower to green so it looks cool/shows valid placement
 	
 	## show tower range
 	var range_texture = Sprite.new()
 	range_texture.position = Vector2(32, 32)
-	var scaling = GameData.tower_data[tower_type]["range"] / 600.0
+	var scaling = tower_data[tower_type]["range"] / 600.0
 	range_texture.scale = Vector2(scaling, scaling)
-	var texture = load("res://Assets/range_overlay.png")
+	var texture = load("res://Pomodefense/Assets/range_overlay.png")
 	range_texture.texture = texture
 	range_texture.modulate = Color("ad54ff3c")
 	
@@ -52,8 +70,6 @@ func _on_PausePlay_pressed():
 		get_parent().cancel_build_mode()
 	if get_tree().is_paused():
 		get_tree().paused = false
-	elif get_parent().enemies_in_wave == 0:
-		get_parent().start_next_wave()
 	else:
 		get_tree().paused = true
 

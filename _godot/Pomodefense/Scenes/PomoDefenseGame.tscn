@@ -1,19 +1,19 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://Scenes/Map1.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Assets/blue_button12.png" type="Texture" id=2]
-[ext_resource path="res://Assets/cat.png" type="Texture" id=3]
-[ext_resource path="res://Assets/bunny.png" type="Texture" id=4]
-[ext_resource path="res://Assets/dog.png" type="Texture" id=5]
-[ext_resource path="res://Assets/green_button12.png" type="Texture" id=6]
-[ext_resource path="res://Assets/red_button09.png" type="Texture" id=7]
-[ext_resource path="res://Scenes/PomoDefenseGame.gd" type="Script" id=8]
-[ext_resource path="res://Scenes/UI.gd" type="Script" id=9]
-[ext_resource path="res://Assets/HPbar.jpg" type="Texture" id=10]
-[ext_resource path="res://Resources/Kenney Rocket.ttf" type="DynamicFontData" id=11]
-[ext_resource path="res://Assets/forward.png" type="Texture" id=12]
-[ext_resource path="res://Assets/fastForward.png" type="Texture" id=13]
-[ext_resource path="res://Assets/pause.png" type="Texture" id=14]
+[ext_resource path="res://Pomodefense/Scenes/Map1.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Pomodefense/Assets/blue_button12.png" type="Texture" id=2]
+[ext_resource path="res://Pomodefense/Assets/cat.png" type="Texture" id=3]
+[ext_resource path="res://Pomodefense/Assets/bunny.png" type="Texture" id=4]
+[ext_resource path="res://Pomodefense/Assets/dog.png" type="Texture" id=5]
+[ext_resource path="res://Pomodefense/Assets/green_button12.png" type="Texture" id=6]
+[ext_resource path="res://Pomodefense/Assets/red_button09.png" type="Texture" id=7]
+[ext_resource path="res://Pomodefense/Scenes/PomoDefenseGame.gd" type="Script" id=8]
+[ext_resource path="res://Pomodefense/Scenes/UI.gd" type="Script" id=9]
+[ext_resource path="res://Pomodefense/Assets/HPbar.jpg" type="Texture" id=10]
+[ext_resource path="res://Pomodefense/Resources/Kenney Rocket.ttf" type="DynamicFontData" id=11]
+[ext_resource path="res://Pomodefense/Assets/forward.png" type="Texture" id=12]
+[ext_resource path="res://Pomodefense/Assets/fastForward.png" type="Texture" id=13]
+[ext_resource path="res://Pomodefense/Assets/pause.png" type="Texture" id=14]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 11 )
@@ -33,10 +33,6 @@ script = ExtResource( 9 )
 [node name="HUD" type="Control" parent="UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -46,10 +42,10 @@ __meta__ = {
 anchor_top = 0.477
 anchor_right = 0.229
 anchor_bottom = 0.737
-margin_left = -1.0
-margin_top = -244.66
-margin_right = -130.916
-margin_bottom = -145.72
+margin_left = 5.0
+margin_top = -397.3
+margin_right = -334.68
+margin_bottom = -383.3
 grow_horizontal = 0
 rect_min_size = Vector2( 100, 100 )
 __meta__ = {
@@ -123,39 +119,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GameControls" type="HBoxContainer" parent="UI/HUD"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -144.0
-margin_top = -70.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PausePlay" type="TextureButton" parent="UI/HUD/GameControls"]
-pause_mode = 2
-margin_right = 70.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 70, 70 )
-size_flags_horizontal = 4
-size_flags_vertical = 4
-toggle_mode = true
-texture_normal = ExtResource( 12 )
-texture_pressed = ExtResource( 14 )
-expand = true
-
-[node name="SpeedUp" type="TextureButton" parent="UI/HUD/GameControls"]
-margin_left = 74.0
-margin_right = 144.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 70, 70 )
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture_normal = ExtResource( 13 )
-expand = true
-
 [node name="InfoBar" type="ColorRect" parent="UI/HUD"]
 self_modulate = Color( 0.0235294, 0.0235294, 0.0235294, 0.470588 )
 anchor_right = 1.0
@@ -195,7 +158,7 @@ margin_bottom = 30.0
 rect_min_size = Vector2( 60, 30 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 0.705882 )
 custom_fonts/font = SubResource( 1 )
-text = "100"
+text = "50"
 align = 2
 valign = 1
 __meta__ = {
@@ -203,9 +166,9 @@ __meta__ = {
 }
 
 [node name="Health" type="TextureProgress" parent="UI/HUD/InfoBar/H"]
-margin_left = 513.0
+margin_left = 1429.0
 margin_top = 7.0
-margin_right = 913.0
+margin_right = 1829.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 400, 15 )
 size_flags_horizontal = 10
@@ -220,8 +183,8 @@ nine_patch_stretch = true
 [node name="Tween" type="Tween" parent="UI/HUD/InfoBar/H/Health"]
 
 [node name="HP" type="Label" parent="UI/HUD/InfoBar/H"]
-margin_left = 917.0
-margin_right = 965.0
+margin_left = 1833.0
+margin_right = 1881.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 12, 30 )
 custom_fonts/font = SubResource( 2 )
@@ -229,11 +192,66 @@ text = "100"
 align = 2
 valign = 1
 
-[node name="Control" type="Control" parent="UI/HUD/InfoBar/H"]
-margin_left = 969.0
-margin_right = 1004.0
+[node name="bump" type="Control" parent="UI/HUD/InfoBar/H"]
+margin_left = 1885.0
+margin_right = 1920.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 35, 0 )
 
-[connection signal="pressed" from="UI/HUD/GameControls/PausePlay" to="UI" method="_on_PausePlay_pressed"]
-[connection signal="pressed" from="UI/HUD/GameControls/SpeedUp" to="UI" method="_on_SpeedUp_pressed"]
+[node name="GameControls" type="HBoxContainer" parent="UI/HUD/InfoBar"]
+margin_left = 128.0
+margin_top = 5.0
+margin_right = 272.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 25 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PausePlay" type="TextureButton" parent="UI/HUD/InfoBar/GameControls"]
+pause_mode = 2
+margin_right = 25.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+toggle_mode = true
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 14 )
+expand = true
+
+[node name="SpeedUp" type="TextureButton" parent="UI/HUD/InfoBar/GameControls"]
+margin_left = 29.0
+margin_right = 54.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 13 )
+expand = true
+
+[node name="NextWave" type="Button" parent="UI/HUD/InfoBar/GameControls"]
+margin_left = 58.0
+margin_right = 139.0
+margin_bottom = 25.0
+text = "Next Wave"
+
+[node name="WaveCount" type="Label" parent="UI/HUD/InfoBar/GameControls"]
+margin_left = 143.0
+margin_top = 5.0
+margin_right = 194.0
+margin_bottom = 19.0
+text = "Wave: 0"
+
+[node name="EnemyCount" type="Label" parent="UI/HUD/InfoBar/GameControls"]
+margin_left = 198.0
+margin_top = 5.0
+margin_right = 269.0
+margin_bottom = 19.0
+text = "Enemies: 0"
+
+[connection signal="pressed" from="UI/HUD/InfoBar/GameControls/PausePlay" to="UI" method="_on_PausePlay_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/GameControls/SpeedUp" to="UI" method="_on_SpeedUp_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/GameControls/NextWave" to="." method="_on_NextWave_pressed"]

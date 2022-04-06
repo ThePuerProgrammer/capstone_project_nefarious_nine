@@ -1,1 +1,1 @@
-extends "res://Assets/Turrets.gd"
+extends "res://Pomodefense/Assets/Turrets.gd"

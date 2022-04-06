@@ -12,6 +12,7 @@ import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
 import { HelpTicket } from '../model/help_ticket.js';
 import { Pomoshop } from '../model/pomoshop.js';
+import { get_coins } from './coins.js';
 //DECKS
 //============================================================================//
 //============================================================================//
@@ -481,6 +482,46 @@ export async function getFlashcardsDataFromDeck(uid, deckDocID) {
     return flashcardsDataList;
 }
 
+//============================================================================//
+// Returns the last srs access date of the deck_data
+//============================================================================//
+export async function getUserLastSrsAccessDeckData(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+    // console.log("FIREBASE FUNCTION LAST SRS ACCESS " + deckDataRef.data().lastSRSAccess);
+    if (deckDataRef.exists) {
+        return deckDataRef.data().lastSRSAccess;
+    }
+
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the streak for a specific flashcard based on the last SRS access
+//============================================================================//
+export async function getUserFlashcardDataByLastSrsAccessandFCid(uid, deckDocID, lastSrsAccess, flashcardDocId) {
+    let on = 1;
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(lastSrsAccess + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .doc(flashcardDocId)
+        .get();
+
+    if (deckDataRef.exists) {
+        return deckDataRef.data().streak;
+    } else return on;
+
+}
+//===========================================================================//
+
+
 export async function getClassFlashcardsDataFromDeck(classDocID, deckDocID) {
     let flashcardsDataList = [];
 
@@ -797,6 +838,32 @@ export async function getUserDecks(uid) {
 
     return deckList;
 }
+
+export async function updateDeckMasteryandAddCoins(uid, deckDocID) {
+    try {
+        await firebase.firestore()
+            .collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .collection(Constant.collectionName.OWNED_DECKS)
+            .doc(deckDocID)
+            .update({
+                isMastered: true,
+            });
+
+    } catch (e) {
+        console.log(e);
+    }
+
+    try { //turns coins into NAN
+        let coins = await getCoins(Auth.currentUser.uid);
+        let newcoins = coins + 100;
+        await updateCoins(Auth.currentUser.uid, newcoins);
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 //============================================================================//
 // This function pulls all decks from the highest level owned_decks collection
@@ -1666,9 +1733,9 @@ export async function getMemberInfo(members) {
             username: user.username,
             profilePhotoURL: user.profilePhotoURL,
             userBio: user.userBio,
-            petPhotoURL: user.pomopet.petPhotoURL, 
-            petName: user.pomopet.name, 
-            equippedSkin: user.equippedSkin, 
+            petPhotoURL: user.pomopet.petPhotoURL,
+            petName: user.pomopet.name,
+            equippedSkin: user.equippedSkin,
             equippedAcc: user.equippedAcc,
         }
 
@@ -2495,7 +2562,7 @@ export async function updatePomopetName(uid, pomopet) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
-        .update({ 'pomopet': pomopet});
+        .update({ 'pomopet': pomopet });
 }
 //============================================================================//
 

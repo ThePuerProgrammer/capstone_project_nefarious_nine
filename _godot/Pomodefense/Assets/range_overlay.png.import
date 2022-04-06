@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/range_overlay.png-d78655a3849cdf2885c1cb206b2ec316.stex"
+path="res://.import/range_overlay.png-f9a121402d7a5d8ad4df9a8c45e679f9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/range_overlay.png"
-dest_files=[ "res://.import/range_overlay.png-d78655a3849cdf2885c1cb206b2ec316.stex" ]
+source_file="res://Pomodefense/Assets/range_overlay.png"
+dest_files=[ "res://.import/range_overlay.png-f9a121402d7a5d8ad4df9a8c45e679f9.stex" ]
 
 [params]
 

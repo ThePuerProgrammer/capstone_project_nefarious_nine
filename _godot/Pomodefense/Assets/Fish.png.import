@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Fish.png-5f44f1890f102567a64558014376f8c3.stex"
+path="res://.import/Fish.png-04eff0a65dd5e14a013d27b6bc42ccdb.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Fish.png"
-dest_files=[ "res://.import/Fish.png-5f44f1890f102567a64558014376f8c3.stex" ]
+source_file="res://Pomodefense/Assets/Fish.png"
+dest_files=[ "res://.import/Fish.png-04eff0a65dd5e14a013d27b6bc42ccdb.stex" ]
 
 [params]
 

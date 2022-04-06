@@ -1,8 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Assets/Bone.png" type="Texture" id=1]
-[ext_resource path="res://Scenes/Bone.gd" type="Script" id=2]
-[ext_resource path="res://Assets/HPbar.jpg" type="Texture" id=3]
+[ext_resource path="res://Pomodefense/Assets/Bone.png" type="Texture" id=1]
+[ext_resource path="res://Pomodefense/Scenes/Bone.gd" type="Script" id=2]
+[ext_resource path="res://Pomodefense/Assets/HPbar.jpg" type="Texture" id=3]
+
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 23.5, 31 )
