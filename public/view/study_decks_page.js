@@ -141,9 +141,9 @@ export async function buildStudyDecksPage(deckList) {
     let myClassroomList = [];
     for (let i = 0; i < availableClassroomList.length; i++) {
         //If we want to make it for all members of class we just change this line to this
-        //if (availableClassroomList[i].members.includes(Auth.currentUser.email)) {
+        if (availableClassroomList[i].members.includes(Auth.currentUser.email)) {
 
-        if (availableClassroomList[i].moderatorList.includes(Auth.currentUser.email)) {
+        //if (availableClassroomList[i].moderatorList.includes(Auth.currentUser.email)) {
             myClassroomList.push(availableClassroomList[i]);
             let tempDeck = await FirebaseController.getClassDecks(availableClassroomList[i].docID);
             if (tempDeck.length < 1) {

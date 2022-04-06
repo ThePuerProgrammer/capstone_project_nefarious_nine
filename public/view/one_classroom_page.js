@@ -276,12 +276,11 @@ export async function one_classroom_page(classroomDocID) {
                 await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
             } else {//else is a class deck
                 let classDocID = e.target.classdocId.value;
-                await EditDeck.edit_class_deck(classDocID, e.target.docId.value);
+                await EditDeck.edit_class_deck_from_classroom(classDocID, e.target.docId.value);
             }
-            setTimeout(await study_decks_page(), 2000);
-            // await study_decks_page();
         });
     }
+    let confirmation = false;
     const deleteDeckForms = document.getElementsByClassName('form-delete-deck');
     for (let i = 0; i < deleteDeckForms.length; i++) {
         deleteDeckForms[i].addEventListener('submit', async e => {
@@ -293,13 +292,8 @@ export async function one_classroom_page(classroomDocID) {
             Elements.modalDeleteDeckConfirmation.show();
             const button2 = document.getElementById('modal-confirmation-delete-deck-yes');
             button2.addEventListener("click", async e => {
-                if (classDocID == "false" || classDocID == false) {
                     confirmation = true;
-                    await EditDeck.delete_deck(deckId, confirmation);
-                } else {
-                    confirmation = true;
-                    await EditDeck.delete_class_deck(deckId, confirmation, classDocID, Auth.currentUser.uid);
-                }
+                    await EditDeck.delete_class_deck_from_classroom(deckId, confirmation, classDocID, Auth.currentUser.uid);
             });
             Utilities.enableButton(button, label);
         });
