@@ -198,6 +198,7 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 				hideAnswerIndicators()
 				startNextQuestion()
 				return
+			showAnswerIndicators(true)
 			var damageMultiplier = floor((_timeRemaining / _subSectionWaitTime) + 1)
 			var newPlayerHp = _playerHpBar.value - (_enemyBaseDamage * damageMultiplier)
 			if newPlayerHp < 0:
@@ -295,8 +296,8 @@ func attackAction():
 		newEnemyHp = 0
 	if newEnemyHp == 0:
 		_enemyDead = true
-		_coins = _coins + _coinsPerQuestion * 10
 		_enemy.play("die")
+		_coins = _coins + _coinsPerQuestion * 10
 		_popupMessage.showPopupMessage("Great Work! Keep answering questions to gain more coins!", 5.0)
 	else:
 		_enemy.play("hit_effect")

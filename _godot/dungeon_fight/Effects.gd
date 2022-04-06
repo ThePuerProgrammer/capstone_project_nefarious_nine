@@ -69,6 +69,7 @@ func _on_VignetteAnimationPlayer_animation_finished(_anim_name):
 
 	get_node("../Enemy").play("idle_animation")
 	_questionManager.startNextQuestion()
+	_questionManager.hideAnswerIndicators()	
 
 func _on_Enemy_animation_finished():
 	if _enemy.animation == "die":
