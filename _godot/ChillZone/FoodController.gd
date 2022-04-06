@@ -22,19 +22,19 @@ var currentMouseMovePos
 var lastMouseMovePos
 var mouseIsDown = false
 
-var actionBar
+var pomopet
 
 var progressBarMaxValue = 20
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	actionBar = get_node("../../ActionBar")
+	pomopet = get_node("../../Pet")
 	var userDocFields = get_node("/root/CurrentUser").user_doc.doc_fields
 	lastFedMs = userDocFields["pomopetData"]["lastFed"]
 	setFoodLevelByLastFed()
 	
 	if getFoodLevel() == 5:
-		actionBar.setFeedButtonEnabled(false)
+		pomopet.setFeedButtonEnabled(false)
 	
 	# Initialize progress bar
 	# 	20 points of progress to feed for every level of food missing
@@ -121,6 +121,11 @@ func endFeedAction():
 	feedingModeOn = false
 	$FeedMeter/FeedMeterProgressBar/AnimationPlayer.play("fade_out")
 	$FoodBag.hideFoodBag()
+	# Clear all food pellets left over
+	var foodPellets = get_tree().get_nodes_in_group("food_pellets")
+	for f in foodPellets:
+		f.destroyFoodPiece()
+	pomopet.setFeedButtonEnabled(false)
 
 func isPouringFood():
 	var lastMouseDistance = getDistanceBetweenMousePositions(lastMouseMovePos, currentMouseMovePos)
@@ -138,3 +143,7 @@ func _on_FoodPieceKillBox_body_entered(body):
 func _on_FoodPieceDespawnZone_body_entered(body):
 	if feedingModeOn and body.get_collision_layer() == 16:
 		body.destroyFoodPiece()
+
+
+func _on_Pet_feedButtonPressed():
+	startFeedAction()

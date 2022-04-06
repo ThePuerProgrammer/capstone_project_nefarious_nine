@@ -40,7 +40,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[node name="FoodPiece" type="RigidBody2D"]
+[node name="FoodPiece" type="RigidBody2D" groups=["food_pellets"]]
 modulate = Color( 1, 1, 1, 0 )
 collision_layer = 16
 collision_mask = 34
