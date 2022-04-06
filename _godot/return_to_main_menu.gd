@@ -244,20 +244,20 @@ func add_items_to_deck_selection():
 	deckList = FirebaseController.get_user_decks(CurrentUser.user_id)
 	if deckList is GDScriptFunctionState:
 		deckList = yield(deckList, "completed")
-#Populates to a dictionary
+	
+	#Adds Selections	
+	deck_selection_optionbutton.add_item("Pick One")
+	#Populates to a dictionary
 	for deck in deckList:
 		var fields = deck["doc_fields"]
 		deck_dict_name[deck["doc_name"]] = fields["name"]
+		if(fields["flashcardNumber"] != 0):
+			deck_selection_optionbutton.add_item(deck_dict_name[deck["doc_name"]])
 #		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
-
-#Adds Selections
-	deck_selection_optionbutton.add_item("Pick One")
-	for deck in deck_dict_name.values():
-		#deck_selection_optionbutton.add_item(deck[0])
-		deck_selection_optionbutton.add_item(deck)
 	deck_selection_optionbutton.add_item("DEMO")
 	deck_selection_optionbutton.set_item_disabled(0,true)
-
+	#for deck in deck_dict_name.values():
+		#deck_selection_optionbutton.add_item(deck[0])
 
 #Category Dropdown Items
 func add_items_to_category_selection():

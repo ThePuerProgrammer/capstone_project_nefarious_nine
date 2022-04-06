@@ -240,18 +240,18 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Games_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container" index="0"]
-margin_right = 714.0
-margin_bottom = 1998.0
+margin_right = 423.0
+margin_bottom = 1842.0
 size_flags_vertical = 3
 
 [node name="dungeon_fight_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="0"]
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 362.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="dungeon_fight_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container" index="0"]
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 294.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -259,14 +259,14 @@ texture = ExtResource( 7 )
 
 [node name="dungeon_fight_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container" index="1"]
 margin_top = 298.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 318.0
 size_flags_vertical = 3
 text = "Details"
 
 [node name="dungeon_fight_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container" index="2"]
 margin_top = 322.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 362.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -276,107 +276,107 @@ expand_icon = true
 
 [node name="Pomoblast_container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="1"]
 margin_top = 366.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 774.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Pomoblast_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container" index="0"]
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 340.0
 size_flags_vertical = 3
 texture = ExtResource( 6 )
 
 [node name="Pomoblast_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container" index="1"]
 margin_top = 344.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 364.0
 size_flags_vertical = 3
 text = "Details"
 
 [node name="Pomoblast_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container" index="2"]
 margin_top = 368.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 408.0
 text = "            Add to Queue:"
 align = 1
 
 [node name="PomoBITE_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="2"]
 margin_top = 778.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 1190.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PomoBITE_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="0"]
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 344.0
 size_flags_vertical = 3
 texture = ExtResource( 8 )
 
 [node name="PomoBITE_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="1"]
 margin_top = 348.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 368.0
 size_flags_vertical = 3
 text = "Details"
 
 [node name="PomoBITE_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="2"]
 margin_top = 372.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 412.0
 text = "            Add to Queue:"
 align = 1
 
 [node name="Slowfruit" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="3"]
 margin_top = 1194.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 1562.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Slowfruit_graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="0"]
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 300.0
 size_flags_vertical = 3
 texture = ExtResource( 9 )
 
 [node name="Slowfruit_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="1"]
 margin_top = 304.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 324.0
 size_flags_vertical = 3
 text = "Details"
 
 [node name="Slowfruit_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="2"]
 margin_top = 328.0
-margin_right = 714.0
+margin_right = 423.0
 margin_bottom = 368.0
 
 [node name="PomoDefense" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="4"]
 margin_top = 1566.0
-margin_right = 714.0
-margin_bottom = 1998.0
+margin_right = 423.0
+margin_bottom = 1842.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PomoDefense_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="0"]
-margin_right = 714.0
-margin_bottom = 364.0
+margin_right = 423.0
+margin_bottom = 208.0
 size_flags_vertical = 3
 texture = ExtResource( 10 )
 
 [node name="PomoDefense_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="1"]
-margin_top = 368.0
-margin_right = 714.0
-margin_bottom = 388.0
+margin_top = 212.0
+margin_right = 423.0
+margin_bottom = 232.0
 size_flags_vertical = 3
 text = "Details"
 
 [node name="PomoDefense_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="2"]
-margin_top = 392.0
-margin_right = 714.0
-margin_bottom = 432.0
+margin_top = 236.0
+margin_right = 423.0
+margin_bottom = 276.0
 
 [node name="No_Games_Selected_Popup_Alert" type="AcceptDialog" parent="." index="14"]
 margin_left = 787.0
