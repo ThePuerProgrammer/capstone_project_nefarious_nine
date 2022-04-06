@@ -20,9 +20,9 @@ export function addEventListeners() { }
 
 // Only on entering study page 
 export async function study_page() {
-  try{
+  try {
     await Coins.get_coins(Auth.currentUser.uid);
-} catch(e) {if(Constant.DEV)console.log(e);}
+  } catch (e) { if (Constant.DEV) console.log(e); }
 
   // get DECK info from firebase
   let deckDocId = localStorage.getItem("deckPageDeckDocID");
@@ -318,9 +318,9 @@ export async function study_page() {
       }
       document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML = buildOverviewView(deck, deckLength);
     }
-    try{
+    try {
       await Coins.get_coins(Auth.currentUser.uid);
-  } catch(e) {if(Constant.DEV)console.log(e);}
+    } catch (e) { if (Constant.DEV) console.log(e); }
   });
 }
 
@@ -508,3 +508,6 @@ export function saveStudyTime() {
   FirebaseController.logTimeSpentStudying(Auth.currentUser.uid, localStorage.getItem("deckPageDeckDocID"));
   removePageLeaveListeners();
 }
+
+
+
