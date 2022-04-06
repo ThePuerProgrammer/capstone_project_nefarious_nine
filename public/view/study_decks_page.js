@@ -17,6 +17,7 @@ let noClassDeckSelected = false;
 export function addEventListeners() {
     Elements.menuStudyDecks.addEventListener('click', async () => {
         history.pushState(null, null, Routes.routePathname.STUDYDECKS);
+        sessionStorage.setItem('cameFromClassDeck', false); 
         await study_decks_page();
     });
 

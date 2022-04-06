@@ -62,6 +62,7 @@ export const htmlIDs = {
     formCheckInputIsMultiple: 'form-check-input-is-multiple',
     createAccountModal: 'modal-create-account',
     smartStudyCheckbox: 'smart-study-checkbox',
+    smartStudyCheckboxLabel: 'smart-study-checkbox-label',
     smartStudyPopupTextContainer: 'smart-study-popup-text-container',
     streakNumberText: 'streak-number-text',
     studyFlashcardAnswer: 'study-flashcard-answer',
