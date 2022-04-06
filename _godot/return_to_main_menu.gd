@@ -221,7 +221,7 @@ func add_items_to_deck_selection():
 	for deck in deckList:
 		var fields = deck["doc_fields"]
 		deck_dict_name[deck["doc_name"]] = fields["name"]
-		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
+#		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
 
 #Adds Selections
 	deck_selection_optionbutton.add_item("Pick One")
@@ -257,7 +257,7 @@ func add_items_to_category_selection():
 	for deck in deckList:
 		var fields = deck["doc_fields"]
 		deck_dict_name[deck["doc_name"]] = fields["category"]
-		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
+#		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
 		#This iterates through the categories from the backend
 		for category in dict_val_array[0]:
 			dict_val_categories[category] = category 
@@ -281,13 +281,13 @@ func add_items_to_timer_selection():
 #Checks which method is selected
 func on_method_item_selected(id):
 	if method_selection_optionbutton.get_item_id(id)==1:
-		print(str(method_selection_optionbutton.get_item_text(id)))
+#		print(str(method_selection_optionbutton.get_item_text(id)))
 		disable_deck_selection_option()
 		category_selection_optionbutton.disabled=false
 		category_selection_optionbutton.clear()
 		add_items_to_category_selection()
 	elif method_selection_optionbutton.get_item_id(id)==2:
-		print(str(method_selection_optionbutton.get_item_text(id)))
+#		print(str(method_selection_optionbutton.get_item_text(id)))
 		disable_category_selection_option()
 		deck_selection_optionbutton.disabled=false
 		deck_selection_optionbutton.clear()
@@ -305,8 +305,8 @@ func on_category_item_selected(id):
 	match category_selection_optionbutton.get_item_id(id):
 		id:
 			category_selected=category_selection_optionbutton.get_item_text(id)
-			print("ID:",id-1)
-			print("Category Selected:",category_selected)
+#			print("ID:",id-1)
+#			print("Category Selected:",category_selected)
 			var keys = deck_dict_name.keys()
 			deck_selected = keys[id-1]
 			flashcardList = FirebaseController.get_user_flashcards(deck_selected)
@@ -321,23 +321,24 @@ func on_category_item_selected(id):
 				flashcardInfo.push_back(fc_fields['isMultipleChoice'])
 				flashcardInfo.push_back(fc_fields['incorrectAnswers'])
 				Pomotimer._flashcards.push_back(flashcardInfo)
-				print("FC_INFO:",flashcardInfo)
+#				print("FC_INFO:",flashcardInfo)
 				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
-				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
-			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
+#				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
+#			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
 
 #Checks which Deck has been selected
 #and assigns to a gah-dough-bal variable deck_selected
 func on_deck_item_selected(id):
 	match deck_selection_optionbutton.get_item_id(id):
 		id:
+			Pomotimer._flashcards.clear()
 			#deck_selected=deck_selection_optionbutton.get_item_text(id)
 			#This is how I will pass the Deck Doc Id to the Flashcard Function
 			var keys = deck_dict_name.keys()
 			deck_selected = keys[id-1]
 			flashcardList = FirebaseController.get_user_flashcards(deck_selected)
 			if flashcardList is GDScriptFunctionState:
-					flashcardList = yield(flashcardList,"completed")
+				flashcardList = yield(flashcardList,"completed")
 			
 			for flashcard in flashcardList:
 				var fc_fields = flashcard["doc_fields"]
@@ -347,10 +348,11 @@ func on_deck_item_selected(id):
 				flashcardInfo.push_back(fc_fields['isMultipleChoice'])
 				flashcardInfo.push_back(fc_fields['incorrectAnswers'])
 				Pomotimer._flashcards.push_back(flashcardInfo)
-				print("FC_INFO:",flashcardInfo)
+				Pomotimer.generatePossibleAnswersPool()
+#				print("FC_INFO:",flashcardInfo)
 				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
-				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
-			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
+#				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
+#			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
 ##########################
 #Disables Selection Options
 ##########################

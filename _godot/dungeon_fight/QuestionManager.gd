@@ -22,7 +22,6 @@ var _currentProgressBarSubSection = 0 # 0 = easy, 1 = medium, 2 = hard ###
 # answer panel selection & randomization ################################
 var _questionPanelText
 var _answerPanels = [ ]
-var count = 0 # TODO: remove, for testing
 var _answerTextCorrect
 var _answerPanelRngSelector = RandomNumberGenerator.new()################
 
@@ -55,8 +54,12 @@ onready var _timer = Pomotimer._time_limit
 onready var _deck = Pomotimer._deck
 #########################################################################
 
+# Controller for getting random flashcards ##############################
+onready var pomotimerController = get_node("/root/Pomotimer")
+#########################################################################
+
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready():	
 	_questionPanelText = get_node("../QuestionMenu/MainColumn/QuestionTextPanelContainer/MarginContainer/ScrollContainer/QuestionText")
 	_popupMessage = get_node("../PopupMessage")
 	
@@ -136,13 +139,11 @@ func resetForNextQuestion():
 	_currentProgressBarSubSection = 0
 	
 func getNextQuestionAndAnswers():
-	var _questionText = "questionText: " + str(count)
-	var _wrongAnswers = [
-		"wrongAnswer1: " + str(count),
-		"wrongAnswer2: " + str(count),
-		"wrongAnswer2: " + str(count)
-	]
-	_answerTextCorrect = "answerTextCorrect: " + str(count)
+	var randomCard = pomotimerController.getRandomFlashcard()
+
+	var _questionText = randomCard[0]
+	_answerTextCorrect = randomCard[1]
+	var _wrongAnswers = randomCard[2]
 	var _selectedPanel = _answerPanelRngSelector.randi_range(0, 3)
 	var _wrongAnswerCounter = 0
 	
@@ -153,7 +154,6 @@ func getNextQuestionAndAnswers():
 		_answerPanels[i].setAnswerText(_wrongAnswers[_wrongAnswerCounter])
 		_wrongAnswerCounter = _wrongAnswerCounter + 1
 	_questionPanelText.text = _questionText
-	count = count + 1
 	
 func stopQuestionTimer():
 	$QuestionTimer.stop()
