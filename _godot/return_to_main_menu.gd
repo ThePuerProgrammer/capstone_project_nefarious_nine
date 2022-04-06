@@ -69,7 +69,7 @@ func _on_Back_Button_pressed():
 	$FadeOut.fade_out()
 #Start Button
 func _on_Start_Button_pressed():
-	if !dungeon_selected and !pomoblast_selected and !pomobite_selected and !slowfruit_selected:
+	if !dungeon_selected and !pomoblast_selected and !pomobite_selected and !slowfruit_selected and !pomodefense_selected:
 		get_node("No_Games_Selected_Popup_Alert").popup()
 	elif method_selection_optionbutton.get_selected_id()==0:
 		get_node("No_Selection_Method_Choosen_Popup_Alert").popup()
