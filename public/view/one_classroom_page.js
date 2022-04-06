@@ -7,11 +7,76 @@ import * as Elements from './elements.js'
 import * as Coins from '../controller/coins.js'
 import * as DeckPage from './deck_page.js'
 import * as EditDeck from '../controller/edit_deck.js'
+import * as Search from './search_page.js'
 import { Message } from '../model/message.js'
 import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 import { html } from './protected_message.js'
 
+
+export function addEventListeners(){
+        // CREATE A DECK Submit button event listener
+        Elements.formCreateDeck.addEventListener('submit', async e => {
+            e.preventDefault();
+            const name = e.target.name.value;
+            const subject = e.target.subject.value;
+            const isFavorited = false;
+            const category = e.target.selectCategory.value;
+            const isClassDeck = e.target.selectClassroom.value;
+            const flashcardNumber = 0;
+            const created_by = Auth.currentUser.uid
+            const isMastered = false;
+            //NOTE: If no class was chosen, isClassDeck value will be false.
+            // Otherwise, the value will be the CLASSROOM DOC ID tied to the deck.
+    
+            //if there is no class selected, the deck is not a class deck
+    
+            const keywords = Search.cleanDataToKeywords(name, subject, category)
+    
+            // relevant to Cody's story:
+            const dateCreated = Date.now();
+    
+            const deck = new Deck({
+                name,
+                subject,
+                dateCreated,
+                isFavorited,
+                category,
+                keywords,
+                isClassDeck,
+                flashcardNumber,
+                created_by,
+                isMastered,
+    
+            });
+                // a class is tied to this deck, isClassDeck is now the classroom DOCID its tied to
+                try {
+                    //Passes Class ID, since it is a Class Deck
+                    //deck.created_by=isClassDeck;
+    
+                    console.log("Creating Deck");
+                    const deckId = await FirebaseController.createClassDeck(deck.isClassDeck, deck);
+                    console.log("Deck Created");
+                    deck.docId = deckId;
+                    localStorage.setItem("deckPageDeckDocID", deck.docId);
+                    sessionStorage.setItem('deckId', deckId);
+                    history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+                    Elements.modalCreateDeck.hide();
+                    //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
+                    await one_classroom_page(classDocID);
+                } catch (e) {
+                    if (Constant.DEV)
+                        console.log(e);
+                }
+        
+        });
+    
+        // Clears CREATE DECK input fields when user closes modal
+        $(`#create-deck-modal`).on('hidden.bs.modal', function (e) {
+            Elements.formCreateDeck.reset();
+        });
+    
+}
 
 export async function one_classroom_page(classroomDocID) {
     try{
@@ -62,6 +127,9 @@ export async function one_classroom_page(classroomDocID) {
         <h4>${classroom.subject}, ${classroom.category}</h4>
         <br>`;
 
+    html += `<button id="${Constant.htmlIDs.createDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">
+        <i class="material-icons pomo-text-color-light">add</i> Create A Deck</button>
+     `;
     //if current user is a mod, populate delete button
     //prevents null button error
     if (mod == true) {
@@ -69,9 +137,11 @@ export async function one_classroom_page(classroomDocID) {
         html += `
             <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
             <i class="material-icons">delete</i>Delete Classroom
-            </button>`
+            </button>
+            </br>`
             ;
     }
+
     //Adding Class Decks Here
     let classDecks = [];
     classDecks = await FirebaseController.getClassDecks(classroomDocID);
@@ -89,6 +159,8 @@ export async function one_classroom_page(classroomDocID) {
     }
 
     html += `</div>`;
+
+
     //CLASSROOM TAB END-----------------------------------------------------
 
     // MEMBERS tab contents -----------------------------------------------------
@@ -298,6 +370,37 @@ export async function one_classroom_page(classroomDocID) {
             Utilities.enableButton(button, label);
         });
     }
+    const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
+    createDeckButton.addEventListener('click', async e => {
+
+        // call Firebase func. to retrieve categories list
+        let categories;
+        try {
+            categories = await FirebaseController.getCategories();
+            //console.log(cat);
+        } catch (e) {
+            if (Constant.DEV)
+                console.log(e);
+        }
+
+        // clear innerHTML to prevent duplicates
+        Elements.formDeckCategorySelect.innerHTML = '';
+
+        categories.forEach(category => {
+            Elements.formDeckCategorySelect.innerHTML += `
+                      <option value="${category}">${category}</option>
+                  `;
+        });
+
+        Elements.formClassSelect.innerHTML = '';
+        //logic for if the dropdown box selection on create deck is NONE or is a CLASSROOM
+        Elements.formClassSelect.innerHTML += `
+                    <option value="${classroomDocID}">${classroom.name}</option>
+                  `;
+
+        // opens create Deck modal
+        $(`#${Constant.htmlIDs.createDeckModal}`).modal('show');
+    })
 
     // get MEMBERS tab and show it as visible
     const classroomMembersButton = document.getElementById('classroom-members-button');

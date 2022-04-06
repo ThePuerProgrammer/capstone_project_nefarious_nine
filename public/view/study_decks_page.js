@@ -420,9 +420,10 @@ export async function buildStudyDecksPage(deckList) {
         // If you've made it this far, then thank you for for following along
     })
 
-    const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
+    //const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
 
     // restructured create deck button to add category dropdown menu
+    const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
     createDeckButton.addEventListener('click', async e => {
 
         // call Firebase func. to retrieve categories list

@@ -14,6 +14,7 @@ import * as EditDeck from './controller/edit_deck.js'
 import * as Search from '../view/search_page.js'
 import * as HelpTicketsPage from '../view/help_tickets_page.js'
 import * as ShopPage from '../view/pomoshop_page.js';
+import * as OneClassroomPage from '../view/one_classroom_page.js'
 
 window.onload = () => {
     const pathname = window.location.pathname;
@@ -44,3 +45,4 @@ EditDeck.addEventListeners();
 Search.addEventListeners();
 HelpTicketsPage.addEventListeners();
 ShopPage.addEventListeners();
+OneClassroomPage.addEventListeners();
