@@ -1,9 +1,105 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Pomodefense/Scenes/PomoDefenseGame.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Pomodefense/SceneHandler.gd" type="Script" id=2]
+[ext_resource path="res://Pomodefense/Resources/Kenney Rocket.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Pomodefense/Resources/Kenney Rocket Square.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 30
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 50
+font_data = ExtResource( 4 )
 
 [node name="SceneHandler" type="Node"]
 script = ExtResource( 2 )
 
 [node name="PomoDefenseGame" parent="." instance=ExtResource( 1 )]
+
+[node name="Flashcards" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -480.0
+margin_top = -250.0
+margin_right = 480.0
+margin_bottom = 300.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FlashcardHolder" type="VBoxContainer" parent="Flashcards"]
+margin_right = 960.0
+margin_bottom = 900.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuestionText" type="PanelContainer" parent="Flashcards/FlashcardHolder"]
+self_modulate = Color( 0.72549, 0.137255, 0.443137, 1 )
+margin_right = 960.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 0, 300 )
+
+[node name="QuestionScroll" type="ScrollContainer" parent="Flashcards/FlashcardHolder/QuestionText"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 953.0
+margin_bottom = 293.0
+
+[node name="QuestionTextLabel" type="Label" parent="Flashcards/FlashcardHolder/QuestionText/QuestionScroll"]
+margin_bottom = 38.0
+custom_fonts/font = SubResource( 1 )
+
+[node name="AnswerBox" type="VBoxContainer" parent="Flashcards/FlashcardHolder"]
+margin_top = 304.0
+margin_right = 960.0
+margin_bottom = 516.0
+
+[node name="Answer1" type="Button" parent="Flashcards/FlashcardHolder/AnswerBox" groups=["answer_buttons"]]
+self_modulate = Color( 0.72549, 0.137255, 0.443137, 1 )
+margin_right = 960.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+
+[node name="Answer2" type="Button" parent="Flashcards/FlashcardHolder/AnswerBox" groups=["answer_buttons"]]
+self_modulate = Color( 0.72549, 0.137255, 0.443137, 1 )
+margin_top = 54.0
+margin_right = 960.0
+margin_bottom = 104.0
+rect_min_size = Vector2( 50, 50 )
+
+[node name="Answer3" type="Button" parent="Flashcards/FlashcardHolder/AnswerBox" groups=["answer_buttons"]]
+self_modulate = Color( 0.72549, 0.137255, 0.443137, 1 )
+margin_top = 108.0
+margin_right = 960.0
+margin_bottom = 158.0
+rect_min_size = Vector2( 50, 50 )
+
+[node name="Answer4" type="Button" parent="Flashcards/FlashcardHolder/AnswerBox" groups=["answer_buttons"]]
+self_modulate = Color( 0.72549, 0.137255, 0.443137, 1 )
+margin_top = 162.0
+margin_right = 960.0
+margin_bottom = 212.0
+rect_min_size = Vector2( 50, 50 )
+
+[node name="Results" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RightWrong" type="Label" parent="Results"]
+margin_right = 40.0
+margin_bottom = 63.0
+custom_fonts/font = SubResource( 2 )

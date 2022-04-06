@@ -7,16 +7,32 @@ var speed
 var health
 var base_damage
 var creep_type
-var GameData = "res://Pomodefense/Singleton/GameData.gd"
+var creep_data = {
+	"Fish": {
+		"speed": 150,
+		"health": 50,
+		"base_damage": 10,
+	},
+	"Carrot": {
+		"speed": 170,
+		"health": 70,
+		"base_damage": 15,
+	},
+	"Bone": {
+		"speed": 160,
+		"health": 100,
+		"base_damage": 20,
+	}
+}
 
 onready var hp_bar = get_node("HPBar")
 onready var impact_area = get_node("Impact")
 var projectile_impact = preload("res://Pomodefense/Scenes/TurretImpact.tscn")
 
 func _ready():
-	speed = GameData.creep_data[creep_type]["speed"]
-	health = GameData.creep_data[creep_type]["health"]
-	base_damage = GameData.creep_data[creep_type]["base_damage"]
+	speed = creep_data[creep_type]["speed"]
+	health = creep_data[creep_type]["health"]
+	base_damage = creep_data[creep_type]["base_damage"]
 	hp_bar.max_value = health
 	hp_bar.value = health
 	hp_bar.set_as_toplevel(true)
