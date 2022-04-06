@@ -1,6 +1,7 @@
 extends Node2D
 
 signal game_finished(result)
+signal round_finished()
 
 ## global variables
 var map_node
@@ -42,7 +43,6 @@ var tower_data = {
 
 func _ready():
 	map_node = get_node("Map1") ## can be updated with additional maps IF THERE WAS TIME c:
-	
 	for i in get_tree().get_nodes_in_group("build_buttons"):
 		## get name of button and pass it to build mode
 		i.connect("pressed", self, "initiate_build_mode", [i.get_name()])
@@ -144,6 +144,8 @@ func verify_and_build():
 func on_base_damage(damage):
 	base_health -= damage
 	enemies_in_wave -= 1
+	if enemies_in_wave <= 0:
+		emit_signal("round_finished")
 	enemy_count.text = "Enemies: " + String(enemies_in_wave)
 	if base_health <= 0:
 		emit_signal("game_finished", false)
@@ -152,7 +154,10 @@ func on_base_damage(damage):
 			
 func on_enemy_destroyed():
 	enemies_in_wave -= 1
+	if enemies_in_wave <= 0:
+		emit_signal("round_finished")
 	enemy_count.text = "Enemies: " + String(enemies_in_wave)
+
 
 func _on_NextWave_pressed():
 	if enemies_in_wave <= 0:
