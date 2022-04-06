@@ -47,7 +47,6 @@ func _ready():
 	updatePomopetSprite(currentPet)
 	startDirtinessLevel = getDirtinessLevel(pomopetData["lastWashed"])
 	startDirtinessValue = dirtyLevels[startDirtinessLevel]
-	print("start dirty: ", startDirtinessLevel)
 	setPetDirtinessLevel(startDirtinessLevel)
 	
 	_getCurrentKinematicBody().connect("input_event", self, "_on_currentKinematicBodyInput")
@@ -59,7 +58,7 @@ func _ready():
 	$WashMeter/WashMeterProgressBar.reset()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("left_mouse_click"):
 		mouseIsDown = true
 		if actionBarVisible and !isWithinPetTypeCollisionPolygon():
@@ -237,7 +236,7 @@ func setPickUpPoopButtonEnabled(isEnabled):
 func canOpenActionBar():
 	return !petWashingModeOn and !poopController.poopPickupModeOn and !foodController.feedingModeOn # or petting mode on
 
-func _on_currentKinematicBodyInput(viewport, event, shape_idx):
+func _on_currentKinematicBodyInput(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and !actionBarVisible and canOpenActionBar(): # TODO: and canOpenActionBar
 		showActionBar()
 		actionBarVisible = true
