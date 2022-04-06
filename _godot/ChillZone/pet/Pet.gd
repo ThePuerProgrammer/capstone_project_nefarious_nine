@@ -98,7 +98,7 @@ func getDirtinessLevel(lastTimeWashedMs):
 	var timeSinceLastWashMs = OS.get_system_time_msecs() - lastTimeWashedMs # currentTime - lastTimeWashed
 	var timeSinceLastWashDay = timeSinceLastWashMs / 1000 / 60 / 60 / 24 # time / ms / seconds / hour / day
 	
-	if timeSinceLastWashDay > 5:
+	if timeSinceLastWashDay > 5: #0 is clean, 5 is dirty
 		return 5
 		
 	return timeSinceLastWashDay
