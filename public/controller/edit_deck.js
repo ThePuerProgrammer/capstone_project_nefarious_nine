@@ -185,7 +185,7 @@ export async function delete_deck(docId, confirmation) {
             if (Constant.DEV) console.log(e);
             Utilities.info(`Delete Deck Error`, JSON.stringify(e));
         }
-        await study_decks_page();
+        location.reload();
     }
 }
 
