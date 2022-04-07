@@ -2,13 +2,19 @@ extends Node
 
 export (PackedScene) var Mob
 export (PackedScene) var PowerUp = preload("res://PomoBlast/PowerUp.tscn")
+export (PackedScene) var Bullet = preload("res://PomoBlast/Bullet.tscn")
+
 
 var score = 0 
+var _questionLabel 
+var questionlist=["1","2","3","4"]
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$Player.start($StartPosition.position)
 	$MobTimer.start()
 	$GameTimer.start()
+	_questionLabel = get_node("HUD/QuestionPanel/Panel/QuestionLabel")
+	_questionLabel.text = questionlist[0]
 	pass # Replace with function body.
 
 
@@ -48,10 +54,13 @@ func _on_GameTimer_timeout():
 	
 	
 func _on_enemy_died(pos):
+	questionlist.pop_front()
+	_questionLabel.text = questionlist[0]
 	score += 1
 	var p = PowerUp.instance()
 	add_child(p)
 	p.position = pos
+	
 	print("we dead")
 
 
