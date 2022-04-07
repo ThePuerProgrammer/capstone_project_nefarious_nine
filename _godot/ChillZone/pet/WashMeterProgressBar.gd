@@ -1,5 +1,7 @@
 extends ProgressBar
 
+signal washMeterValueChange
+
 var bubblesParticle = preload("res://ChillZone/wash_pomopet/MouseBubblesSmallOnlyParticle.tscn")
 var lastWholeValue = 0
 
@@ -9,6 +11,7 @@ func _ready():
 func incrementByStep():
 	# increment value
 	value = value + step
+	emit_signal("washMeterValueChange", value)
 	
 	# Spawn bubbles at end of progress bar
 	if floor((value / max_value) * 100) > lastWholeValue:

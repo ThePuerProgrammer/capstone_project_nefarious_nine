@@ -68,6 +68,7 @@ export function addEventListeners() {
                 deck.docId = deckId;
                 localStorage.setItem("deckPageDeckDocID", deck.docId);
                 sessionStorage.setItem('deckId', deckId);
+                sessionStorage.setItem('isClassDeck', deck.isClassDeck);
                 history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
                 Elements.modalCreateDeck.hide();
                 await FirebaseController.updateDeckCount(Auth.currentUser.uid);

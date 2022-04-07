@@ -248,6 +248,11 @@ animations = [ {
 "name": "dead",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 43 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 48 ) ],
+"loop": true,
+"name": "attack",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 54 ), ExtResource( 46 ), ExtResource( 44 ) ],
 "loop": true,
 "name": "dodge",
@@ -257,25 +262,10 @@ animations = [ {
 "loop": true,
 "name": "die",
 "speed": 5.0
-}, {
-"frames": [ ExtResource( 43 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 48 ) ],
-"loop": true,
-"name": "attack",
-"speed": 5.0
 } ]
 
 [sub_resource type="SpriteFrames" id=17]
 animations = [ {
-"frames": [ ExtResource( 66 ) ],
-"loop": false,
-"name": "third_attack_level",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
-"loop": false,
-"name": "die",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 1 ) ],
 "loop": false,
 "name": "attack_lingering",
@@ -291,14 +281,19 @@ animations = [ {
 "name": "attack_animation_p2",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
-"loop": true,
-"name": "idle_animation",
+"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
+"loop": false,
+"name": "die",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 13 ) ],
-"loop": true,
-"name": "first_attack_level",
+"frames": [ ExtResource( 66 ) ],
+"loop": false,
+"name": "third_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 63 ) ],
+"loop": false,
+"name": "second_attack_level",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
@@ -306,9 +301,14 @@ animations = [ {
 "name": "hit_effect",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 63 ) ],
-"loop": false,
-"name": "second_attack_level",
+"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"loop": true,
+"name": "idle_animation",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 58 ) ],
+"loop": true,
+"name": "first_attack_level",
 "speed": 5.0
 } ]
 
@@ -593,6 +593,9 @@ margin_right = 1939.52
 margin_bottom = 880.977
 custom_constants/separation = 13
 script = ExtResource( 39 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 _block_tex = ExtResource( 38 )
 _attack_tex = ExtResource( 40 )
 _dodgeLeft_tex = ExtResource( 42 )
@@ -837,10 +840,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 348.5
-margin_top = -600.0
-margin_right = 1571.5
-margin_bottom = -26.0
+margin_left = -611.5
+margin_top = -1050.0
+margin_right = 611.5
+margin_bottom = -476.0
 rect_min_size = Vector2( 0, 300 )
 custom_styles/panel = ExtResource( 8 )
 
