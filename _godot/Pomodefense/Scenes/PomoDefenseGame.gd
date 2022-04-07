@@ -10,7 +10,7 @@ var build_valid = false
 var build_location
 var build_type
 var build_tile
-var current_wave = 1
+var current_wave = 0
 var enemies_in_wave = 0
 var base_health = 100
 var wave_data = []
@@ -76,11 +76,11 @@ func create_enemy():
 func retrieve_wave_data():
 	current_wave += 1
 	wave_count.text = "Wave: " + String(current_wave)
-	if current_wave <= 3:
+	if current_wave <= 2:
 		wave_data = [["Fish", 1.2, "HighPath"], ["Fish", 1.2, "HighPath"], ["Fish", 1.2, "HighPath"]]
-	elif current_wave >= 3 and current_wave <= 5:
+	elif current_wave >= 2 and current_wave <= 4:
 		wave_data = [["Fish", 1.2, "Path"], ["Fish", 1.2, "Path"], ["Fish", 1.2, "Path"], ["Carrot", 1.25, "Path"], ["Carrot", 1.25, "Path"]]
-	elif current_wave >= 5 and current_wave <= 8:
+	elif current_wave >= 4 and current_wave <= 6:
 		wave_data = [["Fish", 1.2, "LowPath"], ["Fish", 1.2, "LowPath"], ["Fish", 1.2, "LowPath"], ["Carrot", 1.25, "LowPath"], ["Carrot", 1.25, "LowPath"], ["Carrot", 1.25, "LowPath"], ["Bone", 1.25, "LowPath"], ["Bone", 1.25, "LowPath"]]
 	else:
 		for i in range(1, current_wave):
