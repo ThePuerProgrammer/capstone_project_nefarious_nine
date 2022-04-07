@@ -155,4 +155,8 @@ func addPomocoinsToUserDocument(newCoinAmount):
 	
 	var userDocRef : FirestoreTask = Firebase.Firestore.collection(Constants.COLLECTIONS.USERS).update(currentUser["doc_name"], currentUser["doc_fields"])
 	var document : FirestoreTask = yield(userDocRef, "task_finished")
+	
+	var window = JavaScript.get_interface('window')
+	if window != null: 
+		window.updatePomocoinsFromGoDot(newCoinAmount) # Updates the coins on the nav bar of the browser
 ####################################################################################################
