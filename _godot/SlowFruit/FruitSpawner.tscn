@@ -577,7 +577,7 @@ shape = SubResource( 25 )
 
 [node name="Sprite" type="Sprite" parent="Control/Answer1Container/Fruit1"]
 scale = Vector2( 1.5, 1.5 )
-texture = ExtResource( 1 )
+texture = ExtResource( 5 )
 centered = false
 
 [node name="Answer1" type="Position2D" parent="Control/Answer1Container"]

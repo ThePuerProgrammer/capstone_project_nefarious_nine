@@ -7,7 +7,7 @@ const WALK_DEACCEL = 650.0
 const WALK_MAX_VELOCITY = 140.0
 const AIR_ACCEL = 900.0
 const AIR_DEACCEL = 1100.0
-const JUMP_VELOCITY = 680
+const JUMP_VELOCITY = 780
 const STOP_JUMP_FORCE = 850.0
 const MAX_FLOOR_AIRBORNE_TIME = 0.15
 
@@ -136,7 +136,7 @@ func pull_for_input():
 			setIdle()
 		move_right = false
 		applied_force = Vector2(0, applied_force.y)
-		linear_velocity.x = -WALK_DEACCEL
+		linear_velocity.x = WALK_DEACCEL
 	
 	if Input.is_action_just_pressed("jump"):
 		if linear_velocity.y <= 0:	
