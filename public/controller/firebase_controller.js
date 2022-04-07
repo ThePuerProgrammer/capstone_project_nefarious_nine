@@ -2620,6 +2620,16 @@ export async function updateCoins(uid, coins) {
 }
 
 //============================================================================//
+// GET USER COINS
+//============================================================================//
+
+export async function getUserCoins(uid) {
+    let userDocData = await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid).get();
+
+    return userDocData.data().coins;
+}
+
+//============================================================================//
 // LOG TIME SPENT STUDYING.
 //  Use in any instance when the user nagivagtes away from the study_page.
 //  It grabs the time saved in the local storage "studyStartTime", gets the 

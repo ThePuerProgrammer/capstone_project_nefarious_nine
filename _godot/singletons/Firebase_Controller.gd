@@ -143,3 +143,20 @@ func updateCurrentUserlastFed():
 	var document : FirestoreTask = yield(userDocRef, "task_finished")
 	return document.data
 ####################################################################################################
+
+####################################################################################################
+# General Use Functions
+####################################################################################################
+
+# Adds the amount of pomocoins passed in to the current 
+func addPomocoinsToUserDocument(newCoinAmount):
+	var currentUser = get_node("/root/CurrentUser").user_doc
+	currentUser["doc_fields"]['coins'] = currentUser["doc_fields"]['coins'] + newCoinAmount
+	
+	var userDocRef : FirestoreTask = Firebase.Firestore.collection(Constants.COLLECTIONS.USERS).update(currentUser["doc_name"], currentUser["doc_fields"])
+	var document : FirestoreTask = yield(userDocRef, "task_finished")
+	
+	var window = JavaScript.get_interface('window')
+	if window != null: 
+		window.updatePomocoinsFromGoDot(newCoinAmount) # Updates the coins on the nav bar of the browser
+####################################################################################################
