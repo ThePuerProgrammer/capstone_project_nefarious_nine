@@ -86,6 +86,8 @@ export const modalPomodoption = new bootstrap.Modal(document.getElementById('mod
 export const modalDressup = new bootstrap.Modal(document.getElementById('modal-pomo-dressup', { backdrop: 'static' }));
 export const addItemModal = new bootstrap.Modal(document.getElementById('modal-add-item'));
 export const modalDeleteAccountConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-delete-account', { backdrop: 'static' }));
+export const modalCreateClassroomDeck = new bootstrap.Modal(document.getElementById('create-deck-from-class-modal'));
+
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -176,6 +178,10 @@ export const formClassCategorySelect = document.getElementById('select-class-cat
 export const formEditClassroom = document.getElementById('form-edit-classroom');
 export const formEditClassCategorySelect = document.getElementById('edit-class-category');
 export const formDeleteClassroom = document.getElementById('form-delete-classroom');
+export const formCreateClassroomDeck = document.getElementById('form-create-deck-from-class');
+export const formClassroomDeckCategorySelect = document.getElementById('select-deck-category-classroom');
+export const formClassroomClassSelect = document.getElementById('select-deck-classroom-classroom');
+
 //============================================================================//
 
 //============================================================================//

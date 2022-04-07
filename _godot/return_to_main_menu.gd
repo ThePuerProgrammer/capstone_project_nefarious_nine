@@ -29,6 +29,7 @@ var dict_val_categories : Dictionary = {}
 var deck_dict_name : Dictionary = {} #(-_-)#
 var flash_dict_name: Dictionary = {}
 var category_deck_dict : Dictionary = {}
+var deck_for_category:Dictionary={}
 
 func _ready():
 	$FadeIn.show()
@@ -243,20 +244,20 @@ func add_items_to_deck_selection():
 	deckList = FirebaseController.get_user_decks(CurrentUser.user_id)
 	if deckList is GDScriptFunctionState:
 		deckList = yield(deckList, "completed")
-#Populates to a dictionary
+	
+	#Adds Selections	
+	deck_selection_optionbutton.add_item("Pick One")
+	#Populates to a dictionary
 	for deck in deckList:
 		var fields = deck["doc_fields"]
 		deck_dict_name[deck["doc_name"]] = fields["name"]
+		if(fields["flashcardNumber"] != 0):
+			deck_selection_optionbutton.add_item(deck_dict_name[deck["doc_name"]])
 #		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
-
-#Adds Selections
-	deck_selection_optionbutton.add_item("Pick One")
-	for deck in deck_dict_name.values():
-		#deck_selection_optionbutton.add_item(deck[0])
-		deck_selection_optionbutton.add_item(deck)
 	deck_selection_optionbutton.add_item("DEMO")
 	deck_selection_optionbutton.set_item_disabled(0,true)
-
+	#for deck in deck_dict_name.values():
+		#deck_selection_optionbutton.add_item(deck[0])
 
 #Category Dropdown Items
 func add_items_to_category_selection():
@@ -276,31 +277,38 @@ func add_items_to_category_selection():
 	#Populates to a dictionary
 	
 
-	#Adding Selections
 	category_selection_optionbutton.add_item("Pick One")
-	var deck_for_category=[]
 	
-	for deck in deckList:
-		var fields = deck["doc_fields"]
-		deck_dict_name[deck["doc_name"]] = fields["category"]
-#		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
-		#This iterates through the categories from the backend
-		for category in dict_val_array[0]:
-			dict_val_categories[category] = category 
-		#This iterates through the decks owned by user
-			#We are comparing if we own a deck with said category and add it to the list.
-			if dict_val_categories[category]==deck_dict_name[deck["doc_name"]]:
-				category_selection_optionbutton.add_item(category)
-	category_selection_optionbutton.add_item("DEMO")	
+	var pt
+	var _category_deck_array = []
+	#This iterates through the categories from the backend
+	for category in dict_val_array[0]:
+		#print("CATE IN:",category)
+
+		_category_deck_array.clear()
+		for deck in deckList:
+			var fields = deck["doc_fields"]
+			deck_dict_name[deck["doc_name"]] = fields["category"]
+			print("DIC_NAME:",[deck["doc_name"]])
+			pt = fields["category"]
+			if pt == category:
+				_category_deck_array.push_front(deck["doc_name"])
+		#Add Category if 
+		if _category_deck_array.size() != 0:
+			deck_for_category[category]=_category_deck_array
+			category_selection_optionbutton.add_item(category)
+		print("DECK_CATE_IT:",_category_deck_array)
+		print("LLLLL:", deck_for_category)
+	category_selection_optionbutton.add_item("DEMO")
 	category_selection_optionbutton.set_item_disabled(0,true)
 
 #Timer Dropdown Items
 func add_items_to_timer_selection():
 	timer_selection_optionbutton.add_item("Select One")
-	timer_selection_optionbutton.add_item("30")
-	timer_selection_optionbutton.add_item("60")
-	timer_selection_optionbutton.add_item("90")
-	timer_selection_optionbutton.add_item("10")
+	timer_selection_optionbutton.add_item("1")
+	timer_selection_optionbutton.add_item("3")
+	timer_selection_optionbutton.add_item("5")
+	timer_selection_optionbutton.add_item("DEMO")
 ##########################
 #On Selection
 ##########################
@@ -325,38 +333,46 @@ func on_timer_item_selected(id):
 	match timer_selection_optionbutton.get_item_id(id):
 		id:
 			desired_time=timer_selection_optionbutton.get_item_text(id)
+			if desired_time =="DEMO":
+				desired_time=10
+			else:
+				desired_time=int(desired_time)*60
 #Checks which Category has been selected
 #and assigns to a gah-dough-bal variable category_selected
 func on_category_item_selected(id):
 	match category_selection_optionbutton.get_item_id(id):
 		id:
 			category_selected=category_selection_optionbutton.get_item_text(id)
-#			print("ID:",id-1)
-#			print("Category Selected:",category_selected)
-			var keys = deck_dict_name.keys()
-			deck_selected = keys[id-1]
-			flashcardList = FirebaseController.get_user_flashcards(deck_selected)
-			if flashcardList is GDScriptFunctionState:
-					flashcardList = yield(flashcardList,"completed")
+			print("ID:",id-1)
+			print("Category Selected:",category_selected)
+			#var keys = deck_dict_name.keys()
+			#deck_selected = keys[id-1]
+			#TRY LOGIC HERE WIth a selection within a specific selection
+			##IN PROGRESS##
+			#WITHIN A LOOP
+			#flashcardList = FirebaseController.get_user_flashcards(deck_selected)
+			#if flashcardList is GDScriptFunctionState:
+			#		flashcardList = yield(flashcardList,"completed")
 			
-			for flashcard in flashcardList:
-				var fc_fields = flashcard["doc_fields"]
-				var flashcardInfo = []
-				flashcardInfo.push_back(fc_fields['question'])
-				flashcardInfo.push_back(fc_fields['answer'])
-				flashcardInfo.push_back(fc_fields['isMultipleChoice'])
-				flashcardInfo.push_back(fc_fields['incorrectAnswers'])
-				Pomotimer._flashcards.push_back(flashcardInfo)
-#				print("FC_INFO:",flashcardInfo)
-				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
-#				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
-#			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
+			#for flashcard in flashcardList:
+			#	var fc_fields = flashcard["doc_fields"]
+			#	var flashcardInfo = []
+			#	flashcardInfo.push_back(fc_fields['question'])
+			#	flashcardInfo.push_back(fc_fields['answer'])
+			#	flashcardInfo.push_back(fc_fields['isMultipleChoice'])
+			#	flashcardInfo.push_back(fc_fields['incorrectAnswers'])
+			#	Pomotimer._flashcards.push_back(flashcardInfo)
+			#	print("FC_INFO:",flashcardInfo)
+			#	flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
+			#	print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
+			#print("POMOTIMER_FLASH:",Pomotimer._flashcards)
 
 #Checks which Deck has been selected
 #and assigns to a gah-dough-bal variable deck_selected
 func on_deck_item_selected(id):
 	match deck_selection_optionbutton.get_item_id(id):
 		id:
+			#Clearing Flashcards when a new one is selected
 			Pomotimer._flashcards.clear()
 			#deck_selected=deck_selection_optionbutton.get_item_text(id)
 			#This is how I will pass the Deck Doc Id to the Flashcard Function
@@ -377,8 +393,10 @@ func on_deck_item_selected(id):
 				Pomotimer.generatePossibleAnswersPool()
 #				print("FC_INFO:",flashcardInfo)
 				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
-#				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
-#			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
+				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
+			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
+			for x in range (0,len(Pomotimer._flashcards)):
+				print("Question:", Pomotimer._flashcards[x][0])
 ##########################
 #Disables Selection Options
 ##########################

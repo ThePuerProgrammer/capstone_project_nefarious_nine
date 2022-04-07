@@ -17,6 +17,7 @@ let noClassDeckSelected = false;
 export function addEventListeners() {
     Elements.menuStudyDecks.addEventListener('click', async () => {
         history.pushState(null, null, Routes.routePathname.STUDYDECKS);
+        sessionStorage.setItem('cameFromClassDeck', false); 
         await study_decks_page();
     });
 
@@ -131,6 +132,8 @@ export async function study_decks_page() {
 export async function buildStudyDecksPage(deckList) {
     let availableClassroomList = [];
     let classDecks = [];
+    let clase;
+
     try {
         availableClassroomList = await FirebaseController.getAvailableClassrooms();
     } catch (e) {
@@ -142,7 +145,10 @@ export async function buildStudyDecksPage(deckList) {
     // get my classrooms
     let myClassroomList = [];
     for (let i = 0; i < availableClassroomList.length; i++) {
-        if (availableClassroomList[i].moderatorList.includes(Auth.currentUser.email)) {
+        //If we want to make it for all members of class we just change this line to this
+        if (availableClassroomList[i].members.includes(Auth.currentUser.email)) {
+
+        //if (availableClassroomList[i].moderatorList.includes(Auth.currentUser.email)) {
             myClassroomList.push(availableClassroomList[i]);
             let tempDeck = await FirebaseController.getClassDecks(availableClassroomList[i].docID);
             if (tempDeck.length < 1) {
@@ -220,11 +226,7 @@ export async function buildStudyDecksPage(deckList) {
 
             }
             html += buildDeckView(deckList[i], flashcards, 'false', isMastered);
-
-        } else {
-            let flashcards = await FirebaseController.getClassroomFlashcards(deckList[i].isClassDeck, deckList[i].docId);
-            let clase = await FirebaseController.getClassroomByDocID(deckList[i].isClassDeck)
-            html += buildDeckView(deckList[i], flashcards, clase, isMastered);
+ 
 
         }
 
@@ -417,9 +419,10 @@ export async function buildStudyDecksPage(deckList) {
         // If you've made it this far, then thank you for for following along
     })
 
-    const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
+    //const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
 
     // restructured create deck button to add category dropdown menu
+    const createDeckButton = document.getElementById(Constant.htmlIDs.createDeck);
     createDeckButton.addEventListener('click', async e => {
 
         // call Firebase func. to retrieve categories list
@@ -483,27 +486,24 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                 <h6 class="card-text" >Subject: ${deck.subject}</h6>
                 <h6 class="card-text">Category: ${deck.category}</h6>
                 <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
-                <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>`
-        html += (deck.isClassDeck != "false" && deck.isClassDeck != false) ?
-            `<p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">school</i>${clase.name}</p></div>` : `<p></p></div>`;
-        html += `
+                <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
             <div class="btn-group">
             <form class="form-view-deck" method="post">
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
+                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
             </form>
             <form class="form-edit-deck" method="post">
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
+                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
             </form>
             <form class="form-delete-deck" method="post">
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
+                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
             </form>
-            </div>`;
+            </div>`
 
     } else {
         html = `
@@ -515,10 +515,7 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                     <h6 class="card-text" >Subject: ${deck.subject}</h6>
                     <h6 class="card-text">Category: ${deck.category}</h6>
                     <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
-                    <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>`
-        html += (deck.isClassDeck != "false" && deck.isClassDeck != false) ?
-            `<p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">school</i>${clase.name}</p></div>` : `<p></p></div>`;
-        html += `
+                    <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
                 <div class="btn-group">
                 <form class="form-view-deck" method="post">
                     <input type="hidden" name="docId" value="${deck.docId}">
@@ -535,7 +532,7 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                     <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
                     <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
                 </form>
-                </div>`;
+                </div>`
 
     }
     // ternary operator to check if a deck is favorited or not // my changes messed up horizontal view, idk why tho --blake
