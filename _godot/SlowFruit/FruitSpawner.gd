@@ -52,3 +52,6 @@ func chooseFruit():
 	#for i in answers:
 		#answerPic = fruit[randi()% fruit.size()]
 	pass
+
+func setAnswer():
+	pass

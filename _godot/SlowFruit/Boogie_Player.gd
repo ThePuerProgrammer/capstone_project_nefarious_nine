@@ -8,7 +8,7 @@ const WALK_MAX_VELOCITY = 140.0
 const AIR_ACCEL = 900.0
 const AIR_DEACCEL = 1100.0
 const JUMP_VELOCITY = 680
-const STOP_JUMP_FORCE = 750.0
+const STOP_JUMP_FORCE = 850.0
 const MAX_FLOOR_AIRBORNE_TIME = 0.15
 
 
@@ -151,7 +151,7 @@ func pull_for_input():
 		if found_floor:
 			setIdle()
 		applied_force = Vector2(applied_force.y, 0)
-		linear_velocity.y += STOP_JUMP_FORCE
+		linear_velocity.y = STOP_JUMP_FORCE
 	
 func set_movement():
 	var x = 0

@@ -17,7 +17,7 @@
 [ext_resource path="res://SlowFruit/assets/flowers.png" type="Texture" id=15]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 528, 60 )
+extents = Vector2( 516, 60 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 191.989, 27.4809 )
@@ -431,7 +431,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionObjects/Floor3"]
-position = Vector2( 408, 20 )
+position = Vector2( 396, 20 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="CollisionObjects/Floor3"]
@@ -555,7 +555,7 @@ position = Vector2( 547, -184 )
 scale = Vector2( 1.22, 1.24667 )
 frames = SubResource( 55 )
 animation = "planet"
-frame = 26
+frame = 6
 playing = true
 
 [node name="greens" type="TileMap" parent="."]
