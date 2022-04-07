@@ -354,6 +354,7 @@ input {
     text-align: center;
     word-wrap: break-word;
 }
+
 .form-check{
     text-align: center;
     align-items: center;
@@ -382,17 +383,6 @@ input {
 .form-delete-deck{
     padding-left: 2px;
     padding-bottom: 5px;
-}
-
-
-.classroom-deck-card{
-    width: 18rem;
-    display: inline-block;
-    background-color: #5F4B66;
-    margin-bottom: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 5px;
 }
 
 /*============================================================================*/
