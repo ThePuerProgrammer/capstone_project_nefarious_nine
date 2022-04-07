@@ -6,7 +6,9 @@ import * as Coins from '../controller/coins.js'
 export function addEventListeners() {}
 
 export async function minigames_page() {
-    Coins.get_coins();
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
 
     /* Roloading the page causes an error here. 
      * I'm not sure exactly why, but this becomes null. 
@@ -18,4 +20,10 @@ export async function minigames_page() {
             <iframe src="../gd_exports/pomogame.html" id="pomogame-iframe"></iframe>
         </div>
     `;
+    var minigamesIFrameWindow = document.getElementById("pomogame-iframe").contentWindow;
+    var currentWindow = window;
+    minigamesIFrameWindow.updatePomocoinsFromGoDot = (coins) => {
+        currentWindow.updatePomocoinsDisplayFromGoDot(coins);
+    }
+    console.log(minigamesIFrameWindow);
 }

@@ -22,7 +22,6 @@ var _currentProgressBarSubSection = 0 # 0 = easy, 1 = medium, 2 = hard ###
 # answer panel selection & randomization ################################
 var _questionPanelText
 var _answerPanels = [ ]
-var count = 0 # TODO: remove, for testing
 var _answerTextCorrect
 var _answerPanelRngSelector = RandomNumberGenerator.new()################
 
@@ -49,9 +48,18 @@ var _coins = 0
 var _popupMessage
 #########################################################################
 
+# Added Game Queue ######################################################
+onready var _game_queue = Pomotimer._game_queue
+onready var _timer = Pomotimer._time_limit
+onready var _deck = Pomotimer._deck
+#########################################################################
+
+# Controller for getting random flashcards ##############################
+onready var pomotimerController = get_node("/root/Pomotimer")
+#########################################################################
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready():	
 	_questionPanelText = get_node("../QuestionMenu/MainColumn/QuestionTextPanelContainer/MarginContainer/ScrollContainer/QuestionText")
 	_popupMessage = get_node("../PopupMessage")
 	
@@ -131,13 +139,11 @@ func resetForNextQuestion():
 	_currentProgressBarSubSection = 0
 	
 func getNextQuestionAndAnswers():
-	var _questionText = "questionText: " + str(count)
-	var _wrongAnswers = [
-		"wrongAnswer1: " + str(count),
-		"wrongAnswer2: " + str(count),
-		"wrongAnswer2: " + str(count)
-	]
-	_answerTextCorrect = "answerTextCorrect: " + str(count)
+	var randomCard = pomotimerController.getRandomFlashcard()
+
+	var _questionText = randomCard[0]
+	_answerTextCorrect = randomCard[1]
+	var _wrongAnswers = randomCard[2]
 	var _selectedPanel = _answerPanelRngSelector.randi_range(0, 3)
 	var _wrongAnswerCounter = 0
 	
@@ -148,7 +154,6 @@ func getNextQuestionAndAnswers():
 		_answerPanels[i].setAnswerText(_wrongAnswers[_wrongAnswerCounter])
 		_wrongAnswerCounter = _wrongAnswerCounter + 1
 	_questionPanelText.text = _questionText
-	count = count + 1
 	
 func stopQuestionTimer():
 	$QuestionTimer.stop()
@@ -193,6 +198,7 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 				hideAnswerIndicators()
 				startNextQuestion()
 				return
+			showAnswerIndicators(true)
 			var damageMultiplier = floor((_timeRemaining / _subSectionWaitTime) + 1)
 			var newPlayerHp = _playerHpBar.value - (_enemyBaseDamage * damageMultiplier)
 			if newPlayerHp < 0:
@@ -244,6 +250,7 @@ func endGame(playerWon, answeredCorrectly, answeredIncorrectly, coins):
 	if !$gameplayGameTimer.is_stopped():
 		$gameplayGameTimer.stop()
 	_resultsUI.showResults(playerWon, answeredCorrectly, answeredIncorrectly, coins)
+	FirebaseController.addPomocoinsToUserDocument(coins)
 	
 	
 func showAnswerIndicators(userAnsweredCorrectly):
@@ -290,8 +297,8 @@ func attackAction():
 		newEnemyHp = 0
 	if newEnemyHp == 0:
 		_enemyDead = true
-		_coins = _coins + _coinsPerQuestion * 10
 		_enemy.play("die")
+		_coins = _coins + _coinsPerQuestion * 10
 		_popupMessage.showPopupMessage("Great Work! Keep answering questions to gain more coins!", 5.0)
 	else:
 		_enemy.play("hit_effect")
@@ -311,4 +318,5 @@ func _on_PlayerAnimatedSprite_animation_finished():
 
 func _on_overallMinigameGameTimer_timeout():
 	$overallMinigameGameTimer.stop()
-	get_tree().change_scene('res://Menu/SingleplayerOptionScreen.tscn')
+	Pomotimer.start_game(_timer,_game_queue,_deck)
+

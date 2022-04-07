@@ -38,7 +38,7 @@ export function addEventListeners() {
   Elements.formPomodoption.bunnyButton.addEventListener('change', e => {
     e.preventDefault();
     selectedPet = "bunny";
-    petPhoto = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fbunny.png?alt=media&token=c7f2df72-dbe3-4ca1-bdf0-6c9d85404a7f";
+    petPhoto = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fbunny.png?alt=media&token=86f0a974-0b55-412a-a04a-b7ac479ecbba";
 
 
     document.getElementById("pet-selected").innerHTML =
@@ -49,7 +49,7 @@ export function addEventListeners() {
   Elements.formPomodoption.dogButton.addEventListener('change', e => {
     e.preventDefault();
     selectedPet = "dog";
-    petPhoto = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fdog.png?alt=media&token=f0665f02-dd6f-46b8-820e-8e8e6926e55d";
+    petPhoto = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fdog.png?alt=media&token=bc1c6a5e-a462-4c70-a171-21882eb5c7da";
 
     document.getElementById("pet-selected").innerHTML =
     "Adopt the " + selectedPet + "?";
@@ -59,7 +59,7 @@ export function addEventListeners() {
   Elements.formPomodoption.catButton.addEventListener('change', e => {
     e.preventDefault();
     selectedPet = "cat";
-    petPhoto = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fcat.png?alt=media&token=f265c3a4-881f-4fce-8f82-e4ff9506d8d8";
+    petPhoto = "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fcat.png?alt=media&token=579fad12-2062-4b3c-9b23-08e3e2986d04";
 
     document.getElementById("pet-selected").innerHTML =
     "Adopt the " + selectedPet + "?";
@@ -68,7 +68,9 @@ export function addEventListeners() {
 }
 
 export async function settings_page() {
-  Coins.get_coins();
+  try{
+    await Coins.get_coins(Auth.currentUser.uid);
+} catch(e) {if(Constant.DEV)console.log(e);}
 
   Elements.root.innerHTML = "";
   let html = "";

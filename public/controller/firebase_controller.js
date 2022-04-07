@@ -1,6 +1,8 @@
+import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
 import * as Constant from '../model/constant.js'
 import * as Utilites from '../view/utilities.js'
 import * as Element from '../view/elements.js'
+import * as Auth from './firebase_auth.js'
 import { Deck } from '../model/Deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
@@ -10,7 +12,9 @@ import { Backend } from '../model/backend.js';
 import { Message } from '../model/message.js';
 import { HelpTicket } from '../model/help_ticket.js';
 import { Pomoshop } from '../model/pomoshop.js';
-
+import { get_coins } from './coins.js';
+//DECKS
+//============================================================================//
 //============================================================================//
 // CREATE A Deck
 //============================================================================//
@@ -37,7 +41,8 @@ export async function createClassDeck(docID, deck) {
 }
 //============================================================================//
 
-
+//FLASHCARD STUFF
+//============================================================================//
 //============================================================================//
 // CREATE A Flashcard
 //============================================================================//
@@ -238,9 +243,6 @@ async function copyLastAccessedFlashcardDataToToday(uid, deckDocID, todaysDate) 
             cachedDates: firebase.firestore.FieldValue.arrayUnion(todaysDate)
         });
 }
-
-
-
 
 //same as above but for classrooms
 
@@ -479,6 +481,46 @@ export async function getFlashcardsDataFromDeck(uid, deckDocID) {
 
     return flashcardsDataList;
 }
+
+//============================================================================//
+// Returns the last srs access date of the deck_data
+//============================================================================//
+export async function getUserLastSrsAccessDeckData(uid, deckDocID) {
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+    // console.log("FIREBASE FUNCTION LAST SRS ACCESS " + deckDataRef.data().lastSRSAccess);
+    if (deckDataRef.exists) {
+        return deckDataRef.data().lastSRSAccess;
+    }
+
+}
+//===========================================================================//
+
+//============================================================================//
+// Returns the streak for a specific flashcard based on the last SRS access
+//============================================================================//
+export async function getUserFlashcardDataByLastSrsAccessandFCid(uid, deckDocID, lastSrsAccess, flashcardDocId) {
+    let on = 1;
+    let deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .collection(lastSrsAccess + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .doc(flashcardDocId)
+        .get();
+
+    if (deckDataRef.exists) {
+        return deckDataRef.data().streak;
+    } else return on;
+
+}
+//===========================================================================//
+
 
 export async function getClassFlashcardsDataFromDeck(classDocID, deckDocID) {
     let flashcardsDataList = [];
@@ -797,6 +839,32 @@ export async function getUserDecks(uid) {
     return deckList;
 }
 
+export async function updateDeckMasteryandAddCoins(uid, deckDocID) {
+    try {
+        await firebase.firestore()
+            .collection(Constant.collectionName.USERS)
+            .doc(uid)
+            .collection(Constant.collectionName.OWNED_DECKS)
+            .doc(deckDocID)
+            .update({
+                isMastered: true,
+            });
+
+    } catch (e) {
+        console.log(e);
+    }
+
+    try { //turns coins into NAN
+        let coins = await getCoins(Auth.currentUser.uid);
+        let newcoins = coins + 100;
+        await updateCoins(Auth.currentUser.uid, newcoins);
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
 //============================================================================//
 // This function pulls all decks from the highest level owned_decks collection
 // in firestore. This is purely for testing for the time being and will later be
@@ -894,6 +962,8 @@ export async function getUserDataDeckById(uid, deckDocID) {
     return deckDataRef.data();
 }
 
+
+
 //============================================================================//
 // This function will pull in a single CLASS deck from it's docId
 //============================================================================//
@@ -915,6 +985,54 @@ export async function getClassDeckByDocID(classDocID, deckDocID) {
     deckModel.set_docID(deckDocID);
     return deckModel;
 }
+//CLASSROOM...THinGs
+//============================================================================//
+//============================================================================//
+// Gets all available classrooms
+//============================================================================//
+export async function getAvailableClassrooms() {
+    let classroomList = [];
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .get();
+
+    ref.forEach(doc => {
+        const cr = new Classroom(doc.data());
+        cr.set_docID(doc.id);
+        classroomList.push(cr);
+    });
+
+    return classroomList;
+}
+
+//============================================================================//
+// Gets one classroom
+//============================================================================//
+export async function getOneClassroom(classroomDocID) {
+    const classroomRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classroomDocID)
+        .get();
+
+    if (!classroomRef.exists) return null;
+
+    const classroom = new Classroom(classroomRef.data());
+    classroom.set_docID(classroomDocID);
+    return classroom;
+}
+
+//============================================================================//
+// CREATE A Classroom
+//============================================================================//
+export async function createClassroom(classroom) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .add(classroom.serialize());
+
+    return ref.id;
+}
+//============================================================================//
+
 //============================================================================//
 // This function will pull in a single CLASSROOM from it's docId
 //============================================================================//
@@ -934,10 +1052,84 @@ export async function getClassroomByDocID(classDocID) {
     classModel.set_docID(classDocID);
     return classModel;
 }
+//=============================================================================//
+//JOIN Classroom
+//============================================================================//
+export async function joinClassroom(classId, userEmail) {
+    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
+        .update({ members: arrayUnion(userEmail) });
+}
+//============================================================================//
+//LEAVE Classroom
+//============================================================================//
+export async function leaveClassroom(classId, userEmail) {
+    const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
+        .update({ members: arrayRemove(userEmail) });
+}
+
+
+//============================================================================//
+//Update Classroom
+//============================================================================//
+export async function updateClassroom(classroom) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
+        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category, 'keywords': classroom.keywords });
+}
+//============================================================================//
+// Functions for class chat
+//============================================================================//
+export async function addNewMessage(classroomDocID, message) {
+    const docRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOM_CHATS)
+        .doc(classroomDocID)
+        .collection(Constant.collectionName.MESSAGES)
+        .add(message.serialize());
+    return docRef.id;
+}
+
+export async function getMessages(classroomDocID) {
+    let messages = [];
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOM_CHATS)
+        .doc(classroomDocID)
+        .collection(Constant.collectionName.MESSAGES)
+        .orderBy('timestamp')
+        .get();
+
+    ref.forEach(doc => {
+        let m = new Message(doc.data());
+        m.set_docID(doc.id);
+        messages.push(m);
+    })
+
+    return messages;
+}
+//============================================================================//
+//Ban Members
+//============================================================================//
+export async function banMember(docID, member) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
+        .update({
+            banlist: firebase.firestore.FieldValue.arrayUnion(member)
+        });
+
+}
+
+export async function unbanMember(docID, member) {
+    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
+        .update({
+            banlist: firebase.firestore.FieldValue.arrayRemove(member)
+        });
+}
+
+//============================================================================//
 
 
 
-
+//FAVORITING DECKS
+//============================================================================//
 //============================================================================//
 // Favorite a deck
 //============================================================================//
@@ -977,6 +1169,7 @@ export async function getFlashcards(uid, docId) {
 }
 //CLASSROOMS
 export async function getClassroomFlashcards(isClassDeck, docId) {
+    console.log("IS IT WORKING " + isClassDeck, docId)
     let flashcards = [];
     const snapshot = await firebase.firestore()
         .collection(Constant.collectionName.CLASSROOMS).doc(isClassDeck)
@@ -1127,7 +1320,7 @@ export async function deleteClassDeck(classDocId, docID) {
     ref.forEach(doc => {
         const f = new Flashcard(doc.data());
         f.set_docID(doc.id);
-        deleteFlashcard(uid, docID, f.docID);
+        deleteClassFlashcard(classDocId, docID, f.docID);
     });
 
     //Delete Deck
@@ -1136,19 +1329,9 @@ export async function deleteClassDeck(classDocId, docID) {
         .collection(Constant.collectionName.OWNED_DECKS).doc(docID)
         .delete();
 }
-
-
-//============================================================================//
-// DELETE CLASSROOM
 //============================================================================//
 
-export async function deleteClassroom(classroomDocID) {
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .doc(classroomDocID)
-        .delete();
-}
-//===========================================================================//
+
 
 //===========================================================================//
 //UPDATE DECK 
@@ -1276,6 +1459,7 @@ export async function updateFlashcard(uid, deckDocID, flashcard, docID) {
             if (doc.exists) {
                 flashcard.question = data.question;
                 flashcard.answer = data.answer;
+                flashcard.deckId = data.deckId;
                 //flashcard.isMultipleChoice = data.isMultipleChoice;
                 flashcard.incorrectAnswers = data.incorrectAnswers;
                 flashcard.questionImageName = data.questionImageName;
@@ -1384,31 +1568,6 @@ export async function updateUserInfo(uid, updateInfo) {
     await firebase.firestore().collection(Constant.collectionName.USERS)
         .doc(uid).update(updateInfo);
 }
-//============================================================================//
-//Update Classroom
-//============================================================================//
-export async function updateClassroom(classroom) {
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classroom.docID)
-        .update({ 'name': classroom.name, 'subject': classroom.subject, 'category': classroom.category, 'keywords': classroom.keywords });
-}
-//============================================================================//
-//Ban Members
-//============================================================================//
-export async function banMember(docID, member) {
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
-        .update({
-            banlist: firebase.firestore.FieldValue.arrayUnion(member)
-        });
-
-}
-
-export async function unbanMember(docID, member) {
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(docID)
-        .update({
-            banlist: firebase.firestore.FieldValue.arrayRemove(member)
-        });
-}
-
 
 export async function getUserTimerDefault(uid) {
     const ref = await firebase.firestore()
@@ -1428,66 +1587,6 @@ export async function getUserTimerDefault(uid) {
 
 
 //============================================================================//
-// update user coins
-//============================================================================//
-
-export async function updateCoins(uid, coins) {
-    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
-        .update({ 'coins': coins });
-
-    //Element.coinCount.innerHTML = coins;
-    window.sessionStorage.setItem('coins',coins)
-    Element.coinCount.innerHTML = coins;
-    //localStorage.setItem('usercoins', coins);
-}
-
-//============================================================================//
-// Gets all available classrooms
-//============================================================================//
-export async function getAvailableClassrooms() {
-    let classroomList = [];
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .get();
-
-    ref.forEach(doc => {
-        const cr = new Classroom(doc.data());
-        cr.set_docID(doc.id);
-        classroomList.push(cr);
-    });
-
-    return classroomList;
-}
-
-//============================================================================//
-// Gets one classroom
-//============================================================================//
-export async function getOneClassroom(classroomDocID) {
-    const classroomRef = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .doc(classroomDocID)
-        .get();
-
-    if (!classroomRef.exists) return null;
-
-    const classroom = new Classroom(classroomRef.data());
-    classroom.set_docID(classroomDocID);
-    return classroom;
-}
-
-//============================================================================//
-// CREATE A Classroom
-//============================================================================//
-export async function createClassroom(classroom) {
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOMS)
-        .add(classroom.serialize());
-
-    return ref.id;
-}
-//============================================================================//
-
-//============================================================================//
 // Retrieve CATEGORIES
 //============================================================================//
 export async function getCategories() {
@@ -1498,23 +1597,6 @@ export async function getCategories() {
 
     const backend = new Backend(ref.data());
     return backend.categories;
-}
-//============================================================================//
-//============================================================================//
-//JOIN Classroom
-//============================================================================//
-export async function joinClassroom(classId, userEmail) {
-    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
-        .update({ members: arrayUnion(userEmail) });
-}
-//============================================================================//
-//LEAVE Classroom
-//============================================================================//
-export async function leaveClassroom(classId, userEmail) {
-    const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
-    await firebase.firestore().collection(Constant.collectionName.CLASSROOMS).doc(classId)
-        .update({ members: arrayRemove(userEmail) });
 }
 //============================================================================//
 
@@ -1532,35 +1614,7 @@ export async function getCoins(uid) {
 }
 //============================================================================//
 
-//============================================================================//
-// Functions for class chat
-//============================================================================//
-export async function addNewMessage(classroomDocID, message) {
-    const docRef = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOM_CHATS)
-        .doc(classroomDocID)
-        .collection(Constant.collectionName.MESSAGES)
-        .add(message.serialize());
-    return docRef.id;
-}
 
-export async function getMessages(classroomDocID) {
-    let messages = [];
-    const ref = await firebase.firestore()
-        .collection(Constant.collectionName.CLASSROOM_CHATS)
-        .doc(classroomDocID)
-        .collection(Constant.collectionName.MESSAGES)
-        .orderBy('timestamp')
-        .get();
-
-    ref.forEach(doc => {
-        let m = new Message(doc.data());
-        m.set_docID(doc.id);
-        messages.push(m);
-    })
-
-    return messages;
-}
 
 //============================================================================//
 // SEARCH FUNCTIONS
@@ -1657,6 +1711,39 @@ export async function searchNotMyClassrooms(email, keywordsArray) {
 
     return classroomList;
 }
+//============================================================================//
+
+//============================================================================//
+// CLASSROOM MEMBERS TAB
+//============================================================================//
+
+export async function getMemberInfo(members) {
+    let memberInfo = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .get();
+
+    ref.forEach(doc => {
+        let user = new User(doc.data());
+
+        const mem = {
+            email: user.email,
+            username: user.username,
+            profilePhotoURL: user.profilePhotoURL,
+            userBio: user.userBio,
+            petPhotoURL: user.pomopet.petPhotoURL,
+            petName: user.pomopet.name,
+            equippedSkin: user.equippedSkin,
+            equippedAcc: user.equippedAcc,
+        }
+
+        memberInfo.push(mem);
+    })
+
+    return memberInfo;
+}
 
 //============================================================================//
 
@@ -1680,6 +1767,8 @@ export async function leaderboardDefault(members) {
 
     return classroomLeadersDefault;
 }
+//DESCENDING ORDER
+//===========================================================================//
 export async function leaderboardByCoins(members) {
     let classroomLeadersByCoins = [];
 
@@ -1698,7 +1787,6 @@ export async function leaderboardByCoins(members) {
 
     return classroomLeadersByCoins;
 }
-//Gets the count of the decks and updates it to a new field in user
 export async function leaderboardByDecks(members) {
     let classroomLeadersByDecks = [];
 
@@ -1725,6 +1813,62 @@ export async function leaderboardByFlashcards(members) {
         .collection(Constant.collectionName.USERS)
         .where('email', 'in', members)
         .orderBy('flashcardNumber', 'desc')
+        .get()
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByFlashcards.push(cm);
+    })
+    return classroomLeadersByFlashcards;
+}
+//============================================================================//
+//ASCENDING ORDER
+//===========================================================================//
+export async function leaderboardByCoinsAscending(members) {
+    let classroomLeadersByCoins = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('coins', 'asc')
+        .get();
+
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByCoins.push(cm);
+    })
+
+    return classroomLeadersByCoins;
+}
+export async function leaderboardByDecksAscending(members) {
+    let classroomLeadersByDecks = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('deckNumber', 'asc')
+        .get();
+
+    ref.forEach(doc => {
+        let cm = new User(doc.data());
+        cm.set_docID(doc.id);
+        classroomLeadersByDecks.push(cm);
+    })
+
+    return classroomLeadersByDecks;
+
+}
+//Gets the count of the decks and updates it to a new field in user
+export async function leaderboardByFlashcardsAscending(members) {
+    let classroomLeadersByFlashcards = [];
+
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where('email', 'in', members)
+        .orderBy('flashcardNumber', 'asc')
         .get()
 
     ref.forEach(doc => {
@@ -1857,6 +2001,8 @@ export async function updateDeckCount(currentUser) {
 }
 //============================================================================//
 
+//HELP TICKETS
+//============================================================================//
 //============================================================================//
 // Submit a help ticket
 //============================================================================//
@@ -1935,7 +2081,10 @@ export async function getHelpTickets() {
 
     return helpTickets;
 }
+//============================================================================//
 
+//PROFILE STUFF
+//============================================================================//
 //============================================================================//
 // Get USER
 //============================================================================//
@@ -1947,6 +2096,39 @@ export async function getUser(uid) {
 
     const user = new User(ref.data());
     return user;
+}
+export async function getUserByEmail(email) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .where("email", "==", email)
+        .get();
+
+    const user = new User(ref.data());
+    return user;
+}
+//============================================================================//
+
+//============================================================================//
+// Get USER EQUIPPED ACC / SKIN
+//============================================================================//
+export async function getEquippedSkinURL(equippedSkin) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .doc(equippedSkin)
+        .get();
+
+    const item = new Pomoshop(ref.data());
+    return item.photoURL;
+}
+
+export async function getEquippedAccURL(equippedAcc) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .doc(equippedAcc)
+        .get();
+
+    const item = new Pomoshop(ref.data());
+    return item.photoURL;
 }
 //============================================================================//
 
@@ -1980,15 +2162,391 @@ export async function uploadProfilePicture(profilePicturerFile, oldPfpName) {
     const profilePictureURL = await taskSnapShot.ref.getDownloadURL();
 
     // delete old pfp from storage
-    if(oldPfpName != "defaultPfp.png") {
+    if (oldPfpName != "defaultPfp.png") {
         const refOld = firebase.storage().ref()
-        .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
-    
+            .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
+
         await refOld.delete();
     }
 
     return { profilePictureName, profilePictureURL };
 }
+
+
+
+export async function deleteAccount(userEmail) {
+    const auth = getAuth();
+    let emails = [];
+    emails[0] = userEmail;
+    let classDocIds = [];
+    let classDecksIds = [];
+
+    let twoDarray = [];
+    let array1 = [];
+
+    let user = await getUser(Auth.currentUser.uid);
+
+    // console.log("USER EMAIL TEST " + user.email);
+    // console.log("PROFILE PHOTO NAME " + user.profilePhotoName);
+
+    console.log("USER DOC ID " + Auth.currentUser.uid);
+    //1. ClASSROOM DECKS AND CLASSROOMS
+    // GET CLASSROOMS AND CLASS DOC IDS
+    try {
+        var ref = await firebase.firestore()
+            .collection(Constant.collectionName.CLASSROOMS)
+            .where("moderatorList", "array-contains-any", emails)
+            .get()
+
+        ref.forEach(doc => {
+            classDocIds.push(doc.id);
+
+        });
+
+    } catch (e) {
+        console.log(e);
+    }
+
+    //GET ASSOCIATED OWNED_DECKS AND DECK IDS
+    try {
+        for (let i = 0; i < classDocIds.length; i++) {
+
+            classDecksIds = [];//clear array
+            var ref2 = await firebase.firestore()
+                .collection(Constant.collectionName.CLASSROOMS)
+                .doc(classDocIds[i])
+                .collection(Constant.collectionName.OWNED_DECKS)
+                .get();
+
+            ref2.forEach(doc => {
+                classDecksIds.push(doc.id);
+                array1 = [] //clear array
+                array1 = [classDocIds[i], doc.id]
+                twoDarray.push(array1); //populates twoDaraay with a key value pair of classdocid and deckdocid
+            })
+        }
+        //GET DECK_DATA // DELETE DECK DATA
+        let class2Ddata = [];
+        let classDeckData;//we use this for the "cached dates", this allows us to find the proper document in flashcard data
+        //each flashcard data doc starts with a date, therefore we need to prefix that to the collectionname
+        for (let i = 0; i < classDocIds.length; i++) {
+            const ref3 = await firebase.firestore()
+                .collection(Constant.collectionName.CLASSROOMS)
+                .doc(classDocIds[i])
+                .collection(Constant.collectionName.DECK_DATA)
+                .get()
+
+            ref3.forEach(doc => {
+                array1 = [];
+                array1 = [classDocIds[i], doc.id];
+                //populate a 2d array of key value pairs of class doc id and deck_data doc id
+                class2Ddata.push(array1);
+            })
+
+        }
+        //DELETE SRS DATA FROM classrooms > deck_data >flashcard_data 
+        for (let i = 0; i < class2Ddata.length; i++) {
+            let arr;
+            arr = class2Ddata[i];
+            classDeckData = await getClassDataDeckById(arr[0], arr[1]); //arr[0] = classdocid, arr[1] = deck_data docID
+
+            await deleteAllClassSrsData(arr[0], arr[1], classDeckData.cachedDates);
+        }
+
+        //delete classrooms > deck_data 
+        for (let i = 0; i < class2Ddata.length; i++) {
+            let arr;
+            arr = class2Ddata[i];
+            await deleteClassDeckDataDoc(arr[0], arr[1]);
+        }
+
+        //DELETE classrooms > OWNED_DECKS, ALSO DELETES FLASHCARDS > DOC
+        for (let i = 0; i < twoDarray.length; i++) {
+            let arr;
+            arr = twoDarray[i];
+            await deleteClassDeck(arr[0], arr[1]);
+        }
+        //DELETE CLASSROOMS
+        for (let i = 0; i < twoDarray.length; i++) {
+            let arr;
+            arr = twoDarray[i];
+            await deleteClassroom(arr[0]);
+        }
+
+    } catch (e) {
+        console.log(e);
+    }
+
+    //2. USER DECKS
+    //GET USER DOC ID
+    let userDocId;
+    try {
+        var ref = await firebase.firestore()
+            .collection(Constant.collectionName.USERS)
+            .where("email", "==", userEmail)
+            .get()
+
+        ref.forEach(doc => {
+            userDocId = doc.id;
+
+        });
+
+    } catch (e) {
+        console.log(e);
+    }
+    //GET USER OWNED_DECKS IDS
+    let userDecksIds = [];
+    try {
+        twoDarray = []; //clear twoDarray
+        userDecksIds = [];//clear array
+        var ref4 = await firebase.firestore()
+            .collection(Constant.collectionName.USERS)
+            .doc(userDocId)
+            .collection(Constant.collectionName.OWNED_DECKS)
+            .get();
+
+        ref4.forEach(doc => {
+            userDecksIds.push(doc.id);
+            array1 = [] //clear array
+            array1 = [userDocId, doc.id]
+            twoDarray.push(array1); //populates twoDaraay with a key value pair of userdocid and userdeckdocid
+        })
+
+    } catch (e) {
+        console.log(e);
+    }
+    //GET USER DECK_DATA // DELETE DECK DATA
+    try {
+        let user2Ddata = [];
+        let deckData; //we use this for the "cached dates", this allows us to find the proper document in flashcard data
+        //each flashcard data doc starts with a date, therefore we need to prefix that to the collectionname
+        //what to do if deck data is too new? No cached dates and no files
+        const ref5 = await firebase.firestore()
+            .collection(Constant.collectionName.USERS)
+            .doc(userDocId)
+            .collection(Constant.collectionName.DECK_DATA)
+            .get()
+
+        ref5.forEach(doc => {
+            array1 = [];
+            array1 = [userDocId, doc.id];
+            user2Ddata.push(array1);
+        })
+        //delete user deck_data > flashcard_data > docs
+        for (let i = 0; i < user2Ddata.length; i++) {
+            let arr;
+            arr = user2Ddata[i];
+            deckData = await getUserDataDeckById(arr[0], arr[1]);
+            //DELETION
+            await deleteAllUserSrsData(arr[0], arr[1], deckData.cachedDates);
+            console.log("DECK_DATA CACHED DATES " + deckData.cachedDates);
+        }
+
+        //delete user deck_data
+        for (let i = 0; i < user2Ddata.length; i++) {
+            let arr;
+            arr = user2Ddata[i];
+            //DELETION
+            await deleteUserDeckData(arr[0], arr[1]);
+        }
+
+
+    } catch (e) {
+        console.log(e);
+    }
+
+    //DELETE user_deck > flashcards and user_deck
+    try {
+        for (let i = 0; i < twoDarray.length; i++) {
+            let arr;
+            arr = twoDarray[i];
+            await deleteDeck(arr[0], arr[1]); //arr = [userDocId, userDeckDocId]
+        }
+
+    } catch (e) {
+        console.log(e);
+    }
+
+    //DELETE PROFILE PICTURE
+    try {
+        await deleteProfilePicture(user.profilePhotoName);
+    } catch (e) {
+        console.log(e);
+    }
+
+
+    const user1 = firebase.auth().currentUser;
+    const user1ID = Auth.currentUser.uid;
+    try {
+        await deleteUserFromFirestoreDatabase(user1ID);
+    } catch (e) {
+        console.log(e);
+    }
+    await signOut(auth); //works
+
+    user1.delete().then(() => { // this deletes from authentication
+        console.log("Successfully deleted");
+    }).catch((e) => {
+        console.log(e);
+    });
+
+
+}
+
+
+//============================================================================//
+//DELETE ACCOUNT HELPER FUNCTIONS
+//============================================================================//
+
+export async function deleteUserFromFirestoreDatabase(userDocId) {
+    try {
+        await firebase.firestore().collection(Constant.collectionName.USERS)
+            .doc(userDocId)
+            .delete();
+    } catch (e) {
+        console.log(e);
+    }
+
+}
+
+export async function deleteProfilePicture(oldPfpName) {
+    // delete old pfp from storage
+    // need to update user as well if deleting picture and not the user
+    try {
+        if (oldPfpName != "defaultPfp.png") {
+            const refOld = firebase.storage().ref()
+                .child(Constant.storageFolderName.PROFILE_PICTURES + oldPfpName);
+
+            await refOld.delete();
+        }
+    } catch (e) {
+        console.log(e)
+    }
+
+}
+export async function deleteClassroom(classroomDocID) {
+    const ref = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classroomDocID)
+        .delete();
+}
+
+
+export async function deleteClassDeckDataDoc(classDocId, deckDataDocId) {
+    try {
+        await firebase.firestore()
+            .collection(Constant.collectionName.CLASSROOMS)
+            .doc(classDocId)
+            .collection(Constant.collectionName.DECK_DATA)
+            .doc(deckDataDocId)
+            .delete();
+    } catch (e) {
+        console.log(e);
+    }
+
+}
+
+export async function deleteAllUserSrsData(userDocId, deckDocId, cachedDates) {
+    if (cachedDates) {
+        try {
+            for (let i = 0; i < cachedDates.length; i++) { //cached dates is our prefix identifier for flashcard data collection
+                var userflashcardData = await firebase.firestore()
+                    .collection(Constant.collectionName.USERS)
+                    .doc(userDocId)
+                    .collection(Constant.collectionName.DECK_DATA)
+                    .doc(deckDocId)
+                    .collection(cachedDates[i] + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+                    .get();
+
+                userflashcardData.forEach(doc => {
+                    console.log("DOC IDS OF FLASHCARD DATA " + doc.id);
+                    deleteUserSrsData(userDocId, deckDocId, cachedDates[i], doc.id);
+
+                })
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+    } //else?
+}
+
+export async function deleteUserDeckData(userDocId, deckDocId) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(userDocId)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocId)
+        .delete();
+
+}
+
+export async function deleteAllClassSrsData(classDocId, deckDocId, cachedDates) {
+    try {
+        for (let i = 0; i < cachedDates.length; i++) { //cached dates is our prefix identifier for flashcard data collection
+            var userflashcardData = await firebase.firestore()
+                .collection(Constant.collectionName.CLASSROOMS)
+                .doc(classDocId)
+                .collection(Constant.collectionName.DECK_DATA)
+                .doc(deckDocId)
+                .collection(cachedDates[i] + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+                .get();
+
+            userflashcardData.forEach(doc => {
+                console.log("DOC IDS OF FLASHCARD DATA " + doc.id);
+                deleteClassSrsData(classDocId, deckDocId, cachedDates[i], doc.id); //SHOULD WORK HAVENT ACTUALLY TESTED THO
+            })
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
+export async function deleteUserSrsData(userDocId, deckDocId, cachedDate, fcdataDocId) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(userDocId)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocId)
+        .collection(cachedDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .doc(fcdataDocId)
+        .delete();
+
+}
+
+export async function deleteClassSrsData(classDocId, deckDocId, cachedDate, fcdataDocId) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocId)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocId)
+        .collection(cachedDate + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
+        .doc(fcdataDocId)
+        .delete();
+
+}
+
+export async function getClassDataDeckById(classDocId, deckDocID) {
+    const deckDataRef = await firebase.firestore()
+        .collection(Constant.collectionName.CLASSROOMS)
+        .doc(classDocId)
+        .collection(Constant.collectionName.DECK_DATA)
+        .doc(deckDocID)
+        .get();
+
+    if (!deckDataRef.exists) {
+        if (Constant.DEV)
+            console.log("! Deck Data reference does not exist");
+        return null;
+    }
+    return deckDataRef.data();
+}
+
+
+//============================================================================//
+// END OF DELETE ACCOUNT HELPER FUNCTIONS
+//============================================================================//
 
 //============================================================================//
 // UPDATE POMOPET
@@ -1997,10 +2555,79 @@ export async function updatePomopet(uid, pomopet) {
     await firebase.firestore()
         .collection(Constant.collectionName.USERS)
         .doc(uid)
+        .update({ 'pomopet': pomopet, 'equippedSkin': "" });
+}
+
+export async function updatePomopetName(uid, pomopet) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
         .update({ 'pomopet': pomopet });
 }
 //============================================================================//
 
+//============================================================================//
+// UPDATE USER ITEMS OWNED
+//============================================================================//
+export async function updateItemsOwned(uid, itemsOwned) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'itemsOwned': itemsOwned });
+}
+
+export async function getOwnedItem(item) {
+    const itemRef = await firebase.firestore()
+        .collection(Constant.collectionName.POMOSHOP)
+        .doc(item)
+        .get();
+
+    const itemOwned = new Pomoshop(itemRef.data());
+    itemOwned.set_docID(itemRef.docId);
+    return itemOwned;
+}
+//============================================================================//
+
+//============================================================================//
+// UPDATE USER EQUIPPED ACC / SKIN
+//============================================================================//
+export async function updateEquippedAcc(uid, acc) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'equippedAcc': acc });
+}
+export async function updateEquippedSkin(uid, skin) {
+    await firebase.firestore()
+        .collection(Constant.collectionName.USERS)
+        .doc(uid)
+        .update({ 'equippedSkin': skin });
+}
+//============================================================================//
+
+//============================================================================//
+// UPDATE USER COINS
+//============================================================================//
+
+export async function updateCoins(uid, coins) {
+    await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid)
+        .update({ 'coins': coins });
+
+    //Element.coinCount.innerHTML = coins;
+    window.sessionStorage.setItem('coins', coins)
+    Element.coinCount.innerHTML = coins;
+    //localStorage.setItem('usercoins', coins);
+}
+
+//============================================================================//
+// GET USER COINS
+//============================================================================//
+
+export async function getUserCoins(uid) {
+    let userDocData = await firebase.firestore().collection(Constant.collectionName.USERS).doc(uid).get();
+
+    return userDocData.data().coins;
+}
 
 //============================================================================//
 // LOG TIME SPENT STUDYING.
@@ -2052,6 +2679,7 @@ export async function getPomoshopItems() {
     let items = [];
     const pomoshop = await firebase.firestore()
         .collection(Constant.collectionName.POMOSHOP)
+        .orderBy('rarity', 'asc')
         .get();
 
     pomoshop.forEach(doc => {
@@ -2084,26 +2712,21 @@ export async function addItemtoShop(item) {
     return ref.id;
 }
 
-//============================================================================//
+export async function deleteItemFromShop(imagename, docID) {
+    console.log(docID);
+    try {
+        await firebase.firestore().collection(Constant.collectionName.POMOSHOP).doc(docID)
+            .delete();
+    } catch (e) {
+        console.log(e);
+    }
 
-//============================================================================//
-// UPDATE USER ITEMS OWNED
-//============================================================================//
-export async function updateItemsOwned(uid, itemsOwned) {
-    await firebase.firestore()
-        .collection(Constant.collectionName.USERS)
-        .doc(uid)
-        .update({ 'itemsOwned': itemsOwned });
+    if (imagename != null && imagename != "") {
+        const refImage = firebase.storage().ref()
+            .child(Constant.storageFolderName.POMOSHOP_IMAGES + imagename);
+        await refImage.delete();
+
+    }
 }
 
-export async function getOwnedItem(item) {
-    const itemRef = await firebase.firestore()
-        .collection(Constant.collectionName.POMOSHOP)
-        .doc(item)
-        .get();
-
-    const itemOwned = new Pomoshop(itemRef.data());
-    itemOwned.set_docID(itemRef.docId);
-    return itemOwned;
-}
 //============================================================================//

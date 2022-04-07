@@ -14,6 +14,10 @@ import * as EditDeck from './controller/edit_deck.js'
 import * as Search from '../view/search_page.js'
 import * as HelpTicketsPage from '../view/help_tickets_page.js'
 import * as ShopPage from '../view/pomoshop_page.js';
+import * as OneClassroomPage from '../view/one_classroom_page.js'
+import * as FirebaseController from "../controller/firebase_controller.js";
+import * as Auth from "../controller/firebase_auth.js";
+import * as Elements from '../view/elements.js'
 
 window.onload = () => {
     const pathname = window.location.pathname;
@@ -28,6 +32,14 @@ window.addEventListener('popstate', e => {
     const hash = e.target.location.hash;
     Routes.routing(pathname, hash);
 });
+
+window.updatePomocoinsDisplayFromGoDot = async (coins) => {
+    let currentCoinCount = Number(sessionStorage.getItem('coins'));
+    let newCoins = Number(coins);
+    let newCoinCount = currentCoinCount + newCoins;
+    sessionStorage.setItem('coins', newCoinCount)
+    Elements.coinCount.innerHTML = sessionStorage.getItem('coins');
+}
 
 Home.addEventListeners();
 Classrooms.addEventListeners();
@@ -44,3 +56,4 @@ EditDeck.addEventListeners();
 Search.addEventListeners();
 HelpTicketsPage.addEventListeners();
 ShopPage.addEventListeners();
+OneClassroomPage.addEventListeners();

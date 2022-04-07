@@ -8,6 +8,7 @@ export const DEV = true
  * working better
  *****************************************/
 export const ADMIN = 'admin@test.com'
+export const ADMIN2 = 'admin2@test.com'
 /*****************************************
  *          COLLECTION NAMES
  ***************************************** 
@@ -61,12 +62,15 @@ export const htmlIDs = {
     formCheckInputIsMultiple: 'form-check-input-is-multiple',
     createAccountModal: 'modal-create-account',
     smartStudyCheckbox: 'smart-study-checkbox',
+    smartStudyCheckboxLabel: 'smart-study-checkbox-label',
     smartStudyPopupTextContainer: 'smart-study-popup-text-container',
     streakNumberText: 'streak-number-text',
     studyFlashcardAnswer: 'study-flashcard-answer',
     smartStudyIndicator: 'smart-study-indicator',
     createDeck: 'button-create-deck-modal',
     createDeckModal: 'create-deck-modal',
+    createClassroomDeck: 'button-create-classroom-deck',
+    createClassroomDeckModal: 'create-deck-from-class-modal',
     createClassroom: 'button-create-classroom-modal',
     createClassroomModal: 'create-classroom-modal',
     buttonEditClassroom: 'button-edit-class',
@@ -94,4 +98,5 @@ export const htmlIDs = {
     chartViewRadioButtonRow: 'chart-view-radio-button-row',
     pieChartRadioButtonContainer: 'pie-chart-radio-button-container',
     formEditPomopetName: 'form-edit-pomopet-name',
+    memberProfileModal: 'member-profile-modal',
 }

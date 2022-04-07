@@ -65,11 +65,13 @@ export function addEventListeners() {
             const flashcardNumber = 0;
             const userBio = "";
             const itemsOwned = [];
+            const equippedAcc = "";
+            const equippedSkin = "";
 
             const pomopet = {
                 type: "bunny",
                 name: "bunny",
-                petPhotoURL: "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fbunny.png?alt=media&token=c7f2df72-dbe3-4ca1-bdf0-6c9d85404a7f",
+                petPhotoURL: "https://firebasestorage.googleapis.com/v0/b/pomobyte.appspot.com/o/pomopets%2Fbunny.png?alt=media&token=86f0a974-0b55-412a-a04a-b7ac479ecbba",
             }
 
             let nowInMs = Date.now();
@@ -99,6 +101,8 @@ export function addEventListeners() {
                 pomopet,
                 pomopetData,
                 itemsOwned,
+                equippedAcc,
+                equippedSkin,
             });
             localStorage.setItem("usercoins", newUserModel.coins);
             // Creates user Auth Account AND adds user account to users collections
@@ -136,6 +140,7 @@ export function addEventListeners() {
             if (Constants.DEV)
                 console.log('Sign out error' + e);
         }
+        sessionStorage.clear();
     });
 
     Elements.modalMenuResetPassword.addEventListener('click', async () => {

@@ -85,6 +85,9 @@ export const modalEditProfile = new bootstrap.Modal(document.getElementById('edi
 export const modalPomodoption = new bootstrap.Modal(document.getElementById('modal-pomodoption'));
 export const modalDressup = new bootstrap.Modal(document.getElementById('modal-pomo-dressup', { backdrop: 'static' }));
 export const addItemModal = new bootstrap.Modal(document.getElementById('modal-add-item'));
+export const modalDeleteAccountConfirmation = new bootstrap.Modal(document.getElementById('modal-confirmation-delete-account', { backdrop: 'static' }));
+export const modalCreateClassroomDeck = new bootstrap.Modal(document.getElementById('create-deck-from-class-modal'));
+
 //============================================================================//
 
 // POMO TIMER MISC ACCESSABLES
@@ -175,8 +178,25 @@ export const formClassCategorySelect = document.getElementById('select-class-cat
 export const formEditClassroom = document.getElementById('form-edit-classroom');
 export const formEditClassCategorySelect = document.getElementById('edit-class-category');
 export const formDeleteClassroom = document.getElementById('form-delete-classroom');
+export const formCreateClassroomDeck = document.getElementById('form-create-deck-from-class');
+export const formClassroomDeckCategorySelect = document.getElementById('select-deck-category-classroom');
+export const formClassroomClassSelect = document.getElementById('select-deck-classroom-classroom');
+
 //============================================================================//
 
+//============================================================================//
+//  SINGLE CLASSROOM PAGE
+//============================================================================//
+export const displayMemberProfile = {
+    profilePictureTag: document.getElementById('member-profile-picture-tag'),
+    username: document.getElementById('member-username'),
+    userBio: document.getElementById('member-userbio'),
+    pomopet: document.getElementById('member-pomopet'),
+    pomopetAcc: document.getElementById('member-pomopet-acc'),
+    pomopetName: document.getElementById('member-pomopet-name'),
+    
+}
+//============================================================================//
 //PREVIEW CLASSROOMS 
 //============================================================================//
 // export const formJoinClassroom = document.getElementById('form-join-classroom');

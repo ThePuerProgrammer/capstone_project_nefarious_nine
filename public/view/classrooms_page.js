@@ -63,12 +63,13 @@ export function addEventListeners() {
     $(`#create-classroom-modal`).on('hidden.bs.modal', function (e) {
         Elements.formCreateClassroom.reset();
     });
-    
+
 } //END CLASSROOMS_PAGE EVENT LISTENERS
 
 export async function classrooms_page() {
-    Coins.get_coins();
-
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
     Elements.root.innerHTML = '';
     let html = '';
 
@@ -195,7 +196,7 @@ export async function classrooms_page() {
     Elements.root.innerHTML = html;
 
     buildPreviewClassroomsWithListeners();
-  
+
     // get available class tab and show it as visible
     const availableClassroomButton = document.getElementById('available-classroom-button');
     availableClassroomButton.addEventListener('click', e => {
@@ -304,43 +305,43 @@ export async function classrooms_page() {
     const searchClassroomButton = document.getElementById('search-classroom-button');
     searchClassroomButton.addEventListener('click', async e => {
         const searchtype = 'classroomSearch';
-        Search.setSearchType(searchtype);     
+        Search.setSearchType(searchtype);
         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
             Search.setClassroomSearchOption("all rooms");
         }
-        else if (checkBoxNotMyClassrooms.checked == true){
-            Search.setClassroomSearchOption("not my rooms");  
-        } 
+        else if (checkBoxNotMyClassrooms.checked == true) {
+            Search.setClassroomSearchOption("not my rooms");
+        }
         else if (checkBoxMyClassrooms.checked == true) {
-            Search.setClassroomSearchOption("my rooms"); 
-        } 
-        else Search.setClassroomSearchOption("null"); 
-    
-        Utilities.searchBox('Search Classroom', 'input query');        
+            Search.setClassroomSearchOption("my rooms");
+        }
+        else Search.setClassroomSearchOption("null");
+
+        Utilities.searchBox('Search Classroom', 'input query');
     });
 
-    
-    checkBoxMyClassrooms.addEventListener('change', async e => {     
-         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
+
+    checkBoxMyClassrooms.addEventListener('change', async e => {
+        if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
             Search.setClassroomSearchOption("all rooms");
-         }
-        
-        else if (checkBoxMyClassrooms.checked == true){
-            Search.setClassroomSearchOption("my rooms"); 
-        }    else {
-            Search.setClassroomSearchOption("null"); 
-        }        
+        }
+
+        else if (checkBoxMyClassrooms.checked == true) {
+            Search.setClassroomSearchOption("my rooms");
+        } else {
+            Search.setClassroomSearchOption("null");
+        }
     });
 
-    
-    checkBoxNotMyClassrooms.addEventListener('change', async e => {        
-         if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true){
-             Search.setClassroomSearchOption("all rooms");
-         }
-         else if (checkBoxNotMyClassrooms.checked == true){
-             Search.setClassroomSearchOption("not my rooms");  
-         } else return;
-    });       
+
+    checkBoxNotMyClassrooms.addEventListener('change', async e => {
+        if (checkBoxMyClassrooms.checked == true && checkBoxNotMyClassrooms.checked == true) {
+            Search.setClassroomSearchOption("all rooms");
+        }
+        else if (checkBoxNotMyClassrooms.checked == true) {
+            Search.setClassroomSearchOption("not my rooms");
+        } else return;
+    });
     // END SEARCH CLASSROOMS LISTENERS------------------------------------------------//
 
 } //END CLASSROOMS_PAGE()-----------------------------------------------------------//
@@ -398,7 +399,7 @@ export function buildAvailableClassroom(classroom) {
     `;
 
     html += classroom.members.includes(Auth.currentUser.email) ? `<td>&#128505</td>` : `<td>&#9746</td>`;
-    
+
     return html;
 }
 
@@ -500,6 +501,7 @@ export function buildPreviewClassroomsWithListeners() {
                     //Closes modal on button click
                     $('#preview-classroom-modal').modal('hide')
                     //Navigates to classroom webpage
+                    window.sessionStorage.setItem('classId',classId);
 
                     history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classId);
                     await OneClassroomPage.one_classroom_page(classId);
