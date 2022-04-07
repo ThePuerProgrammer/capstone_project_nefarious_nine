@@ -3,8 +3,8 @@ import * as Auth from './firebase_auth.js'
 import * as Constant from '../model/constant.js'
 import * as Utilities from '../view/utilities.js'
 import * as Elements from '../view/elements.js'
+import * as StudyDeck from '../view/study_decks_page.js'
 import { Deck } from '../model/Deck.js'
-import { study_decks_page } from '../view/study_decks_page.js'
 import { cleanDataToKeywords } from '../view/search_page.js'
 import { one_classroom_page } from '../view/one_classroom_page.js'
 
@@ -63,7 +63,7 @@ export function addEventListeners() {
                 Utilities.info('Update Deck Error', JSON.stringify(e));
             }
             Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
-            await study_decks_page();
+            await StudyDeck.study_decks_page();
         } else { //else is a class deck
             try {
                 //Updates count as Deck is edited
@@ -176,16 +176,13 @@ export async function delete_deck(docId, confirmation) {
         try {
             await FirebaseController.deleteDeck(Auth.currentUser.uid, docId);
             Utilities.info(`Success`, `The desired deck as successfully deleted.`,);
-            //This is called twice before page load, due to it not registering the change
             await FirebaseController.updateDeckCount(Auth.currentUser.uid);
             await FirebaseController.updateFlashcardCountForUser(Auth.currentUser.uid);
-
-
         } catch (e) {
             if (Constant.DEV) console.log(e);
             Utilities.info(`Delete Deck Error`, JSON.stringify(e));
         }
-        await study_decks_page();
+        location.reload();
     }
 }
 
@@ -201,9 +198,7 @@ export async function delete_class_deck(docId, confirmation, classDocId) {
             if (Constant.DEV) console.log(e);
             Utilities.info(`Delete Deck Error`, JSON.stringify(e));
         }
-        //This is called twice before page load, due to it not registering the change
-        //auth.currentuser.uid is not passing
-        await study_decks_page();
+        await StudyDeck.study_decks_page();
     }
 }
 
