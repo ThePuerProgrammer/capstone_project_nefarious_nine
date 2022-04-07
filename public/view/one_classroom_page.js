@@ -61,6 +61,7 @@ export function addEventListeners(){
                 deck.docId = deckId;
                 localStorage.setItem("deckPageDeckDocID", deck.docId);
                 sessionStorage.setItem('deckId', deckId);
+                sessionStorage.setItem('cameFromClassDeck', true); 
                 history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
                 Elements.modalCreateClassroomDeck.hide();
                 //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
@@ -335,6 +336,7 @@ export async function one_classroom_page(classroomDocID) {
             sessionStorage.setItem('isClassDeck', isClassDeck)
 
             history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+            sessionStorage.setItem('cameFromClassDeck', true); 
             await DeckPage.deck_page(deckId, isClassDeck);
         })
     }
