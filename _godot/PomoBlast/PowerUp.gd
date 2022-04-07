@@ -1,6 +1,6 @@
 extends Area2D
 
-
+signal powerUpPicked()
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -19,6 +19,7 @@ func _ready():
 
 func _on_PowerUp_body_entered(body):
 		if body.is_in_group("player"):
+			emit_signal("powerUpPicked")
 			print("Power Up ")
 			self.queue_free()
 		

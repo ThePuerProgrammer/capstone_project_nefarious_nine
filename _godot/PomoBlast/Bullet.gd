@@ -12,7 +12,7 @@ func _physics_process(delta):
 
 
 func _on_VisibilityNotifier2D_screen_exited():
-	print("we outie") # Replace with function body.
+	print("-------- Bullets are outie(dequeued) ") # Replace with function body.
 	queue_free()
 
 

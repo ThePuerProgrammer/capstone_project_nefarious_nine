@@ -4,7 +4,8 @@ export (PackedScene) var Mob
 export (PackedScene) var PowerUp = preload("res://PomoBlast/PowerUp.tscn")
 export (PackedScene) var Bullet = preload("res://PomoBlast/Bullet.tscn")
 
-
+var p = PowerUp.instance()
+var rng = RandomNumberGenerator.new()
 var score = 0 
 var _questionLabel 
 var questionlist=["1","2","3","4"]
@@ -13,6 +14,10 @@ func _ready():
 	$Player.start($StartPosition.position)
 	$MobTimer.start()
 	$GameTimer.start()
+	rng.randomize()
+	var my_random_number = rng.randi_range(1, 10)
+	print(my_random_number)
+	
 	_questionLabel = get_node("HUD/QuestionPanel/Panel/QuestionLabel")
 	_questionLabel.text = questionlist[0]
 	pass # Replace with function body.
@@ -49,20 +54,32 @@ func _on_MobTimer_timeout():
 
 func _on_GameTimer_timeout():
 	$MobTimer.stop()
-	print('**********************************Game Timer Has Stopped')
+	print('++++++++++++++++++++++++++++++++++++++ Game Timer Has Stopped')
 	pass # Replace with function body.
 	
 	
 func _on_enemy_died(pos):
-	questionlist.pop_front()
-	_questionLabel.text = questionlist[0]
+	#uestionlist.pop_front()
+	#_questionLabel.text = questionlist[0]
+	rng.randomize()
+	var my_random_number = rng.randi_range(1, 10)
+	if my_random_number <= 5:
+		var p = PowerUp.instance()
+		p.connect("powerUpPicked",self,"_on_PowerUp_Picked")
+		add_child(p)
+		p.position = pos
+		print("++++++++++++++++++++++++++++++++++++++ power up dropped")
 	score += 1
-	var p = PowerUp.instance()
-	add_child(p)
-	p.position = pos
 	
-	print("we dead")
-
+	
+	print("++++++++++++++++++++++++++++++++++++++ Asteroid dead")
+	
+func _on_PowerUp_Picked():
+	print("++++++++++++++++++++++++++++++++++++++ powerup picked")
+	$Player.speed += 100
+	
+	print($Player.speed)
+	pass
 
 func _on_Pause_pressed():
 	get_tree().paused = true
