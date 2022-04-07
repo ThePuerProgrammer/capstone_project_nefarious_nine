@@ -485,25 +485,22 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                 <h6 class="card-text" >Subject: ${deck.subject}</h6>
                 <h6 class="card-text">Category: ${deck.category}</h6>
                 <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
-                <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>`
-
-        html += `
+                <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
             <div class="btn-group">
             <form class="form-view-deck" method="post">
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
-            </form>`
-           html+=`
+                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
+            </form>
             <form class="form-edit-deck" method="post">
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
+                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">edit</i>Edit</button>
             </form>
             <form class="form-delete-deck" method="post">
                 <input type="hidden" name="docId" value="${deck.docId}">
                 <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
-                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
+                <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
             </form>
             </div>`
 
@@ -517,15 +514,13 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
                     <h6 class="card-text" >Subject: ${deck.subject}</h6>
                     <h6 class="card-text">Category: ${deck.category}</h6>
                     <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
-                    <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>`
-        html += `
+                    <p class="card-text">Created: ${new Date(deck.dateCreated).toString()}</p>
                 <div class="btn-group">
                 <form class="form-view-deck" method="post">
                     <input type="hidden" name="docId" value="${deck.docId}">
                     <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
                     <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">remove_red_eye</i>View</button>
-                </form>`
-               html+=`
+                </form>
                 <form class="form-edit-deck" method="post">
                     <input type="hidden" name="docId" value="${deck.docId}">
                     <input type="hidden" name="classdocId" value="${deck.isClassDeck}">

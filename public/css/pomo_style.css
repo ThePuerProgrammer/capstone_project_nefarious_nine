@@ -385,13 +385,6 @@ input {
     padding-bottom: 5px;
 }
 
-.deck-container-class{
-    height: 100%;
-    overflow-y: scroll;
-}
-.overflow-scroll{
-    height:100%;
-}
 /*============================================================================*/
 
 /* STYLE FOR STUDYING FLASHCARD */
