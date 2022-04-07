@@ -20,4 +20,10 @@ export async function minigames_page() {
             <iframe src="../gd_exports/pomogame.html" id="pomogame-iframe"></iframe>
         </div>
     `;
+    var minigamesIFrameWindow = document.getElementById("pomogame-iframe").contentWindow;
+    var currentWindow = window;
+    minigamesIFrameWindow.updatePomocoinsFromGoDot = (coins) => {
+        currentWindow.updatePomocoinsDisplayFromGoDot(coins);
+    }
+    console.log(minigamesIFrameWindow);
 }
