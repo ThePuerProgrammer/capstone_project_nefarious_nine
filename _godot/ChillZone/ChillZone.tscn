@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_out.tres" type="Animation" id=1]
 [ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=2]
@@ -654,6 +654,9 @@ margin_left = -166.0
 margin_top = -246.721
 margin_right = 134.0
 margin_bottom = -196.721
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="FeedMeterProgressBar" type="ProgressBar" parent="ActionController/FoodController/FeedMeter"]
 modulate = Color( 1, 1, 1, 0 )
@@ -693,7 +696,7 @@ margin_left = 191.0
 margin_top = 738.0
 margin_right = 645.0
 margin_bottom = 801.0
-value = 90.0
+value = 91.0
 texture_under = ExtResource( 40 )
 texture_progress = ExtResource( 45 )
 nine_patch_stretch = true
@@ -713,9 +716,9 @@ __meta__ = {
 }
 
 [node name="HungerProgressBar" type="TextureProgress" parent="ProgressBars"]
-margin_left = 787.0
+margin_left = 784.0
 margin_top = 737.0
-margin_right = 1238.0
+margin_right = 1235.0
 margin_bottom = 798.0
 value = 100.0
 texture_under = ExtResource( 46 )
@@ -726,9 +729,9 @@ __meta__ = {
 }
 
 [node name="HungerBarIcon" type="TextureRect" parent="ProgressBars"]
-margin_left = 690.0
+margin_left = 687.0
 margin_top = 724.0
-margin_right = 774.0
+margin_right = 771.0
 margin_bottom = 808.0
 texture = ExtResource( 43 )
 expand = true
@@ -737,11 +740,11 @@ __meta__ = {
 }
 
 [node name="HappinessProgressBar" type="TextureProgress" parent="ProgressBars"]
-margin_left = 1376.0
-margin_top = 734.0
-margin_right = 1828.0
-margin_bottom = 796.0
-value = 90.0
+margin_left = 1370.0
+margin_top = 736.0
+margin_right = 1822.0
+margin_bottom = 798.0
+value = 100.0
 texture_under = ExtResource( 47 )
 texture_progress = ExtResource( 49 )
 nine_patch_stretch = true
@@ -750,10 +753,10 @@ __meta__ = {
 }
 
 [node name="HappinessBarIcon" type="TextureRect" parent="ProgressBars"]
-margin_left = 1279.0
-margin_top = 721.0
-margin_right = 1364.0
-margin_bottom = 806.0
+margin_left = 1273.0
+margin_top = 723.0
+margin_right = 1358.0
+margin_bottom = 808.0
 texture = ExtResource( 42 )
 expand = true
 __meta__ = {
@@ -768,6 +771,7 @@ scale = Vector2( 0.7, 0.7 )
 [connection signal="hide" from="ActionController/WashPomopetController/EffectController/MouseBubblesParticle" to="ActionController/WashPomopetController/EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
 [connection signal="timeout" from="ActionController/WashPomopetController/EffectController/MouseBubblesCooldownTimer" to="ActionController/WashPomopetController/EffectController" method="_on_MouseBubblesCooldownTimer_timeout"]
 [connection signal="timeout" from="ActionController/WashPomopetController/EffectController/CleanEffectTimer" to="ActionController/WashPomopetController/EffectController" method="_on_CleanEffectTimer_timeout"]
+[connection signal="poopCountChange" from="ActionController/PoopController" to="ProgressBars" method="_on_PoopController_poopCountChange"]
 [connection signal="poopPickUpEnd" from="ActionController/PoopController" to="ActionController/PoopController/Trashcan" method="_on_PoopController_poopPickUpEnd"]
 [connection signal="poopPickUpStart" from="ActionController/PoopController" to="ActionController/PoopController/Trashcan" method="_on_PoopController_poopPickUpStart"]
 [connection signal="timeout" from="ActionController/PoopController/Trashcan/TrashcanOpen/CloseWaitOut" to="ActionController/PoopController/Trashcan" method="_on_CloseWaitOut_timeout"]
@@ -779,9 +783,14 @@ scale = Vector2( 0.7, 0.7 )
 [connection signal="hide" from="ActionController/PoopController/Trashcan/CloudPuffParticle" to="ActionController/PoopController/Trashcan" method="_on_CloudPuffParticle_hide"]
 [connection signal="finished" from="ActionController/PoopController/Trashcan/TrashcanCloseSound" to="ActionController/PoopController/Trashcan" method="_on_TrashcanCloseSound_finished"]
 [connection signal="finished" from="ActionController/PoopController/Trashcan/TrashcanOpenSound" to="ActionController/PoopController/Trashcan" method="_on_TrashcanOpenSound_finished"]
+[connection signal="feedStart" from="ActionController/FoodController" to="ProgressBars" method="_on_FoodController_feedStart"]
 [connection signal="body_entered" from="ActionController/FoodController/FoodBowl/FoodPieceKillBox" to="ActionController/FoodController" method="_on_FoodPieceKillBox_body_entered"]
 [connection signal="body_entered" from="ActionController/FoodController/FoodBowl/FoodPieceDespawnZone" to="ActionController/FoodController" method="_on_FoodPieceDespawnZone_body_entered"]
 [connection signal="timeout" from="ActionController/FoodController/FoodBag/FoodPieceSpawnCooldown" to="ActionController/FoodController/FoodBag" method="_on_FoodPieceSpawnCooldown_timeout"]
+[connection signal="value_changed" from="ActionController/FoodController/FeedMeter/FeedMeterProgressBar" to="ProgressBars" method="_on_FeedMeterProgressBar_value_changed"]
+[connection signal="value_changed" from="ProgressBars/CleanlinessProgressBar" to="ProgressBars" method="_on_CleanlinessProgressBar_value_changed"]
+[connection signal="value_changed" from="ProgressBars/HungerProgressBar" to="ProgressBars" method="_on_HungerProgressBar_value_changed"]
 [connection signal="cleanButtonPressed" from="Pet" to="Pet" method="_on_Pet_cleanButtonPressed"]
+[connection signal="cleanStart" from="Pet" to="ProgressBars" method="_on_Pet_cleanStart"]
 [connection signal="feedButtonPressed" from="Pet" to="ActionController/FoodController" method="_on_Pet_feedButtonPressed"]
 [connection signal="poopPickupButtonPressed" from="Pet" to="ActionController/PoopController" method="_on_Pet_poopPickupButtonPressed"]

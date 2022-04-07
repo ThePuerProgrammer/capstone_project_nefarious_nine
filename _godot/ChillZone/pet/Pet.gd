@@ -5,6 +5,8 @@ signal feedButtonPressed
 signal petButtonPressed
 signal poopPickupButtonPressed
 
+signal cleanStart
+
 var effectController
 var firebaseController
 var poopController
@@ -97,6 +99,7 @@ func _input(event):
 func startCleanAction():
 	petWashingModeOn = true
 	showCleaningProgressBar()
+	emit_signal("cleanStart")
 
 # Set the dirtiness based off of preset dirty levels
 func setPetDirtinessLevel(dirtinessLevel):

@@ -3,6 +3,8 @@ extends Node
 signal poopPickUpStart
 signal poopPickUpEnd
 
+signal poopCountChange
+
 var poopScene = preload("res://ChillZone/poop_pomopet/Poop.tscn")
 var _maxPoopCount = 15
 var pomopet
@@ -51,7 +53,7 @@ func spawnPoop():
 	else:
 		poopInstance.z_index = -1 
 	add_child(poopInstance)
-	print("poop added")
+	#print("poop added")
 
 func startPoopPickupAction():
 	poopPickupModeOn = true
@@ -80,6 +82,7 @@ func _on_Area2D_body_entered(body):
 		$Trashcan.closeTrashCan()
 		
 	_currentPoopCount = _currentPoopCount - 1
+	emit_signal("poopCountChange", _currentPoopCount)
 	if _currentPoopCount == 0:
 		endPoopPickupAction()
 
