@@ -14,9 +14,7 @@ func _ready():
 	$Player.start($StartPosition.position)
 	$MobTimer.start()
 	$GameTimer.start()
-	rng.randomize()
-	var my_random_number = rng.randi_range(1, 10)
-	print(my_random_number)
+	
 	
 	_questionLabel = get_node("HUD/QuestionPanel/Panel/QuestionLabel")
 	_questionLabel.text = questionlist[0]
@@ -61,6 +59,7 @@ func _on_GameTimer_timeout():
 func _on_enemy_died(pos):
 	#uestionlist.pop_front()
 	#_questionLabel.text = questionlist[0]
+	#-----------------------------------------------------------------power up drop and drop rate
 	rng.randomize()
 	var my_random_number = rng.randi_range(1, 10)
 	if my_random_number <= 5:
@@ -70,8 +69,6 @@ func _on_enemy_died(pos):
 		p.position = pos
 		print("++++++++++++++++++++++++++++++++++++++ power up dropped")
 	score += 1
-	
-	
 	print("++++++++++++++++++++++++++++++++++++++ Asteroid dead")
 	
 func _on_PowerUp_Picked():
