@@ -3,18 +3,30 @@ extends Control
 # Clean bar vars
 var cleanController
 var cleanLevels = [5, 4, 3, 2, 1, 0]
-var cleanLvl
+var cleanLvl = 0
 
 # Hunger bar vars
 var hungerController
-var hungerLvl
+var hungerLvl = 0
 var lastFedMs
 
-# Happiness Bar Vars
+# Happy bar vars (poop)
+var happyLvl
+var poopPercent
 var poopController
-var poopCount
+var poopCount = 0
 
-#var petController
+#var pettingController
+
+var maxBar = 100
+
+# On Feed action
+var startHunger = 0 
+var hungerIncrement = 0
+
+# On Pet Clean action
+var startCleanliness = 0 
+var cleanIncrement = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -25,17 +37,16 @@ func _ready():
 	cleanController = get_node("../Pet")
 	var cleanValue = cleanController.getDirtinessLevel(pomopetData["lastWashed"])
 	cleanLvl = cleanLevels[cleanValue]
-	#cleanLvl = 2 
 	updateCleanlinessBar()
 	
 	# HUNGER LEVEL BAR
-	hungerController = get_node("../ActionBarController/FoodController")
+	hungerController = get_node("../ActionController/FoodController")
 	lastFedMs = userDocFields["pomopetData"]["lastFed"]
 	hungerLvl = hungerController.getFoodLevel()
 	updateHungerBar()
 	
 	# HAPPINESS LEVEL BAR
-	poopController = get_node("../ActionBarController/PoopController")
+	poopController = get_node("../ActionController/PoopController")
 	poopCount = poopController.getCurrentPoopCount()
 	updateHappinessBar()
 	
@@ -56,13 +67,84 @@ func updateHungerBar():
 		$HungerProgressBar.set_value(hungerLvl*20)
 
 func updateHappinessBar():
-	var happyLvl = cleanLvl + hungerLvl # the higher the better
-	var poopLvl = poopCount*2 # the lower the better
-	# need to incorporate petting
+	happyLvl = (cleanLvl + hungerLvl) * 10 # the higher the better
+	poopPercent = (poopCount*2) / 100.0 # the lower the better
+
+	#subtract poopPercent from happyLvl
+	if happyLvl > 0:
+		happyLvl -= (happyLvl * poopPercent)
 	
+	# need to incorporate petting
+
 	if happyLvl == 0:
 		$HappinessProgressBar.set_value(5)
-	elif happyLvl < poopLvl:
-		$HappinessProgressBar.set_value(happyLvl*10)
 	else:
-		$HappinessProgressBar.set_value((happyLvl*10) - poopLvl)
+		$HappinessProgressBar.set_value(happyLvl)
+
+# UPDATE HUNGER BAR ON FEED
+func _on_FoodController_feedStart():
+	# Hunger on Feed Action start
+	startHunger = $HungerProgressBar.get_value()
+	
+	# rectifying setting bar = 5 when actually zero
+	if startHunger == 5:
+		startHunger = 0
+	
+	# 100 - (Hunger on Feed Action start) / 10
+	hungerIncrement = (maxBar - startHunger) / 10
+
+
+func _on_FeedMeterProgressBar_value_changed(value):
+	var currentHunger = $HungerProgressBar.get_value()
+
+	# increment every 10% Feeding progress by hungerIncrement
+	if fmod(value, 10) == 0:
+		$HungerProgressBar.set_value(currentHunger + hungerIncrement)
+
+# UPDATE CLEANLINESS BAR ON PET CLEAN
+func _on_Pet_cleanStart():
+	# Cleanliness on Pet Clean Action start
+	startCleanliness = $CleanlinessProgressBar.get_value()
+	
+	# rectifying setting bar = 5 when actually zero
+	if startCleanliness == 5:
+		startCleanliness = 0
+	
+	# 100 - (Cleanliness on Pet Clean Action start) / 10
+	cleanIncrement = (maxBar - startCleanliness) / 10
+	
+	# creating signal manually since in diff scene
+	var washPetProgressBar = get_node("../Pet/WashMeter/WashMeterProgressBar")
+	washPetProgressBar.connect("washMeterValueChange", self, "_on_washMeterProgressBar_value_changed")
+
+
+func _on_washMeterProgressBar_value_changed(value):
+	
+	# only make change every 10 calls (bc increment is .1 not 1.0)
+	if fmod(value, 1) == 0:
+		var currentCleanliness = $CleanlinessProgressBar.get_value()
+		
+		# increment every 10% Cleaning progress by cleanIncrement
+		if fmod(value, 10) == 0:
+			$CleanlinessProgressBar.set_value(currentCleanliness + cleanIncrement)
+
+# UPDATE HAPPINESS on feeding
+func _on_HungerProgressBar_value_changed(value):
+	hungerLvl = value/20
+	updateHappinessBar()
+
+# UPDATE HAPPINESS on wash pet
+func _on_CleanlinessProgressBar_value_changed(value):
+	cleanLvl = value/20
+	#print("CLEAN LEVEL: ", cleanLvl)
+	updateHappinessBar()
+
+# UPDATE HAPPINESS on poop cleanup
+func _on_PoopController_poopCountChange(poop):
+	poopCount = poop
+	updateHappinessBar()
+
+# update happiness on petting value change
+
+
+

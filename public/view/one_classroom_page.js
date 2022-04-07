@@ -23,7 +23,7 @@ export function addEventListeners(){
             const subject = e.target.subject.value;
             const isFavorited = false;
             const category = e.target.selectCategory.value;
-            const isClassDeck = e.target.selectClassroom.value;
+            const isClassDeck = sessionStorage.getItem('classId');
             const flashcardNumber = 0;
             const created_by = Auth.currentUser.uid
             const isMastered = false;
@@ -61,6 +61,7 @@ export function addEventListeners(){
                 deck.docId = deckId;
                 localStorage.setItem("deckPageDeckDocID", deck.docId);
                 sessionStorage.setItem('deckId', deckId);
+                sessionStorage.setItem('cameFromClassDeck', true); 
                 history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
                 Elements.modalCreateClassroomDeck.hide();
                 //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);
@@ -84,7 +85,7 @@ export async function one_classroom_page(classroomDocID) {
         await Coins.get_coins(Auth.currentUser.uid);
     } catch(e) {if(Constant.DEV)console.log(e);}
 
-    console.log(classroomDocID);
+    //console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';
     let coin_descend=false;
@@ -142,7 +143,7 @@ export async function one_classroom_page(classroomDocID) {
             ;
     }
     html+=`<br>
-            <div id = "deck-container">`;
+            <div id ="deck-container-classroom">`;
     //Adding Class Decks Here
     let classDecks = [];
     classDecks = await FirebaseController.getClassDecks(classroomDocID);
@@ -335,6 +336,7 @@ export async function one_classroom_page(classroomDocID) {
             sessionStorage.setItem('isClassDeck', isClassDeck)
 
             history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+            sessionStorage.setItem('cameFromClassDeck', true); 
             await DeckPage.deck_page(deckId, isClassDeck);
         })
     }
@@ -392,11 +394,11 @@ export async function one_classroom_page(classroomDocID) {
                   `;
         });
 
-        Elements.formClassroomClassSelect.innerHTML = '';
-        //logic for if the dropdown box selection on create deck is NONE or is a CLASSROOM
-        Elements.formClassroomClassSelect.innerHTML += `
-                    <option value="${classroomDocID}">${classroom.name}</option>
-                  `;
+        // Elements.formClassroomClassSelect.innerHTML = '';
+        // //logic for if the dropdown box selection on create deck is NONE or is a CLASSROOM
+        // Elements.formClassroomClassSelect.innerHTML += `
+        //             <option value="${classroomDocID}">${classroom.name}</option>
+        //           `;
 
         // opens create Deck modal
         $(`#${Constant.htmlIDs.createClassroomDeckModal}`).modal('show');
@@ -850,7 +852,7 @@ function buildDeckView(deck, flashcards, clase) {
     html+=`
     <div id="${deck.docId}" class="deck-card">
         <div class="deck-view-css">
-        <div class="card-body">
+        <div class="card-body-classroom">
             <h5 class="card-text">${deck.name}</h5>
             <h6 class="card-text" >Subject: ${deck.subject}</h6>
             <h6 class="card-text">Category: ${deck.category}</h6>
@@ -875,8 +877,8 @@ function buildDeckView(deck, flashcards, clase) {
             <input type="hidden" name="classdocId" value="${deck.isClassDeck}">
             <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
         </form>
-        </div></div></div></div>`
-        :`</div></div></div></div>`;
-    // ternary operator to check if a deck is favorited or not // my changes messed up horizontal view, idk why tho --blake
-    return html;
+        </div></div></div>`
+        :`</div></div></div>`;
+
+        return html;
 }
