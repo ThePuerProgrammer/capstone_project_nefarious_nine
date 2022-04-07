@@ -283,15 +283,6 @@ export async function deck_page(deckDocID, isClassDeck) {
         isClassDeck = sessionStorage.getItem('isClassDeck');
     }
 
-    // if(isClassDeck_global != "N/A"){
-    //     try{
-    //         classroom_for_edit = await FirebaseController.getClassDeckByDocID(isClassDeck);
-    //     } catch(e){
-    //         if (Constant.DEV){console.log(e)}
-    //         Utilities.info('Error in Grabbing Class',JSON.stringify(e));
-    //     }
-    // }
-
     console.log(isClassDeck);
     console.log(`Where I commented out:${deckDocID}`);
     let html = '';
@@ -300,8 +291,6 @@ export async function deck_page(deckDocID, isClassDeck) {
     html += `
                 <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">add</i>Create Flashcard</button>
         `;
-
-
 
     let deck;
     let flashcards;
