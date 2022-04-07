@@ -6,6 +6,7 @@ import * as Elements from '../view/elements.js'
 import { Deck } from '../model/Deck.js'
 import { study_decks_page } from '../view/study_decks_page.js'
 import { cleanDataToKeywords } from '../view/search_page.js'
+import { one_classroom_page } from '../view/one_classroom_page.js'
 
 
 export function addEventListeners() {
@@ -19,6 +20,7 @@ export function addEventListeners() {
         const flashcardNumber = e.target.flashcardNumber.value;
         const isClassDeck = e.target.classDocId.value;
         const created_by = e.target.created_by.value;
+        const isMastered = e.target.isMastered.value;
 
         const keywords = cleanDataToKeywords(name, subject, category)
 
@@ -34,6 +36,7 @@ export function addEventListeners() {
             flashcardNumber,
             isClassDeck,
             created_by,
+            isMastered,
         });
         d.set_docID(e.target.docId.value);
 
@@ -74,7 +77,7 @@ export function addEventListeners() {
                 Utilities.info('Update Deck Error', JSON.stringify(e));
             }
             Utilities.info('Success!', `Deck: ${d.name} has been updated!`, "modal-edit-a-deck");
-            await study_decks_page();
+            await one_classroom_page(d.isClassDeck);
 
         }
     });
@@ -154,6 +157,7 @@ export async function edit_class_deck(classDocId, deckId) {
     Elements.formEditDeck.form.isFavorited.value = deck.isFavorited;
     Elements.formEditDeck.form.classDocId.value = deck.isClassDeck;
     Elements.formEditDeck.form.created_by.value = deck.created_by;
+    Elements.formEditDeck.form.isMastered = deck.isMastered;
 
     //Adding the Categories...THINGS
     const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
@@ -200,5 +204,62 @@ export async function delete_class_deck(docId, confirmation, classDocId) {
         //This is called twice before page load, due to it not registering the change
         //auth.currentuser.uid is not passing
         await study_decks_page();
+    }
+}
+
+export async function edit_class_deck_from_classroom(classDocId, deckId){
+    let deck;
+
+    try {
+        deck = await FirebaseController.getClassDeckByDocID(classDocId, deckId);
+
+        if (!deck) {
+            Utilities.info('getDeckById Error', 'No deck found by the id');
+            return;
+        }
+    } catch (e) {
+        if (Constant.DEV) console.log(e);
+        Utilities.info('Error Firebase Controller', JSON.stringify(e));
+    }
+
+    //Getting Elements from Firebase to Edit
+    Elements.formEditDeck.form.docId.value = deck.docID;//Changed Id to ID?
+    Elements.formEditDeck.form.name.value = deck.name;
+    Elements.formEditDeck.form.subject.value = deck.subject;
+    Elements.formEditDeck.form.dateCreated.value = deck.dateCreated;
+    //Checking type before loading
+    if (deck.category) { deck.category; } else if (typeof obj === 'undefined') { deck.category = 'Misc' };
+    Elements.formEditDeck.form.selectCategory.value = deck.category;
+    Elements.formEditDeck.form.isFavorited.value = deck.isFavorited;
+    Elements.formEditDeck.form.classDocId.value = deck.isClassDeck;
+    Elements.formEditDeck.form.created_by.value = deck.created_by;
+
+    //Adding the Categories...THINGS
+    const categories = ["Misc", "Math", "English", "Japanese", "French", "Computer Science", "Biology", "Physics", "Chemistry"];
+
+    categories.forEach(category => {
+        Elements.formEditDeckCategorySelect.innerHTML += `
+         <option value="${category}">${category}</option>`;
+    });
+    //Showing the data loaded into the modal
+    Elements.modalEditDeck.show();
+
+}
+
+export async function delete_class_deck_from_classroom(docId, confirmation, classDocId) {
+    if (confirmation) {
+        try {
+            await FirebaseController.deleteClassDeck(classDocId, docId);
+            //await FirebaseController.updateClassFlashcardCount(classDocId, docId);
+            //await FirebaseController.updateDeckCount(Auth.currentUser.uid);
+            Utilities.info(`Success`, `The desired deck as successfully deleted.`,);
+
+        } catch (e) {
+            if (Constant.DEV) console.log(e);
+            Utilities.info(`Delete Deck Error`, JSON.stringify(e));
+        }
+        //This is called twice before page load, due to it not registering the change
+        //auth.currentuser.uid is not passing
+        await one_classroom_page(classDocId);
     }
 }

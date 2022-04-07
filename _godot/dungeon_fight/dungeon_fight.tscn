@@ -12,6 +12,7 @@
 [ext_resource path="res://dungeon_fight/Buttons/AnswerButton.tscn" type="PackedScene" id=10]
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_foreground.tres" type="StyleBox" id=11]
 [ext_resource path="res://dungeon_fight/PopupMessage.gd" type="Script" id=12]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/firstAttackLvl.png" type="Texture" id=13]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=14]
 [ext_resource path="res://dungeon_fight/PopupLabel.gd" type="Script" id=15]
 [ext_resource path="res://dungeon_fight/overallMinigameGameTimer.gd" type="Script" id=16]
@@ -56,6 +57,7 @@
 [ext_resource path="res://dungeon_fight/art/character/idle/adventurer-idle-2-02-1.3.png" type="Texture" id=55]
 [ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_2.png" type="Texture" id=56]
 [ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_7.png" type="Texture" id=57]
+[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/firstAttackLvl.png" type="Texture" id=58]
 [ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_3.png" type="Texture" id=59]
 [ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_6.png" type="Texture" id=60]
 [ext_resource path="res://dungeon_fight/art/enemy/idle/Big-Cultist_Idle_4.png" type="Texture" id=61]
@@ -81,7 +83,6 @@
 [ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-02-1.3.png" type="Texture" id=81]
 [ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-03-1.3.png" type="Texture" id=82]
 [ext_resource path="res://dungeon_fight/art/character/die/adventurer-die-06-1.3.png" type="Texture" id=83]
-[ext_resource path="res://dungeon_fight/art/enemy/dead/Big-Cultist_Death_12.png" type="Texture" id=84]
 [ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_4.png" type="Texture" id=85]
 [ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_5.png" type="Texture" id=86]
 [ext_resource path="res://dungeon_fight/art/enemy/die/Big-Cultist_Death_2.png" type="Texture" id=87]
@@ -242,14 +243,14 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 54 ), ExtResource( 46 ), ExtResource( 44 ) ],
-"loop": true,
-"name": "dodge",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
 "loop": true,
 "name": "dead",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 54 ), ExtResource( 46 ), ExtResource( 44 ) ],
+"loop": true,
+"name": "dodge",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 77 ), ExtResource( 78 ), ExtResource( 81 ), ExtResource( 82 ), ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
@@ -265,34 +266,29 @@ animations = [ {
 
 [sub_resource type="SpriteFrames" id=17]
 animations = [ {
-"frames": [ ExtResource( 84 ) ],
-"loop": true,
-"name": "attack_lingering",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
-"loop": true,
-"name": "die",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
-"loop": true,
-"name": "die",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 66 ) ],
-"loop": true,
+"loop": false,
 "name": "third_attack_level",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 58 ) ],
-"loop": true,
-"name": "first_attack_level",
+"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
+"loop": false,
+"name": "die",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
-"loop": true,
-"name": "hit_effect",
+"frames": [ ExtResource( 1 ) ],
+"loop": false,
+"name": "attack_lingering",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
+"loop": false,
+"name": "attack_animation_p1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 18 ), ExtResource( 70 ), ExtResource( 19 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 1 ) ],
+"loop": false,
+"name": "attack_animation_p2",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
@@ -300,29 +296,19 @@ animations = [ {
 "name": "idle_animation",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 18 ), ExtResource( 70 ), ExtResource( 19 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 1 ) ],
-"loop": true,
-"name": "attack_animation_p2",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"frames": [ ExtResource( 13 ) ],
 "loop": true,
 "name": "first_attack_level",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
+"loop": false,
+"name": "hit_effect",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 63 ) ],
-"loop": true,
+"loop": false,
 "name": "second_attack_level",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "attack_lingering",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
-"loop": true,
-"name": "attack_animation_p1",
 "speed": 5.0
 } ]
 
@@ -542,6 +528,7 @@ shape = SubResource( 1 )
 position = Vector2( 1435.29, 503 )
 scale = Vector2( 6, 6 )
 frames = SubResource( 17 )
+animation = "first_attack_level"
 
 [node name="TimerBar" type="Control" parent="."]
 margin_left = 1015.8
@@ -726,6 +713,9 @@ margin_right = 1586.6
 margin_bottom = 342.544
 rect_min_size = Vector2( 400, 200 )
 script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PopupLabel" type="Label" parent="PopupMessage"]
 margin_left = 0.00012207

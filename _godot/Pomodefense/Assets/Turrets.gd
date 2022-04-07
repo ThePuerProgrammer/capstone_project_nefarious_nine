@@ -5,10 +5,30 @@ var built = false
 var enemy
 var type
 var ready = true
+var tower_data = {
+	"PomopetT1": {
+		"damage": 20,
+		"rate": 1,
+		"range": 350,
+		"cost": 25,
+	},
+	"PomopetT2": {
+		"damage": 50,
+		"rate": 1.5,
+		"range": 400,
+		"cost": 30,
+	},
+	"PomopetT3": {
+		"damage": 100,
+		"rate": 2,
+		"range": 500,
+		"cost": 40,
+	}
+}
 
 func _ready():
 	if built:
-		self.get_node("Range/CollisionShape2D").get_shape().radius = 0.5 * GameData.tower_data[type]["range"]
+		self.get_node("Range/CollisionShape2D").get_shape().radius = 0.5 * tower_data[type]["range"]
 
 func _physics_process(delta):
 	if enemy_array.size() != 0 and built:
@@ -34,8 +54,8 @@ func select_enemy():
 func fire():
 	ready = false
 	get_node("AnimationPlayer").play("Fire")
-	enemy.on_hit(GameData.tower_data[type]["damage"])
-	yield(get_tree().create_timer(GameData.tower_data[type]["rate"]), "timeout")
+	enemy.on_hit(tower_data[type]["damage"])
+	yield(get_tree().create_timer(tower_data[type]["rate"]), "timeout")
 	ready = true
 
 func _on_Range_body_entered(body):

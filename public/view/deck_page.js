@@ -16,6 +16,7 @@ let imageFile2UploadAnswer;
 const imageAnswer = Elements.formContainerAnswerImage;
 const imageQuestion = Elements.formContainerQuestionImage;
 
+
 var isClassDeck_global; // temp bug fix for classroom decks from Noah
 
 export function addEventListeners() {
@@ -268,6 +269,7 @@ export async function deck_page(deckDocID, isClassDeck) {
     } catch(e) {if(Constant.DEV)console.log(e);}
 
     isClassDeck_global = isClassDeck; // Temp bug fix from Noah!
+    
 
     if (localStorage.getItem("studyTimeTracked") == "false") { // user backed out of study page, so save time
         saveStudyTime();
@@ -290,10 +292,9 @@ export async function deck_page(deckDocID, isClassDeck) {
                 <button id="${Constant.htmlIDs.buttonShowCreateAFlashcardModal}" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">add</i>Create Flashcard</button>
         `;
 
-
-
     let deck;
     let flashcards;
+    let classroom;
     try {
         if (isClassDeck == "false" || isClassDeck == false) {
             // console.log("deck_page no class check for is class deck " + isClassDeck);
@@ -304,14 +305,40 @@ export async function deck_page(deckDocID, isClassDeck) {
             //note: class selected is either the doc id of a selected classroom or false
             deck = await FirebaseController.getClassDeckByDocID(isClassDeck, deckDocID);
             flashcards = await FirebaseController.getClassDeckFlashcards(isClassDeck, deckDocID);
+            classroom = await FirebaseController.getClassroomByDocID(isClassDeck);
         }
-        if (flashcards.length != 0) {
-            // study deck button
+        //Personal Deck with Flashcards
+        if (flashcards.length != 0 && isClassDeck == "false") {
+            console.log(`Personal Deck with Flashcards`);
             html += `
                 <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark"><i class="material-icons text-white">local_library</i>Study</button>
                 <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">delete</i>Delete Flashcard</button>`;
-        } else {
+        }//Personal Deck without Flashcards
+        else if(flashcards.length == 0 && isClassDeck == "false") {
+            console.log(`Personal Deck without Flashcards`);
             html += `
+                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled><i class="material-icons text-white">local_library</i>Study</button>
+                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> <i class="material-icons text-white">delete</i>Delete Flashcard</button>
+                `;
+        }//Class Deck When Creator of Deck or Classroom Mod with Flashcards
+         else if(flashcards.length !=0 && (classroom.moderatorList.includes(Auth.currentUser.email) || deck.created_by==Auth.currentUser.uid)){
+            console.log(`Class Deck with Flashcards & Mod/Creator`);
+            html +=` 
+                <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark"><i class="material-icons text-white">local_library</i>Study</button>
+                <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark"> <i class="material-icons text-white">delete</i>Delete Flashcard</button>`;
+         }//Class Deck with Flashcards for Members
+         else if(flashcards.length !=0 && classroom.members.includes(Auth.currentUser.email)){
+            console.log(`Class Deck with Flashcards`);
+
+            html +=`
+            <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark"><i class="material-icons text-white">local_library</i>Study</button>
+            <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> <i class="material-icons text-white">delete</i>Delete Flashcard</button>
+            `;
+         }//Class Deck without flashcards
+         else if(flashcards.length==0 && isClassDeck != "false"){
+            console.log(`Class Deck without Flashcards`);
+
+                html += `
                 <button id="${Constant.htmlIDs.buttonStudy}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled><i class="material-icons text-white">local_library</i>Study</button>
                 <button id="${Constant.htmlIDs.deleteFlashcard}" type="button" class="btn btn-secondary pomo-bg-color-dark" disabled> <i class="material-icons text-white">delete</i>Delete Flashcard</button>
                 `;
@@ -326,7 +353,7 @@ export async function deck_page(deckDocID, isClassDeck) {
             html += '<h5>No flashcards found for this deck</h5>';
         } else {
             flashcards.forEach(flashcard => {
-                html += buildFlashcardView(flashcard);
+                html += buildFlashcardView(flashcard,deck,classroom);
             });
         }
     } catch (e) {
@@ -436,7 +463,7 @@ export async function deck_page(deckDocID, isClassDeck) {
     })
 
 }
-function buildFlashcardView(flashcard) {
+function buildFlashcardView(flashcard,deck,classroom) {
     let html = flashcard.questionImageURL != "N/A" ? `<div id="card-${flashcard.docId}" class="flip-card" style="display: inline-block">
     <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -466,27 +493,34 @@ function buildFlashcardView(flashcard) {
         }
     }
 
+    //Edit Flashcard if deck.createdby==Auth.currentUser 
+    //|| If deck isclass !=false get moderatorlist to do a comparison
+       
+    //With or Without Image
     html += flashcard.answerImageURL != "N/A" ? `</div><div class="flip-card-back">
     <h6>${flashcard.answer}</h6>
     <br>
-    <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>
-    <form class="form-edit-flashcard" method="post">
-        <input type="hidden" name="docId" value="${flashcard.docID}">
-        <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="small material-icons pomo-text-color-light">edit</i>Edit</button>
-    </form>
-  </div>
-  </div>
-  </div>`
+    <img src="${flashcard.answerImageURL}" style="width: 100px; height: 100px"/>`
+    :
+    `</div><div class="flip-card-back">
+        <h6>${flashcard.answer}</h6>`;
+    if(deck.isClassDeck!="N/A"){
+    html += (deck.created_by==Auth.currentUser.uid || classroom.moderatorList.includes(Auth.currentUser.email))?`
+        <form class="form-edit-flashcard" method="post">
+            <input type="hidden" name="docId" value="${flashcard.docID}">
+            <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="small material-icons pomo-text-color-light">edit</i>Edit</button>
+        </form>
+        </div></div></div>`
         :
-        `</div><div class="flip-card-back">
-  <h6>${flashcard.answer}</h6>
-  <form class="form-edit-flashcard" method="post">
-        <input type="hidden" name="docId" value="${flashcard.docID}">
-        <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="small material-icons pomo-text-color-light">edit</i>Edit</button>
-  </form>
-  </div>
-  </div>
-  </div>`;
+        `</div></div></div>`;
+    } else {
+        html += `
+        <form class="form-edit-flashcard" method="post">
+            <input type="hidden" name="docId" value="${flashcard.docID}">
+            <button class="btn btn-secondary pomo-bg-color-md pomo-text-color-light" type="submit" style="padding:5px 10px;"><i class="small material-icons pomo-text-color-light">edit</i>Edit</button>
+        </form>
+        </div></div></div>`
+    }
 
     return html;
 }

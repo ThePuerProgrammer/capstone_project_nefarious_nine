@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/pause.png-6cc586a6ad215b2f21a53cfa9aaa6b1d.stex"
+path="res://.import/pause.png-f692ad7bf6c6afd098596772a608a7ff.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/pause.png"
-dest_files=[ "res://.import/pause.png-6cc586a6ad215b2f21a53cfa9aaa6b1d.stex" ]
+source_file="res://Pomodefense/Assets/pause.png"
+dest_files=[ "res://.import/pause.png-f692ad7bf6c6afd098596772a608a7ff.stex" ]
 
 [params]
 
