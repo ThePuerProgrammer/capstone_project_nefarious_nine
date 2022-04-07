@@ -1,5 +1,7 @@
 extends Node2D
 
+signal feedStart
+
 export (int) var foodBowlDecrementByHours
 
 var foodLevel0FGTexture = load("res://ChillZone/food_pomopet/art/FoodBowls/food_bowl_0_fg.png") # Full
@@ -115,6 +117,7 @@ func startFeedAction():
 	feedingModeOn = true
 	$FeedMeter/FeedMeterProgressBar/AnimationPlayer.play("fade_in")
 	$FoodBag.showFoodBag()
+	emit_signal("feedStart")
 
 func endFeedAction():
 	get_node("/root/FirebaseController").updateCurrentUserlastFed()
