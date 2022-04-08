@@ -61,6 +61,8 @@ func _process(delta):
 		# Mouse being shaken and is down
 		if isPouringFood() and mouseIsDown:
 			$FoodBag.spawnFoodAtRandomPoint()
+			if $FoodBag/FoodBagShake.playing == false:
+				$FoodBag/FoodBagShake.playing = true
 		
 		if $FeedMeter/FeedMeterProgressBar.getPercentageComplete() == 1:
 			endFeedAction()
