@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cloud-puff.png-ae6499b8408462a94dd6c632c6448c21.stex"
+path="res://.import/cloud-puff.png-08205250aede95c34a4d1c0a13aedef3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/Pet/pet_sprites/new/cloud-puff.png"
-dest_files=[ "res://.import/cloud-puff.png-ae6499b8408462a94dd6c632c6448c21.stex" ]
+source_file="res://ChillZone/pet/pet_sprites/new/cloud-puff.png"
+dest_files=[ "res://.import/cloud-puff.png-08205250aede95c34a4d1c0a13aedef3.stex" ]
 
 [params]
 

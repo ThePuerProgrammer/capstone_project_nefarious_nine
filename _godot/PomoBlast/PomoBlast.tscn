@@ -242,12 +242,33 @@ margin_bottom = 62.0
 text = "d"
 
 [node name="GameOverScreen" type="Popup" parent="HUD"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = 797.0
+margin_top = 292.0
+margin_right = 1152.0
+margin_bottom = 442.0
 
-[node name="PopupMenu" type="PopupMenu" parent="HUD/GameOverScreen"]
-margin_right = 20.0
-margin_bottom = 20.0
+[node name="Panel" type="Panel" parent="HUD/GameOverScreen"]
+anchor_right = 0.854
+anchor_bottom = 1.027
+margin_left = -2.0
+margin_top = -1.0
+margin_right = -0.170013
+margin_bottom = -0.0500031
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HUD/GameOverScreen"]
+anchor_right = 0.853
+anchor_bottom = 1.0
+margin_left = 85.0
+margin_top = 68.0
+margin_right = -86.815
+margin_bottom = -68.0
+text = "BRUH YOU GOT HIT!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 layer = -99

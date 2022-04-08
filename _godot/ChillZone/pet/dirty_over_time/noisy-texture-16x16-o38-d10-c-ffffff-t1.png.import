@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/noisy-texture-16x16-o38-d10-c-ffffff-t1.png-3ffba8422d4a37219c56b24fa285e956.stex"
+path="res://.import/noisy-texture-16x16-o38-d10-c-ffffff-t1.png-105f04a035444eb29bd68f3a7202a28f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/Pet/dirty_over_time/noisy-texture-16x16-o38-d10-c-ffffff-t1.png"
-dest_files=[ "res://.import/noisy-texture-16x16-o38-d10-c-ffffff-t1.png-3ffba8422d4a37219c56b24fa285e956.stex" ]
+source_file="res://ChillZone/pet/dirty_over_time/noisy-texture-16x16-o38-d10-c-ffffff-t1.png"
+dest_files=[ "res://.import/noisy-texture-16x16-o38-d10-c-ffffff-t1.png-105f04a035444eb29bd68f3a7202a28f.stex" ]
 
 [params]
 
