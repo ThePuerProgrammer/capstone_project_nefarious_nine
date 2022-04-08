@@ -199,6 +199,7 @@ Constants="*res://singletons/Constants.tscn"
 FirebaseController="*res://singletons/Firebase_Controller.tscn"
 Pomotimer="*res://singletons/Pomotimer.gd"
 LobbyDescription="*res://singletons/Lobby_Description.tscn"
+GlobalSettings="*res://singletons/Global_Settings.gd"
 
 [display]
 

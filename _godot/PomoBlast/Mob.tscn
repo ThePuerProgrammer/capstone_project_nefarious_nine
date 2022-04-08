@@ -8,14 +8,14 @@
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "largeRock",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "smallRock",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "largeRock",
 "speed": 5.0
 } ]
 
@@ -23,6 +23,7 @@ animations = [ {
 radius = 25.02
 
 [node name="Mob" type="RigidBody2D" groups=["mobs"]]
+position = Vector2( 267, 127 )
 collision_mask = 0
 script = ExtResource( 2 )
 
@@ -38,7 +39,18 @@ animation = "largeRock"
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( 0, 1 )
 shape = SubResource( 3 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = -8.0
+margin_top = -14.0
+margin_right = 6.0
+rect_scale = Vector2( 2, 2 )
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+text = "a"
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

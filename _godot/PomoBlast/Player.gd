@@ -5,14 +5,14 @@ export (int) var speed = 350
 var screenSize
 onready var bulletcooldownTimer  := $BulletCooldownTimer
 onready var DashTimer  := $DashTimer
-
+signal playerDied()
 
 var velocity = Vector2()
 
 func _ready():
 	screenSize = get_viewport_rect().size
 	hide()
-	pass
+	
 	
 
 
@@ -32,7 +32,7 @@ func get_input():
 	if Input.is_action_pressed("pomo_blast_shoot") and bulletcooldownTimer.is_stopped():
 		shoot()
 	if Input.is_action_pressed("pomo_blast_dash") and DashTimer.is_stopped():
-		dash(velocity)
+		dash()
 		
 
 func _physics_process(delta):
@@ -44,21 +44,23 @@ func _physics_process(delta):
 	
 func shoot():
 	var b = Bullet.instance()
-	
+	$SoundLaser.play()
 	owner.add_child(b) 
 	b.transform = $Muzzle.global_transform
+	
 	bulletcooldownTimer.start()
 	
 func start(pos):
 	position= pos
 	show()
 
-func dash(vel):
+func dash():
 		velocity = velocity * 100
 		DashTimer.start()
 
 func _on_Area2D_body_entered(body):
 	if body.is_in_group("mobs"):
-		self.queue_free()
+		emit_signal("playerDied")
+		queue_free()
 	pass
 	

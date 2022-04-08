@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Menu/Buttons/MultiplayerButton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Menu/Buttons/SingleplayerButton.tscn" type="PackedScene" id=2]
@@ -10,14 +10,12 @@
 [ext_resource path="res://authenticate_user/Authenticate_User.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui_elements/Pomo_BG.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/icons/volume_off.png" type="Texture" id=10]
+[ext_resource path="res://world_environment.tscn" type="PackedScene" id=11]
 
 [node name="MenuScreen" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Lobby_Scene_BG" parent="." instance=ExtResource( 9 )]
 
@@ -89,6 +87,8 @@ color = Color( 0, 0, 0, 0 )
 [node name="MusicStartTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 11 )]
 
 [connection signal="pressed" from="SoundOffButton" to="." method="_on_SoundOffButton_pressed"]
 [connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]

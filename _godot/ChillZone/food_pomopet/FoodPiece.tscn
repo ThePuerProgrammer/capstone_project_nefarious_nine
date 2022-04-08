@@ -42,6 +42,7 @@ tracks/0/keys = {
 
 [node name="FoodPiece" type="RigidBody2D" groups=["food_pellets"]]
 modulate = Color( 1, 1, 1, 0 )
+z_index = 13
 collision_layer = 16
 collision_mask = 34
 mass = 0.510204

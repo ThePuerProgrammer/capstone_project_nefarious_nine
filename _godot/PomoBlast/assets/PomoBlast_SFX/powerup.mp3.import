@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/powerup.mp3-382885e727e620d91ef969a14cc50ab9.mp3str"
+
+[deps]
+
+source_file="res://PomoBlast/assets/PomoBlast_SFX/powerup.mp3"
+dest_files=[ "res://.import/powerup.mp3-382885e727e620d91ef969a14cc50ab9.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

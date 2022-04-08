@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/food_bag_shake.mp3-ed8696c912e6df9795900cd1098000bf.mp3str"
+
+[deps]
+
+source_file="res://ChillZone/food_pomopet/SoundEffects/food_bag_shake.mp3"
+dest_files=[ "res://.import/food_bag_shake.mp3-ed8696c912e6df9795900cd1098000bf.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

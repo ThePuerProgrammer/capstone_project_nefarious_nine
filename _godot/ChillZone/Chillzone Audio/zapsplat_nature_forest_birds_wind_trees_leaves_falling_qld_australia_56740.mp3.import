@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/zapsplat_nature_forest_birds_wind_trees_leaves_falling_qld_australia_56740.mp3-d872039fe1241b980af290884b4aa5da.mp3str"
+
+[deps]
+
+source_file="res://ChillZone/Chillzone Audio/zapsplat_nature_forest_birds_wind_trees_leaves_falling_qld_australia_56740.mp3"
+dest_files=[ "res://.import/zapsplat_nature_forest_birds_wind_trees_leaves_falling_qld_australia_56740.mp3-d872039fe1241b980af290884b4aa5da.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,10 +1,12 @@
-[gd_scene load_steps=65 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_out.tres" type="Animation" id=1]
 [ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ChillZone/ChillZone.gd" type="Script" id=3]
+[ext_resource path="res://ChillZone/food_pomopet/SoundEffects/food_bag_shake.mp3" type="AudioStream" id=4]
 [ext_resource path="res://ChillZone/Setting Assets/Chillzone-floor.png" type="Texture" id=5]
 [ext_resource path="res://ChillZone/wash_pomopet/ParticleEffectController.gd" type="Script" id=6]
+[ext_resource path="res://ChillZone/Chillzone Audio/radio.png" type="Texture" id=7]
 [ext_resource path="res://ChillZone/Setting Assets/Forest_background.png" type="Texture" id=8]
 [ext_resource path="res://ChillZone/wash_pomopet/SoundEffects/mixkit-liquid-bubble-3000-shorter.wav" type="AudioStream" id=9]
 [ext_resource path="res://ChillZone/wash_pomopet/sparkle_animation/f7.png" type="Texture" id=10]
@@ -47,6 +49,10 @@
 [ext_resource path="res://ChillZone/progressBars/Assets/ghappiness_progress_bg.png" type="Texture" id=47]
 [ext_resource path="res://ChillZone/progressBars/Assets/gradiant_hunger_progress_fg.png" type="Texture" id=48]
 [ext_resource path="res://ChillZone/progressBars/Assets/gradiant_happiness_progress_fg.png" type="Texture" id=49]
+[ext_resource path="res://ChillZone/Chillzone Audio/Gold in Them Hills - Nathan Moore.mp3" type="AudioStream" id=50]
+[ext_resource path="res://ChillZone/RadioControl.gd" type="Script" id=51]
+[ext_resource path="res://ChillZone/Chillzone Audio/MusicNoteParticle.tscn" type="PackedScene" id=52]
+[ext_resource path="res://ChillZone/Chillzone Audio/zapsplat_nature_forest_birds_wind_trees_leaves_falling_qld_australia_56740.mp3" type="AudioStream" id=53]
 
 [sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( 0, 0, 128, 0, 128, 128, 0, 128 )
@@ -365,6 +371,7 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [node name="ChillZone" type="Node2D"]
+position = Vector2( -5, -17 )
 script = ExtResource( 3 )
 
 [node name="Background" type="Control" parent="."]
@@ -398,6 +405,7 @@ scale = Vector2( 0.461791, -0.696972 )
 shape = SubResource( 12 )
 
 [node name="Walls" type="RigidBody2D" parent="Background"]
+collision_mask = 129
 mode = 1
 gravity_scale = 0.0
 
@@ -481,7 +489,7 @@ texture = ExtResource( 23 )
 visible = false
 
 [node name="TrashcanOpenForeground" type="Sprite" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
-z_index = 6
+z_index = 17
 texture = ExtResource( 24 )
 
 [node name="TrashcanOpenBackground" type="Sprite" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
@@ -559,7 +567,7 @@ texture = ExtResource( 37 )
 [node name="FoodBowlFg" type="Sprite" parent="ActionController/FoodController/FoodBowl"]
 position = Vector2( 154.836, 620.508 )
 scale = Vector2( 3, 3 )
-z_index = 2
+z_index = 14
 texture = ExtResource( 29 )
 
 [node name="FoodPieceKillBox" type="Area2D" parent="ActionController/FoodController/FoodBowl"]
@@ -599,11 +607,11 @@ rotation = -2.35619
 scale = Vector2( 3, 3 )
 
 [node name="FoodBagBg" type="Sprite" parent="ActionController/FoodController/FoodBag/BagActive"]
-z_index = -1
+z_index = 12
 texture = ExtResource( 38 )
 
 [node name="FoodBagFg" type="Sprite" parent="ActionController/FoodController/FoodBag/BagActive"]
-z_index = 2
+z_index = 14
 texture = ExtResource( 31 )
 
 [node name="FoodSpawnPositions" type="Node2D" parent="ActionController/FoodController/FoodBag"]
@@ -649,6 +657,10 @@ scale_amount_random = 0.5
 scale_amount_curve = SubResource( 1 )
 color_ramp = SubResource( 2 )
 
+[node name="FoodBagShake" type="AudioStreamPlayer" parent="ActionController/FoodController/FoodBag"]
+stream = ExtResource( 4 )
+volume_db = -10.0
+
 [node name="FeedMeter" type="Control" parent="ActionController/FoodController"]
 margin_left = -166.0
 margin_top = -246.721
@@ -693,9 +705,9 @@ __meta__ = {
 
 [node name="CleanlinessProgressBar" type="TextureProgress" parent="ProgressBars"]
 margin_left = 191.0
-margin_top = 738.0
+margin_top = 759.0
 margin_right = 645.0
-margin_bottom = 801.0
+margin_bottom = 822.0
 value = 91.0
 texture_under = ExtResource( 40 )
 texture_progress = ExtResource( 45 )
@@ -706,9 +718,9 @@ __meta__ = {
 
 [node name="CleanlinessBarIcon" type="TextureRect" parent="ProgressBars"]
 margin_left = 100.0
-margin_top = 724.0
+margin_top = 745.0
 margin_right = 184.0
-margin_bottom = 808.0
+margin_bottom = 829.0
 texture = ExtResource( 44 )
 expand = true
 __meta__ = {
@@ -717,9 +729,9 @@ __meta__ = {
 
 [node name="HungerProgressBar" type="TextureProgress" parent="ProgressBars"]
 margin_left = 784.0
-margin_top = 737.0
+margin_top = 758.0
 margin_right = 1235.0
-margin_bottom = 798.0
+margin_bottom = 819.0
 value = 100.0
 texture_under = ExtResource( 46 )
 texture_progress = ExtResource( 48 )
@@ -730,9 +742,9 @@ __meta__ = {
 
 [node name="HungerBarIcon" type="TextureRect" parent="ProgressBars"]
 margin_left = 687.0
-margin_top = 724.0
+margin_top = 745.0
 margin_right = 771.0
-margin_bottom = 808.0
+margin_bottom = 829.0
 texture = ExtResource( 43 )
 expand = true
 __meta__ = {
@@ -741,9 +753,9 @@ __meta__ = {
 
 [node name="HappinessProgressBar" type="TextureProgress" parent="ProgressBars"]
 margin_left = 1370.0
-margin_top = 736.0
+margin_top = 757.0
 margin_right = 1822.0
-margin_bottom = 798.0
+margin_bottom = 819.0
 value = 100.0
 texture_under = ExtResource( 47 )
 texture_progress = ExtResource( 49 )
@@ -754,18 +766,53 @@ __meta__ = {
 
 [node name="HappinessBarIcon" type="TextureRect" parent="ProgressBars"]
 margin_left = 1273.0
-margin_top = 723.0
+margin_top = 744.0
 margin_right = 1358.0
-margin_bottom = 808.0
+margin_bottom = 829.0
 texture = ExtResource( 42 )
 expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="RadioControl" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 51 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MusicNotes" parent="RadioControl" instance=ExtResource( 52 )]
+position = Vector2( 925, 524 )
+
+[node name="RadioButton" type="TextureButton" parent="RadioControl"]
+show_behind_parent = true
+margin_left = 837.0
+margin_top = 461.0
+margin_right = 1007.0
+margin_bottom = 631.0
+texture_normal = ExtResource( 7 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RadioMusic" type="AudioStreamPlayer" parent="RadioControl"]
+stream = ExtResource( 50 )
+volume_db = -20.0
+
 [node name="Pet" parent="." instance=ExtResource( 2 )]
 position = Vector2( 417.556, 558.986 )
 scale = Vector2( 0.7, 0.7 )
+
+[node name="AmbientSounds" type="Node" parent="."]
+
+[node name="AmbientNature" type="AudioStreamPlayer" parent="AmbientSounds"]
+stream = ExtResource( 53 )
+volume_db = -25.0
+pitch_scale = 0.85
+autoplay = true
 
 [connection signal="body_entered" from="Background/Floor" to="ActionController/FoodController" method="_on_Floor_body_entered"]
 [connection signal="hide" from="ActionController/WashPomopetController/EffectController/MouseBubblesParticle" to="ActionController/WashPomopetController/EffectController/MouseBubblesParticle" method="_on_MouseBubblesParticle_hide"]
@@ -790,6 +837,8 @@ scale = Vector2( 0.7, 0.7 )
 [connection signal="value_changed" from="ActionController/FoodController/FeedMeter/FeedMeterProgressBar" to="ProgressBars" method="_on_FeedMeterProgressBar_value_changed"]
 [connection signal="value_changed" from="ProgressBars/CleanlinessProgressBar" to="ProgressBars" method="_on_CleanlinessProgressBar_value_changed"]
 [connection signal="value_changed" from="ProgressBars/HungerProgressBar" to="ProgressBars" method="_on_HungerProgressBar_value_changed"]
+[connection signal="pressed" from="RadioControl/RadioButton" to="." method="_on_RadioButton_pressed"]
+[connection signal="pressed" from="RadioControl/RadioButton" to="RadioControl" method="_on_RadioButton_pressed"]
 [connection signal="cleanButtonPressed" from="Pet" to="Pet" method="_on_Pet_cleanButtonPressed"]
 [connection signal="cleanStart" from="Pet" to="ProgressBars" method="_on_Pet_cleanStart"]
 [connection signal="feedButtonPressed" from="Pet" to="ActionController/FoodController" method="_on_Pet_feedButtonPressed"]
