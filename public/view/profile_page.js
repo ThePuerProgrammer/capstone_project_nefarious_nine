@@ -95,31 +95,6 @@ export function addEventListeners() {
             Utilities.info('Item not equipped', 'The item hasn\'t been equipped yet');
         }
     })
-
-
-    // need a way to return pet to default skin
-    Elements.submitAccessoriesButton.addEventListener('click', async () => {
-        const user = await FirebaseController.getUser(Auth.currentUser.uid);
-        const pomopet = user.pomopet;
-        let itemsOwnedList = [];
-        for (let i = 0; i < user.itemsOwned.length; i++) {
-            const tempItem = await FirebaseController.getOwnedItem(user.itemsOwned[i]);
-            itemsOwnedList.push(tempItem);
-        }
-        const accessoriesList = document.getElementsByClassName('items-list');
-        for (let i = 0; i < accessoriesList.length; i++) {
-            for (let j = 0; j < itemsOwnedList.length; j++) {
-                if (itemsOwnedList[j].name == accessoriesList[i].id) {
-                    pomopet.petPhotoURL = itemsOwnedList[j].photoURL;
-                    pomopet.petSkin = itemsOwnedList[j].skinType;
-                    await FirebaseController.updatePomopet(Auth.currentUser.uid, pomopet);
-                    break;
-                }
-            }
-        }
-        Elements.modalDressup.hide();
-        await profile_page();
-    })
 }
 
 export async function profile_page() {
@@ -158,7 +133,7 @@ export async function profile_page() {
             console.log(e);
         }
     }
-    console.log("WTF");
+
     let deckList = [];
     let masteredDecks = [];
     try {
@@ -208,35 +183,48 @@ export async function profile_page() {
         }
     }
 
-
-
-
-
     let html = '';
 
     // EDIT PROFILE button    
     html += `<div class="edit-profile-btn">
-        <button id="${Constant.htmlIDs.editProfile}" type="button" class="btn btn-secondary pomo-bg-color-dark" style="padding:5px 12px; float:right">
-        <i class="material-icons pomo-text-color-light">edit</i>Edit Profile</button>
-        <button type="button" id="pomo-dressup-btn" class="btn btn-secondary pomo-bg-color-md-dark" style="float:right; margin-right: 10px;">Dress up!</button>
         <form class="form-delete-account" method="post">
         <input type="hidden" name="userEmail" value="${user.email}">
-        <button class="btn btn-outline-secondary pomo-bg-color-dark pomo-text-color-light" type="submit" style="padding:5px 12px;"><i class="material-icons pomo-text-color-light">delete</i>Delete</button>
+        <button class="btn btn-danger" type="submit" style="padding:5px 12px; float:right;">
+            <i class="material-icons ">delete</i>Delete Account</button>
         </form>
 
+        <button id="${Constant.htmlIDs.editProfile}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="padding:5px 12px; margin-right: 10px; float:right">
+        <i class="material-icons pomo-text-color-light">edit</i>Edit Profile</button>
+        
         </div>`;
 
     html += `<div class="user-profile">
         <img src="${user.profilePhotoURL}" style="width: 200px; height: 200px; object-fit: cover;" class="center pfp">
         <br>
-        <h3 class="user-username pomo-text-color-dark">${user.username}</h3>`;
+        <h3 class="user-username pomo-text-color-dark" style="text-align: center;">${user.username}</h3>`;
 
     // if user bio, display
     if (user.userBio != "") {
-        html += `<p>${user.userBio}</p>`;
+        html += `<p style="text-align: center;">${user.userBio}</p>`;
     }
 
-    html += `</div>`;
+    html += `<br>
+        <div class="user-mastered-decks"  style="display: inline-block;">
+        <h3 class="pomo-text-color-dark" style="text-align: center;"> Mastered Decks </h3>`;
+    
+    if(masteredDecks.length == 0) {
+        html += `<p class="pomo-text-color-dark" style="text-align: center;">No decks mastered yet, go do some studying!</p>`;
+    } else {
+        masteredDecks.forEach(deck => {
+            html += `<div class = "user-deck-trophy" style="display: inline-block;">
+                <h1 style="text-align: center;"><i class="material-icons" style="color:#ffdf00; font-size: 60px;">emoji_events</i></h1>
+                <p class="pomo-text-color-dark">${deck.name}</p>
+            </div>`;
+        });     
+    }
+
+    html += `</div>
+        </div>`;
 
     html += `<div class="equipped-pomopet">`;
 
@@ -274,32 +262,6 @@ export async function profile_page() {
 
 
     //** DYNAMIC EVENT LISTENERS **//
-
-
-    const dressupButton = document.getElementById('pomo-dressup-btn');
-    dressupButton.addEventListener('click', async e => {
-        e.preventDefault();
-        // opens dress up ✺◟(♥ᴥ♥)◞✺ modal
-        document.getElementById('pomo-dressup-image').src = user.pomopet.petPhotoURL;
-        const accessoriesSelect = document.getElementById('select-accessories');
-        // clears out accessories list to prevent duplicates
-        for (let i = accessoriesSelect.length; i > 0; i--) {
-            accessoriesSelect.remove(i);
-        }
-        let itemsOwnedList = [];
-        for (let i = 0; i < user.itemsOwned.length; i++) {
-            const tempItem = await FirebaseController.getOwnedItem(user.itemsOwned[i]);
-            itemsOwnedList.push(tempItem);
-        }
-        // rebuilds accessories list from owned items
-        itemsOwnedList.forEach(item => {
-            const opt = document.createElement('option');
-            opt.value = item.name;
-            opt.innerHTML = item.name;
-            accessoriesSelect.appendChild(opt);
-        })
-        Elements.modalDressup.show();
-    });
 
     const editProfileButton = document.getElementById(Constant.htmlIDs.editProfile);
 

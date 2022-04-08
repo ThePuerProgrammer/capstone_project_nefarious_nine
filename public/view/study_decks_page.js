@@ -513,8 +513,7 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
             <div id="${deck.docId}" class="deck-card">
                 <div class="deck-view-css">
                 <div class="card-body">
-                <p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">emoji_events</i></p>
-                    <h5 class="card-text">${deck.name}</h5>
+                    <h5 class="card-text"><i class="small material-icons" style="color: #ffdf00;">emoji_events</i>${deck.name}</h5>
                     <h6 class="card-text" >Subject: ${deck.subject}</h6>
                     <h6 class="card-text">Category: ${deck.category}</h6>
                     <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>
