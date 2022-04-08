@@ -68,6 +68,7 @@ export function addEventListeners() {
                 deck.docId = deckId;
                 localStorage.setItem("deckPageDeckDocID", deck.docId);
                 sessionStorage.setItem('deckId', deckId);
+                sessionStorage.setItem('isClassDeck', deck.isClassDeck);
                 history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
                 Elements.modalCreateDeck.hide();
                 await FirebaseController.updateDeckCount(Auth.currentUser.uid);
@@ -271,7 +272,7 @@ export async function buildStudyDecksPage(deckList) {
                 let classDocID = e.target.classdocId.value;
                 await EditDeck.edit_class_deck(classDocID, e.target.docId.value);
             }
-            setTimeout(await study_decks_page(), 2000);
+            //setTimeout(await study_decks_page(), 2000);
             // await study_decks_page();
         });
     }
@@ -292,6 +293,8 @@ export async function buildStudyDecksPage(deckList) {
                 } else {
                     confirmation = true;
                     await EditDeck.delete_class_deck(deckId, confirmation, classDocID, Auth.currentUser.uid);
+                    //await study_decks_page();
+
                 }
             });
             Utilities.enableButton(button, label);

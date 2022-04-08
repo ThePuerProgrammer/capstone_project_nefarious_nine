@@ -250,6 +250,7 @@ func endGame(playerWon, answeredCorrectly, answeredIncorrectly, coins):
 	if !$gameplayGameTimer.is_stopped():
 		$gameplayGameTimer.stop()
 	_resultsUI.showResults(playerWon, answeredCorrectly, answeredIncorrectly, coins)
+	FirebaseController.addPomocoinsToUserDocument(coins)
 	
 	
 func showAnswerIndicators(userAnsweredCorrectly):
