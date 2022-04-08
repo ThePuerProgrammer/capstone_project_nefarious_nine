@@ -23,7 +23,9 @@ func _on_Area2D_area_entered(area):
 	if area.is_in_group("bullet"):
 		emit_signal("enemy_died",position)
 		emit_signal("enemy_ded")
-		self.queue_free()
+		area.queue_free()
+		print("++++++++++++++++++++++++++++++++++++++ bullet has hit asteroid and been freed from queue")
+		queue_free()
 
 	
 
