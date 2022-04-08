@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://Menu/MenuOptionScreen.tscn" type="PackedScene" id=1]
+[ext_resource path="res://world_environment.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_48pt.tres" type="DynamicFont" id=2]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_26pt.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=4]
@@ -10,50 +10,96 @@
 [ext_resource path="res://assets/gameimages/PomoBITEGraphic.png" type="Texture" id=8]
 [ext_resource path="res://assets/gameimages/SlowFruitMenu.png" type="Texture" id=9]
 [ext_resource path="res://assets/gameimages/pomodefense_splash.PNG" type="Texture" id=10]
+[ext_resource path="res://Menu/SingleplayerOptionsScreen.gd" type="Script" id=11]
+[ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=13]
 
-[node name="SingleplayerOptionScreen" instance=ExtResource( 1 )]
+[node name="SingleplayerOptionScreen" type="Control"]
+script = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Container" parent="." index="0"]
+[node name="WorldEnvironment" parent="." instance=ExtResource( 1 )]
+
+[node name="Container" type="CenterContainer" parent="."]
 visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_top = 1074.0
 margin_bottom = 1074.0
 rect_rotation = -0.105083
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Center" parent="Container" index="0"]
+[node name="Center" type="VBoxContainer" parent="Container"]
 visible = false
-margin_left = 960.0
-margin_top = 450.0
-margin_right = 960.0
-margin_bottom = 450.0
+margin_left = 42.0
+margin_top = 12.0
+margin_right = 42.0
+margin_bottom = 12.0
+custom_constants/separation = 15
 
-[node name="Label" parent="Container/Center" index="0"]
+[node name="Label" type="Label" parent="Container/Center"]
 visible = false
 margin_right = 1062.0
 margin_bottom = 81.0
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = ExtResource( 4 )
 text = "<As a> user, <I want to> be able to setup my singleplayer 
 minigame session <so that> I can focus on what to study on 
 while I play mini games by myself.
 "
 
-[node name="backButton" parent="Container/Center" index="1"]
-visible = false
-margin_top = 96.0
-margin_right = 1062.0
-margin_bottom = 120.0
-
-[node name="DungeonFightTemporaryNavigation" parent="Container/Center" index="2"]
+[node name="DungeonFightTemporaryNavigation" type="Button" parent="Container/Center"]
 visible = false
 margin_top = 135.0
 margin_right = 1062.0
 margin_bottom = 159.0
+custom_fonts/font = ExtResource( 4 )
+text = "Temporary Navigation for Dungeon-Fight"
 
-[node name="PomoBlast" parent="Container/Center" index="3"]
+[node name="PomoBlast" type="Button" parent="Container/Center"]
 visible = false
 margin_top = 174.0
 margin_right = 1062.0
 margin_bottom = 198.0
+custom_fonts/font = ExtResource( 4 )
+text = "Temporary Navigation for Pomo Blast"
 
-[node name="Single_Player_Container" type="HBoxContainer" parent="." index="2"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Container"]
+margin_left = 42.0
+margin_top = 12.0
+margin_right = 42.0
+margin_bottom = 12.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 5 )
+text = "Game Settings
+"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="backButton" type="Button" parent="Container"]
+margin_right = 84.0
+margin_bottom = 24.0
+custom_fonts/font = ExtResource( 4 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FadeOut" parent="." instance=ExtResource( 13 )]
+visible = false
+color = Color( 0, 0, 0, 0 )
+
+[node name="Single_Player_Container" type="HBoxContainer" parent="."]
 margin_left = 60.0
 margin_top = 50.0
 margin_right = 1860.0
@@ -63,7 +109,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Single_Player_Label" type="RichTextLabel" parent="Single_Player_Container" index="0"]
+[node name="Single_Player_Label" type="RichTextLabel" parent="Single_Player_Container"]
 margin_right = 1800.0
 margin_bottom = 200.0
 size_flags_horizontal = 3
@@ -72,7 +118,7 @@ custom_fonts/normal_font = ExtResource( 5 )
 text = "	Single Player 
    Session Options"
 
-[node name="Method_Of_Flashcard_Selection_Container" type="HBoxContainer" parent="." index="3"]
+[node name="Method_Of_Flashcard_Selection_Container" type="HBoxContainer" parent="."]
 margin_left = 60.0
 margin_top = 300.0
 margin_right = 360.0
@@ -81,7 +127,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Method_Selection_Label" type="RichTextLabel" parent="Method_Of_Flashcard_Selection_Container" index="0"]
+[node name="Method_Selection_Label" type="RichTextLabel" parent="Method_Of_Flashcard_Selection_Container"]
 margin_right = 300.0
 margin_bottom = 74.0
 size_flags_horizontal = 3
@@ -89,7 +135,7 @@ size_flags_vertical = 3
 custom_fonts/normal_font = ExtResource( 3 )
 text = "Selection Method:"
 
-[node name="Method_Selection_Button" type="OptionButton" parent="." index="4"]
+[node name="Method_Selection_Button" type="OptionButton" parent="."]
 margin_left = 380.0
 margin_top = 300.0
 margin_right = 528.0
@@ -98,7 +144,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Deck_Selection_Container" type="HBoxContainer" parent="." index="5"]
+[node name="Deck_Selection_Container" type="HBoxContainer" parent="."]
 margin_left = 60.0
 margin_top = 415.0
 margin_right = 360.0
@@ -107,7 +153,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Deck_Selection_Label" type="RichTextLabel" parent="Deck_Selection_Container" index="0"]
+[node name="Deck_Selection_Label" type="RichTextLabel" parent="Deck_Selection_Container"]
 margin_right = 300.0
 margin_bottom = 70.0
 size_flags_horizontal = 3
@@ -117,7 +163,7 @@ text = "Deck Selection:
 "
 scroll_active = false
 
-[node name="Deck_Selection_Button" type="OptionButton" parent="." index="6"]
+[node name="Deck_Selection_Button" type="OptionButton" parent="."]
 margin_left = 380.0
 margin_top = 400.0
 margin_right = 528.0
@@ -126,7 +172,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Category_Selection_Container" type="HBoxContainer" parent="." index="7"]
+[node name="Category_Selection_Container" type="HBoxContainer" parent="."]
 margin_left = 60.0
 margin_top = 515.0
 margin_right = 360.0
@@ -135,7 +181,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Category_Selection_Label" type="RichTextLabel" parent="Category_Selection_Container" index="0"]
+[node name="Category_Selection_Label" type="RichTextLabel" parent="Category_Selection_Container"]
 margin_right = 300.0
 margin_bottom = 70.0
 size_flags_horizontal = 3
@@ -144,7 +190,7 @@ custom_fonts/normal_font = ExtResource( 3 )
 text = "Category Selection:"
 scroll_active = false
 
-[node name="Category_Selection_Button" type="OptionButton" parent="." index="8"]
+[node name="Category_Selection_Button" type="OptionButton" parent="."]
 margin_left = 380.0
 margin_top = 515.0
 margin_right = 528.0
@@ -153,7 +199,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Timer_Selection_Container" type="HBoxContainer" parent="." index="9"]
+[node name="Timer_Selection_Container" type="HBoxContainer" parent="."]
 margin_left = 60.0
 margin_top = 615.0
 margin_right = 360.0
@@ -162,7 +208,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Timer_Selection_Label" type="RichTextLabel" parent="Timer_Selection_Container" index="0"]
+[node name="Timer_Selection_Label" type="RichTextLabel" parent="Timer_Selection_Container"]
 margin_right = 300.0
 margin_bottom = 70.0
 size_flags_horizontal = 3
@@ -171,7 +217,7 @@ custom_fonts/normal_font = ExtResource( 3 )
 text = "Desired Time:"
 scroll_active = false
 
-[node name="Timer_Selection_Button" type="OptionButton" parent="." index="10"]
+[node name="Timer_Selection_Button" type="OptionButton" parent="."]
 margin_left = 380.0
 margin_top = 615.0
 margin_right = 528.0
@@ -180,14 +226,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Start_Button" type="Button" parent="." index="11"]
+[node name="Start_Button" type="Button" parent="."]
 margin_left = 60.0
 margin_top = 825.0
 margin_right = 180.0
 margin_bottom = 870.0
 text = "Start"
 
-[node name="Back_Button" type="Button" parent="." index="12"]
+[node name="Back_Button" type="Button" parent="."]
 margin_left = 195.0
 margin_top = 825.0
 margin_right = 320.0
@@ -197,7 +243,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Game_Selection" type="HSplitContainer" parent="." index="13"]
+[node name="Game_Selection" type="HSplitContainer" parent="."]
 margin_left = 700.0
 margin_top = 300.0
 margin_right = 1900.0
@@ -207,14 +253,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VSplit_Game_Container" type="VSplitContainer" parent="Game_Selection" index="0"]
+[node name="VSplit_Game_Container" type="VSplitContainer" parent="Game_Selection"]
 margin_right = 594.0
 margin_bottom = 525.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 dragger_visibility = 1
 
-[node name="Games_Selection_Label" type="RichTextLabel" parent="Game_Selection/VSplit_Game_Container" index="0"]
+[node name="Games_Selection_Label" type="RichTextLabel" parent="Game_Selection/VSplit_Game_Container"]
 margin_right = 594.0
 margin_bottom = 256.0
 size_flags_horizontal = 3
@@ -223,7 +269,7 @@ custom_fonts/normal_font = ExtResource( 2 )
 text = "Game(s):
 []"
 
-[node name="Game_Details_Label" type="RichTextLabel" parent="Game_Selection/VSplit_Game_Container" index="1"]
+[node name="Game_Details_Label" type="RichTextLabel" parent="Game_Selection/VSplit_Game_Container"]
 margin_top = 268.0
 margin_right = 594.0
 margin_bottom = 525.0
@@ -232,39 +278,39 @@ size_flags_vertical = 3
 custom_fonts/normal_font = ExtResource( 4 )
 text = "Click Details for more information on each game."
 
-[node name="Games_Scroll_Container" type="ScrollContainer" parent="Game_Selection" index="1"]
+[node name="Games_Scroll_Container" type="ScrollContainer" parent="Game_Selection"]
 margin_left = 606.0
 margin_right = 1200.0
 margin_bottom = 525.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Games_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container" index="0"]
+[node name="Games_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container"]
 margin_right = 423.0
 margin_bottom = 1842.0
 size_flags_vertical = 3
 
-[node name="dungeon_fight_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="0"]
+[node name="dungeon_fight_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container"]
 margin_right = 423.0
 margin_bottom = 362.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="dungeon_fight_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container" index="0"]
+[node name="dungeon_fight_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container"]
 margin_right = 423.0
 margin_bottom = 294.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource( 7 )
 
-[node name="dungeon_fight_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container" index="1"]
+[node name="dungeon_fight_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container"]
 margin_top = 298.0
 margin_right = 423.0
 margin_bottom = 318.0
 size_flags_vertical = 3
 text = "Details"
 
-[node name="dungeon_fight_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container" index="2"]
+[node name="dungeon_fight_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container"]
 margin_top = 322.0
 margin_right = 423.0
 margin_bottom = 362.0
@@ -274,111 +320,111 @@ text = "           Add to Queue:"
 align = 1
 expand_icon = true
 
-[node name="Pomoblast_container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="1"]
+[node name="Pomoblast_container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container"]
 margin_top = 366.0
 margin_right = 423.0
 margin_bottom = 774.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Pomoblast_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container" index="0"]
+[node name="Pomoblast_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container"]
 margin_right = 423.0
 margin_bottom = 340.0
 size_flags_vertical = 3
 texture = ExtResource( 6 )
 
-[node name="Pomoblast_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container" index="1"]
+[node name="Pomoblast_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container"]
 margin_top = 344.0
 margin_right = 423.0
 margin_bottom = 364.0
 size_flags_vertical = 3
 text = "Details"
 
-[node name="Pomoblast_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container" index="2"]
+[node name="Pomoblast_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container"]
 margin_top = 368.0
 margin_right = 423.0
 margin_bottom = 408.0
 text = "            Add to Queue:"
 align = 1
 
-[node name="PomoBITE_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="2"]
+[node name="PomoBITE_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container"]
 margin_top = 778.0
 margin_right = 423.0
 margin_bottom = 1190.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PomoBITE_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="0"]
+[node name="PomoBITE_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container"]
 margin_right = 423.0
 margin_bottom = 344.0
 size_flags_vertical = 3
 texture = ExtResource( 8 )
 
-[node name="PomoBITE_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="1"]
+[node name="PomoBITE_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container"]
 margin_top = 348.0
 margin_right = 423.0
 margin_bottom = 368.0
 size_flags_vertical = 3
 text = "Details"
 
-[node name="PomoBITE_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container" index="2"]
+[node name="PomoBITE_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container"]
 margin_top = 372.0
 margin_right = 423.0
 margin_bottom = 412.0
 text = "            Add to Queue:"
 align = 1
 
-[node name="Slowfruit" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="3"]
+[node name="Slowfruit" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container"]
 margin_top = 1194.0
 margin_right = 423.0
 margin_bottom = 1562.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slowfruit_graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="0"]
+[node name="Slowfruit_graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit"]
 margin_right = 423.0
 margin_bottom = 300.0
 size_flags_vertical = 3
 texture = ExtResource( 9 )
 
-[node name="Slowfruit_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="1"]
+[node name="Slowfruit_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit"]
 margin_top = 304.0
 margin_right = 423.0
 margin_bottom = 324.0
 size_flags_vertical = 3
 text = "Details"
 
-[node name="Slowfruit_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit" index="2"]
+[node name="Slowfruit_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit"]
 margin_top = 328.0
 margin_right = 423.0
 margin_bottom = 368.0
 
-[node name="PomoDefense" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="4"]
+[node name="PomoDefense" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container"]
 margin_top = 1566.0
 margin_right = 423.0
 margin_bottom = 1842.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PomoDefense_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="0"]
+[node name="PomoDefense_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense"]
 margin_right = 423.0
 margin_bottom = 208.0
 size_flags_vertical = 3
 texture = ExtResource( 10 )
 
-[node name="PomoDefense_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="1"]
+[node name="PomoDefense_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense"]
 margin_top = 212.0
 margin_right = 423.0
 margin_bottom = 232.0
 size_flags_vertical = 3
 text = "Details"
 
-[node name="PomoDefense_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="2"]
+[node name="PomoDefense_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense"]
 margin_top = 236.0
 margin_right = 423.0
 margin_bottom = 276.0
 
-[node name="No_Games_Selected_Popup_Alert" type="AcceptDialog" parent="." index="14"]
+[node name="No_Games_Selected_Popup_Alert" type="AcceptDialog" parent="."]
 margin_left = 787.0
 margin_top = 403.0
 margin_right = 1075.0
@@ -390,7 +436,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="No_Selection_Method_Choosen_Popup_Alert" type="AcceptDialog" parent="." index="15"]
+[node name="No_Selection_Method_Choosen_Popup_Alert" type="AcceptDialog" parent="."]
 margin_left = 795.0
 margin_top = 400.0
 margin_right = 1073.0
@@ -399,7 +445,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 dialog_text = "You Must Select A Method To Pull Decks!"
 
-[node name="No_Deck_Selected_Popup_Alert" type="AcceptDialog" parent="." index="16"]
+[node name="No_Deck_Selected_Popup_Alert" type="AcceptDialog" parent="."]
 margin_left = 849.0
 margin_top = 400.0
 margin_right = 1024.0
@@ -408,7 +454,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 dialog_text = "You Must Select A Deck!!"
 
-[node name="No_Category_Selected_Popup_Alert" type="AcceptDialog" parent="." index="17"]
+[node name="No_Category_Selected_Popup_Alert" type="AcceptDialog" parent="."]
 margin_left = 849.0
 margin_top = 400.0
 margin_right = 1024.0
@@ -417,7 +463,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 dialog_text = "You Must Select A Category!!"
 
-[node name="No_Time_Selected_Popup_Alert" type="AcceptDialog" parent="." index="18"]
+[node name="No_Time_Selected_Popup_Alert" type="AcceptDialog" parent="."]
 margin_left = 787.0
 margin_top = 400.0
 margin_right = 1085.0
@@ -426,10 +472,14 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 dialog_text = "You Must Select A Desired Time To Play For!"
 
+[node name="FadeIn" parent="." instance=ExtResource( 12 )]
+visible = false
+color = Color( 0, 0, 0, 1 )
+
+[connection signal="fade_out_finished" from="FadeOut" to="." method="_on_FadeOut_fade_out_finished"]
 [connection signal="pressed" from="Start_Button" to="." method="_on_Start_Button_pressed"]
 [connection signal="pressed" from="Back_Button" to="." method="_on_Back_Button_pressed"]
 [connection signal="pressed" from="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container/dungeon_fight_Details_Button" to="." method="_on_dungeon_fight_Details_Button_pressed"]
-[connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container/dungeon_fight_Details_Button" to="." method="_on_dungeon_fight_Details_Button_toggled"]
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/dungeon_fight_Container/dungeon_fight_Selection_Toggle" to="." method="_on_dungeon_fight_Selection_Toggle_toggled"]
 [connection signal="pressed" from="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container/Pomoblast_Details_Button" to="." method="_on_Pomoblast_Details_Button_pressed"]
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/Pomoblast_container/Pomoblast_Selection_Toggle" to="." method="_on_Pomoblast_Selection_Toggle_toggled"]
@@ -439,3 +489,4 @@ dialog_text = "You Must Select A Desired Time To Play For!"
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit/Slowfruit_Selection_Toggle" to="." method="_on_Slowfruit_Selection_Toggle_toggled"]
 [connection signal="pressed" from="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense/PomoDefense_Details_Button" to="." method="_on_PomoDefense_Details_Button_pressed"]
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense/PomoDefense_Selection_Toggle" to="." method="_on_PomoDefense_Selection_Toggle_toggled"]
+[connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]

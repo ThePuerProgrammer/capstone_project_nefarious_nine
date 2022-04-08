@@ -61,7 +61,8 @@ export function addEventListeners(){
                 deck.docId = deckId;
                 localStorage.setItem("deckPageDeckDocID", deck.docId);
                 sessionStorage.setItem('deckId', deckId);
-                sessionStorage.setItem('cameFromClassDeck', true); 
+                sessionStorage.setItem('cameFromClassDeck', true);
+                sessionStorage.setItem('isClassDeck', deck.isClassDeck); 
                 history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
                 Elements.modalCreateClassroomDeck.hide();
                 //history.pushState(null, null, Routes.routePathname.DECK + "#" + deck.docId);

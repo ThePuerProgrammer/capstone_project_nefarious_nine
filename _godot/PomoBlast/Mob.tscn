@@ -8,14 +8,14 @@
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "largeRock",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "smallRock",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "largeRock",
 "speed": 5.0
 } ]
 
@@ -40,5 +40,16 @@ animation = "largeRock"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 0, 1 )
 shape = SubResource( 3 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = -5.0
+margin_top = -13.0
+margin_right = 5.0
+margin_bottom = 1.0
+text = "a"
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

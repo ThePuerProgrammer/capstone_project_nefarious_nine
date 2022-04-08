@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=1]
-[ext_resource path="res://return_to_main_menu.gd" type="Script" id=2]
+[ext_resource path="res://Menu/MenuOptionScreen.gd" type="Script" id=2]
 [ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_90pt.tres" type="DynamicFont" id=5]
 
 [node name="MenuOptionScreen" type="Control"]
 anchor_right = 1.0
@@ -14,14 +15,19 @@ __meta__ = {
 }
 
 [node name="Container" type="CenterContainer" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Center" type="VBoxContainer" parent="Container"]
+visible = false
 margin_left = 612.0
-margin_top = 382.0
+margin_top = 402.0
 margin_right = 1308.0
-margin_bottom = 517.0
+margin_bottom = 498.0
 custom_constants/separation = 15
 
 [node name="Label" type="Label" parent="Container/Center"]
@@ -33,13 +39,6 @@ custom_constants/shadow_offset_x = -3
 custom_constants/shadow_offset_y = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Sample Text :)"
-
-[node name="backButton" type="Button" parent="Container/Center"]
-margin_top = 33.0
-margin_right = 696.0
-margin_bottom = 57.0
-custom_fonts/font = ExtResource( 1 )
-text = "Back"
 
 [node name="DungeonFightTemporaryNavigation" type="Button" parent="Container/Center"]
 margin_top = 72.0
@@ -55,6 +54,32 @@ margin_bottom = 135.0
 custom_fonts/font = ExtResource( 1 )
 text = "Temporary Navigation for Pomo Blast"
 
+[node name="RichTextLabel" type="RichTextLabel" parent="Container"]
+margin_left = 960.0
+margin_top = 450.0
+margin_right = 960.0
+margin_bottom = 450.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 5 )
+text = "Game Settings
+"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="backButton" type="Button" parent="Container"]
+margin_left = 918.0
+margin_top = 438.0
+margin_right = 1002.0
+margin_bottom = 462.0
+custom_fonts/font = ExtResource( 1 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="FadeOut" parent="." instance=ExtResource( 3 )]
 visible = false
 color = Color( 0, 0, 0, 0 )
@@ -63,8 +88,8 @@ color = Color( 0, 0, 0, 0 )
 visible = false
 color = Color( 0, 0, 0, 1 )
 
-[connection signal="pressed" from="Container/Center/backButton" to="." method="_on_backButton_pressed"]
 [connection signal="pressed" from="Container/Center/DungeonFightTemporaryNavigation" to="." method="_on_DungeonFightTemporaryNavigation_pressed"]
 [connection signal="pressed" from="Container/Center/PomoBlast" to="." method="_on_PomoBlast_pressed"]
+[connection signal="pressed" from="Container/backButton" to="." method="_on_backButton_pressed"]
 [connection signal="fade_out_finished" from="FadeOut" to="." method="_on_FadeOut_fade_out_finished"]
 [connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]

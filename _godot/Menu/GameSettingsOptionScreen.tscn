@@ -1,34 +1,301 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Menu/MenuOptionScreen.tscn" type="PackedScene" id=1]
+[ext_resource path="res://world_environment.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Menu/GameSettingsOptionScreen.gd" type="Script" id=2]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_90pt.tres" type="DynamicFont" id=3]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=4]
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_48pt.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Menu/Background.gd" type="Script" id=6]
+[ext_resource path="res://assets/textures/water.png" type="Texture" id=7]
+[ext_resource path="res://assets/textures/Game_Settings_Box.png" type="Texture" id=8]
+[ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=10]
 
-[node name="GameSettingsOptionScreen" instance=ExtResource( 1 )]
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
 
-[node name="Center" parent="Container" index="0"]
-margin_left = 420.0
-margin_top = 351.0
-margin_right = 1500.0
-margin_bottom = 549.0
+uniform vec2 tiled_factor = vec2(1, 1);
+uniform	float aspect_ratio = 0.5;
+uniform float wave_height = 0.04;
+uniform vec2 wave_width_factor = vec2(5.0, 1.0);
+uniform float wave_speed_factor = 0.2;
 
-[node name="Label" parent="Container/Center" index="0"]
-margin_right = 1080.0
-margin_bottom = 81.0
-text = "
-<As a> user, <I want to> be able to change my game settings 
-for minigames <so that> I can customize my experience when 
-playing minigames. "
+void fragment() {
+	vec2 tiled_uvs = UV * tiled_factor;
+	tiled_uvs.y *= aspect_ratio;
+	vec2 waves_offset;
+	waves_offset.x = cos(TIME * wave_speed_factor + (-tiled_uvs.y + tiled_uvs.x) * wave_width_factor.x );
+	waves_offset.y = sin(TIME * wave_speed_factor + (-tiled_uvs.y) * wave_width_factor.y );
+	float full_range_offset_x = -1.0 + 2.0 * waves_offset.x;
+	float full_range_x = -1.0 + 2.0 * tiled_uvs.x;
+	float inward_waves = -0.03 + sin(TIME * wave_speed_factor - full_range_x - full_range_offset_x * waves_offset.y * 0.5) * 0.01;
+	vec4 colorize = vec4(vec3(0.88, 0.32, 0.64) * 0.3 + inward_waves, 1);
+	COLOR = texture( TEXTURE, tiled_uvs + waves_offset * wave_height ) * colorize;
+}"
 
-[node name="backButton" parent="Container/Center" index="1"]
-margin_top = 96.0
-margin_right = 1080.0
-margin_bottom = 120.0
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/tiled_factor = Vector2( 1, 1 )
+shader_param/aspect_ratio = 0.475667
+shader_param/wave_height = 0.04
+shader_param/wave_width_factor = Vector2( 5, 1 )
+shader_param/wave_speed_factor = 0.2
 
-[node name="DungeonFightTemporaryNavigation" parent="Container/Center" index="2"]
-margin_top = 135.0
-margin_right = 1080.0
-margin_bottom = 159.0
+[node name="GameSettingsOptionScreen" type="Control"]
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="PomoBlast" parent="Container/Center" index="3"]
-margin_top = 174.0
-margin_right = 1080.0
-margin_bottom = 198.0
+[node name="WorldEnvironment" parent="." instance=ExtResource( 1 )]
+
+[node name="Window" type="Sprite" parent="."]
+modulate = Color( 0.584314, 0.580392, 0.580392, 0.756863 )
+position = Vector2( 986, 458.5 )
+scale = Vector2( 5.2828, 4.98758 )
+texture = ExtResource( 8 )
+
+[node name="Background" type="Sprite" parent="."]
+show_behind_parent = true
+material = SubResource( 2 )
+position = Vector2( -821.661, 50.941 )
+scale = Vector2( 1.86621, 0.887695 )
+texture = ExtResource( 7 )
+offset = Vector2( 963, 462.5 )
+script = ExtResource( 6 )
+
+[node name="Container" type="CenterContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 2.0
+margin_bottom = 2.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Center" type="VBoxContainer" parent="Container"]
+visible = false
+margin_left = -306.0
+margin_top = -36.0
+margin_right = 390.0
+margin_bottom = 60.0
+custom_constants/separation = 15
+
+[node name="Label" type="Label" parent="Container/Center"]
+margin_right = 696.0
+margin_bottom = 18.0
+custom_colors/font_color = Color( 0.654902, 0.678431, 0.776471, 1 )
+custom_colors/font_color_shadow = Color( 0.117647, 0.133333, 0.152941, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = ExtResource( 4 )
+text = "Sample Text :)"
+
+[node name="DungeonFightTemporaryNavigation" type="Button" parent="Container/Center"]
+margin_top = 72.0
+margin_right = 696.0
+margin_bottom = 96.0
+custom_fonts/font = ExtResource( 4 )
+text = "Temporary Navigation for Dungeon-Fight"
+
+[node name="PomoBlast" type="Button" parent="Container/Center"]
+margin_top = 111.0
+margin_right = 696.0
+margin_bottom = 135.0
+custom_fonts/font = ExtResource( 4 )
+text = "Temporary Navigation for Pomo Blast"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Container"]
+margin_left = 42.0
+margin_top = 12.0
+margin_right = 42.0
+margin_bottom = 12.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 3 )
+text = "Game Settings
+"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="backButton" type="Button" parent="Container"]
+margin_right = 84.0
+margin_bottom = 24.0
+custom_fonts/font = ExtResource( 4 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FadeOut" parent="." instance=ExtResource( 10 )]
+visible = false
+color = Color( 0, 0, 0, 0 )
+
+[node name="GameSettingsContainer" type="HBoxContainer" parent="."]
+margin_left = 475.0
+margin_top = 100.0
+margin_right = 1675.0
+margin_bottom = 200.0
+size_flags_horizontal = 7
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameSettingsLabel" type="RichTextLabel" parent="GameSettingsContainer"]
+margin_right = 1200.0
+margin_bottom = 100.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 3 )
+text = "Game Settings
+"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BloomContainer" type="HBoxContainer" parent="."]
+margin_left = 475.0
+margin_top = 300.0
+margin_right = 1675.0
+margin_bottom = 340.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BloomLabel" type="RichTextLabel" parent="BloomContainer"]
+margin_right = 1120.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 5 )
+text = "Bloom:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BloomToggle" type="CheckButton" parent="BloomContainer"]
+margin_left = 1124.0
+margin_right = 1200.0
+margin_bottom = 40.0
+
+[node name="BrightnessContainer" type="HBoxContainer" parent="."]
+margin_left = 475.0
+margin_top = 400.0
+margin_right = 1675.0
+margin_bottom = 440.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BrightnessLabel" type="RichTextLabel" parent="BrightnessContainer"]
+margin_right = 598.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 5 )
+text = "Brightness:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BrightnessSlider" type="HSlider" parent="BrightnessContainer"]
+margin_left = 602.0
+margin_right = 1200.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[node name="ContrastContainer" type="HBoxContainer" parent="."]
+margin_left = 475.0
+margin_top = 500.0
+margin_right = 1675.0
+margin_bottom = 540.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ContrastLabel" type="RichTextLabel" parent="ContrastContainer"]
+margin_right = 598.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 5 )
+text = "Contrast:"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ContrastSlider" type="HSlider" parent="ContrastContainer"]
+margin_left = 602.0
+margin_right = 1200.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[node name="VolumeContainer" type="HBoxContainer" parent="."]
+margin_left = 475.0
+margin_top = 600.0
+margin_right = 1675.0
+margin_bottom = 640.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VolumeLabel" type="RichTextLabel" parent="VolumeContainer"]
+margin_right = 598.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 5 )
+text = "Volume:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VolumeSlider" type="HSlider" parent="VolumeContainer"]
+margin_left = 602.0
+margin_right = 1200.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = -50.0
+max_value = 20.0
+value = -15.0
+
+[node name="backButton" type="Button" parent="."]
+margin_left = 200.0
+margin_top = 750.0
+margin_right = 350.0
+margin_bottom = 800.0
+custom_fonts/font = ExtResource( 4 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FadeIn" parent="." instance=ExtResource( 9 )]
+visible = false
+color = Color( 0, 0, 0, 1 )
+
+[connection signal="item_rect_changed" from="Background" to="Background" method="_on_Background_item_rect_changed"]
+[connection signal="pressed" from="Container/backButton" to="." method="_on_backButton_pressed"]
+[connection signal="fade_out_finished" from="FadeOut" to="." method="_on_FadeOut_fade_out_finished"]
+[connection signal="toggled" from="BloomContainer/BloomToggle" to="." method="_on_BloomToggle_toggled"]
+[connection signal="value_changed" from="BrightnessContainer/BrightnessSlider" to="." method="_on_BrightnessSlider_value_changed"]
+[connection signal="value_changed" from="ContrastContainer/ContrastSlider" to="." method="_on_ContrastSlider_value_changed"]
+[connection signal="value_changed" from="VolumeContainer/VolumeSlider" to="." method="_on_VolumeSlider_value_changed"]
+[connection signal="pressed" from="backButton" to="." method="_on_backButton_pressed"]
+[connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]

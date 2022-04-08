@@ -68,6 +68,7 @@ export function addEventListeners() {
                 deck.docId = deckId;
                 localStorage.setItem("deckPageDeckDocID", deck.docId);
                 sessionStorage.setItem('deckId', deckId);
+                sessionStorage.setItem('isClassDeck', deck.isClassDeck);
                 history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
                 Elements.modalCreateDeck.hide();
                 await FirebaseController.updateDeckCount(Auth.currentUser.uid);
@@ -271,7 +272,7 @@ export async function buildStudyDecksPage(deckList) {
                 let classDocID = e.target.classdocId.value;
                 await EditDeck.edit_class_deck(classDocID, e.target.docId.value);
             }
-            setTimeout(await study_decks_page(), 2000);
+            //setTimeout(await study_decks_page(), 2000);
             // await study_decks_page();
         });
     }
@@ -292,6 +293,8 @@ export async function buildStudyDecksPage(deckList) {
                 } else {
                     confirmation = true;
                     await EditDeck.delete_class_deck(deckId, confirmation, classDocID, Auth.currentUser.uid);
+                    //await study_decks_page();
+
                 }
             });
             Utilities.enableButton(button, label);
@@ -510,8 +513,7 @@ export function buildDeckView(deck, flashcards, clase, isMastered) {
             <div id="${deck.docId}" class="deck-card">
                 <div class="deck-view-css">
                 <div class="card-body">
-                <p class="pomo-text-color-light"><i class="small material-icons pomo-text-color-light">emoji_events</i></p>
-                    <h5 class="card-text">${deck.name}</h5>
+                    <h5 class="card-text"><i class="small material-icons" style="color: #ffdf00;">emoji_events</i>${deck.name}</h5>
                     <h6 class="card-text" >Subject: ${deck.subject}</h6>
                     <h6 class="card-text">Category: ${deck.category}</h6>
                     <h7 class="card-text"># of flashcards: ${flashcards.length}</h7>

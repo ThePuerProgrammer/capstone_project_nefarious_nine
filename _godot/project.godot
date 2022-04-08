@@ -193,6 +193,7 @@ config/icon="res://icon.png"
 [autoload]
 
 MenuMusic="*res://singletons/MenuMusic.tscn"
+GlobalSettings="*res://singletons/Global_Settings.gd"
 Firebase="*res://addons/godot-firebase/firebase/firebase.tscn"
 CurrentUser="*res://singletons/Current_User.tscn"
 Constants="*res://singletons/Constants.tscn"

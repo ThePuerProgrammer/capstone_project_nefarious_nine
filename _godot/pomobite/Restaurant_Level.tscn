@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=2]
+[gd_scene load_steps=91 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -23,6 +23,7 @@
 [ext_resource path="res://pomobite/Fryer_Oil_Particles.tscn" type="PackedScene" id=21]
 [ext_resource path="res://pomobite/Dishwasher_NPC.tscn" type="PackedScene" id=22]
 [ext_resource path="res://pomobite/CursingParticles.tscn" type="PackedScene" id=23]
+[ext_resource path="res://world_environment.tscn" type="PackedScene" id=24]
 
 [sub_resource type="DynamicFont" id=39]
 size = 10
@@ -2262,6 +2263,8 @@ position = Vector2( 829, 352 )
 visible = false
 position = Vector2( 0, -40 )
 z_index = 5
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 24 )]
 
 [connection signal="ready_to_be_seated" from="." to="." method="_on_Restaurant_Level_ready_to_be_seated"]
 [connection signal="return_to_host_stand" from="." to="." method="_on_Restaurant_Level_return_to_host_stand"]
