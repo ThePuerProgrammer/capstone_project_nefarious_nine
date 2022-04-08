@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/powerdown.mp3-43af21063b1d0c6abbd0a18607e2e2ce.mp3str"
+
+[deps]
+
+source_file="res://PomoBlast/assets/PomoBlast_SFX/powerdown.mp3"
+dest_files=[ "res://.import/powerdown.mp3-43af21063b1d0c6abbd0a18607e2e2ce.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -13,6 +13,7 @@ _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.181818, 0.497727 ), 0.0, 0
 
 [node name="MouseBubbles" type="CPUParticles2D"]
 material = SubResource( 2 )
+z_index = 11
 emitting = false
 amount = 2
 one_shot = true
