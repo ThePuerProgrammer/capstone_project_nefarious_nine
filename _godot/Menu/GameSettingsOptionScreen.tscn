@@ -11,7 +11,7 @@
 [ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=10]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id=3]
 code = "shader_type canvas_item;
 
 uniform vec2 tiled_factor = vec2(1, 1);
@@ -34,7 +34,7 @@ void fragment() {
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+shader = SubResource( 3 )
 shader_param/tiled_factor = Vector2( 1, 1 )
 shader_param/aspect_ratio = 0.475667
 shader_param/wave_height = 0.04
