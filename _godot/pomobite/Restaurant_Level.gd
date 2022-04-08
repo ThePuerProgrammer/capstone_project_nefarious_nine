@@ -1,8 +1,16 @@
 extends Node2D
 
+# <As a> Waiter_Player, <I want to> greet my tables <so that> they know they are being taken care of
+# <As a> Waiter_Player, <I want to> bring my guests their drink orders <so that> they can quench their thirst
+# <As a> Waiter_Player, <I want to> take my guests orders <so that> I can inform the chefs of their food choice
+# <As a> Waiter_Player, <I want to> put the orders into a POS system <so that> I can relay the order to the back of house (and see how their order relates to a flashcard question)
+# <As a> Customer_NPC, <I want to> place a drink order <so that> I can quench my thirst
+# <As a> Customer_NPC, <I want to> place a food order <so that> I can feed my hunger
+
 signal ready_to_be_seated(patrons)
 signal seat_guests()
 signal return_to_host_stand()
+signal table_greeted(table_number)
 
 onready var pos_wall 					= $POSWall
 onready var pos_zoom 					= $POSZoom
@@ -25,6 +33,9 @@ onready var left_player_section			= false
 onready var customer_to_host_path		= false
 onready var table_exiting				= [false, 0]
 onready var customer_path_h_offset		= 200
+onready var server_at_table				= [false, 0]
+
+const table_stay_time	= 180
 
 var pos_table_menu 		= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
 var pos_default_screen 	= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
@@ -66,9 +77,6 @@ var tables = {
 		table11 = [Vector2(1504, 624), Vector2(1600, 624), Vector2(1504, 728), Vector2(1600, 728)],
 		table12 = [Vector2(1728, 624), Vector2(1824, 624), Vector2(1728, 728), Vector2(1824, 728)],
 	},
-	time_since_being_sat = [
-		0,0,0,0,0,0,0,0,0,0,0,0
-	],
 	guests = {
 		table1 = [], table2 = [], table3 = [], table4 = [], table5 = [], table6 = [],
 		table7 = [], table8 = [], table9 = [], table10 = [], table11 = [], table12 = [],
@@ -89,7 +97,10 @@ var tables = {
 		false, false, false, false, false, false,
 		false, false, false, false, false, false
 	],
+	leaving_queue = [],
 }
+
+var leaving_timers_queue = []
 
 var drink_orders = ["water", "tea", "bepis", "spripe", "dr popper"]
 
@@ -126,17 +137,6 @@ func _ready():
 	
 
 func _process(_delta):
-	#for i in range(tables["tables_sat"].size()):
-	#	if tables["tables_sat"][i] and\
-	#	OS.get_system_time_secs() - tables["time_since_being_sat"][i] >= 180:
-	#		tables["tables_sat"][i] = false
-	#		table_exiting = [true, i]
-	#		for guest in tables["guests"]["table" + String(i)]:
-	#			guest.queue_free()
-			
-	
-	#if table_exiting[0]:
-	#	pass
 	
 	if walk_in:
 		var paths = customer_paths.get_children()
@@ -181,6 +181,7 @@ func _process(_delta):
 					if path.get_child(0).unit_offset < 1.0:
 						path.get_child(0).offset += 0.8
 						all_added = false
+						continue
 					
 					if path.get_child(0).unit_offset == 1.0:
 						path.get_child(0).queue_free()
@@ -195,6 +196,7 @@ func _process(_delta):
 
 				if all_added:
 					customer_to_host_path = false
+					
 			
 	if host_back_to_host_stand:
 		if get_node(host_path).get_child(0).unit_offset > 0.0:
@@ -245,6 +247,12 @@ func _on_player_1_interact():
 			$Player1.visible = true
 			$Player1.movable = true
 			$Player2.visible = true
+			
+	elif server_at_table[0]:
+		var table_number = server_at_table[1]
+		if !tables['drink_order_taken'][table_number]:
+			tables['drink_order_taken'][table_number] = true
+			print("TAKING DRINK ORDER AT TABLE: " + String(server_at_table[1]))
 
 
 # POS LOGIC
@@ -448,6 +456,7 @@ func _on_Table12_area_exited(_area):
 
 
 func set_table_popup(var table, var number):
+	_server_at_table(true, number)
 	$PopupCanvas/PopupDialog.rect_position = table.position
 	$PopupCanvas/PopupDialog.rect_position.x -= 42
 	if number == 5 or number == 6 or number == 11 or number == 12:
@@ -457,6 +466,7 @@ func set_table_popup(var table, var number):
 
 	
 func hide_table_popup(var number):
+	_server_at_table(false, 0)
 	tables['tables_entered'][number - 1] = false	
 	var all_exited = true
 	for table in tables['tables_entered']:
@@ -465,6 +475,9 @@ func hide_table_popup(var number):
 	if all_exited:		
 		$PopupCanvas/PopupDialog.hide()
 
+func _server_at_table(is_at_table, table_num):
+	server_at_table[0] = is_at_table
+	server_at_table[1] = table_num
 	
 ####################################################################################################
 
@@ -716,17 +729,27 @@ func _on_DialogueTimer_timeout():
 			
 
 func _on_Restaurant_Level_seat_guests():
-	#tables["time_since_being_sat"][current_focused_table] = OS.get_system_time_secs()
 	var hp = get_node(host_path).get_children()
 	for i in range(1, hp.size()):
 		hp[i].get_child(0).queue_free()
+		hp[i].queue_free()
 	for i in range(0, 4):
 		var customer = customer_npc.instance()
+		customer.table = current_focused_table
 		var table = "table" + String(current_focused_table)
 		customer.position = tables["seat_positions"][table][i]
 		$Customers.add_child(customer)
-	#	tables["guests"]["table" + String(current_focused_table)].append(customer)
-		
+	
+	tables['leaving_queue'].push_back(current_focused_table)
+	var timer = Timer.new()
+	timer.wait_time = table_stay_time
+	timer.one_shot = true
+	timer.connect("timeout", self, "_table_leaving")
+	add_child(timer)
+	timer.start()
+	
+	leaving_timers_queue.push_back(timer)
+	
 	convo_string = "Your server will be\nright with you.\nEnjoy your meal!"
 	var cl = CanvasLayer.new()
 	cl.layer = 4
@@ -746,3 +769,31 @@ func _on_Restaurant_Level_seat_guests():
 func _on_Restaurant_Level_return_to_host_stand():
 	host_back_to_host_stand = true
 
+
+func _table_leaving():
+	var leaving_table = tables['leaving_queue'].front()
+	tables['leaving_queue'].pop_front()
+	var timer = leaving_timers_queue.front()
+	leaving_timers_queue.pop_front()
+	timer.queue_free()
+	var path = $Paths/HostPaths.get_child(leaving_table - 1)
+	var children = path.get_children()
+	for child in children:
+		child.queue_free()
+	var offset_decrementer = 1.0		
+	for customer in $Customers.get_children():
+		if customer.table == leaving_table:
+			customer.queue_free()
+			# FOR NOW... the guests will just blip out of the restaurant
+#			var new_customer = customer_npc.instance()
+#			var pf2d = PathFollow2D.new()
+#			pf2d.unit_offset = offset_decrementer
+#			offset_decrementer -= .05
+#			pf2d.loop = false
+#			pf2d.rotate = false
+#			pf2d.add_child(new_customer)
+#			$Paths/HostPaths.get_child(leaving_table - 1).add_child(pf2d)
+			
+	table_exiting[0] = true
+	table_exiting[1] = leaving_table
+	
