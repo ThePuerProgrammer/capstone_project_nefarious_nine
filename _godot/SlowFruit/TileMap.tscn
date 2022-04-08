@@ -415,7 +415,6 @@ texture = ExtResource( 1 )
 [node name="Treedeco" type="Sprite" parent="."]
 position = Vector2( 171.688, 88.9593 )
 scale = Vector2( 7.58442, 6.4764 )
-z_index = 1
 texture = ExtResource( 6 )
 
 [node name="Treedeco" type="Sprite" parent="Treedeco"]
@@ -482,7 +481,7 @@ position = Vector2( 547, -184 )
 scale = Vector2( 1.22, 1.24667 )
 frames = SubResource( 55 )
 animation = "planet"
-frame = 3
+frame = 29
 playing = true
 
 [node name="greens" type="TileMap" parent="."]
@@ -544,7 +543,7 @@ shape = SubResource( 59 )
 scale = Vector2( 2.021, 1.778 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SmallPlatform"]
-position = Vector2( 221.672, 53.9932 )
+position = Vector2( 221.672, 49.4938 )
 scale = Vector2( 1.483, 1.337 )
 z_index = 2
 shape = SubResource( 3 )
@@ -559,7 +558,6 @@ texture = ExtResource( 8 )
 [node name="platform" type="StaticBody2D" parent="."]
 position = Vector2( 1528, 15 )
 scale = Vector2( 2.064, 2.177 )
-z_index = 1
 
 [node name="FloatGround" type="Sprite" parent="platform"]
 scale = Vector2( 0.689959, 0.924528 )

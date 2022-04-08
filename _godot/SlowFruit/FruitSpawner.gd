@@ -1,13 +1,8 @@
 extends Node
 
 
-var floating_text = preload("res://SlowFruit/FloatingText.tscn")
+#var floating_text = preload("res://SlowFruit/FloatingText.tscn")
 
-var question
-var answer1
-var answer2
-var answer3
-var answer4
 
 onready var fruit1 = get_node("/Fruit1")
 onready var fruit2 = get_node("/Fruit2")
@@ -20,7 +15,7 @@ onready var fruit8 = get_node("/Fruit8")
 onready var fruit9 = get_node("/Fruit9")
 onready var fruit10 = get_node("/Fruit10")
 
-onready var pomotimer = get_node("root/singletons/Pomotimer")
+onready var pomotimer = get_node("root/Pomotimer")
 var deck = pomotimer._deck
 #print decks
 
@@ -30,7 +25,12 @@ var coins = 0
 
 var fruits = [fruit1, fruit2, fruit3, fruit4, fruit5, fruit6, fruit7, fruit8, fruit9, fruit10]
 var fruitCopy = fruits.duplicate()
-onready var answer = get_node("Answer1/FloatingText/Answer")
+
+onready var questionLabel = get_node("Control/Question/Question/Label")
+onready var answer1Label = get_node("Control/Answer1Container/Answer1/RichTextLabel")
+onready var answer2Label = get_node("Control/Answer1Container/Answer2/RichTextLabel")
+onready var answer3Label = get_node("Control/Answer1Container/Answer3/RichTextLabel")
+onready var answer4Label = get_node("Control/Answer1Container/Answer4/RichTextLabel")
 
 var choseAnswer = false
 
@@ -44,10 +44,10 @@ func _ready():
 func _process(delta):
 	setCards()
 
-func showQuestion(question):
-	var text = floating_text.instance()
-	text.amount = question
-	add_child(text)
+#func showQuestion(question):
+#	var text = floating_text.instance()
+#	text.amount = question
+#	add_child(text)
 	
 func chooseFruit():
 	#for i in answers:
@@ -57,7 +57,6 @@ func chooseFruit():
 func setCards():
 	var card = pomotimer.getRandomFlashcard()
 	
-	var questionLabel = get_node("/Control/Question/Question/Label")
 	questionLabel.text = card[0]
 	print(questionLabel.text)
 	
