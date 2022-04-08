@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_26pt.tres" type="DynamicFont" id=1]
 [ext_resource path="res://assets/gameimages/PomoBITEGraphic.png" type="Texture" id=2]
 [ext_resource path="res://transitions/pomobite_transition.gd" type="Script" id=3]
+[ext_resource path="res://world_environment.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Animation" id=1]
 resource_name = "FADE_IN"
@@ -119,6 +120,8 @@ __meta__ = {
 playback_speed = 0.65
 anims/FADE_IN = SubResource( 1 )
 anims/FADE_OUT = SubResource( 2 )
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 4 )]
 
 [connection signal="timeout" from="Pomobite_Transition_Timer" to="." method="_on_Pomobite_Transition_Timer_timeout"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

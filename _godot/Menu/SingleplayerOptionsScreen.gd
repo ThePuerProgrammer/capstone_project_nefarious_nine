@@ -21,9 +21,6 @@ var deck_selected
 var deckList
 var flashcardList
 
-
-
-
 #Dictionaries
 var dict_val_categories : Dictionary = {}
 var deck_dict_name : Dictionary = {} #(-_-)#
@@ -393,10 +390,8 @@ func on_deck_item_selected(id):
 				Pomotimer.generatePossibleAnswersPool()
 #				print("FC_INFO:",flashcardInfo)
 				flash_dict_name[flashcard["doc_name"]] = fc_fields["question"]
-				print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
-			print("POMOTIMER_FLASH:",Pomotimer._flashcards)
-			for x in range (0,len(Pomotimer._flashcards)):
-				print("Question:", Pomotimer._flashcards[x][0])
+				#print("FLASH_NAME:", flash_dict_name[flashcard["doc_name"]])
+			#print("POMOTIMER_FLASH:",Pomotimer._flashcards)
 ##########################
 #Disables Selection Options
 ##########################

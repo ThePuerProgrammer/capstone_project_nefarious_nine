@@ -2,6 +2,7 @@ extends Node
 
 export (PackedScene) var Mob
 export (PackedScene) var PowerUp = preload("res://PomoBlast/PowerUp.tscn")
+onready var _game_settings = preload("res://world_environment.tscn")
 
 var score = 0 
 # Called when the node enters the scene tree for the first time.
@@ -9,7 +10,6 @@ func _ready():
 	$Player.start($StartPosition.position)
 	$MobTimer.start()
 	$GameTimer.start()
-	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

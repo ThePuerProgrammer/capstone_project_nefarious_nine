@@ -6,9 +6,9 @@
 
 [node name="Center" parent="Container" index="0"]
 margin_left = 474.0
-margin_top = 330.0
+margin_top = 349.0
 margin_right = 1446.0
-margin_bottom = 570.0
+margin_bottom = 550.0
 
 [node name="Label" parent="Container/Center" index="0"]
 margin_right = 972.0
@@ -20,17 +20,12 @@ together.
 <As a> user, <I want to> join a multiplayer lobby 
 <so that> we can study/play together."
 
-[node name="backButton" parent="Container/Center" index="1"]
-margin_top = 138.0
-margin_right = 972.0
-margin_bottom = 162.0
-
-[node name="DungeonFightTemporaryNavigation" parent="Container/Center" index="2"]
+[node name="DungeonFightTemporaryNavigation" parent="Container/Center" index="1"]
 margin_top = 177.0
 margin_right = 972.0
 margin_bottom = 201.0
 
-[node name="PomoBlast" parent="Container/Center" index="3"]
+[node name="PomoBlast" parent="Container/Center" index="2"]
 margin_top = 216.0
 margin_right = 972.0
 margin_bottom = 240.0

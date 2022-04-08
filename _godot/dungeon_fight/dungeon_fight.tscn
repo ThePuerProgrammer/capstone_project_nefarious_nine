@@ -1,4 +1,4 @@
-[gd_scene load_steps=118 format=2]
+[gd_scene load_steps=119 format=2]
 
 [ext_resource path="res://dungeon_fight/art/enemy/attackFrames/attack animation/Big-Cultist_Attack_19.png" type="Texture" id=1]
 [ext_resource path="res://dungeon_fight/art/other/Timer.png" type="Texture" id=2]
@@ -12,7 +12,7 @@
 [ext_resource path="res://dungeon_fight/Buttons/AnswerButton.tscn" type="PackedScene" id=10]
 [ext_resource path="res://dungeon_fight/ProgressBar/progress_bar_hard_foreground.tres" type="StyleBox" id=11]
 [ext_resource path="res://dungeon_fight/PopupMessage.gd" type="Script" id=12]
-[ext_resource path="res://dungeon_fight/art/enemy/attackFrames/firstAttackLvl.png" type="Texture" id=13]
+[ext_resource path="res://world_environment.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=14]
 [ext_resource path="res://dungeon_fight/PopupLabel.gd" type="Script" id=15]
 [ext_resource path="res://dungeon_fight/overallMinigameGameTimer.gd" type="Script" id=16]
@@ -248,6 +248,11 @@ animations = [ {
 "name": "dead",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 77 ), ExtResource( 78 ), ExtResource( 81 ), ExtResource( 82 ), ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
+"loop": true,
+"name": "die",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 43 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 48 ) ],
 "loop": true,
 "name": "attack",
@@ -257,23 +262,33 @@ animations = [ {
 "loop": true,
 "name": "dodge",
 "speed": 5.0
-}, {
-"frames": [ ExtResource( 77 ), ExtResource( 78 ), ExtResource( 81 ), ExtResource( 82 ), ExtResource( 79 ), ExtResource( 80 ), ExtResource( 83 ) ],
-"loop": true,
-"name": "die",
-"speed": 5.0
 } ]
 
 [sub_resource type="SpriteFrames" id=17]
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
-"loop": false,
-"name": "attack_lingering",
+"frames": [ ExtResource( 58 ) ],
+"loop": true,
+"name": "first_attack_level",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
+"frames": [ ExtResource( 63 ) ],
 "loop": false,
-"name": "attack_animation_p1",
+"name": "second_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
+"loop": true,
+"name": "idle_animation",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 66 ) ],
+"loop": false,
+"name": "third_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
+"loop": false,
+"name": "hit_effect",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 18 ), ExtResource( 70 ), ExtResource( 19 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 1 ) ],
@@ -286,29 +301,14 @@ animations = [ {
 "name": "die",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 66 ) ],
+"frames": [ ExtResource( 1 ) ],
 "loop": false,
-"name": "third_attack_level",
+"name": "attack_lingering",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 63 ) ],
+"frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
 "loop": false,
-"name": "second_attack_level",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 75 ), ExtResource( 73 ), ExtResource( 74 ) ],
-"loop": false,
-"name": "hit_effect",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 65 ), ExtResource( 56 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 57 ), ExtResource( 64 ) ],
-"loop": true,
-"name": "idle_animation",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 58 ) ],
-"loop": true,
-"name": "first_attack_level",
+"name": "attack_animation_p1",
 "speed": 5.0
 } ]
 
@@ -840,10 +840,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -611.5
-margin_top = -1050.0
-margin_right = 611.5
-margin_bottom = -476.0
+margin_left = 348.5
+margin_top = -600.0
+margin_right = 1571.5
+margin_bottom = -26.0
 rect_min_size = Vector2( 0, 300 )
 custom_styles/panel = ExtResource( 8 )
 
@@ -1163,6 +1163,8 @@ script = ExtResource( 24 )
 [node name="WhiteInAnimationPlayer" type="AnimationPlayer" parent="Effects/WhiteIn"]
 anims/RESET = SubResource( 8 )
 anims/white_in = SubResource( 9 )
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 13 )]
 
 [connection signal="animation_finished" from="Player/PlayerAnimatedSprite" to="Player" method="_on_PlayerAnimatedSprite_animation_finished"]
 [connection signal="animation_finished" from="Player/PlayerAnimatedSprite" to="QuestionManager" method="_on_PlayerAnimatedSprite_animation_finished"]
