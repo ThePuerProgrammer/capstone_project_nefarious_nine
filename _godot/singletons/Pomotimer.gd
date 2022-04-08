@@ -1,13 +1,25 @@
 extends Node
 #Global Variables
 ################################################################################
+
+#Timer
+##############
 var timer
+var _time_limit
+var _testing_count
+#Game Queue
+##############
 var currentGame
 var current_game_scene
 var _game_queue
+#Deck of Cards
+##############
 var _deck
-var _time_limit
-var _testing_count
+#Game Settings
+##############
+const SAVEFILE = "user:://SAVEFILE.save"
+var _game_settings = {}
+
 
 # structure of an element in _flashcards
 #	_flashcards[DESIRED_INDEX]['question']
@@ -36,6 +48,10 @@ func _ready():
 	timer= Timer.new()
 	add_child(timer)
 	timer.connect("timeout",self,"_on_Timer_timeout")
+	load_data()
+
+
+
 ################################################################################
 #Starts the Game
 ################################################################################
@@ -89,6 +105,33 @@ func _on_Timer_timeout():
 func timer_start(time_limit):
 		timer.set_wait_time(time_limit)
 		timer.start()
+################################################################################
+#Game Settings
+################################################################################
+#Loads Saved Game Settings
+##########################
+func load_data():
+	var file = File.new()
+	if not file.file_exists(SAVEFILE):
+		_game_settings = {
+			"bloom_on": false,
+			"brightness": 1,
+			"contrast": 1,
+			"volume": -15,
+		}
+		save_data()
+	else:
+		file.open(SAVEFILE, File.READ)
+		_game_settings = file.get_var()
+		file.close()
+
+#Saves Game Settings
+##########################
+func save_data():
+	var file = File.new()
+	file.open(SAVEFILE, File.WRITE)
+	file.store_var(_game_settings)
+	file.close()
 ################################################################################
 
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/pomopoop.png-653809378dba63f2832b0dfd8ea6f0be.stex"
+path="res://.import/pomopoop.png-aab72efb965e0ec8f9eb5f641f1db0d0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/pet/pet_sprites/new/pomopoop.png"
-dest_files=[ "res://.import/pomopoop.png-653809378dba63f2832b0dfd8ea6f0be.stex" ]
+source_file="res://ChillZone/Pet/pet_sprites/new/pomopoop.png"
+dest_files=[ "res://.import/pomopoop.png-aab72efb965e0ec8f9eb5f641f1db0d0.stex" ]
 
 [params]
 
