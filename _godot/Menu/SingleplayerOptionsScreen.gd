@@ -231,8 +231,8 @@ func _on_PomoDefense_Selection_Toggle_toggled(button_pressed):
 func add_items_to_selection_method():
 	#Options for Method Selection
 	method_selection_optionbutton.add_item("Pick One")
-	method_selection_optionbutton.add_item("Category")
 	method_selection_optionbutton.add_item("Decks")
+	#method_selection_optionbutton.add_item("Category")
 	method_selection_optionbutton.set_item_disabled(0,true)
 
 #Deck Dropdown Items
@@ -251,7 +251,6 @@ func add_items_to_deck_selection():
 		if(fields["flashcardNumber"] != 0):
 			deck_selection_optionbutton.add_item(deck_dict_name[deck["doc_name"]])
 #		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
-	deck_selection_optionbutton.add_item("DEMO")
 	deck_selection_optionbutton.set_item_disabled(0,true)
 	#for deck in deck_dict_name.values():
 		#deck_selection_optionbutton.add_item(deck[0])
@@ -311,13 +310,13 @@ func add_items_to_timer_selection():
 ##########################
 #Checks which method is selected
 func on_method_item_selected(id):
-	if method_selection_optionbutton.get_item_id(id)==1:
+	if method_selection_optionbutton.get_item_id(id)==2:
 #		print(str(method_selection_optionbutton.get_item_text(id)))
 		disable_deck_selection_option()
 		category_selection_optionbutton.disabled=false
 		category_selection_optionbutton.clear()
 		add_items_to_category_selection()
-	elif method_selection_optionbutton.get_item_id(id)==2:
+	elif method_selection_optionbutton.get_item_id(id)==1:
 #		print(str(method_selection_optionbutton.get_item_text(id)))
 		disable_category_selection_option()
 		deck_selection_optionbutton.disabled=false

@@ -75,6 +75,10 @@ func _player_died():
 	print("player died")
 	$SoundDie.play()
 	$SoundExplosion.play()
+	$HUD/GameOverScreen.show()
+	$HUD/QuestionPanel.hide()
+	$HUD/AnswerControl.hide()
+	
 	gameOver = true
 	
 	
