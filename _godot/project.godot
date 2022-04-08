@@ -193,18 +193,20 @@ config/icon="res://icon.png"
 [autoload]
 
 MenuMusic="*res://singletons/MenuMusic.tscn"
-GlobalSettings="*res://singletons/Global_Settings.gd"
 Firebase="*res://addons/godot-firebase/firebase/firebase.tscn"
 CurrentUser="*res://singletons/Current_User.tscn"
 Constants="*res://singletons/Constants.tscn"
 FirebaseController="*res://singletons/Firebase_Controller.tscn"
 Pomotimer="*res://singletons/Pomotimer.gd"
 LobbyDescription="*res://singletons/Lobby_Description.tscn"
+GlobalSettings="*res://singletons/Global_Settings.gd"
 
 [display]
 
 window/size/width=1920
 window/size/height=900
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_width"
 
 [editor_plugins]
 
@@ -214,6 +216,7 @@ enabled=PoolStringArray( "res://addons/godot-firebase/plugin.cfg", "res://addons
 
 firebase=false
 layer=false
+stretch=false
 
 [input]
 
