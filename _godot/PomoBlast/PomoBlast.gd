@@ -3,6 +3,7 @@ extends Node
 export (PackedScene) var Mob
 export (PackedScene) var PowerUp = preload("res://PomoBlast/PowerUp.tscn")
 export (PackedScene) var Bullet = preload("res://PomoBlast/Bullet.tscn")
+onready var _game_settings = preload("res://world_environment.tscn")
 
 var p = PowerUp.instance()
 var rng = RandomNumberGenerator.new()
