@@ -158,6 +158,59 @@ export async function profile_page() {
             console.log(e);
         }
     }
+    console.log("WTF");
+    let deckList = [];
+    let masteredDecks = [];
+    try {
+        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
+    } catch (e) {
+        console.log(e);
+    }
+    console.log(deckList);
+
+
+    //This will update the isMastered field and give rewards if user did not visit study decks page after smart studying
+    let streaks;
+    let isMastered = false;
+    for (let i = 0; i < deckList.length; i++) {
+        streaks = [];
+        isMastered = false;
+        let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
+        let lastSRSaccess = await FirebaseController.getUserLastSrsAccessDeckData(Auth.currentUser.uid, deckList[i].docId);
+        for (let k = 0; k < flashcards.length; k++) {
+            let streak = await FirebaseController.getUserFlashcardDataByLastSrsAccessandFCid(Auth.currentUser.uid, deckList[i].docId, lastSRSaccess, flashcards[k].docID);
+            streaks.push(streak);
+        }
+
+        if (streaks.length >= 1) {
+            for (let j = 0; j < streaks.length; j++) {
+                if (streaks[j] > 3) {
+                    isMastered = true;
+                }
+            }
+        }
+        if (isMastered == true && deckList[i].isMastered == false) {
+            await FirebaseController.updateDeckMasteryandAddCoins(Auth.currentUser.uid, deckList[i].docId);
+        }
+
+    }
+    //refresh our deck list in case study decks was not visited prior to visiting profile page
+    let updatedDeckList;
+    try {
+        updatedDeckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
+    } catch (e) {
+        console.log(e);
+    }
+
+    for (let i = 0; i < updatedDeckList.length; i++) {
+        if (updatedDeckList[i].isMastered == true) {
+            masteredDecks.push(updatedDeckList[i]);
+        }
+    }
+
+
+
+
 
     let html = '';
 
