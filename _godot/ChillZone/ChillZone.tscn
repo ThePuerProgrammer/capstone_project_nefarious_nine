@@ -398,6 +398,7 @@ scale = Vector2( 0.461791, -0.696972 )
 shape = SubResource( 12 )
 
 [node name="Walls" type="RigidBody2D" parent="Background"]
+collision_mask = 129
 mode = 1
 gravity_scale = 0.0
 

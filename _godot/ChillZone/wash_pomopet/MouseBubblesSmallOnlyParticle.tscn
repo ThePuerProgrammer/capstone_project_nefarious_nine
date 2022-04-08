@@ -38,6 +38,7 @@ anim_speed = 1.0
 
 [node name="MouseBubbles" type="Particles2D"]
 material = SubResource( 5 )
+z_index = 11
 emitting = false
 amount = 1
 lifetime = 0.75
