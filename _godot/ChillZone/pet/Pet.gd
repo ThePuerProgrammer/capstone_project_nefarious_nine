@@ -260,6 +260,7 @@ func _on_PoopPickupButton_pressed():
 
 
 func showActionBar():
+	$ActionBar.rect_position = _getCurrentKinematicBody().position
 	$ActionBar/AnimationPlayer.play("show_buttons")
 
 func hideActionBar():

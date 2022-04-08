@@ -562,6 +562,9 @@ polygon = PoolVector2Array( 58.5, -149.9, 59.9, -146.5, 63.3, -146.5, 66.5, -143
 [node name="ActionBar" type="Control" parent="."]
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 100 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CleanButton" type="TextureButton" parent="ActionBar"]
 margin_left = -296.0
