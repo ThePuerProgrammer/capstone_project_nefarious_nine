@@ -205,6 +205,8 @@ GlobalSettings="*res://singletons/Global_Settings.gd"
 
 window/size/width=1920
 window/size/height=900
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_width"
 
 [editor_plugins]
 
@@ -214,6 +216,7 @@ enabled=PoolStringArray( "res://addons/godot-firebase/plugin.cfg", "res://addons
 
 firebase=false
 layer=false
+stretch=false
 
 [input]
 
@@ -361,5 +364,5 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-environment/default_clear_color=Color( 0.207843, 0.207843, 0.207843, 1 )
+environment/default_clear_color=Color( 0, 0, 0, 1 )
 environment/default_environment="res://default_env.tres"
