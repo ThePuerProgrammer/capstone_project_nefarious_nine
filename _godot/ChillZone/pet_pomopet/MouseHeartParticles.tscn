@@ -13,7 +13,7 @@ _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.223776, 0.383506 ), 0.0, 0
 
 [node name="MouseHeart" type="CPUParticles2D"]
 material = SubResource( 4 )
-z_index = 11
+z_index = 22
 emitting = false
 amount = 5
 lifetime = 2.0
