@@ -175,12 +175,14 @@ func getDistanceBetweenMousePositions(pos1, pos2):
 	return pow(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2), 0.5)
 
 func showCleaningProgressBar():
+	$WashMeter.rect_position = Vector2(_getCurrentKinematicBody().position.x - 166, -231.244)
 	$WashMeter/WashMeterProgressBar/AnimationPlayer.play("fade_in")
 
 func hideCleaningProgressBar():
 	$WashMeter/WashMeterProgressBar/AnimationPlayer.play("fade_out")
 	
 func showPettingProgressBar():
+	$PetMeter.rect_position = Vector2(_getCurrentKinematicBody().position.x - 166, -231.244)
 	$PetMeter/ProgressBar/AnimationPlayer.play("fade_in")
 
 func hidePettingProgressBar():
@@ -260,6 +262,7 @@ func _on_PoopPickupButton_pressed():
 
 
 func showActionBar():
+	$ActionBar.rect_position = _getCurrentKinematicBody().position
 	$ActionBar/AnimationPlayer.play("show_buttons")
 
 func hideActionBar():

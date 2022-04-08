@@ -11,9 +11,13 @@ func _ready():
 	$CleanSparkle.modulate.a = 0
 	$CleanSparkle.play("sparkle")
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(_delta):
+	if $CleanGlowParticle.emitting:
+		# Move effects to player location
+		$CleanGlowParticle.global_position = Vector2(pomopet._getCurrentKinematicBody().global_position.x, pomopet._getCurrentKinematicBody().global_position.y + 25)
+		$CleanSparkle.global_position = pomopet._getCurrentKinematicBody().global_position
+		
+	
 
 func _input(event):
 	if !bubblesOnCooldown and pomopet.petWashingModeOn and pomopet.mouseIsDown and pomopet.isWithinPetTypeCollisionPolygon() and event is InputEventMouseMotion:
@@ -32,10 +36,6 @@ func _on_MouseBubblesCooldownTimer_timeout(): # bubble cooldown resets when time
 
 # Starts clean effect animations
 func playCleanEffects():
-	# Move effects to player location
-	$CleanGlowParticle.position = Vector2(pomopet.position.x, pomopet.position.y + 25)
-	$CleanSparkle.position = pomopet.position
-	
 	# Start effects
 	# 	Glow Effect
 	$CleanGlowParticle.emitting = true
