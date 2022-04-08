@@ -11,6 +11,7 @@ var _progressBarHard
 var _waitTime
 var _subSectionWaitTime
 var _waitingForAnswer = false
+var gameStarted = false
 var _enemy
 var _timeRemaining
 #export (Texture) var _enemyIdle_tex
@@ -159,6 +160,9 @@ func stopQuestionTimer():
 	$QuestionTimer.stop()
 	
 func _on_answerPanelContainer_Clicked(answerPanelText):
+	if !gameStarted:
+		return
+	
 	stopQuestionTimer()
 	var correctAnswerClicked = answerPanelText == _answerTextCorrect
 	#
@@ -214,6 +218,7 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 
 func _on_startGameTimer_timeout():
 	_waitingForAnswer = true
+	gameStarted = true
 	$startGameTimer.stop()
 	$gameplayGameTimer.start()
 	startNextQuestion()

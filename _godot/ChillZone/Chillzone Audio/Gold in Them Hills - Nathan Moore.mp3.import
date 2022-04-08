@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Gold in Them Hills - Nathan Moore.mp3-202a7066a898b0ce4647ffd660d7008c.mp3str"
+
+[deps]
+
+source_file="res://ChillZone/Chillzone Audio/Gold in Them Hills - Nathan Moore.mp3"
+dest_files=[ "res://.import/Gold in Them Hills - Nathan Moore.mp3-202a7066a898b0ce4647ffd660d7008c.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

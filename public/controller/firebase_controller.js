@@ -854,7 +854,7 @@ export async function updateDeckMasteryandAddCoins(uid, deckDocID) {
         console.log(e);
     }
 
-    try { //turns coins into NAN
+    try {
         let coins = await getCoins(Auth.currentUser.uid);
         let newcoins = coins + 100;
         await updateCoins(Auth.currentUser.uid, newcoins);

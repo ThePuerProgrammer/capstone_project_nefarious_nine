@@ -707,7 +707,22 @@ iframe {
     height: 100%;
     margin: auto;
     width: 50%;
+}
+
+.user-mastered-decks {
+    background-color:#5F4B66;
+    padding: 20px;
+    border-radius: 25px;
+    height: 100%;
+    width: 100%;
+}
+
+.user-deck-trophy {
+    padding: 10px;
+    word-wrap: break-word;
+    width: 33%;
     text-align: center;
+    vertical-align: top;
 }
 
 .equipped-pomopet {

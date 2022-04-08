@@ -20,9 +20,6 @@ _data = {
 [node name="Main" type="Node"]
 pause_mode = 2
 script = ExtResource( 4 )
-__meta__ = {
-"_edit_horizontal_guides_": [  ]
-}
 Mob = ExtResource( 2 )
 
 [node name="StartPosition" type="Position2D" parent="."]
