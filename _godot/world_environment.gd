@@ -12,9 +12,9 @@ func _on_bloom_toggled(value):
 	
 func _on_brightness_updated(value):
 	environment.adjustment_brightness = value
-	print("Brightness in WORLD",environment.glow_bloom,environment.glow_enabled)
+	#print("Brightness in WORLD",environment.glow_bloom,environment.glow_enabled)
 
 func _on_contrast_updated(value):
 	environment.adjustment_contrast = value
-	print("Contrast in WORLD",environment.glow_bloom,environment.glow_enabled)
+	#print("Contrast in WORLD",environment.glow_bloom,environment.glow_enabled)
 

@@ -173,6 +173,7 @@ __meta__ = {
 }
 
 [node name="Category_Selection_Container" type="HBoxContainer" parent="."]
+visible = false
 margin_left = 60.0
 margin_top = 515.0
 margin_right = 360.0
@@ -191,6 +192,7 @@ text = "Category Selection:"
 scroll_active = false
 
 [node name="Category_Selection_Button" type="OptionButton" parent="."]
+visible = false
 margin_left = 380.0
 margin_top = 515.0
 margin_right = 528.0

@@ -12,19 +12,20 @@ func _ready():
 ################################################################################
 func toggle_bloom(value):
 	emit_signal("bloom_toggled", value)
-	print("Bloom in Global Settings")
-	Pomotimer._game_settings.bloom = value
+	#print("Bloom in Global Settings")
+	Pomotimer._game_settings.bloom_on = value
 	Pomotimer.save_data()
+	print("Pomotimer STATE:",Pomotimer._game_settings.bloom_on)
 
 func update_brightness(value):
 	emit_signal("brightness_updated", value)
-	print("Brightness in Global Settings")
+	#print("Brightness in Global Settings")
 	Pomotimer._game_settings.brightness = value
 	Pomotimer.save_data()
 
 func update_contrast(value):
 	emit_signal("contrast_updated", value)
-	print("Contrast in Global Settings")
+	#print("Contrast in Global Settings")
 	Pomotimer._game_settings.contrast = value
 	Pomotimer.save_data()
 
