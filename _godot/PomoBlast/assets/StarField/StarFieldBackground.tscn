@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://PomoBlast/assets/StarField/StarField.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GradientTexture" id=1]
 
 [node name="StarFieldBackground" type="ParallaxBackground"]
 scroll_ignore_camera_zoom = true
@@ -8,6 +10,17 @@ scroll_ignore_camera_zoom = true
 [node name="ParallaxLayer" type="ParallaxLayer" parent="."]
 motion_scale = Vector2( 0.1, 0.1 )
 motion_mirroring = Vector2( 1920, 1080 )
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayer"]
+margin_left = -834.0
+margin_top = -343.0
+margin_right = 4475.0
+margin_bottom = 2668.0
+texture = SubResource( 1 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="StarField" parent="ParallaxLayer" instance=ExtResource( 1 )]
 

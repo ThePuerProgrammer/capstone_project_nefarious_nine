@@ -310,6 +310,36 @@ animations = [ {
 "loop": false,
 "name": "attack_animation_p2",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 63 ) ],
+"loop": false,
+"name": "second_attack_level",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": false,
+"name": "attack_lingering",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 90 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 86 ), ExtResource( 89 ), ExtResource( 92 ), ExtResource( 91 ), ExtResource( 96 ), ExtResource( 93 ), ExtResource( 94 ), ExtResource( 95 ) ],
+"loop": false,
+"name": "die",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 17 ), ExtResource( 71 ), ExtResource( 72 ) ],
+"loop": false,
+"name": "attack_animation_p1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 18 ), ExtResource( 70 ), ExtResource( 19 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 1 ) ],
+"loop": false,
+"name": "attack_animation_p2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 66 ) ],
+"loop": false,
+"name": "third_attack_level",
+"speed": 5.0
 } ]
 
 [sub_resource type="DynamicFont" id=15]
