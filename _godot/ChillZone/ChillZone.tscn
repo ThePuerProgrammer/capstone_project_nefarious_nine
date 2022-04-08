@@ -1,8 +1,9 @@
-[gd_scene load_steps=65 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://ChillZone/wash_pomopet/AnimationPlayer_Anims/sparkle_fade_out.tres" type="Animation" id=1]
 [ext_resource path="res://ChillZone/pet/Pet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ChillZone/ChillZone.gd" type="Script" id=3]
+[ext_resource path="res://ChillZone/food_pomopet/SoundEffects/food_bag_shake.mp3" type="AudioStream" id=4]
 [ext_resource path="res://ChillZone/Setting Assets/Chillzone-floor.png" type="Texture" id=5]
 [ext_resource path="res://ChillZone/wash_pomopet/ParticleEffectController.gd" type="Script" id=6]
 [ext_resource path="res://ChillZone/Setting Assets/Forest_background.png" type="Texture" id=8]
@@ -481,7 +482,7 @@ texture = ExtResource( 23 )
 visible = false
 
 [node name="TrashcanOpenForeground" type="Sprite" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
-z_index = 6
+z_index = 17
 texture = ExtResource( 24 )
 
 [node name="TrashcanOpenBackground" type="Sprite" parent="ActionController/PoopController/Trashcan/TrashcanOpen"]
@@ -559,7 +560,7 @@ texture = ExtResource( 37 )
 [node name="FoodBowlFg" type="Sprite" parent="ActionController/FoodController/FoodBowl"]
 position = Vector2( 154.836, 620.508 )
 scale = Vector2( 3, 3 )
-z_index = 2
+z_index = 14
 texture = ExtResource( 29 )
 
 [node name="FoodPieceKillBox" type="Area2D" parent="ActionController/FoodController/FoodBowl"]
@@ -599,11 +600,11 @@ rotation = -2.35619
 scale = Vector2( 3, 3 )
 
 [node name="FoodBagBg" type="Sprite" parent="ActionController/FoodController/FoodBag/BagActive"]
-z_index = -1
+z_index = 12
 texture = ExtResource( 38 )
 
 [node name="FoodBagFg" type="Sprite" parent="ActionController/FoodController/FoodBag/BagActive"]
-z_index = 2
+z_index = 14
 texture = ExtResource( 31 )
 
 [node name="FoodSpawnPositions" type="Node2D" parent="ActionController/FoodController/FoodBag"]
@@ -648,6 +649,10 @@ scale_amount = 2.0
 scale_amount_random = 0.5
 scale_amount_curve = SubResource( 1 )
 color_ramp = SubResource( 2 )
+
+[node name="FoodBagShake" type="AudioStreamPlayer" parent="ActionController/FoodController/FoodBag"]
+stream = ExtResource( 4 )
+volume_db = -10.0
 
 [node name="FeedMeter" type="Control" parent="ActionController/FoodController"]
 margin_left = -166.0
