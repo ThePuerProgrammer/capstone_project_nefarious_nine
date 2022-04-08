@@ -20,16 +20,17 @@ onready var fruit8 = get_node("/Fruit8")
 onready var fruit9 = get_node("/Fruit9")
 onready var fruit10 = get_node("/Fruit10")
 
-onready var timer = get_node("root/singletons/Pomotimer")
-var decks = timer._flashcards
+onready var pomotimer = get_node("root/singletons/Pomotimer")
+var deck = pomotimer._deck
 #print decks
 
-
+var numCorrect = 0
+var numIncorrect = 0
 var coins = 0
 
 var fruits = [fruit1, fruit2, fruit3, fruit4, fruit5, fruit6, fruit7, fruit8, fruit9, fruit10]
 var fruitCopy = fruits.duplicate()
-onready var answers = get_node("Answer1/FloatingText/Answer")
+onready var answer = get_node("Answer1/FloatingText/Answer")
 
 var choseAnswer = false
 
@@ -41,7 +42,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	showQuestion("hiya howdy")
+	setCards()
 
 func showQuestion(question):
 	var text = floating_text.instance()
@@ -52,6 +53,14 @@ func chooseFruit():
 	#for i in answers:
 		#answerPic = fruit[randi()% fruit.size()]
 	pass
+	
+func setCards():
+	var card = pomotimer.getRandomFlashcard()
+	
+	var questionLabel = get_node("/Control/Question/Question/Label")
+	questionLabel.text = card[0]
+	print(questionLabel.text)
+	
 
 func setAnswer():
 	pass

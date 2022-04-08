@@ -1,21 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://SlowFruit/Fruit_Level.gd" type="Script" id=1]
 [ext_resource path="res://SlowFruit/Boogie_Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://SlowFruit/TileMap.tscn" type="PackedScene" id=3]
-[ext_resource path="res://SlowFruit/An Adventure in the Future.mp3" type="AudioStream" id=4]
-[ext_resource path="res://SlowFruit/Tilemap2.tscn" type="PackedScene" id=5]
+[ext_resource path="res://SlowFruit/assets/Sound/An Adventure in the Future.mp3" type="AudioStream" id=4]
 [ext_resource path="res://SlowFruit/FruitSpawner.tscn" type="PackedScene" id=6]
 
 [node name="Fruit_Level" type="Node2D"]
-position = Vector2( 0, 8 )
+position = Vector2( -24, 6 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
-
-[node name="Tilemap2" parent="." instance=ExtResource( 5 )]
-visible = false
 
 [node name="Boogie__Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 80, 408 )
@@ -26,12 +22,9 @@ gravity_scale = 7.0
 
 [node name="TileMap" parent="." instance=ExtResource( 3 )]
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource( 4 )
-attenuation_model = 3
-autoplay = true
-
-[node name="Area2D" type="Area2D" parent="."]
-
 [node name="FruitSpawner" parent="." instance=ExtResource( 6 )]
 z_index = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+autoplay = true

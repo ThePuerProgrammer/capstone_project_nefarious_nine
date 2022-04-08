@@ -1,6 +1,7 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://SlowFruit/Boogie_Player.gd" type="Script" id=1]
+[ext_resource path="res://SlowFruit/assets/Sound/animal-dog-footsteps.wav" type="AudioStream" id=2]
 [ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump5.png" type="Texture" id=3]
 [ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump6.png" type="Texture" id=4]
 [ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump8.png" type="Texture" id=5]
@@ -22,17 +23,14 @@
 [ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle3.png" type="Texture" id=21]
 [ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle5.png" type="Texture" id=22]
 [ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle1.png" type="Texture" id=23]
+[ext_resource path="res://SlowFruit/assets/Sound/zapsplat_multimedia_game-sound_classic_retro_jump_010_65130.mp3" type="AudioStream" id=24]
+[ext_resource path="res://SlowFruit/assets/Sound/Pickup_002.wav" type="AudioStream" id=25]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 12.8889, 17.1111 )
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 23 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ) ],
-"loop": true,
-"name": "Idle",
-"speed": 7.0
-}, {
 "frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 9 ), ExtResource( 11 ), ExtResource( 13 ) ],
 "loop": true,
 "name": "Walk",
@@ -42,6 +40,11 @@ animations = [ {
 "loop": true,
 "name": "Jump",
 "speed": 9.0
+}, {
+"frames": [ ExtResource( 23 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 7.0
 } ]
 
 [node name="Boogie__Player" type="RigidBody2D"]
@@ -66,5 +69,18 @@ position = Vector2( -16, -24 )
 scale = Vector2( 3, 3 )
 frames = SubResource( 2 )
 animation = "Idle"
-frame = 1
+frame = 3
 playing = true
+
+[node name="JumpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 24 )
+volume_db = 2.0
+
+[node name="PickupSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 25 )
+
+[node name="WalkSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+volume_db = 5.0
+
+[connection signal="finished" from="JumpSound" to="." method="_on_JumpSound_finished"]

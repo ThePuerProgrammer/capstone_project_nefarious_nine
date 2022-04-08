@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/zapsplat_multimedia_game-sound_classic_retro_jump_010_65130.mp3-9843f1dcf91dd820b5bfe5ea9bb1a7dd.mp3str"
+
+[deps]
+
+source_file="res://SlowFruit/assets/Sound/zapsplat_multimedia_game-sound_classic_retro_jump_010_65130.mp3"
+dest_files=[ "res://.import/zapsplat_multimedia_game-sound_classic_retro_jump_010_65130.mp3-9843f1dcf91dd820b5bfe5ea9bb1a7dd.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

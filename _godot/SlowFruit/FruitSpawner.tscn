@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://SlowFruit/assets/Fruit/fruit1.png" type="Texture" id=1]
 [ext_resource path="res://SlowFruit/assets/Fruit/fruit2.png" type="Texture" id=2]
@@ -11,10 +11,11 @@
 [ext_resource path="res://SlowFruit/assets/Fruit/fruit9.png" type="Texture" id=9]
 [ext_resource path="res://SlowFruit/assets/Fruit/fruit10.png" type="Texture" id=10]
 [ext_resource path="res://assets/fonts/PressStart2P-Regular.ttf" type="DynamicFontData" id=11]
-[ext_resource path="res://SlowFruit/assets/FRUIT_NL_HL.png" type="Texture" id=12]
+[ext_resource path="res://SlowFruit/assets/Fruit/FRUIT_NL_HL.png" type="Texture" id=12]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=13]
 [ext_resource path="res://SlowFruit/Answer.gd" type="Script" id=14]
 [ext_resource path="res://SlowFruit/Question.gd" type="Script" id=15]
+[ext_resource path="res://SlowFruit/assets/Sound/Pickup_002.wav" type="AudioStream" id=16]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -564,10 +565,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Fruit1" type="RigidBody2D" parent="Control/Answer1Container"]
+[node name="Fruit1" type="Area2D" parent="Control/Answer1Container"]
 position = Vector2( 216, 0 )
-mass = 0.510204
-gravity_scale = 0.0
 __meta__ = {
 "_edit_group_": true
 }
@@ -616,10 +615,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Fruit2" type="RigidBody2D" parent="Control/Answer2Container2"]
+[node name="Fruit2" type="Area2D" parent="Control/Answer2Container2"]
 position = Vector2( 200, 25 )
-mass = 0.510204
-gravity_scale = 0.0
 __meta__ = {
 "_edit_group_": true
 }
@@ -665,10 +662,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Fruit3" type="RigidBody2D" parent="Control/Answer3Container3"]
+[node name="Fruit3" type="Area2D" parent="Control/Answer3Container3"]
 position = Vector2( 184, 4 )
-mass = 0.510204
-gravity_scale = 0.0
 __meta__ = {
 "_edit_group_": true
 }
@@ -719,10 +714,8 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Fruit4" type="RigidBody2D" parent="Control/Answer4Container"]
+[node name="Fruit4" type="Area2D" parent="Control/Answer4Container"]
 position = Vector2( 170, 46 )
-mass = 0.510204
-gravity_scale = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer4Container/Fruit4"]
 position = Vector2( 110, 0 )
@@ -757,3 +750,10 @@ fit_content_height = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 16 )
+pitch_scale = 0.01
+attenuation = 0.965934
+
+[connection signal="area_entered" from="Control/Answer1Container/Fruit1" to="Control/Question/Question" method="_on_Fruit1_area_entered"]
