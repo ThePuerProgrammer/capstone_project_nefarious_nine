@@ -283,7 +283,7 @@ func canOpenActionBar():
 func _on_currentKinematicBodyInput(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and !actionBarVisible and canOpenActionBar(): # TODO: and canOpenActionBar
 		var position = $CatKinematicBody.get_position()
-		$ActionBar.rect_position(position, true)
+		#$ActionBar.rect_position(position, true)
 		showActionBar()
 		actionBarVisible = true
 
