@@ -1,15 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=1]
-[ext_resource path="res://return_to_main_menu.gd" type="Script" id=2]
+[ext_resource path="res://Menu/MenuOptionScreen.gd" type="Script" id=2]
 [ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=4]
-
+[ext_resource path="res://assets/fonts/PressStart2P-vaV7_90pt.tres" type="DynamicFont" id=5]
 
 [node name="MenuOptionScreen" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Container" type="CenterContainer" parent="."]
 anchor_right = 1.0
@@ -60,6 +63,21 @@ color = Color( 0, 0, 0, 0 )
 [node name="FadeIn" parent="." instance=ExtResource( 4 )]
 visible = false
 color = Color( 0, 0, 0, 1 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 475.0
+margin_top = 10.0
+margin_right = 1675.0
+margin_bottom = 110.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 5 )
+text = "Game Settings
+"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="pressed" from="Container/Center/backButton" to="." method="_on_backButton_pressed"]
 [connection signal="pressed" from="Container/Center/DungeonFightTemporaryNavigation" to="." method="_on_DungeonFightTemporaryNavigation_pressed"]

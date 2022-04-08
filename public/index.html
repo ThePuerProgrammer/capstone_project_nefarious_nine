@@ -319,7 +319,7 @@
     aria-labelledby="create-deck-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content pomo-bg-color-md-dark">
-        <div class="modal-header pomo-text-color-light">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
           <h5 class="modal-title pomo-text-color-light" id="create-deck-modal-label">Create A New Deck</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -342,7 +342,7 @@
               <br>
               <select id="select-deck-category" name="selectCategory" class="form-select-deck-category"
                 aria-label="Default select example" style="width:300px;"></select>
-              <br>
+                <br>
               <br>
               <label class="pomo-text-color-light" for="selectClassroom">Classroom</label>
               <br>
@@ -360,6 +360,45 @@
   </div>
   <!-- END CREATE DECK MODAL---------------------------------------------->
 
+  <!-- CREATE DECK FROM CLASSROOM MODAL----------------------------------------------------->
+<div class="modal fade" id="create-deck-from-class-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="create-deck-from-class-modal-label" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content pomo-bg-color-md-dark">
+    <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+      <h5 class="modal-title pomo-text-color-light" id="create-deck-from-class-modal-label">Create A New Class Deck</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form id="form-create-deck-from-class" method="post">
+        <input type="hidden" name="classDeckdocId" />
+        <div class="form-group">
+          <label class="pomo-text-color-light" for="name">Name</label>
+          <input class="form-control form-control-lg" type="name" name="name" placeholder="e.g. DSA Chapter 1"
+            required minlength="2" id="deck-title-classroom" autocomplete="off">
+          <br>
+          <br>
+          <label class="pomo-text-color-light" for="subject">Subject</label>
+          <input class="form-control form-control-lg" type="subject" name='subject'
+            placeholder="e.g. Data Structures & Algorithms" required minlength="2" id="deck-subject-classroom"
+            autocomplete="off">
+          <br>
+          <br>
+          <label class="pomo-text-color-light" for="selectCategory">Category</label>
+          <br>
+          <select id="select-deck-category-classroom" name="selectCategory" class="form-select-deck-category"
+            aria-label="Default select example" style="width:300px;"></select>
+        </div>
+        <br>
+        <br>
+        <button class="btn btn-secondary pomo-bg-color-dark" style="float:right" id="decks-create-deck-classroom"
+          type="submit">Create Deck</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+<!-- END CREATE DECK FROM CLASSROOM MODAL---------------------------------------------->
   <!-- EDIT DECK MODAL----------------------------------------------------->
   <div class="modal fade" id="modal-edit-a-deck" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="modal-edit-a-deck-label" aria-hidden="true">
@@ -376,7 +415,8 @@
             <input type="hidden" name="dateCreated" />
             <input type="hidden" name="flashcardNumber" />
             <input type="hidden" name="classDocId" />
-            <input type="hidden" name="created_by"/>
+            <input type="hidden" name="created_by" />
+            <input type="hidden" name="isMastered" />
             <div class="form-group">
               <div id="form-edit-deck-name">
                 <label class="pomo-text-color-light" for="name">Name</label>
@@ -497,6 +537,7 @@
         <div class="modal-body">
           <form id="form-edit-a-flashcard" method="post">
             <input type="hidden" name="docId" />
+            <input type="hidden" name="deckId" />
             <input type="hidden" name="deckDocId" />
             <input type="hidden" name="isMultipleChoice" />
             <input type="hidden" name="incorrectAnswers" />
@@ -737,6 +778,34 @@
   </div>
   <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
 
+
+  <!-- MODAL: CONFIRMATION DELETE ACCOUNT -------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modal-confirmation-delete-account" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="modal-confirmation-delete-account-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-header pomo-bg-color-dark pomo-text-color-light">
+          <h5 class="modal-title" id="modal-confirmation-delete-account-title">Confirmation</h5>
+        </div>
+        <div class="modal-body pomo-bg-color-light pomo-text-color-dark" id="modal-confirmation-delete-account-body">
+          <h6>Are you sure you wish to delete this account?</h6>
+          <h6>If you delete this account, it will be permanently
+            removed</h6>
+        </div>
+        <div class="modal-footer">
+          <form id="form-delete-account-confirmation" method="post">
+            <input type="hidden" name="yes" />
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              id="modal-confirmation-delete-account-yes" type="submit" data-bs-dismiss="modal">Yes</button>
+            <button type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light"
+              data-bs-dismiss="modal">No</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OF MODAL: CONFIRMATION  -------------------------------------------------------------------------------------------------------------------------->
+
   <!-- MODAL: Submit a help ticket ---------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-submit-help-ticket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -846,7 +915,38 @@
       </div>
     </div>
   </div>
-  <!-- END UPDATE PROFILE MODAL---------------------------------------------->
+  <!-- END EDIT PROFILE MODAL---------------------------------------------->
+
+  <!-- VIEW MEMBER PROFILE MODAL----------------------------------------------------->
+  <div class="modal fade" id="member-profile-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="member-profile-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content pomo-bg-color-md-dark">
+        <div class="modal-body">
+          <button type="button" style="float:right" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+          <br>
+          <div id="member-profile-picture-container">
+            <img id="member-profile-picture-tag"
+              style=" height: 200px; width: 200px; object-fit: cover; display: block;" class="center pfp">
+            <br>
+          </div>
+          <div class="member-profile" style="text-align: center;">
+            <h3 class="member-username pomo-text-color-dark" id="member-username"></h3>
+            <p class="pomo-text-color-light" id="member-userbio"></p>
+          </div>
+          <div class="equipped-member-pomopet">
+            <img id="member-pomopet" style="width: 250px; height: 250px;" class="pomopet-display center">
+            <img id="member-pomopet-acc" style="height: 80px; width: 100px; margin-right: 90px; object-fit: cover;"
+              class="acc-display center">
+            <h4 class="pomo-text-color-light" style="text-align: center;" id="member-pomopet-name"></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- VIEW MEMBER PROFILE MODAL---------------------------------------------->
+
   <!-- MODAL: ADD ITEM -------------------------------------------------------------------------------------------------------------------------->
   <div class="modal fade" id="modal-add-item" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="modal-add-item-label" aria-hidden="true">
@@ -869,7 +969,7 @@
                 required minlength="1" autocomplete="off">
               <br>
               <br>
-              <label class="pomo-text-color-light" for="selectskin">Skin Type</label>
+              <label class="pomo-text-color-light" for="selectskin">Type</label>
               <br>
               <select id="select-item-skin" name="selectSkin" class="form-select-item-skin"
                 aria-label="Default select example" style="width:300px;"></select>

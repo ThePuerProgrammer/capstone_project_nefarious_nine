@@ -20,25 +20,31 @@ export function addEventListeners() { }
 
 // Only on entering study page 
 export async function study_page() {
-  try{
+  try {
     await Coins.get_coins(Auth.currentUser.uid);
-} catch(e) {if(Constant.DEV)console.log(e);}
+  } catch (e) { if (Constant.DEV) console.log(e); }
 
   // get DECK info from firebase
   let deckDocId = localStorage.getItem("deckPageDeckDocID");
 
-  // update last time studied
-  try {
-    FirebaseController.updateDeckDataLastStudied(Auth.currentUser.uid, deckDocId);
-  }
-  catch (e) {
-    console.log("Error updating deck data lastStudied: ", e);
+  // update last time studied only if we are studying our own deck
+  if (sessionStorage.getItem('cameFromClassDeck') != "true") {
+    try {
+      FirebaseController.updateDeckDataLastStudied(Auth.currentUser.uid, deckDocId);
+    }
+    catch (e) {
+      console.log("Error updating deck data lastStudied: ", e);
+    }
   }
 
-  // save time spent studying
-  localStorage.setItem("studyStartTime", new Date().getTime());
-  localStorage.setItem("studyTimeTracked", "false");
-  assignPageLeaveListeners(); // for tracking how long a user spent studying a deck
+
+  // save time spent studying only if we are studying our own deck
+  if (sessionStorage.getItem('cameFromClassDeck') != "true") {
+    localStorage.setItem("studyStartTime", new Date().getTime());
+    localStorage.setItem("studyTimeTracked", "false");
+    assignPageLeaveListeners(); // for tracking how long a user spent studying a deck
+  }
+
 
   reset(); // start by resetting globals
 
@@ -83,7 +89,7 @@ export async function study_page() {
     <div class="form-check form-switch float-top-right">
       <input class="form-check-input" type="checkbox" role="switch"
       id="smart-study-checkbox">
-      <label class="form-check-label" for="smart-study-checkbox">Smart Study</label>
+      <label class="form-check-label" for="smart-study-checkbox" id="smart-study-checkbox-label">Smart Study</label>
     </div>
   `;
   html += `
@@ -151,6 +157,15 @@ export async function study_page() {
   const smartStudyCheckbox = document.getElementById(
     Constant.htmlIDs.smartStudyCheckbox
   );
+  const smartStudyCheckboxLabel = document.getElementById(
+    Constant.htmlIDs.smartStudyCheckboxLabel
+  );
+
+  if (sessionStorage.getItem('cameFromClassDeck') == "true") {
+    smartStudyCheckbox.remove();
+    smartStudyCheckboxLabel.remove();
+  }
+
   const smartStudyPopupTextContainer = document.getElementById(
     Constant.htmlIDs.smartStudyPopupTextContainer
   );
@@ -265,7 +280,7 @@ export async function study_page() {
       smartStudyIndicator.innerHTML = updatedFlashcardData.streak;
 
       // Update next flashcard
-      if (isClassDeck == "false" || isClassDeck == false) {
+      if ((isClassDeck == "false" || isClassDeck == false)) {
         try {
           flashcard = await FirebaseController.getNextSmartStudyFlashcard(Auth.currentUser.uid, deck.docID, flashcards);
         }
@@ -306,7 +321,11 @@ export async function study_page() {
       e.target.reset();
     } else {
       checkAnswer(answer, flashcard);
-      document.getElementById(Constant.htmlIDs.smartStudyCheckbox).disabled = true;
+
+      if (sessionStorage.getItem('cameFromClassDeck') != "true") {
+        document.getElementById(Constant.htmlIDs.smartStudyCheckbox).disabled = true;
+      }
+      
       try {
         await FirebaseController.updateCoins(Auth.currentUser.uid, coins);
         await FirebaseController.getCoins(Auth.currentUser.uid);
@@ -318,9 +337,9 @@ export async function study_page() {
       }
       document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML = buildOverviewView(deck, deckLength);
     }
-    try{
+    try {
       await Coins.get_coins(Auth.currentUser.uid);
-  } catch(e) {if(Constant.DEV)console.log(e);}
+    } catch (e) { if (Constant.DEV) console.log(e); }
   });
 }
 
@@ -417,8 +436,10 @@ function buildOverviewView(deck, deckLength) {
   Elements.root.innerHTML += html;
 
   // For tracking time spent studying
-  const returnToDeckPageButton = document.getElementById(Constant.htmlIDs.studyPageReturnToDeckPageButton);
-  returnToDeckPageButton.addEventListener('click', saveStudyTime);
+  if (sessionStorage.getItem('cameFromClassDeck') != "true"){
+    const returnToDeckPageButton = document.getElementById(Constant.htmlIDs.studyPageReturnToDeckPageButton);
+    returnToDeckPageButton.addEventListener('click', saveStudyTime);
+  }
 
   const overrideCheckboxes =
     document.getElementsByClassName("form-check-input");
@@ -508,3 +529,6 @@ export function saveStudyTime() {
   FirebaseController.logTimeSpentStudying(Auth.currentUser.uid, localStorage.getItem("deckPageDeckDocID"));
   removePageLeaveListeners();
 }
+
+
+

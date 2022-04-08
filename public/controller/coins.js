@@ -8,6 +8,9 @@ export async function get_coins(uid){
     if(Elements.coinCount.innerHTML == '' || Elements.coinCount.innerHTML == null) {
         try{
            let coins = await FirebaseController.getCoins(uid);
+           if(coins == null || ''){
+               coins =0;
+           }
             window.sessionStorage.setItem('coins',coins);
         }catch(e){
             if(Constant.DEV) console.log(e);

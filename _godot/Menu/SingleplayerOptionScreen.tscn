@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Menu/MenuOptionScreen.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_48pt.tres" type="DynamicFont" id=2]
@@ -9,8 +9,11 @@
 [ext_resource path="res://assets/gameimages/DungeonFight.PNG" type="Texture" id=7]
 [ext_resource path="res://assets/gameimages/PomoBITEGraphic.png" type="Texture" id=8]
 [ext_resource path="res://assets/gameimages/SlowFruitMenu.png" type="Texture" id=9]
+[ext_resource path="res://assets/gameimages/pomodefense_splash.PNG" type="Texture" id=10]
+[ext_resource path="res://Menu/SingleplayerOptionsScreen.gd" type="Script" id=11]
 
 [node name="SingleplayerOptionScreen" instance=ExtResource( 1 )]
+script = ExtResource( 11 )
 
 [node name="Container" parent="." index="0"]
 visible = false
@@ -240,7 +243,7 @@ size_flags_vertical = 3
 
 [node name="Games_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container" index="0"]
 margin_right = 423.0
-margin_bottom = 1562.0
+margin_bottom = 1842.0
 size_flags_vertical = 3
 
 [node name="dungeon_fight_Container" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="0"]
@@ -352,6 +355,31 @@ margin_top = 328.0
 margin_right = 423.0
 margin_bottom = 368.0
 
+[node name="PomoDefense" type="VBoxContainer" parent="Game_Selection/Games_Scroll_Container/Games_Container" index="4"]
+margin_top = 1566.0
+margin_right = 423.0
+margin_bottom = 1842.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PomoDefense_Graphic" type="TextureRect" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="0"]
+margin_right = 423.0
+margin_bottom = 208.0
+size_flags_vertical = 3
+texture = ExtResource( 10 )
+
+[node name="PomoDefense_Details_Button" type="Button" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="1"]
+margin_top = 212.0
+margin_right = 423.0
+margin_bottom = 232.0
+size_flags_vertical = 3
+text = "Details"
+
+[node name="PomoDefense_Selection_Toggle" type="CheckButton" parent="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense" index="2"]
+margin_top = 236.0
+margin_right = 423.0
+margin_bottom = 276.0
+
 [node name="No_Games_Selected_Popup_Alert" type="AcceptDialog" parent="." index="14"]
 margin_left = 787.0
 margin_top = 403.0
@@ -411,3 +439,5 @@ dialog_text = "You Must Select A Desired Time To Play For!"
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/PomoBITE_Container/PomoBITE_Selection_Toggle" to="." method="_on_PomoBITE_Selection_Toggle_toggled"]
 [connection signal="pressed" from="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit/Slowfruit_Details_Button" to="." method="_on_Slowfruit_Details_Button_pressed"]
 [connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/Slowfruit/Slowfruit_Selection_Toggle" to="." method="_on_Slowfruit_Selection_Toggle_toggled"]
+[connection signal="pressed" from="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense/PomoDefense_Details_Button" to="." method="_on_PomoDefense_Details_Button_pressed"]
+[connection signal="toggled" from="Game_Selection/Games_Scroll_Container/Games_Container/PomoDefense/PomoDefense_Selection_Toggle" to="." method="_on_PomoDefense_Selection_Toggle_toggled"]

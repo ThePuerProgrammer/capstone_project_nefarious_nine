@@ -6,6 +6,7 @@ import * as Constant from '../model/constant.js'
 import * as Coins from '../controller/coins.js'
 import * as Utilities from './utilities.js';
 import { Pomoshop } from '../model/pomoshop.js'
+import { home_page } from './home_page.js'
 
 //Declaration of Image
 let imageFile2UploadProfile = "";
@@ -26,8 +27,8 @@ export function addEventListeners() {
 
         try {
             // if updated pfp
-            if(imageFile2UploadProfile != "") {
-                const {profilePictureName, profilePictureURL} = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile, currentPfpName);
+            if (imageFile2UploadProfile != "") {
+                const { profilePictureName, profilePictureURL } = await FirebaseController.uploadProfilePicture(imageFile2UploadProfile, currentPfpName);
                 await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, profilePictureName, profilePictureURL);
             } else {
                 await FirebaseController.updateUserProfile(Auth.currentUser.uid, username, bio, null, null);
@@ -45,8 +46,8 @@ export function addEventListeners() {
         e.preventDefault();
         imageFile2UploadProfile = e.target.files[0];
 
-        if(!imageFile2UploadProfile){
-            Elements.formEditProfile.profilePictureTag.src= currentPfpURL;
+        if (!imageFile2UploadProfile) {
+            Elements.formEditProfile.profilePictureTag.src = currentPfpURL;
             return;
         }
 
@@ -60,6 +61,9 @@ export function addEventListeners() {
     $(`#edit-profile-modal`).on('hidden.bs.modal', function (e) {
         Elements.formEditProfile.form.reset();
     });
+
+
+
 
     Elements.addAccessoriesButton.addEventListener('click', e => {
         e.preventDefault();
@@ -91,36 +95,12 @@ export function addEventListeners() {
             Utilities.info('Item not equipped', 'The item hasn\'t been equipped yet');
         }
     })
-
-    // need a way to return pet to default skin
-    Elements.submitAccessoriesButton.addEventListener('click', async () => {
-        const user = await FirebaseController.getUser(Auth.currentUser.uid);
-        const pomopet = user.pomopet;
-        let itemsOwnedList = [];
-        for (let i = 0; i < user.itemsOwned.length; i++) {
-            const tempItem = await FirebaseController.getOwnedItem(user.itemsOwned[i]);
-            itemsOwnedList.push(tempItem);
-        }
-        const accessoriesList = document.getElementsByClassName('items-list');
-        for (let i = 0; i < accessoriesList.length; i++) {
-            for (let j = 0; j < itemsOwnedList.length; j++) {
-                if (itemsOwnedList[j].name == accessoriesList[i].id) {
-                    pomopet.petPhotoURL = itemsOwnedList[j].photoURL;
-                    pomopet.petSkin = itemsOwnedList[j].skinType;
-                    await FirebaseController.updatePomopet(Auth.currentUser.uid, pomopet);
-                    break;
-                }
-            }
-        }
-        Elements.modalDressup.hide();
-        await profile_page();
-    })
 }
 
 export async function profile_page() {
-    try{
+    try {
         await Coins.get_coins(Auth.currentUser.uid);
-    } catch(e) {if(Constant.DEV)console.log(e);}    
+    } catch (e) { if (Constant.DEV) console.log(e); }
     imageFile2UploadProfile = ""; // reset
 
     // retrieve user info from Firebase
@@ -128,37 +108,140 @@ export async function profile_page() {
     try {
         user = await FirebaseController.getUser(Auth.currentUser.uid);
         currentPfpName = user.profilePhotoName;
-        currentPfpURL= user.profilePhotoURL;
-    }catch (e) {
+        currentPfpURL = user.profilePhotoURL;
+    } catch (e) {
         console.log(e);
+    }
+
+
+    let equippedAccURL;
+    // if user has equippedAcc retrieve photoURL 
+    if (user.equippedAcc != "") {
+        try {
+            equippedAccURL = await FirebaseController.getEquippedAccURL(user.equippedAcc);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    let equippedSkinURL;
+    // if user has equippedSkin retrieve photoURL 
+    if (user.equippedSkin != "") {
+        try {
+            equippedSkinURL = await FirebaseController.getEquippedSkinURL(user.equippedSkin);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    let deckList = [];
+    let masteredDecks = [];
+    try {
+        deckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
+    } catch (e) {
+        console.log(e);
+    }
+    console.log(deckList);
+
+
+    //This will update the isMastered field and give rewards if user did not visit study decks page after smart studying
+    let streaks;
+    let isMastered = false;
+    for (let i = 0; i < deckList.length; i++) {
+        streaks = [];
+        isMastered = false;
+        let flashcards = await FirebaseController.getFlashcards(Auth.currentUser.uid, deckList[i].docId);
+        let lastSRSaccess = await FirebaseController.getUserLastSrsAccessDeckData(Auth.currentUser.uid, deckList[i].docId);
+        for (let k = 0; k < flashcards.length; k++) {
+            let streak = await FirebaseController.getUserFlashcardDataByLastSrsAccessandFCid(Auth.currentUser.uid, deckList[i].docId, lastSRSaccess, flashcards[k].docID);
+            streaks.push(streak);
+        }
+
+        if (streaks.length >= 1) {
+            for (let j = 0; j < streaks.length; j++) {
+                if (streaks[j] > 3) {
+                    isMastered = true;
+                }
+            }
+        }
+        if (isMastered == true && deckList[i].isMastered == false) {
+            await FirebaseController.updateDeckMasteryandAddCoins(Auth.currentUser.uid, deckList[i].docId);
+        }
+
+    }
+    //refresh our deck list in case study decks was not visited prior to visiting profile page
+    let updatedDeckList;
+    try {
+        updatedDeckList = await FirebaseController.getUserDecks(Auth.currentUser.uid);
+    } catch (e) {
+        console.log(e);
+    }
+
+    for (let i = 0; i < updatedDeckList.length; i++) {
+        if (updatedDeckList[i].isMastered == true) {
+            masteredDecks.push(updatedDeckList[i]);
+        }
     }
 
     let html = '';
 
     // EDIT PROFILE button    
     html += `<div class="edit-profile-btn">
-        <button id="${Constant.htmlIDs.editProfile}" type="button" class="btn btn-secondary pomo-bg-color-dark" style="padding:5px 12px; float:right">
+        <form class="form-delete-account" method="post">
+        <input type="hidden" name="userEmail" value="${user.email}">
+        <button class="btn btn-danger" type="submit" style="padding:5px 12px; float:right;">
+            <i class="material-icons ">delete</i>Delete Account</button>
+        </form>
+
+        <button id="${Constant.htmlIDs.editProfile}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light" style="padding:5px 12px; margin-right: 10px; float:right">
         <i class="material-icons pomo-text-color-light">edit</i>Edit Profile</button>
-        <button type="button" id="pomo-dressup-btn" class="btn btn-secondary pomo-bg-color-md-dark" style="float:right; margin-right: 10px;">Dress up!</button>
+        
         </div>`;
 
     html += `<div class="user-profile">
         <img src="${user.profilePhotoURL}" style="width: 200px; height: 200px; object-fit: cover;" class="center pfp">
         <br>
-        <h3 class="user-username pomo-text-color-dark">${user.username}</h3>`;
+        <h3 class="user-username pomo-text-color-dark" style="text-align: center;">${user.username}</h3>`;
 
     // if user bio, display
     if (user.userBio != "") {
-        html += `<p>${user.userBio}</p>`;
+        html += `<p style="text-align: center;">${user.userBio}</p>`;
     }
 
-    html += `</div>`;
-
-    html += `<div class="equipped-pomopet">
-
-    <img src="${user.pomopet.petPhotoURL}" style="width: 200px; height: 200px; margin-bottom: -16px;" class="center">
-    <hr class="pomopet-bar">`;
+    html += `<br>
+        <div class="user-mastered-decks"  style="display: inline-block;">
+        <h3 class="pomo-text-color-dark" style="text-align: center;"> Mastered Decks </h3>`;
     
+    if(masteredDecks.length == 0) {
+        html += `<p class="pomo-text-color-dark" style="text-align: center;">No decks mastered yet, go do some studying!</p>`;
+    } else {
+        masteredDecks.forEach(deck => {
+            html += `<div class = "user-deck-trophy" style="display: inline-block;">
+                <h1 style="text-align: center;"><i class="material-icons" style="color:#ffdf00; font-size: 60px;">emoji_events</i></h1>
+                <p class="pomo-text-color-dark">${deck.name}</p>
+            </div>`;
+        });     
+    }
+
+    html += `</div>
+        </div>`;
+
+    html += `<div class="equipped-pomopet">`;
+
+    // if no equipped skin
+    if (user.equippedSkin == "") {
+        html += `<img src="${user.pomopet.petPhotoURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="pomopet-display center">`;
+    } else {
+        html += `<img src="${equippedSkinURL}" style="width: 250px; height: 250px; margin-bottom: -16px;" class="pomopet-display center">`;
+    }
+
+    // if equipped acc
+    if (user.equippedAcc != "") {
+        html += `<img src="${equippedAccURL}" style="height: 80px; width: 100px; margin-bottom: -50px;  object-fit: cover;" class="acc-display center">`;
+    }
+
+    html += `<hr class="pomopet-bar">`;
+
 
     html += `<div id="pomopet-edit-name-display">
         <button type="button" class="pomopet-edit-name-btn pomo-text-color-dark" id="pomopet-edit-name-btn" 
@@ -179,31 +262,6 @@ export async function profile_page() {
 
 
     //** DYNAMIC EVENT LISTENERS **//
-
-    const dressupButton = document.getElementById('pomo-dressup-btn');
-    dressupButton.addEventListener('click', async e => {
-        e.preventDefault();
-        // opens dress up ✺◟(♥ᴥ♥)◞✺ modal
-        document.getElementById('pomo-dressup-image').src = user.pomopet.petPhotoURL;
-        const accessoriesSelect = document.getElementById('select-accessories');
-        // clears out accessories list to prevent duplicates
-        for (let i = accessoriesSelect.length; i > 0; i--) {
-            accessoriesSelect.remove(i);
-        }
-        let itemsOwnedList = [];
-        for (let i = 0; i < user.itemsOwned.length; i++) {
-            const tempItem = await FirebaseController.getOwnedItem(user.itemsOwned[i]);
-            itemsOwnedList.push(tempItem);
-        }
-        // rebuilds accessories list from owned items
-        itemsOwnedList.forEach(item => {
-            const opt = document.createElement('option');
-            opt.value = item.name;
-            opt.innerHTML = item.name;
-            accessoriesSelect.appendChild(opt);
-        })
-        Elements.modalDressup.show();
-    });
 
     const editProfileButton = document.getElementById(Constant.htmlIDs.editProfile);
 
@@ -228,6 +286,23 @@ export async function profile_page() {
         $(`#${Constant.htmlIDs.editProfileModal}`).modal('show');
     });
 
+    const deleteAccountForm = document.getElementsByClassName('form-delete-account');
+    for (let i = 0; i < deleteAccountForm.length; i++) {
+        deleteAccountForm[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            let userEmail = e.target.userEmail.value;
+
+            console.log("EMAIL: " + userEmail);
+            Elements.modalDeleteAccountConfirmation.show();
+            const yesbutton = document.getElementById('modal-confirmation-delete-account-yes');
+
+            yesbutton.addEventListener("click", async e => {
+                await home_page();
+                await FirebaseController.deleteAccount(userEmail);
+            });
+        });
+
+    }
     // POMOPET NAME button listener
     const pomopetEditNameButton = document.getElementById('pomopet-edit-name-btn');
 
@@ -248,7 +323,7 @@ export async function profile_page() {
         user.pomopet.name = pomopetName;
 
         try {
-            await FirebaseController.updatePomopet(Auth.currentUser.uid, user.pomopet);
+            await FirebaseController.updatePomopetName(Auth.currentUser.uid, user.pomopet);
             await profile_page();
         } catch (e) {
             if (Constant.DEV)

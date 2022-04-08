@@ -2,7 +2,6 @@ extends Control
 
 export (bool) var overrideMenuToChillZone = false
 export var chillzone_scene_path = "res://ChillZone/ChillZone.tscn"
-var testing_pomopet_washing_scene_path = "res://ChillZone/wash_pomopet_testing/WashPomopet.tscn"
 
 var _scene_path_to_load
 
@@ -37,8 +36,8 @@ func _on_signin():
 
 	# Only occurs if we are running in GoDot client 
 	if window == null and overrideMenuToChillZone:
-		if (get_tree().change_scene(testing_pomopet_washing_scene_path) != OK):
-			print("Failed to change scene, ", testing_pomopet_washing_scene_path)
+		if (get_tree().change_scene(chillzone_scene_path) != OK):
+			print("Failed to change scene, ", chillzone_scene_path)
 		return
 	
 	# Only occurs if we are running in Web client

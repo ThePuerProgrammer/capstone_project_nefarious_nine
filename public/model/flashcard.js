@@ -3,15 +3,19 @@
 **************************************************/
 export class Flashcard{
     constructor(data){
+
         this.question = data.question.trim();
         this.answer = data.answer.trim();
         this.isMultipleChoice = data.isMultipleChoice;
         this.incorrectAnswers = data.incorrectAnswers;
+        this.deckId = data.deckId;
+
         //Picture Related DATA
         this.questionImageName = data.questionImageName;
         this.questionImageURL = data.questionImageURL;
         this.answerImageName = data.answerImageName;
         this.answerImageURL = data.answerImageURL;
+        
     }
 
 
@@ -50,6 +54,8 @@ export class Flashcard{
                 questionImageURL:       this.questionImageURL, 
                 answerImageName:        this.answerImageName, 
                 answerImageURL:         this.answerImageURL,
+                deckId:                 this.deckId,
+
             };
         }
 
@@ -68,6 +74,7 @@ export class Flashcard{
             if(!obj.question || typeof obj.question != 'string') return false;
             if(!obj.answer || typeof obj.answer != 'string') return false;
             if(!obj.isMultipleChoice || typeof obj.isMultipleChoice != 'boolean') return false;
+            if(!obj.deckId || typeof obj.deckId != 'string') return false;
         }
 
 /***************************************************************************
@@ -86,6 +93,8 @@ export class Flashcard{
             if(this.questionImageURL) fc.questionImageURL = this.questionImageURL;
             if(this.answerImageName) fc.answerImageName = this.answerImageName;
             if(this.answerImageURL) fc.answerImageURL = this.answerImageURL;
+            if(this.deckId) fc.deckId = this.deckId;
+
             return fc;
         }
 
