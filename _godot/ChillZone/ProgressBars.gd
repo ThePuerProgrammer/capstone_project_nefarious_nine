@@ -77,7 +77,6 @@ func updateHungerBar():
 func updateHappinessBar():
 	happyLvl = (cleanLvl + hungerLvl) * 10 # the higher the better
 	poopPercent = (poopCount*2) / 100.0 # the lower the better
-
 	
 	#subtract poopPercent from happyLvl
 	if happyLvl > 0:
@@ -122,7 +121,7 @@ func _on_Pet_cleanStart():
 		startCleanliness = 0
 	
 	# 100 - (Cleanliness on Pet Clean Action start) / 10
-	cleanIncrement = (maxBar - startCleanliness) / 10
+	#cleanIncrement = (maxBar - startCleanliness) / 10
 	
 	# creating signal manually since in diff scene
 	var washPetProgressBar = get_node("../Pet/WashMeter/WashMeterProgressBar")
@@ -130,14 +129,14 @@ func _on_Pet_cleanStart():
 
 
 func _on_washMeterProgressBar_value_changed(value):
+	var currentCleanliness = $CleanlinessProgressBar.get_value()
 	
 	# only make change every 10 calls (bc increment is .1 not 1.0)
 	if fmod(value, 1) == 0:
-		var currentCleanliness = $CleanlinessProgressBar.get_value()
 		
 		# increment every 10% Cleaning progress by cleanIncrement
 		if fmod(value, 10) == 0:
-			$CleanlinessProgressBar.set_value(currentCleanliness + cleanIncrement)
+			$CleanlinessProgressBar.set_value(currentCleanliness + 10)
 	
 # UPDATE HAPPINESS on feeding
 func _on_HungerProgressBar_value_changed(value):
