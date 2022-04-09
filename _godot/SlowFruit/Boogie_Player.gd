@@ -50,7 +50,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	#check_floor()
+	check_floor()
 	change_animation()
 	
 func change_animation():
@@ -66,14 +66,20 @@ func change_animation():
 func check_floor():
 	found_floor = get_node("../TileMap").get_found_floor()
 	if found_floor:
-		jumping = false
+		jumping = false	
+		if walking:
+			setWalking()
+		else:
+			setIdle()	
 	elif !found_floor:
 		setJumping()
+		stopWalkSound()
 
 func setJumping():
 	jumping = true
 	idle = false
 	walking = false
+	stopWalkSound()
 	
 func setWalking():
 	walking = true
@@ -84,6 +90,7 @@ func setIdle():
 	idle = true
 	jumping = false
 	walking = false
+	stopWalkSound()
 	
 func if_right_in_air():
 	if right :
@@ -107,7 +114,7 @@ func stopJumpSound():
 		jumpSound.stop()
 		
 func playWalkSound():
-	if !walk_sound_has_played && found_floor:
+	if !walk_sound_has_played:
 		walk_sound_has_played = true
 		walkSound.play()
 		
@@ -119,7 +126,8 @@ func stopWalkSound():
 	
 func pull_for_input():
 	if Input.is_action_just_pressed("move_left"):		
-		if !jumping:
+		check_floor()
+		if !jumping && found_floor:
 			setWalking()
 			playWalkSound()
 		$AnimatedSprite.flip_h = true
@@ -127,16 +135,17 @@ func pull_for_input():
 		left = true
 		right = false
 		
-	if Input.is_action_just_released("move_left"):		
-		if !jumping:
-			setIdle()
+	if Input.is_action_just_released("move_left"):
 		stopWalkSound()
+		if !jumping && found_floor:
+			setIdle()
 		move_left = false
 		applied_force = Vector2(0, applied_force.y)
 		linear_velocity.x = -WALK_DEACCEL
 		
 	if Input.is_action_just_pressed("move_right"):		
-		if !jumping:
+		check_floor()
+		if !jumping && found_floor:
 			setWalking()
 			playWalkSound()
 		$AnimatedSprite.flip_h = false
@@ -145,29 +154,29 @@ func pull_for_input():
 		left = false
 		
 	if Input.is_action_just_released("move_right"):
-		if !jumping:			
-			setIdle()
 		stopWalkSound()
+		if !jumping && found_floor:			
+			setIdle()		
 		move_right = false
 		applied_force = Vector2(0, applied_force.y)
 		linear_velocity.x = WALK_DEACCEL
 	
-	if Input.is_action_just_pressed("jump"):	
-		if linear_velocity.y <= 0:	
+	if Input.is_action_just_pressed("jump"):
+		stopWalkSound()
+		if linear_velocity.y <= 0:
 			setJumping()
 			stopping_jump = false
 			applied_force = Vector2(applied_force.y, 0)
 			linear_velocity.y = -JUMP_VELOCITY
-			stopWalkSound()
 			playJumpSound()
 		
 	if Input.is_action_just_released("jump"):
+		stopWalkSound()
 		stopping_jump = true
 		if !walking:
 			setIdle()
 		elif walking:
-			setWalking()
-		stopWalkSound()
+			setWalking()		
 		stopJumpSound()
 		applied_force = Vector2(applied_force.y, 0)
 		linear_velocity.y = STOP_JUMP_FORCE
@@ -177,13 +186,13 @@ func set_movement():
 	var y = 0	
 	
 	if move_left:
-		#check_floor() 
+		check_floor() 
 		x = -WALK_ACCEL
 	elif move_right:
-		#check_floor()
+		check_floor()
 		x = WALK_ACCEL
 	if jump:
-		#check_floor()
+		check_floor()
 		y -= AIR_ACCEL
 		
 	applied_force += Vector2(x, y)

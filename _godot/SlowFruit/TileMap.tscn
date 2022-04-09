@@ -481,7 +481,7 @@ position = Vector2( 547, -184 )
 scale = Vector2( 1.22, 1.24667 )
 frames = SubResource( 55 )
 animation = "planet"
-frame = 29
+frame = 43
 playing = true
 
 [node name="greens" type="TileMap" parent="."]
@@ -536,7 +536,7 @@ autostart = true
 position = Vector2( 360, 96 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SmallPlatformArea2D"]
-position = Vector2( 88, -8 )
+position = Vector2( 88, -16 )
 shape = SubResource( 59 )
 
 [node name="SmallPlatform" type="StaticBody2D" parent="."]
@@ -576,7 +576,6 @@ scale = Vector2( 2.064, 2.177 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformArea2D"]
 position = Vector2( 104.651, -3.67477 )
-scale = Vector2( 1, 1 )
 shape = SubResource( 58 )
 
 [node name="Floor" type="StaticBody2D" parent="."]

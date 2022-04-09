@@ -1,12 +1,12 @@
 extends Position2D
 #floatingtext
 
-#onready var answerLabel = get_node("Answer/RichTextLabel")
-#onready var answer = get_node("Answer")
-#onready var tween = get_node("Answer/Tween")
+onready var answerLabel = get_node("Answer/RichTextLabel")
+onready var answer = get_node("Answer")
+onready var tween = get_node("Answer/Tween")
 #var answerText = "Here's an Answer!!"
-#var answersArray
-#onready var questionLabel = get_node("Question/Label")
+var answersArray
+onready var questionLabel = get_node("Question/Label")
 #var questionText = "here's a question"
 
 

@@ -14,7 +14,7 @@
 [ext_resource path="res://SlowFruit/assets/Fruit/FRUIT_NL_HL.png" type="Texture" id=12]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=13]
 [ext_resource path="res://SlowFruit/Answer.gd" type="Script" id=14]
-[ext_resource path="res://SlowFruit/Question.gd" type="Script" id=15]
+[ext_resource path="res://SlowFruit/FruitSpawner.gd" type="Script" id=15]
 [ext_resource path="res://SlowFruit/assets/Sound/Pickup_002.wav" type="AudioStream" id=16]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
@@ -419,6 +419,7 @@ outline_color = Color( 0.0588235, 0.0352941, 0.486275, 1 )
 font_data = ExtResource( 13 )
 
 [node name="FruitSpawner" type="Node2D" groups=["Fruit"]]
+script = ExtResource( 15 )
 
 [node name="TileMap" type="TileMap" parent="."]
 visible = false
@@ -534,12 +535,10 @@ margin_bottom = -125.0
 size_flags_horizontal = 5
 alignment = 1
 __meta__ = {
-"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
 [node name="Question" type="Node2D" parent="Control/Question"]
-script = ExtResource( 15 )
 
 [node name="Label" type="Label" parent="Control/Question/Question"]
 margin_right = 1920.0
@@ -590,8 +589,8 @@ script = ExtResource( 14 )
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer1Container/Answer1"]
 margin_left = -197.0
 margin_top = -12.0
-margin_right = 212.0
-margin_bottom = 184.0
+margin_right = 1435.0
+margin_bottom = 635.0
 theme = SubResource( 28 )
 custom_colors/default_color = Color( 0.0627451, 0.662745, 0.0980392, 1 )
 custom_colors/selection_color = Color( 0.101961, 0.478431, 0.356863, 1 )
@@ -646,6 +645,7 @@ custom_colors/font_color_selected = Color( 0.298039, 0.141176, 0.607843, 1 )
 custom_colors/font_color_shadow = Color( 0.203922, 0.168627, 0.168627, 1 )
 custom_constants/shadow_offset_x = 3
 custom_fonts/normal_font = SubResource( 29 )
+text = "heyllo"
 fit_content_height = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -698,6 +698,7 @@ custom_colors/font_color_selected = Color( 0.298039, 0.141176, 0.607843, 1 )
 custom_colors/font_color_shadow = Color( 0.203922, 0.168627, 0.168627, 1 )
 custom_constants/shadow_offset_x = 3
 custom_fonts/normal_font = SubResource( 29 )
+text = "hullo"
 fit_content_height = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -746,6 +747,7 @@ custom_colors/font_color_selected = Color( 0.298039, 0.141176, 0.607843, 1 )
 custom_colors/font_color_shadow = Color( 0.203922, 0.168627, 0.168627, 1 )
 custom_constants/shadow_offset_x = 3
 custom_fonts/normal_font = SubResource( 29 )
+text = "yoyoyo"
 fit_content_height = true
 __meta__ = {
 "_edit_use_anchors_": false

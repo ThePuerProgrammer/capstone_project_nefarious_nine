@@ -11,9 +11,7 @@ func _ready():
 
 
 func _on_FloorArea2D_body_entered(body):
-	found_floor = true
-	print("found floor true")
-	
+	found_floor = true	
 	
 func _on_YelpSound_finished():
 	if !yelp_sound_has_played:
@@ -32,24 +30,24 @@ func _on_Timer_timeout():
 
 func _on_FloorArea2D_body_exited(body):
 	found_floor = false
-	print("found floor false")
+
 
 func _on_Area2D_body_entered_platform(body):
 	found_floor = true
-	print("found platform")
+
 
 func _on_Area2D_body_exited_platform(body):
 	found_floor = false
-	print("left platform")
+
 
 
 func _on_SmallPlatformArea2D_body_entered(body):
 	found_floor = true
-	print("on small plat")
+
 	
 func _on_SmallPlatformArea2D_body_exited(body):
 	found_floor = false
-	print("left small plat")
+
 	
 func _on_Floor2Area2D_body_entered(body):
 	found_floor = true

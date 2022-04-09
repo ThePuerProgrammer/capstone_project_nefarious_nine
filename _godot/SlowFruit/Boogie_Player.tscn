@@ -36,15 +36,15 @@ animations = [ {
 "name": "Walk",
 "speed": 7.0
 }, {
-"frames": [ ExtResource( 16 ), ExtResource( 10 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 5 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 8 ) ],
-"loop": true,
-"name": "Jump",
-"speed": 9.0
-}, {
 "frames": [ ExtResource( 23 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 7.0
+}, {
+"frames": [ ExtResource( 16 ), ExtResource( 10 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 5 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "Jump",
+"speed": 9.0
 } ]
 
 [node name="Boogie__Player" type="RigidBody2D"]
@@ -69,7 +69,7 @@ position = Vector2( -16, -24 )
 scale = Vector2( 3, 3 )
 frames = SubResource( 2 )
 animation = "Idle"
-frame = 2
+frame = 4
 playing = true
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="."]
@@ -81,6 +81,6 @@ stream = ExtResource( 25 )
 
 [node name="WalkSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
-volume_db = 5.0
+volume_db = 3.0
 
 [connection signal="finished" from="JumpSound" to="." method="_on_JumpSound_finished"]

@@ -1,19 +1,22 @@
 extends Node2D
 
 
-onready var questionLabel = get_node("Label")
-var questionText = "Here's a question"
+
+var questionLabel
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	questionLabel.set_text(str(questionText))
+	questionLabel = get_node("Label")
+	
+	#questionLabel.set_text(str(questionText))
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+#func setQuestionText(question):
+	#questionLabel.text = question
 
-
+#func getQuestionText():
+#	return questionLabel.text
+	
 func _on_Fruit1_area_entered(area):
 	pass # Replace with function body.
