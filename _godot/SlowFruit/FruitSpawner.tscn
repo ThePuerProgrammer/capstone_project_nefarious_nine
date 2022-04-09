@@ -758,4 +758,7 @@ stream = ExtResource( 16 )
 pitch_scale = 0.01
 attenuation = 0.965934
 
-[connection signal="area_entered" from="Control/Answer1Container/Fruit1" to="Control/Question/Question" method="_on_Fruit1_area_entered"]
+[connection signal="body_entered" from="Control/Answer1Container/Fruit1" to="." method="_on_Fruit1_body_entered"]
+[connection signal="body_entered" from="Control/Answer2Container2/Fruit2" to="." method="_on_Fruit2_body_entered"]
+[connection signal="body_entered" from="Control/Answer3Container3/Fruit3" to="." method="_on_Fruit3_body_entered"]
+[connection signal="body_entered" from="Control/Answer4Container/Fruit4" to="." method="_on_Fruit4_body_entered"]

@@ -26,6 +26,7 @@ var fruitCopy = fruits.duplicate()
 var card
 
 var correctIndex
+var correctFruit
 
 
 onready var questionLabel = get_node("Control/Question/Question/Label")
@@ -58,9 +59,9 @@ func chooseFruit():
 	pass
 	
 func setCards():
-	
-	print(answers)
+	print("helo")
 	card = Pomotimer.getRandomFlashcard()
+	print("helo2")
 	var question = card[0]
 	var correctAnswer = card[1]
 	var wrongAnswers = card[2]
@@ -70,8 +71,15 @@ func setCards():
 	var rand = RandomNumberGenerator.new()
 	rand.randomize()
 	var answerLabel = rand.randi_range(0, 3)
-	
+
 	correctIndex = answerLabel	
+	print("correct index")
+	
+	correctFruit = "Control/Answer%sContainer%s/Fruit%s"
+	print("correct fruit", correctFruit)
+	
+	var format_answer = correctFruit %[correctIndex, correctIndex, correctIndex]
+	print("format annswer", format_answer)
 	
 	answers[answerLabel].text = correctAnswer
 	
@@ -84,3 +92,19 @@ func setCards():
 
 func setAnswer():
 	pass
+
+
+func _on_Fruit1_body_entered(body):
+	print("fruit1")
+
+
+func _on_Fruit2_body_entered(body):
+	print("fruit2")
+
+
+func _on_Fruit3_body_entered(body):
+	print("fruit3")
+
+
+func _on_Fruit4_body_entered(body):
+	print("fruit4")

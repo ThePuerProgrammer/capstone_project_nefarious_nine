@@ -8,7 +8,7 @@ const WALK_MAX_VELOCITY = 140.0
 const AIR_ACCEL = 900.0
 const AIR_DEACCEL = 1100.0
 const JUMP_VELOCITY = 780
-const STOP_JUMP_FORCE = 950.0
+const STOP_JUMP_FORCE = 550.0
 const MAX_FLOOR_AIRBORNE_TIME = 0.15
 
 
@@ -71,7 +71,7 @@ func check_floor():
 			setWalking()
 		else:
 			setIdle()	
-	elif !found_floor:
+	if !found_floor:
 		setJumping()
 		stopWalkSound()
 
@@ -130,6 +130,8 @@ func pull_for_input():
 		if !jumping && found_floor:
 			setWalking()
 			playWalkSound()
+		elif !found_floor:
+			stopWalkSound()
 		$AnimatedSprite.flip_h = true
 		move_left = true
 		left = true
@@ -148,6 +150,8 @@ func pull_for_input():
 		if !jumping && found_floor:
 			setWalking()
 			playWalkSound()
+		elif !found_floor:
+			stopWalkSound()
 		$AnimatedSprite.flip_h = false
 		move_right = true
 		right = true
@@ -163,11 +167,11 @@ func pull_for_input():
 	
 	if Input.is_action_just_pressed("jump"):
 		stopWalkSound()
-		if linear_velocity.y <= 0:
+		if linear_velocity.y <= 0 && found_floor && !jumping:
 			setJumping()
 			stopping_jump = false
-			applied_force = Vector2(applied_force.y, 0)
 			linear_velocity.y = -JUMP_VELOCITY
+			applied_force = Vector2(applied_force.y, 0)
 			playJumpSound()
 		
 	if Input.is_action_just_released("jump"):
@@ -177,9 +181,10 @@ func pull_for_input():
 			setIdle()
 		elif walking:
 			setWalking()		
-		stopJumpSound()
+		stopJumpSound()		
 		applied_force = Vector2(applied_force.y, 0)
-		linear_velocity.y = STOP_JUMP_FORCE
+		linear_velocity.y += STOP_JUMP_FORCE
+		
 	
 func set_movement():
 	var x = 0
@@ -203,7 +208,7 @@ func set_movement():
 		
 	if linear_velocity.y > JUMP_VELOCITY:
 		stopping_jump = true
-		linear_velocity.y -= STOP_JUMP_FORCE
+		linear_velocity.y += STOP_JUMP_FORCE
 	if linear_velocity.y < -JUMP_VELOCITY:
 		linear_velocity.y = -JUMP_VELOCITY
 		
