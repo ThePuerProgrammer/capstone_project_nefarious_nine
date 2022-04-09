@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://ChillZone/Pet/pet_sprites/Heart.png" type="Texture" id=1]
+[ext_resource path="res://ChillZone/pet/pet_sprites/Heart.png" type="Texture" id=1]
 
 [sub_resource type="CanvasItemMaterial" id=4]
 particles_animation = true

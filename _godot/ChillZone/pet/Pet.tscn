@@ -8,7 +8,7 @@
 [ext_resource path="res://ChillZone/pet/WashMeterProgressBar.gd" type="Script" id=6]
 [ext_resource path="res://ChillZone/wash_pomopet/MouseBubblesSmallOnlyParticle.tscn" type="PackedScene" id=7]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_48pt.tres" type="DynamicFont" id=8]
-[ext_resource path="res://ChillZone/Pet/pet_sprites/cat_sprite.png" type="Texture" id=9]
+[ext_resource path="res://ChillZone/pet/pet_sprites/cat_sprite.png" type="Texture" id=9]
 [ext_resource path="res://ChillZone/pet/pet_sprites/rembo_sprite.png" type="Texture" id=10]
 [ext_resource path="res://ChillZone/action_wheel/button_textures/pet_textures/pet_disabled.png" type="Texture" id=11]
 [ext_resource path="res://ChillZone/action_wheel/button_textures/pet_textures/pet_pressed.png" type="Texture" id=12]
@@ -26,12 +26,12 @@
 [ext_resource path="res://ChillZone/action_wheel/button_textures/clean_textures/clean_pressed.png" type="Texture" id=24]
 [ext_resource path="res://ChillZone/action_wheel/button_textures/clean_textures/clean_hover.png" type="Texture" id=25]
 [ext_resource path="res://ChillZone/action_wheel/button_textures/clean_textures/clean_normal.png" type="Texture" id=26]
-[ext_resource path="res://ChillZone/Pet/PettingBar.gd" type="Script" id=27]
 [ext_resource path="res://ChillZone/wash_pomopet/progressBar/pb_bg.tres" type="StyleBox" id=28]
 [ext_resource path="res://ChillZone/wash_pomopet/progressBar/pb_fg.tres" type="StyleBox" id=29]
 [ext_resource path="res://ChillZone/pet_pomopet/progressBar/pb_fg.tres" type="StyleBox" id=30]
 [ext_resource path="res://ChillZone/pet_pomopet/progressBar/pb_bg.tres" type="StyleBox" id=31]
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_26pt_less_spacing.tres" type="DynamicFont" id=32]
+[ext_resource path="res://ChillZone/pet/PettingBar.gd" type="Script" id=33]
 
 [sub_resource type="Animation" id=6]
 length = 0.001
@@ -418,7 +418,7 @@ tracks/7/keys = {
 "times": PoolRealArray( 0, 0.4, 1 )
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=15]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
@@ -433,7 +433,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=16]
 resource_name = "fade_in"
 length = 0.5
 tracks/0/type = "value"
@@ -449,7 +449,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=17]
 resource_name = "fade_out"
 length = 0.5
 tracks/0/type = "value"
@@ -632,6 +632,10 @@ anims/show_buttons = SubResource( 11 )
 wait_time = 4.0
 autostart = true
 
+[node name="heartsCooldown" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
 [node name="PetMeter" type="Control" parent="."]
 margin_left = -166.0
 margin_top = -231.244
@@ -649,19 +653,15 @@ custom_fonts/font = ExtResource( 32 )
 custom_styles/fg = ExtResource( 30 )
 custom_styles/bg = ExtResource( 31 )
 step = 1.0
-script = ExtResource( 27 )
+script = ExtResource( 33 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PetMeter/ProgressBar"]
-anims/RESET = SubResource( 12 )
-anims/fade_in = SubResource( 13 )
-anims/fade_out = SubResource( 14 )
-
-[node name="heartsCooldown" type="Timer" parent="."]
-wait_time = 0.05
-one_shot = true
+anims/RESET = SubResource( 15 )
+anims/fade_in = SubResource( 16 )
+anims/fade_out = SubResource( 17 )
 
 [connection signal="mouse_entered" from="DogKinematicBody" to="." method="_on_DogKinematicBody_mouse_entered"]
 [connection signal="mouse_exited" from="DogKinematicBody" to="." method="_on_DogKinematicBody_mouse_exited"]
