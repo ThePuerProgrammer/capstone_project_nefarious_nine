@@ -127,7 +127,6 @@ func _input(event):
 func startPettingAction():
 	pettingModeOn = true
 	showPettingProgressBar()
-	emit_signal("pettingStart")
 
 func startCleanAction():
 	petWashingModeOn = true
