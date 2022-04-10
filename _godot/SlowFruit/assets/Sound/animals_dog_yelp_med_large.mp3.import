@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/animals_dog_yelp_med_large.mp3-6a80df290c6fa5e39e66c94c98e562f8.mp3str"
+
+[deps]
+
+source_file="res://SlowFruit/assets/Sound/animals_dog_yelp_med_large.mp3"
+dest_files=[ "res://.import/animals_dog_yelp_med_large.mp3-6a80df290c6fa5e39e66c94c98e562f8.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

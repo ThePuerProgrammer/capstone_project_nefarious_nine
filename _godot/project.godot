@@ -357,6 +357,8 @@ jump={
 2d_render/layer_3="TriggerLayer"
 2d_physics/layer_1="PoopLayer"
 2d_physics/layer_2="Floor"
+2d_physics/layer_3=false
+2d_physics/layer_4="Fruit"
 
 [physics]
 
