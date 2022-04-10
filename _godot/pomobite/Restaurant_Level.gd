@@ -1,8 +1,5 @@
 extends Node2D
 
-# <As a> Customer_NPC, <I want to> leave a tip of varying amounts <so that> I can express my gratitude to my waiter for their service
-# <As a> Customer_NPC, <I want to> express my frustration for poor service <so that> my waiter will understand that I am not recieving quality care
-
 signal ready_to_be_seated(patrons)
 signal seat_guests()
 signal return_to_host_stand()
@@ -20,6 +17,34 @@ onready var right_paths					= $Paths/FollowHostPaths/RightPaths
 onready var left_paths					= $Paths/FollowHostPaths/LeftPaths
 onready var chef_c						= $Paths/ChefPaths/ChefCPath/PathFollow2D/Chef_NPC
 onready var chef_d						= $Paths/ChefPaths/ChefDPath/PathFollow2D/Chef_NPC
+onready var one_answer_one				= $POSZoom/POSScreen/OneAnswer1
+onready var one_answer_two				= $POSZoom/POSScreen/OneAnswer2
+onready var one_answer_three			= $POSZoom/POSScreen/OneAnswer3
+onready var one_answer_four				= $POSZoom/POSScreen/OneAnswer4
+onready var two_answer_one				= $POSZoom/POSScreen/TwoAnswer1
+onready var two_answer_two				= $POSZoom/POSScreen/TwoAnswer2
+onready var two_answer_three			= $POSZoom/POSScreen/TwoAnswer3
+onready var two_answer_four				= $POSZoom/POSScreen/TwoAnswer4
+onready var three_answer_one			= $POSZoom/POSScreen/ThreeAnswer1
+onready var three_answer_two			= $POSZoom/POSScreen/ThreeAnswer2
+onready var three_answer_three			= $POSZoom/POSScreen/ThreeAnswer3
+onready var three_answer_four			= $POSZoom/POSScreen/ThreeAnswer4
+
+var one_answer_buttons_array = []
+var two_answer_buttons_array = []
+var three_answer_buttons_array = []
+
+var one_correct_answer
+var two_correct_answer
+var three_correct_answer
+
+onready var one_answers = []
+onready var two_answers = []
+onready var three_answers = []
+
+var one_selected
+var two_selected
+var three_selected
 
 onready var opening_restaurant			= true
 onready var walk_in						= false
@@ -50,6 +75,7 @@ onready var has_food					= false
 
 var anger_timer : Timer
 var food_in_window_timer : Timer
+var order_in_timer : Timer
  
 const table_stay_time	= 225
 const TERMINATE_CONVO_VALUE = 1000
@@ -150,7 +176,7 @@ var leaving_timers_queue = []
 
 var drink_orders = ["water", "tea", "bepis", "spripe", "dr popper"]
 
-var food_orders = ["number 1", "number 2", "number 3"]
+var food_orders = ["#1", "#2", "#3"]
 
 onready var table_buttons = [
 	$POSZoom/POSScreen/Table1Button,
@@ -179,7 +205,6 @@ onready var order_menu_buttons = [
 ]
 
 onready var order_menu_labels = [
-	$POSZoom/POSScreen/WarningOrderLabel,
 	$POSZoom/POSScreen/MenuOption1Label,
 	$POSZoom/POSScreen/MenuOption2Label,
 	$POSZoom/POSScreen/MenuOption3Label,
@@ -194,7 +219,6 @@ func setup(player_number : int, relay_client : ClientMgr): # Called by multiplay
 		pass
 		
 	players = get_tree().get_nodes_in_group("players")
-	var player = players[player_number]
 	
 
 func _ready():
@@ -225,9 +249,31 @@ func _ready():
 	food_in_window_timer = Timer.new()
 	food_in_window_timer.one_shot = true
 	food_in_window_timer.wait_time = 10
-	food_in_window_timer.connect("timeout", self, "_put_food_in_window")
+	if food_in_window_timer.connect("timeout", self, "_put_food_in_window") != OK:
+		pass
 	add_child(food_in_window_timer)
-	
+	one_answer_buttons_array = [one_answer_one, one_answer_two, one_answer_three, one_answer_four]
+	for btn in one_answer_buttons_array:
+		btn.visible = false
+		btn.disabled = true
+	two_answer_buttons_array = [two_answer_one, two_answer_two, two_answer_three, two_answer_four]
+	for btn in two_answer_buttons_array:
+		btn.visible = false
+		btn.disabled = true		
+	three_answer_buttons_array = [three_answer_one, three_answer_two, three_answer_three, three_answer_four]
+	for btn in three_answer_buttons_array:
+		btn.visible = false
+		btn.disabled = true
+		
+	one_correct_answer = 0
+	two_correct_answer = 0
+	three_correct_answer = 0
+	order_in_timer = Timer.new()
+	order_in_timer.one_shot = true
+	order_in_timer.wait_time = 2
+	if order_in_timer.connect("timeout", self, "_dismiss_order_screen") != OK:
+		pass
+	add_child(order_in_timer)
 	
 func _on_message(msg):
 	if msg.content and msg.content.has('player_1_position'):
@@ -548,13 +594,41 @@ func _on_OrderButton_pressed():
 	
 	chefs_cursing = true
 	anger_timer.one_shot = true
-	anger_timer.wait_time = 3
+	anger_timer.wait_time = 10
 	for p in cursing_array:
 		p.visible = true
-	anger_timer.connect("timeout", self, '_on_anger_timer_timeout')
+	if anger_timer.connect("timeout", self, '_on_anger_timer_timeout') != OK:
+		pass
 	anger_timer.start()
 	food_in_window_timer.start()
 	
+	print("ONE ", one_correct_answer)
+	print(one_selected)
+	
+	print("TWO", two_correct_answer)
+	print(two_selected)
+	
+	print("THREE", three_correct_answer)
+	print(three_selected)
+	
+	if one_correct_answer != one_selected:
+		order_menu_labels[0].text = 'INCORRECT'
+	else:
+		order_menu_labels[0].text = 'Correct!'
+		
+	if two_correct_answer != two_selected:
+		order_menu_labels[1].text = 'INCORRECT'
+	else:
+		order_menu_labels[1].text = 'Correct!'
+		
+	if three_correct_answer != three_selected:
+		order_menu_labels[2].text = 'INCORRECT'
+	else:
+		order_menu_labels[2].text = 'Correct!'
+	
+	order_in_timer.start()
+	
+func _dismiss_order_screen():	
 	_on_BackButton_pressed()
 	
 func _on_anger_timer_timeout():
@@ -599,6 +673,15 @@ func _go_to_table_menu():
 		for label in order_menu_labels:
 			label.text = tables['questions'][selected_table - 1][i][0]
 			i += 1
+		for btn in one_answer_buttons_array:
+			btn.visible = true
+			btn.disabled = false
+		for btn in two_answer_buttons_array:
+			btn.visible = true
+			btn.disabled = false
+		for btn in three_answer_buttons_array:
+			btn.visible = true
+			btn.disabled = false			
 		
 	for table in table_buttons:
 		table.disabled = true
@@ -617,6 +700,18 @@ func _on_BackButton_pressed():
 		button.disabled = true
 	for label in order_menu_labels:
 		label.visible = false
+	for btn in one_answer_buttons_array:
+		btn.visible = false
+	for btn in two_answer_buttons_array:
+		btn.visible = false
+	for btn in three_answer_buttons_array:
+		btn.visible = false
+	one_selected = -1
+	two_selected = -1
+	three_selected = -1
+	one_answers = []
+	two_answers = []
+	three_answers = []
 	pos_screen.set_texture(pos_default_screen)
 	food_order_list = []
 
@@ -1009,12 +1104,52 @@ func _on_DialogueTimer_timeout():
 func _guests_order_food():
 	# GENERATE FLASHCARD!!!!!
 	var flashcard = Pomotimer.getRandomFlashcard()
-	tables['questions'][ordering_table - 1].append(flashcard)
 	
 	print("FC Question = ", flashcard[0])
 	print("FC Answer = ", flashcard[1])
 	for each in flashcard[2]:
 		print("Wrong answer = ", each)
+		
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var correct = rng.randi_range(0, 3)
+	
+	var q = true
+		
+	if one_answers.size() == 0:
+		one_answers = [flashcard[1], flashcard[2]]
+		one_correct_answer = correct
+		one_answer_buttons_array[correct].text = flashcard[1]
+		var j = 0
+		for i in range(0, 4):
+			if i != correct:
+				one_answer_buttons_array[i].text = flashcard[2][j]
+				j += 1
+		
+	elif two_answers.size() == 0:
+		two_answers = [flashcard[1], flashcard[2]]
+		two_correct_answer = correct
+		two_answer_buttons_array[correct].text = flashcard[1]
+		var j = 0
+		for i in range(0, 4):
+			if i != correct:
+				two_answer_buttons_array[i].text = flashcard[2][j]
+				j += 1
+		
+	elif three_answers.size() == 0:
+		three_answers = [flashcard[1], flashcard[2]]
+		three_correct_answer = correct
+		three_answer_buttons_array[correct].text = flashcard[1]
+		var j = 0
+		for i in range(0, 4):
+			if i != correct:
+				three_answer_buttons_array[i].text = flashcard[2][j]
+				j += 1
+	else:
+		q = false
+	
+	if q:
+		tables['questions'][ordering_table - 1].append(flashcard)
 	
 	var rando = RandomNumberGenerator.new()
 	rando.seed = hash(String(order_pos_queue.front()[0] + order_pos_queue.front()[1]))
@@ -1119,4 +1254,42 @@ func _put_food_in_window():
 	food_in_window = true
 	$Window_Food.visible = true
 
+
+
+
+func _on_OneAnswer1_pressed():
+	one_selected = 0
+
+func _on_OneAnswer2_pressed():
+	one_selected = 1
+
+func _on_OneAnswer3_pressed():
+	one_selected = 2
+
+func _on_OneAnswer4_pressed():
+	one_selected = 3
+
+func _on_TwoAnswer1_pressed():
+	two_selected = 0
+
+func _on_TwoAnswer2_pressed():
+	two_selected = 1
+
+func _on_TwoAnswer3_pressed():
+	two_selected = 2
+
+func _on_TwoAnswer4_pressed():
+	two_selected = 3
+
+func _on_ThreeAnswer1_pressed():
+	three_selected = 0
+
+func _on_ThreeAnswer2_pressed():
+	three_selected = 1
+
+func _on_ThreeAnswer3_pressed():
+	three_selected = 2
+
+func _on_ThreeAnswer4_pressed():
+	three_selected = 3
 

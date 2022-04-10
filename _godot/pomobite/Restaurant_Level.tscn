@@ -1790,6 +1790,174 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="OneAnswer1" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -374.0
+margin_top = -36.0
+margin_right = -154.0
+margin_bottom = -7.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OneAnswer2" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -374.0
+margin_top = 11.0
+margin_right = -154.0
+margin_bottom = 40.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OneAnswer3" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -374.0
+margin_top = 58.0
+margin_right = -154.0
+margin_bottom = 87.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OneAnswer4" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -373.0
+margin_top = 105.0
+margin_right = -153.0
+margin_bottom = 134.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoAnswer1" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -111.0
+margin_top = -36.0
+margin_right = 109.0
+margin_bottom = -7.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoAnswer2" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -111.0
+margin_top = 11.0
+margin_right = 109.0
+margin_bottom = 40.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoAnswer3" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -111.0
+margin_top = 58.0
+margin_right = 109.0
+margin_bottom = 87.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoAnswer4" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -110.0
+margin_top = 105.0
+margin_right = 110.0
+margin_bottom = 134.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeAnswer1" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 153.0
+margin_top = -36.0
+margin_right = 373.0
+margin_bottom = -7.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeAnswer2" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 153.0
+margin_top = 11.0
+margin_right = 373.0
+margin_bottom = 40.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeAnswer3" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 153.0
+margin_top = 58.0
+margin_right = 373.0
+margin_bottom = 87.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeAnswer4" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 154.0
+margin_top = 105.0
+margin_right = 374.0
+margin_bottom = 134.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="OnePlusButton" type="Button" parent="POSZoom/POSScreen"]
 margin_left = -235.0
 margin_top = 161.0
@@ -1881,7 +2049,7 @@ visible = false
 margin_left = -374.0
 margin_top = -143.0
 margin_right = -156.0
-margin_bottom = 149.0
+margin_bottom = -39.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "test"
 align = 1
@@ -1896,7 +2064,7 @@ visible = false
 margin_left = -109.0
 margin_top = -143.0
 margin_right = 109.0
-margin_bottom = 149.0
+margin_bottom = -40.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "test"
 align = 1
@@ -1911,7 +2079,7 @@ visible = false
 margin_left = 152.0
 margin_top = -143.0
 margin_right = 370.0
-margin_bottom = 149.0
+margin_bottom = -39.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "test"
 align = 1
@@ -2464,6 +2632,18 @@ position = Vector2( 1773, 610 )
 [connection signal="pressed" from="POSZoom/POSScreen/Table12Button" to="." method="_on_Table12Button_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/OneMinusButton" to="." method="_on_OneMinusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneAnswer1" to="." method="_on_OneAnswer1_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneAnswer2" to="." method="_on_OneAnswer2_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneAnswer3" to="." method="_on_OneAnswer3_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneAnswer4" to="." method="_on_OneAnswer4_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoAnswer1" to="." method="_on_TwoAnswer1_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoAnswer2" to="." method="_on_TwoAnswer2_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoAnswer3" to="." method="_on_TwoAnswer3_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoAnswer4" to="." method="_on_TwoAnswer4_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeAnswer1" to="." method="_on_ThreeAnswer1_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeAnswer2" to="." method="_on_ThreeAnswer2_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeAnswer3" to="." method="_on_ThreeAnswer3_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeAnswer4" to="." method="_on_ThreeAnswer4_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/OnePlusButton" to="." method="_on_OnePlusButton_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/TwoMinusButton" to="." method="_on_TwoMinusButton_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/TwoPlusButton" to="." method="_on_TwoPlusButton_pressed"]
