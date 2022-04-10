@@ -116,7 +116,7 @@ func get_user_flashcards(deckid):
 	return res
 
 func get_user_decks(uid):
-	print("UID:",uid)
+	#print("UID:",uid)
 	var query : FirestoreQuery = FirestoreQuery.new()\
 		.from(Constants.COLLECTIONS.USERS)\
 		.from(Constants.COLLECTIONS.DECKS)\

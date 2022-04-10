@@ -248,7 +248,7 @@ func add_items_to_deck_selection():
 	for deck in deckList:
 		var fields = deck["doc_fields"]
 		deck_dict_name[deck["doc_name"]] = fields["name"]
-		if(fields["flashcardNumber"] != 0):
+		if(fields["flashcardNumber"] != 0 and fields["isClassDeck"] == "false"):
 			deck_selection_optionbutton.add_item(deck_dict_name[deck["doc_name"]])
 #		print("DIC_NAME:",deck_dict_name[deck["doc_name"]])
 	deck_selection_optionbutton.set_item_disabled(0,true)
