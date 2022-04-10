@@ -18,6 +18,9 @@ onready var customer_paths 				= $Paths/CustomerPaths
 onready var customer_walkin_timer		= $CustomerWalkInTimer
 onready var right_paths					= $Paths/FollowHostPaths/RightPaths
 onready var left_paths					= $Paths/FollowHostPaths/LeftPaths
+onready var chef_c						= $Paths/ChefPaths/ChefCPath/PathFollow2D/Chef_NPC
+onready var chef_d						= $Paths/ChefPaths/ChefDPath/PathFollow2D/Chef_NPC
+
 onready var opening_restaurant			= true
 onready var walk_in						= false
 onready var pos_right_usable 			= false
@@ -40,6 +43,10 @@ onready var make_food					= [false, []]
 onready var ordering_table				= -1
 onready var carrying_trash				= false
 onready var carrying_dishes				= true
+onready var chefs_cursing				= false
+onready var cursing_array				= []
+
+var anger_timer : Timer
  
 const table_stay_time	= 225
 const TERMINATE_CONVO_VALUE = 1000
@@ -50,6 +57,8 @@ var customer_npc		= preload("res://pomobite/Customer_NPC.tscn")
 var host_npc			= preload("res://pomobite/Host_NPC.tscn")
 var convo_dialogue		= preload("res://pomobite/ConversationDialogue.tscn")
 var dirty_table			= preload('res://pomobite/DirtyTable.tscn')
+var cursing_particles	= preload('res://pomobite/CursingParticles.tscn')
+
 var selected_table 		= 1
 var show_hint 			= true
 var ticks				
@@ -184,11 +193,8 @@ func setup(player_number : int, relay_client : ClientMgr): # Called by multiplay
 	players = get_tree().get_nodes_in_group("players")
 	var player = players[player_number]
 	
-	
 
 func _ready():
-	
-		
 	MenuMusic.get_child(0).stop()
 #	controlled_player = 1 # This will need to be adjusted for multiplayer
 	# But I'm trying to prepare for that in the code as is
@@ -203,6 +209,16 @@ func _ready():
 		print("Cannot connect signals")
 	customer_walkin_timer.start()
 	
+	var cursing_c = cursing_particles.instance()
+	cursing_c.visible = false
+	var cursing_d = cursing_particles.instance()
+	cursing_d.visible = false
+	cursing_array.append(cursing_c)
+	cursing_array.append(cursing_d)
+	anger_timer = Timer.new()
+	add_child(anger_timer)
+	chef_c.add_child(cursing_c)
+	chef_d.add_child(cursing_d)
 	
 	
 func _on_message(msg):
@@ -212,7 +228,6 @@ func _on_message(msg):
 		player_2_position = msg.content['player_2_position']
 
 func _process(_delta):
-	
 	if _is_host:
 		$Player1.movable = true
 		$Player1.interactable = true
@@ -318,19 +333,19 @@ func _process(_delta):
 			get_node(host_path).get_child(0).queue_free()
 			$Host_NPC.visible = true
 			$Host_NPC/CollisionShape2D.disabled = false
-			
-	var msg = Message.new()
-	msg.content = {}
-	msg.is_echo = false
-	msg.start_pomobite = false
-	msg.game_start = false
-	msg.server_login = false
-	msg.content['player_1_position'] = $Player1.position
-	_relay_client.send_data(msg)
+		
+	if _relay_client != null:	
+		var msg = Message.new()
+		msg.content = {}
+		msg.is_echo = false
+		msg.start_pomobite = false
+		msg.game_start = false
+		msg.server_login = false
+		msg.content['player_1_position'] = $Player1.position
+		_relay_client.send_data(msg)
 			
 
 func _on_player_1_interact():
-	print("interact")
 #	show_hint = false
 	$PopupCanvas/PopupDialog.hide()
 	if pos_right_usable or pos_left_usable:
@@ -516,8 +531,22 @@ func _on_OrderButton_pressed():
 	make_food = [true, food_order_list.duplicate()]
 	tables['orders']['table' + String(selected_table)] = food_order_list.duplicate()
 	food_order_list = []
+	
+	chefs_cursing = true
+	anger_timer.one_shot = true
+	anger_timer.wait_time = 3
+	for p in cursing_array:
+		p.visible = true
+	anger_timer.connect("timeout", self, '_on_anger_timer_timeout')
+	anger_timer.start()
+	
 	_on_BackButton_pressed()
 	
+func _on_anger_timer_timeout():
+	print("timeout")
+	for p in cursing_array:
+		p.visible = false
+
 
 func _on_POS_right_area_entered(_area):
 	if show_hint:
@@ -1005,7 +1034,6 @@ func _on_Restaurant_Level_seat_guests():
 		var table = "table" + String(current_focused_table)
 		customer.position = tables["seat_positions"][table][i]
 		$Customers.add_child(customer)
-	print("CURRENT FOCUSED TABLE ", current_focused_table)
 	tables['leaving_queue'].push_back(current_focused_table)
 	var timer = Timer.new()
 	timer.wait_time = table_stay_time
