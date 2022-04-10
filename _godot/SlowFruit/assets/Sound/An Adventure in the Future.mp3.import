@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/An Adventure in the Future.mp3-accd40fe6e0a7b914cd947f08da6618e.mp3str"
+
+[deps]
+
+source_file="res://SlowFruit/assets/Sound/An Adventure in the Future.mp3"
+dest_files=[ "res://.import/An Adventure in the Future.mp3-accd40fe6e0a7b914cd947f08da6618e.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/zapsplat_fantasy_magic_glissando_reversed_bright_twinkling_001_70182.mp3-39d41fcf794b0c0407a36327c538d3a6.mp3str"
+
+[deps]
+
+source_file="res://SlowFruit/assets/Sound/zapsplat_fantasy_magic_glissando_reversed_bright_twinkling_001_70182.mp3"
+dest_files=[ "res://.import/zapsplat_fantasy_magic_glissando_reversed_bright_twinkling_001_70182.mp3-39d41fcf794b0c0407a36327c538d3a6.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
