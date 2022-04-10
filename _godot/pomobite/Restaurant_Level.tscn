@@ -1775,6 +1775,149 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="OneMinusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = -373.0
+margin_top = 160.0
+margin_right = -290.0
+margin_bottom = 194.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OnePlusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = -235.0
+margin_top = 161.0
+margin_right = -152.0
+margin_bottom = 195.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoMinusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = -112.0
+margin_top = 162.0
+margin_right = -29.0
+margin_bottom = 196.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoPlusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = 29.0
+margin_top = 162.0
+margin_right = 112.0
+margin_bottom = 196.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeMinusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = 151.0
+margin_top = 162.0
+margin_right = 234.0
+margin_bottom = 196.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreePlusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = 289.0
+margin_top = 160.0
+margin_right = 372.0
+margin_bottom = 194.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OrderButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = 287.0
+margin_top = -246.0
+margin_right = 370.0
+margin_bottom = -212.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WarningOrderLabel" type="Label" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -264.0
+margin_top = -251.0
+margin_right = 262.0
+margin_bottom = -209.0
+custom_colors/font_color = Color( 1, 0, 0.211765, 1 )
+text = "Enter 4 items before placing an order"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuOption1Label" type="Label" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -374.0
+margin_top = -143.0
+margin_right = -156.0
+margin_bottom = 149.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "test"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuOption2Label" type="Label" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -109.0
+margin_top = -143.0
+margin_right = 109.0
+margin_bottom = 149.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "test"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuOption3Label" type="Label" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 152.0
+margin_top = -143.0
+margin_right = 370.0
+margin_bottom = 149.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "test"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Paths" type="Node2D" parent="."]
 
 [node name="ChefPaths" type="Node2D" parent="Paths"]
@@ -2263,6 +2406,8 @@ visible = false
 position = Vector2( 0, -40 )
 z_index = 5
 
+[node name="Dishes" type="Node2D" parent="."]
+
 [connection signal="ready_to_be_seated" from="." to="." method="_on_Restaurant_Level_ready_to_be_seated"]
 [connection signal="return_to_host_stand" from="." to="." method="_on_Restaurant_Level_return_to_host_stand"]
 [connection signal="seat_guests" from="." to="." method="_on_Restaurant_Level_seat_guests"]
@@ -2283,6 +2428,13 @@ z_index = 5
 [connection signal="pressed" from="POSZoom/POSScreen/Table11Button" to="." method="_on_Table11Button_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/Table12Button" to="." method="_on_Table12Button_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneMinusButton" to="." method="_on_OneMinusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OnePlusButton" to="." method="_on_OnePlusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoMinusButton" to="." method="_on_TwoMinusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoPlusButton" to="." method="_on_TwoPlusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeMinusButton" to="." method="_on_ThreeMinusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreePlusButton" to="." method="_on_ThreePlusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OrderButton" to="." method="_on_OrderButton_pressed"]
 [connection signal="timeout" from="Paths/ChefPaths/ChefAPath/PauseMovementTimer" to="Paths/ChefPaths/ChefAPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="timeout" from="Paths/ChefPaths/ChefBPath/PauseMovementTimer" to="Paths/ChefPaths/ChefBPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="timeout" from="Paths/ChefPaths/ChefCPath/PauseMovementTimer" to="Paths/ChefPaths/ChefCPath" method="_on_PauseMovementTimer_timeout"]

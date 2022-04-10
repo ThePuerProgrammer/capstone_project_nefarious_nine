@@ -1,16 +1,15 @@
 extends Node2D
 
-# <As a> Waiter_Player, <I want to> greet my tables <so that> they know they are being taken care of
-# <As a> Waiter_Player, <I want to> bring my guests their drink orders <so that> they can quench their thirst
-# <As a> Waiter_Player, <I want to> take my guests orders <so that> I can inform the chefs of their food choice
-# <As a> Waiter_Player, <I want to> put the orders into a POS system <so that> I can relay the order to the back of house (and see how their order relates to a flashcard question)
-# <As a> Customer_NPC, <I want to> place a drink order <so that> I can quench my thirst
-# <As a> Customer_NPC, <I want to> place a food order <so that> I can feed my hunger
+# <As a> Customer_NPC, <I want to> leave a tip of varying amounts <so that> I can express my gratitude to my waiter for their service
+# <As a> Customer_NPC, <I want to> express my frustration for poor service <so that> my waiter will understand that I am not recieving quality care
 
 signal ready_to_be_seated(patrons)
 signal seat_guests()
 signal return_to_host_stand()
-signal table_greeted(table_number)
+
+var _is_host
+var _player_number
+var players
 
 onready var pos_wall 					= $POSWall
 onready var pos_zoom 					= $POSZoom
@@ -34,25 +33,35 @@ onready var customer_to_host_path		= false
 onready var table_exiting				= [false, 0]
 onready var customer_path_h_offset		= 200
 onready var server_at_table				= [false, 0]
-
-const table_stay_time	= 180
+onready var has_drinks					= false
+onready var dialogue_active				= false
+onready var conversation_index			= 0
+onready var make_food					= [false, []]
+onready var ordering_table				= -1
+onready var carrying_trash				= false
+onready var carrying_dishes				= true
+ 
+const table_stay_time	= 225
+const TERMINATE_CONVO_VALUE = 1000
 
 var pos_table_menu 		= preload("res://assets/textures/PomoBITE_Textures/Table_Menu.png")
 var pos_default_screen 	= preload("res://assets/textures/PomoBITE_Textures/Inner_Monitor_Tables.png")
 var customer_npc		= preload("res://pomobite/Customer_NPC.tscn")
 var host_npc			= preload("res://pomobite/Host_NPC.tscn")
 var convo_dialogue		= preload("res://pomobite/ConversationDialogue.tscn")
+var dirty_table			= preload('res://pomobite/DirtyTable.tscn')
 var selected_table 		= 1
 var show_hint 			= true
 var ticks				
-var conversation_index
 var controlled_player
 var host_path
 var offset_queue
 var current_focused_table
 var dialogue_queue
 
-var convo_string
+var _relay_client : ClientMgr
+
+var convo_strings = []
 
 var tables = {
 	tables_entered = [
@@ -62,6 +71,12 @@ var tables = {
 	tables_sat = [
 		false, false, false, false, false, false,
 		false, false, false, false, false, false
+	],
+	table_positions = [
+		Vector2(1.0,1.0),   Vector2(1.0,1.0),   Vector2(1.0,1.0), 
+		Vector2(1.0,1.0),   Vector2(1.0,1.0),   Vector2(1.0,1.0),
+		Vector2(1552, 240), Vector2(1776, 240), Vector2(1552, 432), 
+		Vector2(1776, 432), Vector2(1480, 672), Vector2(1704, 672),
 	],
 	seat_positions = {
 		table1 =  [Vector2(76,   248), Vector2(76,   312), Vector2(212,  248), Vector2(212,  312)],
@@ -85,20 +100,37 @@ var tables = {
 		false, false, false, false, false, false,
 		false, false, false, false, false, false
 	],
+	drinks_delivered = [
+		false, false, false, false, false, false,
+		false, false, false, false, false, false
+	],
 	food_order_taken = [
 		false, false, false, false, false, false,
 		false, false, false, false, false, false
+	],
+	given_order = [
+		[],[],[],[],[],[],[],[],[],[],[],[],
 	],
 	orders = {
 		table1 = [], table2 = [], table3 = [], table4 = [], table5 = [], table6 = [],
 		table7 = [], table8 = [], table9 = [], table10 = [], table11 = [], table12 = [],
 	},
+	questions = [
+		[],[],[],[],[],[],[],[],[],[],[],[],
+	],
 	check_delivered = [
+		false, false, false, false, false, false,
+		false, false, false, false, false, false
+	],
+	table_dirty = [
 		false, false, false, false, false, false,
 		false, false, false, false, false, false
 	],
 	leaving_queue = [],
 }
+
+onready var order_pos_queue = []
+onready var food_order_list = []
 
 var leaving_timers_queue = []
 
@@ -121,12 +153,39 @@ onready var table_buttons = [
 	$POSZoom/POSScreen/Table12Button,
 ]
 
+onready var order_menu_buttons = [
+	$POSZoom/POSScreen/BackButton,
+	$POSZoom/POSScreen/OneMinusButton,
+	$POSZoom/POSScreen/OnePlusButton,
+	$POSZoom/POSScreen/TwoMinusButton,
+	$POSZoom/POSScreen/TwoPlusButton,
+	$POSZoom/POSScreen/ThreeMinusButton,
+	$POSZoom/POSScreen/ThreePlusButton,
+	$POSZoom/POSScreen/OrderButton
+]
+
+onready var order_menu_labels = [
+	$POSZoom/POSScreen/WarningOrderLabel,
+	$POSZoom/POSScreen/MenuOption1Label,
+	$POSZoom/POSScreen/MenuOption2Label,
+	$POSZoom/POSScreen/MenuOption3Label,
+]
+
+func setup(player_number : int, relay_client : ClientMgr):
+	_is_host = player_number == 0
+	_relay_client = relay_client
+	_player_number = player_number
+
+	players = get_tree().get_nodes_in_group("players")
+	var player = players[player_number]
+
 func _ready():
 	MenuMusic.get_child(0).stop()
 	controlled_player = 1 # This will need to be adjusted for multiplayer
 	# But I'm trying to prepare for that in the code as is
 	ticks = OS.get_system_time_msecs()
-	$POSZoom/POSScreen/BackButton.disabled = true
+	for button in order_menu_buttons:
+		button.disabled = true
 	pos_wall.visible = false
 	pos_zoom.visible = false
 	$Player1.visible = true
@@ -204,23 +263,12 @@ func _process(_delta):
 		
 		if get_node(host_path).get_child(0).unit_offset <= 0.0:
 			host_back_to_host_stand = false
+			var notify_server_string = ""
 			if current_focused_table > 6:
-				convo_string = "Hey Right, you've\nbeen sat at " + String(current_focused_table)
+				notify_server_string = "Hey Right, you've\nbeen sat at " + String(current_focused_table)
 			else:
-				convo_string = "Hey Left, you've\nbeen sat at " + String(current_focused_table)
-			var cl = CanvasLayer.new()
-			cl.layer = 4
-			var conversation_dialogue = convo_dialogue.instance()
-			cl.add_child(conversation_dialogue)
-			$Dialogues.add_child(cl)	
-			if dialogue_queue == null:
-				dialogue_queue = []
-			dialogue_queue.append([conversation_dialogue, 2])
-			conversation_dialogue.rect_position = get_node(host_path).get_child(0).position
-			conversation_dialogue.show()
-			conversation_index = 0
-			conversation_dialogue.get_child(2).connect("timeout", self, "_on_DialogueTimer_timeout")
-			conversation_dialogue.get_child(2).start()
+				notify_server_string = "Hey Left, you've\nbeen sat at " + String(current_focused_table)
+			_gen_dialogue(notify_server_string, TERMINATE_CONVO_VALUE, get_node(host_path).get_child(0).position)
 			get_node(host_path).get_child(0).queue_free()
 			$Host_NPC.visible = true
 			$Host_NPC/CollisionShape2D.disabled = false
@@ -238,6 +286,8 @@ func _on_player_1_interact():
 			$Player1.visible = false
 			$Player1.movable = false
 			$Player2.visible = false
+			for d in $Dialogues.get_children():
+				d.get_child(0).visible = false
 		else:
 			for cl in $Dialogues.get_children():
 				cl.layer = 4
@@ -247,13 +297,57 @@ func _on_player_1_interact():
 			$Player1.visible = true
 			$Player1.movable = true
 			$Player2.visible = true
+			for d in $Dialogues.get_children():
+				d.get_child(0).visible = true
 			
 	elif server_at_table[0]:
 		var table_number = server_at_table[1]
-		if !tables['drink_order_taken'][table_number]:
-			tables['drink_order_taken'][table_number] = true
-			print("TAKING DRINK ORDER AT TABLE: " + String(server_at_table[1]))
+		if !tables['drink_order_taken'][table_number - 1] and tables['tables_sat'][table_number - 1]:
+			tables['drink_order_taken'][table_number - 1] = true
+			order_pos_queue = tables['seat_positions']['table' + String(table_number)].duplicate()
+			_greet_table()
+		elif has_drinks && !tables['drinks_delivered'][table_number - 1] and tables['tables_sat'][table_number - 1]:
+			ordering_table = table_number
+			order_pos_queue = tables['seat_positions']['table' + String(table_number)].duplicate()
+			has_drinks = false;
+			_deliver_drinks(table_number - 1)
+		
+			
+	elif soda_machine_area_entered:
+		has_drinks = true
+			
+			
+func _deliver_drinks(table):
+	tables['drinks_delivered'][table] = true
+	print("delivered at ", table)
+	_take_food_order()
+	
+func _take_food_order():
+	_gen_dialogue(\
+	"Here are your drinks!\nWhat would you like\nto order?",\
+	3,\
+	$Player1.position if controlled_player == 1 else $Player2.position)
+	
+func _greet_table():
+	_gen_dialogue(\
+	"Hi! I'll be\nyour server. Can I\nget you something\nto drink?",\
+	2, \
+	$Player1.position if controlled_player == 1 else $Player2.position)
 
+func _gen_dialogue(msg, type, pos):
+	convo_strings.push_back(msg)
+	var cl = CanvasLayer.new()
+	cl.layer = 4
+	var conversation_dialogue = convo_dialogue.instance()
+	if dialogue_queue == null:
+		dialogue_queue = []
+	cl.add_child(conversation_dialogue)
+	dialogue_queue.append([conversation_dialogue, type])
+	$Dialogues.add_child(cl)
+	conversation_dialogue.rect_position = pos
+	conversation_dialogue.show()
+	conversation_dialogue.get_child(2).start()
+	conversation_dialogue.get_child(2).connect("timeout", self, "_on_DialogueTimer_timeout")
 
 # POS LOGIC
 ####################################################################################################
@@ -315,7 +409,59 @@ func _on_Table11Button_pressed():
 func _on_Table12Button_pressed():
 	selected_table = 12
 	_go_to_table_menu()
+	
 
+func _on_OneMinusButton_pressed():
+	_remove_foor_from_order(1)
+
+
+func _on_OnePlusButton_pressed():
+	_add_food_to_order(1)
+
+
+func _on_TwoMinusButton_pressed():
+	_remove_foor_from_order(2)
+
+
+func _on_TwoPlusButton_pressed():
+	_add_food_to_order(2)
+
+
+func _on_ThreeMinusButton_pressed():
+	_remove_foor_from_order(3)
+
+
+func _on_ThreePlusButton_pressed():
+	_add_food_to_order(3)
+
+
+func _add_food_to_order(num):
+	if food_order_list.size() < 4:
+		food_order_list.append(num)
+
+func _remove_foor_from_order(num):
+	if food_order_list.size() > 0:
+		var index = food_order_list.find_last(num)
+		food_order_list.remove(index)
+
+
+func _on_OrderButton_pressed():
+	if tables['given_order'][selected_table - 1].size() == 0:
+		food_order_list = []
+		$POSZoom/POSScreen/WarningOrderLabel.text = "Take the table's order first!"
+		$POSZoom/POSScreen/WarningOrderLabel.visible = true
+		return
+		
+	if food_order_list.size() < 4:
+		$POSZoom/POSScreen/WarningOrderLabel.text = "Must have 4 items to order"		
+		$POSZoom/POSScreen/WarningOrderLabel.visible = true
+		return
+		
+	make_food = [true, food_order_list.duplicate()]
+	tables['orders']['table' + String(selected_table)] = food_order_list.duplicate()
+	food_order_list = []
+	_on_BackButton_pressed()
+	
 
 func _on_POS_right_area_entered(_area):
 	if show_hint:
@@ -342,17 +488,37 @@ func _on_POS_left_area_exited(_area):
 
 	
 func _go_to_table_menu():
+	if !tables['tables_sat'][selected_table - 1]:
+		return
+		
+	if tables['given_order'][selected_table - 1].size() == 0:
+		for label in order_menu_labels:
+			label.text = "Take the tables order first!"
+	else:
+		var i = 0
+		for label in order_menu_labels:
+			label.text = tables['questions'][selected_table - 1][i][0]
+			i += 1
+		
 	for table in table_buttons:
 		table.disabled = true
-	$POSZoom/POSScreen/BackButton.disabled = false
+	for button in order_menu_buttons:
+		button.disabled = false
+	for label in order_menu_labels:
+		label.visible = true
+	$POSZoom/POSScreen/WarningOrderLabel.visible = false
 	pos_screen.set_texture(pos_table_menu)
 
 
 func _on_BackButton_pressed():
 	for table in table_buttons:
 		table.disabled = false
-	$POSZoom/POSScreen/BackButton.disabled = true
+	for button in order_menu_buttons:
+		button.disabled = true
+	for label in order_menu_labels:
+		label.visible = false
 	pos_screen.set_texture(pos_default_screen)
+	food_order_list = []
 
 
 ####################################################################################################
@@ -641,30 +807,18 @@ func _on_CustomerWalkInTimer_timeout():
 
 
 func _on_Restaurant_Level_ready_to_be_seated(_patrons):
-	convo_string = "Hi!\nWelcome to PomoBITE!\nI'll take you to\nyour table!"
-	var cl = CanvasLayer.new()
-	cl.layer = 4
-	var conversation_dialogue = convo_dialogue.instance()
-	if dialogue_queue == null:
-		dialogue_queue = []
-	cl.add_child(conversation_dialogue)
-	dialogue_queue.append([conversation_dialogue, 0])
-	$Dialogues.add_child(cl)
-	conversation_dialogue.rect_position = $Host_NPC.position
-	conversation_dialogue.show()
-	conversation_index = 0
-	conversation_dialogue.get_child(2).start()
-	conversation_dialogue.get_child(2).connect("timeout", self, "_on_DialogueTimer_timeout")
-
+	_gen_dialogue("Hi!\nWelcome to PomoBITE!\nI'll take you to\nyour table!", 0, $Host_NPC.position)
 
 func _on_DialogueTimer_timeout():
 	var conversation_dialogue = dialogue_queue[0][0]
 	var convo_type = dialogue_queue[0][1]
 	var label = conversation_dialogue.get_child(1)
 	if convo_type == 0:
-		label.text += convo_string[conversation_index]
+		label.text += convo_strings[0][conversation_index]
 		conversation_index += 1
-		if conversation_index == convo_string.length():
+		if conversation_index == convo_strings[0].length():
+			conversation_index = 0
+			convo_strings.pop_front()
 			dialogue_queue.pop_front()
 			conversation_index = 0
 			conversation_dialogue.get_child(2).stop()
@@ -714,9 +868,11 @@ func _on_DialogueTimer_timeout():
 					break
 					
 	else:
-		label.text += convo_string[conversation_index]
+		label.text += convo_strings[0][conversation_index]
 		conversation_index += 1
-		if conversation_index == convo_string.length():
+		if conversation_index == convo_strings[0].length():
+			conversation_index = 0			
+			convo_strings.pop_front()
 			dialogue_queue.pop_front()
 			conversation_index = 0
 			conversation_dialogue.get_child(2).stop()
@@ -726,7 +882,61 @@ func _on_DialogueTimer_timeout():
 			$Dialogues.remove_child(conversation_dialogue.get_parent())
 			if convo_type == 1:
 				emit_signal("return_to_host_stand")
+			if convo_type == 2:
+				var a = _guests_order_drinks()
+				while a is GDScriptFunctionState:
+					a = yield(a, 'completed')
+				var b = _guests_order_drinks()
+				while b is GDScriptFunctionState:
+					b = yield(b, 'completed')
+				var c = _guests_order_drinks()
+				while c is GDScriptFunctionState:
+					c = yield(c, 'completed')
+				_guests_order_drinks()
+			if convo_type == 3:
+				var a = _guests_order_food()
+				while a is GDScriptFunctionState:
+					a = yield(a, 'completed')
+				var b = _guests_order_food()
+				while b is GDScriptFunctionState:
+					b = yield(b, 'completed')
+				var c = _guests_order_food()
+				while c is GDScriptFunctionState:
+					c = yield(c, 'completed')
+				_guests_order_food()
 			
+
+func _guests_order_food():
+	# GENERATE FLASHCARD!!!!!
+	var flashcard = Pomotimer.getRandomFlashcard()
+	tables['questions'][ordering_table - 1].append(flashcard)
+	
+	print("FC Question = ", flashcard[0])
+	print("FC Answer = ", flashcard[1])
+	for each in flashcard[2]:
+		print("Wrong answer = ", each)
+	
+	var rando = RandomNumberGenerator.new()
+	rando.seed = hash(String(order_pos_queue.front()[0] + order_pos_queue.front()[1]))
+	rando.randomize()
+	var order = rando.randi_range(0, 2)
+	tables['given_order'][ordering_table - 1].append(order)
+	var food = food_orders[order]
+	_gen_dialogue(food, TERMINATE_CONVO_VALUE, order_pos_queue.front())
+	order_pos_queue.pop_front()
+	yield(get_tree().create_timer(0.5), "timeout")
+	return true
+
+func _guests_order_drinks():
+	var rando = RandomNumberGenerator.new()
+	rando.seed = hash(String(order_pos_queue.front()[0] + order_pos_queue.front()[1]))
+	rando.randomize()
+	var order = rando.randi_range(0, 4)
+	var drink = drink_orders[order]
+	_gen_dialogue(drink, TERMINATE_CONVO_VALUE, order_pos_queue.front())
+	order_pos_queue.pop_front()
+	yield(get_tree().create_timer(0.5), "timeout")
+	return true
 
 func _on_Restaurant_Level_seat_guests():
 	var hp = get_node(host_path).get_children()
@@ -739,7 +949,7 @@ func _on_Restaurant_Level_seat_guests():
 		var table = "table" + String(current_focused_table)
 		customer.position = tables["seat_positions"][table][i]
 		$Customers.add_child(customer)
-	
+	print("CURRENT FOCUSED TABLE ", current_focused_table)
 	tables['leaving_queue'].push_back(current_focused_table)
 	var timer = Timer.new()
 	timer.wait_time = table_stay_time
@@ -750,20 +960,7 @@ func _on_Restaurant_Level_seat_guests():
 	
 	leaving_timers_queue.push_back(timer)
 	
-	convo_string = "Your server will be\nright with you.\nEnjoy your meal!"
-	var cl = CanvasLayer.new()
-	cl.layer = 4
-	var conversation_dialogue = convo_dialogue.instance()
-	cl.add_child(conversation_dialogue)
-	$Dialogues.add_child(cl)	
-	if dialogue_queue == null:
-		dialogue_queue = []
-	dialogue_queue.append([conversation_dialogue, 1])
-	conversation_dialogue.rect_position = get_node(host_path).get_child(0).position
-	conversation_dialogue.show()
-	conversation_index = 0
-	conversation_dialogue.get_child(2).start()
-	conversation_dialogue.get_child(2).connect("timeout", self, "_on_DialogueTimer_timeout")
+	_gen_dialogue("Your server will be\nright with you.\nEnjoy your meal!", 1, get_node(host_path).get_child(0).position)
 
 
 func _on_Restaurant_Level_return_to_host_stand():
@@ -777,10 +974,31 @@ func _table_leaving():
 	leaving_timers_queue.pop_front()
 	timer.queue_free()
 	var path = $Paths/HostPaths.get_child(leaving_table - 1)
+	
+	# leave dirty dishes iff they recieved food
+	if tables['check_delivered'][leaving_table - 1]:
+		tables['table_dirty'][leaving_table - 1] = true
+		var pos = tables['table_positions'][leaving_table - 1]
+		var dishes = dirty_table.instance()
+		dishes.position = pos
+		dishes.table = leaving_table - 1
+		$Dishes.add_child(dishes)
+	
+	# RESET THE TABLE
+	tables['tables_sat'][leaving_table - 1] = false
+	tables['guests']['table' + String(leaving_table)] = []
+	tables['drink_order_taken'][leaving_table - 1] = false
+	tables['drinks_delivered'][leaving_table - 1] = false
+	tables['food_order_taken'][leaving_table - 1] = false
+	tables['given_order'][leaving_table - 1] = []
+	tables['orders']['table' + String(leaving_table)] = []
+	tables['questions'][leaving_table - 1] = []
+	tables['check_delivered'][leaving_table - 1] = false
+	
 	var children = path.get_children()
 	for child in children:
 		child.queue_free()
-	var offset_decrementer = 1.0		
+#	var offset_decrementer = 1.0		
 	for customer in $Customers.get_children():
 		if customer.table == leaving_table:
 			customer.queue_free()
@@ -797,3 +1015,6 @@ func _table_leaving():
 	table_exiting[0] = true
 	table_exiting[1] = leaving_table
 	
+
+
+

@@ -6,6 +6,8 @@ onready var start_game_button 	  = $CenterContainer/DisplayConnectedPanel/VBoxCo
 onready var this_user_is_host = LobbyDescription._host_name == CurrentUser.user_email
 onready var num_of_players =  LobbyDescription._max_players - LobbyDescription._num_of_players
 
+var _game
+
 func _ready():
 	var e = OK
 	e += $Client_Mgr.connect("connected_to_ws_server", 	self, '_on_ws_connect')
@@ -22,8 +24,28 @@ func _ready():
 	if not this_user_is_host:
 		start_game_button.visible = false
 
+
+# HEY JESSE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 func _on_StartGameButton_pressed():
-	$CenterContainer/AcceptDialog.popup()
+	# No need to keep connection to matchmaking server
+	$Client_Mgr.disconnect_from_server()
+	
+	_game = load("res://pomobite/Restaurant_Level.tscn").instance()
+	add_child(_game)
+#	_game.connect("on_game_over", self, "_on_game_over")
+	
+#	$Lobby.hide()
+	var peers = $Client_Mgr._match
+	_game.setup(peers.find($Client_Mgr._id), $Client_Mgr)
+	
+	var is_host = peers.find($Client_Mgr._id) == 0
+	if (is_host):
+		var msg = Message.new()
+		msg.is_echo = true
+		msg.content = {}
+		msg.content["seed"] = randi()
+		$Client_Mgr.send_data(msg)
+
 
 func _on_ws_connect():
 	var msg_connect = "Connected!\n Waiting for "

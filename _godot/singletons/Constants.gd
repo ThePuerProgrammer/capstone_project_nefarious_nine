@@ -13,7 +13,6 @@ const COLLECTIONS = {
 	'USERS' : 'users',
 	'MULTIPLAYER_GAME_LOBBIES' : 'multiplayer_game_lobbies',
 	'CATEGORIES': 'backend',
-	'FLASHCARDS':'flashcards',
 }
 
 const WEB_SOCKET_URL = 'localhost'
