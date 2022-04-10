@@ -390,7 +390,9 @@ func _on_player_1_interact():
 			order_pos_queue = tables['seat_positions']['table' + String(table_number)].duplicate()
 			has_drinks = false;
 			_deliver_drinks(table_number - 1)
-		
+		elif has_food && !tables['check_delivered'][table_number - 1] and tables['tables_sat'][table_number - 1]:
+			tables['check_delivered'][table_number - 1] = true
+			$TableFood.get_child(table_number - 1 - 6).visible = true
 			
 	elif soda_machine_area_entered:
 		has_drinks = true
@@ -1074,6 +1076,7 @@ func _table_leaving():
 	
 	# leave dirty dishes iff they recieved food
 	if tables['check_delivered'][leaving_table - 1]:
+		$TableFood.get_child(leaving_table - 7).visible = false
 		tables['table_dirty'][leaving_table - 1] = true
 		var pos = tables['table_positions'][leaving_table - 1]
 		var dishes = dirty_table.instance()

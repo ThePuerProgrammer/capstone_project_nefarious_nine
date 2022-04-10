@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=2]
+[gd_scene load_steps=93 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -25,6 +25,7 @@
 [ext_resource path="res://pomobite/CursingParticles.tscn" type="PackedScene" id=23]
 [ext_resource path="res://world_environment.tscn" type="PackedScene" id=24]
 [ext_resource path="res://pomobite/Window_Food.tscn" type="PackedScene" id=25]
+[ext_resource path="res://pomobite/Table_Food.tscn" type="PackedScene" id=26]
 
 [sub_resource type="DynamicFont" id=39]
 size = 10
@@ -2415,6 +2416,32 @@ z_index = 5
 [node name="Window_Food" parent="." instance=ExtResource( 25 )]
 visible = false
 position = Vector2( 1190, 214 )
+
+[node name="TableFood" type="Node2D" parent="."]
+
+[node name="Table_Food" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1552, 212 )
+
+[node name="Table_Food2" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1776, 214 )
+
+[node name="Table_Food3" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1551, 405 )
+
+[node name="Table_Food4" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1776, 408 )
+
+[node name="Table_Food5" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1550, 611 )
+
+[node name="Table_Food6" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1773, 610 )
 
 [connection signal="ready_to_be_seated" from="." to="." method="_on_Restaurant_Level_ready_to_be_seated"]
 [connection signal="return_to_host_stand" from="." to="." method="_on_Restaurant_Level_return_to_host_stand"]
