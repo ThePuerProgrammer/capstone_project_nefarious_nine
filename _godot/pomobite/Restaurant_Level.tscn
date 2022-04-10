@@ -2407,11 +2407,8 @@ visible = false
 position = Vector2( 0, -40 )
 z_index = 5
 
-<<<<<<< HEAD
 [node name="Dishes" type="Node2D" parent="."]
-=======
 [node name="WorldEnvironment" parent="." instance=ExtResource( 24 )]
->>>>>>> origin/main
 
 [connection signal="ready_to_be_seated" from="." to="." method="_on_Restaurant_Level_ready_to_be_seated"]
 [connection signal="return_to_host_stand" from="." to="." method="_on_Restaurant_Level_return_to_host_stand"]
