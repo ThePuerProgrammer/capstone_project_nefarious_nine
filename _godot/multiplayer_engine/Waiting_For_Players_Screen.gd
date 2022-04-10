@@ -7,13 +7,16 @@ onready var this_user_is_host = LobbyDescription._host_name == CurrentUser.user_
 onready var num_of_players =  LobbyDescription._max_players - LobbyDescription._num_of_players
 
 var _game
+var is_host
 
 func _ready():
+	is_host = false
 	var e = OK
 	e += $Client_Mgr.connect("connected_to_ws_server", 	self, '_on_ws_connect')
 	e += $Client_Mgr.connect('on_players_ready', 		self, '_on_game_start')
 	e += $Client_Mgr.connect("player_disconnected",		self, '_on_player_disconnected')
 	e += $Client_Mgr.connect("player_joining_game",		self, '_on_player_joining_game')
+	e += $Client_Mgr.connect("on_message",				self, '_on_message')
 	
 	if e != OK:
 		print("Could not connect signals in waiting screen")
@@ -24,24 +27,29 @@ func _ready():
 	if not this_user_is_host:
 		start_game_button.visible = false
 
+func _on_message(msg):
+	var start = msg.start_pomobite
+	if start and !is_host:
+		_on_StartGameButton_pressed()
 
-# HEY JESSE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 func _on_StartGameButton_pressed():
-	# No need to keep connection to matchmaking server
 	$Client_Mgr.disconnect_from_server()
 	
 	_game = load("res://pomobite/Restaurant_Level.tscn").instance()
 	add_child(_game)
-#	_game.connect("on_game_over", self, "_on_game_over")
 	
-#	$Lobby.hide()
+	$Lobby_Scene_BG.hide()
+	$CenterContainer.hide()
+	
 	var peers = $Client_Mgr._match
 	_game.setup(peers.find($Client_Mgr._id), $Client_Mgr)
 	
-	var is_host = peers.find($Client_Mgr._id) == 0
+	is_host = peers.find($Client_Mgr._id) == 0
 	if (is_host):
 		var msg = Message.new()
 		msg.is_echo = true
+		msg.start_pomobite = true
 		msg.content = {}
 		msg.content["seed"] = randi()
 		$Client_Mgr.send_data(msg)

@@ -1543,10 +1543,10 @@ position = Vector2( 1216, 76 )
 amount = 120
 lifetime = 0.5
 
-[node name="Player1" parent="." instance=ExtResource( 3 )]
+[node name="Player1" parent="." groups=["player"] instance=ExtResource( 3 )]
 collision/safe_margin = 0.001
 
-[node name="Player2" parent="." instance=ExtResource( 4 )]
+[node name="Player2" parent="." groups=["player"] instance=ExtResource( 4 )]
 position = Vector2( 592, 336 )
 
 [node name="LevelSprites" type="Node2D" parent="."]

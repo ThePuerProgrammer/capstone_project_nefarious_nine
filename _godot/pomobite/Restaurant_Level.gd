@@ -7,7 +7,7 @@ signal ready_to_be_seated(patrons)
 signal seat_guests()
 signal return_to_host_stand()
 
-var _is_host
+onready var _is_host = true
 var _player_number
 var players
 
@@ -58,6 +58,8 @@ var host_path
 var offset_queue
 var current_focused_table
 var dialogue_queue
+var player_1_position
+var player_2_position
 
 var _relay_client : ClientMgr
 
@@ -171,17 +173,24 @@ onready var order_menu_labels = [
 	$POSZoom/POSScreen/MenuOption3Label,
 ]
 
-func setup(player_number : int, relay_client : ClientMgr):
+func setup(player_number : int, relay_client : ClientMgr): # Called by multiplayer engine
 	_is_host = player_number == 0
 	_relay_client = relay_client
-	_player_number = player_number
+	controlled_player = player_number + 1
 
+	if _relay_client.connect("on_message", self, '_on_message') != OK:
+		pass
+		
 	players = get_tree().get_nodes_in_group("players")
 	var player = players[player_number]
+	
+	
 
 func _ready():
+	
+		
 	MenuMusic.get_child(0).stop()
-	controlled_player = 1 # This will need to be adjusted for multiplayer
+#	controlled_player = 1 # This will need to be adjusted for multiplayer
 	# But I'm trying to prepare for that in the code as is
 	ticks = OS.get_system_time_msecs()
 	for button in order_menu_buttons:
@@ -194,8 +203,45 @@ func _ready():
 		print("Cannot connect signals")
 	customer_walkin_timer.start()
 	
+	
+	
+func _on_message(msg):
+	if msg.content and msg.content.has('player_1_position'):
+		player_1_position = msg.content['player_1_position']
+	if msg.content and msg.content.has('player_2_position'):
+		player_2_position = msg.content['player_2_position']
 
 func _process(_delta):
+	
+	if _is_host:
+		$Player1.movable = true
+		$Player1.interactable = true
+		$Player2.movable = false
+		$Player2.interactable = false
+		
+	else:
+		$Player1.movable = false	
+		$Player1.interactable = false
+		$Player2.movable = true
+		$Player2.interactable = true
+	
+	if !_is_host:
+		if player_1_position:
+			$Player1.position = player_1_position
+		
+		var msg = Message.new()
+		msg.content = {}
+		msg.is_echo = false
+		msg.start_pomobite = false
+		msg.game_start = false
+		msg.server_login = false
+		msg.content['player_2_position'] = $Player2.position
+		_relay_client.send_data(msg)
+		
+		return
+		
+	if player_2_position:
+		$Player2.position = player_2_position
 	
 	if walk_in:
 		var paths = customer_paths.get_children()
@@ -273,8 +319,18 @@ func _process(_delta):
 			$Host_NPC.visible = true
 			$Host_NPC/CollisionShape2D.disabled = false
 			
+	var msg = Message.new()
+	msg.content = {}
+	msg.is_echo = false
+	msg.start_pomobite = false
+	msg.game_start = false
+	msg.server_login = false
+	msg.content['player_1_position'] = $Player1.position
+	_relay_client.send_data(msg)
+			
 
 func _on_player_1_interact():
+	print("interact")
 #	show_hint = false
 	$PopupCanvas/PopupDialog.hide()
 	if pos_right_usable or pos_left_usable:
