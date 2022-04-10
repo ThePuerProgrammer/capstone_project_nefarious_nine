@@ -8,7 +8,8 @@ var vertical = 0
 var moving_down = true
 var moving_sideways = false
 var last_pressed_key = Vector2.DOWN
-var movable = true
+var movable = false
+var interactable = false
 
 var u = "ui_up"
 var d = "ui_down"
@@ -22,7 +23,9 @@ func _ready():
 	pass
 
 func _physics_process(_delta):
-	poll_interaction()
+	if interactable:
+		poll_interaction()		
+	
 	if movable:
 		process_movement()
 		process_animation()

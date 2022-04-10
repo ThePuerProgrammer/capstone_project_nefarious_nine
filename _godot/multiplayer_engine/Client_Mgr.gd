@@ -129,6 +129,7 @@ func _on_data():
 
 func _process(_delta):
 	if (_client != null): _client.poll()
+	if (_rtc != null): pass
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
