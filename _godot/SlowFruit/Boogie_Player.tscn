@@ -69,7 +69,7 @@ position = Vector2( -16, -24 )
 scale = Vector2( 3, 3 )
 frames = SubResource( 2 )
 animation = "Idle"
-frame = 2
+frame = 1
 playing = true
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="."]

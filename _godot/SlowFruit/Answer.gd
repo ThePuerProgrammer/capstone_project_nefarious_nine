@@ -8,12 +8,11 @@ onready var tween = get_node("Tween")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#answerLabel.set_text(str(answerText))
+	answerTween()
 
+
+
+func answerTween():
 	tween.interpolate_property(self, 'scale', scale, Vector2(1,1), 0.2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.interpolate_property(self, 'scale', Vector2(1,1), Vector2(0.01,0.01), 10, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT, 3)
 	tween.start()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

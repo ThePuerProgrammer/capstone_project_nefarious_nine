@@ -183,7 +183,7 @@ func pull_for_input():
 			setWalking()		
 		stopJumpSound()				
 		applied_force = Vector2(applied_force.y, 0)
-		linear_velocity.y += STOP_JUMP_FORCE
+		linear_velocity.y = STOP_JUMP_FORCE
 		
 		
 	

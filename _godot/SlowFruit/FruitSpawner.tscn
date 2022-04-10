@@ -865,6 +865,10 @@ __meta__ = {
 
 [node name="Tween" type="Tween" parent="WinLabel"]
 
+[node name="Timer" type="Timer" parent="WinLabel"]
+wait_time = 7.0
+one_shot = true
+
 [node name="LoseLabel" type="RichTextLabel" parent="."]
 visible = false
 margin_left = 240.0
@@ -892,12 +896,16 @@ __meta__ = {
 
 [node name="Tween" type="Tween" parent="LoseLabel"]
 
+[node name="Timer" type="Timer" parent="LoseLabel"]
+wait_time = 7.0
+one_shot = true
+
 [node name="ScoreLabel" type="RichTextLabel" parent="."]
 visible = false
 margin_left = 1528.0
-margin_top = 48.0
+margin_top = 60.0
 margin_right = 3088.0
-margin_bottom = 600.0
+margin_bottom = 612.0
 size_flags_horizontal = 5
 custom_colors/default_color = Color( 0.145098, 0.427451, 0.698039, 1 )
 custom_colors/selection_color = Color( 0, 0, 0, 1 )
@@ -916,3 +924,5 @@ __meta__ = {
 [connection signal="body_entered" from="Control/Answer2Container/RigidBody2D/Fruit2" to="." method="_on_Fruit2_body_entered"]
 [connection signal="body_entered" from="Control/Answer3Container/RigidBody2D/Fruit3" to="." method="_on_Fruit3_body_entered"]
 [connection signal="body_entered" from="Control/Answer4Container/RigidBody2D/Fruit4" to="." method="_on_Fruit4_body_entered"]
+[connection signal="timeout" from="WinLabel/Timer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="LoseLabel/Timer" to="." method="_on_Timer_timeout"]

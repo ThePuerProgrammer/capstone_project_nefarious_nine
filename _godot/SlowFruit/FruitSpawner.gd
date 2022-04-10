@@ -15,6 +15,7 @@ onready var fruit8 = get_node("/Fruit8")
 onready var fruit9 = get_node("/Fruit9")
 onready var fruit10 = get_node("/Fruit10")
 
+var answerScript = load("res://SlowFruit/Answer.gd").new()
 
 var numCorrect = 0
 var numIncorrect = 0
@@ -34,10 +35,11 @@ var correctIndex
 var correctFruit
 var correctRigidBody
 
-
+onready var anAnswer = get_node("Control/Answer1Container/Answer1/RichTextLabel")
 onready var questionLabel = get_node("Control/Question/Question/Label")
 onready var scoreLabel = get_node("ScoreLabel")
 onready var answers = [get_node("Control/Answer1Container/Answer1/RichTextLabel"),get_node("Control/Answer2Container/Answer2/RichTextLabel"),get_node("Control/Answer3Container/Answer3/RichTextLabel"), get_node("Control/Answer4Container/Answer4/RichTextLabel")]
+onready var answerNodes = [get_node("Control/Answer1Container/Answer1"),get_node("Control/Answer2Container/Answer2"),get_node("Control/Answer3Container/Answer3"), get_node("Control/Answer4Container/Answer4")]
 onready var rigidbodies = [get_node("Control/Answer1Container/RigidBody2D"),get_node("Control/Answer2Container/RigidBody2D"),get_node("Control/Answer3Container/RigidBody2D"), get_node("Control/Answer4Container/RigidBody2D")]
 
 var choseAnswer = false
@@ -58,9 +60,8 @@ func chooseFruit():
 	pass
 	
 func setCards():
-	print("helo")
-	card = Pomotimer.getRandomFlashcard()
-	print("helo2")
+	
+	card = Pomotimer.getRandomFlashcard()	
 	var question = card[0]
 	var correctAnswer = card[1]
 	var wrongAnswers = card[2]
@@ -95,14 +96,13 @@ func setCards():
 			answers[i].text = wrongAnswers[j]
 			j+= 1	
 
+#SOUNDS-------------------------------------------------------
+
 func playWinSound():
 	if !win_sound_has_played:
 		win_sound_has_played = true
 		$WinSound.play()
 		$DogWinSound.play()
-
-
-
 
 func stopWinSound():
 	if win_sound_has_played:
@@ -123,10 +123,9 @@ func stopLoseSound():
 		$LoseSound.stop()
 		$DogLoseSound.stop()
 
+#SOUNDS-------------------------------------------------------
 
-func setAnswer():
-	pass
-
+#RESULTS-------------------------------------------------------
 func winningChoice():
 	playWinSound()
 	stopWinSound()
@@ -134,21 +133,43 @@ func winningChoice():
 	dropFruit()
 	$WinLabel.show()	
 	coins += 5
-	FirebaseController.addPomocoinsToUserDocument(5)
-	scoreLabel.text = coins
+	#FirebaseController.addPomocoinsToUserDocument(5)
+	scoreLabel.text = "Coins: " + str(coins)
 	scoreLabel.show()
+	$WinLabel/Timer.start()
 	
 func losingChoice():
 	playLoseSound()
 	stopLoseSound()
 	$LoseLabel.show()
+	$LoseLabel/Timer.start()
 	dropFruit()
 	
 func dropFruit():
 	for fruit in rigidbodies:
 		print(fruit.get_path())
 		if fruit.get_path() != winningBody.get_path():
-			fruit.set_gravity_scale(2)
+			fruit.set_gravity_scale(3)
+			
+func refreshCard():		
+	setCards()
+	answers = [get_node("Control/Answer1Container/Answer1/RichTextLabel"),get_node("Control/Answer2Container/Answer2/RichTextLabel"),get_node("Control/Answer3Container/Answer3/RichTextLabel"), get_node("Control/Answer4Container/Answer4/RichTextLabel")]
+	questionLabel.show()
+	#anAnswer = get_node("Control/Answer1Container/Answer1")
+	#anAnswer.answerScript.answerTween()
+	#anAnswer.show()
+	#print(anAnswer.text)
+	for label in answers:		
+		label.show()
+	for label in answerNodes:
+		pass
+		#print(label.text)
+		#label.show()
+	for body in rigidbodies:
+		body.show()
+	
+
+#RESULTS-------------------------------------------------------
 
 func _on_Fruit1_body_entered(body):
 	var path = "Control/Answer1Container/Fruit1"
@@ -181,3 +202,11 @@ func _on_Fruit4_body_entered(body):
 	else:
 		print("nein")
 		losingChoice()
+
+
+func _on_Timer_timeout():
+	$WinLabel.hide()
+	$LoseLabel.hide()
+	questionLabel.hide()
+	winningBody.set_gravity_scale(3)
+	refreshCard()
