@@ -437,6 +437,7 @@ func _on_player_1_interact():
 			has_drinks = false;
 			_deliver_drinks(table_number - 1)
 		elif has_food && !tables['check_delivered'][table_number - 1] and tables['tables_sat'][table_number - 1]:
+			has_food = false
 			tables['check_delivered'][table_number - 1] = true
 			$TableFood.get_child(table_number - 1 - 6).visible = true
 			
