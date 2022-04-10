@@ -133,7 +133,7 @@ func winningChoice():
 	dropFruit()
 	$WinLabel.show()	
 	coins += 5
-	#FirebaseController.addPomocoinsToUserDocument(coins)	
+	FirebaseController.addPomocoinsToUserDocument(coins)	
 	scoreLabel.text = "Coins: " + str(coins)
 	scoreLabel.show()
 	$WinLabel/Timer.start()
