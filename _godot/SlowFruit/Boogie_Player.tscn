@@ -69,15 +69,14 @@ position = Vector2( -16, -24 )
 scale = Vector2( 3, 3 )
 frames = SubResource( 2 )
 animation = "Idle"
-frame = 1
 playing = true
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 24 )
-volume_db = 2.0
+volume_db = -5.0
 
 [node name="WalkSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
-volume_db = 1.0
+volume_db = -5.0
 
 [connection signal="finished" from="JumpSound" to="." method="_on_JumpSound_finished"]
