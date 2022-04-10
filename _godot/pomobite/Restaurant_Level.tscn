@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=2]
+[gd_scene load_steps=93 format=2]
 
 [ext_resource path="res://pomobite/Restaurant_Level.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/Pomobite_Restaurant_Tileset.png" type="Texture" id=2]
@@ -24,6 +24,8 @@
 [ext_resource path="res://pomobite/Dishwasher_NPC.tscn" type="PackedScene" id=22]
 [ext_resource path="res://pomobite/CursingParticles.tscn" type="PackedScene" id=23]
 [ext_resource path="res://world_environment.tscn" type="PackedScene" id=24]
+[ext_resource path="res://pomobite/Window_Food.tscn" type="PackedScene" id=25]
+[ext_resource path="res://pomobite/Table_Food.tscn" type="PackedScene" id=26]
 
 [sub_resource type="DynamicFont" id=39]
 size = 10
@@ -1544,10 +1546,10 @@ position = Vector2( 1216, 76 )
 amount = 120
 lifetime = 0.5
 
-[node name="Player1" parent="." instance=ExtResource( 3 )]
+[node name="Player1" parent="." groups=["player"] instance=ExtResource( 3 )]
 collision/safe_margin = 0.001
 
-[node name="Player2" parent="." instance=ExtResource( 4 )]
+[node name="Player2" parent="." groups=["player"] instance=ExtResource( 4 )]
 position = Vector2( 592, 336 )
 
 [node name="LevelSprites" type="Node2D" parent="."]
@@ -1772,6 +1774,317 @@ margin_bottom = -214.0
 focus_mode = 0
 enabled_focus_mode = 0
 flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OneMinusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = -373.0
+margin_top = 160.0
+margin_right = -290.0
+margin_bottom = 194.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OneAnswer1" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -374.0
+margin_top = -36.0
+margin_right = -154.0
+margin_bottom = -7.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OneAnswer2" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -374.0
+margin_top = 11.0
+margin_right = -154.0
+margin_bottom = 40.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OneAnswer3" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -374.0
+margin_top = 58.0
+margin_right = -154.0
+margin_bottom = 87.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OneAnswer4" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -373.0
+margin_top = 105.0
+margin_right = -153.0
+margin_bottom = 134.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoAnswer1" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -111.0
+margin_top = -36.0
+margin_right = 109.0
+margin_bottom = -7.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoAnswer2" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -111.0
+margin_top = 11.0
+margin_right = 109.0
+margin_bottom = 40.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoAnswer3" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -111.0
+margin_top = 58.0
+margin_right = 109.0
+margin_bottom = 87.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoAnswer4" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -110.0
+margin_top = 105.0
+margin_right = 110.0
+margin_bottom = 134.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeAnswer1" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 153.0
+margin_top = -36.0
+margin_right = 373.0
+margin_bottom = -7.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeAnswer2" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 153.0
+margin_top = 11.0
+margin_right = 373.0
+margin_bottom = 40.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeAnswer3" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 153.0
+margin_top = 58.0
+margin_right = 373.0
+margin_bottom = 87.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeAnswer4" type="Button" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 154.0
+margin_top = 105.0
+margin_right = 374.0
+margin_bottom = 134.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OnePlusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = -235.0
+margin_top = 161.0
+margin_right = -152.0
+margin_bottom = 195.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoMinusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = -112.0
+margin_top = 162.0
+margin_right = -29.0
+margin_bottom = 196.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TwoPlusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = 29.0
+margin_top = 162.0
+margin_right = 112.0
+margin_bottom = 196.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreeMinusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = 151.0
+margin_top = 162.0
+margin_right = 234.0
+margin_bottom = 196.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ThreePlusButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = 289.0
+margin_top = 160.0
+margin_right = 372.0
+margin_bottom = 194.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OrderButton" type="Button" parent="POSZoom/POSScreen"]
+margin_left = 287.0
+margin_top = -246.0
+margin_right = 370.0
+margin_bottom = -212.0
+disabled = true
+enabled_focus_mode = 0
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WarningOrderLabel" type="Label" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -264.0
+margin_top = -251.0
+margin_right = 262.0
+margin_bottom = -209.0
+custom_colors/font_color = Color( 1, 0, 0.211765, 1 )
+text = "Enter 4 items before placing an order"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuOption1Label" type="Label" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -374.0
+margin_top = -143.0
+margin_right = -156.0
+margin_bottom = -39.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "test"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuOption2Label" type="Label" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = -109.0
+margin_top = -143.0
+margin_right = 109.0
+margin_bottom = -40.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "test"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuOption3Label" type="Label" parent="POSZoom/POSScreen"]
+visible = false
+margin_left = 152.0
+margin_top = -143.0
+margin_right = 370.0
+margin_bottom = -39.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "test"
+align = 1
+valign = 1
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -2264,7 +2577,39 @@ visible = false
 position = Vector2( 0, -40 )
 z_index = 5
 
+[node name="Dishes" type="Node2D" parent="."]
+
 [node name="WorldEnvironment" parent="." instance=ExtResource( 24 )]
+
+[node name="Window_Food" parent="." instance=ExtResource( 25 )]
+visible = false
+position = Vector2( 1190, 214 )
+
+[node name="TableFood" type="Node2D" parent="."]
+
+[node name="Table_Food" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1552, 212 )
+
+[node name="Table_Food2" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1776, 214 )
+
+[node name="Table_Food3" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1551, 405 )
+
+[node name="Table_Food4" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1776, 408 )
+
+[node name="Table_Food5" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1550, 611 )
+
+[node name="Table_Food6" parent="TableFood" instance=ExtResource( 26 )]
+visible = false
+position = Vector2( 1773, 610 )
 
 [connection signal="ready_to_be_seated" from="." to="." method="_on_Restaurant_Level_ready_to_be_seated"]
 [connection signal="return_to_host_stand" from="." to="." method="_on_Restaurant_Level_return_to_host_stand"]
@@ -2286,6 +2631,25 @@ z_index = 5
 [connection signal="pressed" from="POSZoom/POSScreen/Table11Button" to="." method="_on_Table11Button_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/Table12Button" to="." method="_on_Table12Button_pressed"]
 [connection signal="pressed" from="POSZoom/POSScreen/BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneMinusButton" to="." method="_on_OneMinusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneAnswer1" to="." method="_on_OneAnswer1_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneAnswer2" to="." method="_on_OneAnswer2_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneAnswer3" to="." method="_on_OneAnswer3_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OneAnswer4" to="." method="_on_OneAnswer4_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoAnswer1" to="." method="_on_TwoAnswer1_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoAnswer2" to="." method="_on_TwoAnswer2_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoAnswer3" to="." method="_on_TwoAnswer3_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoAnswer4" to="." method="_on_TwoAnswer4_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeAnswer1" to="." method="_on_ThreeAnswer1_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeAnswer2" to="." method="_on_ThreeAnswer2_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeAnswer3" to="." method="_on_ThreeAnswer3_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeAnswer4" to="." method="_on_ThreeAnswer4_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OnePlusButton" to="." method="_on_OnePlusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoMinusButton" to="." method="_on_TwoMinusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/TwoPlusButton" to="." method="_on_TwoPlusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreeMinusButton" to="." method="_on_ThreeMinusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/ThreePlusButton" to="." method="_on_ThreePlusButton_pressed"]
+[connection signal="pressed" from="POSZoom/POSScreen/OrderButton" to="." method="_on_OrderButton_pressed"]
 [connection signal="timeout" from="Paths/ChefPaths/ChefAPath/PauseMovementTimer" to="Paths/ChefPaths/ChefAPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="timeout" from="Paths/ChefPaths/ChefBPath/PauseMovementTimer" to="Paths/ChefPaths/ChefBPath" method="_on_PauseMovementTimer_timeout"]
 [connection signal="timeout" from="Paths/ChefPaths/ChefCPath/PauseMovementTimer" to="Paths/ChefPaths/ChefCPath" method="_on_PauseMovementTimer_timeout"]

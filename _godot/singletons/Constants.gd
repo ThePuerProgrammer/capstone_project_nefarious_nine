@@ -9,10 +9,10 @@ const TEST_PASSWORD : String = "111111"
 const COLLECTIONS = { 
 	'CLASSROOMS' : "classrooms",
 	'DECKS' : 'owned_decks',
+	'FLASHCARDS' : 'flashcards',
 	'USERS' : 'users',
 	'MULTIPLAYER_GAME_LOBBIES' : 'multiplayer_game_lobbies',
 	'CATEGORIES': 'backend',
-	'FLASHCARDS':'flashcards',
 }
 
 const WEB_SOCKET_URL = 'localhost'

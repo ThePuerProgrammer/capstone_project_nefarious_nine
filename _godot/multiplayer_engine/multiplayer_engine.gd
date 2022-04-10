@@ -8,6 +8,7 @@ onready var chat_enabled_checkbutton 	= $"Centered/TabContainer/CreateLobby/Lobb
 onready var vote_minigame_checkbutton 	= $"Centered/TabContainer/CreateLobby/LobbySettings/VoteNextMinigameCheckbutton"
 onready var pword_input_line_edit 		= $'Centered/TabContainer/JoinLobby/JoinHBox/PwordInput'
 onready var join_button 				= $'Centered/TabContainer/JoinLobby/JoinHBox/JoinButton'
+onready var category_options_button		= $'Centered/TabContainer/CreateLobby/LobbySettings/SelectCategoryOptionsButton'
 
 var classrooms
 var classrooms_docid_to_name_dict : Dictionary = {}
@@ -15,6 +16,12 @@ var classrooms_docid_to_name_dict : Dictionary = {}
 var available_lobbies = []
 var lobby_docids = []
 var selected_lobby = -1
+
+var categories = [
+	'Misc', 'English', 'Math', 'History', 
+	'Physics', 'Chemistry', 'Biology', 
+	'Computer Science', 'Engineering', 'French', 'Japanese'
+]
 
 func _ready():
 	$FadeIn.show()
@@ -50,9 +57,17 @@ func _ready():
 	# Add all the users classrooms to the dropdown
 	for classroom in classrooms_docid_to_name_dict.values():
 		selectClassroomsButton.add_item(classroom)
+	
+	# This label will be diabled	
+	category_options_button.add_item("Filter by Category")
+	
+	# Add all the catergories to the dropdown
+	for category in categories:
+		category_options_button.add_item(category)
 
-	# Disable lable
+	# Disable options lables
 	selectClassroomsButton.set_item_disabled(0, true)
+	category_options_button.set_item_disabled(0, true)
 	
 	# Ensure the lobbies are visible as soon as you visit the mp page
 	_get_available_lobbies()
@@ -79,6 +94,26 @@ func _createLobby():
 		get_node("Centered/NoMaxPlayersDefinedAlert").popup()
 	else:
 		get_node("Centered/TabContainer/CreateLobby/SubmitHBox/CreateButton").disabled = true
+		
+		# Get the classroom_id of chosen classroom by iterating and comparing name values of the ids
+		var classroom_id
+		for cr in classrooms_docid_to_name_dict.keys():
+			if classrooms_docid_to_name_dict[cr] == selectClassroomsButton.get_item_text(selectClassroomsButton.get_selected_id()):
+				classroom_id = cr
+		
+		# Get the decks from this classroom
+		var decks = FirebaseController.get_classroom_decks(classroom_id)
+		if decks is GDScriptFunctionState:
+			decks = yield(decks, "completed")
+		
+		# Parse the decks, selecting only those whose category matches the selection (if so)
+		var parsed_decks = [] if category_options_button.get_selected_id() != 0 else decks
+		if parsed_decks.size() == 0:
+			for deck in decks:
+				var fields = deck['doc_fields']
+				if fields['category'] == category_options_button.get_item_text(category_options_button.get_selected_id()):
+					parsed_decks.append(deck)
+		
 		var lobby_description = {
 			'host' : CurrentUser.user_email,
 			'password' : lobby_password_line_edit.text,

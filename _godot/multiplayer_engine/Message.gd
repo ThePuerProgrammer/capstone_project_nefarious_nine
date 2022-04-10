@@ -6,12 +6,14 @@ class_name Message
 const SERVER_LOGIN = 1
 const GAME_START = 2
 const IS_ECHO = 4
+const START_POMOBITE = 8
 
 const _BYTE_MASK = 255
 
 var server_login : bool
 var game_start : bool
 var is_echo : bool
+var start_pomobite : bool
 
 var content
 
@@ -22,6 +24,7 @@ func get_raw() -> PoolByteArray:
 	byte = set_bit(byte, SERVER_LOGIN, server_login)
 	byte = set_bit(byte, IS_ECHO, is_echo)
 	byte = set_bit(byte, GAME_START, game_start)
+	byte = set_bit(byte, START_POMOBITE, start_pomobite)
 	
 	message.append(byte)
 	message.append_array(var2bytes(content))
@@ -31,9 +34,10 @@ func get_raw() -> PoolByteArray:
 func from_raw(var arr : PoolByteArray):
 	var flags = arr[0]
 	
-	server_login = get_bit(flags, SERVER_LOGIN)
-	is_echo = get_bit(flags, IS_ECHO)
-	game_start = get_bit(flags, GAME_START)
+	server_login 	= get_bit(flags, SERVER_LOGIN)
+	is_echo 		= get_bit(flags, IS_ECHO)
+	game_start 		= get_bit(flags, GAME_START)
+	start_pomobite 	= get_bit(flags, START_POMOBITE)
 	
 	content = null
 	if (arr.size() > 1):

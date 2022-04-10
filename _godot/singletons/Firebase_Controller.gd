@@ -13,7 +13,28 @@ func get_classrooms_where_user_is_member(user_email):
 		.where("members", FirestoreQuery.OPERATOR.ARRAY_CONTAINS, user_email)
 	var query_task : FirestoreTask = Firebase.Firestore.query(query)
 	var res = yield(query_task, "task_finished")
-	return res.data 
+	return res.data
+	
+func get_classroom_decks(classroom_id):
+	assert(classroom_id != null)
+	var query : FirestoreQuery = FirestoreQuery.new()\
+		.from(Constants.COLLECTIONS.CLASSROOMS)\
+		.from(Constants.COLLECTIONS.DECKS)\
+		.where('isClassDeck', FirestoreQuery.OPERATOR.EQUAL, classroom_id)
+	var query_task : FirestoreTask = Firebase.Firestore.query(query)
+	var res = yield(query_task, "task_finished")
+	return res.data
+	
+func get_flashcards_from_decks(classroom_id):
+	assert(classroom_id != null)
+	var query : FirestoreQuery = FirestoreQuery.new()\
+		.from(Constants.COLLECTIONS.CLASSROOMS)\
+		.from(Constants.COLLECTIONS.DECKS)\
+		.where('isClassDeck', FirestoreQuery.OPERATOR.EQUAL, classroom_id)\
+		.from(Constants.COLLECTIONS.FLASHCARDS)
+	var query_task : FirestoreTask = Firebase.Firestore.query(query)
+	var res = yield(query_task, "task_finished")
+	return res.data
 	
 func get_classroom(docid):
 	assert(docid != null)
