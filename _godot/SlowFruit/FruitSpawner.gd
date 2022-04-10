@@ -1,7 +1,7 @@
 extends Node
 
 
-var floating_text = preload("res://SlowFruit/FloatingText.tscn")
+#var floating_text = preload("res://SlowFruit/FloatingText.tscn")
 
 
 onready var fruit1 = get_node("/Fruit1")
@@ -133,7 +133,7 @@ func winningChoice():
 	dropFruit()
 	$WinLabel.show()	
 	coins += 5
-	#FirebaseController.addPomocoinsToUserDocument(5)
+	#FirebaseController.addPomocoinsToUserDocument(coins)	
 	scoreLabel.text = "Coins: " + str(coins)
 	scoreLabel.show()
 	$WinLabel/Timer.start()
@@ -155,11 +155,12 @@ func refreshCard():
 	setCards()
 	answers = [get_node("Control/Answer1Container/Answer1/RichTextLabel"),get_node("Control/Answer2Container/Answer2/RichTextLabel"),get_node("Control/Answer3Container/Answer3/RichTextLabel"), get_node("Control/Answer4Container/Answer4/RichTextLabel")]
 	questionLabel.show()
-	#anAnswer = get_node("Control/Answer1Container/Answer1")
+	anAnswer = get_node("Control/Answer2Container/Answer2/Tween")
 	#anAnswer.answerScript.answerTween()
 	#anAnswer.show()
 	#print(anAnswer.text)
 	for label in answers:		
+		print("Label 1 name: ", label.name)
 		label.show()
 	for label in answerNodes:
 		pass
@@ -209,4 +210,14 @@ func _on_Timer_timeout():
 	$LoseLabel.hide()
 	questionLabel.hide()
 	winningBody.set_gravity_scale(3)
-	refreshCard()
+	var fruitLevel = get_parent()
+	fruitLevel.reloadFruits()
+	#var instance = self.instance()
+	#add_child(instance)
+	#queue_free() breaks everything
+	#get_node("Control")
+	#get_tree().reload_current_scene() 
+	
+	
+	#_ready()
+	#refreshCard()

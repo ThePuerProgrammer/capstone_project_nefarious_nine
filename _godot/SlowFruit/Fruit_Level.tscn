@@ -21,9 +21,6 @@ z_index = 2
 mass = 1.83673
 gravity_scale = 7.0
 
-[node name="FruitSpawner" parent="." instance=ExtResource( 6 )]
-z_index = 1
-
 [node name="TileMap" parent="." instance=ExtResource( 3 )]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
@@ -32,3 +29,6 @@ volume_db = -15.0
 autoplay = true
 
 [node name="WorldEnvironment" parent="." instance=ExtResource( 7 )]
+
+[node name="FruitSpawner" parent="." instance=ExtResource( 6 )]
+z_index = 1

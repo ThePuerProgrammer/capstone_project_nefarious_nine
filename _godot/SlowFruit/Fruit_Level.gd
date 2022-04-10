@@ -1,6 +1,6 @@
 extends Node2D
 
-
+var fruitSpawn = preload("res://SlowFruit/FruitSpawner.tscn")
 
 func _ready():
 	pass
@@ -11,3 +11,8 @@ func _process(delta):
 
 func _physics_process(delta):
 	pass
+
+func reloadFruits():
+	self.get_child(4).queue_free()
+	var fruitSpawn_instance = fruitSpawn.instance()
+	self.add_child(fruitSpawn_instance)

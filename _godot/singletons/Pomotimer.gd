@@ -153,14 +153,14 @@ func save_data():
 
 func getRandomFlashcard():
 	# Grab a random flashcard
-	print(_possibleAnswerPool);
+	#print(_possibleAnswerPool);
 	randomize()
 	var pickedRandomFlashcardIndex = randi() % _flashcards.size()
 	var pickedRandomFlashcard = _flashcards[pickedRandomFlashcardIndex]
-	print(pickedRandomFlashcard)
+	#print(pickedRandomFlashcard)
 
 	# If the flashcard already has 3 incorrect answers, we can return the flashcard
-	print("picked random flashcard incorrect answer count: ", pickedRandomFlashcard[3].size())
+	#print("picked random flashcard incorrect answer count: ", pickedRandomFlashcard[3].size())
 	if pickedRandomFlashcard[3].size() == 3:
 		return [ pickedRandomFlashcard[0], pickedRandomFlashcard[1], pickedRandomFlashcard[3] ]
 

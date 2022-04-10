@@ -420,7 +420,7 @@ font_data = ExtResource( 11 )
 [sub_resource type="Theme" id=28]
 
 [sub_resource type="DynamicFont" id=29]
-size = 35
+size = 30
 outline_size = 1
 outline_color = Color( 0.0588235, 0.0352941, 0.486275, 1 )
 font_data = ExtResource( 13 )
@@ -848,9 +848,9 @@ margin_right = 1696.0
 margin_bottom = 992.0
 custom_colors/default_color = Color( 0.623529, 0.0588235, 0.560784, 1 )
 custom_colors/selection_color = Color( 0, 0, 0, 1 )
-custom_colors/font_color_shadow = Color( 0.0235294, 0.145098, 0.132633, 1 )
-custom_constants/shadow_offset_x = 14
-custom_constants/shadow_offset_y = 5
+custom_colors/font_color_shadow = Color( 0.823529, 0.92549, 0.101961, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 3
 custom_constants/shadow_as_outline = 0
 custom_fonts/normal_font = ExtResource( 21 )
 bbcode_enabled = true
@@ -897,15 +897,15 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="LoseLabel"]
 
 [node name="Timer" type="Timer" parent="LoseLabel"]
-wait_time = 7.0
+wait_time = 9.0
 one_shot = true
 
 [node name="ScoreLabel" type="RichTextLabel" parent="."]
 visible = false
-margin_left = 1528.0
-margin_top = 60.0
-margin_right = 3088.0
-margin_bottom = 612.0
+margin_left = 1568.0
+margin_top = 32.0
+margin_right = 3128.0
+margin_bottom = 584.0
 size_flags_horizontal = 5
 custom_colors/default_color = Color( 0.145098, 0.427451, 0.698039, 1 )
 custom_colors/selection_color = Color( 0, 0, 0, 1 )
@@ -914,6 +914,7 @@ custom_constants/shadow_offset_x = 10
 custom_constants/shadow_offset_y = 5
 custom_constants/shadow_as_outline = 0
 custom_fonts/normal_font = ExtResource( 21 )
+text = "coingssss"
 __meta__ = {
 "_edit_use_anchors_": false
 }
