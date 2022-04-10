@@ -20,6 +20,7 @@ var numCorrect = 0
 var numIncorrect = 0
 var coins = 0
 var winningPath
+var winningBody
 
 var win_sound_has_played = false
 var lose_sound_has_played = false
@@ -31,11 +32,12 @@ var card
 
 var correctIndex
 var correctFruit
+var correctRigidBody
 
 
 onready var questionLabel = get_node("Control/Question/Question/Label")
 onready var answers = [get_node("Control/Answer1Container/Answer1/RichTextLabel"),get_node("Control/Answer2Container/Answer2/RichTextLabel"),get_node("Control/Answer3Container/Answer3/RichTextLabel"), get_node("Control/Answer4Container/Answer4/RichTextLabel")]
-
+onready var rigidbodies = [get_node("Control/Answer1Container/RigidBody2D"),get_node("Control/Answer2Container/RigidBody2D"),get_node("Control/Answer3Container/RigidBody2D"), get_node("Control/Answer4Container/RigidBody2D")]
 
 var choseAnswer = false
 
@@ -81,10 +83,15 @@ func setCards():
 
 	
 	correctFruit = "Control/Answer%sContainer/Fruit%s"
-
+	correctRigidBody = "Control/Answer%sContainer/RigidBody2D"
 	
-	winningPath = correctFruit %[correctIndex+1, correctIndex+1]
-	print(winningPath)
+	var actualCorrectIndex = correctIndex+1
+	
+	var winningBodyPath
+	winningPath = correctFruit %[actualCorrectIndex, actualCorrectIndex]
+	winningBodyPath = correctRigidBody %actualCorrectIndex
+	winningBody = get_node(winningBodyPath)
+	print(winningBody.get_path())
 	
 	
 	answers[answerLabel].text = correctAnswer
@@ -131,22 +138,23 @@ func winningChoice():
 	playWinSound()
 	stopWinSound()
 	
-	#$DogWinSound.play()
-	print("win")
+	dropFruit()
+	$WinLabel.show()
 	
 func losingChoice():
 	playLoseSound()
 	stopLoseSound()
-	#dropFruit()
+	$LoseLabel.show()
+	dropFruit()
 	
 func dropFruit():
-	for fruit in answers:
-		if !correctFruit:
-			fruit.self.gravity_scale = 1
+	for fruit in rigidbodies:
+		print(fruit.get_path())
+		if fruit.get_path() != winningBody.get_path():
+			fruit.set_gravity_scale(2)
 
 func _on_Fruit1_body_entered(body):
 	var path = "Control/Answer1Container/Fruit1"
-	print(path)
 	if (path == winningPath):
 		winningChoice()
 	else:
@@ -155,7 +163,6 @@ func _on_Fruit1_body_entered(body):
 
 func _on_Fruit2_body_entered(body):
 	var path = "Control/Answer2Container/Fruit2"
-	print(path)
 	if (path == winningPath):
 		winningChoice()
 	else:
@@ -164,7 +171,6 @@ func _on_Fruit2_body_entered(body):
 
 func _on_Fruit3_body_entered(body):
 	var path = "Control/Answer3Container/Fruit3"
-	print(path)
 	if (path == winningPath):
 		winningChoice()
 	else:
@@ -173,7 +179,6 @@ func _on_Fruit3_body_entered(body):
 
 func _on_Fruit4_body_entered(body):
 	var path = "Control/Answer4Container/Fruit4"
-	print(path)
 	if (path == winningPath):
 		winningChoice()
 	else:

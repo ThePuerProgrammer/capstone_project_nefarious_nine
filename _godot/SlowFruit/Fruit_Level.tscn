@@ -29,5 +29,6 @@ z_index = 1
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
 volume_db = -15.0
+autoplay = true
 
 [node name="WorldEnvironment" parent="." instance=ExtResource( 7 )]

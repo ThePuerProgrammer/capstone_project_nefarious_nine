@@ -64,8 +64,7 @@ func change_animation():
 		$AnimatedSprite.play("Idle")
 	
 func check_floor():
-	found_floor = get_node("../TileMap").get_found_floor()
-	print(found_floor)
+	found_floor = get_node("../TileMap").get_found_floor()	
 	if found_floor:
 		jumping = false	
 		if walking:
