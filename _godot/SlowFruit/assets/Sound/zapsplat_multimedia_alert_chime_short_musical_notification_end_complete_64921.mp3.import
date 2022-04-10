@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/zapsplat_multimedia_alert_chime_short_musical_notification_end_complete_64921.mp3-f5541654ce03362346151b644a9468db.mp3str"
+
+[deps]
+
+source_file="res://SlowFruit/assets/Sound/zapsplat_multimedia_alert_chime_short_musical_notification_end_complete_64921.mp3"
+dest_files=[ "res://.import/zapsplat_multimedia_alert_chime_short_musical_notification_end_complete_64921.mp3-f5541654ce03362346151b644a9468db.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

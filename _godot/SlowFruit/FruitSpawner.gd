@@ -19,6 +19,10 @@ onready var fruit10 = get_node("/Fruit10")
 var numCorrect = 0
 var numIncorrect = 0
 var coins = 0
+var winningPath
+
+var win_sound_has_played = false
+var lose_sound_has_played = false
 
 var fruits = [fruit1, fruit2, fruit3, fruit4, fruit5, fruit6, fruit7, fruit8, fruit9, fruit10]
 var fruitCopy = fruits.duplicate()
@@ -30,7 +34,7 @@ var correctFruit
 
 
 onready var questionLabel = get_node("Control/Question/Question/Label")
-onready var answers = [get_node("Control/Answer1Container/Answer1/RichTextLabel"),get_node("Control/Answer2Container2/Answer2/RichTextLabel"),get_node("Control/Answer3Container3/Answer3/RichTextLabel"), get_node("Control/Answer4Container/Answer4/RichTextLabel")]
+onready var answers = [get_node("Control/Answer1Container/Answer1/RichTextLabel"),get_node("Control/Answer2Container/Answer2/RichTextLabel"),get_node("Control/Answer3Container/Answer3/RichTextLabel"), get_node("Control/Answer4Container/Answer4/RichTextLabel")]
 
 
 var choseAnswer = false
@@ -73,13 +77,15 @@ func setCards():
 	var answerLabel = rand.randi_range(0, 3)
 
 	correctIndex = answerLabel	
-	print("correct index")
+	print(correctIndex+1)
+
 	
-	correctFruit = "Control/Answer%sContainer%s/Fruit%s"
-	print("correct fruit", correctFruit)
+	correctFruit = "Control/Answer%sContainer/Fruit%s"
+
 	
-	var format_answer = correctFruit %[correctIndex, correctIndex, correctIndex]
-	print("format annswer", format_answer)
+	winningPath = correctFruit %[correctIndex+1, correctIndex+1]
+	print(winningPath)
+	
 	
 	answers[answerLabel].text = correctAnswer
 	
@@ -89,22 +95,87 @@ func setCards():
 			answers[i].text = wrongAnswers[j]
 			j+= 1	
 
+func playWinSound():
+	if !win_sound_has_played:
+		win_sound_has_played = true
+		$WinSound.play()
+		$DogWinSound.play()
+
+
+
+
+func stopWinSound():
+	if win_sound_has_played:
+		win_sound_has_played = false
+		$WinSound.stop()
+		$DogWinSound.stop()
+
+func playLoseSound():
+	if !lose_sound_has_played:
+		lose_sound_has_played = true
+		$LoseSound.play()
+		$DogLoseSound.play(2)
+
+
+func stopLoseSound():
+	if lose_sound_has_played:
+		lose_sound_has_played = false
+		$LoseSound.stop()
+		$DogLoseSound.stop()
+
 
 func setAnswer():
 	pass
 
+func winningChoice():
+	playWinSound()
+	stopWinSound()
+	
+	#$DogWinSound.play()
+	print("win")
+	
+func losingChoice():
+	playLoseSound()
+	stopLoseSound()
+	#dropFruit()
+	
+func dropFruit():
+	for fruit in answers:
+		if !correctFruit:
+			fruit.self.gravity_scale = 1
 
 func _on_Fruit1_body_entered(body):
-	print("fruit1")
-
+	var path = "Control/Answer1Container/Fruit1"
+	print(path)
+	if (path == winningPath):
+		winningChoice()
+	else:
+		print("nein")
+		losingChoice()
 
 func _on_Fruit2_body_entered(body):
-	print("fruit2")
-
+	var path = "Control/Answer2Container/Fruit2"
+	print(path)
+	if (path == winningPath):
+		winningChoice()
+	else:
+		print("nein")
+		losingChoice()
 
 func _on_Fruit3_body_entered(body):
-	print("fruit3")
-
+	var path = "Control/Answer3Container/Fruit3"
+	print(path)
+	if (path == winningPath):
+		winningChoice()
+	else:
+		print("nein")
+		losingChoice()
 
 func _on_Fruit4_body_entered(body):
-	print("fruit4")
+	var path = "Control/Answer4Container/Fruit4"
+	print(path)
+	if (path == winningPath):
+		winningChoice()
+	else:
+		print("nein")
+		losingChoice()

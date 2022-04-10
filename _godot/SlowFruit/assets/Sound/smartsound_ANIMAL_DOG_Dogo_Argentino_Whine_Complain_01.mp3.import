@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/smartsound_ANIMAL_DOG_Dogo_Argentino_Whine_Complain_01.mp3-efd77a311ca36531a50844a84a4c4ba4.mp3str"
+
+[deps]
+
+source_file="res://SlowFruit/assets/Sound/smartsound_ANIMAL_DOG_Dogo_Argentino_Whine_Complain_01.mp3"
+dest_files=[ "res://.import/smartsound_ANIMAL_DOG_Dogo_Argentino_Whine_Complain_01.mp3-efd77a311ca36531a50844a84a4c4ba4.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

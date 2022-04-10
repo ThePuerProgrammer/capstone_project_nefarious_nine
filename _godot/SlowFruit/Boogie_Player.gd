@@ -65,6 +65,7 @@ func change_animation():
 	
 func check_floor():
 	found_floor = get_node("../TileMap").get_found_floor()
+	print(found_floor)
 	if found_floor:
 		jumping = false	
 		if walking:
@@ -181,9 +182,10 @@ func pull_for_input():
 			setIdle()
 		elif walking:
 			setWalking()		
-		stopJumpSound()		
+		stopJumpSound()				
 		applied_force = Vector2(applied_force.y, 0)
 		linear_velocity.y += STOP_JUMP_FORCE
+		
 		
 	
 func set_movement():
@@ -191,13 +193,13 @@ func set_movement():
 	var y = 0	
 	
 	if move_left:
-		check_floor() 
+		#heck_floor() 
 		x = -WALK_ACCEL
 	elif move_right:
-		check_floor()
+		#check_floor()
 		x = WALK_ACCEL
 	if jump:
-		check_floor()
+		#check_floor()
 		y -= AIR_ACCEL
 		
 	applied_force += Vector2(x, y)

@@ -18,7 +18,7 @@ __meta__ = {
 position = Vector2( 80, 408 )
 scale = Vector2( 1, 1 )
 z_index = 2
-mass = 1.53061
+mass = 1.83673
 gravity_scale = 7.0
 
 [node name="FruitSpawner" parent="." instance=ExtResource( 6 )]

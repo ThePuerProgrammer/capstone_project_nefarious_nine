@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://SlowFruit/assets/Fruit/fruit1.png" type="Texture" id=1]
 [ext_resource path="res://SlowFruit/assets/Fruit/fruit2.png" type="Texture" id=2]
@@ -15,7 +15,10 @@
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7.ttf" type="DynamicFontData" id=13]
 [ext_resource path="res://SlowFruit/Answer.gd" type="Script" id=14]
 [ext_resource path="res://SlowFruit/FruitSpawner.gd" type="Script" id=15]
-[ext_resource path="res://SlowFruit/assets/Sound/Pickup_002.wav" type="AudioStream" id=16]
+[ext_resource path="res://SlowFruit/assets/Sound/zapsplat_multimedia_alert_chime_short_musical_notification_end_complete_64921.mp3" type="AudioStream" id=16]
+[ext_resource path="res://SlowFruit/assets/Sound/smartsound_ANIMAL_DOG_Dogo_Argentino_Whine_Complain_01.mp3" type="AudioStream" id=17]
+[ext_resource path="res://SlowFruit/assets/Sound/winSoundDog.wav" type="AudioStream" id=18]
+[ext_resource path="res://SlowFruit/assets/Sound/zapsplat_multimedia_alert_chime_short_musical_notification_007_64916.mp3" type="AudioStream" id=19]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -401,7 +404,7 @@ resource_local_to_scene = true
 10/z_index = 0
 
 [sub_resource type="RectangleShape2D" id=25]
-extents = Vector2( 17.5, 13 )
+extents = Vector2( 17.5, 19.5 )
 
 [sub_resource type="DynamicFont" id=30]
 size = 51
@@ -564,21 +567,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Fruit1" type="Area2D" parent="Control/Answer1Container"]
-position = Vector2( 216, 0 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer1Container/Fruit1"]
-position = Vector2( 23, 28 )
-shape = SubResource( 25 )
-
-[node name="Sprite" type="Sprite" parent="Control/Answer1Container/Fruit1"]
-scale = Vector2( 1.5, 1.5 )
-texture = ExtResource( 5 )
-centered = false
-
 [node name="Answer1" type="Position2D" parent="Control/Answer1Container"]
 position = Vector2( 216, 28 )
 scale = Vector2( 0.2, 0.2 )
@@ -603,7 +591,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Answer2Container2" type="HBoxContainer" parent="Control"]
+[node name="Fruit1" type="Area2D" parent="Control/Answer1Container"]
+position = Vector2( 223, 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer1Container/Fruit1"]
+position = Vector2( 23, 28 )
+shape = SubResource( 25 )
+
+[node name="Sprite" type="Sprite" parent="Control/Answer1Container/Fruit1"]
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 5 )
+centered = false
+
+[node name="Answer2Container" type="HBoxContainer" parent="Control"]
 margin_left = 528.0
 margin_top = 110.0
 margin_right = 930.0
@@ -614,26 +617,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Fruit2" type="Area2D" parent="Control/Answer2Container2"]
-position = Vector2( 200, 25 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer2Container2/Fruit2"]
-shape = SubResource( 25 )
-
-[node name="Sprite" type="Sprite" parent="Control/Answer2Container2/Fruit2"]
-scale = Vector2( 1.5, 1.5 )
-texture = ExtResource( 7 )
-
-[node name="Answer2" type="Position2D" parent="Control/Answer2Container2"]
+[node name="Answer2" type="Position2D" parent="Control/Answer2Container"]
 position = Vector2( 229, 28 )
 script = ExtResource( 14 )
 
-[node name="Tween" type="Tween" parent="Control/Answer2Container2/Answer2"]
+[node name="Tween" type="Tween" parent="Control/Answer2Container/Answer2"]
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer2Container2/Answer2"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer2Container/Answer2"]
 margin_left = -197.0
 margin_top = 12.0
 margin_right = 212.0
@@ -651,7 +641,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Answer3Container3" type="HBoxContainer" parent="Control"]
+[node name="Fruit2" type="Area2D" parent="Control/Answer2Container"]
+position = Vector2( 200, 25 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer2Container/Fruit2"]
+shape = SubResource( 25 )
+
+[node name="Sprite" type="Sprite" parent="Control/Answer2Container/Fruit2"]
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 7 )
+
+[node name="Answer3Container" type="HBoxContainer" parent="Control"]
 margin_left = 968.0
 margin_top = 96.0
 margin_right = 1432.0
@@ -662,31 +665,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Fruit3" type="Area2D" parent="Control/Answer3Container3"]
-position = Vector2( 184, 4 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer3Container3/Fruit3"]
-position = Vector2( 32, 36 )
-shape = SubResource( 25 )
-
-[node name="Sprite" type="Sprite" parent="Control/Answer3Container3/Fruit3"]
-position = Vector2( 32, 36 )
-scale = Vector2( 1.5, 1.5 )
-texture = ExtResource( 6 )
-
-[node name="Answer3" type="Position2D" parent="Control/Answer3Container3"]
+[node name="Answer3" type="Position2D" parent="Control/Answer3Container"]
 position = Vector2( 328, 88 )
 script = ExtResource( 14 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Tween" type="Tween" parent="Control/Answer3Container3/Answer3"]
+[node name="Tween" type="Tween" parent="Control/Answer3Container/Answer3"]
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer3Container3/Answer3"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer3Container/Answer3"]
 margin_left = -336.0
 margin_top = -34.0
 margin_right = 112.0
@@ -704,6 +692,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Fruit3" type="Area2D" parent="Control/Answer3Container"]
+position = Vector2( 184, 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer3Container/Fruit3"]
+position = Vector2( 32, 36 )
+shape = SubResource( 25 )
+
+[node name="Sprite" type="Sprite" parent="Control/Answer3Container/Fruit3"]
+position = Vector2( 32, 36 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 6 )
+
 [node name="Answer4Container" type="HBoxContainer" parent="Control"]
 margin_left = 1408.0
 margin_top = 88.0
@@ -712,20 +715,9 @@ margin_bottom = 288.0
 size_flags_horizontal = 5
 size_flags_vertical = 5
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_edit_use_anchors_": false
 }
-
-[node name="Fruit4" type="Area2D" parent="Control/Answer4Container"]
-position = Vector2( 170, 46 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer4Container/Fruit4"]
-position = Vector2( 110, 0 )
-shape = SubResource( 25 )
-
-[node name="Sprite" type="Sprite" parent="Control/Answer4Container/Fruit4"]
-position = Vector2( 110, 0 )
-scale = Vector2( 1.5, 1.5 )
-texture = ExtResource( 10 )
 
 [node name="Answer4" type="Position2D" parent="Control/Answer4Container"]
 position = Vector2( 272, 120 )
@@ -734,10 +726,10 @@ script = ExtResource( 14 )
 [node name="Tween" type="Tween" parent="Control/Answer4Container/Answer4"]
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer4Container/Answer4"]
-margin_left = -216.0
-margin_top = -49.0
-margin_right = 240.0
-margin_bottom = 151.0
+margin_left = -184.0
+margin_top = -57.0
+margin_right = 272.0
+margin_bottom = 143.0
 size_flags_horizontal = 5
 size_flags_vertical = 5
 theme = SubResource( 28 )
@@ -753,12 +745,38 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
+[node name="Fruit4" type="Area2D" parent="Control/Answer4Container"]
+position = Vector2( 170, 46 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer4Container/Fruit4"]
+position = Vector2( 110, 0 )
+shape = SubResource( 25 )
+
+[node name="Sprite" type="Sprite" parent="Control/Answer4Container/Fruit4"]
+position = Vector2( 110, 0 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 10 )
+
+[node name="LoseSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 16 )
-pitch_scale = 0.01
-attenuation = 0.965934
+
+[node name="WinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 19 )
+volume_db = 2.0
+
+[node name="DogWinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 18 )
+
+[node name="dogSoundTimer" type="Timer" parent="DogWinSound"]
+one_shot = true
+
+[node name="DogLoseSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 17 )
+
+[node name="dogSoundTimer2" type="Timer" parent="DogLoseSound"]
+one_shot = true
 
 [connection signal="body_entered" from="Control/Answer1Container/Fruit1" to="." method="_on_Fruit1_body_entered"]
-[connection signal="body_entered" from="Control/Answer2Container2/Fruit2" to="." method="_on_Fruit2_body_entered"]
-[connection signal="body_entered" from="Control/Answer3Container3/Fruit3" to="." method="_on_Fruit3_body_entered"]
+[connection signal="body_entered" from="Control/Answer2Container/Fruit2" to="." method="_on_Fruit2_body_entered"]
+[connection signal="body_entered" from="Control/Answer3Container/Fruit3" to="." method="_on_Fruit3_body_entered"]
 [connection signal="body_entered" from="Control/Answer4Container/Fruit4" to="." method="_on_Fruit4_body_entered"]
