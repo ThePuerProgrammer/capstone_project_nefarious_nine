@@ -2225,40 +2225,6 @@ export async function deleteAccount(userEmail) {
                 twoDarray.push(array1); //populates twoDaraay with a key value pair of classdocid and deckdocid
             })
         }
-        //GET DECK_DATA // DELETE DECK DATA
-        let class2Ddata = [];
-        let classDeckData;//we use this for the "cached dates", this allows us to find the proper document in flashcard data
-        //each flashcard data doc starts with a date, therefore we need to prefix that to the collectionname
-        for (let i = 0; i < classDocIds.length; i++) {
-            const ref3 = await firebase.firestore()
-                .collection(Constant.collectionName.CLASSROOMS)
-                .doc(classDocIds[i])
-                .collection(Constant.collectionName.DECK_DATA)
-                .get()
-
-            ref3.forEach(doc => {
-                array1 = [];
-                array1 = [classDocIds[i], doc.id];
-                //populate a 2d array of key value pairs of class doc id and deck_data doc id
-                class2Ddata.push(array1);
-            })
-
-        }
-        //DELETE SRS DATA FROM classrooms > deck_data >flashcard_data 
-        for (let i = 0; i < class2Ddata.length; i++) {
-            let arr;
-            arr = class2Ddata[i];
-            classDeckData = await getClassDataDeckById(arr[0], arr[1]); //arr[0] = classdocid, arr[1] = deck_data docID
-
-            await deleteAllClassSrsData(arr[0], arr[1], classDeckData.cachedDates);
-        }
-
-        //delete classrooms > deck_data 
-        for (let i = 0; i < class2Ddata.length; i++) {
-            let arr;
-            arr = class2Ddata[i];
-            await deleteClassDeckDataDoc(arr[0], arr[1]);
-        }
 
         //DELETE classrooms > OWNED_DECKS, ALSO DELETES FLASHCARDS > DOC
         for (let i = 0; i < twoDarray.length; i++) {
@@ -2384,7 +2350,7 @@ export async function deleteAccount(userEmail) {
     }
     await signOut(auth); //works
 
-    user1.delete().then(() => { // this deletes from authentication
+    user1.delete().then(() => { // this deletes from authentication, i think? maybe add helpdesk ticket for adming to delete this user from auth
         console.log("Successfully deleted");
     }).catch((e) => {
         console.log(e);
@@ -2461,7 +2427,6 @@ export async function deleteAllUserSrsData(userDocId, deckDocId, cachedDates) {
                 userflashcardData.forEach(doc => {
                     console.log("DOC IDS OF FLASHCARD DATA " + doc.id);
                     deleteUserSrsData(userDocId, deckDocId, cachedDates[i], doc.id);
-
                 })
             }
         } catch (e) {
@@ -2481,26 +2446,6 @@ export async function deleteUserDeckData(userDocId, deckDocId) {
 
 }
 
-export async function deleteAllClassSrsData(classDocId, deckDocId, cachedDates) {
-    try {
-        for (let i = 0; i < cachedDates.length; i++) { //cached dates is our prefix identifier for flashcard data collection
-            var userflashcardData = await firebase.firestore()
-                .collection(Constant.collectionName.CLASSROOMS)
-                .doc(classDocId)
-                .collection(Constant.collectionName.DECK_DATA)
-                .doc(deckDocId)
-                .collection(cachedDates[i] + Constant.collectionName.FLASHCARDS_DATA_SUFFIX)
-                .get();
-
-            userflashcardData.forEach(doc => {
-                console.log("DOC IDS OF FLASHCARD DATA " + doc.id);
-                deleteClassSrsData(classDocId, deckDocId, cachedDates[i], doc.id); //SHOULD WORK HAVENT ACTUALLY TESTED THO
-            })
-        }
-    } catch (e) {
-        console.log(e);
-    }
-}
 
 
 export async function deleteUserSrsData(userDocId, deckDocId, cachedDate, fcdataDocId) {
