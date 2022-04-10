@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cat_sprite.png-6af08c0e968a51b7268a2bb5feeee455.stex"
+path="res://.import/ff2.png-a35d7fc10bc42e0db82f82844088b950.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ChillZone/pet/pet_sprites/cat_sprite.png"
-dest_files=[ "res://.import/cat_sprite.png-6af08c0e968a51b7268a2bb5feeee455.stex" ]
+source_file="res://ChillZone/Background Assets/ff2.png"
+dest_files=[ "res://.import/ff2.png-a35d7fc10bc42e0db82f82844088b950.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
