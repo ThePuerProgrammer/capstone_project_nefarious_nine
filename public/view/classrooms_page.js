@@ -50,6 +50,7 @@ export function addEventListeners() {
         try {
             const docId = await FirebaseController.createClassroom(classroom);
             classroom.docId = docId;
+            window.sessionStorage.setItem('classId', classroom.docId);
             Elements.modalCreateClassroom.hide();
             history.pushState(null, null, Routes.routePathname.ONECLASSROOM + '#' + classroom.docId);
             await OneClassroomPage.one_classroom_page(classroom.docId);
