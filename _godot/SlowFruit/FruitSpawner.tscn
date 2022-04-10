@@ -893,11 +893,10 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="LoseLabel"]
 
 [node name="ScoreLabel" type="RichTextLabel" parent="."]
-visible = false
-margin_left = 240.0
-margin_top = 224.0
-margin_right = 1800.0
-margin_bottom = 776.0
+margin_left = 1528.0
+margin_top = 48.0
+margin_right = 3088.0
+margin_bottom = 600.0
 size_flags_horizontal = 5
 custom_colors/default_color = Color( 0.145098, 0.427451, 0.698039, 1 )
 custom_colors/selection_color = Color( 0, 0, 0, 1 )
@@ -906,7 +905,7 @@ custom_constants/shadow_offset_x = 10
 custom_constants/shadow_offset_y = 5
 custom_constants/shadow_as_outline = 0
 custom_fonts/normal_font = ExtResource( 21 )
-text = "fdgfdgdfgdf"
+text = "Coins"
 __meta__ = {
 "_edit_use_anchors_": false
 }

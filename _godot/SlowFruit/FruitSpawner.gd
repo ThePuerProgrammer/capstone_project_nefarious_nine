@@ -139,7 +139,11 @@ func winningChoice():
 	stopWinSound()
 	
 	dropFruit()
-	$WinLabel.show()
+	$WinLabel.show()	
+	coins += 5
+	Pomotimer.addPomocoinsToUserDocument(5)
+	$ScoreLabel.text = coins
+	$ScoreLabel.show()
 	
 func losingChoice():
 	playLoseSound()
