@@ -36,6 +36,7 @@ var correctRigidBody
 
 
 onready var questionLabel = get_node("Control/Question/Question/Label")
+onready var scoreLabel = get_node("ScoreLabel")
 onready var answers = [get_node("Control/Answer1Container/Answer1/RichTextLabel"),get_node("Control/Answer2Container/Answer2/RichTextLabel"),get_node("Control/Answer3Container/Answer3/RichTextLabel"), get_node("Control/Answer4Container/Answer4/RichTextLabel")]
 onready var rigidbodies = [get_node("Control/Answer1Container/RigidBody2D"),get_node("Control/Answer2Container/RigidBody2D"),get_node("Control/Answer3Container/RigidBody2D"), get_node("Control/Answer4Container/RigidBody2D")]
 
@@ -46,20 +47,12 @@ var choseAnswer = false
 func _ready():
 	
 	setCards()
-	#question.setQuestionText(newQuestion)
-	#print(question.getQuestionText())
-	#questionLabelText = "this is the new label"
-	#questionLabel.set_text(str(questionLabeltext))
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
-#func showQuestion(question):
-#	var text = floating_text.instance()
-#	text.amount = question
-#	add_child(text)
+
 	
 func chooseFruit():	
 	pass
@@ -141,9 +134,9 @@ func winningChoice():
 	dropFruit()
 	$WinLabel.show()	
 	coins += 5
-	Pomotimer.addPomocoinsToUserDocument(5)
-	$ScoreLabel.text = coins
-	$ScoreLabel.show()
+	FirebaseController.addPomocoinsToUserDocument(5)
+	scoreLabel.text = coins
+	scoreLabel.show()
 	
 func losingChoice():
 	playLoseSound()

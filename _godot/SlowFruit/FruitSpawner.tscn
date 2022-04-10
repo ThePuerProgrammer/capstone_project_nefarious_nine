@@ -893,6 +893,7 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="LoseLabel"]
 
 [node name="ScoreLabel" type="RichTextLabel" parent="."]
+visible = false
 margin_left = 1528.0
 margin_top = 48.0
 margin_right = 3088.0
@@ -905,7 +906,6 @@ custom_constants/shadow_offset_x = 10
 custom_constants/shadow_offset_y = 5
 custom_constants/shadow_as_outline = 0
 custom_fonts/normal_font = ExtResource( 21 )
-text = "Coins"
 __meta__ = {
 "_edit_use_anchors_": false
 }
