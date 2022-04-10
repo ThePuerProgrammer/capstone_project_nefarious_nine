@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/message1.ogg-b46f9609c325d59046b8c684a6228c68.oggstr"
+
+[deps]
+
+source_file="res://PomoBlast/assets/PomoBlast_SFX/message1.ogg"
+dest_files=[ "res://.import/message1.ogg-b46f9609c325d59046b8c684a6228c68.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
