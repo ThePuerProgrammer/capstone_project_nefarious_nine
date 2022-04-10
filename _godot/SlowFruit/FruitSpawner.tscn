@@ -548,8 +548,9 @@ __meta__ = {
 [node name="Question" type="Node2D" parent="Control/Question"]
 
 [node name="Label" type="Label" parent="Control/Question/Question"]
+margin_top = 39.0
 margin_right = 1920.0
-margin_bottom = 62.0
+margin_bottom = 101.0
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.501961, 0.113725, 0.713726, 1 )
 custom_colors/font_outline_modulate = Color( 0.0745098, 0.266667, 0.121569, 1 )
@@ -561,10 +562,10 @@ __meta__ = {
 }
 
 [node name="Answer1Container" type="HBoxContainer" parent="Control"]
-margin_left = 17.0
-margin_top = 125.0
-margin_right = 492.0
-margin_bottom = 325.0
+margin_left = 16.0
+margin_top = 160.0
+margin_right = 491.0
+margin_bottom = 360.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -580,9 +581,11 @@ script = ExtResource( 14 )
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer1Container/Answer1"]
 margin_left = -85.0
-margin_top = 75.0
+margin_top = 105.0
 margin_right = 1547.0
-margin_bottom = 722.0
+margin_bottom = 752.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = SubResource( 28 )
 custom_colors/default_color = Color( 0.0627451, 0.662745, 0.0980392, 1 )
 custom_colors/selection_color = Color( 0.101961, 0.478431, 0.356863, 1 )
@@ -606,6 +609,7 @@ can_sleep = false
 position = Vector2( 223, -13 )
 collision_layer = 8
 collision_mask = 0
+monitorable = false
 gravity_vec = Vector2( 0, 0 )
 gravity = 0.0
 angular_damp = 0.0
@@ -627,13 +631,14 @@ position = Vector2( 247, 10 )
 shape = SubResource( 25 )
 
 [node name="Answer2Container" type="HBoxContainer" parent="Control"]
-margin_left = 528.0
-margin_top = 110.0
-margin_right = 930.0
-margin_bottom = 312.0
+margin_left = 520.0
+margin_top = 168.0
+margin_right = 922.0
+margin_bottom = 370.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
+"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
@@ -690,13 +695,14 @@ position = Vector2( 192, 46 )
 shape = SubResource( 25 )
 
 [node name="Answer3Container" type="HBoxContainer" parent="Control"]
-margin_left = 968.0
-margin_top = 96.0
-margin_right = 1432.0
-margin_bottom = 296.0
+margin_left = 976.0
+margin_top = 128.0
+margin_right = 1440.0
+margin_bottom = 328.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
+"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
@@ -710,10 +716,10 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="Control/Answer3Container/Answer3"]
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer3Container/Answer3"]
-margin_left = -336.0
-margin_top = -34.0
-margin_right = 112.0
-margin_bottom = 136.0
+margin_left = -328.0
+margin_top = -71.0
+margin_right = 120.0
+margin_bottom = 99.0
 theme = SubResource( 28 )
 custom_colors/default_color = Color( 0.0627451, 0.662745, 0.0980392, 1 )
 custom_colors/selection_color = Color( 0.101961, 0.478431, 0.356863, 1 )
@@ -759,12 +765,13 @@ shape = SubResource( 25 )
 
 [node name="Answer4Container" type="HBoxContainer" parent="Control"]
 margin_left = 1408.0
-margin_top = 88.0
+margin_top = 120.0
 margin_right = 1912.0
-margin_bottom = 288.0
+margin_bottom = 320.0
 size_flags_horizontal = 5
 size_flags_vertical = 5
 __meta__ = {
+"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
@@ -902,12 +909,12 @@ one_shot = true
 
 [node name="ScoreLabel" type="RichTextLabel" parent="."]
 visible = false
-margin_left = 1568.0
+margin_left = 1616.0
 margin_top = 32.0
-margin_right = 3128.0
+margin_right = 3176.0
 margin_bottom = 584.0
 size_flags_horizontal = 5
-custom_colors/default_color = Color( 0.145098, 0.427451, 0.698039, 1 )
+custom_colors/default_color = Color( 0.827451, 0.623529, 0.937255, 1 )
 custom_colors/selection_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0.137255, 0.0235294, 0.145098, 1 )
 custom_constants/shadow_offset_x = 10
