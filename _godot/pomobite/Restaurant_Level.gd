@@ -45,8 +45,11 @@ onready var carrying_trash				= false
 onready var carrying_dishes				= true
 onready var chefs_cursing				= false
 onready var cursing_array				= []
+onready var food_in_window				= false
+onready var has_food					= false
 
 var anger_timer : Timer
+var food_in_window_timer : Timer
  
 const table_stay_time	= 225
 const TERMINATE_CONVO_VALUE = 1000
@@ -219,6 +222,11 @@ func _ready():
 	add_child(anger_timer)
 	chef_c.add_child(cursing_c)
 	chef_d.add_child(cursing_d)
+	food_in_window_timer = Timer.new()
+	food_in_window_timer.one_shot = true
+	food_in_window_timer.wait_time = 10
+	food_in_window_timer.connect("timeout", self, "_put_food_in_window")
+	add_child(food_in_window_timer)
 	
 	
 func _on_message(msg):
@@ -386,6 +394,10 @@ func _on_player_1_interact():
 			
 	elif soda_machine_area_entered:
 		has_drinks = true
+		
+	elif expo_area_entered and food_in_window:
+		$Window_Food.visible = false
+		has_food = true
 			
 			
 func _deliver_drinks(table):
@@ -539,6 +551,7 @@ func _on_OrderButton_pressed():
 		p.visible = true
 	anger_timer.connect("timeout", self, '_on_anger_timer_timeout')
 	anger_timer.start()
+	food_in_window_timer.start()
 	
 	_on_BackButton_pressed()
 	
@@ -1099,6 +1112,8 @@ func _table_leaving():
 	table_exiting[0] = true
 	table_exiting[1] = leaving_table
 	
-
+func _put_food_in_window():
+	food_in_window = true
+	$Window_Food.visible = true
 
 
