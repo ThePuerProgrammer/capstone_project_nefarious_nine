@@ -382,13 +382,13 @@ func _take_food_order():
 	_gen_dialogue(\
 	"Here are your drinks!\nWhat would you like\nto order?",\
 	3,\
-	$Player1.position if controlled_player == 1 else $Player2.position)
+	$Player1.position if _is_host else $Player2.position)
 	
 func _greet_table():
 	_gen_dialogue(\
 	"Hi! I'll be\nyour server. Can I\nget you something\nto drink?",\
 	2, \
-	$Player1.position if controlled_player == 1 else $Player2.position)
+	$Player1.position if _is_host else $Player2.position)
 
 func _gen_dialogue(msg, type, pos):
 	convo_strings.push_back(msg)
