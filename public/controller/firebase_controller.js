@@ -3,7 +3,7 @@ import * as Constant from '../model/constant.js'
 import * as Utilites from '../view/utilities.js'
 import * as Element from '../view/elements.js'
 import * as Auth from './firebase_auth.js'
-import { Deck } from '../model/Deck.js';
+import { Deck } from '../model/deck.js';
 import { Flashcard } from '../model/flashcard.js';
 import { FlashcardData } from '../model/flashcard_data.js';
 import { User } from '../model/user.js';
