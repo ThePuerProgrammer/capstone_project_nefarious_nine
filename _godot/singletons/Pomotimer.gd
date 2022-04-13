@@ -72,6 +72,8 @@ func start_game(time_limit, game_queue, deck):
 		currentGame = _game_queue[0]
 		current_game_scene = check_currentGame_Scene(currentGame)
 		_game_queue.pop_front()
+		if Engine.get_time_scale() == 2.0:
+			Engine.set_time_scale(1.0)
 		get_tree().change_scene(current_game_scene)
 ################################################################################
 #Methods Used In Start Game
