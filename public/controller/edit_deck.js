@@ -4,7 +4,7 @@ import * as Constant from '../model/constant.js'
 import * as Utilities from '../view/utilities.js'
 import * as Elements from '../view/elements.js'
 import * as StudyDeck from '../view/study_decks_page.js'
-import { Deck } from '../model/Deck.js'
+import { Deck } from '../model/deck.js'
 import { cleanDataToKeywords } from '../view/search_page.js'
 import { one_classroom_page } from '../view/one_classroom_page.js'
 
