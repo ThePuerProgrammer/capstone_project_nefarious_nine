@@ -147,7 +147,7 @@ export async function study_page() {
     }
   }
 
-  html += buildStudyFlashcardView(flashcard);
+  html += buildStudyFlashcardView(flashcard, true);
   Elements.root.innerHTML += html;
 
   // create const for submit on ANSWER button
@@ -201,7 +201,7 @@ export async function study_page() {
       } else {
         flashcard = await FirebaseController.getNextClassSmartStudyFlashcard(deck.isClassDeck, deck.docID, flashcards);
       }
-      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard, false);
       smartStudyPopupTextContainer.style.opacity = '100';
     }
     else { // Smart Study Off
@@ -209,7 +209,7 @@ export async function study_page() {
       smartStudyIndicator.classList.remove("streak-incorrect");
       smartStudyIndicator.innerHTML = "Resumed";
       flashcard = flashcards[count]; // Go back to Normal Study
-      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard, false);
       smartStudyPopupTextContainer.style.opacity = '100';
     }
   });
@@ -221,7 +221,7 @@ export async function study_page() {
         return;
       }
 
-      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard);
+      formAnswerFlashcard.innerHTML = buildStudyFlashcardView(flashcard, false);
       studyFlashcardAnswer.value = "";
     }
     else {
@@ -317,7 +317,7 @@ export async function study_page() {
       flashcard = flashcards[count];
 
       document.getElementById(Constant.htmlIDs.formAnswerFlashcard).innerHTML =
-        buildStudyFlashcardView(flashcard);
+        buildStudyFlashcardView(flashcard, false);
       e.target.reset();
     } else {
       checkAnswer(answer, flashcard);
@@ -344,9 +344,15 @@ export async function study_page() {
 }
 
 // view when flashcards are being shown to STUDY
-function buildStudyFlashcardView(flashcard) {
-  let html = `<div class="study-flashcard-view overflow-auto"><form id="${Constant.htmlIDs.formAnswerFlashcard}">
-  <div class="study-flashcard-question pomo-text-color-light">`;
+function buildStudyFlashcardView(flashcard, firstTime) {
+  let html = "";
+  if (firstTime) {
+    html += `<div class="d-flex justify-content-center" id="flashcard-view-container">
+    <div class="study-flashcard-view col-10 p-5"><form id="${Constant.htmlIDs.formAnswerFlashcard}">`;
+  }
+
+  html += `<div class="study-flashcard-question pomo-text-color-light">`;
+
 
   if (flashcard.questionImageURL != "N/A") {
     html += `<img src="${flashcard.questionImageURL}" style="width: 200px; height: 200px" class="center">`;
@@ -379,9 +385,11 @@ function buildStudyFlashcardView(flashcard) {
     <br>`;
 
   html += `<button type="submit" class="btn btn-secondary pomo-bg-color-dark" style="float:right">Answer</button>
-  </div>
-  </form>
   </div>`;
+
+  if (firstTime) {
+    html += `</form></div></div>`;
+  }
 
   console.log(flashcard.question);
   return html;
@@ -389,8 +397,17 @@ function buildStudyFlashcardView(flashcard) {
 
 // Post-study OVERVIEW view
 function buildOverviewView(deck, deckLength) {
+  let flashcardViewContainer =  document.getElementById("flashcard-view-container");
+  if (flashcardViewContainer != null)
+    flashcardViewContainer.remove();
+
+  let flashcardOverviewContainer =  document.getElementById("flashcard-overview-container");
+  if (flashcardOverviewContainer != null)
+    flashcardOverviewContainer.remove();
+
   let html = "";
-  html += `<div class="study-flashcard-view overflow-auto pomo-text-color-light" id="${Constant.htmlIDs.overrideFlashcardBtn}">
+  html += `<div class="d-flex justify-content-center" id="flashcard-overview-container">
+    <div class="study-flashcard-view col-10 p-5 pomo-text-color-light" id="${Constant.htmlIDs.overrideFlashcardBtn}">
     <center><h1>${deck.name} Study Overview</h1></centered>
     <br>
     <ul class="list-group list-group-flush list-group-numbered" role="group">`;
@@ -430,6 +447,7 @@ function buildOverviewView(deck, deckLength) {
     <input type="hidden" name="docId" value"${deck.docID}">
     <button id="${Constant.htmlIDs.studyPageReturnToDeckPageButton}" class="btn btn-outline-secondary pomo-bg-color-md-dark pomo-text-color-light" type="submit" style="padding:5px 10px; float: right;"> <i class="material-icons pomo-text-color-light">keyboard_return</i>Return</button>
   </form>
+  </div>
   </div>
   </div>`;
 
