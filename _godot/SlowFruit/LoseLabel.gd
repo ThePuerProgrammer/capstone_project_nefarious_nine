@@ -1,4 +1,4 @@
-extends RichTextLabel
+extends Position2D
 
 
 onready var LoseLabel = get_node("LoseLabel")
@@ -8,12 +8,13 @@ onready var tween = get_node("Tween")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("tween running")
-	tween.interpolate_property(self, 'scale', Vector2(1,1), Vector2(1,1), 0.2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-	tween.interpolate_property(self, 'scale', Vector2(1,1), Vector2(0.01,0.01), 10, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT, 3)
+	pass
+	#loseTween()
+	
+
+
+
+func loseTween():
+	tween.interpolate_property(self, 'scale', scale, Vector2(1,1), 0.2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	tween.interpolate_property(self, 'scale', Vector2(1,1), Vector2(0.001,0.001), 2, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT, 5)
 	tween.start()
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

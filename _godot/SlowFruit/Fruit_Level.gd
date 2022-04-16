@@ -2,6 +2,8 @@ extends Node2D
 
 var fruitSpawn = preload("res://SlowFruit/FruitSpawner.tscn")
 
+var slowfruitCoins = 0
+
 func _ready():
 	pass
 	

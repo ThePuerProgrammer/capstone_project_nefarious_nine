@@ -1,76 +1,329 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=98 format=2]
 
 [ext_resource path="res://SlowFruit/Boogie_Player.gd" type="Script" id=1]
 [ext_resource path="res://SlowFruit/assets/Sound/animal-dog-footsteps.wav" type="AudioStream" id=2]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump5.png" type="Texture" id=3]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump6.png" type="Texture" id=4]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump8.png" type="Texture" id=5]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiWalk/corgi-walk1.png" type="Texture" id=6]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiWalk/corgi-walk2.png" type="Texture" id=7]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump11.png" type="Texture" id=8]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiWalk/corgi-walk3.png" type="Texture" id=9]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump2.png" type="Texture" id=10]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiWalk/corgi-walk4.png" type="Texture" id=11]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump10.png" type="Texture" id=12]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiWalk/corgi-walk5.png" type="Texture" id=13]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump7.png" type="Texture" id=14]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump9.png" type="Texture" id=15]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump1.png" type="Texture" id=16]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump4.png" type="Texture" id=17]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiJump/corgi-jump3.png" type="Texture" id=18]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle2.png" type="Texture" id=19]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle4.png" type="Texture" id=20]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle3.png" type="Texture" id=21]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle5.png" type="Texture" id=22]
-[ext_resource path="res://SlowFruit/assets/BoogieDog/corgiIdle/corgi-idle1.png" type="Texture" id=23]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_idle2_2.png" type="Texture" id=3]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_idle2_3.png" type="Texture" id=4]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sniff2.png" type="Texture" id=5]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sniff1.png" type="Texture" id=6]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sniff3.png" type="Texture" id=7]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sniff4.png" type="Texture" id=8]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sniff8.png" type="Texture" id=9]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sniff5.png" type="Texture" id=10]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sniff6.png" type="Texture" id=11]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sniff7.png" type="Texture" id=12]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_idle2_1.png" type="Texture" id=13]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-jump6.png" type="Texture" id=14]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-jump8.png" type="Texture" id=16]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-walk4.png" type="Texture" id=17]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-walk2.png" type="Texture" id=18]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-run5.png" type="Texture" id=19]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-run1.png" type="Texture" id=20]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-walk5.png" type="Texture" id=21]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-idle2.png" type="Texture" id=22]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-idle4.png" type="Texture" id=23]
 [ext_resource path="res://SlowFruit/assets/Sound/zapsplat_multimedia_game-sound_classic_retro_jump_010_65130.mp3" type="AudioStream" id=24]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-walk1.png" type="Texture" id=25]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-jump2.png" type="Texture" id=26]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-idle1.png" type="Texture" id=27]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-jump3.png" type="Texture" id=28]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-jump4.png" type="Texture" id=29]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-idle5.png" type="Texture" id=31]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-walk3.png" type="Texture" id=32]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-jump5.png" type="Texture" id=33]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-jump7.png" type="Texture" id=34]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-run2.png" type="Texture" id=35]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-run3.png" type="Texture" id=36]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-run4.png" type="Texture" id=37]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-run6.png" type="Texture" id=38]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-run7.png" type="Texture" id=39]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-run8.png" type="Texture" id=41]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-jump1.png" type="Texture" id=42]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-idle3.png" type="Texture" id=43]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit7.png" type="Texture" id=44]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit3.png" type="Texture" id=45]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit2.png" type="Texture" id=46]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit5.png" type="Texture" id=47]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_idle2_4.png" type="Texture" id=48]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit1.png" type="Texture" id=49]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit4.png" type="Texture" id=50]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_idle2_5.png" type="Texture" id=51]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit9.png" type="Texture" id=52]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit8.png" type="Texture" id=53]
+[ext_resource path="res://SlowFruit/assets/BoogieDog/corgi-asse_sit6.png" type="Texture" id=54]
+
+[sub_resource type="Animation" id=4]
+resource_name = "Idle"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.00444733, 0.197207, 0.403011, 0.600177, 0.801124 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 27 ), ExtResource( 22 ), ExtResource( 43 ), ExtResource( 23 ), ExtResource( 31 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "Idle2"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.0510342, 0.198216, 0.401192, 0.601281, 0.799447 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 13 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 48 ), ExtResource( 51 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Jump"
+length = 2.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.00586915, 0.101173, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 1.2, 1.4, 1.5, 1.7, 1.9, 2, 2.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 42 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 29 ), ExtResource( 33 ), ExtResource( 14 ), ExtResource( 34 ), ExtResource( 16 ), ExtResource( 34 ), ExtResource( 14 ), ExtResource( 33 ), ExtResource( 29 ), ExtResource( 28 ), ExtResource( 26 ), ExtResource( 42 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Run"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.00288591, 0.098121, 0.199128, 0.301097, 0.40018, 0.501187, 0.601232, 0.701277 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 20 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 37 ), ExtResource( 19 ), ExtResource( 38 ), ExtResource( 39 ), ExtResource( 41 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "Sit"
+length = 1.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.00197368, 0.204127, 0.396826, 0.602713, 0.801525, 0.999603, 1.20034, 1.39723, 1.60119 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 49 ), ExtResource( 46 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 47 ), ExtResource( 54 ), ExtResource( 44 ), ExtResource( 53 ), ExtResource( 52 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "Sniff"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.032707, 0.103893, 0.197204, 0.302059, 0.399218, 0.504073, 0.603156, 0.702239, 0.799398 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 6 ), ExtResource( 5 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 9 ), ExtResource( 9 ) ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "Walk"
+length = 0.9
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.000437198, 0.20031, 0.400126, 0.600065, 0.897789 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 25 ), ExtResource( 18 ), ExtResource( 32 ), ExtResource( 17 ), ExtResource( 21 ) ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "Idle2"
+
+[sub_resource type="AnimationNodeAnimation" id=15]
+animation = "Idle2"
+
+[sub_resource type="AnimationNodeAnimation" id=16]
+animation = "Jump"
+
+[sub_resource type="AnimationNodeAnimation" id=17]
+animation = "Run"
+
+[sub_resource type="AnimationNodeAnimation" id=18]
+animation = "Sit"
+
+[sub_resource type="AnimationNodeAnimation" id=19]
+animation = "Sniff"
+
+[sub_resource type="AnimationNodeAnimation" id=49]
+animation = "Walk"
+
+[sub_resource type="AnimationNodeAnimation" id=20]
+animation = "Walk"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=30]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=31]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=32]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=33]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=34]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=35]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=36]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=40]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=41]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=42]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=43]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=44]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=45]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=46]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=47]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=48]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=50]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=51]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=52]
+
+[sub_resource type="AnimationNodeStateMachine" id=37]
+states/Idle/node = SubResource( 13 )
+states/Idle/position = Vector2( 250, 43 )
+"states/Idle 2/node" = SubResource( 12 )
+"states/Idle 2/position" = Vector2( 258, 194 )
+states/Idle2/node = SubResource( 15 )
+states/Idle2/position = Vector2( 87, 172 )
+"states/Idle2 2/node" = SubResource( 14 )
+"states/Idle2 2/position" = Vector2( 258, 313 )
+states/Jump/node = SubResource( 16 )
+states/Jump/position = Vector2( 509, 389 )
+states/Run/node = SubResource( 17 )
+states/Run/position = Vector2( 660, 53 )
+states/Sit/node = SubResource( 18 )
+states/Sit/position = Vector2( 87, 304 )
+states/Sniff/node = SubResource( 19 )
+states/Sniff/position = Vector2( 258, 459 )
+states/Walk/node = SubResource( 20 )
+states/Walk/position = Vector2( 504, 158 )
+"states/Walk 2/node" = SubResource( 49 )
+"states/Walk 2/position" = Vector2( 704, 158 )
+transitions = [ "Idle2", "Idle", SubResource( 23 ), "Idle", "Idle 2", SubResource( 24 ), "Idle2 2", "Sniff", SubResource( 25 ), "Sniff", "Sit", SubResource( 26 ), "Idle 2", "Idle2 2", SubResource( 27 ), "Sit", "Idle2", SubResource( 28 ), "Jump", "Idle", SubResource( 30 ), "Jump", "Walk", SubResource( 31 ), "Run", "Jump", SubResource( 32 ), "Run", "Idle", SubResource( 33 ), "Idle", "Jump", SubResource( 34 ), "Idle", "Walk", SubResource( 35 ), "Walk", "Jump", SubResource( 36 ), "Idle2", "Jump", SubResource( 40 ), "Idle 2", "Jump", SubResource( 41 ), "Idle2 2", "Jump", SubResource( 42 ), "Sniff", "Jump", SubResource( 43 ), "Sit", "Jump", SubResource( 44 ), "Idle2", "Walk", SubResource( 45 ), "Idle 2", "Walk", SubResource( 46 ), "Sit", "Walk", SubResource( 47 ), "Idle2 2", "Walk", SubResource( 48 ), "Walk", "Walk 2", SubResource( 50 ), "Walk 2", "Run", SubResource( 51 ), "Walk 2", "Jump", SubResource( 52 ) ]
+start_node = "Jump"
+graph_offset = Vector2( 0, 49.7186 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=38]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 12.8889, 17.1111 )
-
-[sub_resource type="SpriteFrames" id=2]
-animations = [ {
-"frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 9 ), ExtResource( 11 ), ExtResource( 13 ) ],
-"loop": true,
-"name": "Walk",
-"speed": 7.0
-}, {
-"frames": [ ExtResource( 23 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ) ],
-"loop": true,
-"name": "Idle",
-"speed": 7.0
-}, {
-"frames": [ ExtResource( 16 ), ExtResource( 10 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 5 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 8 ) ],
-"loop": true,
-"name": "Jump",
-"speed": 9.0
-} ]
+extents = Vector2( 44, 56 )
 
 [node name="Boogie__Player" type="RigidBody2D"]
-position = Vector2( -32, -24 )
-scale = Vector2( 3, 3 )
-z_index = 1
-collision_layer = 25
-collision_mask = 25
+position = Vector2( 16, 408 )
+collision_mask = 28
 mode = 2
-mass = 5.10204
+mass = 1.83673
+gravity_scale = 6.0
 contact_monitor = true
 script = ExtResource( 1 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -17.9998, -22.6667 )
-rotation = 1.5708
-scale = Vector2( 3, 3 )
-z_index = 2
-shape = SubResource( 1 )
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( -16, -24 )
-scale = Vector2( 3, 3 )
-frames = SubResource( 2 )
-animation = "Idle"
-frame = 4
-playing = true
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 68.75, 64.75 )
+scale = Vector2( 3.71774, 3.58871 )
+z_index = 1
+texture = ExtResource( 4 )
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 24 )
@@ -78,6 +331,28 @@ volume_db = -5.0
 
 [node name="WalkSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
-volume_db = -5.0
+volume_db = -8.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Idle = SubResource( 4 )
+anims/Idle2 = SubResource( 5 )
+anims/Jump = SubResource( 6 )
+anims/RESET = SubResource( 7 )
+anims/Run = SubResource( 8 )
+anims/Sit = SubResource( 9 )
+anims/Sniff = SubResource( 10 )
+anims/Walk = SubResource( 11 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 37 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 38 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2( 72, 72 )
+rotation = 1.5708
+shape = SubResource( 1 )
 
 [connection signal="finished" from="JumpSound" to="." method="_on_JumpSound_finished"]

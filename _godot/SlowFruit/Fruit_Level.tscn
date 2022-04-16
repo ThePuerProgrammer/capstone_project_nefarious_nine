@@ -8,24 +8,18 @@
 [ext_resource path="res://world_environment.tscn" type="PackedScene" id=7]
 
 [node name="Fruit_Level" type="Node2D"]
-position = Vector2( -24, 6 )
+position = Vector2( 0, 8 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Boogie__Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 80, 408 )
-scale = Vector2( 1, 1 )
 z_index = 2
-mass = 1.83673
-gravity_scale = 7.0
 
 [node name="TileMap" parent="." instance=ExtResource( 3 )]
+position = Vector2( 0, 446 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
-volume_db = -15.0
+volume_db = -20.0
 autoplay = true
 
 [node name="WorldEnvironment" parent="." instance=ExtResource( 7 )]
