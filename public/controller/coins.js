@@ -15,8 +15,8 @@ export async function get_coins(uid){
         }catch(e){
             if(Constant.DEV) console.log(e);
         }
-        if(sessionStorage.getItem('coins')==0 || sessionStorage.getItem('coins')==null){ //Has Zero Coins
-            window.sessionStorage.setItem('coins', 0);
+        if(sessionStorage.getItem('coins')==0){ //Has Zero Coins
+            //window.sessionStorage.setItem('coins', 0);
             Elements.coinCount.innerHTML = sessionStorage.getItem('coins');
         } else{
         Elements.coinCount.innerHTML = sessionStorage.getItem('coins'); //Has coins but not loaded
