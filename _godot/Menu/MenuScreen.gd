@@ -43,9 +43,9 @@ func _on_signin():
 	# Only occurs if we are running in Web client
 	if window != null:
 		var dest = window.sessionStorage.getItem("web-to-godot-destination")
-		print("dest: ", dest)
+		#print("dest: ", dest)
 		if dest == "chillzone":
-			print("changing to chillzone")
+			#print("changing to chillzone")
 			if (get_tree().change_scene(chillzone_scene_path) != OK):
 				print("Failed to change scene, ", chillzone_scene_path)
 			return
