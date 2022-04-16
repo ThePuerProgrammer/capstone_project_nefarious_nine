@@ -15,7 +15,7 @@ func toggle_bloom(value):
 	#print("Bloom in Global Settings")
 	Pomotimer._game_settings.bloom_on = value
 	Pomotimer.save_data()
-	print("Pomotimer STATE:",Pomotimer._game_settings.bloom_on)
+	#print("Pomotimer STATE:",Pomotimer._game_settings.bloom_on)
 
 func update_brightness(value):
 	emit_signal("brightness_updated", value)

@@ -8,7 +8,7 @@ func _ready():
 func _on_bloom_toggled(value):
 	environment.glow_enabled = value
 	environment.glow_bloom = 0.3
-	print("Bloom in WORLD")
+	#print("Bloom in WORLD")
 	
 func _on_brightness_updated(value):
 	environment.adjustment_brightness = value

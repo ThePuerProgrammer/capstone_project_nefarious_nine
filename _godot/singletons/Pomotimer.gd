@@ -58,7 +58,7 @@ func _ready():
 func start_game(time_limit, game_queue, deck):
 	#Checks if the queue is empty, if so return to menu else it will continue the queue
 	if game_queue.empty()==true:
-		print("Empty after pop")
+		#print("Empty after pop")
 		get_tree().change_scene("res://Menu/SingleplayerOptionScreen.tscn")
 	else:
 		#Sets Timer time limit and then initiates the game
