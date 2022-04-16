@@ -473,7 +473,7 @@ position = Vector2( 547, -184 )
 scale = Vector2( 1.22, 1.24667 )
 frames = SubResource( 55 )
 animation = "planet"
-frame = 23
+frame = 45
 playing = true
 
 [node name="greens" type="TileMap" parent="."]
