@@ -30,7 +30,7 @@ export function addEventListeners() {
                 });
             //grab user data
             var userdata = await FirebaseController.getUser(uid);
-            localStorage.setItem("usercoins", userdata.coins);
+            sessionStorage.setItem("usercoins", userdata.coins);
             // Saving UID in local storage for referencing user's Firestore data
             localStorage.setItem("uid", uid); // Retrievable with localStorage.getItem("uid")
             Utilities.info('Welcome', `You're now signed in as ${email}`);

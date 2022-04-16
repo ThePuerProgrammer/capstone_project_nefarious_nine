@@ -8,14 +8,14 @@ export async function get_coins(uid){
     if(Elements.coinCount.innerHTML == '' || Elements.coinCount.innerHTML == null) {
         try{
            let coins = await FirebaseController.getCoins(uid);
-           if(coins == null || ''){
+           if(coins == null || coins==''){
                coins =0;
            }
             window.sessionStorage.setItem('coins',coins);
         }catch(e){
             if(Constant.DEV) console.log(e);
         }
-        if(sessionStorage.getItem('coins')==0 ){ //Has Zero Coins
+        if(sessionStorage.getItem('coins')==0 || sessionStorage.getItem('coins')==null){ //Has Zero Coins
             window.sessionStorage.setItem('coins', 0);
             Elements.coinCount.innerHTML = sessionStorage.getItem('coins');
         } else{
