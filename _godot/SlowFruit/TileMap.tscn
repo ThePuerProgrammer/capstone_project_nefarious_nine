@@ -378,7 +378,7 @@ animations = [ {
 9/z_index = 0
 
 [sub_resource type="RectangleShape2D" id=59]
-extents = Vector2( 34, 33.125 )
+extents = Vector2( 48, 33.125 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 36, 32 )
@@ -473,7 +473,7 @@ position = Vector2( 547, -184 )
 scale = Vector2( 1.22, 1.24667 )
 frames = SubResource( 55 )
 animation = "planet"
-frame = 45
+frame = 33
 playing = true
 
 [node name="greens" type="TileMap" parent="."]
@@ -533,7 +533,7 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SmallPlatformArea2D"]
 visible = false
-position = Vector2( 18, 1.125 )
+position = Vector2( 16, 1.125 )
 shape = SubResource( 59 )
 
 [node name="SmallPlatform" type="StaticBody2D" parent="."]
