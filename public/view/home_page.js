@@ -17,7 +17,10 @@ export function addEventListeners() {
 export async function home_page() {
 
     Elements.root.innerHTML = ``;
-    
+    //Retrieves coin count
+    try{
+        await Coins.get_coins(Auth.currentUser.uid);
+    } catch(e) {if(Constant.DEV)console.log(e);}
     let html = '';
     html += `
     <div style="text-align: center; padding-top: 2%;">
@@ -51,11 +54,7 @@ export async function home_page() {
         </div>
     </div>
     `;
-    //Retrieves coin count
-    try{
-        await Coins.get_coins(Auth.currentUser.uid);
-    } catch(e) {if(Constant.DEV)console.log(e);}
-
+ 
     Elements.root.innerHTML = html;
 
     const miniGamesPage = document.getElementById(
