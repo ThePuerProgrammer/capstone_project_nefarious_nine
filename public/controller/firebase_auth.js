@@ -105,7 +105,7 @@ export function addEventListeners() {
                 equippedAcc,
                 equippedSkin,
             });
-            localStorage.setItem("usercoins", newUserModel.coins);
+            sessionStorage.setItem("coins", newUserModel.coins);
             // Creates user Auth Account AND adds user account to users collections
             //  * uid of the Auth account matches the Doc ID of the user document!
             await createUserWithEmailAndPassword(auth, emailAddress, password)
