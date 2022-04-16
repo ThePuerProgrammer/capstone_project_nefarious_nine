@@ -65,7 +65,7 @@ func _on_VignetteAnimationPlayer_animation_finished(_anim_name):
 	$WhiteOut.hide()
 	$WhiteIn.hide()
 	
-	print(_playerHpAfterHitReference)
+	#print(_playerHpAfterHitReference)
 
 	get_node("../Enemy").play("idle_animation")
 	_questionManager.startNextQuestion()
@@ -76,7 +76,7 @@ func _on_Enemy_animation_finished():
 		_enemy.play("dead")
 		return
 	elif _enemy.animation == "hit_effect":
-		print("made it")
+		#print("made it")
 		_enemy.play("idle_animation")
 		return;
 

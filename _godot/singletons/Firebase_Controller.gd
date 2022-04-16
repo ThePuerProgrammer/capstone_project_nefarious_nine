@@ -91,7 +91,7 @@ func get_categories():
 	var collection : FirestoreCollection=Firebase.Firestore.collection(Constants.COLLECTIONS.CATEGORIES)
 	var document_task: FirestoreTask = collection.get('Categories')
 	var document : FirestoreDocument = yield(document_task, "get_document")
-	print("Categories Document:", document)
+	#print("Categories Document:", document)
 	return document
 	
 #GET USER DECKS FROM FIRESTORE
@@ -112,7 +112,7 @@ func get_user_flashcards(deckid):
 		.order_by("question", FirestoreQuery.DIRECTION.DESCENDING)
 	var query_task : FirestoreTask = Firebase.Firestore.query(query)
 	var res : Array = yield(query_task, "task_finished").data
-	print("FLASHCARDS FS:",res)
+	#print("FLASHCARDS FS:",res)
 	return res
 
 func get_user_decks(uid):

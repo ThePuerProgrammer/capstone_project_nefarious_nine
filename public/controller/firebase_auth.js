@@ -6,6 +6,7 @@ import * as Elements from '../view/elements.js'
 import * as Utilities from '../view/utilities.js'
 import * as Constants from '../model/constant.js'
 import * as HomePage from '../view/home_page.js'
+import * as Coins from './coins.js'
 import { routing, routePathname } from './routes.js';
 
 
@@ -30,7 +31,13 @@ export function addEventListeners() {
                 });
             //grab user data
             var userdata = await FirebaseController.getUser(uid);
-            localStorage.setItem("usercoins", userdata.coins);
+            sessionStorage.setItem("coins", userdata.coins);
+            try {
+                Coins.get_coins(uid);
+            } catch (e) {
+                if (Constants.DEV) { console.log(e); }
+                Utilities.info("Error Coins", JSON.stringify(e));
+            }
             // Saving UID in local storage for referencing user's Firestore data
             localStorage.setItem("uid", uid); // Retrievable with localStorage.getItem("uid")
             Utilities.info('Welcome', `You're now signed in as ${email}`);
@@ -104,7 +111,7 @@ export function addEventListeners() {
                 equippedAcc,
                 equippedSkin,
             });
-            localStorage.setItem("usercoins", newUserModel.coins);
+            sessionStorage.setItem("coins", newUserModel.coins);
             // Creates user Auth Account AND adds user account to users collections
             //  * uid of the Auth account matches the Doc ID of the user document!
             await createUserWithEmailAndPassword(auth, emailAddress, password)

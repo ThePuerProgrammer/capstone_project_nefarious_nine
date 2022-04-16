@@ -2,7 +2,7 @@ extends Node
 
 const DEV : bool = true
 #const TEST_UID : String = "oUGC8ETKcUdBaRBMzkGcCl1MbGc2"
-const TEST_UID : String = "inru7aCaQpZSlfZzslnZvWS8wC22"
+const TEST_UID : String = "RMRmRWLWbCRppb5BqvZX9ZLaMT93"
 const TEST_EMAIL : String = "test@gtest.com"
 const TEST_PASSWORD : String = "111111"
 

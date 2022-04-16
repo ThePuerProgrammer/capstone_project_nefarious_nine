@@ -285,7 +285,7 @@ func add_items_to_category_selection():
 		for deck in deckList:
 			var fields = deck["doc_fields"]
 			deck_dict_name[deck["doc_name"]] = fields["category"]
-			print("DIC_NAME:",[deck["doc_name"]])
+			#print("DIC_NAME:",[deck["doc_name"]])
 			pt = fields["category"]
 			if pt == category:
 				_category_deck_array.push_front(deck["doc_name"])
@@ -293,8 +293,8 @@ func add_items_to_category_selection():
 		if _category_deck_array.size() != 0:
 			deck_for_category[category]=_category_deck_array
 			category_selection_optionbutton.add_item(category)
-		print("DECK_CATE_IT:",_category_deck_array)
-		print("LLLLL:", deck_for_category)
+		#print("DECK_CATE_IT:",_category_deck_array)
+		#print("LLLLL:", deck_for_category)
 	category_selection_optionbutton.add_item("DEMO")
 	category_selection_optionbutton.set_item_disabled(0,true)
 
@@ -339,8 +339,8 @@ func on_category_item_selected(id):
 	match category_selection_optionbutton.get_item_id(id):
 		id:
 			category_selected=category_selection_optionbutton.get_item_text(id)
-			print("ID:",id-1)
-			print("Category Selected:",category_selected)
+			#print("ID:",id-1)
+			#print("Category Selected:",category_selected)
 			#var keys = deck_dict_name.keys()
 			#deck_selected = keys[id-1]
 			#TRY LOGIC HERE WIth a selection within a specific selection

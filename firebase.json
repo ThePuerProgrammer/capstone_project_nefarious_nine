@@ -1,6 +1,7 @@
 {
   "hosting": {
     "public": "public",
+    "site": "pomobyte",
     "ignore": [
       "firebase.json",
       "**/.*",

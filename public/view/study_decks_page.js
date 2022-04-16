@@ -1,6 +1,6 @@
 import * as Elements from './elements.js'
 import * as Routes from '../controller/routes.js'
-import { Deck } from '../model/Deck.js';
+import { Deck } from '../model/deck.js';
 import { Flashcard } from '../model/flashcard.js'
 import * as Constant from '../model/constant.js'
 import * as FirebaseController from '../controller/firebase_controller.js'

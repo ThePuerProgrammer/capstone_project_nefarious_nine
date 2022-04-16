@@ -2,7 +2,7 @@ extends Control
 
 
 func showPopupMessage(message, messageTimeLength):
-	print("wtf")
+	#print("wtf")
 	$PopupLabelSmallText.show()
 	$MessageTimeLength.wait_time = messageTimeLength
 	$MessageTimeLength.start()

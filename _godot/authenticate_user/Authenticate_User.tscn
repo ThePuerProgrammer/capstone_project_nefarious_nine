@@ -8,10 +8,17 @@
 
 [node name="Authenticate_User" type="Node"]
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 701.0, 665.0 ],
+"_edit_vertical_guides_": [ 898.0, 1023.0 ]
+}
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 margin_right = 1920.0
 margin_bottom = 1172.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SignInPanel" type="Panel" parent="CenterContainer"]
 margin_left = 640.0
@@ -55,11 +62,17 @@ custom_fonts/font = ExtResource( 2 )
 text = "Enter Password
 "
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CenterContainer" type="CenterContainer" parent="CenterContainer/SignInPanel/ColorRect"]
 margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 641, 320 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PasswordEdit" type="LineEdit" parent="CenterContainer/SignInPanel/ColorRect/CenterContainer"]
 margin_left = 195.0
@@ -80,5 +93,8 @@ margin_bottom = 272.0
 action_mode = 0
 text = "Sign In"
 icon = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="pressed" from="CenterContainer/SignInPanel/ColorRect/SignInButton" to="." method="_on_SignInButton_pressed"]
