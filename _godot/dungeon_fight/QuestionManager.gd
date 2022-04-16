@@ -208,7 +208,7 @@ func _on_answerPanelContainer_Clicked(answerPanelText):
 			if newPlayerHp < 0:
 				newPlayerHp = 0
 			if newPlayerHp == 0:
-				print("player dead")
+				#print("player dead")
 				_playerDead = true
 				_coinsPerQuestion = floor(_coinsPerQuestion / 2)
 				_popupMessage.showPopupMessage("Nice Try! Keep answering questions to gain more coins!", 10.0)
@@ -238,7 +238,7 @@ func _on_QuestionTimer_timeout():
 	if newPlayerHp < 0:
 		newPlayerHp = 0
 	if newPlayerHp == 0:
-		print("player dead")
+		#print("player dead")
 		_playerDead = true
 		_coinsPerQuestion = floor(_coinsPerQuestion / 2)
 		_popupMessage.showPopupMessage("Nice Try! Keep answering questions to gain more coins!", 10.0)
@@ -260,10 +260,10 @@ func endGame(playerWon, answeredCorrectly, answeredIncorrectly, coins):
 	
 func showAnswerIndicators(userAnsweredCorrectly):
 	if userAnsweredCorrectly:
-		print("started correct timer")
+		#print("started correct timer")
 		$AnswerIndicatorTimers/Correct.start()
 	else:
-		print("started incorrect timer")
+		#print("started incorrect timer")
 		$AnswerIndicatorTimers/Incorrect.start()
 
 	for answerPanelContainer in _answerPanels:
@@ -287,7 +287,7 @@ func setCurrentAction(newAction):
 	_currentAction = newAction
 
 func performCurrentAction():
-	print("Performing action", _currentAction)
+	#print("Performing action", _currentAction)
 	if _currentAction == "attack":
 		attackAction()
 	elif _currentAction == "dodge":
