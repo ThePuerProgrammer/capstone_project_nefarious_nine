@@ -16,5 +16,5 @@ func _on_ScrollContainer_mouse_exited():
 func _on_ScrollContainer_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_action_pressed("left_mouse_click"):
-			print("Panel Clicked")
+			#print("Panel Clicked")
 			emit_signal("answer_selected_scroll")

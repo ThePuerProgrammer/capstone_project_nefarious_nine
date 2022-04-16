@@ -29,5 +29,5 @@ func hideAnswerIndicator():
 	$AnswerIndicator.hide()
 
 func _on_ScrollContainer_answer_selected_scroll():
-	print("test")
+	#print("test")
 	emit_signal("answer_selected", getAnswerText())

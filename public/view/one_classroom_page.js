@@ -14,6 +14,8 @@ import { Classroom } from '../model/classroom.js'
 import { classrooms_page } from './classrooms_page.js'
 import { html } from './protected_message.js'
 
+let reloadId = sessionStorage.getItem('classId');
+
 //Same code as study_decks page with a few minor tweeks to be specific for classes
 export function addEventListeners(){
         // CREATE A DECK Submit button event listener
@@ -82,16 +84,16 @@ export function addEventListeners(){
 }
 
 export async function one_classroom_page(classroomDocID) {
-    try{
+    try {
         await Coins.get_coins(Auth.currentUser.uid);
-    } catch(e) {if(Constant.DEV)console.log(e);}
+    } catch (e) { if (Constant.DEV) console.log(e); }
 
     //console.log(classroomDocID);
     Elements.root.innerHTML = '';
     let html = '';
-    let coin_descend=false;
-    let deck_descend=false;
-    let fc_descend=false;
+    let coin_descend = false;
+    let deck_descend = false;
+    let fc_descend = false;
 
     let classroom;
     try {
@@ -100,91 +102,91 @@ export async function one_classroom_page(classroomDocID) {
         console.log(e);
         Utilities.info('Failed to retrieve classroom', JSON.stringify(e));
     }
-
-    let members = [];
-    //get members list
-    if (classroom.members != null) {
-        for (let k = 0; k < classroom.members.length; k++) {
-            members.push(classroom.members[k]);
+    if (classroom != null) {
+        let members = [];
+        //get members list
+        if (classroom.members != null) {
+            for (let k = 0; k < classroom.members.length; k++) {
+                members.push(classroom.members[k]);
+            }
         }
-    }
 
-    let mod = false;
-    for (let i = 0; i < classroom.moderatorList.length; i++) { //check if current user is a mod
-        if (Auth.currentUser.email == classroom.moderatorList[i]) {
-            mod = true;
+        let mod = false;
+        for (let i = 0; i < classroom.moderatorList.length; i++) { //check if current user is a mod
+            if (Auth.currentUser.email == classroom.moderatorList[i]) {
+                mod = true;
+            }
         }
-    }
 
-    // adding classroom, members, and leaderboard tabs
-    html += `<div class="classroom-page-tab">
+        // adding classroom, members, and leaderboard tabs
+        html += `<div class="classroom-page-tab">
         <button id="classroom-gen-button" class="classroom-tab"><i class="small material-icons">school</i>Classroom</button>
         <button id="classroom-members-button" class="classroom-tab"><i class="small material-icons">group</i>Members</button>
         <button id="classroom-leaderboard-button" class="classroom-tab"><i class="small material-icons">insert_chart</i>Leaderboard</button>
         <button id="classroom-chat-button" class="classroom-tab"><i class="small material-icons">chat</i>Chat</button>
         </div>`;
 
-    // CLASSROOM tab contents
-    html += `<div id="Classroom" class="one-classroom-tab-content">
+        // CLASSROOM tab contents
+        html += `<div id="Classroom" class="one-classroom-tab-content">
         <h1>${classroom.name}</h1>
         <h4>${classroom.subject}, ${classroom.category}</h4>
         <br>`;
 
-    html += `<button id="${Constant.htmlIDs.createClassroomDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">
+        html += `<button id="${Constant.htmlIDs.createClassroomDeck}" type="button" class="btn btn-secondary pomo-bg-color-dark pomo-text-color-light">
         <i class="material-icons pomo-text-color-light">add</i> Create A Deck</button>
      `;
-    //if current user is a mod, populate delete button
-    //prevents null button error
-    if (mod == true) {
-        //removed doc id from page view -- Blake
-        html += `
+        //if current user is a mod, populate delete button
+        //prevents null button error
+        if (mod == true) {
+            //removed doc id from page view -- Blake
+            html += `
             <button id="button-delete-classroom" type="click" class="btn btn-danger pomo-bg-color-md pomo-text-color-dark pomo-font-weight-bold" data-bs-toggle="modal" data-bs-target="#modal-delete-classroom">
             <i class="material-icons">delete</i>Delete Classroom
             </button>`
-            ;
-    }
-    html+=`<br>
-            <div id ="deck-container-classroom">`;
-    //Adding Class Decks Here
-    let classDecks = [];
-    classDecks = await FirebaseController.getClassDecks(classroomDocID);
-    if (classDecks.length == 0) {
-        html += `<h2> There are currently no decks for this classroom!\n 
-                Go create some and get to studying!</h2>`
-    } else {
-    for (let i = 0; i < classDecks.length; i++) {
-            let flashcards = await FirebaseController.getClassroomFlashcards(classroomDocID, classDecks[i].docId);
-            html += buildDeckView(classDecks[i], flashcards, classroom);
+                ;
         }
-    }
-    html+=`</div></div>`
+        html += `<br>
+            <div id ="deck-container-classroom">`;
+        //Adding Class Decks Here
+        let classDecks = [];
+        classDecks = await FirebaseController.getClassDecks(classroomDocID);
+        if (classDecks.length == 0) {
+            html += `<h2> There are currently no decks for this classroom!\n 
+                Go create some and get to studying!</h2>`
+        } else {
+            for (let i = 0; i < classDecks.length; i++) {
+                let flashcards = await FirebaseController.getClassroomFlashcards(classroomDocID, classDecks[i].docId);
+                html += buildDeckView(classDecks[i], flashcards, classroom);
+            }
+        }
+        html += `</div></div>`
 
    
 
 
 
-    //CLASSROOM TAB END-----------------------------------------------------
+        //CLASSROOM TAB END-----------------------------------------------------
 
-    // MEMBERS tab contents -----------------------------------------------------
+        // MEMBERS tab contents -----------------------------------------------------
 
-    let memberInfo = [];
-    memberInfo = await FirebaseController.getMemberInfo(members);
+        let memberInfo = [];
+        memberInfo = await FirebaseController.getMemberInfo(members);
 
-    html += `<div id="Members" class="one-classroom-tab-content pomo-text-color-dark">
+        html += `<div id="Members" class="one-classroom-tab-content pomo-text-color-dark">
         <div class="row-classroom">
         <div class="column-classroom" style="display: inline-block;">
         <h2>Members</h2>`;
 
-    // If mod, show members w BAN option
-    if (mod == true && members != null) {
-        html += `<div class="row-memberInfo">
+        // If mod, show members w BAN option
+        if (mod == true && members != null) {
+            html += `<div class="row-memberInfo">
             <div class="column-memberInfo" style="flex: 50%;">`;
-    }
+        }
 
-    if (members != null) {
-        memberInfo.forEach(mem => {
-            let memProfile = "profile_" + mem.username;
-            html += `<div class="classroom-members-info">
+        if (members != null) {
+            memberInfo.forEach(mem => {
+                let memProfile = "profile_" + mem.username;
+                html += `<div class="classroom-members-info">
             <br>
             <div  style="display: inline-block;">
             <img src="${mem.profilePhotoURL}" class="pfp" style="width: 65px; height: 65px; object-fit: cover; margin-right: 10px;">
@@ -204,52 +206,52 @@ export async function one_classroom_page(classroomDocID) {
             </div>
             <br>
             </div>`;
-        })
-    }
+            })
+        }
 
-    // If mod, show members w BAN option
-    if (mod == true && members != null) {
-        html += `</div>
+        // If mod, show members w BAN option
+        if (mod == true && members != null) {
+            html += `</div>
             <div class="column-memberInfo" style="flex: 50%;">`;
 
-        memberInfo.forEach(mem => {
-            html += `<br>
+            memberInfo.forEach(mem => {
+                html += `<br>
                 <tr>${buildButtons(mem.email, classroom.banlist)}</tr>
-                <br>`; 
-        })
+                <br>`;
+            })
+
+            html += `</div>
+        </div>`;
+        }
 
         html += `</div>
-        </div>`;
-    }
-
-    html += `</div>
         <div class="column-classroom style="display: inline-block;">
         <h2>Mods</h2>`;
 
-    // display mods list
-    let mods = classroom.moderatorList
-    mods.forEach(mod => {
-        html += `<br>
+        // display mods list
+        let mods = classroom.moderatorList
+        mods.forEach(mod => {
+            html += `<br>
             <div  style="display: inline-block;"> 
             <h4 style=""><i class="small material-icons pomo-text-color-dark">shield</i>${mod}</h4>
             </div>`;
-    })
+        })
 
-    html += `</div>`;
+        html += `</div>`;
 
-    //MEMBERS TAB END------------------------------------------------------
+        //MEMBERS TAB END------------------------------------------------------
 
     
-    //Fetchs Default Leaderboard
-    let leaderboardDefault = [];
-    leaderboardDefault = await FirebaseController.leaderboardDefault(members);
+        //Fetchs Default Leaderboard
+        let leaderboardDefault = [];
+        leaderboardDefault = await FirebaseController.leaderboardDefault(members);
 
-    html += `</div>
+        html += `</div>
         </div>
         </div>`;
 
-    // LEADERBOARD tab content
-    html += `<div id="Leaderboard" class="one-classroom-tab-content">
+        // LEADERBOARD tab content
+        html += `<div id="Leaderboard" class="one-classroom-tab-content">
     <center>
     <div class="leaderboard-main-row"><h2>Leaderboard for ${classroom.name}</h2></div>
 
@@ -266,480 +268,483 @@ export async function one_classroom_page(classroomDocID) {
             </tr>
             </thead>
             <tbody id="leaderboard-fields">`;
-            //Builds the cells below the buttons
-            if(leaderboardDefault.length>0){           
-                let index = 1;
-                leaderboardDefault.forEach(e =>{
-                    html+= buildLeaderBoard(e, index);
-                    index++;
-                });
-            }
-    html+=`</tbody></table></div></center></div>`;
-    //LEADERBOARD TAB END----------------------------------------------------------
-    // CHAT tab content
+        //Builds the cells below the buttons
+        if (leaderboardDefault.length > 0) {
+            let index = 1;
+            leaderboardDefault.forEach(e => {
+                html += buildLeaderBoard(e, index);
+                index++;
+            });
+        }
+        html += `</tbody></table></div></center></div>`;
+        //LEADERBOARD TAB END----------------------------------------------------------
+        // CHAT tab content
 
-    let messages = [];
-    messages = await FirebaseController.getMessages(classroomDocID);
+        let messages = [];
+        messages = await FirebaseController.getMessages(classroomDocID);
 
-    html += `<div id="Chat" class="one-classroom-tab-content">
+        html += `<div id="Chat" class="one-classroom-tab-content">
         <div id="message-reply-body">`;
-    if (messages.length > 0) {
-        messages.forEach(m => {
-            html += buildMessageView(m);
-        })
-    } else {
-        html += '<p id="temp">No messages have been posted yet...be the first!</p>';
-    }
-    html += `</div>`;
+        if (messages.length > 0) {
+            messages.forEach(m => {
+                html += buildMessageView(m);
+            })
+        } else {
+            html += '<p id="temp">No messages have been posted yet...be the first!</p>';
+        }
+        html += `</div>`;
 
-    html += `<div>
+        html += `<div>
     <textarea id="add-new-message" placeholder="Send a message..." style="border: 1px solid #2C1320; width: 700px; height: 150px; background-color: #2C1320; color: #A7ADC6;"></textarea>
     <br>
     <button id="classroom-message-button" style="background-color: #2C1320; color: #A7ADC6;"><i class="small material-icons">send</i> Send</button>
     </div>
     </div>`;
 
-    Elements.root.innerHTML = html;
+        Elements.root.innerHTML = html;
 
 
-    // get CLASSROOM tab and show it as visible
-    const classroomGenButton = document.getElementById('classroom-gen-button');
-    classroomGenButton.addEventListener('click', e => {
-        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
-        for (let i = 0; i < tabContents.length; i++) {
-            tabContents[i].style.display = "none";
-        }
-        document.getElementById('Classroom').style.display = "block";
-
-        document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
-
-        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-chat-button').style.color = '#2C1320';
-
-        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-members-button').style.color = '#2C1320';
-
-        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
-
-    })
-    const viewDeckButtons = document.getElementsByClassName('form-view-deck');
-    for (let i = 0; i < viewDeckButtons.length; i++) {
-        viewDeckButtons[i].addEventListener('submit', async e => {
-            e.preventDefault();
-            let deckId = e.target.docId.value;
-            let isClassDeck = e.target.classdocId.value;
-            console.log("check for form view deck submit event " + e.target.classdocId.value);
-
-            window.sessionStorage;
-            sessionStorage.setItem('deckId', deckId);
-            sessionStorage.setItem('isClassDeck', isClassDeck)
-
-            history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
-            sessionStorage.setItem('cameFromClassDeck', true); 
-            await DeckPage.deck_page(deckId, isClassDeck);
-        })
-    }
-
-    const editDeckForms = document.getElementsByClassName('form-edit-deck');
-    for (let i = 0; i < editDeckForms.length; i++) {
-        editDeckForms[i].addEventListener('submit', async e => {
-            //prevents refresh on submit of form
-            e.preventDefault();
-            if (e.target.classdocId.value == "false") { //if not a class deck
-                await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
-            } else {//else is a class deck
-                let classDocID = e.target.classdocId.value;
-                await EditDeck.edit_class_deck_from_classroom(classDocID, e.target.docId.value);
+        // get CLASSROOM tab and show it as visible
+        const classroomGenButton = document.getElementById('classroom-gen-button');
+        classroomGenButton.addEventListener('click', e => {
+            let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
             }
-        });
-    }
-    let confirmation = false;
-    const deleteDeckForms = document.getElementsByClassName('form-delete-deck');
-    for (let i = 0; i < deleteDeckForms.length; i++) {
-        deleteDeckForms[i].addEventListener('submit', async e => {
-            e.preventDefault();
-            const button = e.target.getElementsByTagName('button')[0];
-            const label = Utilities.disableButton(button);
-            let deckId = e.target.docId.value;
-            let classDocID = e.target.classdocId.value;
-            Elements.modalDeleteDeckConfirmation.show();
-            const button2 = document.getElementById('modal-confirmation-delete-deck-yes');
-            button2.addEventListener("click", async e => {
+            document.getElementById('Classroom').style.display = "block";
+
+            document.getElementById('classroom-gen-button').style.backgroundColor = `#2C1320`;
+            document.getElementById('classroom-gen-button').style.color = '#A7ADC6';
+
+            document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-chat-button').style.color = '#2C1320';
+
+            document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-members-button').style.color = '#2C1320';
+
+            document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
+
+        })
+        const viewDeckButtons = document.getElementsByClassName('form-view-deck');
+        for (let i = 0; i < viewDeckButtons.length; i++) {
+            viewDeckButtons[i].addEventListener('submit', async e => {
+                e.preventDefault();
+                let deckId = e.target.docId.value;
+                let isClassDeck = e.target.classdocId.value;
+                console.log("check for form view deck submit event " + e.target.classdocId.value);
+
+                window.sessionStorage;
+                sessionStorage.setItem('deckId', deckId);
+                sessionStorage.setItem('isClassDeck', isClassDeck)
+
+                history.pushState(null, null, Routes.routePathname.DECK + '#' + deckId);
+                sessionStorage.setItem('cameFromClassDeck', true);
+                await DeckPage.deck_page(deckId, isClassDeck);
+            })
+        }
+
+        const editDeckForms = document.getElementsByClassName('form-edit-deck');
+        for (let i = 0; i < editDeckForms.length; i++) {
+            editDeckForms[i].addEventListener('submit', async e => {
+                //prevents refresh on submit of form
+                e.preventDefault();
+                if (e.target.classdocId.value == "false") { //if not a class deck
+                    await EditDeck.edit_deck(Auth.currentUser.uid, e.target.docId.value);
+                } else {//else is a class deck
+                    let classDocID = e.target.classdocId.value;
+                    await EditDeck.edit_class_deck_from_classroom(classDocID, e.target.docId.value);
+                }
+            });
+        }
+        let confirmation = false;
+        const deleteDeckForms = document.getElementsByClassName('form-delete-deck');
+        for (let i = 0; i < deleteDeckForms.length; i++) {
+            deleteDeckForms[i].addEventListener('submit', async e => {
+                e.preventDefault();
+                const button = e.target.getElementsByTagName('button')[0];
+                const label = Utilities.disableButton(button);
+                let deckId = e.target.docId.value;
+                let classDocID = e.target.classdocId.value;
+                Elements.modalDeleteDeckConfirmation.show();
+                const button2 = document.getElementById('modal-confirmation-delete-deck-yes');
+                button2.addEventListener("click", async e => {
                     confirmation = true;
                     await EditDeck.delete_class_deck_from_classroom(deckId, confirmation, classDocID, Auth.currentUser.uid);
+                });
+                Utilities.enableButton(button, label);
             });
-            Utilities.enableButton(button, label);
-        });
-    }
-    const createDeckButton = document.getElementById(Constant.htmlIDs.createClassroomDeck);
-    createDeckButton.addEventListener('click', async e => {
-        Elements.formCreateClassroomDeck.reset();
-        // call Firebase func. to retrieve categories list
-        let categories;
-        try {
-            categories = await FirebaseController.getCategories();
-            //console.log(cat);
-        } catch (e) {
-            if (Constant.DEV)
-                console.log(e);
         }
+        const createDeckButton = document.getElementById(Constant.htmlIDs.createClassroomDeck);
+        createDeckButton.addEventListener('click', async e => {
+            Elements.formCreateClassroomDeck.reset();
+            // call Firebase func. to retrieve categories list
+            let categories;
+            try {
+                categories = await FirebaseController.getCategories();
+                //console.log(cat);
+            } catch (e) {
+                if (Constant.DEV)
+                    console.log(e);
+            }
 
-        // clear innerHTML to prevent duplicates
-        Elements.formClassroomDeckCategorySelect.innerHTML = '';
+            // clear innerHTML to prevent duplicates
+            Elements.formClassroomDeckCategorySelect.innerHTML = '';
 
-        categories.forEach(category => {
-            Elements.formClassroomDeckCategorySelect.innerHTML += `
+            categories.forEach(category => {
+                Elements.formClassroomDeckCategorySelect.innerHTML += `
                       <option value="${category}">${category}</option>
                   `;
+            });
+
+            // Elements.formClassroomClassSelect.innerHTML = '';
+            // //logic for if the dropdown box selection on create deck is NONE or is a CLASSROOM
+            // Elements.formClassroomClassSelect.innerHTML += `
+            //             <option value="${classroomDocID}">${classroom.name}</option>
+            //           `;
+
+            // opens create Deck modal
+            $(`#${Constant.htmlIDs.createClassroomDeckModal}`).modal('show');
+        })
+
+        // get MEMBERS tab and show it as visible
+        const classroomMembersButton = document.getElementById('classroom-members-button');
+        classroomMembersButton.addEventListener('click', e => {
+            let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+            document.getElementById('Members').style.display = "block";
+
+            document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
+            document.getElementById('classroom-members-button').style.color = '#A7ADC6';
+
+            document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-gen-button').style.color = '#2C1320';
+
+            document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-chat-button').style.color = '#2C1320';
+
+            document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
+        })
+
+        // get LEADERBOARD tab and show it as visible
+        const classroomLeaderboardButton = document.getElementById('classroom-leaderboard-button');
+        classroomLeaderboardButton.addEventListener('click', e => {
+            // clear all tabs contents
+            let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+            document.getElementById('Leaderboard').style.display = "block";
+
+            document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
+            document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
+
+            document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-gen-button').style.color = '#2C1320';
+
+            document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-chat-button').style.color = '#2C1320';
+
+            document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-members-button').style.color = '#2C1320';
+        })
+
+        //html+=`</table></center></div>`;
+        //SORT BY COINS
+        const sortByCoinsButton = document.getElementById(Constant.htmlIDs.leaderboardCoins);
+        sortByCoinsButton.addEventListener('click', async e => {
+            console.log('clicked COINS');
+            //Passing Correct Values for the Method
+            if (!coin_descend) {
+                coin_descend = true;
+                deck_descend = false;
+                fc_descend = false;
+                leaderBoardIcon("coin_descend");
+            } else {
+                coin_descend = false;
+                deck_descend = false;
+                fc_descend = false;
+                leaderBoardIcon("coin_ascend");
+            }
+        
+            //Building Rows of Table/Reordering
+            let leaderboardCoins = [];
+            let html2 = ``;
+            if (coin_descend) {//Descending
+                leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
+                document.getElementById('leaderboard-fields').innerHTML = ''
+                if (leaderboardCoins.length > 0) {
+                    let index = 1;
+                    leaderboardCoins.forEach(e => {
+                        html2 += buildLeaderBoard(e, index);
+                        index++;
+                    });
+                }
+            } else {//Ascending
+                leaderboardCoins = await FirebaseController.leaderboardByCoinsAscending(members);
+                document.getElementById('leaderboard-fields').innerHTML = '';
+                if (leaderboardCoins.length > 0) {
+                    let index = leaderboardCoins.length;
+                    leaderboardCoins.forEach(e => {
+                        html2 += buildLeaderBoard(e, index);
+                        index--;
+                    });
+                }
+            }
+        
+            html2 += `</tbody>`;
+            document.getElementById('leaderboard-fields').innerHTML = html2;
+        });
+        //SORT BY DECKS
+        const sortByDecksButton = document.getElementById(Constant.htmlIDs.leaderboardDecks);
+        sortByDecksButton.addEventListener('click', async e => {
+            console.log('clicked DECKS');
+        
+            //Passing Correct Values for the Method
+            if (!deck_descend) {
+                coin_descend = false;
+                deck_descend = true;
+                fc_descend = false;
+                leaderBoardIcon("deck_descend");
+            } else {
+                coin_descend = false;
+                deck_descend = false;
+                fc_descend = false;
+                leaderBoardIcon("deck_ascend");
+            }
+        
+            let leaderboardDecks = [];
+            let html2 = ``;
+
+            if (deck_descend) {//Descending
+                leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
+                document.getElementById('leaderboard-fields').innerHTML = ''
+                if (leaderboardDecks.length > 0) {
+                    let index = 1;
+                    leaderboardDecks.forEach(e => {
+                        html2 += buildLeaderBoard(e, index);
+                        index++;
+                    });
+                }
+            } else {//Ascending
+                leaderboardDecks = await FirebaseController.leaderboardByDecksAscending(members);
+                document.getElementById('leaderboard-fields').innerHTML = ''
+                if (leaderboardDecks.length > 0) {
+                    let index = leaderboardDecks.length;
+                    leaderboardDecks.forEach(e => {
+                        html2 += buildLeaderBoard(e, index);
+                        index--;
+                    });
+                }
+            }
+      
+            html2 += `</tbody>`;
+            document.getElementById('leaderboard-fields').innerHTML = html2;
+
+        });
+        //SORT BY FLASHCARDS
+        const sortByFlashcardsButton = document.getElementById(Constant.htmlIDs.leaderboardFlashcards);
+        sortByFlashcardsButton.addEventListener('click', async e => {
+            console.log('clicked FLASHCARDS');
+        
+            //Passing Correct Values for the Method
+            if (!fc_descend) {
+                coin_descend = false;
+                deck_descend = false;
+                fc_descend = true;
+                leaderBoardIcon("fc_descend");
+            } else {
+                coin_descend = false;
+                deck_descend = false;
+                fc_descend = false;
+                leaderBoardIcon("fc_ascend");
+            }
+
+        
+            let leaderboardFlashcards = [];
+            let html2 = '';
+
+            if (fc_descend) {//Ascending
+                leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
+                document.getElementById('leaderboard-fields').innerHTML = ''
+                if (leaderboardFlashcards.length > 0) {
+                    let index = 1;
+                    leaderboardFlashcards.forEach(e => {
+                        html2 += buildLeaderBoard(e, index);
+                        index++;
+                    });
+                }
+            } else {//Descending
+                leaderboardFlashcards = await FirebaseController.leaderboardByFlashcardsAscending(members);
+                document.getElementById('leaderboard-fields').innerHTML = ''
+                if (leaderboardFlashcards.length > 0) {
+                    let index = leaderboardFlashcards.length;
+                    leaderboardFlashcards.forEach(e => {
+                        html2 += buildLeaderBoard(e, index);
+                        index--;
+                    });
+                }
+            }
+      
+            html2 += `</tbody>`;
+            document.getElementById('leaderboard-fields').innerHTML = html2;
+
         });
 
-        // Elements.formClassroomClassSelect.innerHTML = '';
-        // //logic for if the dropdown box selection on create deck is NONE or is a CLASSROOM
-        // Elements.formClassroomClassSelect.innerHTML += `
-        //             <option value="${classroomDocID}">${classroom.name}</option>
-        //           `;
-
-        // opens create Deck modal
-        $(`#${Constant.htmlIDs.createClassroomDeckModal}`).modal('show');
-    })
-
-    // get MEMBERS tab and show it as visible
-    const classroomMembersButton = document.getElementById('classroom-members-button');
-    classroomMembersButton.addEventListener('click', e => {
-        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
-        for (let i = 0; i < tabContents.length; i++) {
-            tabContents[i].style.display = "none";
-        }
-        document.getElementById('Members').style.display = "block";
-
-        document.getElementById('classroom-members-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-members-button').style.color = '#A7ADC6';
-
-        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-gen-button').style.color = '#2C1320';
-
-        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-chat-button').style.color = '#2C1320';
-
-        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
-    })
-
-    // get LEADERBOARD tab and show it as visible
-    const classroomLeaderboardButton = document.getElementById('classroom-leaderboard-button');
-    classroomLeaderboardButton.addEventListener('click', e => {
-        // clear all tabs contents
-        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
-        for (let i = 0; i < tabContents.length; i++) {
-            tabContents[i].style.display = "none";
-        }
-        document.getElementById('Leaderboard').style.display = "block";
-
-        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-leaderboard-button').style.color = '#A7ADC6';
-
-        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-gen-button').style.color = '#2C1320';
-
-        document.getElementById('classroom-chat-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-chat-button').style.color = '#2C1320';
-
-        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-members-button').style.color = '#2C1320';
-    })
-
-    //html+=`</table></center></div>`;
-    //SORT BY COINS
-    const sortByCoinsButton = document.getElementById(Constant.htmlIDs.leaderboardCoins);
-    sortByCoinsButton.addEventListener('click', async e=>{
-        console.log('clicked COINS');
-        //Passing Correct Values for the Method
-        if(!coin_descend){
-            coin_descend=true;
-            deck_descend=false;
-            fc_descend=false;
-            leaderBoardIcon("coin_descend");
-        } else{
-            coin_descend=false;
-            deck_descend=false;
-            fc_descend=false;
-            leaderBoardIcon("coin_ascend");
-        }
-        
-        //Building Rows of Table/Reordering
-        let leaderboardCoins = [];
-        let html2 = ``;
-        if(coin_descend){//Descending
-            leaderboardCoins = await FirebaseController.leaderboardByCoins(members);
-            document.getElementById('leaderboard-fields').innerHTML=''
-            if(leaderboardCoins.length>0){           
-                let index = 1;
-                leaderboardCoins.forEach(e =>{
-                    html2+= buildLeaderBoard(e, index);
-                    index++;
-                });
+        // get CHAT tab and show it as visible 
+        const classroomChatButton = document.getElementById('classroom-chat-button');
+        classroomChatButton.addEventListener('click', e => {
+            // clear all tabs contents
+            let tabContents = document.getElementsByClassName("one-classroom-tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
             }
-        } else {//Ascending
-            leaderboardCoins = await FirebaseController.leaderboardByCoinsAscending(members);
-            document.getElementById('leaderboard-fields').innerHTML='';   
-            if(leaderboardCoins.length>0){           
-                let index = leaderboardCoins.length;
-                leaderboardCoins.forEach(e =>{
-                    html2+= buildLeaderBoard(e, index);
-                    index--;
-                });
-            }
-        }
-        
-        html2+=`</tbody>`;
-        document.getElementById('leaderboard-fields').innerHTML=html2;      
-    });
-    //SORT BY DECKS
-    const sortByDecksButton = document.getElementById(Constant.htmlIDs.leaderboardDecks);
-    sortByDecksButton.addEventListener('click', async e=>{
-        console.log('clicked DECKS');
-        
-        //Passing Correct Values for the Method
-        if(!deck_descend){
-            coin_descend=false;
-            deck_descend=true;
-            fc_descend=false;
-            leaderBoardIcon("deck_descend");
-        } else{
-            coin_descend=false;
-            deck_descend=false;
-            fc_descend=false;
-            leaderBoardIcon("deck_ascend");
-        }
-        
-        let leaderboardDecks = [];
-        let html2 = ``;
+            document.getElementById('Chat').style.display = "block";
 
-        if(deck_descend){//Descending
-            leaderboardDecks = await FirebaseController.leaderboardByDecks(members);
-            document.getElementById('leaderboard-fields').innerHTML=''
-            if(leaderboardDecks.length>0){           
-                let index = 1;
-                leaderboardDecks.forEach(e =>{
-                    html2+= buildLeaderBoard(e, index);
-                    index++;
-                });
-            }
-        } else {//Ascending
-            leaderboardDecks = await FirebaseController.leaderboardByDecksAscending(members);
-            document.getElementById('leaderboard-fields').innerHTML=''
-            if(leaderboardDecks.length>0){           
-                let index = leaderboardDecks.length;
-                leaderboardDecks.forEach(e =>{
-                    html2+= buildLeaderBoard(e, index);
-                    index--;
-                });
-            }
-        }
-      
-        html2+=`</tbody>`;
-        document.getElementById('leaderboard-fields').innerHTML=html2;
+            document.getElementById('classroom-chat-button').style.backgroundColor = `#2C1320`;
+            document.getElementById('classroom-chat-button').style.color = '#A7ADC6';
 
-    });
-    //SORT BY FLASHCARDS
-    const sortByFlashcardsButton = document.getElementById(Constant.htmlIDs.leaderboardFlashcards);
-    sortByFlashcardsButton.addEventListener('click', async e=>{
-        console.log('clicked FLASHCARDS');
-        
-        //Passing Correct Values for the Method
-        if(!fc_descend){
-            coin_descend=false;
-            deck_descend=false;
-            fc_descend=true;
-            leaderBoardIcon("fc_descend");
-        } else{
-            coin_descend=false;
-            deck_descend=false;
-            fc_descend=false;
-            leaderBoardIcon("fc_ascend");
-        }
+            document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-gen-button').style.color = '#2C1320';
 
-        
-        let leaderboardFlashcards = [];
-        let html2='';
+            document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-members-button').style.color = '#2C1320';
 
-        if(fc_descend){//Ascending
-            leaderboardFlashcards = await FirebaseController.leaderboardByFlashcards(members);
-            document.getElementById('leaderboard-fields').innerHTML=''
-            if(leaderboardFlashcards.length>0){           
-                let index = 1;
-                leaderboardFlashcards.forEach(e =>{
-                    html2+= buildLeaderBoard(e, index);
-                    index++;
-                });
-            }
-        } else {//Descending
-            leaderboardFlashcards = await FirebaseController.leaderboardByFlashcardsAscending(members);
-            document.getElementById('leaderboard-fields').innerHTML=''
-            if(leaderboardFlashcards.length>0){           
-                let index = leaderboardFlashcards.length;
-                leaderboardFlashcards.forEach(e =>{
-                    html2+= buildLeaderBoard(e, index);
-                    index--;
-                });
-            }
-        }
-      
-        html2+=`</tbody>`;
-        document.getElementById('leaderboard-fields').innerHTML=html2;
-
-    });
-
-    // get CHAT tab and show it as visible 
-    const classroomChatButton = document.getElementById('classroom-chat-button');
-    classroomChatButton.addEventListener('click', e => {
-        // clear all tabs contents
-        let tabContents = document.getElementsByClassName("one-classroom-tab-content");
-        for (let i = 0; i < tabContents.length; i++) {
-            tabContents[i].style.display = "none";
-        }
-        document.getElementById('Chat').style.display = "block";
-
-        document.getElementById('classroom-chat-button').style.backgroundColor = `#2C1320`;
-        document.getElementById('classroom-chat-button').style.color = '#A7ADC6';
-
-        document.getElementById('classroom-gen-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-gen-button').style.color = '#2C1320';
-
-        document.getElementById('classroom-members-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-members-button').style.color = '#2C1320';
-
-        document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
-        document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
-    })
-
-    // submitting a message
-    const messageSubmitButton = document.getElementById("classroom-message-button");
-    messageSubmitButton.addEventListener('click', async e => {
-        e.preventDefault();
-        const messageElement = document.getElementById('add-new-message');
-        const content = messageElement.value;
-        const sender = Auth.currentUser.email;
-        const timestamp = Date.now();
-        const message = new Message({
-            sender, content, timestamp,
-        })
-        const docID = await FirebaseController.addNewMessage(classroomDocID, message);
-        message.docId = docID;
-        const messageTag = document.createElement('div');
-        messageTag.innerHTML = buildMessageView(message);
-        const tempEl = document.getElementById('temp');
-        // delete temp if it's there
-        if (tempEl) {
-            tempEl.remove();
-        }
-        document.getElementById('message-reply-body').appendChild(messageTag);
-        document.getElementById('add-new-message').value = '';
-    });
-
-    // sets CLASSROOM as default
-    classroomGenButton.click();
-
-
-    if (mod == true) { //if owner of classroom, add listener. This avoids null Button errors.
-        const deleteButton = document.getElementById('button-delete-classroom'); //delete button on page
-
-        deleteButton.addEventListener('click', async e => {
-            Elements.modalDeleteClassroom.show();
+            document.getElementById('classroom-leaderboard-button').style.backgroundColor = `#A7ADC6`;
+            document.getElementById('classroom-leaderboard-button').style.color = '#2C1320';
         })
 
-        const confirmDeleteClassroom = document.getElementById('yes-delete-classroom-button'); //delete button on modal
-        confirmDeleteClassroom.addEventListener("click", async e => {
+        // submitting a message
+        const messageSubmitButton = document.getElementById("classroom-message-button");
+        messageSubmitButton.addEventListener('click', async e => {
             e.preventDefault();
-            await classrooms_page();
-            const deletedClassName = classroom.name;
+            const messageElement = document.getElementById('add-new-message');
+            const content = messageElement.value;
+            const sender = Auth.currentUser.email;
+            const timestamp = Date.now();
+            const message = new Message({
+                sender, content, timestamp,
+            })
+            const docID = await FirebaseController.addNewMessage(classroomDocID, message);
+            message.docId = docID;
+            const messageTag = document.createElement('div');
+            messageTag.innerHTML = buildMessageView(message);
+            const tempEl = document.getElementById('temp');
+            // delete temp if it's there
+            if (tempEl) {
+                tempEl.remove();
+            }
+            document.getElementById('message-reply-body').appendChild(messageTag);
+            document.getElementById('add-new-message').value = '';
+        });
+
+        // sets CLASSROOM as default
+        classroomGenButton.click();
+
+
+        if (mod == true) { //if owner of classroom, add listener. This avoids null Button errors.
+            const deleteButton = document.getElementById('button-delete-classroom'); //delete button on page
+
+            deleteButton.addEventListener('click', async e => {
+                Elements.modalDeleteClassroom.show();
+            })
+
+            const confirmDeleteClassroom = document.getElementById('yes-delete-classroom-button'); //delete button on modal
+            confirmDeleteClassroom.addEventListener("click", async e => {
+                e.preventDefault();
+                await classrooms_page();
+                const deletedClassName = classroom.name;
             
-            await FirebaseController.deleteClassroom(classroomDocID);
-            Utilities.info('Success', `Classroom: ${deletedClassName} deleted.`);
-            await classrooms_page();
+                await FirebaseController.deleteClassroom(classroomDocID);
+                Utilities.info('Success', `Classroom: ${deletedClassName} deleted.`);
+                await classrooms_page();
 
             
-        })
-    } //end of mod listeners
+            })
+        } //end of mod listeners
 
 
 
-    const banButtons = document.getElementsByClassName('form-ban-members');
-    //this will add ban functionality to each member button
-    for (let i = 0; i < banButtons.length; ++i) {
-        banButtons[i].addEventListener("submit", async e => {
-            e.preventDefault();
-            await FirebaseController.banMember(classroomDocID, e.target.membername.value);
-            await one_classroom_page(classroomDocID);
-        })
-    }
+        const banButtons = document.getElementsByClassName('form-ban-members');
+        //this will add ban functionality to each member button
+        for (let i = 0; i < banButtons.length; ++i) {
+            banButtons[i].addEventListener("submit", async e => {
+                e.preventDefault();
+                await FirebaseController.banMember(classroomDocID, e.target.membername.value);
+                await one_classroom_page(classroomDocID);
+            })
+        }
 
-    //this will add unban functionality to each member button
-    const unbanButtons = document.getElementsByClassName('form-unban-members');
-    for (let i = 0; i < unbanButtons.length; i++) {
-        unbanButtons[i].addEventListener("submit", async e => {
-            e.preventDefault();
-            await FirebaseController.unbanMember(classroomDocID, e.target.membername.value);
-            await one_classroom_page(classroomDocID);
-        })
-    }
+        //this will add unban functionality to each member button
+        const unbanButtons = document.getElementsByClassName('form-unban-members');
+        for (let i = 0; i < unbanButtons.length; i++) {
+            unbanButtons[i].addEventListener("submit", async e => {
+                e.preventDefault();
+                await FirebaseController.unbanMember(classroomDocID, e.target.membername.value);
+                await one_classroom_page(classroomDocID);
+            })
+        }
 
-    const memberProfileButtons =
-    document.getElementsByClassName("form-member-profile");
+        const memberProfileButtons =
+            document.getElementsByClassName("form-member-profile");
 
-    // Add event listeners for each MEMBER button
-    for (let i = 0; i < memberProfileButtons.length; i++) {
-        memberProfileButtons[i].addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const profilePhotoURL = e.target.pfpURL.value;
-            const username = e.target.username.value;
-            const userBio = e.target.userBio.value;
-            const petName = e.target.petName.value;
-            const petPhotoURL = e.target.petPhotoURL.value;
-            const equippedSkin = e.target.equippedSkin.value;
-            const equippedAcc = e.target.equippedAcc.value;
+        // Add event listeners for each MEMBER button
+        for (let i = 0; i < memberProfileButtons.length; i++) {
+            memberProfileButtons[i].addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const profilePhotoURL = e.target.pfpURL.value;
+                const username = e.target.username.value;
+                const userBio = e.target.userBio.value;
+                const petName = e.target.petName.value;
+                const petPhotoURL = e.target.petPhotoURL.value;
+                const equippedSkin = e.target.equippedSkin.value;
+                const equippedAcc = e.target.equippedAcc.value;
 
 
-            Elements.displayMemberProfile.profilePictureTag.src = `${profilePhotoURL}`;
-            Elements.displayMemberProfile.username.innerHTML = `${username}`;
-            Elements.displayMemberProfile.userBio.innerHTML = `${userBio}`;
+                Elements.displayMemberProfile.profilePictureTag.src = `${profilePhotoURL}`;
+                Elements.displayMemberProfile.username.innerHTML = `${username}`;
+                Elements.displayMemberProfile.userBio.innerHTML = `${userBio}`;
 
-            // if no equipped skin
-            if (equippedSkin == "") {
-                Elements.displayMemberProfile.pomopet.src = `${petPhotoURL}`;
-            } else {
-                let equippedSkinURL;
-                try {
-                    equippedSkinURL = await FirebaseController.getEquippedSkinURL(equippedSkin);
-                } catch (e) {
-                    console.log(e);
+                // if no equipped skin
+                if (equippedSkin == "") {
+                    Elements.displayMemberProfile.pomopet.src = `${petPhotoURL}`;
+                } else {
+                    let equippedSkinURL;
+                    try {
+                        equippedSkinURL = await FirebaseController.getEquippedSkinURL(equippedSkin);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    Elements.displayMemberProfile.pomopet.src = `${equippedSkinURL}`;
                 }
-                Elements.displayMemberProfile.pomopet.src = `${equippedSkinURL}`;
-            }
 
-            // if equipped acc
-            if (equippedAcc != "") {
-                let equippedAccURL;
-                try {
-                    equippedAccURL = await FirebaseController.getEquippedAccURL(equippedAcc);
-                } catch (e) {
-                    console.log(e);
+                // if equipped acc
+                if (equippedAcc != "") {
+                    let equippedAccURL;
+                    try {
+                        equippedAccURL = await FirebaseController.getEquippedAccURL(equippedAcc);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    Elements.displayMemberProfile.pomopetAcc.style.display = "block";
+                    Elements.displayMemberProfile.pomopetAcc.src = `${equippedAccURL}`;
+                } else {
+                    Elements.displayMemberProfile.pomopetAcc.style.display = "none";
                 }
-                Elements.displayMemberProfile.pomopetAcc.style.display = "block";
-                Elements.displayMemberProfile.pomopetAcc.src = `${equippedAccURL}`;
-            } else {
-                Elements.displayMemberProfile.pomopetAcc.style.display = "none";
-            }
 
-            Elements.displayMemberProfile.pomopetName.innerHTML = `${petName}`;
+                Elements.displayMemberProfile.pomopetName.innerHTML = `${petName}`;
     
-            // opens member Profile modal
-            $(`#${Constant.htmlIDs.memberProfileModal}`).modal('show');
-    });
-}
-}
+                // opens member Profile modal
+                $(`#${Constant.htmlIDs.memberProfileModal}`).modal('show');
+            });
+        }
+    } else {
+        one_classroom_page(reloadId);
+    }
+} 
 
 
 
