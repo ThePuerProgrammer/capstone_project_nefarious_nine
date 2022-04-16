@@ -19,7 +19,6 @@ var answerScript = load("res://SlowFruit/Answer.gd").new()
 
 var numCorrect = 0
 var numIncorrect = 0
-#var coins = 0
 var winningPath
 var winningBody
 
@@ -136,9 +135,9 @@ func winningChoice():
 	$WinLabelNode/WinLabel.show()	
 	$WinLabelNode.winTween()
 	fruitLevel.slowfruitCoins += 5
-	#FirebaseController.addPomocoinsToUserDocument(coins)	
+	var coinPrize = 5
+	FirebaseController.addPomocoinsToUserDocument(coinPrize)	
 	scoreLabel.text = "Coins: " + str(fruitLevel.slowfruitCoins)
-	#scoreLabel.show()
 	$WinLabelNode/WinLabel/Timer.start()
 	
 func losingChoice():
