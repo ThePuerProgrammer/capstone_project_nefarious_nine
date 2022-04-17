@@ -26,6 +26,10 @@ func _ready():
 	_server.connect("data_received", self, "_on_data")
 
 	# Start listening
+	# Addition of certificates validates WSS for HTML5 and HTTPS protocols
+	_server.private_key = load("res://certs/privkey.key");
+	_server.ssl_certificate = load("res://certs/cert.crt");
+	
 	var err = _server.listen(Constants.SERVER_PORT)
 	if err != OK:
 		print("Unable to start server")

@@ -69,3 +69,5 @@ node_modules/
 **/.DS_Store
 
 functions/account_key.json
+
+_godot/certs/privkey.key

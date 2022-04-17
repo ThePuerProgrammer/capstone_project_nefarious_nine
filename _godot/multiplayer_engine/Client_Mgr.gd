@@ -35,7 +35,7 @@ func send_data(message : Message):
 			print("Error: put_packet() Client_Mgr line 32")
 
 func connect_to_server():
-	uri = "ws://" + Constants.WEB_SOCKET_URL + ":" + str(Constants.SERVER_PORT)
+	uri = "wss://" + Constants.WEB_SOCKET_URL + ":" + str(Constants.SERVER_PORT)
 	
 	players_ready = false
 	_rtc = load('res://multiplayer_engine/WebRTC_Client.tscn').instance()
@@ -44,6 +44,14 @@ func connect_to_server():
 	_id = 0
 	_player_number = 0
 	_client = WebSocketClient.new()
+	
+	_client.set_verify_ssl_enabled(Constants.SSL)
+
+	# For use of WSS instead of WS!
+	if(Constants.SSL):
+		print("trusting crt...")
+		_client.trusted_ssl_certificate = load("res://certs/cert.crt");
+		
 	_initialised = false
 
 	var e = OK
