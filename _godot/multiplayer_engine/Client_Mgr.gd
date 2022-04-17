@@ -47,6 +47,7 @@ func connect_to_server():
 	
 	_client.set_verify_ssl_enabled(Constants.SSL)
 
+	# For use of WSS instead of WS!
 	if(Constants.SSL):
 		print("trusting crt...")
 		_client.trusted_ssl_certificate = load("res://certs/cert.crt");
