@@ -49,9 +49,7 @@ func connect_to_server():
 
 	if(Constants.SSL):
 		print("trusting crt...")
-		var cert = X509Certificate.new()
-		cert.load("res://certs/cert.crt")
-		_client.set_trusted_ssl_certificate(cert)
+		_client.trusted_ssl_certificate = load("res://certs/cert.crt");
 		
 	_initialised = false
 
