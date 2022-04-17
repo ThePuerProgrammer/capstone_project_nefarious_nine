@@ -44,6 +44,15 @@ func connect_to_server():
 	_id = 0
 	_player_number = 0
 	_client = WebSocketClient.new()
+	
+	_client.set_verify_ssl_enabled(Constants.SSL)
+
+	if(Constants.SSL):
+		print("trusting crt...")
+		var cert = X509Certificate.new()
+		cert.load("res://certs/cert.crt")
+		_client.set_trusted_ssl_certificate(cert)
+		
 	_initialised = false
 
 	var e = OK

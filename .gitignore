@@ -70,4 +70,4 @@ node_modules/
 
 functions/account_key.json
 
-_godot/certs/*
+_godot/certs/privkey.key
