@@ -17,6 +17,8 @@ var _active_lobbies : Dictionary = {
 var _peers_awaiting_lobby_confirmation = []
 
 func _ready():
+	# FOR THE LINUX EXPORT
+	CurrentUser.authenticate_current_user(Constants.TEST_PASSWORD)
 	# Connect server signals to local functions
 	_server.connect("client_connected", self, "_connected")
 	_server.connect("client_disconnected", self, "_disconnected")

@@ -15,5 +15,5 @@ const COLLECTIONS = {
 	'CATEGORIES': 'backend',
 }
 
-const WEB_SOCKET_URL = 'localhost'
+const WEB_SOCKET_URL = '20.230.229.12'
 const SERVER_PORT = 6969
