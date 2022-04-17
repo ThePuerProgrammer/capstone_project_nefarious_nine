@@ -35,7 +35,7 @@ func send_data(message : Message):
 			print("Error: put_packet() Client_Mgr line 32")
 
 func connect_to_server():
-	uri = "ws://" + Constants.WEB_SOCKET_URL + ":" + str(Constants.SERVER_PORT)
+	uri = "wss://" + Constants.WEB_SOCKET_URL + ":" + str(Constants.SERVER_PORT)
 	
 	players_ready = false
 	_rtc = load('res://multiplayer_engine/WebRTC_Client.tscn').instance()
