@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=2]
+[gd_scene load_steps=77 format=2]
 
 [ext_resource path="res://SlowFruit/assets/Environment/nightBG.png" type="Texture" id=1]
 [ext_resource path="res://SlowFruit/assets/Environment/longGround.PNG" type="Texture" id=2]
@@ -378,34 +378,26 @@ animations = [ {
 9/z_index = 0
 
 [sub_resource type="RectangleShape2D" id=59]
-extents = Vector2( 44, 34.25 )
+extents = Vector2( 48, 33.125 )
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 14.5, 16 )
+extents = Vector2( 36, 32 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 191.989, 27.4809 )
 
 [sub_resource type="RectangleShape2D" id=58]
-extents = Vector2( 108.769, 12.8617 )
+extents = Vector2( 222.385, 36 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 653.666, 63.068 )
+extents = Vector2( 1102, 64.5 )
 
 [sub_resource type="RectangleShape2D" id=57]
-extents = Vector2( 1206, 115.5 )
-
-[sub_resource type="RectangleShape2D" id=60]
-extents = Vector2( 525, 46.5 )
-
-[sub_resource type="RectangleShape2D" id=61]
-extents = Vector2( 608.234, 62.5 )
+extents = Vector2( 1206, 111.5 )
 
 [node name="TileMap" type="Node2D"]
 position = Vector2( 8, 448 )
 script = ExtResource( 16 )
-
-[node name="CollisionObjects" type="Node2D" parent="."]
 
 [node name="background" type="Sprite" parent="."]
 position = Vector2( 967.5, -72 )
@@ -425,7 +417,7 @@ texture = ExtResource( 6 )
 [node name="Rocks" type="Sprite" parent="."]
 position = Vector2( 1801.87, 279.75 )
 scale = Vector2( 2.06556, 1.75926 )
-z_index = 2
+z_index = 3
 texture = ExtResource( 5 )
 
 [node name="Grass" type="Sprite" parent="."]
@@ -481,17 +473,15 @@ position = Vector2( 547, -184 )
 scale = Vector2( 1.22, 1.24667 )
 frames = SubResource( 55 )
 animation = "planet"
-frame = 15
+frame = 33
 playing = true
 
 [node name="greens" type="TileMap" parent="."]
+position = Vector2( -8, 3 )
 format = 1
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="villageGreens" type="TileMap" parent="greens"]
-position = Vector2( -3.838, 15 )
+position = Vector2( 8, 13 )
 scale = Vector2( 0.946, 1.003 )
 tile_set = SubResource( 56 )
 cell_size = Vector2( 31, 32 )
@@ -533,38 +523,46 @@ one_shot = true
 autostart = true
 
 [node name="SmallPlatformArea2D" type="Area2D" parent="."]
-position = Vector2( 360, 96 )
-collision_layer = 5
-collision_mask = 0
+visible = false
+position = Vector2( 408, 48 )
+collision_layer = 4
 gravity = 0.0
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SmallPlatformArea2D"]
-position = Vector2( 88, -16 )
+visible = false
+position = Vector2( 16, 1.125 )
 shape = SubResource( 59 )
 
 [node name="SmallPlatform" type="StaticBody2D" parent="."]
-scale = Vector2( 2.021, 1.778 )
-collision_layer = 5
-collision_mask = 0
+position = Vector2( 416, 40 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SmallPlatform"]
-position = Vector2( 221.672, 49.4938 )
-scale = Vector2( 1.483, 1.337 )
+visible = false
+position = Vector2( 12, 8 )
 z_index = 2
 shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="Sprite" type="Sprite" parent="SmallPlatform"]
-position = Vector2( 225.631, 53.9933 )
-scale = Vector2( 1.626, 1.524 )
+position = Vector2( 16, 8 )
+scale = Vector2( 2.45918, 2.23913 )
 z_index = 1
 texture = ExtResource( 8 )
 
 [node name="platform" type="StaticBody2D" parent="."]
 position = Vector2( 1528, 15 )
 scale = Vector2( 2.064, 2.177 )
-collision_layer = 5
-collision_mask = 0
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="FloatGround" type="Sprite" parent="platform"]
 scale = Vector2( 0.689959, 0.924528 )
@@ -572,60 +570,80 @@ texture = ExtResource( 7 )
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="platform"]
+visible = false
 position = Vector2( 0, -5.51216 )
 scale = Vector2( 0.575, 0.650943 )
 shape = SubResource( 2 )
 one_way_collision = true
 
 [node name="PlatformArea2D" type="Area2D" parent="."]
-position = Vector2( 1312, -8 )
-scale = Vector2( 2.064, 2.177 )
+visible = false
+position = Vector2( 1528, 0 )
 collision_layer = 5
 collision_mask = 0
 gravity = 0.0
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformArea2D"]
-position = Vector2( 104.651, -3.67477 )
+visible = false
 shape = SubResource( 58 )
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2( 176, 376 )
-scale = Vector2( 1.924, 1.809 )
 z_index = 1
-collision_layer = 5
-collision_mask = 0
+collision_layer = 4
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-position = Vector2( 322.476, 23.267 )
+visible = false
+position = Vector2( 768, -8 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="Floor"]
-position = Vector2( 400, 16 )
-scale = Vector2( 1.23281, 1 )
+position = Vector2( -208.705, -41.1704 )
+scale = Vector2( 1.28228, 1.27876 )
+z_index = 3
+texture = ExtResource( 2 )
+offset = Vector2( 402.333, 32 )
+region_rect = Rect2( 1, 0, 0, 0 )
+
+[node name="Sprite2" type="Sprite" parent="Floor"]
+position = Vector2( 1372.8, -0.25 )
+scale = Vector2( 1.26325, 1.27876 )
 z_index = 3
 texture = ExtResource( 2 )
 region_rect = Rect2( 1, 0, 0, 0 )
 
 [node name="FloorArea2D" type="Area2D" parent="."]
+visible = false
 position = Vector2( 0, 360 )
-collision_layer = 5
+collision_layer = 4
 collision_mask = 0
 gravity = 0.0
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FloorArea2D"]
-position = Vector2( 838, 51.5 )
+visible = false
+position = Vector2( 840, 48 )
 shape = SubResource( 57 )
 
 [node name="Floor2" type="StaticBody2D" parent="."]
-position = Vector2( 2072, 250 )
+visible = false
+position = Vector2( 2064, 216 )
 collision_layer = 5
-collision_mask = 0
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2"]
-position = Vector2( 616, 6 )
+visible = false
+position = Vector2( 1086, 22.5 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="Floor2"]
@@ -634,38 +652,24 @@ scale = Vector2( 1.23281, 1 )
 texture = ExtResource( 2 )
 region_rect = Rect2( 1, 0, 0, 0 )
 
-[node name="Floor2Area2D" type="Area2D" parent="."]
-collision_layer = 5
-collision_mask = 0
-gravity = 0.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2Area2D"]
-position = Vector2( 2576, 250 )
-shape = SubResource( 60 )
-
 [node name="Floor3" type="StaticBody2D" parent="."]
+visible = false
 position = Vector2( -1496, 224 )
 collision_layer = 5
-collision_mask = 0
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3"]
-position = Vector2( 706.334, 8 )
+visible = false
+position = Vector2( 216, -8 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="Floor3"]
-position = Vector2( 400, 16 )
+position = Vector2( 376, 24 )
 scale = Vector2( 1.23281, 1 )
 texture = ExtResource( 2 )
 region_rect = Rect2( 1, 0, 0, 0 )
-
-[node name="Floor3Area2D" type="Area2D" parent="."]
-collision_layer = 5
-collision_mask = 0
-gravity = 0.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3Area2D"]
-position = Vector2( -728.234, 232 )
-shape = SubResource( 61 )
 
 [connection signal="finished" from="YelpSound" to="." method="_on_YelpSound_finished"]
 [connection signal="timeout" from="YelpSound/Timer" to="." method="_on_Timer_timeout"]
@@ -675,5 +679,3 @@ shape = SubResource( 61 )
 [connection signal="body_exited" from="PlatformArea2D" to="." method="_on_Area2D_body_exited_platform"]
 [connection signal="body_entered" from="FloorArea2D" to="." method="_on_FloorArea2D_body_entered"]
 [connection signal="body_exited" from="FloorArea2D" to="." method="_on_FloorArea2D_body_exited"]
-[connection signal="body_entered" from="Floor2Area2D" to="." method="_on_Floor2Area2D_body_entered"]
-[connection signal="body_exited" from="Floor2Area2D" to="." method="_on_Floor2Area2D_body_exited"]

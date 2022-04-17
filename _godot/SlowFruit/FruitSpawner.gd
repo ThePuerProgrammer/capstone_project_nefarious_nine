@@ -19,7 +19,6 @@ var answerScript = load("res://SlowFruit/Answer.gd").new()
 
 var numCorrect = 0
 var numIncorrect = 0
-var coins = 0
 var winningPath
 var winningBody
 
@@ -35,6 +34,7 @@ var correctIndex
 var correctFruit
 var correctRigidBody
 
+onready var fruitLevel = get_parent()
 onready var anAnswer = get_node("Control/Answer1Container/Answer1/RichTextLabel")
 onready var questionLabel = get_node("Control/Question/Question/Label")
 onready var scoreLabel = get_node("ScoreLabel")
@@ -45,13 +45,14 @@ onready var rigidbodies = [get_node("Control/Answer1Container/RigidBody2D"),get_
 var choseAnswer = false
 
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	scoreLabel.text = "Coins: " + str(fruitLevel.slowfruitCoins)
 	setCards()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 
@@ -123,101 +124,94 @@ func stopLoseSound():
 		$LoseSound.stop()
 		$DogLoseSound.stop()
 
-#SOUNDS-------------------------------------------------------
+#END SOUNDS-------------------------------------------------------
 
 #RESULTS-------------------------------------------------------
 func winningChoice():
+	choseAnswer = true
 	playWinSound()
-	stopWinSound()
-	
+	stopWinSound()	
 	dropFruit()
-	$WinLabel.show()	
-	coins += 5
-	FirebaseController.addPomocoinsToUserDocument(coins)	
-	scoreLabel.text = "Coins: " + str(coins)
-	scoreLabel.show()
-	$WinLabel/Timer.start()
+	$WinLabelNode/WinLabel.show()	
+	$WinLabelNode.winTween()
+	fruitLevel.slowfruitCoins += 5
+	var coinPrize = 5
+	FirebaseController.addPomocoinsToUserDocument(coinPrize)	
+	scoreLabel.text = "Coins: " + str(fruitLevel.slowfruitCoins)
+	$WinLabelNode/WinLabel/Timer.start()
 	
 func losingChoice():
+	choseAnswer = true
 	playLoseSound()
 	stopLoseSound()
-	$LoseLabel.show()
-	$LoseLabel/Timer.start()
+	$LoseLabelNode/LoseLabel.show()
+	$LoseLabelNode.loseTween()
+	$LoseLabelNode/LoseLabel/Timer.start()
 	dropFruit()
 	
 func dropFruit():
 	for fruit in rigidbodies:
 		print(fruit.get_path())
 		if fruit.get_path() != winningBody.get_path():
-			fruit.set_gravity_scale(3)
+			fruit.set_gravity_scale(5)
 			
 func refreshCard():		
 	setCards()
 	answers = [get_node("Control/Answer1Container/Answer1/RichTextLabel"),get_node("Control/Answer2Container/Answer2/RichTextLabel"),get_node("Control/Answer3Container/Answer3/RichTextLabel"), get_node("Control/Answer4Container/Answer4/RichTextLabel")]
 	questionLabel.show()
 	anAnswer = get_node("Control/Answer2Container/Answer2/Tween")
-	#anAnswer.answerScript.answerTween()
-	#anAnswer.show()
-	#print(anAnswer.text)
-	for label in answers:		
-		print("Label 1 name: ", label.name)
+	
+	for label in answers:	
 		label.show()
 	for label in answerNodes:
 		pass
-		#print(label.text)
-		#label.show()
+		
 	for body in rigidbodies:
 		body.show()
 	
 
 #RESULTS-------------------------------------------------------
 
-func _on_Fruit1_body_entered(body):
+func _on_Fruit1_body_entered(_body):
 	var path = "Control/Answer1Container/Fruit1"
-	if (path == winningPath):
-		winningChoice()
-	else:
-		print("nein")
-		losingChoice()
+	if(choseAnswer == false):
+		if (path == winningPath && choseAnswer):
+			winningChoice()
+		else:
+			print("nein")
+			losingChoice()
 
-func _on_Fruit2_body_entered(body):
+
+func _on_Fruit2_body_entered(_body):
 	var path = "Control/Answer2Container/Fruit2"
-	if (path == winningPath):
-		winningChoice()
-	else:
-		print("nein")
-		losingChoice()
+	if(choseAnswer == false):
+		if (path == winningPath):
+			winningChoice()
+		else:
+			print("nein")
+			losingChoice()
 
-func _on_Fruit3_body_entered(body):
+func _on_Fruit3_body_entered(_body):
 	var path = "Control/Answer3Container/Fruit3"
-	if (path == winningPath):
-		winningChoice()
-	else:
-		print("nein")
-		losingChoice()
+	if(choseAnswer == false):
+		if (path == winningPath):
+			winningChoice()
+		else:
+			print("nein")
+			losingChoice()
 
-func _on_Fruit4_body_entered(body):
+func _on_Fruit4_body_entered(_body):
 	var path = "Control/Answer4Container/Fruit4"
-	if (path == winningPath):
-		winningChoice()
-	else:
-		print("nein")
-		losingChoice()
+	if(choseAnswer == false):
+		if (path == winningPath):
+			winningChoice()
+		else:
+			print("nein")
+			losingChoice()
 
 
 func _on_Timer_timeout():
-	$WinLabel.hide()
-	$LoseLabel.hide()
 	questionLabel.hide()
-	winningBody.set_gravity_scale(3)
-	var fruitLevel = get_parent()
+	winningBody.set_gravity_scale(3)	
 	fruitLevel.reloadFruits()
-	#var instance = self.instance()
-	#add_child(instance)
-	#queue_free() breaks everything
-	#get_node("Control")
-	#get_tree().reload_current_scene() 
 	
-	
-	#_ready()
-	#refreshCard()

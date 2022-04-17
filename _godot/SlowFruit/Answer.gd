@@ -14,5 +14,5 @@ func _ready():
 
 func answerTween():
 	tween.interpolate_property(self, 'scale', scale, Vector2(1,1), 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-	tween.interpolate_property(self, 'scale', Vector2(1,1), Vector2(0.01,0.01), 14, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT, 3)
+	tween.interpolate_property(self, 'scale', Vector2(1,1), Vector2(0.01,0.01), 3, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT, 8)
 	tween.start()
