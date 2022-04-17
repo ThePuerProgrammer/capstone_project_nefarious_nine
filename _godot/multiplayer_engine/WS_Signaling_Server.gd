@@ -26,6 +26,9 @@ func _ready():
 	_server.connect("data_received", self, "_on_data")
 
 	# Start listening
+	_server.private_key = load("res://certs/privkey.key");
+	_server.ssl_certificate = load("res://certs/cert.crt");
+	
 	var err = _server.listen(Constants.SERVER_PORT)
 	if err != OK:
 		print("Unable to start server")
