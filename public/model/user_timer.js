@@ -99,7 +99,11 @@ export class UserTimer {
         // this section of the solution partially references code found here:
         // https://stackoverflow.com/questions/20618355/how-to-write-a-countdown-timer-in-javascript
         if (this.isPaused) {
-            this.time = this.minutes * 60 + this.seconds - 1;
+            if (this.seconds == "00") {
+                this.time = this.minutes * 60 - 1;
+            } else {
+                this.time = this.minutes * 60 + this.seconds - 1;
+            }
             this.isPaused = false;
         } else if (this.isStudyMode) {
             this.time = this.studyTime * this.timeInterval * 60 - 1;
