@@ -97,7 +97,6 @@ func _process(_delta):
 				setCleanButtonEnabled(false)
 				
 	if mouseIsDown and pettingModeOn and isWithinPetTypeCollisionPolygon():
-		$CatKinematicBody/AnimationPlayer.play("Cat_Action")
 		if getScrubIntensity() > 1.5:
 			$PetMeter/ProgressBar.incrementByStep()
 			
@@ -294,6 +293,7 @@ func _on_currentKinematicBodyInput(_viewport, event, _shape_idx):
 func _on_Pet_cleanButtonPressed():
 	startCleanAction()
 
+# physics for pet movement
 func _physics_process(delta):
 	
 	if(state == 0):
