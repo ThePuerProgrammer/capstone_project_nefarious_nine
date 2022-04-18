@@ -119,7 +119,7 @@ func winningChoice():
 	$WinLabelNode.winTween()
 	fruitLevel.slowfruitCoins += 5
 	var coinPrize = 5
-	#FirebaseController.addPomocoinsToUserDocument(coinPrize)	
+	FirebaseController.addPomocoinsToUserDocument(coinPrize)	
 	scoreLabel.text = "Coins: " + str(fruitLevel.slowfruitCoins)
 	$WinLabelNode/WinLabel/Timer.start()
 	
