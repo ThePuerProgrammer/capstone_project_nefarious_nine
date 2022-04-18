@@ -756,12 +756,14 @@ volume_db = 2.0
 
 [node name="DogWinSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 18 )
+volume_db = 2.0
 
 [node name="dogSoundTimer" type="Timer" parent="DogWinSound"]
 one_shot = true
 
 [node name="DogLoseSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 17 )
+volume_db = 2.0
 
 [node name="dogSoundTimer2" type="Timer" parent="DogLoseSound"]
 one_shot = true
