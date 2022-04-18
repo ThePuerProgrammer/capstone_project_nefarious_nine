@@ -293,6 +293,7 @@ func _on_currentKinematicBodyInput(_viewport, event, _shape_idx):
 func _on_Pet_cleanButtonPressed():
 	startCleanAction()
 
+# physics for pet movement
 func _physics_process(delta):
 	
 	if(state == 0):
@@ -300,13 +301,24 @@ func _physics_process(delta):
 		$BunnyKinematicBody/BunnySprite.flip_h = false
 		$CatKinematicBody/CatSprite.flip_h = false
 		$DogKinematicBody/DogSprite.flip_h = false
+		
+		$CatKinematicBody/AnimationPlayer.play("Cat_Walking")
+		$BunnyKinematicBody/AnimationPlayer.play("Bunny_walking")
+		$DogKinematicBody/AnimationPlayer.play("Dog_Walking")
 	if(state == 1):
 		movement.x = -100
 		$BunnyKinematicBody/BunnySprite.flip_h = true
 		$CatKinematicBody/CatSprite.flip_h = true
 		$DogKinematicBody/DogSprite.flip_h = true
+		
+		$CatKinematicBody/AnimationPlayer.play("Cat_Walking")
+		$BunnyKinematicBody/AnimationPlayer.play("Bunny_walking")
+		$DogKinematicBody/AnimationPlayer.play("Dog_Walking")
 	if(state == 2 || actionBarVisible || pettingModeOn || petWashingModeOn):
 		movement.x = 0
+		$CatKinematicBody/AnimationPlayer.play("Cat_Idle")
+		$BunnyKinematicBody/AnimationPlayer.play("Bunny_Idle")
+		$DogKinematicBody/AnimationPlayer.play("Dog_Idle")
 	
 	$BunnyKinematicBody.move_and_slide(movement, Vector2(0, -1))
 	$CatKinematicBody.move_and_slide(movement, Vector2(0, -1))
