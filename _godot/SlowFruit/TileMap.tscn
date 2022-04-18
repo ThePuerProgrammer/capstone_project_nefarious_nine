@@ -415,13 +415,13 @@ scale = Vector2( 0.5, 0.553782 )
 texture = ExtResource( 6 )
 
 [node name="Rocks" type="Sprite" parent="."]
-position = Vector2( 1801.87, 279.75 )
+position = Vector2( 1801.87, 281.821 )
 scale = Vector2( 2.06556, 1.75926 )
 z_index = 3
 texture = ExtResource( 5 )
 
 [node name="Grass" type="Sprite" parent="."]
-position = Vector2( 500, 254.936 )
+position = Vector2( 500, 256.142 )
 scale = Vector2( 3.06977, 4.11628 )
 texture = ExtResource( 3 )
 
@@ -454,7 +454,7 @@ scale = Vector2( 1.42857, 2.16136 )
 texture = ExtResource( 9 )
 
 [node name="Bush3" type="Sprite" parent="."]
-position = Vector2( 1200, 278.725 )
+position = Vector2( 1200, 279.249 )
 scale = Vector2( 0.877, 1.491 )
 texture = ExtResource( 9 )
 
@@ -473,7 +473,7 @@ position = Vector2( 547, -184 )
 scale = Vector2( 1.22, 1.24667 )
 frames = SubResource( 55 )
 animation = "planet"
-frame = 33
+frame = 15
 playing = true
 
 [node name="greens" type="TileMap" parent="."]
