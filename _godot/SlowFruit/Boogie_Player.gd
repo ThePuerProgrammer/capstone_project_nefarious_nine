@@ -45,14 +45,13 @@ var move_right = Input.is_action_just_pressed("move_right")
 var jump = Input.is_action_just_pressed("jump")
 
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready():
 	MenuMusic.get_child(0).stop()
 	state_machine = $AnimationTree.get("parameters/playback")
 	
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	check_floor()
 	checkWalking()
@@ -140,19 +139,20 @@ func pull_for_input():
 		left = true
 		right = false
 		$Sprite.flip_h = true
-		#check_floor()
+
 		if !jumping && found_floor:
 			setWalking()
 			playWalkSound()
 		elif !found_floor:
 			stopWalkSound()
-		#
-		#$AnimatedSprite.flip_h = true
+		
+
 		
 		
 	if Input.is_action_just_released("move_left"):
 		move_left = false
 		stopWalkSound()
+		
 		if !jumping && found_floor:
 			setIdle()		
 		applied_force = Vector2(0, applied_force.y)
@@ -163,13 +163,13 @@ func pull_for_input():
 		right = true
 		left = false
 		$Sprite.flip_h = false
-		#check_floor()
+		
 		if !jumping && found_floor:
 			setWalking()
 			playWalkSound()
 		elif !found_floor:
 			stopWalkSound()
-		#$AnimatedSprite.flip_h = false
+
 		
 		
 	if Input.is_action_just_released("move_right"):		
@@ -192,6 +192,7 @@ func pull_for_input():
 	if Input.is_action_just_released("jump"):
 		stopWalkSound()
 		stopping_jump = true
+		
 		if !walking && found_floor:
 			setIdle()
 		elif walking && found_floor:
@@ -216,15 +217,14 @@ func set_movement():
 	var y = 0	
 	
 	if move_left:
-		#heck_floor() 
 		x = -WALK_ACCEL
 		x -= WALK_ACCEL * w_delta
+		
 	elif move_right:
-		#check_floor()
 		x = WALK_ACCEL
 		x += WALK_ACCEL * w_delta
+		
 	if jump:
-		#check_floor()
 		y -= AIR_ACCEL
 		
 	applied_force += Vector2(x, y)

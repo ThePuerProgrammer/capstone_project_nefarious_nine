@@ -45,24 +45,18 @@ onready var rigidbodies = [get_node("Control/Answer1Container/RigidBody2D"),get_
 var choseAnswer = false
 
 
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	scoreLabel.text = "Coins: " + str(fruitLevel.slowfruitCoins)
 	setCards()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	pass
 
-####answer bug has to do with the leftmost fruit only, it seems
-	
 func chooseFruit():	
 	pass
 	
 func setCards():
 	choseAnswer = false
-	print(choseAnswer)
 	card = Pomotimer.getRandomFlashcard()	
 	var question = card[0]
 	var correctAnswer = card[1]
@@ -75,8 +69,6 @@ func setCards():
 	var answerLabel = rand.randi_range(0, 3)
 
 	correctIndex = answerLabel	
-	print(correctIndex+1)
-
 	
 	correctFruit = "Control/Answer%sContainer/Fruit%s"
 	correctRigidBody = "Control/Answer%sContainer/RigidBody2D"
@@ -86,9 +78,7 @@ func setCards():
 	var winningBodyPath
 	winningPath = correctFruit %[actualCorrectIndex, actualCorrectIndex]
 	winningBodyPath = correctRigidBody %actualCorrectIndex
-	winningBody = get_node(winningBodyPath)
-	print(winningBody.get_path(), "winning path")
-	
+	winningBody = get_node(winningBodyPath)	
 	
 	answers[answerLabel].text = correctAnswer
 	
