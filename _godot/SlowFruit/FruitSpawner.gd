@@ -55,13 +55,14 @@ func _ready():
 func _process(_delta):
 	pass
 
-
+####answer bug has to do with the leftmost fruit only, it seems
 	
 func chooseFruit():	
 	pass
 	
 func setCards():
-	
+	choseAnswer = false
+	print(choseAnswer)
 	card = Pomotimer.getRandomFlashcard()	
 	var question = card[0]
 	var correctAnswer = card[1]
@@ -86,7 +87,7 @@ func setCards():
 	winningPath = correctFruit %[actualCorrectIndex, actualCorrectIndex]
 	winningBodyPath = correctRigidBody %actualCorrectIndex
 	winningBody = get_node(winningBodyPath)
-	print(winningBody.get_path())
+	print(winningBody.get_path(), "winning path")
 	
 	
 	answers[answerLabel].text = correctAnswer
@@ -136,7 +137,7 @@ func winningChoice():
 	$WinLabelNode.winTween()
 	fruitLevel.slowfruitCoins += 5
 	var coinPrize = 5
-	FirebaseController.addPomocoinsToUserDocument(coinPrize)	
+	#FirebaseController.addPomocoinsToUserDocument(coinPrize)	
 	scoreLabel.text = "Coins: " + str(fruitLevel.slowfruitCoins)
 	$WinLabelNode/WinLabel/Timer.start()
 	
@@ -175,7 +176,7 @@ func refreshCard():
 func _on_Fruit1_body_entered(_body):
 	var path = "Control/Answer1Container/Fruit1"
 	if(choseAnswer == false):
-		if (path == winningPath && choseAnswer):
+		if (path == winningPath):
 			winningChoice()
 		else:
 			print("nein")

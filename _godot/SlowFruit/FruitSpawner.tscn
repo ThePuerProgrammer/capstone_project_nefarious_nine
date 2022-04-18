@@ -478,24 +478,20 @@ margin_bottom = 360.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
-"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
 [node name="Answer1" type="Position2D" parent="Control/Answer1Container"]
 position = Vector2( 216, 28 )
 script = ExtResource( 14 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Tween" type="Tween" parent="Control/Answer1Container/Answer1"]
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/Answer1Container/Answer1"]
-margin_left = -85.0
-margin_top = 105.0
-margin_right = 1547.0
-margin_bottom = 752.0
+margin_left = -72.0
+margin_top = 164.0
+margin_right = 181.0
+margin_bottom = 279.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 28 )
@@ -513,11 +509,14 @@ __meta__ = {
 }
 
 [node name="RigidBody2D" type="RigidBody2D" parent="Control/Answer1Container"]
-position = Vector2( 199, -8 )
+position = Vector2( 224, 104 )
 collision_layer = 16
 collision_mask = 0
 gravity_scale = 0.0
 can_sleep = false
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Fruit1" type="Area2D" parent="Control/Answer1Container/RigidBody2D"]
 position = Vector2( 0, 1 )
@@ -527,9 +526,6 @@ monitorable = false
 gravity_vec = Vector2( 0, 0 )
 gravity = 0.0
 angular_damp = 0.0
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer1Container/RigidBody2D/Fruit1"]
 visible = false
@@ -537,7 +533,7 @@ position = Vector2( 24, 25 )
 shape = SubResource( 25 )
 
 [node name="Sprite" type="Sprite" parent="Control/Answer1Container/RigidBody2D/Fruit1"]
-scale = Vector2( 1.5, 1.5 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 5 )
 centered = false
 
@@ -588,6 +584,9 @@ collision_layer = 16
 collision_mask = 0
 gravity_scale = 0.0
 can_sleep = false
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Fruit2" type="Area2D" parent="Control/Answer2Container/RigidBody2D"]
 position = Vector2( 192, 46 )
@@ -596,16 +595,13 @@ collision_mask = 0
 monitorable = false
 gravity_vec = Vector2( 0, 0 )
 gravity = 0.0
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer2Container/RigidBody2D/Fruit2"]
 visible = false
 shape = SubResource( 25 )
 
 [node name="Sprite" type="Sprite" parent="Control/Answer2Container/RigidBody2D/Fruit2"]
-scale = Vector2( 1.5, 1.5 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 7 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer2Container/RigidBody2D"]
@@ -658,6 +654,9 @@ collision_layer = 16
 collision_mask = 0
 gravity_scale = 0.0
 can_sleep = false
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Fruit3" type="Area2D" parent="Control/Answer3Container/RigidBody2D"]
 position = Vector2( 184, 0 )
@@ -666,9 +665,6 @@ collision_mask = 0
 monitorable = false
 gravity_vec = Vector2( 0, 0 )
 gravity = 0.0
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="whereis" type="CollisionShape2D" parent="Control/Answer3Container/RigidBody2D/Fruit3"]
 visible = false
@@ -677,7 +673,7 @@ shape = SubResource( 25 )
 
 [node name="Sprite" type="Sprite" parent="Control/Answer3Container/RigidBody2D/Fruit3"]
 position = Vector2( 32, 36 )
-scale = Vector2( 1.5, 1.5 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 6 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer3Container/RigidBody2D"]
@@ -729,6 +725,9 @@ collision_layer = 16
 collision_mask = 0
 gravity_scale = 0.0
 can_sleep = false
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Fruit4" type="Area2D" parent="Control/Answer4Container/RigidBody2D"]
 position = Vector2( 170, 46 )
@@ -745,7 +744,7 @@ shape = SubResource( 25 )
 
 [node name="Sprite" type="Sprite" parent="Control/Answer4Container/RigidBody2D/Fruit4"]
 position = Vector2( 94, 18 )
-scale = Vector2( 1.5, 1.5 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Answer4Container/RigidBody2D"]
