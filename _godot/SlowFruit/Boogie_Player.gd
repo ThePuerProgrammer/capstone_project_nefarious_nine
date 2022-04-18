@@ -13,10 +13,8 @@ const JUMP_VELOCITY = 780
 const STOP_JUMP_FORCE = 550.0
 const MAX_FLOOR_AIRBORNE_TIME = 0.15
 
+var state_machine # for animations
 
-var state_machine
-
-var anim = ""
 var siding_left = false
 var jumping = false
 var walking = false
@@ -33,7 +31,6 @@ var g_delta = 0.01
 var w_delta = 0.05
 
 onready var walkSound = $WalkSound
-onready var pickupSound = $PickupSound
 onready var jumpSound = $JumpSound
 
 
@@ -44,19 +41,26 @@ var move_left = Input.is_action_just_pressed("move_left")
 var move_right = Input.is_action_just_pressed("move_right")
 var jump = Input.is_action_just_pressed("jump")
 
+################################################################################
+#BASIC FUNCTIONS--------------------------------------------------------------
+################################################################################
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	MenuMusic.get_child(0).stop()
 	state_machine = $AnimationTree.get("parameters/playback")
 	
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	check_floor()
 	checkWalking()
-	
+
+################################################################################
+#END BASIC FUNCTIONS-------------------------------------------------
+################################################################################
+
+
+################################################################################
+#GAMEPLAY----------------------------------------------------------------------
+################################################################################
 func check_floor():
 	found_floor = get_node("../TileMap").get_found_floor()	
 	if found_floor:
@@ -70,7 +74,29 @@ func check_floor():
 		stopWalkSound()
 		add_gravity()
 		setJumping()
+
+func add_gravity():
+	if linear_velocity.y !=0 && linear_velocity.y > -780 && linear_velocity.y < 62:
+			gravity_scale += g_delta
+			
+####for future gameplay----------------------------------------------
+func if_right_in_air():
+	if right :
+		if linear_velocity.x > -WALK_MAX_VELOCITY:
+			linear_velocity.x -= -AIR_ACCEL
 		
+func if_left_in_air():
+	if left:
+		if linear_velocity.x < WALK_MAX_VELOCITY:
+			linear_velocity.x += AIR_ACCEL
+			
+################################################################################
+#END GAMEPLAY------------------------------------------------------------------
+################################################################################
+
+################################################################################
+#ANIMATIONS--------------------------------------------------------------------
+################################################################################
 
 func setJumping():
 	state_machine.travel("Jump") # Animations are capitalized
@@ -78,8 +104,7 @@ func setJumping():
 	idle = false
 	walking = false
 	stopWalkSound()
-	add_gravity()
-	
+	add_gravity()	
 	
 func setWalking():
 	state_machine.travel("Run") 
@@ -93,22 +118,14 @@ func setIdle():
 	jumping = false
 	walking = false
 	stopWalkSound()
-	
-func add_gravity():
-	if linear_velocity.y !=0 && linear_velocity.y > -780 && linear_velocity.y < 62:
-			gravity_scale += g_delta
-	
-func if_right_in_air():
-	if right :
-		if linear_velocity.x > -WALK_MAX_VELOCITY:
-			linear_velocity.x -= -AIR_ACCEL
-		
-func if_left_in_air():
-	if left:
-		if linear_velocity.x < WALK_MAX_VELOCITY:
-			linear_velocity.x += AIR_ACCEL
-			
-		
+
+################################################################################
+#END ANIMATIONS----------------------------------------------------------------
+################################################################################
+
+################################################################################
+##SOUNDS----------------------------------------------------------------------
+################################################################################
 func playJumpSound():
 	if !jump_sound_has_played:
 		jump_sound_has_played = true
@@ -128,50 +145,64 @@ func stopWalkSound():
 	if walk_sound_has_played:
 		walk_sound_has_played = false
 		walkSound.stop()
-		
+
 func checkWalking():
 	if !walking:
 		stopWalkSound()
 		
+func _on_JumpSound_finished():
+	stopJumpSound()
+	
+################################################################################
+#END SOUNDS--------------------------------------------------------------------
+################################################################################
+
+
+################################################################################
+#INPUTS------------------------------------------------------------------------
+################################################################################
 func pull_for_input():
 	var current = state_machine.get_current_node()
+
+################################################################################
+##LEFT----------------------------------------------------------------
 	if Input.is_action_just_pressed("move_left"):
 		move_left = true
 		left = true
 		right = false
 		$Sprite.flip_h = true
-		#check_floor()
+
 		if !jumping && found_floor:
 			setWalking()
 			playWalkSound()
 		elif !found_floor:
 			stopWalkSound()
-		#
-		#$AnimatedSprite.flip_h = true
-		
 		
 	if Input.is_action_just_released("move_left"):
 		move_left = false
 		stopWalkSound()
+		
 		if !jumping && found_floor:
 			setIdle()		
 		applied_force = Vector2(0, applied_force.y)
 		linear_velocity.x = -WALK_DEACCEL
-		
+##END LEFT------------------------------------------------------------
+################################################################################
+
+################################################################################
+##RIGHT---------------------------------------------------------------
 	if Input.is_action_just_pressed("move_right"):	
 		move_right = true
 		right = true
 		left = false
 		$Sprite.flip_h = false
-		#check_floor()
+		
 		if !jumping && found_floor:
 			setWalking()
 			playWalkSound()
 		elif !found_floor:
 			stopWalkSound()
-		#$AnimatedSprite.flip_h = false
-		
-		
+
 	if Input.is_action_just_released("move_right"):		
 		move_right = false
 		stopWalkSound()
@@ -179,10 +210,14 @@ func pull_for_input():
 			setIdle()				
 		applied_force = Vector2(0, applied_force.y)
 		linear_velocity.x = WALK_DEACCEL
-	
+##END RIGHT---------------------------------------------------------------
+################################################################################
+
+################################################################################
+##JUMP---------------------------------------------------------------
 	if Input.is_action_just_pressed("jump"):
 		stopWalkSound()
-		if linear_velocity.y <= 0 && found_floor && !jumping:			
+		if linear_velocity.y <= 0 && found_floor && !jumping:	
 			setJumping()
 			stopping_jump = false
 			linear_velocity.y = -JUMP_VELOCITY
@@ -192,6 +227,7 @@ func pull_for_input():
 	if Input.is_action_just_released("jump"):
 		stopWalkSound()
 		stopping_jump = true
+		
 		if !walking && found_floor:
 			setIdle()
 		elif walking && found_floor:
@@ -200,6 +236,10 @@ func pull_for_input():
 		applied_force = Vector2(applied_force.y, 0)
 		linear_velocity.y = STOP_JUMP_FORCE
 		
+
+##END JUMP---------------------------------------------------------------------
+################################################################################
+
 	if linear_velocity.x == 0 && linear_velocity.y == 0:
 		state_machine.travel("Idle2")
 		
@@ -207,24 +247,29 @@ func pull_for_input():
 		state_machine.travel("Jump")
 		
 	if found_floor && linear_velocity.x > 0:
-		state_machine.travel("Run")
-		
-		
-	
+		state_machine.travel("Run")		
+
+################################################################################
+#END INPUTS--------------------------------------------------------------------
+################################################################################
+
+
+################################################################################
+#NUTS AND BOLTS----------------------------------------------------------------
+################################################################################
 func set_movement():
 	var x = 0
 	var y = 0	
 	
 	if move_left:
-		#heck_floor() 
 		x = -WALK_ACCEL
 		x -= WALK_ACCEL * w_delta
+		
 	elif move_right:
-		#check_floor()
 		x = WALK_ACCEL
 		x += WALK_ACCEL * w_delta
+		
 	if jump:
-		#check_floor()
 		y -= AIR_ACCEL
 		
 	applied_force += Vector2(x, y)
@@ -243,6 +288,11 @@ func _integrate_forces(_s):
 	pull_for_input()
 	set_movement()
 
-func _on_JumpSound_finished():
-	stopJumpSound()
+################################################################################
+#END OF NUTS AND BOLTS---------------------------------------------------------
+################################################################################
 
+
+##EOF
+################################################################################
+################################################################################
