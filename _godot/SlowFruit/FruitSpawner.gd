@@ -1,20 +1,5 @@
 extends Node
 
-
-#var floating_text = preload("res://SlowFruit/FloatingText.tscn")
-
-
-onready var fruit1 = get_node("/Fruit1")
-onready var fruit2 = get_node("/Fruit2")
-onready var fruit3 = get_node("/Fruit3")
-onready var fruit4 = get_node("/Fruit4")
-onready var fruit5 = get_node("/Fruit5")
-onready var fruit6 = get_node("/Fruit6")
-onready var fruit7 = get_node("/Fruit7")
-onready var fruit8 = get_node("/Fruit8")
-onready var fruit9 = get_node("/Fruit9")
-onready var fruit10 = get_node("/Fruit10")
-
 var answerScript = load("res://SlowFruit/Answer.gd").new()
 
 var numCorrect = 0
@@ -25,8 +10,8 @@ var winningBody
 var win_sound_has_played = false
 var lose_sound_has_played = false
 
-var fruits = [fruit1, fruit2, fruit3, fruit4, fruit5, fruit6, fruit7, fruit8, fruit9, fruit10]
-var fruitCopy = fruits.duplicate()
+#var fruits = [fruit1, fruit2, fruit3, fruit4, fruit5, fruit6, fruit7, fruit8, fruit9, fruit10] for randomizing fruit sprites later on
+#var fruitCopy = fruits.duplicate()
 
 var card
 
@@ -142,7 +127,6 @@ func losingChoice():
 	
 func dropFruit():
 	for fruit in rigidbodies:
-		print(fruit.get_path())
 		if fruit.get_path() != winningBody.get_path():
 			fruit.set_gravity_scale(5)
 			
@@ -169,7 +153,6 @@ func _on_Fruit1_body_entered(_body):
 		if (path == winningPath):
 			winningChoice()
 		else:
-			print("nein")
 			losingChoice()
 
 
@@ -179,7 +162,6 @@ func _on_Fruit2_body_entered(_body):
 		if (path == winningPath):
 			winningChoice()
 		else:
-			print("nein")
 			losingChoice()
 
 func _on_Fruit3_body_entered(_body):
@@ -188,7 +170,6 @@ func _on_Fruit3_body_entered(_body):
 		if (path == winningPath):
 			winningChoice()
 		else:
-			print("nein")
 			losingChoice()
 
 func _on_Fruit4_body_entered(_body):
@@ -197,7 +178,6 @@ func _on_Fruit4_body_entered(_body):
 		if (path == winningPath):
 			winningChoice()
 		else:
-			print("nein")
 			losingChoice()
 
 
