@@ -15,5 +15,7 @@ const COLLECTIONS = {
 	'CATEGORIES': 'backend',
 }
 
-const WEB_SOCKET_URL = 'localhost'
+const WEB_SOCKET_URL = 'pomoserve.westus2.cloudapp.azure.com'
 const SERVER_PORT = 6969
+
+const SSL = true

@@ -17,6 +17,8 @@ var _active_lobbies : Dictionary = {
 var _peers_awaiting_lobby_confirmation = []
 
 func _ready():
+	# FOR THE LINUX EXPORT
+	CurrentUser.authenticate_current_user(Constants.TEST_PASSWORD)
 	# Connect server signals to local functions
 	_server.connect("client_connected", self, "_connected")
 	_server.connect("client_disconnected", self, "_disconnected")
@@ -24,6 +26,10 @@ func _ready():
 	_server.connect("data_received", self, "_on_data")
 
 	# Start listening
+	# Addition of certificates validates WSS for HTML5 and HTTPS protocols
+	_server.private_key = load("res://certs/privkey.key");
+	_server.ssl_certificate = load("res://certs/cert.crt");
+	
 	var err = _server.listen(Constants.SERVER_PORT)
 	if err != OK:
 		print("Unable to start server")

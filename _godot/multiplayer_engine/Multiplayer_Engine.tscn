@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/fonts/PressStart2P-vaV7_18pt.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Menu/fade_out.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/icons/outline_keyboard_double_arrow_up_black_24dp.png" type="Texture" id=3]
 [ext_resource path="res://multiplayer_engine/multiplayer_engine.gd" type="Script" id=4]
 [ext_resource path="res://Menu/fade_in.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/fonts/PressStart2P-Regular.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://assets/icons/outline_key_black_24dp.png" type="Texture" id=7]
 [ext_resource path="res://ui_elements/Pomo_BG.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/icons/outline_sports_esports_black_24dp.png" type="Texture" id=10]
@@ -30,6 +31,11 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=4]
 shader = SubResource( 3 )
 
+[sub_resource type="DynamicFont" id=10]
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 6 )
+
 [sub_resource type="Theme" id=9]
 
 [node name="Multiplayer_Engine" type="Node"]
@@ -45,13 +51,12 @@ margin_bottom = 900.0
 [node name="TabContainer" type="TabContainer" parent="Centered"]
 self_modulate = Color( 1, 1, 1, 0.717647 )
 margin_left = 298.0
-margin_top = 97.0
+margin_top = 83.0
 margin_right = 1622.0
-margin_bottom = 803.0
+margin_bottom = 817.0
 tab_align = 0
 
 [node name="JoinLobby" type="VBoxContainer" parent="Centered/TabContainer"]
-visible = false
 material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -115,8 +120,9 @@ margin_right = 260.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.552941, 0.164706, 0.415686, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 10 )
 text = "Host Name"
 align = 1
 valign = 1
@@ -127,8 +133,9 @@ margin_right = 524.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.552941, 0.164706, 0.415686, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 10 )
 text = "Privacy Status"
 align = 1
 valign = 1
@@ -139,8 +146,9 @@ margin_right = 788.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.552941, 0.164706, 0.415686, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 10 )
 text = "Classroom"
 align = 1
 valign = 1
@@ -151,8 +159,9 @@ margin_right = 1052.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.552941, 0.164706, 0.415686, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 10 )
 text = "Player Count"
 align = 1
 valign = 1
@@ -163,8 +172,9 @@ margin_right = 1316.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.552941, 0.164706, 0.415686, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 10 )
 text = "Chat Enabled"
 align = 1
 valign = 1
@@ -217,6 +227,7 @@ text = " Connect To Lobby"
 icon = ExtResource( 3 )
 
 [node name="CreateLobby" type="VBoxContainer" parent="Centered/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
