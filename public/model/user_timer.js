@@ -1,7 +1,7 @@
 // Needed for timer display
 import * as Elements from '../view/elements.js'
 
-// TODO studymode switch is still showing study mode time for a second
+// TODO studymode switch is still showing study mode time for a second!!
 
 export class UserTimer {
 
