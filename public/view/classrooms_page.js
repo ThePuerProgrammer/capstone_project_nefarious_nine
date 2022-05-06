@@ -433,7 +433,7 @@ export function buildPreviewClassroomsWithListeners() {
             //Breaking the string into an array to put each member on a separate line
             const classMembersList = classMembers.split(",");
             //Iterating through the array to print all names
-            if (classMembers.length > 0) {
+            if (classMembersList.length > 0) {
                 for (let j = 0; j < classMembersList.length; j++) {
 
                     Elements.previewClassroomBody.innerHTML += `
@@ -442,7 +442,7 @@ export function buildPreviewClassroomsWithListeners() {
             }
             //Checking to see if the classroom is full
             //ALREADY ENROLLED
-            if (classMembers.includes(userEmail)) {
+            if (classMembersList.includes(userEmail)) {
                 Elements.previewClassroomFooter.innerHTML = `
                 <form class="form-view-classroom-from-preview" method="post">
                     <input type="hidden" name="docId" value="${classId}">
@@ -463,7 +463,9 @@ export function buildPreviewClassroomsWithListeners() {
                     </form>`
 
                 }
-            } else if (classMembersList.length != classMembers.length) {
+            } else if (classMembersList.length != 9) {
+                console.log(`MembersList:${classMembersList.length}`);
+                console.log(`Members:${classMembers.length}`);
                 //CLASSROOM HAS ROOM
                 Elements.previewClassroomFooter.innerHTML = `
                 <form class="form-join-classroom" method="post">
@@ -471,7 +473,7 @@ export function buildPreviewClassroomsWithListeners() {
                     <button id="form-join-classroom" class="btn btn-secondary pomo-bg-color-dark 
                         pomo-text-color-light" type="submit" style="padding:5px 10px"> <i class="material-icons pomo-text-color-light">person_add</i>Join</button>
                 </form>`;
-            } else {
+            } else if(classMembersList.length==9){
                 //CLASSROOM FULL
                 Elements.previewClassroomFooter.innerHTML = `
                    <button class="btn btn-secondary pomo-bg-color-dark 
