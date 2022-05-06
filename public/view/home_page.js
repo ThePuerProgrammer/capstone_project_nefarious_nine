@@ -17,12 +17,13 @@ export function addEventListeners() {
 export async function home_page() {
 
     Elements.root.innerHTML = ``;
-    //Retrieves coin count
+   
+    let html = '';
+    if (Auth.currentUser != null) {
+         //Retrieves coin count
     try{
         await Coins.get_coins(Auth.currentUser.uid);
     } catch(e) {if(Constant.DEV)console.log(e);}
-    let html = '';
-    if (Auth.currentUser != null) {
         html += `
             <div style="text-align: center; padding-top: 2%;">
                 <h1 class="pomo-text-color-dark pomo-font-weight-bold"> Welcome to Pomobyte! </h1>
